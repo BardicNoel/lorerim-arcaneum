@@ -1,10 +1,9 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  darkMode: ['class'],
+import type { Config } from 'tailwindcss'
+
+export default {
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
+    './index.html',
+    './src/**/*.{ts,tsx}',
   ],
   theme: {
     extend: {
@@ -12,6 +11,8 @@ module.exports = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        xl: 'var(--radius-lg)',
+        '2xl': 'var(--radius-xl)',
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -33,4 +34,4 @@ module.exports = {
     },
   },
   plugins: [require('tailwindcss-animate')],
-}
+} satisfies Config

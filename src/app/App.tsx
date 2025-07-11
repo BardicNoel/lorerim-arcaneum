@@ -1,7 +1,7 @@
 import { HashRouter } from 'react-router-dom'
 import { AppRouter } from './router'
 import { useNavigate } from 'react-router-dom'
-import { H1, P } from '@/shared/ui/ui/typography'
+import { H1, H4, P } from '@/shared/ui/ui/typography'
 import { Button } from '@/shared/ui/ui/button'
 
 const navSections = [
@@ -25,7 +25,10 @@ function Sidebar() {
   return (
     <div className="w-56 bg-background border-r border-border min-h-screen">
       <div className="p-6 border-b border-border">
-        <H1 className="text-lg font-bold text-foreground">Lorerim Arcaneum</H1>
+        <div className="text-base font-bold text-foreground leading-tight">
+          <div>Lorerim</div>
+          <div>Arcaneum</div>
+        </div>
         <P className="text-xs text-muted-foreground mt-1">Theorycrafting Hub</P>
       </div>
       <nav className="p-4 flex flex-col gap-8">
@@ -44,9 +47,9 @@ function Sidebar() {
                       variant="ghost"
                       onClick={() => navigate(item.to)}
                       className={
-                        'w-full text-left px-4 py-2.5 rounded-full text-sm transition-colors ' +
+                        'w-full text-left px-4 py-2.5 rounded-lg text-sm transition-all duration-200 hover:shadow-md ' +
                         (isActive
-                          ? 'bg-muted font-bold text-foreground'
+                          ? 'bg-muted font-bold text-foreground shadow-md'
                           : 'text-muted-foreground hover:bg-muted/70 hover:text-foreground')
                       }
                     >

@@ -1,8 +1,0 @@
-
-@import "tw-animate-css";
-
-@import './starter-theme.css';
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
