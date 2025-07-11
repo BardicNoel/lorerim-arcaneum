@@ -1,0 +1,88 @@
+
+# ⚡ ShadCN Quick-Start Cheat Sheet for Cursor Agents
+
+## 📦 What is ShadCN?
+ShadCN is a component generator built on:
+- **React**
+- **TailwindCSS**
+- **Radix UI primitives**
+
+It provides ready-made components (buttons, modals, inputs) styled with Tailwind utilities and fully themeable via Tailwind’s config.
+
+---
+
+## 🚀 Setup Guidelines
+1. **Ensure TailwindCSS is installed and configured**
+   - Tailwind config (`tailwind.config.ts`) must define Arcaneum’s custom theme colors and fonts.
+
+2. **Install ShadCN dependencies**
+```bash
+pnpm add shadcn-ui radix-ui react-icons tailwind-variants
+```
+
+3. **Pull a component template**
+```bash
+npx shadcn add button
+```
+This generates `src/components/ui/button.tsx` styled with Tailwind.
+
+---
+
+## 🎨 Theming Rules
+✅ Always use Arcaneum’s custom colors and fonts defined in `tailwind.config.ts`:
+```ts
+// tailwind.config.ts
+theme: {
+  extend: {
+    colors: {
+      skyrim: {
+        gold: '#d4af37',
+        dark: '#1e1e1e'
+      }
+    },
+    fontFamily: {
+      skyrim: ['Cinzel', 'serif']
+    }
+  }
+}
+```
+Update ShadCN components to use these:
+```tsx
+<Button className="bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold-dark font-skyrim">
+  Continue
+</Button>
+```
+
+✅ Place all customized ShadCN components in `src/shared/ui/` for reuse.
+
+❌ Do NOT use ShadCN components with default styling (always apply Arcaneum’s theme).
+
+---
+
+## 📁 Folder Placement
+| Type                 | Location            |
+|----------------------|---------------------|
+| Reusable UI          | `src/shared/ui/`    |
+| Feature-specific UI  | `src/features/<feature>/components/`
+
+---
+
+## 🚫 Prohibited Patterns
+- ❌ Do not import raw ShadCN components from the library without theming.
+- ❌ Do not bypass Tailwind’s theme config with inline styles unless dynamic.
+
+---
+
+## 🌟 Best Practices
+- 🪶 Keep components small and composable
+- 🎯 Use Tailwind utility classes for additional styling, avoid global CSS
+- 📦 Refactor common ShadCN customizations into variants where possible
+
+---
+
+## 📌 Quick Reminder for Cursor
+When generating a new UI element:
+1. Pull ShadCN component template
+2. Apply Arcaneum’s Tailwind theme colors and fonts
+3. Place in `src/shared/ui/` or feature folder
+4. Ensure all Tailwind classes are valid and test with `pnpm dev`
