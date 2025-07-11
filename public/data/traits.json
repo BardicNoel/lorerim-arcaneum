@@ -1,0 +1,88 @@
+[
+  {
+    "id": "gifted",
+    "name": "Gifted",
+    "description": "You were born with a natural talent for magic. All spells cost 25% less mana to cast.",
+    "category": "magic",
+    "type": "positive",
+    "effects": [
+      {
+        "type": "cost_reduction",
+        "value": 25,
+        "target": "mana",
+        "condition": "spells"
+      }
+    ],
+    "compatibility": ["mage", "battlemage", "spellsword"]
+  },
+  {
+    "id": "athletic",
+    "name": "Athletic",
+    "description": "Your physical training has made you exceptionally fit. +20 to stamina and +10% movement speed.",
+    "category": "physical",
+    "type": "positive",
+    "effects": [
+      {
+        "type": "stat_bonus",
+        "value": 20,
+        "target": "stamina"
+      },
+      {
+        "type": "movement_speed",
+        "value": 10,
+        "target": "base"
+      }
+    ],
+    "compatibility": ["warrior", "archer", "assassin"]
+  },
+  {
+    "id": "quick",
+    "name": "Quick",
+    "description": "You are naturally fast and agile. +15 to agility and +5% attack speed.",
+    "category": "physical",
+    "type": "positive",
+    "effects": [
+      {
+        "type": "stat_bonus",
+        "value": 15,
+        "target": "agility"
+      },
+      {
+        "type": "attack_speed",
+        "value": 5,
+        "target": "all"
+      }
+    ],
+    "compatibility": ["assassin", "archer", "spellsword"]
+  },
+  {
+    "id": "imperial_luck",
+    "name": "Imperial Luck",
+    "description": "You have the legendary luck of the Imperial bloodline. +10% chance to find better loot.",
+    "category": "luck",
+    "type": "positive",
+    "effects": [
+      {
+        "type": "loot_quality",
+        "value": 10,
+        "target": "all"
+      }
+    ],
+    "compatibility": ["all"]
+  },
+  {
+    "id": "disease_resistant",
+    "name": "Disease Resistant",
+    "description": "Your body is naturally resistant to disease. 75% chance to resist disease effects.",
+    "category": "defense",
+    "type": "positive",
+    "effects": [
+      {
+        "type": "disease_resistance",
+        "value": 75,
+        "target": "all"
+      }
+    ],
+    "compatibility": ["all"]
+  }
+] 

@@ -1,0 +1,334 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 🚀 Lorerim Arcaneum Initialization Rules
+
+## 📋 Project Context
+- **Project Name:** Lorerim Arcaneum
+- **Purpose:** Theorycrafting playground and reference hub for Lorerim players
+- **Hosting:** GitHub Pages (static site)
+- **Tech Stack:** React + Vite + TypeScript + TailwindCSS + FUSE.js + Zustand
+- **Repository:** github.com/<your-org>/lorerim-arcaneum
+
+## 🏗️ Core Architecture Rules
+
+### Repository Setup
+- ALWAYS initialize Git repository before any other setup
+- MUST create repository on GitHub first, then clone locally
+- MUST use repository name: `lorerim-arcaneum`
+- MUST set up `.gitignore` for Node.js/React projects
+
+### Project Scaffolding
+- MUST use Vite with React TypeScript template: `npm create vite@latest . -- --template react-ts`
+- MUST install dependencies with `npm install` immediately after scaffolding
+- MUST verify TypeScript configuration in `tsconfig.json` before proceeding
+
+### Dependencies Management
+- MUST install these core dependencies:
+  - `react-router-dom` (for HashRouter - required for GitHub Pages)
+  - `fuse.js` (for search functionality)
+  - `zustand` (for state management)
+  - `tailwindcss postcss autoprefixer` (for styling)
+  - `@types/node` (for TypeScript support)
+
+## 🎨 Styling & UI Rules
+
+### TailwindCSS Configuration
+- MUST initialize TailwindCSS with `npx tailwindcss init -p`
+- MUST configure `tailwind.config.ts` with Skyrim-inspired theme
+- MUST set up `src/index.css` with Tailwind directives
+- MUST configure content paths to include all React components
+
+### ShadCN UI (Optional Enhancement)
+- CAN install ShadCN UI for rapid component development
+- MUST use `npm install -D @shadcn/ui` if implementing
+- MUST initialize with `npx shadcn-ui@latest init`
+- MUST configure for TailwindCSS integration
+
+## 📁 File Structure Rules
+
+### Directory Creation (MUST CREATE)
+```
+lorerim-arcaneum/
+├─ public/
+│  ├─ data/           # JSON data files
+│  │   ├─ perks.json
+│  │   ├─ races.json
+│  │   ├─ traits.json
+│  ├─ favicon.ico     # Site favicon
+├─ src/
+│  ├─ features/       # Feature-based organization
+│  │   ├─ wishlist/
+│  │   │   ├─ components/
+│  │   │   ├─ store.ts          # Zustand store
+│  │   │   ├─ adapters.ts       # JSON → UI data
+│  │   │   ├─ hooks.ts
+│  │   │   └─ routes/
+│  │   ├─ playerCreation/
+│  │   │   ├─ components/
+│  │   │   ├─ store.ts          # Optional, if filters needed
+│  │   │   ├─ adapters.ts
+│  │   │   └─ routes/
+│  ├─ shared/         # Shared utilities and components
+│  │   ├─ ui/
+│  │   ├─ hooks/
+│  │   ├─ utils/
+│  │   ├─ context/
+│  ├─ app/            # App-level configuration
+│  │   ├─ router.tsx
+│  │   ├─ App.tsx
+│  ├─ main.tsx        # Entry point
+├─ .github/
+│  ├─ workflows/      # CI/CD pipelines
+├─ Configuration files (package.json, tsconfig.json, etc.)
+```
+
+### Required JSON Data Files
+- MUST create `public/data/perks.json`
+- MUST create `public/data/races.json`
+- MUST create `public/data/traits.json`
+- MUST include sample data structure in each file
+
+### Required Feature Directories
+- MUST create `src/features/wishlist/` with subdirectories:
+  - `components/`
+  - `routes/`
+  - `store.ts` (Zustand store)
+  - `adapters.ts` (data transformation)
+  - `hooks.ts` (custom hooks)
+
+- MUST create `src/features/playerCreation/` with subdirectories:
+  - `components/`
+  - `routes/`
+  - `store.ts` (optional, for filters)
+  - `adapters.ts` (data transformation)
+
+### Required Shared Directories
+- MUST create `src/shared/ui/` (reusable UI components)
+- MUST create `src/shared/hooks/` (shared custom hooks)
+- MUST create `src/shared/utils/` (utility functions)
+- MUST create `src/shared/context/` (shared context providers)
+
+### Required App Directories
+- MUST create `src/app/` for app-level configuration
+- MUST create `src/app/router.tsx` (routing configuration)
+- MUST create `src/app/App.tsx` (main app component)
+
+## 🧠 State Management Rules
+
+### Zustand Implementation
+- MUST use Zustand for state management (NOT Redux or Jotai)
+- MUST implement feature-local stores for modular state management
+- MUST create `wishlistStore` in `src/features/wishlist/store.ts`
+- MUST create optional `filtersStore` in `src/features/playerCreation/store.ts`
+- MUST use custom hooks to encapsulate state access (`useWishlist()`, `useFilters()`)
+
+### State Management Patterns
+- MUST follow Feature-Sliced Design (FSD) for state organization
+- MUST implement Model-View-Adapter (MVA) pattern:
+  - **Model:** Raw JSON data loaded via feature store (Zustand)
+  - **Adapter:** Transforms data into view-ready format
+  - **View:** React components rendering the UI
+- MUST keep state scoped and modular per feature
+- MUST use session-only state for MVP (explore LocalStorage later)
+
+## ⚙️ Configuration Rules
+
+### Vite Configuration
+- MUST update `vite.config.ts` with base path for GitHub Pages subdirectory
+- MUST configure build output directory as `dist`
+- MUST set up proper asset handling for static files
+
+### Package.json Requirements
+- MUST include build script: `"build": "tsc && vite build"`
+- MUST include preview script: `"preview": "vite preview"`
+- MUST update repository URL and project description
+- MUST specify Node.js version compatibility
+
+### TypeScript Configuration
+- MUST configure `tsconfig.json` for React and Vite compatibility
+- MUST enable strict mode settings
+- MUST set up proper module resolution
+- MUST configure path aliases for feature imports
+
+## 🌐 Routing & State Rules
+
+### React Router Setup
+- MUST use HashRouter (NOT BrowserRouter) for GitHub Pages compatibility
+- MUST configure HashRouter in `src/main.tsx`
+- MUST set up base routes for all specified pages
+- MUST handle URL hash encoding for state persistence
+
+### App Structure
+- MUST create `src/app/router.tsx` with routing configuration
+- MUST create `src/app/App.tsx` with main app structure
+- MUST include navigation component
+- MUST configure URL hash encoding for wishlist/filter state
+
+## 🚀 Deployment Rules
+
+### GitHub Actions Workflow
+- MUST create `.github/workflows/deploy.yml`
+- MUST use Node.js 20 environment
+- MUST include these steps:
+  1. Checkout repository
+  2. Setup Node.js 20
+  3. Install dependencies with `npm ci`
+  4. Build with `npm run build`
+  5. Deploy to GitHub Pages using peaceiris/actions-gh-pages@v3
+
+### GitHub Pages Configuration
+- MUST enable GitHub Pages in repository settings
+- MUST set source to GitHub Actions (not main branch)
+- MUST configure for custom domain if specified
+
+## 🧪 Testing & Validation Rules
+
+### Local Development Testing
+- MUST run `npm run dev` and verify app starts without errors
+- MUST test TailwindCSS styling application
+- MUST verify TypeScript compilation passes
+- MUST test routing functionality between pages
+- MUST test Zustand state management functionality
+
+### Build Process Testing
+- MUST run `npm run build` successfully
+- MUST verify `dist/` folder contains all built files
+- MUST test `npm run preview` locally before deployment
+
+### Deployment Testing
+- MUST push to GitHub and trigger Actions workflow
+- MUST verify GitHub Pages deployment completes successfully
+- MUST test live site functionality after deployment
+
+## 📝 Documentation Rules
+
+### README.md Requirements
+- MUST include project description and purpose
+- MUST include setup and development instructions
+- MUST include deployment information
+- MUST reference the technical design specification
+
+### Asset Requirements
+- MUST create `public/favicon.ico`
+- MUST add any additional static assets as needed
+
+## 🔒 Constraint Enforcement
+
+### Static Site Constraints
+- MUST serve entirely from GitHub Pages (no backend)
+- MUST fetch JSON data only from `/public/data/` (no external APIs)
+- MUST keep data size minimal for fast page loads
+
+### State Management Constraints
+- MUST use session-only state for wishlist (MVP)
+- MUST encode wishlist/filter state in URL hash (Base64)
+- MUST explore LocalStorage persistence later (not MVP)
+- MUST use Zustand for state management (NOT Redux or Jotai)
+
+### Routing Constraints
+- MUST use HashRouter for GitHub Pages compatibility
+- MUST handle URL encoding for state persistence
+- MUST support subdirectory deployment
+
+### Architecture Constraints
+- MUST follow Feature-Sliced Design (FSD) for code organization
+- MUST implement Model-View-Adapter (MVA) pattern
+- MUST keep components at reasonable sizes (avoid strict Atomic Design)
+- MUST use feature-local stores for modular state management
+
+## ✅ Success Criteria Checklist
+
+### Technical Requirements
+- [ ] App builds and deploys successfully to GitHub Pages
+- [ ] All TypeScript compilation passes without errors
+- [ ] TailwindCSS styling is properly applied
+- [ ] Routing works correctly with HashRouter
+- [ ] JSON data can be fetched from `/public/data/`
+- [ ] GitHub Actions workflow completes successfully
+- [ ] Zustand state management works correctly
+- [ ] Feature-based folder structure is implemented
+
+### Functional Requirements
+- [ ] All specified pages are accessible via routing
+- [ ] Search functionality works with FUSE.js
+- [ ] Wishlist drawer component is functional
+- [ ] URL state encoding works for sharing
+- [ ] Responsive design works on different screen sizes
+- [ ] Feature-local stores manage state correctly
+- [ ] Custom hooks encapsulate state access properly
+
+### Performance Requirements
+- [ ] Page loads quickly (< 3 seconds)
+- [ ] JSON data files are optimized for size
+- [ ] Build process completes in reasonable time
+- [ ] No console errors in production build
+- [ ] Zustand stores are lightweight and efficient
+
+## 🚨 Error Prevention Rules
+
+### Common Pitfalls to Avoid
+- NEVER use BrowserRouter (use HashRouter for GitHub Pages)
+- NEVER make external API calls (use local JSON only)
+- NEVER commit large data files (keep JSON files minimal)
+- NEVER skip TypeScript compilation checks
+- NEVER deploy without testing build locally first
+- NEVER use Redux or Jotai (use Zustand for state management)
+- NEVER mix different state management libraries
+
+### Validation Steps
+- ALWAYS test locally before pushing to GitHub
+- ALWAYS verify GitHub Actions workflow syntax
+- ALWAYS check that all required files are created
+- ALWAYS validate JSON data structure
+- ALWAYS test routing with actual navigation
+- ALWAYS verify Zustand stores work correctly
+- ALWAYS test feature-local state management
+
+## 📚 Reference Information
+
+### Key Commands
+```bash
+# Project initialization
+npm create vite@latest . -- --template react-ts
+npm install
+
+# Dependencies
+npm install react-router-dom fuse.js zustand
+npm install -D tailwindcss postcss autoprefixer @types/node
+
+# TailwindCSS setup
+npx tailwindcss init -p
+
+# Build and test
+npm run build
+npm run preview
+
+# Development
+npm run dev
+```
+
+### Important URLs
+- Repository: github.com/<your-org>/lorerim-arcaneum
+- Live Site: https://[username].github.io/lorerim-arcaneum/
+- Technical Spec: docs/technical-spec.md
+
+### File Paths to Remember
+- JSON Data: `/public/data/`
+- Features: `/src/features/`
+- Shared: `/src/shared/`
+- App Config: `/src/app/`
+- Workflows: `/.github/workflows/`
+- Build Output: `/dist/`
+
+### Architecture Patterns
+- **Feature-Sliced Design (FSD):** Organize by feature domain
+- **Model-View-Adapter (MVA):** Separate data, transformation, and UI
+- **Feature-local stores:** Zustand stores scoped to features
+- **Custom hooks:** Encapsulate state access and business logic
+
+---
+
+**Remember:** This rule file serves as a memory bank during the initialization process. Refer to it at each step to ensure all requirements are met and constraints are followed. The updated specification emphasizes feature-based organization and Zustand for state management.

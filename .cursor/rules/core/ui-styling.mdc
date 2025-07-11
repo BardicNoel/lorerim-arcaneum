@@ -1,0 +1,117 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# 🎨 Arcaneum Tailwind Styling Rule
+
+## 🪶 Purpose
+Ensure Tailwind styling in **Lorerim Arcaneum** works with Vite + Tailwind v4, supports the Skyrim theme, and avoids build-breaking patterns.
+
+---
+
+## ✅ Core Practices
+
+### 🎨 1. Use Raw CSS Variables for Theme Colors
+When styling in `.css` files, **always use raw CSS vars**, not Tailwind color utilities.
+
+**✅ Example:**
+```css
+background-color: hsl(var(--primary));
+color: hsl(var(--primary-foreground));
+```
+
+**❌ Avoid:**
+```css
+@apply bg-primary text-foreground;
+```
+
+---
+
+### 📦 2. Restrict `@apply` Usage
+✅ Allowed:
+```css
+@apply p-4 rounded-lg shadow;
+```
+
+❌ Forbidden (unless mapped in Tailwind config):
+```css
+@apply bg-background text-foreground;
+```
+
+---
+
+### 🛠 3. Tailwind Config Mapping
+All custom colors must be mapped in `tailwind.config.ts`:
+```ts
+extend: {
+  colors: {
+    background: "hsl(var(--background))",
+    foreground: "hsl(var(--foreground))",
+    primary: "hsl(var(--primary))",
+    secondary: "hsl(var(--secondary))",
+    accent: "hsl(var(--accent))",
+    muted: "hsl(var(--muted))",
+    destructive: "hsl(var(--destructive))",
+    border: "hsl(var(--border))",
+    input: "hsl(var(--input))",
+    ring: "hsl(var(--ring))",
+    skyrim: {
+      gold: "#d4af37",
+      dark: "#1e1e1e"
+    }
+  }
+}
+```
+
+This allows JSX to safely use:
+```tsx
+<div className="bg-primary text-foreground">
+```
+
+---
+
+### 🚦 4. Component Styling Priority
+✅ In JSX: use Tailwind utilities for fast, safe styling  
+✅ In CSS: use raw vars (`hsl(var(--...))`) for shared components like buttons/cards  
+📁 Keep all theme styling centralized in `starter-theme.css`
+
+---
+
+### ⚠️ Constraints for Cursor Agents
+
+| Rule                                      | Why                           |
+|-------------------------------------------|--------------------------------|
+| ❌ No `@apply bg-* text-*` unless mapped  | Avoid build errors            |
+| ✅ Use `hsl(var(--color))` in CSS         | Consistent theme application  |
+| ✅ Use Tailwind utilities in JSX          | Faster builds, easier purge   |
+| 📁 Centralize styles in `starter-theme.css`| Prevent duplicated theming    |
+
+---
+
+## 🪄 Example Refactor
+
+**Before (❌ breaks build):**
+```css
+.card {
+  @apply bg-background text-foreground p-4 rounded;
+}
+```
+
+**After (✅ safe):**
+```css
+.card {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  @apply p-4 rounded;
+}
+```
+
+---
+
+## 🏆 Cursor Directives
+- Validate Tailwind classes against `tailwind.config.ts`
+- Fallback to raw CSS vars for unknown classes
+- Always import `starter-theme.css` for new pages/components
+- Assume Tailwind v4+ (no legacy PostCSS plugins)
