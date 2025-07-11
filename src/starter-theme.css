@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 248 10% 15%;
+  --foreground: 240 8% 90%;
+  --primary: 42 87% 50%; /* Skyrim gold */
+  --primary-foreground: 240 8% 15%;
+  --secondary: 240 5% 25%;
+  --secondary-foreground: 240 8% 90%;
+  --accent: 220 13% 35%;
+  --accent-foreground: 240 8% 90%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 240 8% 10%;
+  --foreground: 240 8% 90%;
+  --primary: 42 87% 50%; /* Skyrim gold */
+  --primary-foreground: 240 8% 10%;
+  --secondary: 240 5% 20%;
+  --secondary-foreground: 240 8% 90%;
+  --accent: 220 13% 30%;
+  --accent-foreground: 240 8% 90%;
+}
+
+@layer base {
+  html {
+    font-family: 'Cinzel', serif;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cinzel', serif;
+    color: hsl(var(--primary));
+  }
+  p, span, a, li {
+    font-family: 'Crimson Text', serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+  .btn-primary:hover {
+    background-color: hsl(var(--primary-foreground));
+    color: hsl(var(--primary));
+  }
+  .card {
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+  }
+  .link {
+    color: hsl(var(--primary));
+    text-decoration: underline;
+  }
+  .link:hover {
+    color: hsl(var(--accent));
+  }
+}

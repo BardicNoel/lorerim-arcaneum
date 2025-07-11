@@ -1,0 +1,62 @@
+[
+  {
+    "id": "warrior_mastery",
+    "name": "Warrior Mastery",
+    "description": "Increases physical damage by 25% and reduces damage taken by 15%",
+    "category": "combat",
+    "tier": 1,
+    "prerequisites": [],
+    "effects": [
+      {
+        "type": "damage_bonus",
+        "value": 25,
+        "target": "physical"
+      },
+      {
+        "type": "damage_reduction",
+        "value": 15,
+        "target": "all"
+      }
+    ]
+  },
+  {
+    "id": "mage_scholar",
+    "name": "Mage Scholar",
+    "description": "Increases magical damage by 30% and reduces mana costs by 20%",
+    "category": "magic",
+    "tier": 1,
+    "prerequisites": [],
+    "effects": [
+      {
+        "type": "damage_bonus",
+        "value": 30,
+        "target": "magical"
+      },
+      {
+        "type": "cost_reduction",
+        "value": 20,
+        "target": "mana"
+      }
+    ]
+  },
+  {
+    "id": "stealth_artist",
+    "name": "Stealth Artist",
+    "description": "Increases stealth effectiveness by 40% and critical hit chance by 15%",
+    "category": "stealth",
+    "tier": 1,
+    "prerequisites": [],
+    "effects": [
+      {
+        "type": "stealth_bonus",
+        "value": 40,
+        "target": "detection"
+      },
+      {
+        "type": "critical_chance",
+        "value": 15,
+        "target": "all"
+      }
+    ]
+  }
+] 
