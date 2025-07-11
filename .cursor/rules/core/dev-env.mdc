@@ -1,0 +1,11 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Shell
+- Powershell, use Powershell syntax
+
+# Git
+
+- Project hosted on GitHub
