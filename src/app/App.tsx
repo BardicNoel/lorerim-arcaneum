@@ -10,6 +10,7 @@ const navSections = [
     items: [
       { to: '/', label: 'Home' },
       { to: '/player-creation', label: 'Player Creation' },
+      { to: '/race-data', label: 'Race Data' },
       { to: '/equipment', label: 'Equipment' },
       { to: '/crafting', label: 'Crafting' },
       { to: '/skills', label: 'Skills' },
