@@ -96,5 +96,244 @@
       "intelligence": 6,
       "agility": 12
     }
+  },
+  {
+    "id": "dunmer",
+    "name": "Dunmer",
+    "description": "Dark elves with natural fire resistance and ancestral abilities",
+    "traits": [
+      {
+        "name": "Fire Resistance",
+        "description": "50% resistance to fire damage",
+        "effect": {
+          "type": "resistance",
+          "value": 50,
+          "target": "fire"
+        }
+      },
+      {
+        "name": "Ancestor's Wrath",
+        "description": "Summons a flame cloak that damages nearby enemies",
+        "effect": {
+          "type": "ability",
+          "name": "ancestors_wrath",
+          "cooldown": 120
+        }
+      }
+    ],
+    "startingStats": {
+      "health": 90,
+      "mana": 80,
+      "stamina": 80,
+      "strength": 8,
+      "intelligence": 8,
+      "agility": 8
+    }
+  },
+  {
+    "id": "altmer",
+    "name": "Altmer",
+    "description": "High elves with exceptional magical aptitude and longer lifespans",
+    "traits": [
+      {
+        "name": "Magicka Boost",
+        "description": "50 additional magicka points",
+        "effect": {
+          "type": "passive",
+          "name": "magicka_boost",
+          "value": 50
+        }
+      },
+      {
+        "name": "Highborn",
+        "description": "Magicka regenerates 25% faster",
+        "effect": {
+          "type": "passive",
+          "name": "magicka_regen",
+          "value": 25
+        }
+      }
+    ],
+    "startingStats": {
+      "health": 70,
+      "mana": 120,
+      "stamina": 60,
+      "strength": 4,
+      "intelligence": 14,
+      "agility": 6
+    }
+  },
+  {
+    "id": "argonian",
+    "name": "Argonian",
+    "description": "Reptilian people with natural water breathing and disease resistance",
+    "traits": [
+      {
+        "name": "Water Breathing",
+        "description": "Can breathe underwater indefinitely",
+        "effect": {
+          "type": "passive",
+          "name": "water_breathing"
+        }
+      },
+      {
+        "name": "Disease Resistance",
+        "description": "90% resistance to disease",
+        "effect": {
+          "type": "resistance",
+          "value": 90,
+          "target": "disease"
+        }
+      },
+      {
+        "name": "Histskin",
+        "description": "Health regenerates 10 times faster for 60 seconds",
+        "effect": {
+          "type": "ability",
+          "name": "histskin",
+          "cooldown": 300
+        }
+      }
+    ],
+    "startingStats": {
+      "health": 95,
+      "mana": 70,
+      "stamina": 85,
+      "strength": 8,
+      "intelligence": 7,
+      "agility": 9
+    }
+  },
+  {
+    "id": "orsimer",
+    "name": "Orsimer",
+    "description": "Orcs with exceptional strength and berserker rage abilities",
+    "traits": [
+      {
+        "name": "Berserker Rage",
+        "description": "Deals double damage and takes half damage for 60 seconds",
+        "effect": {
+          "type": "ability",
+          "name": "berserker_rage",
+          "cooldown": 240
+        }
+      },
+      {
+        "name": "Strong Constitution",
+        "description": "25% resistance to poison",
+        "effect": {
+          "type": "resistance",
+          "value": 25,
+          "target": "poison"
+        }
+      }
+    ],
+    "startingStats": {
+      "health": 110,
+      "mana": 40,
+      "stamina": 110,
+      "strength": 12,
+      "intelligence": 4,
+      "agility": 7
+    }
+  },
+  {
+    "id": "bosmer",
+    "name": "Bosmer",
+    "description": "Wood elves with natural archery skills and command over animals",
+    "traits": [
+      {
+        "name": "Command Animal",
+        "description": "Can command animals to fight for you for 60 seconds",
+        "effect": {
+          "type": "ability",
+          "name": "command_animal",
+          "cooldown": 180
+        }
+      },
+      {
+        "name": "Resist Disease",
+        "description": "50% resistance to disease",
+        "effect": {
+          "type": "resistance",
+          "value": 50,
+          "target": "disease"
+        }
+      }
+    ],
+    "startingStats": {
+      "health": 80,
+      "mana": 70,
+      "stamina": 95,
+      "strength": 6,
+      "intelligence": 7,
+      "agility": 11
+    }
+  },
+  {
+    "id": "redguard",
+    "name": "Redguard",
+    "description": "Warriors from Hammerfell with exceptional combat skills and adrenaline rush",
+    "traits": [
+      {
+        "name": "Adrenaline Rush",
+        "description": "Stamina regenerates 10 times faster for 60 seconds",
+        "effect": {
+          "type": "ability",
+          "name": "adrenaline_rush",
+          "cooldown": 300
+        }
+      },
+      {
+        "name": "Resist Poison",
+        "description": "50% resistance to poison",
+        "effect": {
+          "type": "resistance",
+          "value": 50,
+          "target": "poison"
+        }
+      }
+    ],
+    "startingStats": {
+      "health": 95,
+      "mana": 50,
+      "stamina": 105,
+      "strength": 9,
+      "intelligence": 6,
+      "agility": 10
+    }
+  },
+  {
+    "id": "imperial",
+    "name": "Imperial",
+    "description": "Diplomatic humans with natural luck and calming abilities",
+    "traits": [
+      {
+        "name": "Voice of the Emperor",
+        "description": "Calms nearby humans and elves for 30 seconds",
+        "effect": {
+          "type": "ability",
+          "name": "voice_of_emperor",
+          "cooldown": 180
+        }
+      },
+      {
+        "name": "Imperial Luck",
+        "description": "10% chance to find extra gold in containers",
+        "effect": {
+          "type": "passive",
+          "name": "imperial_luck",
+          "value": 10
+        }
+      }
+    ],
+    "startingStats": {
+      "health": 90,
+      "mana": 70,
+      "stamina": 85,
+      "strength": 8,
+      "intelligence": 7,
+      "agility": 8
+    }
   }
 ] 
