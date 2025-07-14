@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/sha
 import { Button } from '@/shared/ui/ui/button'
 import { H1, H2, H3, H4, H5, H6, P, Blockquote, Code, Lead, Large, Small, Muted } from '@/shared/ui/ui/typography'
 import { User, Shield, Hammer, BookOpen, Type } from 'lucide-react'
+import { RaceDataPage } from '@/features/races'
 
 // Typography Demo Page
 const TypographyDemo = () => (
@@ -93,25 +94,7 @@ const TypographyDemo = () => (
 )
 
 // Placeholder components for routes
-const PlayerCreation = () => (
-  <div className="space-y-6">
-    <div>
-      <H1>Player Creation</H1>
-      <Muted>Design your character with races, traits, and birthsigns</Muted>
-    </div>
-    <Card>
-      <CardHeader>
-        <CardTitle>Coming Soon</CardTitle>
-        <CardDescription>Player creation feature is under development</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Muted>
-          This section will allow you to create and customize your character with various options.
-        </Muted>
-      </CardContent>
-    </Card>
-  </div>
-)
+const PlayerCreation = () => <RaceDataPage />
 
 const Equipment = () => (
   <div className="space-y-6">
@@ -251,6 +234,7 @@ export const AppRouter = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/player-creation" element={<PlayerCreation />} />
+      <Route path="/race-data" element={<RaceDataPage />} />
       <Route path="/equipment" element={<Equipment />} />
       <Route path="/crafting" element={<Crafting />} />
       <Route path="/skills" element={<Skills />} />
