@@ -157,7 +157,7 @@ export function PlayerCreationPage<T extends PlayerCreationItem>({
                 className="sticky top-6"
                 style={{ zIndex: Z_INDEX.STICKY }}
               >
-                <DetailPanel item={selectedItem} />
+                {renderDetailPanel(selectedItem)}
               </div>
             ) : (
               <div 

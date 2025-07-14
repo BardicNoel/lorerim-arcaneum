@@ -1,0 +1,100 @@
+# 🎨 Player Traits Catalog – Web Page Design Spec
+
+## 📄 Purpose
+
+The Player Traits page serves as a **read-only catalog** for players to browse and explore all available traits in Lorerim. It provides clear descriptions, effects, and optional items associated with each trait. There is no selection or unlock mechanic here—it’s purely informational.
+
+---
+
+## 🖥️ Desktop Layout (3-Column)
+
+[ Filter Panel ]   [ Trait Grid/List ]   [ Right-Side Detail Panel ]
+
+### 🗂️ Filter Panel (Left Sidebar)
+
+- **Category Filters**: Combat, Economic, Social, Survival.
+- **Weapon/Magic Filters**: Sword, Bow, Spear, Destruction, etc.
+- **Search Box**: Fuzzy search across trait names and descriptions.
+- Multi-select filters update the grid live.
+- “Clear All” button resets filters.
+
+---
+
+### 📋 Trait Grid (Center Column)
+
+- Displays **Trait Cards** in a grid (3–4 per row on desktop).
+- Each card includes:
+    - 🏷 Name: Bold trait name.
+    - ✨ Summary: Short thematic one-liner.
+    - 🌟 Effects Preview: First 1–2 key effects (if compact enough).
+    - 🏷 Tags: Category and weapon/magic tags as pill-shaped chips.
+- Clicking a card opens the **right-side detail panel**.
+
+---
+
+### 📖 Right-Side Detail Panel (Third Column)
+
+When a trait is selected:
+
+- Takes up equal vertical space with the grid (no overlay).
+- Remains fixed while you scroll the grid/list.
+- Displays full trait details:
+    - 🏷 Name: Large title.
+    - ✨ Summary: Brief thematic description.
+    - 📜 Details: Full text including mechanics and conditional effects.
+    - 🌟 Effects:
+        - Positives styled in gold.
+        - Negatives styled in muted red.
+        - Neutral/conditional styled in gray.
+    - 🎁 Associated Items: Optional; shown with icons and tooltips.
+    - 🏷 Tags: Category and weapon/magic tags as chips.
+- “Close” button at the top right or click another card to switch.
+
+---
+
+## 📱 Mobile/Tablet Layout
+
+- Filters collapse into a dropdown menu at the top.
+- Trait grid switches to a single column (list view).
+- Clicking a trait opens a **full page view** for that trait.
+- Back button returns to grid.
+
+---
+
+## 🌟 UX Behavior
+
+| Feature | Behavior |
+| --- | --- |
+| Search | Instant fuzzy matching across names and descriptions. |
+| Multi-Select Filters | Combine multiple categories and tags. |
+| Persistent Scroll | Grid scroll position remains unchanged when viewing traits. |
+| URL Deep-Linking | Each trait has a unique URL fragment (`/traits/au-naturel`). |
+
+---
+
+## 🖌 Styling Guidelines
+
+| Element | Style |
+| --- | --- |
+| Positives | Gold text/icons. |
+| Negatives | Muted red text/icons. |
+| Neutral/Conditional | Gray text/icons. |
+| Tags | Pill-shaped chips with subtle icons (e.g., ⚔️ Combat, 🎯 Bow). |
+| Associated Items | Small item icons with hover tooltips. |
+
+---
+
+## 🔥 Summary
+
+This page functions as a **dynamic encyclopedia**:
+✔️ **Read-only catalog, no selection logic.**
+
+✔️ **Dynamic filters and search.**
+
+✔️ **Grid or list browsing with detail panel view.**
+
+✔️ **Responsive design for desktop, tablet, and mobile.**---
+description:
+globs:
+alwaysApply: false
+---
