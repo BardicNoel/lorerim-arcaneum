@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { H3, H4, P, Small } from '@/shared/ui/ui/typography'
+import { MarkdownText } from '@/shared/components/MarkdownText'
 import { X, Plus, Minus, Circle, Shield, Zap, Heart, Brain, Target, Flame, Droplets, Skull, Clock } from 'lucide-react'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import type { Race } from '../types'
@@ -108,9 +109,9 @@ export function RaceDetailPanel({ item, originalRace, onClose, className }: Race
         {/* Description */}
         <div>
           <H4 className="mb-2">Description</H4>
-          <P className="text-sm text-muted-foreground leading-relaxed">
+          <MarkdownText className="text-sm text-muted-foreground leading-relaxed">
             {item.description}
-          </P>
+          </MarkdownText>
         </div>
 
         {/* Starting Stats */}
