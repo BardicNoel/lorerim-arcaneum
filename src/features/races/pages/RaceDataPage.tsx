@@ -11,7 +11,7 @@ import { Button } from '@/shared/ui/ui/button'
 import { Loader2, List, Grid3X3 } from 'lucide-react'
 import type { Race } from '../types'
 
-export function RaceDataPage() {
+function PlayerRacePage() {
   const { races, loading, error, filters, setFilters } = useRaces()
   const [layout, setLayout] = useState<'list' | 'grid'>('grid')
   const [selectedRace, setSelectedRace] = useState<Race | null>(null)
@@ -29,7 +29,7 @@ export function RaceDataPage() {
 
   if (loading) {
     return (
-      <PageShell title="Race Data" subtitle="Browse and compare Skyrim races">
+      <PageShell title="Races of Skyrim" subtitle="Browse and compare Skyrim races">
         <div className="flex items-center justify-center py-12">
           <div className="flex items-center gap-2">
             <Loader2 className="h-6 w-6 animate-spin" />
@@ -42,7 +42,7 @@ export function RaceDataPage() {
 
   if (error) {
     return (
-      <PageShell title="Race Data" subtitle="Browse and compare Skyrim races">
+      <PageShell title="Races of Skyrim" subtitle="Browse and compare Skyrim races">
         <Card>
           <CardContent className="pt-6">
             <P className="text-destructive">Error loading race data: {error}</P>
@@ -54,7 +54,7 @@ export function RaceDataPage() {
 
   return (
     <PageShell 
-      title="Race Data" 
+      title="Races of Skyrim" 
       subtitle="Browse and compare Skyrim races with their unique traits and abilities"
     >
       <div className="space-y-6">
@@ -115,11 +115,9 @@ export function RaceDataPage() {
       </div>
 
       {/* Race Details Panel */}
-      <RaceDetailsPanel
-        race={selectedRace}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-      />
+      <RaceDetailsPanel race={selectedRace} isOpen={isModalOpen} onClose={handleCloseModal} />
     </PageShell>
   )
-} 
+}
+
+export default PlayerRacePage 
