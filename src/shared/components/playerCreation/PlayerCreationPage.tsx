@@ -25,8 +25,12 @@ export function PlayerCreationPage<T extends PlayerCreationItem>({
   renderItemCard,
   renderDetailPanel,
   searchPlaceholder,
-  currentFilters
-}: PlayerCreationPageProps<T> & { currentFilters?: PlayerCreationFilters }) {
+  currentFilters,
+  customContentAfterFilters
+}: PlayerCreationPageProps<T> & { 
+  currentFilters?: PlayerCreationFilters
+  customContentAfterFilters?: React.ReactNode
+}) {
   const [localFilters, setLocalFilters] = useState<PlayerCreationFilters>(
     currentFilters || {
       search: '',
@@ -135,6 +139,13 @@ export function PlayerCreationPage<T extends PlayerCreationItem>({
             onRemove={handleTagRemove}
             className="justify-start"
           />
+
+          {/* Custom Content After Filters */}
+          {customContentAfterFilters && (
+            <div className="pt-4">
+              {customContentAfterFilters}
+            </div>
+          )}
         </div>
 
         {/* Layout */}
