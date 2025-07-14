@@ -10,19 +10,14 @@ import { SidebarGroup } from '@/shared/ui/sidebar/SidebarGroup'
 import { SidebarMenu } from '@/shared/ui/sidebar/SidebarMenu'
 import { SidebarMenuItem } from '@/shared/ui/sidebar/SidebarMenuItem'
 import { SidebarMenuButton } from '@/shared/ui/sidebar/SidebarMenuButton'
-
 import { SidebarRail } from '@/shared/ui/sidebar/SidebarRail'
+import { SiteHeader } from './SiteHeader'
 
 const navSections = [
   {
-    items: [
-      { to: '/', label: 'Home' },
-    ],
-  },
-  {
     label: 'Character Creation',
     items: [
-      { to: '/race', label: 'Race' }, 
+      { to: '/race', label: 'Races' },
       { to: '/birth-signs', label: 'Birth Signs' },
       { to: '/traits', label: 'Traits' },
       { to: '/skills', label: 'Skill Selection' },
@@ -64,32 +59,13 @@ const navSections = [
   },
 ]
 
-function AppSidebar() {
+function AppSidebar({ collapsed }: { collapsed: boolean }) {
   const navigate = useNavigate()
-  const [collapsed, setCollapsed] = useState(false)
   const currentPath = window.location.hash.replace(/^#\/?/, '/')
 
   return (
     <Sidebar collapsed={collapsed}>
-      <SidebarHeader>
-        <button
-          className="flex items-center gap-2 text-skyrim-gold/90 hover:text-skyrim-gold text-xs font-bold px-1 py-1 focus:outline-none"
-          onClick={() => setCollapsed((c) => !c)}
-          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          <span className="w-7 h-7 bg-skyrim-gold rounded-lg flex items-center justify-center text-skyrim-dark font-bold text-xs shrink-0">
-            LA
-          </span>
-          {!collapsed && (
-            <span className="ml-1 leading-tight truncate">
-              Lorerim Arcaneum
-            </span>
-          )}
-          <span className="ml-auto text-base font-bold px-1">
-            {collapsed ? '→' : '←'}
-          </span>
-        </button>
-      </SidebarHeader>
+      <SidebarHeader />
       <SidebarContent>
         {navSections.map((section) => (
           <SidebarGroup key={section.label}>
@@ -137,13 +113,20 @@ function AppSidebar() {
 }
 
 function App() {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   return (
     <HashRouter>
-      <div className="min-h-screen bg-background text-foreground flex">
-        <AppSidebar />
-        <main className="flex-1 p-8">
-          <AppRouter />
-        </main>
+      <div className="min-h-screen bg-background text-foreground flex flex-col">
+        <SiteHeader
+          sidebarCollapsed={sidebarCollapsed}
+          onToggleSidebar={() => setSidebarCollapsed((c) => !c)}
+        />
+        <div className="flex flex-1">
+          <AppSidebar collapsed={sidebarCollapsed} />
+          <main className="flex-1 p-8">
+            <AppRouter />
+          </main>
+        </div>
       </div>
     </HashRouter>
   )
