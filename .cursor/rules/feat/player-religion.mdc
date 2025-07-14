@@ -1,0 +1,91 @@
+# 📖 Player Religion Page
+
+This page presents all playable religions from **Wintersun** and the **Lorerim patch set**, using the generic player content layout.
+
+---
+
+## 🏛️ Overview
+
+Explore and compare religions, their blessings, tenets, follower/devotee powers, and any restrictions. Designed for players to quickly find the best fit for their character.
+
+- 🔍 **Search Bar:** Search by deity name, pantheon, domain, tags, or mechanical effects.
+- 🏷️ **Filter Chips:**
+    - Pantheon (Aedra, Daedra, Yokudan, Custom)
+    - Domain (e.g., Warrior, Mage, Thief, Nature)
+    - Alignment (Good, Neutral, Evil)
+    - Tags (Combat Utility, Stealth-Focused, Favor Scaling, etc.)
+- 📂 **List/Grid View:** Displays all religions with icons, names, pantheons, and primary tags.
+
+---
+
+## 📋 Left Panel: Religion List
+
+- Each entry includes:
+    - 🕊️ **Deity Name**
+    - Pantheon (Aedra, Daedra, etc.)
+    - Icon or symbol (Wintersun asset or Lorerim reskin)
+    - Tags summarizing focus and mechanics
+
+Click an entry to load details in the right panel.
+
+---
+
+## 📜 Right Panel: Religion Details
+
+### ✨ Blessing
+
+- Displays the active blessing and its effect.
+
+### 📖 Tenets
+
+- List of behavioral guidelines or goals tied to favor gain/loss.
+
+### 🙏 Ranks
+
+- **Follower Power**
+    - Name + Description
+- **Devotee Power**
+    - Name + Description
+
+### 🔒 Restrictions
+
+- Race, quest, or alignment requirements if present.
+- Display unmet requirements grayed out.
+
+### 🏷️ Tags
+
+- Filterable tags to quickly identify playstyle relevance.
+
+### 🔄 Compare Button
+
+- Compare two religions side by side.
+
+---
+
+## 🎨 Theming Notes
+
+- Background: desaturated stone gray (Skyrim aesthetic)
+- Accent Colors:
+    - Gold = Positive
+    - Silver = Neutral
+    - Iron = Negative
+- Fonts: Serif for deity names, sans-serif for body text
+- Icons from Wintersun/Lorerim assets for visual consistency
+
+---
+
+## ⚙️ Data Source
+
+This page consumes `religions.json` with:
+
+- Deity Name
+- Pantheon & Domain(s)
+- Blessing
+- Tenets
+- Ranks (Follower & Devotee)
+- Restrictions (Race, Quest, Alignment, etc.)
+- Tags (filterable)---
+description:
+globs:
+alwaysApply: false
+---
