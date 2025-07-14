@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { PlayerCreationPage } from '@/shared/components/playerCreation'
+import { 
+  PlayerCreationLayout,
+  PlayerCreationContent,
+  PlayerCreationItemsSection,
+  PlayerCreationDetailSection,
+  PlayerCreationEmptyDetail,
+  PlayerCreationFilters,
+  ItemGrid
+} from '@/shared/components/playerCreation'
 import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
+import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
 import { TraitCard } from '../components/TraitCard'
 import { TraitDetailPanel } from '../components/TraitDetailPanel'
 import type { PlayerCreationItem, SearchCategory, SelectedTag } from '@/shared/components/playerCreation/types'
@@ -111,21 +120,15 @@ export function UnifiedTraitsPage() {
     filters: []
   })
 
-  const handleTagSelect = (tag: SelectedTag) => {
-    const updatedFilters = {
-      ...currentFilters,
-      selectedTags: [...currentFilters.selectedTags, tag]
-    }
-    handleFiltersChange(updatedFilters)
-  }
-
-  const handleTagRemove = (tagId: string) => {
-    const updatedFilters = {
-      ...currentFilters,
-      selectedTags: currentFilters.selectedTags.filter(tag => tag.id !== tagId)
-    }
-    handleFiltersChange(updatedFilters)
-  }
+  // Use the new filters hook
+  const {
+    handleTagSelect,
+    handleTagRemove
+  } = usePlayerCreationFilters({
+    initialFilters: currentFilters,
+    onFiltersChange: handleFiltersChange,
+    onSearch: handleSearch
+  })
 
   const renderTraitCard = (item: PlayerCreationItem, isSelected: boolean) => (
     <TraitCard 
@@ -168,23 +171,38 @@ export function UnifiedTraitsPage() {
   }
 
   return (
-    <PlayerCreationPage
+    <PlayerCreationLayout
       title="Traits"
       description="Choose your character's traits. Each trait provides unique abilities, bonuses, and sometimes drawbacks that will define your character's strengths and playstyle."
-      items={filteredItems}
-      searchCategories={searchCategories}
-      selectedItem={selectedItem}
-      onItemSelect={handleItemSelect}
-      onFiltersChange={handleFiltersChange}
-      onSearch={handleSearch}
-      onTagSelect={handleTagSelect}
-      onTagRemove={handleTagRemove}
-      viewMode={viewMode}
-      onViewModeChange={handleViewModeChange}
-      renderItemCard={renderTraitCard}
-      renderDetailPanel={renderTraitDetailPanel}
-      searchPlaceholder="Search traits by name, category, effects, or description..."
-      currentFilters={currentFilters}
-    />
+    >
+      <PlayerCreationFilters
+        searchCategories={searchCategories}
+        selectedTags={currentFilters.selectedTags}
+        viewMode={viewMode}
+        onTagSelect={handleTagSelect}
+        onTagRemove={handleTagRemove}
+        onViewModeChange={handleViewModeChange}
+      />
+
+      <PlayerCreationContent>
+        <PlayerCreationItemsSection>
+          <ItemGrid
+            items={filteredItems}
+            viewMode={viewMode}
+            onItemSelect={handleItemSelect}
+            selectedItem={selectedItem}
+            renderItemCard={renderTraitCard}
+          />
+        </PlayerCreationItemsSection>
+
+        <PlayerCreationDetailSection>
+          {selectedItem ? (
+            renderTraitDetailPanel(selectedItem)
+          ) : (
+            <PlayerCreationEmptyDetail />
+          )}
+        </PlayerCreationDetailSection>
+      </PlayerCreationContent>
+    </PlayerCreationLayout>
   )
 } 

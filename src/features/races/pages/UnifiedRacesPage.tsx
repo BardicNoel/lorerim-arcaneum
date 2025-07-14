@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { PlayerCreationPage } from '@/shared/components/playerCreation'
+import { 
+  PlayerCreationLayout,
+  PlayerCreationContent,
+  PlayerCreationItemsSection,
+  PlayerCreationDetailSection,
+  PlayerCreationEmptyDetail,
+  PlayerCreationFilters,
+  ItemGrid
+} from '@/shared/components/playerCreation'
 import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
+import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
 import { RaceCard } from '../components/RaceCard'
 import { RaceDetailPanel } from '../components/RaceDetailPanel'
 import type { PlayerCreationItem, SearchCategory, SelectedTag } from '@/shared/components/playerCreation/types'
@@ -92,21 +101,15 @@ export function UnifiedRacesPage() {
     filters: []
   })
 
-  const handleTagSelect = (tag: SelectedTag) => {
-    const updatedFilters = {
-      ...currentFilters,
-      selectedTags: [...currentFilters.selectedTags, tag]
-    }
-    handleFiltersChange(updatedFilters)
-  }
-
-  const handleTagRemove = (tagId: string) => {
-    const updatedFilters = {
-      ...currentFilters,
-      selectedTags: currentFilters.selectedTags.filter(tag => tag.id !== tagId)
-    }
-    handleFiltersChange(updatedFilters)
-  }
+  // Use the new filters hook
+  const {
+    handleTagSelect,
+    handleTagRemove
+  } = usePlayerCreationFilters({
+    initialFilters: currentFilters,
+    onFiltersChange: handleFiltersChange,
+    onSearch: handleSearch
+  })
 
   const renderRaceCard = (item: PlayerCreationItem, isSelected: boolean) => (
     <RaceCard 
@@ -150,23 +153,38 @@ export function UnifiedRacesPage() {
   }
 
   return (
-    <PlayerCreationPage
+    <PlayerCreationLayout
       title="Races"
       description="Choose your character's race. Each race has unique abilities, starting attributes, and racial traits that will shape your journey through Tamriel."
-      items={filteredItems}
-      searchCategories={searchCategories}
-      selectedItem={selectedItem}
-      onItemSelect={handleItemSelect}
-      onFiltersChange={handleFiltersChange}
-      onSearch={handleSearch}
-      onTagSelect={handleTagSelect}
-      onTagRemove={handleTagRemove}
-      viewMode={viewMode}
-      onViewModeChange={handleViewModeChange}
-      renderItemCard={renderRaceCard}
-      renderDetailPanel={renderRaceDetailPanel}
-      searchPlaceholder="Search races by name, traits, or description..."
-      currentFilters={currentFilters}
-    />
+    >
+      <PlayerCreationFilters
+        searchCategories={searchCategories}
+        selectedTags={currentFilters.selectedTags}
+        viewMode={viewMode}
+        onTagSelect={handleTagSelect}
+        onTagRemove={handleTagRemove}
+        onViewModeChange={handleViewModeChange}
+      />
+
+      <PlayerCreationContent>
+        <PlayerCreationItemsSection>
+          <ItemGrid
+            items={filteredItems}
+            viewMode={viewMode}
+            onItemSelect={handleItemSelect}
+            selectedItem={selectedItem}
+            renderItemCard={renderRaceCard}
+          />
+        </PlayerCreationItemsSection>
+
+        <PlayerCreationDetailSection>
+          {selectedItem ? (
+            renderRaceDetailPanel(selectedItem)
+          ) : (
+            <PlayerCreationEmptyDetail />
+          )}
+        </PlayerCreationDetailSection>
+      </PlayerCreationContent>
+    </PlayerCreationLayout>
   )
 } 
