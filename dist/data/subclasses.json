@@ -1,0 +1,416 @@
+[
+  {
+    "name": "Destiny",
+    "description": "Increases carry weight by 25.",
+    "prerequisites": [],
+    "globalFormId": "0xFE260808"
+  },
+  {
+    "name": "Focus",
+    "description": "Your Magicka Regeneration is increased by 50%.",
+    "prerequisites": [
+      "Destiny"
+    ],
+    "globalFormId": "0xFE26080A"
+  },
+  {
+    "name": "Constitution",
+    "description": "Your Health Regeneration is increased by 50%.",
+    "prerequisites": [
+      "Destiny"
+    ],
+    "globalFormId": "0xFE26080B"
+  },
+  {
+    "name": "Endurance",
+    "description": "Your Stamina Regeneration is increased by 50%.",
+    "prerequisites": [
+      "Destiny"
+    ],
+    "globalFormId": "0xFE26080C"
+  },
+  {
+    "name": "Mage",
+    "description": "Your spells and enchantments cost 5% less Magicka.",
+    "prerequisites": [
+      "Focus"
+    ],
+    "globalFormId": "0xFE26080D"
+  },
+  {
+    "name": "Warrior",
+    "description": "You deal 5% more weapon damage.",
+    "prerequisites": [
+      "Constitution"
+    ],
+    "globalFormId": "0xFE26080E"
+  },
+  {
+    "name": "Thief",
+    "description": "You are 10% harder to detect.",
+    "prerequisites": [
+      "Endurance"
+    ],
+    "globalFormId": "0xFE26080F"
+  },
+  {
+    "name": "Fortification",
+    "description": "Your Health, Magicka and Stamina are increased by 10 each.",
+    "prerequisites": [
+      "Mage"
+    ],
+    "globalFormId": "0xFE260810"
+  },
+  {
+    "name": "Magicka Surge",
+    "description": "Your Magicka Regeneration is increased by 400% when your Magicka falls below 25%.",
+    "prerequisites": [
+      "Mage"
+    ],
+    "globalFormId": "0xFE260811"
+  },
+  {
+    "name": "Magic Shell",
+    "description": "Your magic resistance is increased by 10%.",
+    "prerequisites": [
+      "Mage",
+      "Warrior"
+    ],
+    "globalFormId": "0xFE260812"
+  },
+  {
+    "name": "Iron Skin",
+    "description": "Every 10 seconds, taking damage increases your Armor Rating by 150 for 6 seconds.",
+    "prerequisites": [
+      "Warrior"
+    ],
+    "globalFormId": "0xFE260813"
+  },
+  {
+    "name": "Battle Spirit",
+    "description": "Power attacks increase your attack damage by 10% for 6 seconds.",
+    "prerequisites": [
+      "Warrior",
+      "Thief"
+    ],
+    "globalFormId": "0xFE260814"
+  },
+  {
+    "name": "Adrenaline",
+    "description": "Your Stamina Regeneration is increased by 200% when your Stamina falls below 25%.",
+    "prerequisites": [
+      "Thief"
+    ],
+    "globalFormId": "0xFE260815"
+  },
+  {
+    "name": "Swiftness",
+    "description": "Every 10 seconds, taking damage increases your movement speed by 20% for 6 seconds.",
+    "prerequisites": [
+      "Thief"
+    ],
+    "globalFormId": "0xFE260816"
+  },
+  {
+    "name": "Agent",
+    "description": "Enemy attacks against you slows them by 25% for 5 seconds.",
+    "prerequisites": [
+      "Fortification"
+    ],
+    "globalFormId": "0xFE260817"
+  },
+  {
+    "name": "Sorcerer",
+    "description": "You take 10% less damage while casting spells.",
+    "prerequisites": [
+      "Magicka Surge"
+    ],
+    "globalFormId": "0xFE260818"
+  },
+  {
+    "name": "Spellsword",
+    "description": "You restore 15 magicka per weapon attack.",
+    "prerequisites": [
+      "Magic Shell"
+    ],
+    "globalFormId": "0xFE260819"
+  },
+  {
+    "name": "Knight",
+    "description": "You take 10% less damage while power attacking, drawing a bow, or blocking.",
+    "prerequisites": [
+      "Iron Skin"
+    ],
+    "globalFormId": "0xFE26081A"
+  },
+  {
+    "name": "Endurance",
+    "description": "You regenerate stamina 100% faster.",
+    "prerequisites": [
+      "Battle Spirit"
+    ],
+    "globalFormId": "0xFE26081B"
+  },
+  {
+    "name": "Scout",
+    "description": "Your bows, crossbows and throwing knives do 10% more damage.",
+    "prerequisites": [
+      "Adrenaline"
+    ],
+    "globalFormId": "0xFE26081C"
+  },
+  {
+    "name": "Spellblade",
+    "description": "Attacks with weapons have a 30% chance to interupt casting enemies.",
+    "prerequisites": [
+      "Swiftness"
+    ],
+    "globalFormId": "0xFE26081D"
+  },
+  {
+    "name": "Leadership",
+    "description": "Nearby allies move 15% faster during combat.",
+    "prerequisites": [
+      "Agent"
+    ],
+    "globalFormId": "0xFE26081E"
+  },
+  {
+    "name": "Hard Skin",
+    "description": "Your Armor Rating is increased by 100.",
+    "prerequisites": [
+      "Agent"
+    ],
+    "globalFormId": "0xFE26081F"
+  },
+  {
+    "name": "Healing Presence",
+    "description": "You heal yourself and nearby allies for 10 Health every 10 seconds.",
+    "prerequisites": [
+      "Agent",
+      "Sorcerer"
+    ],
+    "globalFormId": "0xFE260820"
+  },
+  {
+    "name": "Absorbtion",
+    "description": "You have a 10% chance to absorb the Magicka from incoming spells.",
+    "prerequisites": [
+      "Sorcerer"
+    ],
+    "globalFormId": "0xFE260821"
+  },
+  {
+    "name": "Conjuring Presence",
+    "description": "Nearby summoned or reanimated allies have 50 increased Health, 50 increased Armor Rating and reflect 15% physical damage.",
+    "prerequisites": [
+      "Sorcerer",
+      "Spellsword"
+    ],
+    "globalFormId": "0xFE260822"
+  },
+  {
+    "name": "Corrosive Weapon",
+    "description": "Power attacks reduces enemies magic resistance by 15% and Armor Rating by 75 for 10 seconds.",
+    "prerequisites": [
+      "Spellsword"
+    ],
+    "globalFormId": "0xFE260823"
+  },
+  {
+    "name": "Leeching Spikes",
+    "description": "You absorb 15 Health over 5 seconds from enemies attacking you once every 10 seconds for each enemy. While below 25% Health, absorbed Health is doubled.",
+    "prerequisites": [
+      "Spellsword",
+      "Knight"
+    ],
+    "globalFormId": "0xFE260824"
+  },
+  {
+    "name": "Unyielding",
+    "description": "While blocking, your health, stamina and magicka regeneration are increased by 25%.",
+    "prerequisites": [
+      "Knight"
+    ],
+    "globalFormId": "0xFE260825"
+  },
+  {
+    "name": "Overwhelming Presence",
+    "description": "Close enemies have 100 reduced Armor Rating.",
+    "prerequisites": [
+      "Knight",
+      "Endurance"
+    ],
+    "globalFormId": "0xFE260826"
+  },
+  {
+    "name": "Smash",
+    "description": "Power attacks deal 10% more damage.",
+    "prerequisites": [
+      "Endurance"
+    ],
+    "globalFormId": "0xFE260827"
+  },
+  {
+    "name": "Trickster",
+    "description": "You have a 10% chance to evade enemy weapon attacks.",
+    "prerequisites": [
+      "Endurance",
+      "Scout"
+    ],
+    "globalFormId": "0xFE260828"
+  },
+  {
+    "name": "Swift Shadow",
+    "description": "You move 20% faster while sneaking.",
+    "prerequisites": [
+      "Scout"
+    ],
+    "globalFormId": "0xFE260829"
+  },
+  {
+    "name": "Viper's Blade",
+    "description": "Power attacks reduces enemies poison resistance by 50% for 10 seconds.",
+    "prerequisites": [
+      "Scout",
+      "Spellblade"
+    ],
+    "globalFormId": "0xFE26082A"
+  },
+  {
+    "name": "Evasion",
+    "description": "You have a 15% chance to evade spells.",
+    "prerequisites": [
+      "Spellblade"
+    ],
+    "globalFormId": "0xFE26082B"
+  },
+  {
+    "name": "Silent Blade",
+    "description": "Your attacks deal 25 damage to Magicka.",
+    "prerequisites": [
+      "Spellblade"
+    ],
+    "globalFormId": "0xFE260846"
+  },
+  {
+    "name": "Bard",
+    "description": "Nearby allies deal 15% more physical damage and have 15% magic resistance during combat.",
+    "prerequisites": [
+      "Leadership"
+    ],
+    "globalFormId": "0xFE260847"
+  },
+  {
+    "name": "Shaman",
+    "description": "You deal 20% more damage against impaired enemies.",
+    "prerequisites": [
+      "Hard Skin"
+    ],
+    "globalFormId": "0xFE260848"
+  },
+  {
+    "name": "Templar",
+    "description": "Every 90 seconds, falling below 10% Health, you are immune to any damage for 6 seconds and heal yourself afterwards for 100 Health.",
+    "prerequisites": [
+      "Healing Presence"
+    ],
+    "globalFormId": "0xFE260849"
+  },
+  {
+    "name": "Archmage",
+    "description": "Your Spells are 15% stronger or last 30% longer.",
+    "prerequisites": [
+      "Absorbtion"
+    ],
+    "globalFormId": "0xFE26084A"
+  },
+  {
+    "name": "Summoner",
+    "description": "You can summon or reanimate one additional minion.",
+    "prerequisites": [
+      "Conjuring Presence"
+    ],
+    "globalFormId": "0xFE26084B"
+  },
+  {
+    "name": "Battlemage",
+    "description": "Power attacks cost 25% less stamina if you have a spell in your left hand. Spell & enchantments cost 10% less if you have a weapon in your right hand.",
+    "prerequisites": [
+      "Corrosive Weapon"
+    ],
+    "globalFormId": "0xFE26084C"
+  },
+  {
+    "name": "Blood Knight",
+    "description": "While above 50% Health you deal 10% more weapon damage and while below 50% Health, you take 25% less magic damage.",
+    "prerequisites": [
+      "Leeching Spikes"
+    ],
+    "globalFormId": "0xFE26084D"
+  },
+  {
+    "name": "General",
+    "description": "Your weapon damage and Armor Rating is increased by 10%.",
+    "prerequisites": [
+      "Unyielding"
+    ],
+    "globalFormId": "0xFE26084E"
+  },
+  {
+    "name": "Monk",
+    "description": "Your attacks deal 50 bleeding damage over 5 seconds.",
+    "prerequisites": [
+      "Overwhelming Presence"
+    ],
+    "globalFormId": "0xFE26084F"
+  },
+  {
+    "name": "Berserker",
+    "description": "You take 25% less damage while power attacking and power attack stamina usage is reduced by 25%.",
+    "prerequisites": [
+      "Smash"
+    ],
+    "globalFormId": "0xFE260850"
+  },
+  {
+    "name": "Saboteur",
+    "description": "Your attacks have a 15% chance to stagger enemies. You deal 20% more damage against staggered enemies.",
+    "prerequisites": [
+      "Trickster"
+    ],
+    "globalFormId": "0xFE260851"
+  },
+  {
+    "name": "Assassin",
+    "description": "Every 10 seconds, your next sneak attack deals 100% more damage.",
+    "prerequisites": [
+      "Swift Shadow"
+    ],
+    "globalFormId": "0xFE260852"
+  },
+  {
+    "name": "Rogue",
+    "description": "Your attacks deal 50 poison damage over 10 seconds.",
+    "prerequisites": [
+      "Viper's Blade"
+    ],
+    "globalFormId": "0xFE260853"
+  },
+  {
+    "name": "Stalker",
+    "description": "Your attacks slows enemies by 50% for 3 seconds.",
+    "prerequisites": [
+      "Evasion"
+    ],
+    "globalFormId": "0xFE260854"
+  },
+  {
+    "name": "Nightblade",
+    "description": "Against enemies that are out of Magicka, your attacks deal 20% more damage and have a 30% chance to dispel magic.",
+    "prerequisites": [
+      "Silent Blade"
+    ],
+    "globalFormId": "0xFE260855"
+  }
+]
