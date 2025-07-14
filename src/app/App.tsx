@@ -12,6 +12,7 @@ import { SidebarMenuItem } from '@/shared/ui/sidebar/SidebarMenuItem'
 import { SidebarMenuButton } from '@/shared/ui/sidebar/SidebarMenuButton'
 import { SidebarRail } from '@/shared/ui/sidebar/SidebarRail'
 import { SiteHeader } from './SiteHeader'
+import { Z_INDEX } from '@/lib/constants'
 import { Home } from 'lucide-react'
 
 const navSections = [
@@ -137,6 +138,7 @@ function App() {
             className={`absolute top-0 left-0 h-full transition-transform duration-300 ease-in-out ${
               sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'
             }`}
+            style={{ zIndex: Z_INDEX.SIDEBAR }}
           >
             <AppSidebar collapsed={false} />
           </div>

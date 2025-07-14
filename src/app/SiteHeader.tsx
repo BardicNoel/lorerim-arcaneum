@@ -1,5 +1,6 @@
 import React from 'react';
 import { Menu } from 'lucide-react';
+import { Z_INDEX } from '@/lib/constants';
 
 interface SiteHeaderProps {
   sidebarCollapsed: boolean;
@@ -8,7 +9,10 @@ interface SiteHeaderProps {
 
 export function SiteHeader({ sidebarCollapsed, onToggleSidebar }: SiteHeaderProps) {
   return (
-    <header className="sticky top-0 z-40 w-full h-12 flex items-center bg-skyrim-dark border-b border-skyrim-gold/20 px-2 shadow-sm">
+    <header 
+      className="sticky top-0 w-full h-12 flex items-center bg-white border-b border-skyrim-gold/20 px-2 shadow-sm"
+      style={{ zIndex: Z_INDEX.NAVIGATION, backgroundColor: '#fff' }}
+    >
       <button
         onClick={onToggleSidebar}
         aria-label={sidebarCollapsed ? 'Open sidebar' : 'Close sidebar'}

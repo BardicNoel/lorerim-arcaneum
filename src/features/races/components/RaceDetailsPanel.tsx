@@ -5,6 +5,7 @@ import { Badge } from '@/shared/ui/ui/badge'
 import { H2, H3, H4, P, Small } from '@/shared/ui/ui/typography'
 import { X, Shield, Zap, Heart, Brain, Battery, Sword, Eye } from 'lucide-react'
 import type { Race } from '../types'
+import { Z_INDEX } from '@/lib/constants'
 
 interface RaceDetailsPanelProps {
   race: Race | null
@@ -50,16 +51,18 @@ export function RaceDetailsPanel({ race, isOpen, onClose }: RaceDetailsPanelProp
       {/* Backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/20 z-[100]"
+          className="fixed inset-0 bg-black/20"
+          style={{ zIndex: Z_INDEX.DROPDOWN, position: 'fixed' }}
           onClick={onClose}
         />
       )}
       
       {/* Side Panel */}
       <div 
-        className={`fixed top-0 right-0 h-full w-96 bg-white border-l border-border shadow-2xl transform transition-transform duration-300 ease-in-out z-[101] ${
+        className={`fixed top-0 right-0 h-full w-96 bg-white border-l border-border shadow-2xl transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
+        style={{ zIndex: Z_INDEX.AUTOCOMPLETE, position: 'fixed' }}
       >
         {race && (
           <div className="h-full flex flex-col">
