@@ -3,97 +3,64 @@
 /* ===== MODERN 2020+ DESIGN SYSTEM ===== */
 
 :root {
-  /* ===== SOPHISTICATED COLOR PALETTE ===== */
-  /* Light Theme - Muted, elegant tones */
-  --background: 0 0% 100%;
-  --foreground: 240 10% 3.9%;
-  
-  /* Card & Surface Colors */
-  --card: 0 0% 100%;
-  --card-foreground: 240 10% 3.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 3.9%;
-  
-  /* Primary - Dusty Blue */
-  --primary: 217 91% 60%;
-  --primary-foreground: 0 0% 98%;
-  
-  /* Secondary - Soft Sage Green */
-  --secondary: 142 76% 36%;
-  --secondary-foreground: 0 0% 98%;
-  
-  /* Muted - Warm Neutrals */
-  --muted: 240 4.8% 95.9%;
-  --muted-foreground: 240 3.8% 46.1%;
-  
-  /* Accent - Warm Amber */
-  --accent: 38 92% 50%;
-  --accent-foreground: 240 10% 3.9%;
-  
-  /* Destructive - Refined Red */
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 0 0% 98%;
-  
-  /* UI Elements */
-  --border: 240 5.9% 90%;
-  --input: 240 5.9% 90%;
-  --ring: 217 91% 60%;
-  
-  /* ===== MODERN SPACING & RADIUS ===== */
-  --radius: 0.75rem;
-  --radius-sm: 0.5rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  
-  /* ===== ELEVATION & SHADOWS ===== */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  
-  /* ===== ANIMATION TIMINGS ===== */
-  --transition-fast: 150ms ease-in-out;
-  --transition-normal: 250ms ease-in-out;
-  --transition-slow: 350ms ease-in-out;
+  --background: 210 10% 98%;
+  --foreground: 40 20% 15%;
+
+  --card: 210 10% 96%;
+  --card-foreground: 40 20% 15%;
+  --popover: 210 10% 98%;
+  --popover-foreground: 40 20% 15%;
+
+  --primary: 43 35% 45%;
+  --primary-foreground: 210 20% 96%;
+
+  --secondary: 0 0% 30%;
+  --secondary-foreground: 210 20% 96%;
+
+  --muted: 210 15% 92%;
+  --muted-foreground: 210 10% 40%;
+
+  --accent: 0 5% 30%;
+  --accent-foreground: 210 20% 96%;
+
+  --destructive: 0 60% 40%;
+  --destructive-foreground: 210 20% 96%;
+
+  --border: 210 10% 80%;
+  --input: 210 10% 80%;
+  --ring: 43 35% 45%;
 }
 
 /* ===== DARK THEME ===== */
 .dark {
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
-  
-  /* Card & Surface Colors */
-  --card: 240 10% 3.9%;
-  --card-foreground: 0 0% 98%;
-  --popover: 240 10% 3.9%;
-  --popover-foreground: 0 0% 98%;
-  
-  /* Primary - Brighter Blue for Dark Mode */
-  --primary: 217 91% 60%;
-  --primary-foreground: 240 10% 3.9%;
-  
-  /* Secondary - Lighter Sage */
-  --secondary: 142 76% 36%;
-  --secondary-foreground: 240 10% 3.9%;
-  
-  /* Muted - Dark Neutrals */
-  --muted: 240 3.7% 15.9%;
-  --muted-foreground: 240 5% 64.9%;
-  
-  /* Accent - Warmer Amber */
-  --accent: 38 92% 50%;
-  --accent-foreground: 240 10% 3.9%;
-  
-  /* Destructive - Darker Red */
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 98%;
-  
-  /* UI Elements */
-  --border: 240 3.7% 15.9%;
-  --input: 240 3.7% 15.9%;
-  --ring: 217 91% 60%;
+  --background: 210 10% 8%;
+  --foreground: 40 20% 92%;
+
+  --card: 210 10% 12%;
+  --card-foreground: 40 20% 92%;
+  --popover: 210 10% 12%;
+  --popover-foreground: 40 20% 92%;
+
+  --primary: 43 35% 45%;
+  --primary-foreground: 210 10% 8%;
+
+  --secondary: 0 0% 50%;
+  --secondary-foreground: 40 20% 92%;
+
+  --muted: 210 10% 20%;
+  --muted-foreground: 210 10% 60%;
+
+  --accent: 0 5% 40%;
+  --accent-foreground: 40 20% 92%;
+
+  --destructive: 0 60% 30%;
+  --destructive-foreground: 40 20% 92%;
+
+  --border: 210 10% 20%;
+  --input: 210 10% 20%;
+  --ring: 43 35% 45%;
 }
+
 
 /* ===== BASE STYLES ===== */
 @layer base {
