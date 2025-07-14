@@ -1,0 +1,158 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# 🧱 Player Creation Page Layout – Reusable Design Spec
+
+This design defines a **reusable page layout** for all player creation pages (traits, races, birthsigns, classes, etc.). Each page uses the same structure with dynamic content injected per use case.
+
+---
+
+## 📦 Page-Level Layout Component
+
+[ FilterSidebar ] [ ItemGrid/List ] [ DetailPanel ]
+
+### 1️⃣ `PlayerCreationPage`
+
+The base wrapper for all player creation pages.
+
+- Defines the global layout:
+- Provides:
+- Consistent header & breadcrumb.
+- Search bar placement.
+- Responsive behavior.
+
+---
+
+## 🧩 Core Reusable Components
+
+### 🔍 `SearchBar`
+
+- Positioned at the top center above grid/list.
+- **Props**:
+- `placeholder`: e.g., "Search traits…"
+- `onSearch`: Callback triggered on query updates.
+- **Behavior**:
+- Fuzzy matches against item names and descriptions.
+- Instant updates to grid/list.
+
+---
+
+### 🗂️ `FilterSidebar`
+
+- Left column (desktop), collapsible menu (mobile).
+- **Props**:
+- `filters`: Array of filter groups (categories, tags, etc.)
+- `onFilterChange`: Callback when filters are updated.
+- Contains:
+- Multi-select filter chips.
+- “Clear All” button.
+- Example filter groups:
+- Functional Categories: Combat, Economic, Social, Survival.
+- Tags: Weapon types, magic schools.
+
+---
+
+### 📋 `ItemGrid` / `ItemList`
+
+- Displays **compact cards** for each item.
+- **Props**:
+- `items`: Array of content objects (traits, races, etc.)
+- `viewMode`: `"grid"` or `"list"`.
+- `onSelect`: Callback when an item is clicked.
+- Responsive behavior:
+- Grid: 3–4 columns (desktop), 2 (tablet), 1 (mobile).
+- List: Full-width cards stacked vertically.
+
+---
+
+### 🃏 `ItemCard`
+
+- Compact summary card for each item.
+- **Props**:
+- `name`
+- `summary`
+- `tags`
+- `previewEffects` (optional)
+- Clickable to open the **DetailPanel**.
+
+---
+
+### 📖 `DetailPanel`
+
+- Right column detail view (always visible on desktop).
+- Takes up equal vertical space alongside grid/list.
+- **Props**:
+- `item`: Selected content object.
+- `onClose`: Optional callback (used for mobile back navigation).
+- Sections:
+- Name & summary.
+- Full description/details.
+- Effects (positive/negative/neutral).
+- Associated Items (if present).
+- Tags display.
+- **Behavior**:
+- Stays fixed while grid/list scrolls.
+- Switches content instantly when another item is selected.
+
+---
+
+### 🏷️ `TagChips`
+
+- Used in ItemCards and DetailPanel for displaying tags.
+- **Props**:
+- `tags`: Array of strings.
+- `onClick`: Optional filtering callback.
+
+---
+
+### 🎁 `AssociatedItemIcons`
+
+- Shows icons for items granted by a trait/race/etc.
+- Tooltip hover displays item name and details.
+
+---
+
+## 📱 Responsive Behavior
+
+| Viewport | Layout |
+| --- | --- |
+| Desktop | 3-column: FilterSidebar + Grid/List + DetailPanel. |
+| Tablet | 2-column: Collapsible FilterSidebar + Grid/List. |
+| Mobile | Stacked: Dropdown filters + Grid/List + Full Page Details. |
+
+---
+
+## 🌟 Dynamic Content Injection
+
+Each player creation page reuses this layout and injects content dynamically:
+
+| Page | Content Source |
+| --- | --- |
+| Traits Catalog | Traits JSON (name, effects). |
+| Races Catalog | Races JSON (abilities, bonuses). |
+| Birthsigns Catalog | Birthsigns JSON (blessings). |
+| Class Selection | Classes JSON (skills, perks). |
+
+---
+
+## 🔥 Why This Design?
+
+✔ Unified UX across all player creation pages.
+
+✔ Modular components for easy reuse and testing.
+
+✔ Supports grid/list toggle and dynamic filters.
+
+✔ Future-proof for additional features like “Favorites” or “Recommended”.
+
+---
+
+## 📝 Summary
+
+This layout provides a **clean, dynamic browsing experience** for all player creation systems:
+
+- 🔍 Search + 🗂️ Filters + 📋 Grid/List + 📖 Details.
+- Fully responsive across desktop, tablet, and mobile.
+- Plug in any content type (traits, races, classes, etc.) without changing core layout.
