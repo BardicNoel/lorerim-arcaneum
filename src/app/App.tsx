@@ -12,6 +12,7 @@ import { SidebarMenuItem } from '@/shared/ui/sidebar/SidebarMenuItem'
 import { SidebarMenuButton } from '@/shared/ui/sidebar/SidebarMenuButton'
 import { SidebarRail } from '@/shared/ui/sidebar/SidebarRail'
 import { SiteHeader } from './SiteHeader'
+import { Home } from 'lucide-react'
 
 const navSections = [
   {
@@ -65,7 +66,17 @@ function AppSidebar({ collapsed }: { collapsed: boolean }) {
 
   return (
     <Sidebar collapsed={collapsed}>
-      <SidebarHeader />
+      <SidebarHeader>
+        {!collapsed && (
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center justify-center w-full gap-2 hover:bg-skyrim-gold/15 hover:shadow-md hover:scale-[1.02] active:scale-[0.98] rounded px-2 py-1 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-skyrim-gold/50 focus:ring-offset-1"
+          >
+            <Home className="w-4 h-4 text-skyrim-gold transition-transform duration-200 group-hover:scale-110" />
+            <span className="text-sm font-semibold text-skyrim-gold tracking-wide">Home</span>
+          </button>
+        )}
+      </SidebarHeader>
       <SidebarContent>
         {navSections.map((section) => (
           <SidebarGroup key={section.label}>
@@ -121,9 +132,17 @@ function App() {
           sidebarCollapsed={sidebarCollapsed}
           onToggleSidebar={() => setSidebarCollapsed((c) => !c)}
         />
-        <div className="flex flex-1">
-          <AppSidebar collapsed={sidebarCollapsed} />
-          <main className="flex-1 p-8">
+        <div className="flex flex-1 relative">
+          <div 
+            className={`absolute top-0 left-0 h-full transition-transform duration-300 ease-in-out ${
+              sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'
+            }`}
+          >
+            <AppSidebar collapsed={false} />
+          </div>
+          <main className={`flex-1 p-8 transition-all duration-300 ease-in-out ${
+            sidebarCollapsed ? 'ml-0' : 'ml-64'
+          }`}>
             <AppRouter />
           </main>
         </div>
