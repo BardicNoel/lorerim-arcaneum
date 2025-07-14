@@ -9,6 +9,17 @@ import { Grid3X3, List } from 'lucide-react'
 import { Z_INDEX } from '@/lib/constants'
 import type { PlayerCreationPageProps, PlayerCreationFilters, PlayerCreationItem, SearchOption, SelectedTag } from './types'
 
+/**
+ * @deprecated This component is deprecated. Use the new composable components instead:
+ * - PlayerCreationLayout
+ * - PlayerCreationContent
+ * - PlayerCreationItemsSection
+ * - PlayerCreationDetailSection
+ * - PlayerCreationEmptyDetail
+ * - PlayerCreationFilters
+ * 
+ * See docs/player-creation-migration-guide.md for migration instructions.
+ */
 export function PlayerCreationPage<T extends PlayerCreationItem>({
   title,
   description,

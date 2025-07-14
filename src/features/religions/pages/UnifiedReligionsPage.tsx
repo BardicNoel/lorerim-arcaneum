@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { PlayerCreationPage } from '@/shared/components/playerCreation'
+import { 
+  PlayerCreationLayout,
+  PlayerCreationContent,
+  PlayerCreationItemsSection,
+  PlayerCreationDetailSection,
+  PlayerCreationEmptyDetail,
+  PlayerCreationFilters,
+  ItemGrid
+} from '@/shared/components/playerCreation'
 import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
+import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
 import { ReligionCard } from '../components/ReligionCard'
 import { ReligionDetailPanel } from '../components/ReligionDetailPanel'
 import { BlessingCard } from '../components/BlessingCard'
@@ -41,57 +50,35 @@ export function UnifiedReligionsPage() {
     fetchReligions()
   }, [])
 
-  // Convert religions to PlayerCreationItem format for followers
+  // Convert religions to PlayerCreationItem format for both follower and blessing views
   const followerItems: PlayerCreationItem[] = religions.map(religion => ({
     id: `follower-${religion.name.toLowerCase().replace(/\s+/g, '-')}`,
     name: religion.name,
-    description: religion.tenet?.description || 'No description available',
-    tags: [
-      religion.type, // Pantheon type
-      ...(religion.favoredRaces || []),
-      ...(religion.worshipRestrictions || []).map(restriction => 
-        restriction.toLowerCase().includes('quest') ? 'Quest Required' : 
-        restriction.toLowerCase().includes('alignment') ? 'Alignment Restricted' : 
-        restriction.toLowerCase().includes('race') ? 'Race Restricted' : restriction
-      )
-    ],
-    summary: religion.tenet?.description || 'No description available',
-    effects: [
-      ...(religion.boon1?.effects?.map(effect => ({
-        type: 'positive' as const,
-        name: effect.effectName,
-        description: effect.effectDescription,
-        value: effect.magnitude,
-        target: effect.targetAttribute || ''
-      })) || []),
-      ...(religion.boon2?.effects?.map(effect => ({
-        type: 'positive' as const,
-        name: effect.effectName,
-        description: effect.effectDescription,
-        value: effect.magnitude,
-        target: effect.targetAttribute || ''
-      })) || [])
-    ],
+    description: religion.tenet?.description || '',
+    tags: religion.favoredRaces || [],
+    summary: religion.tenet?.description || '',
+    effects: religion.tenet?.effects?.map(effect => ({
+      type: 'positive',
+      name: effect.effectName,
+      description: effect.effectDescription,
+      value: effect.magnitude,
+      target: effect.targetAttribute || ''
+    })) || [],
     associatedItems: [],
     imageUrl: undefined,
-    category: religion.type // Use pantheon type as category
+    category: religion.type
   }))
 
-  // Convert religions to PlayerCreationItem format for blessings
   const blessingItems: PlayerCreationItem[] = religions
-    .filter(religion => religion.blessing) // Only include religions with blessings
+    .filter(religion => religion.blessing)
     .map(religion => ({
       id: `blessing-${religion.name.toLowerCase().replace(/\s+/g, '-')}`,
-      name: religion.name,
-      description: `Shrine blessing from ${religion.name}`,
-      tags: [
-        religion.type, // Pantheon type
-        'Shrine Blessing',
-        'Temporary'
-      ],
-      summary: `Shrine blessing from ${religion.name}`,
+      name: `${religion.name} Blessing`,
+      description: religion.blessing?.spellName || '',
+      tags: religion.favoredRaces || [],
+      summary: religion.blessing?.spellName || '',
       effects: religion.blessing?.effects?.map(effect => ({
-        type: 'positive' as const,
+        type: 'positive',
         name: effect.effectName,
         description: effect.effectDescription,
         value: effect.magnitude,
@@ -99,7 +86,7 @@ export function UnifiedReligionsPage() {
       })) || [],
       associatedItems: [],
       imageUrl: undefined,
-      category: religion.type // Use pantheon type as category
+      category: religion.type
     }))
 
   // Generate search categories for autocomplete
@@ -168,21 +155,15 @@ export function UnifiedReligionsPage() {
     filters: []
   })
 
-  const handleTagSelect = (tag: SelectedTag) => {
-    const updatedFilters = {
-      ...currentFilters,
-      selectedTags: [...currentFilters.selectedTags, tag]
-    }
-    handleFiltersChange(updatedFilters)
-  }
-
-  const handleTagRemove = (tagId: string) => {
-    const updatedFilters = {
-      ...currentFilters,
-      selectedTags: currentFilters.selectedTags.filter(tag => tag.id !== tagId)
-    }
-    handleFiltersChange(updatedFilters)
-  }
+  // Use the new filters hook
+  const {
+    handleTagSelect,
+    handleTagRemove
+  } = usePlayerCreationFilters({
+    initialFilters: currentFilters,
+    onFiltersChange: handleFiltersChange,
+    onSearch: handleSearch
+  })
 
   const renderReligionCard = (item: PlayerCreationItem, isSelected: boolean) => (
     <ReligionCard 
@@ -254,51 +235,52 @@ export function UnifiedReligionsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Religions</h1>
-          <p className="text-muted-foreground text-lg">
-            Choose your character's religion. Each deity offers unique blessings, tenets, and powers that will guide your spiritual journey through Tamriel.
-          </p>
+    <PlayerCreationLayout
+      title="Religions"
+      description="Choose your character's religion. Each deity offers unique blessings, tenets, and powers that will guide your spiritual journey through Tamriel."
+    >
+      <PlayerCreationFilters
+        searchCategories={searchCategories}
+        selectedTags={currentFilters.selectedTags}
+        viewMode={viewMode}
+        onTagSelect={handleTagSelect}
+        onTagRemove={handleTagRemove}
+        onViewModeChange={handleViewModeChange}
+      >
+        {/* Custom content after filters - Tabs */}
+        <div className="mb-6">
+          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'follower' | 'blessing')} className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="follower" className="flex items-center gap-2">
+                🙏 Follower
+              </TabsTrigger>
+              <TabsTrigger value="blessing" className="flex items-center gap-2">
+                ✨ Blessing
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
+      </PlayerCreationFilters>
 
-        <PlayerCreationPage
-          title=""
-          description=""
-          items={filteredItems}
-          searchCategories={searchCategories}
-          selectedItem={selectedItem}
-          onItemSelect={handleItemSelect}
-          onFiltersChange={handleFiltersChange}
-          onSearch={handleSearch}
-          onTagSelect={handleTagSelect}
-          onTagRemove={handleTagRemove}
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
-          renderItemCard={activeTab === 'follower' ? renderReligionCard : renderBlessingCard}
-          renderDetailPanel={activeTab === 'follower' ? renderReligionDetailPanel : renderBlessingDetailPanel}
-          searchPlaceholder={activeTab === 'follower' 
-            ? "Search religions by name, pantheon, effects, or description..."
-            : "Search blessings by name, pantheon, effects, or description..."
-          }
-          currentFilters={currentFilters}
-          customContentAfterFilters={
-            <div className="mb-6">
-              <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'follower' | 'blessing')} className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="follower" className="flex items-center gap-2">
-                    🙏 Follower
-                  </TabsTrigger>
-                  <TabsTrigger value="blessing" className="flex items-center gap-2">
-                    ✨ Blessing
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-          }
-        />
-      </div>
-    </div>
+      <PlayerCreationContent>
+        <PlayerCreationItemsSection>
+          <ItemGrid
+            items={filteredItems}
+            viewMode={viewMode}
+            onItemSelect={handleItemSelect}
+            selectedItem={selectedItem}
+            renderItemCard={activeTab === 'follower' ? renderReligionCard : renderBlessingCard}
+          />
+        </PlayerCreationItemsSection>
+
+        <PlayerCreationDetailSection>
+          {selectedItem ? (
+            activeTab === 'follower' ? renderReligionDetailPanel(selectedItem) : renderBlessingDetailPanel(selectedItem)
+          ) : (
+            <PlayerCreationEmptyDetail />
+          )}
+        </PlayerCreationDetailSection>
+      </PlayerCreationContent>
+    </PlayerCreationLayout>
   )
 } 
