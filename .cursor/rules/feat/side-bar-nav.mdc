@@ -1,0 +1,179 @@
+# 📐 Left Site Navigation Spec (ShadCN Sidebar Block)
+
+## 🏛 Overview
+
+The Left Site Navigation uses the [ShadCN Sidebar Block](https://ui.shadcn.com/blocks/sidebar) as the base. It provides:
+
+- A **persistent sidebar** on desktop (`lg:` breakpoints)
+- A **mobile slide-out drawer** using `Sheet`
+- Grouped links for **Player Pages**, **Settings**, and **Docs**
+- Skyrim-inspired minimal styling via Tailwind utilities.
+
+---
+
+## 🌿 Components Used (ShadCN)
+
+| ShadCN Primitive          | Purpose                               |
+| ------------------------- | ------------------------------------- |
+| `Sidebar Block`           | Base persistent sidebar structure     |
+| `Accordion`               | Collapsible sub-groups (Player Pages) |
+| `Sheet`                   | Mobile slide-out navigation           |
+| `Button` (variant: ghost) | Mobile hamburger toggle               |
+| `Separator`               | Group separation in sidebar           |
+| `NavigationMenuItem`      | Individual links                      |
+
+---
+
+## 🗂 Structure
+
+```
+SiteLayout
+├── HeaderBar (mobile hamburger here)
+├── LeftNavigation
+│   ├── Sidebar Block (desktop)
+│   │   ├── Logo
+│   │   ├── NavigationMenu
+│   │   │   ├── Accordion: Player Pages
+│   │   │   │   ├── Traits
+│   │   │   │   ├── Skills
+│   │   │   │   ├── Birth Signs
+│   │   │   │   ├── Races
+│   │   │   │   ├── Religions
+│   │   │   ├── Separator
+│   │   │   ├── Settings (Account, Preferences)
+│   │   │   ├── Separator
+│   │   │   ├── Docs / Help
+│   ├── Sheet (mobile)
+│       ├── Sidebar Block (inside SheetContent)
+└── MainContent
+```
+
+---
+
+## 🔗 Navigation Groups
+
+### 🧑‍🎓 Player Pages
+
+- Traits (`/traits`)
+- Skills (`/skills`)
+- Birth Signs (`/birth-signs`)
+- Races (`/races`)
+- Religions (`/religions`)
+
+### ⚙ Settings
+
+- Account (`/account`)
+- Preferences (`/preferences`)
+
+### 📖 Docs
+
+- Help (`/help`)
+- API Docs (`/api-docs`)
+
+---
+
+## 🎨 Styling (Tailwind + ShadCN)
+
+| Feature       | Style                                         |
+| ------------- | --------------------------------------------- |
+| Background    | `bg-muted` (dark slate gray)                  |
+| Text          | `text-foreground`                             |
+| Active Link   | `bg-accent text-accent-foreground rounded-md` |
+| Spacing       | `p-4` in groups, `gap-2` for items            |
+| Borders       | Subtle `border-muted` separators              |
+| Sidebar Width | `w-64 lg:w-72`                                |
+
+---
+
+## 📱 Mobile Behavior
+
+- `Sheet` wraps Sidebar Block for mobile experience
+- Hamburger button in `HeaderBar` triggers `Sheet`
+- `SheetContent` slides in from the left: `position="left"`
+
+---
+
+## 🖥 Desktop Behavior
+
+- Persistent Sidebar Block on `lg:` breakpoints
+- Scrollable if nav exceeds viewport height
+- Collapsible groups using ShadCN `Accordion`
+
+---
+
+## ✨ Example JSX (ShadCN + Tailwind)
+
+```tsx
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Sidebar } from "@/components/ui/sidebar";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
+import { Separator } from "@/components/ui/separator";
+import { NavigationMenuItem } from "@/components/ui/navigation-menu";
+
+export function LeftNavigation() {
+  return (
+    <aside className="hidden lg:flex flex-col w-64 bg-muted p-4">
+      <div className="text-xl font-bold mb-4">Lorerim</div>
+      <Accordion type="single" collapsible>
+        <AccordionItem value="player">
+          <AccordionTrigger>Player Pages</AccordionTrigger>
+          <AccordionContent>
+            <NavigationMenuItem href="/traits">Traits</NavigationMenuItem>
+            <NavigationMenuItem href="/skills">Skills</NavigationMenuItem>
+            <NavigationMenuItem href="/birth-signs">
+              Birth Signs
+            </NavigationMenuItem>
+            <NavigationMenuItem href="/races">Races</NavigationMenuItem>
+            <NavigationMenuItem href="/religions">Religions</NavigationMenuItem>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+      <Separator className="my-4" />
+      <NavigationMenuItem href="/account">Account</NavigationMenuItem>
+      <NavigationMenuItem href="/preferences">Preferences</NavigationMenuItem>
+      <Separator className="my-4" />
+      <NavigationMenuItem href="/help">Help</NavigationMenuItem>
+      <NavigationMenuItem href="/api-docs">API Docs</NavigationMenuItem>
+    </aside>
+  );
+}
+
+export function MobileNavigation() {
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <MenuIcon />
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left" className="p-0 w-64">
+        <LeftNavigation />
+      </SheetContent>
+    </Sheet>
+  );
+}
+```
+
+---
+
+## ✅ Acceptance Criteria
+
+- [ ] Desktop sidebar uses ShadCN Sidebar Block
+- [ ] Mobile uses `Sheet` with Sidebar Block inside
+- [ ] Player Pages group collapses using Accordion
+- [ ] Active route highlighting works across all links
+- [ ] Fully responsive and accessible
+
+---
+
+description:
+globs:
+alwaysApply: false
+
+---

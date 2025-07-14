@@ -1,69 +1,138 @@
 import { HashRouter } from 'react-router-dom'
 import { AppRouter } from './router'
 import { useNavigate } from 'react-router-dom'
-import { H1, H4, P } from '@/shared/ui/ui/typography'
-import { Button } from '@/shared/ui/ui/button'
+import { P } from '@/shared/ui/ui/typography'
+import { useState } from 'react'
+import { Sidebar } from '@/shared/ui/sidebar/Sidebar'
+import { SidebarHeader } from '@/shared/ui/sidebar/SidebarHeader'
+import { SidebarContent } from '@/shared/ui/sidebar/SidebarContent'
+import { SidebarGroup } from '@/shared/ui/sidebar/SidebarGroup'
+import { SidebarMenu } from '@/shared/ui/sidebar/SidebarMenu'
+import { SidebarMenuItem } from '@/shared/ui/sidebar/SidebarMenuItem'
+import { SidebarMenuButton } from '@/shared/ui/sidebar/SidebarMenuButton'
+
+import { SidebarRail } from '@/shared/ui/sidebar/SidebarRail'
 
 const navSections = [
   {
-    label: 'Get Started',
     items: [
       { to: '/', label: 'Home' },
-      { to: '/player-creation', label: 'Player Creation' },
-      { to: '/race-data', label: 'Race Data' },
-      { to: '/equipment', label: 'Equipment' },
-      { to: '/crafting', label: 'Crafting' },
-      { to: '/skills', label: 'Skills' },
-      { to: '/typography', label: 'Typography Demo' },
+    ],
+  },
+  {
+    label: 'Character Creation',
+    items: [
+      { to: '/race', label: 'Race' }, 
+      { to: '/birth-signs', label: 'Birth Signs' },
+      { to: '/traits', label: 'Traits' },
+      { to: '/skills', label: 'Skill Selection' },
+      { to: '/religions', label: 'Religion' },
+    ],
+  },
+  {
+    label: 'Progression',
+    items: [
+      { to: '/destiny', label: 'Destiny ' },
+      { to: '/perks', label: 'Perks' },
+    ],
+  },
+  {
+    label: 'Gear',
+    items: [
+      { to: '/weapons', label: 'Weapons' },
+      { to: '/armor', label: 'Armor' },
+      { to: '/food', label: 'Food' },
+      { to: '/alcohol', label: 'Alcohol' },
+    ],
+  },
+  {
+    label: 'Crafting',
+    items: [
+      { to: '/alchemy', label: 'Alchemy' },
+      { to: '/smithing', label: 'Smithing' },
+      { to: '/enchanting', label: 'Enchanting' },
+    ],
+  },
+  {
+    label: 'Ascensions',
+    items: [
+      { to: "/shouts", label: "Shouts of the Dragonborn" },
+      { to: '/lichdom', label: 'Lichdom' },
+      { to: '/lycanthropy', label: 'Lycanthropy' },
+      { to: '/vampirism', label: 'Vampirism' },
     ],
   },
 ]
 
-function Sidebar() {
+function AppSidebar() {
   const navigate = useNavigate()
+  const [collapsed, setCollapsed] = useState(false)
   const currentPath = window.location.hash.replace(/^#\/?/, '/')
 
   return (
-    <div className="w-56 bg-background border-r border-border min-h-screen">
-      <div className="p-6 border-b border-border">
-        <div className="text-base font-bold text-foreground leading-tight">
-          <div>Lorerim</div>
-          <div>Arcaneum</div>
-        </div>
-        <P className="text-xs text-muted-foreground mt-1">Theorycrafting Hub</P>
-      </div>
-      <nav className="p-4 flex flex-col gap-8">
+    <Sidebar collapsed={collapsed}>
+      <SidebarHeader>
+        <button
+          className="flex items-center gap-2 text-skyrim-gold/90 hover:text-skyrim-gold text-xs font-bold px-1 py-1 focus:outline-none"
+          onClick={() => setCollapsed((c) => !c)}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        >
+          <span className="w-7 h-7 bg-skyrim-gold rounded-lg flex items-center justify-center text-skyrim-dark font-bold text-xs shrink-0">
+            LA
+          </span>
+          {!collapsed && (
+            <span className="ml-1 leading-tight truncate">
+              Lorerim Arcaneum
+            </span>
+          )}
+          <span className="ml-auto text-base font-bold px-1">
+            {collapsed ? '→' : '←'}
+          </span>
+        </button>
+      </SidebarHeader>
+      <SidebarContent>
         {navSections.map((section) => (
-          <div key={section.label}>
-            <div className="mb-2 px-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-              {section.label}
-            </div>
-            <ul className="flex flex-col gap-1 list-none p-0 m-0">
+          <SidebarGroup key={section.label}>
+            {!collapsed && (
+              <div className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-wider text-skyrim-gold/60">
+                {section.label}
+              </div>
+            )}
+            <SidebarMenu>
               {section.items.map((item) => {
                 const isActive = currentPath === item.to
                 return (
-                  <li key={item.to}>
-                    <Button
-                      type="button"
-                      variant="ghost"
+                  <SidebarMenuItem key={item.to}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive}
                       onClick={() => navigate(item.to)}
-                      className={
-                        'w-full text-left px-4 py-2.5 rounded-lg text-sm transition-all duration-200 hover:shadow-md ' +
-                        (isActive
-                          ? 'bg-muted font-bold text-foreground shadow-md'
-                          : 'text-muted-foreground hover:bg-muted/70 hover:text-foreground')
-                      }
+                      tabIndex={0}
                     >
-                      {item.label}
-                    </Button>
-                  </li>
+                      <span className="w-full text-left truncate">
+                        {item.label}
+                      </span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                 )
               })}
-            </ul>
-          </div>
+            </SidebarMenu>
+          </SidebarGroup>
         ))}
-      </nav>
-    </div>
+      </SidebarContent>
+      {!collapsed && (
+        <div className="mt-auto px-3 py-2 border-t border-skyrim-gold/20 text-center">
+          <P className="text-xs text-skyrim-gold/50">Version 1.0.0</P>
+          <button
+            className="mt-2 text-skyrim-gold/70 hover:text-skyrim-gold hover:bg-skyrim-gold/10 text-xs rounded px-2 py-1"
+            tabIndex={0}
+          >
+            ⚙️ Settings
+          </button>
+        </div>
+      )}
+      <SidebarRail />
+    </Sidebar>
   )
 }
 
@@ -71,7 +140,7 @@ function App() {
   return (
     <HashRouter>
       <div className="min-h-screen bg-background text-foreground flex">
-        <Sidebar />
+        <AppSidebar />
         <main className="flex-1 p-8">
           <AppRouter />
         </main>
