@@ -1,4 +1,3 @@
-
 # 📘 Lorerim Arcaneum: Technical Design Specification
 
 This document specifies the technical architecture and implementation details for initializing and building the **Lorerim Arcaneum** web app, a theorycrafting-focused application for Lorerim players.
@@ -22,13 +21,14 @@ This document specifies the technical architecture and implementation details fo
 | Language           | TypeScript           |
 | Styling            | TailwindCSS + custom |
 | Search             | FUSE.js              |
-| State Management   | Zustand               |
+| State Management   | Zustand              |
 | Deployment         | GitHub Pages         |
 | CI/CD              | GitHub Actions       |
 
 ---
 
 ## 🗂️ Folder Structure (Initial Scaffold)
+
 ```
 lorerim-arcaneum/
 ├─ public/
@@ -116,11 +116,13 @@ Example URL:
 The app uses a hybrid of:
 
 ### ✅ Feature-Sliced Design (FSD)
+
 - Organizes code by feature domain (PlayerCreation, Skills, Wishlist)
 - Keeps components, stores, adapters, and routes grouped per feature
 - Excellent for modular growth and Cursor-driven code generation
 
 ### ✅ Model-View-Adapter (MVA)
+
 - **Model:** Raw JSON data loaded via feature store (Zustand)
 - **Adapter:** Transforms data into view-ready format
 - **View:** React components rendering the UI
@@ -149,6 +151,7 @@ The app uses a hybrid of:
 ## 🏗️ Deployment Pipeline
 
 **GitHub Actions Workflow:**
+
 ```yaml
 name: Deploy to GitHub Pages
 
@@ -168,7 +171,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install dependencies
         run: npm ci
@@ -216,3 +219,38 @@ jobs:
 - Enforce JSON fetch paths relative to `/public/data/`
 - Encode wishlist/filter state in URL hash (Base64)
 - Use TailwindCSS + optional ShadCN for UI components
+
+# Sidebar Navigation Specification
+
+## Overview
+
+The sidebar navigation provides access to all major sections of the Lorerim Arcaneum app. It is styled with the Skyrim theme and supports collapsible functionality.
+
+## Structure
+
+- **Header**: Logo, app title, subtitle, and collapse toggle
+- **Navigation Sections**: Grouped by category (e.g., Character Creation, Game Systems, Tools)
+- **Footer**: Version info and settings
+
+## Navigation Items
+
+- **No icons or emoji**: Navigation items are text-only. Do not use icons or emoji in the sidebar nav.
+- **Left-aligned, tab offset**: All navigation items are left-aligned and indented (tab offset) under their section headers. Do not center nav items. Follow the submenu alignment and indentation style of ShadCN sidebar-03 ([see example](https://ui.shadcn.com/blocks)).
+- **Section headers**: Use uppercase, small font, muted gold color.
+- **Active state**: Highlight the active item with a gold background and border.
+- **Hover state**: Use a subtle gold background on hover.
+
+## Collapsible Behavior
+
+- Sidebar can be collapsed to a narrow width, showing only the logo and collapse toggle.
+- When collapsed, navigation items are hidden.
+
+## Styling
+
+- **Theme**: Skyrim dark background, gold accents, and muted gold for section headers.
+- **Spacing**: Use padding and indentation to create a clear hierarchy.
+- **Borders**: Gold borders for separation and active states.
+
+## Implementation Note
+
+- The sidebar follows the submenu alignment and indentation pattern of ShadCN sidebar-03 for a modern, accessible navigation experience.
