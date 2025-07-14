@@ -26,12 +26,31 @@ The Race Data page has been successfully implemented as part of the Lorerim Arca
    - Handles the list layout and spacing
 
 4. **RaceCard** (`src/features/races/components/RaceCard.tsx`)
+
    - Individual race display with:
      - Race name and type badge
      - Description preview
      - Trait badges (showing first 2 + count)
      - Details button
    - Hover effects and Skyrim-themed styling
+
+5. **RaceCardCompact** (`src/features/races/components/RaceCardCompact.tsx`)
+
+   - Compact version optimized for grid layout
+   - Smaller dimensions and condensed information
+   - Same functionality as RaceCard but space-efficient
+
+6. **RaceGrid** (`src/features/races/components/RaceGrid.tsx`)
+
+   - Grid layout container for displaying races
+   - Responsive grid: 1 column on mobile, 2 on tablet, 3-4 on desktop
+   - Uses RaceCardCompact for optimal grid display
+
+7. **RaceDetailsPanel** (`src/features/races/components/RaceDetailsPanel.tsx`)
+   - Side panel that slides in from the right
+   - Shows comprehensive race information including all traits and stats
+   - Smooth slide-in animation with proper z-index layering
+   - Compact design optimized for side panel layout
 
 ### Supporting Components
 
@@ -83,10 +102,12 @@ The race data includes:
 - [x] Loading and error states
 - [x] Responsive design
 - [x] Skyrim-themed styling
+- [x] Grid and list layout toggle
+- [x] Compact card design for grid view
+- [x] Side panel for detailed race information
 
 ### 🔄 Future Enhancements
 
-- [ ] Race details modal/page
 - [ ] Race comparison functionality
 - [ ] Race selection for character creation
 - [ ] Advanced filtering options
@@ -101,8 +122,11 @@ src/features/races/
 ├── components/
 │   ├── PageShell.tsx
 │   ├── RaceCard.tsx
+│   ├── RaceCardCompact.tsx
 │   ├── RaceList.tsx
-│   └── RaceListFilter.tsx
+│   ├── RaceGrid.tsx
+│   ├── RaceListFilter.tsx
+│   └── RaceDetailsPanel.tsx
 ├── hooks/
 │   └── useRaces.ts
 ├── pages/
@@ -128,7 +152,8 @@ src/features/races/
 2. Use the search bar to find specific races
 3. Filter by race type (Human, Elf, Beast)
 4. Filter by trait type (Resistance, Ability, Passive)
-5. Click "Details" to view full race information (placeholder)
+5. Toggle between list and grid layout using the layout buttons
+6. Click "Details" to view comprehensive race information in the side panel
 
 ## 🔧 Development Notes
 
