@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
 import { Badge } from '@/shared/ui/ui/badge'
 import { H3, P, Small } from '@/shared/ui/ui/typography'
+import { MarkdownText } from '@/shared/components/MarkdownText'
 import { Shield, Zap, Heart, Brain, Target, Flame, Droplets, Skull } from 'lucide-react'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 
@@ -83,9 +84,11 @@ export function RaceCard({ item, isSelected = false, className }: RaceCardProps)
       </CardHeader>
       
       <CardContent className="pt-0">
-        <P className="text-sm text-muted-foreground mb-3 line-clamp-2">
-          {item.summary || item.description}
-        </P>
+        <div className="mb-3 line-clamp-2">
+          <MarkdownText className="text-sm text-muted-foreground">
+            {item.summary || item.description}
+          </MarkdownText>
+        </div>
         
         {/* Key Traits with Icons */}
         <div className="space-y-2">
