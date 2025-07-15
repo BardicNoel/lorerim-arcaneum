@@ -1,0 +1,131 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+
+# Subclass Page Specification
+
+## Overview
+
+This page provides an interactive and informational view of subclasses in the Lorerim system. Each subclass is presented as a **perk tree**, starting from a single node and branching into multiple paths. The page serves two primary user needs:
+
+1. **Text-based Browsing**: Users can view all subclass nodes in a list with their details for easy reading and searching.
+2. **Tree-based Planning**: Users can visually navigate the perk tree to plan their progression path.
+
+The design follows the unified layout principles from other player creation pages, with reusable components for search, filters, and detail panels, but introduces unique elements for tree visualization and interactive planning.
+
+---
+
+## Page Layout
+
+### Global Layout
+
+- **Header**: Page title ("Subclasses"), breadcrumb navigation.
+- **Search Bar**: Dynamic search across subclass names and node details.
+- **Tabs**:
+  - **List View** (default): Shows all subclass nodes in a searchable, filterable list.
+  - **Tree View**: Shows a visual perk tree with interactive planning features.
+
+---
+
+## List View
+
+### Components
+
+- **Search + Filters**
+
+  - Search bar for node names, effects, prerequisites.
+  - Filter options (by subclass type, tags, required level, etc.).
+  - Sort options (alphabetical, tier level, number of branches).
+
+- **Grid/List of Nodes**
+
+  - Each node presented in a **Node Card**:
+    - Node Name
+    - Icon (small graphic or symbol)
+    - Short Description
+    - Tags (e.g., Offensive, Defensive, Utility)
+    - Required level / prerequisites (if any)
+  - Clicking a Node Card opens the **Details Panel**.
+
+- **Details Panel (Right Sidebar)**
+  - Expanded view of the selected node:
+    - Full description
+    - Effects
+    - Prerequisites (with links to other nodes)
+    - Next branches (with links)
+    - Lore or flavor text
+
+---
+
+## Tree View
+
+### Components
+
+- **Perk Tree Visualization**
+
+  - Interactive perk tree starting from a root node.
+  - Nodes shown as circles or hexagons connected by branches.
+  - Color-coded paths for unlocked, planned, and locked nodes.
+  - Hover or click to reveal details in a floating tooltip or sidebar.
+
+- **Planning Features**
+
+  - Click nodes to "plan" a path (adds to a persistent list of planned nodes).
+  - Reset or clear planned path button.
+  - Display total planned nodes and required levels.
+
+- **Mini-map / Overview**
+
+  - For large trees, a small overview map for fast navigation.
+
+- **Details Sidebar**
+  - Shows info about the currently hovered/selected node, same as in List View.
+
+---
+
+## Reusable Components
+
+- **Dynamic Search Bar**
+  - Shared with other player creation pages.
+- **Filter Panel**
+  - Similar to player traits and birthsign pages.
+- **Node Card**
+  - Compact design for list/grid view.
+- **Details Panel**
+  - Reused pattern for right sidebar across pages.
+
+---
+
+## Data Structure & Integration
+
+### Data Requirements
+
+Each subclass node must provide:
+
+- **ID**: Unique identifier
+- **Name**
+- **Icon**
+- **Description**
+- **Tags**: (e.g., Offensive, Defensive, Utility)
+- **Prerequisites**: IDs of parent nodes
+- **Next Branches**: IDs of child nodes
+- **Level Requirement**
+- **Lore Text** (optional)
+
+### JSON Schema Example
+
+```json
+{
+  "id": "warrior_root",
+  "name": "Warrior's Resolve",
+  "icon": "icons/warrior_resolve.png",
+  "description": "Increases melee damage by 10%.",
+  "tags": ["Offensive", "Melee"],
+  "prerequisites": [],
+  "next_branches": ["warrior_fury", "warrior_defense"],
+  "level_requirement": 1,
+  "lore": "The Warrior draws strength from unyielding resolve."
+}
+```
