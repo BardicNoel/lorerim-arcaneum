@@ -9,14 +9,116 @@ interface DestinyCardProps {
   isSelected: boolean
   originalNode?: DestinyNode
   allNodes?: DestinyNode[]
+  viewMode?: 'grid' | 'list'
 }
 
-export function DestinyCard({ item, isSelected, originalNode, allNodes = [] }: DestinyCardProps) {
+export function DestinyCard({ item, isSelected, originalNode, allNodes = [], viewMode = 'grid' }: DestinyCardProps) {
   // Get next nodes by finding nodes that have this node as a prerequisite
   const getNextNodes = (nodeName: string) => {
     return allNodes
       .filter(node => node.prerequisites.includes(nodeName))
       .map(node => node.name)
+  }
+
+  if (viewMode === 'list') {
+    return (
+      <div className={`flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 p-3 rounded-lg border ${
+        isSelected 
+          ? 'ring-2 ring-primary bg-primary/5' 
+          : 'hover:bg-muted/50'
+      }`}>
+        {/* Name and Description - Always visible */}
+        <div className="flex-1 min-w-0">
+          <h3 className="font-medium text-foreground truncate text-base">
+            {item.name}
+          </h3>
+          <p className="text-base text-muted-foreground line-clamp-1 sm:line-clamp-2">
+            {item.description}
+          </p>
+        </div>
+
+        {/* Badge Groups - Responsive layout */}
+        <div className="flex flex-wrap gap-2 sm:gap-3 sm:flex-shrink-0">
+          {/* Prerequisites - Show on medium screens and up */}
+          {originalNode && originalNode.prerequisites.length > 0 && (
+            <div className="hidden md:flex gap-1">
+              {originalNode.prerequisites.slice(0, 1).map((prereq, index) => (
+                <Badge 
+                  key={index} 
+                  variant="outline" 
+                  className="text-xs bg-orange-50 text-orange-700 border-orange-200"
+                >
+                  {prereq}
+                </Badge>
+              ))}
+              {originalNode.prerequisites.length > 1 && (
+                <Badge variant="outline" className="text-xs">
+                  +{originalNode.prerequisites.length - 1}
+                </Badge>
+              )}
+            </div>
+          )}
+
+          {/* Next Nodes - Show on large screens and up */}
+          {originalNode && (
+            <div className="hidden lg:flex gap-1">
+              {getNextNodes(originalNode.name).slice(0, 1).map((nextNode, index) => (
+                <Badge 
+                  key={index} 
+                  variant="outline" 
+                  className="text-xs bg-blue-50 text-blue-700 border-blue-200"
+                >
+                  {nextNode}
+                </Badge>
+              ))}
+              {getNextNodes(originalNode.name).length > 1 && (
+                <Badge variant="outline" className="text-xs">
+                  +{getNextNodes(originalNode.name).length - 1}
+                </Badge>
+              )}
+              {getNextNodes(originalNode.name).length === 0 && (
+                <Badge variant="outline" className="text-xs text-muted-foreground">
+                  Terminal
+                </Badge>
+              )}
+            </div>
+          )}
+
+          {/* Tags - Responsive to available space */}
+          {item.tags.length > 0 && (
+            <div className="flex gap-1">
+              {item.tags.slice(0, 2).map((tag, index) => (
+                <Badge 
+                  key={index} 
+                  variant="secondary" 
+                  className="text-xs"
+                >
+                  {tag}
+                </Badge>
+              ))}
+              {item.tags.length > 2 && (
+                <Badge variant="outline" className="text-xs">
+                  +{item.tags.length - 2}
+                </Badge>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Mobile: Show key info in a more compact way */}
+        <div className="flex sm:hidden gap-2 text-base text-muted-foreground">
+          {originalNode && originalNode.prerequisites.length > 0 && (
+            <span>Prereq: {originalNode.prerequisites.length}</span>
+          )}
+          {originalNode && getNextNodes(originalNode.name).length > 0 && (
+            <span>Next: {getNextNodes(originalNode.name).length}</span>
+          )}
+          {originalNode && getNextNodes(originalNode.name).length === 0 && (
+            <span>Terminal</span>
+          )}
+        </div>
+      </div>
+    )
   }
 
   return (
