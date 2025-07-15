@@ -8,12 +8,14 @@ import SkillsPage from '@/pages/SkillsPage'
 import HomePage from '@/pages/HomePage'
 import NotFoundPage from '@/pages/NotFoundPage'
 import { UnifiedRacesPage } from '@/features/races'
+import { UnifiedDestinyPage } from '@/features/destiny'
 
 export const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/race" element={<UnifiedRacesPage />} />
+      <Route path="/destiny" element={<UnifiedDestinyPage />} />
       <Route path="/birth-signs" element={<BirthSignsPage />} />
       <Route path="/traits" element={<TraitsPage />} />
       <Route path="/skills" element={<SkillsPage />} />
