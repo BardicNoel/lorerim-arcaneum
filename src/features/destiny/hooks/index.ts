@@ -1,0 +1,1 @@
+export { useDestinyPath } from './useDestinyPath' 

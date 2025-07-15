@@ -18,6 +18,7 @@ import { DestinyPathBuilder } from '../components/DestinyPathBuilder'
 import type { PlayerCreationItem, SearchCategory, SelectedTag } from '@/shared/components/playerCreation/types'
 import type { DestinyNode, PlannedNode } from '../types'
 import { Card } from '@/shared/ui/ui/card'
+import { DestinyAccordionList } from '../components/DestinyAccordionList';
 
 export function UnifiedDestinyPage() {
   // Load destiny data from public/data/subclasses.json at runtime
@@ -124,7 +125,7 @@ export function UnifiedDestinyPage() {
 
   const {
     selectedItem,
-    viewMode,
+    viewMode: defaultViewMode,
     filteredItems,
     currentFilters,
     handleItemSelect,
@@ -135,6 +136,9 @@ export function UnifiedDestinyPage() {
     items: playerCreationItems,
     filters: []
   })
+
+  // Override view mode to default to list for destiny reference
+  const viewMode = 'list'
 
   // Use the new filters hook
   const {
@@ -179,6 +183,7 @@ export function UnifiedDestinyPage() {
       isSelected={isSelected}
       originalNode={destinyNodes.find(node => node.id === item.id)}
       allNodes={destinyNodes}
+      viewMode={viewMode}
     />
   )
 
@@ -236,19 +241,13 @@ export function UnifiedDestinyPage() {
             <PlayerCreationFilters
               searchCategories={searchCategories}
               selectedTags={currentFilters.selectedTags}
-              viewMode={viewMode}
               onTagSelect={handleTagSelect}
               onTagRemove={handleTagRemove}
-              onViewModeChange={handleViewModeChange}
             />
-
             <div className="w-full">
-              <ItemGrid
+              <DestinyAccordionList
                 items={filteredItems}
-                viewMode={viewMode}
-                onItemSelect={() => {}} // Disable selection for reference view
-                selectedItem={null} // No selection in reference view
-                renderItemCard={renderDestinyCard}
+                allNodes={destinyNodes}
               />
             </div>
           </TabsContent>
