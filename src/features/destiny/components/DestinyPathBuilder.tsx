@@ -2,7 +2,13 @@ import React, { useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
-import { ChevronRight, MapPin } from 'lucide-react'
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/shared/ui/ui/hover-card'
+import { ScrollArea } from '@/shared/ui/ui/scroll-area'
+import { ChevronRight, MapPin, GitBranch } from 'lucide-react'
 import type { DestinyNode, PlannedNode } from '../types'
 
 interface DestinyPathBuilderProps {
@@ -10,6 +16,12 @@ interface DestinyPathBuilderProps {
   plannedNodes: PlannedNode[]
   onNodePlan: (nodeId: string) => void
   onNodeUnplan: (nodeId: string) => void
+}
+
+interface PredictivePath {
+  path: DestinyNode[]
+  isComplete: boolean
+  endNode: DestinyNode
 }
 
 export function DestinyPathBuilder({ 
@@ -37,14 +49,56 @@ export function DestinyPathBuilder({
     return getNextNodes(lastNode.name)
   }, [selectedPath, rootNodes])
 
-  // Add a node to the selected path
-  const addToPath = (node: DestinyNode) => {
-    setSelectedPath(prev => [...prev, node])
-  }
+  // Generate predictive paths from current position
+  const predictivePaths = useMemo(() => {
+    const paths: PredictivePath[] = []
+    const visited = new Set<string>()
+
+    const buildPaths = (currentPath: DestinyNode[]) => {
+      const lastNode = currentPath[currentPath.length - 1]
+      const nextNodes = getNextNodes(lastNode.name)
+
+      if (nextNodes.length === 0) {
+        // End of path
+        paths.push({
+          path: [...currentPath],
+          isComplete: true,
+          endNode: lastNode
+        })
+        return
+      }
+
+      // Continue building paths for each next node
+      nextNodes.forEach(nextNode => {
+        const pathKey = currentPath.map(n => n.id).join('->') + '->' + nextNode.id
+        if (!visited.has(pathKey)) {
+          visited.add(pathKey)
+          buildPaths([...currentPath, nextNode])
+        }
+      })
+    }
+
+    // Start building paths from current position
+    if (selectedPath.length === 0) {
+      // From root, build paths from each root node
+      rootNodes.forEach(rootNode => {
+        buildPaths([rootNode])
+      })
+    } else {
+      // From current position, build paths from each available option
+      currentOptions.forEach(option => {
+        buildPaths([...selectedPath, option])
+      })
+    }
+
+    return paths
+  }, [selectedPath, currentOptions, rootNodes, nodes])
 
   // Remove nodes from path (backtrack)
   const backtrack = (index: number) => {
-    setSelectedPath(prev => prev.slice(0, index + 1))
+    const newPath = selectedPath.slice(0, index + 1)
+    setSelectedPath(newPath)
+    updatePlannedNodes(newPath)
   }
 
   // Check if a node is planned
@@ -52,13 +106,17 @@ export function DestinyPathBuilder({
     return plannedNodes.some(p => p.id === nodeId)
   }
 
-  // Handle planning/unplanning a node
-  const handleTogglePlan = (nodeId: string) => {
-    if (isNodePlanned(nodeId)) {
-      onNodeUnplan(nodeId)
-    } else {
-      onNodePlan(nodeId)
-    }
+  // Update planned nodes when selected path changes
+  const updatePlannedNodes = (path: DestinyNode[]) => {
+    // Clear existing planned nodes
+    plannedNodes.forEach(node => {
+      onNodeUnplan(node.id)
+    })
+    
+    // Add all nodes from the selected path to planned nodes
+    path.forEach(node => {
+      onNodePlan(node.id)
+    })
   }
 
   // Get current node name for the header
@@ -67,237 +125,284 @@ export function DestinyPathBuilder({
     return selectedPath[selectedPath.length - 1].name
   }
 
+  // Handle breadcrumb click - advance to specific stage in path
+  const handleBreadcrumbClick = (path: DestinyNode[], clickedIndex: number) => {
+    const newPath = path.slice(0, clickedIndex + 1)
+    setSelectedPath(newPath)
+    updatePlannedNodes(newPath)
+  }
+
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-      {/* Left Column - Path Selection and Options */}
-      <div className="xl:col-span-3 space-y-6">
-        {/* Path Breadcrumbs */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MapPin className="w-5 h-5" />
-              Your Destiny Path
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {selectedPath.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-muted-foreground mb-4">No path started yet</p>
-                <Button onClick={() => setSelectedPath([rootNodes[0]])}>
-                  Start Your Journey
-                </Button>
-              </div>
-            ) : (
-              <div className="flex flex-wrap items-center gap-2">
-                {selectedPath.map((node, index) => (
-                  <React.Fragment key={node.id}>
-                    <div className="flex items-center gap-2">
-                      <Badge 
-                        variant={index === selectedPath.length - 1 ? "default" : "secondary"}
-                        className="cursor-pointer hover:bg-primary/80"
-                        onClick={() => backtrack(index)}
-                      >
-                        {node.name}
-                      </Badge>
-                      {index < selectedPath.length - 1 && (
-                        <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                      )}
-                    </div>
-                  </React.Fragment>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Next Options */}
-        {currentOptions.length > 0 && (
+    <div className="space-y-6">
+      {/* Path Selection Tools */}
+      <div className="space-y-6">
+          {/* Path Breadcrumbs */}
           <Card>
             <CardHeader>
-              <CardTitle>{getCurrentNodeName()}: Choose Your Next Step</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                Click on one of the available paths to continue your journey
-              </p>
+              <CardTitle className="flex items-center gap-2">
+                <MapPin className="w-5 h-5" />
+                Your Destiny Path
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {currentOptions.map((option) => (
-                  <Card key={option.id} className="hover:bg-muted/50 cursor-pointer transition-colors" onClick={() => addToPath(option)}>
-                    <CardContent className="p-4">
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-medium text-lg">{option.name}</h4>
-                          <Badge 
-                            variant={isNodePlanned(option.id) ? "default" : "outline"}
-                            className="text-xs"
-                          >
-                            {isNodePlanned(option.id) ? "Planned" : "Not Planned"}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                          {option.description}
-                        </p>
-                        
-                        {/* Prerequisites */}
-                        {option.prerequisites.length > 0 && (
-                          <div>
-                            <p className="text-xs font-medium text-foreground mb-1">Prerequisites:</p>
-                            <div className="flex flex-wrap gap-1">
-                              {option.prerequisites.map((prereq, index) => (
-                                <Badge 
-                                  key={index} 
-                                  variant="outline" 
-                                  className="text-xs bg-orange-50 text-orange-700 border-orange-200"
-                                >
-                                  {prereq}
-                                </Badge>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                        
-                        {/* Tags */}
-                        {option.tags.length > 0 && (
-                          <div>
-                            <p className="text-xs font-medium text-foreground mb-1">Tags:</p>
-                            <div className="flex flex-wrap gap-1">
-                              {option.tags.map((tag, index) => (
-                                <Badge key={index} variant="secondary" className="text-xs">
-                                  {tag}
-                                </Badge>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                        
-                        {/* Planning Button */}
-                        <Button
-                          variant={isNodePlanned(option.id) ? "outline" : "default"}
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            handleTogglePlan(option.id)
-                          }}
-                          className="w-full"
-                        >
-                          {isNodePlanned(option.id) ? "Remove from Plan" : "Add to Plan"}
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* End of Path */}
-        {selectedPath.length > 0 && currentOptions.length === 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Path Complete</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <p className="text-muted-foreground mb-4">
-                  You've reached the end of this path. "{selectedPath[selectedPath.length - 1].name}" has no further progression options.
-                </p>
-                <Button onClick={() => setSelectedPath([])}>
-                  Start New Path
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Planned Nodes Summary */}
-        {plannedNodes.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Your Planned Destiny</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {plannedNodes.map((plannedNode) => (
-                  <div key={plannedNode.id} className="flex items-center justify-between p-2 border rounded">
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium">{plannedNode.name}</div>
-                      <div className="text-sm text-muted-foreground truncate">
-                        {plannedNode.description}
-                      </div>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="ml-3 flex-shrink-0"
-                      onClick={() => onNodeUnplan(plannedNode.id)}
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-      </div>
-
-      {/* Right Column - Selected Path Carousel */}
-      <div className="xl:col-span-1">
-        <Card className="h-full">
-          <CardHeader>
-            <CardTitle>Selected Path</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {selectedPath.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-muted-foreground">No path selected yet</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {selectedPath.map((node, index) => (
-                  <Card key={node.id} className="border-l-4 border-l-primary">
-                    <CardContent className="p-4">
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-medium text-lg">{node.name}</h4>
-                          <Badge variant="secondary" className="text-xs">
-                            Step {index + 1}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                          {node.description}
-                        </p>
-                        
-                        {/* Tags */}
-                        {node.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-1">
-                            {node.tags.map((tag, tagIndex) => (
-                              <Badge key={tagIndex} variant="outline" className="text-xs">
-                                {tag}
+              {selectedPath.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground mb-4">No path started yet</p>
+                  <Button onClick={() => setSelectedPath([rootNodes[0]])}>
+                    Start Your Journey
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* Breadcrumbs */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    {selectedPath.map((node, index) => (
+                      <React.Fragment key={node.id}>
+                        <div className="flex items-center gap-2">
+                          <HoverCard openDelay={100} closeDelay={0}>
+                            <HoverCardTrigger asChild>
+                              <Badge 
+                                variant={index === selectedPath.length - 1 ? "default" : "secondary"}
+                                className="cursor-pointer hover:bg-primary/80"
+                                onClick={() => backtrack(index)}
+                              >
+                                {node.name}
                               </Badge>
-                            ))}
+                            </HoverCardTrigger>
+                            <HoverCardContent className="w-80">
+                              <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                  <h4 className="font-medium text-lg">{node.name}</h4>
+                                  <Badge 
+                                    variant={isNodePlanned(node.id) ? "default" : "outline"}
+                                    className="text-xs"
+                                  >
+                                    {isNodePlanned(node.id) ? "Planned" : "Not Planned"}
+                                  </Badge>
+                                </div>
+                                <p className="text-sm text-muted-foreground">
+                                  {node.description}
+                                </p>
+                                
+                                {/* Prerequisites */}
+                                {node.prerequisites.length > 0 && (
+                                  <div>
+                                    <p className="text-xs font-medium text-foreground mb-1">Prerequisites:</p>
+                                    <div className="flex flex-wrap gap-1">
+                                      {node.prerequisites.map((prereq, index) => (
+                                        <Badge 
+                                          key={index} 
+                                          variant="outline" 
+                                          className="text-xs bg-orange-50 text-orange-700 border-orange-200"
+                                        >
+                                          {prereq}
+                                        </Badge>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                                
+                                {/* Tags */}
+                                {node.tags.length > 0 && (
+                                  <div>
+                                    <p className="text-xs font-medium text-foreground mb-1">Tags:</p>
+                                    <div className="flex flex-wrap gap-1">
+                                      {node.tags.map((tag, index) => (
+                                        <Badge key={index} variant="secondary" className="text-xs">
+                                          {tag}
+                                        </Badge>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </HoverCardContent>
+                          </HoverCard>
+                          {index < selectedPath.length - 1 && (
+                            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                          )}
+                        </div>
+                      </React.Fragment>
+                    ))}
+                  </div>
+                  
+                  {/* Selected Path List */}
+                  <div className="space-y-2">
+                    {selectedPath.map((node, index) => (
+                      <div key={node.id} className="flex items-center p-2 border rounded">
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium flex items-center gap-2">
+                            <Badge variant="secondary" className="text-xs">
+                              Step {index + 1}
+                            </Badge>
+                            {node.name}
                           </div>
-                        )}
-                        
-                        {/* Planning Button */}
-                        <Button
-                          variant={isNodePlanned(node.id) ? "outline" : "default"}
-                          size="sm"
-                          onClick={() => handleTogglePlan(node.id)}
-                          className="w-full"
-                        >
-                          {isNodePlanned(node.id) ? "Remove from Plan" : "Add to Plan"}
-                        </Button>
+                          <div className="text-sm text-muted-foreground truncate">
+                            {node.description}
+                          </div>
+                        </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Predictive Paths */}
+          {predictivePaths.length > 0 && (
+            <Card className="h-[calc(60vh-200px)] overflow-hidden">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <GitBranch className="w-5 h-5" />
+                  Possible Paths ({predictivePaths.length})
+                </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  {selectedPath.length === 0 
+                    ? "All possible destiny paths from the beginning"
+                    : `Paths available from your current position at "${getCurrentNodeName()}"`
+                  }
+                </p>
+              </CardHeader>
+              <CardContent className="p-0 h-full">
+                <ScrollArea className="h-full">
+                  <div className="space-y-4 p-4">
+                    {predictivePaths.map((predictivePath, pathIndex) => {
+                      // Check if this path matches the current selected path
+                      const isSelectedPath = selectedPath.length > 0 && 
+                        predictivePath.path.length >= selectedPath.length &&
+                        selectedPath.every((node, index) => 
+                          predictivePath.path[index]?.id === node.id
+                        )
+                      
+                      return (
+                        <div 
+                          key={pathIndex}
+                          className="p-3 border rounded-lg hover:bg-muted/50 transition-colors"
+                        >
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="flex flex-wrap items-center gap-1">
+                              {predictivePath.path.map((node, nodeIndex) => (
+                                <React.Fragment key={node.id}>
+                                  <HoverCard openDelay={100} closeDelay={0}>
+                                    <HoverCardTrigger asChild>
+                                      <Badge 
+                                        variant={
+                                          nodeIndex < selectedPath.length 
+                                            ? "default" 
+                                            : nodeIndex === selectedPath.length 
+                                              ? "secondary"
+                                              : "outline"
+                                        }
+                                        className={`text-xs cursor-pointer hover:scale-105 transition-transform ${
+                                          nodeIndex < selectedPath.length
+                                            ? "bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600"
+                                            : predictivePath.isComplete && nodeIndex === predictivePath.path.length - 1
+                                              ? "bg-red-800 text-red-100 border-red-700"
+                                              : ""
+                                        }`}
+                                        onClick={(e) => {
+                                          e.stopPropagation()
+                                          handleBreadcrumbClick(predictivePath.path, nodeIndex)
+                                        }}
+                                      >
+                                        {node.name}
+                                      </Badge>
+                                    </HoverCardTrigger>
+                                    <HoverCardContent className="w-80">
+                                      <div className="space-y-3">
+                                        <div className="flex items-center justify-between">
+                                          <h4 className="font-medium text-lg">{node.name}</h4>
+                                          <Badge 
+                                            variant={isNodePlanned(node.id) ? "default" : "outline"}
+                                            className="text-xs"
+                                          >
+                                            {isNodePlanned(node.id) ? "Planned" : "Not Planned"}
+                                          </Badge>
+                                        </div>
+                                        <p className="text-sm text-muted-foreground">
+                                          {node.description}
+                                        </p>
+                                        
+                                        {/* Prerequisites */}
+                                        {node.prerequisites.length > 0 && (
+                                          <div>
+                                            <p className="text-xs font-medium text-foreground mb-1">Prerequisites:</p>
+                                            <div className="flex flex-wrap gap-1">
+                                              {node.prerequisites.map((prereq, index) => (
+                                                <Badge 
+                                                  key={index} 
+                                                  variant="outline" 
+                                                  className="text-xs bg-orange-50 text-orange-700 border-orange-200"
+                                                >
+                                                  {prereq}
+                                                </Badge>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        )}
+                                        
+                                        {/* Tags */}
+                                        {node.tags.length > 0 && (
+                                          <div>
+                                            <p className="text-xs font-medium text-foreground mb-1">Tags:</p>
+                                            <div className="flex flex-wrap gap-1">
+                                              {node.tags.map((tag, index) => (
+                                                <Badge key={index} variant="secondary" className="text-xs">
+                                                  {tag}
+                                                </Badge>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </HoverCardContent>
+                                  </HoverCard>
+                                  {nodeIndex < predictivePath.path.length - 1 && (
+                                    <ChevronRight className="w-3 h-3 text-muted-foreground" />
+                                  )}
+                                </React.Fragment>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <span>Length: {predictivePath.path.length} steps</span>
+                            {predictivePath.isComplete && (
+                              <span>• Ends at: {predictivePath.endNode.name}</span>
+                            )}
+                            {predictivePath.path.length > selectedPath.length && (
+                              <span>• {predictivePath.path.length - selectedPath.length} more choices</span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* End of Path */}
+          {selectedPath.length > 0 && currentOptions.length === 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Path Complete</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground mb-4">
+                    You've reached the end of this path. "{selectedPath[selectedPath.length - 1].name}" has no further progression options.
+                  </p>
+                  <Button onClick={() => setSelectedPath([])}>
+                    Start New Path
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
       </div>
-    </div>
+
   )
 } 

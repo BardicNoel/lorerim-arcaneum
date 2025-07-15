@@ -1,123 +1,20 @@
 # Destiny Feature Documentation
 
-## Overview
+## 🎯 Feature Overview
 
-The Destiny feature provides an interactive interface for exploring and planning character progression through a perk tree system. It implements three distinct views: a list view for browsing all available nodes, a tree view for visual planning using the `react-d3-tree` library with proper graph-based node linking, and a path builder for step-by-step progression planning.
+### Purpose
+The Destiny feature provides an interactive interface for exploring and planning character progression through a sophisticated perk tree system. It enables users to browse, search, visualize, and plan character development paths with three distinct views: list browsing, tree visualization, and step-by-step path building.
 
-## Features
+### Core Functionality
+- **Destiny Browsing**: Display all available destiny nodes in grid/list view modes with prerequisite and progression information
+- **Advanced Search**: Multi-category autocomplete search by tags, prerequisites, and node types
+- **Tree Visualization**: Interactive D3-based tree view with proper graph-based node linking and planning controls
+- **Path Building**: Step-by-step progression planning with breadcrumb navigation and backtracking
+- **Node Planning**: Add/remove nodes from planned destiny with visual feedback
+- **Responsive Design**: Mobile-friendly interface with adaptive layouts across all view modes
 
-### List View
-
-- **Search and Filter**: Search across node names, descriptions, and prerequisites
-- **Tag-based Filtering**: Filter by node tags (Magic, Defensive, Offensive, etc.)
-- **Grid/List Layout**: Toggle between grid and list view modes
-- **Detail Panel**: Right sidebar showing comprehensive node information
-- **Prerequisites Display**: Each card shows required prerequisites with color-coded badges
-- **Next Nodes Display**: Each card shows what nodes this leads to for progression planning
-
-### Tree View
-
-- **Interactive D3 Tree**: Professional tree visualization using react-d3-tree
-- **Proper Node Linking**: Graph-based approach prevents duplicate nodes and handles shared prerequisites correctly
-- **Node Planning**: Click nodes to add/remove them from your planned path
-- **Visual Feedback**: Color-coded nodes (selected, planned, available)
-- **Expand/Collapse**: Interactive node expansion and collapse
-- **Custom Node Rendering**: Rich node display with planning controls
-
-### Path Builder
-
-- **Step-by-Step Progression**: Interactive path building with breadcrumb navigation
-- **Radio Button Selection**: Choose from available next nodes with detailed information
-- **Breadcrumb Navigation**: Click on any step in your path to backtrack
-- **Current Position Details**: Comprehensive information about your current node
-- **Planning Integration**: Add/remove nodes from your planned destiny
-- **Path Completion**: Clear indication when you reach the end of a path
-
-## Components
-
-### DestinyCard
-
-Displays individual destiny nodes in card format for the list view with prerequisite and progression information.
-
-**Props:**
-
-- `item: PlayerCreationItem` - The node data
-- `isSelected: boolean` - Whether the node is currently selected
-- `originalNode?: DestinyNode` - The original destiny node data for prerequisites/next nodes
-- `allNodes?: DestinyNode[]` - All nodes for calculating next node relationships
-
-**Features:**
-
-- **Prerequisites Section**: Shows required nodes with orange badges
-- **Next Nodes Section**: Shows progression options with blue badges
-- **Tag Display**: Shows node categories and types
-- **Effect Indicators**: Visual indicators for positive/negative effects
-
-### DestinyDetailPanel
-
-Shows detailed information about a selected node in the right sidebar.
-
-**Props:**
-
-- `item: PlayerCreationItem` - The node data
-- `originalNode?: DestinyNode` - The original destiny node data
-- `onPlanNode?: (nodeId: string) => void` - Callback for planning nodes
-- `isPlanned?: boolean` - Whether the node is in the planned path
-- `allNodes?: DestinyNode[]` - All nodes for calculating next node relationships
-
-**Features:**
-
-- **Comprehensive Information**: Full description, tags, effects, and relationships
-- **Prerequisites Display**: Shows all required nodes with proper formatting
-- **Next Branches**: Shows what nodes this leads to for progression planning
-- **Planning Controls**: Add/remove from planned path
-- **Lore Information**: Displays flavor text when available
-
-### DestinyTreeView
-
-Renders the interactive D3-based perk tree visualization with proper node linking.
-
-**Props:**
-
-- `nodes: DestinyNode[]` - All available nodes
-- `plannedNodes: PlannedNode[]` - Currently planned nodes
-- `selectedNode?: DestinyNode` - Currently selected node
-- `onNodeClick: (node: DestinyNode) => void` - Node selection callback
-- `onNodePlan: (nodeId: string) => void` - Node planning callback
-
-**Features:**
-
-- **Graph-Based Structure**: Builds a proper graph first, then converts to tree format
-- **Shared Node Handling**: Nodes with multiple prerequisites are properly linked, not duplicated
-- **Custom Node Rendering**: Each node displays as a circle with text and planning controls
-- **Visual States**: Different colors for selected, planned, and available nodes
-- **Planning Controls**: Small circular buttons for adding/removing nodes from plan
-- **Expand/Collapse**: Buttons to expand or collapse nodes with children
-- **Responsive Design**: Adapts to container size with proper scaling
-
-### DestinyPathBuilder
-
-Provides an interactive step-by-step path building experience with breadcrumb navigation.
-
-**Props:**
-
-- `nodes: DestinyNode[]` - All available nodes
-- `plannedNodes: PlannedNode[]` - Currently planned nodes
-- `onNodePlan: (nodeId: string) => void` - Callback for planning nodes
-- `onNodeUnplan: (nodeId: string) => void` - Callback for unplanning nodes
-
-**Features:**
-
-- **Breadcrumb Navigation**: Visual path history with clickable backtracking
-- **Current Position**: Detailed information about the current node
-- **Next Options**: Interactive selection of available progression paths
-- **Planning Integration**: Add/remove nodes from planned destiny
-- **Path Completion**: Clear indication when reaching path endpoints
-- **Planned Summary**: Overview of all planned nodes
-
-## Data Structure
-
-### DestinyNode
+### Data Structure
+Destiny nodes are defined with the following structure:
 
 ```typescript
 interface DestinyNode {
@@ -127,187 +24,411 @@ interface DestinyNode {
   icon?: string;
   tags: string[];
   prerequisites: string[];
-  nextBranches?: string[]; // Optional since we calculate this dynamically in the tree view
+  nextBranches?: string[]; // Calculated dynamically in tree view
+  levelRequirement?: number;
+  lore?: string;
+  globalFormId?: string;
+}
+
+interface PlannedNode {
+  id: string;
+  name: string;
+  description: string;
+  levelRequirement?: number;
+}
+```
+
+---
+
+## 🏗️ Component Architecture
+
+### Component Tree
+```
+UnifiedDestinyPage
+├── Tabs (List/Tree/Path Builder)
+├── List View
+│   ├── PlayerCreationPage (shared)
+│   │   ├── Header (title + description)
+│   │   ├── Search & Filters
+│   │   │   ├── MultiAutocompleteSearch
+│   │   │   ├── SelectedTags
+│   │   │   └── ViewModeToggle (grid/list)
+│   │   ├── ItemGrid
+│   │   │   └── DestinyCard (custom render)
+│   │   └── DetailPanel
+│   │       └── DestinyDetailPanel (custom render)
+│   └── Loading/Error States
+├── Tree View
+│   └── DestinyTreeView (D3 visualization)
+└── Path Builder
+    └── DestinyPathBuilder (step-by-step)
+```
+
+### Component Responsibilities
+
+#### **UnifiedDestinyPage** (`pages/UnifiedDestinyPage.tsx`)
+- **Purpose**: Main orchestrator managing data fetching, state coordination, and view switching
+- **Key Functions**:
+  - Data fetching from `public/data/subclasses.json`
+  - Data transformation from raw JSON to `DestinyNode` format
+  - Search category generation (Tags, Prerequisites)
+  - Custom render functions for destiny-specific components
+  - Planned nodes state management
+  - View mode coordination (List/Tree/Path Builder)
+  - Error handling and loading states
+
+#### **DestinyCard** (`components/DestinyCard.tsx`)
+- **Purpose**: Compact destiny node representation in grid/list views
+- **Features**:
+  - Prerequisites display with orange badges
+  - Next nodes display with blue badges
+  - Tag categorization and visual indicators
+  - Selection state management
+  - Responsive design with hover effects
+  - Effect indicators for positive/negative impacts
+
+#### **DestinyDetailPanel** (`components/DestinyDetailPanel.tsx`)
+- **Purpose**: Comprehensive destiny node information display
+- **Features**:
+  - Full node description and lore information
+  - Prerequisites and next branches display
+  - Planning controls (add/remove from planned destiny)
+  - Tag categorization and effect details
+  - Visual feedback for planning status
+  - Relationship mapping with other nodes
+
+#### **DestinyTreeView** (`components/DestinyTreeView.tsx`)
+- **Purpose**: Interactive D3-based tree visualization with planning capabilities
+- **Features**:
+  - Graph-based tree building with proper node linking
+  - Custom node rendering with planning controls
+  - Visual states (available, selected, planned)
+  - Expand/collapse functionality
+  - Interactive node selection and planning
+  - Responsive design with proper scaling
+
+#### **DestinyPathBuilder** (`components/DestinyPathBuilder.tsx`)
+- **Purpose**: Step-by-step path building with breadcrumb navigation
+- **Features**:
+  - Breadcrumb navigation with backtracking
+  - Current position details and planning controls
+  - Next options selection with detailed information
+  - Path completion detection and restart options
+  - Planned nodes summary and management
+
+---
+
+## 🔧 Technical Design
+
+### Data Flow Architecture
+
+```mermaid
+graph TD
+    A[subclasses.json] --> B[UnifiedDestinyPage]
+    B --> C[Data Transformation]
+    C --> D[DestinyNode[]]
+    D --> E[PlayerCreationItem[]]
+    E --> F[PlayerCreationPage]
+    F --> G[DestinyCard/DetailPanel]
+    
+    D --> H[DestinyTreeView]
+    H --> I[D3 Tree Visualization]
+    
+    D --> J[DestinyPathBuilder]
+    J --> K[Step-by-Step Planning]
+    
+    L[User Planning] --> M[PlannedNode[]]
+    M --> N[Visual Feedback]
+    N --> G
+    N --> I
+    N --> K
+```
+
+### State Management
+
+The feature uses a combination of local state and shared hooks:
+
+1. **Local State** (`UnifiedDestinyPage`):
+   - `destinyNodes`: Raw destiny data from JSON
+   - `loading`: Data fetching state
+   - `error`: Error handling state
+   - `plannedNodes`: Currently planned destiny nodes
+   - `selectedNode`: Currently selected node for tree view
+
+2. **Shared State** (`usePlayerCreation`):
+   - `selectedItem`: Currently selected node for detail panel
+   - `viewMode`: Grid or list view preference
+   - `currentFilters`: Active search and filter state
+   - `filteredItems`: Computed filtered results
+
+### Data Transformation
+
+The feature transforms destiny data between multiple formats:
+
+**Source Format** (from `subclasses.json`):
+```typescript
+{
+  globalFormId: string;
+  name: string;
+  description: string;
+  prerequisites: string[];
+}
+```
+
+**Target Format** (`DestinyNode`):
+```typescript
+{
+  id: string; // Uses globalFormId or generated fallback
+  name: string;
+  description: string;
+  tags: string[]; // Auto-generated based on content analysis
+  prerequisites: string[];
+  nextBranches: string[]; // Calculated dynamically
   levelRequirement?: number;
   lore?: string;
   globalFormId?: string;
 }
 ```
 
-### PlannedNode
-
+**PlayerCreationItem Format**:
 ```typescript
-interface PlannedNode {
+{
   id: string;
   name: string;
-  levelRequirement?: number;
+  description: string;
+  tags: string[];
+  summary: string;
+  effects: [];
+  associatedItems: [];
+  imageUrl: undefined;
+  category: undefined;
 }
 ```
 
-### GraphNode (Internal)
+### Search & Filtering System
 
+#### Search Categories
+- **Tags**: Filter by node categories (Magic, Defensive, Offensive, Utility, Combat)
+- **Prerequisites**: Search by required nodes and dependencies
+- **Node Types**: Filter by different destiny node classifications
+
+#### Filter Logic
 ```typescript
-interface GraphNode {
-  node: DestinyNode;
-  children: Set<string>; // Set of child node IDs
-  parents: Set<string>; // Set of parent node IDs
-}
+// Multi-layered filtering approach
+1. Text Search: name, description, tag content
+2. Tag Filter: Category-based filtering (Magic, Defensive, etc.)
+3. Prerequisite Filter: Dependency-based filtering
+4. Content Analysis: Automatic tag assignment based on description keywords
 ```
-
-### PathStep (Internal)
-
-```typescript
-interface PathStep {
-  node: DestinyNode;
-  availableOptions: DestinyNode[];
-}
-```
-
-## Data Source
-
-The feature loads data from `public/data/subclasses.json` and transforms it to match the DestinyNode interface. The transformation includes:
-
-1. **ID Generation**: Uses `globalFormId` or generates fallback IDs
-2. **Tag Assignment**: Automatically assigns tags based on content analysis
-3. **Graph Building**: Creates a proper graph structure with parent-child relationships
-
-## List View Enhancements
-
-### Prerequisites Display
-
-Each card in the list view shows:
-
-- **Prerequisites Section**: Required nodes displayed with orange badges
-- **Visual Distinction**: Color-coded badges make requirements easy to identify
-- **Multiple Requirements**: Properly handles nodes requiring multiple prerequisites
-
-### Next Nodes Display
-
-Each card shows progression options:
-
-- **Next Nodes Section**: Shows what nodes this leads to with blue badges
-- **Progression Planning**: Helps users understand their options
-- **End Nodes**: Shows "No further progression" for terminal nodes
-
-### Visual Design
-
-- **Color Coding**: Orange for prerequisites, blue for next nodes, gray for tags
-- **Compact Layout**: Information is organized efficiently within card space
-- **Consistent Styling**: Matches the overall design system
-
-## Path Builder Experience
-
-### Interactive Path Building
-
-The Path Builder provides a unique step-by-step experience:
-
-1. **Path Initialization**: Start with root nodes (nodes with no prerequisites)
-2. **Step-by-Step Progression**: Choose from available next nodes at each step
-3. **Breadcrumb Navigation**: Visual representation of your current path
-4. **Backtracking**: Click any breadcrumb to return to that point in your path
-
-### Current Position Details
-
-- **Node Information**: Full description, tags, and effects
-- **Planning Controls**: Add/remove current node from planned destiny
-- **Visual Feedback**: Clear indication of planning status
-
-### Next Options Selection
-
-- **Available Paths**: All nodes that can be reached from current position
-- **Detailed Information**: Each option shows description, prerequisites, and tags
-- **Planning Integration**: Add/remove any option from planned destiny
-- **One-Click Progression**: Click any option to continue down that path
-
-### Path Completion
-
-- **End Detection**: Automatically detects when reaching terminal nodes
-- **Restart Options**: Easy way to start a new path
-- **Path Summary**: Overview of completed path
-
-## Tree Visualization
 
 ### Graph-Based Tree Building
 
-The tree view uses a sophisticated approach to handle complex prerequisite relationships:
+The tree visualization uses a sophisticated graph-based approach:
 
-1. **Graph Construction**: First builds a complete graph with all nodes and their relationships
-2. **Parent-Child Mapping**: Maps prerequisites to proper parent-child relationships
-3. **Tree Conversion**: Converts the graph to a tree format while preserving shared nodes
-4. **Cycle Prevention**: Uses visited sets to prevent infinite loops in complex relationships
+```typescript
+// Internal graph structure
+interface GraphNode {
+  node: DestinyNode;
+  children: Set<string>; // Child node IDs
+  parents: Set<string>;  // Parent node IDs
+}
 
-### D3 Tree Implementation
+// Tree building process
+1. Graph Construction: Build complete relationship graph
+2. Parent-Child Mapping: Map prerequisites to proper relationships
+3. Tree Conversion: Convert graph to tree format
+4. Cycle Prevention: Use visited sets to prevent infinite loops
+```
 
-The tree view uses `react-d3-tree` for professional visualization:
+---
 
-- **Orientation**: Vertical layout with step-based path connections
-- **Node Spacing**: Configurable separation between siblings and non-siblings
-- **Custom Rendering**: Each node is rendered as a custom SVG element
-- **Interactive Features**: Click to select, plan, expand/collapse
+## 🎨 UI/UX Design Patterns
 
-### Node States
+### Visual Hierarchy
+1. **Primary**: Destiny node name and core information
+2. **Secondary**: Prerequisites and next nodes relationships
+3. **Tertiary**: Detailed descriptions and planning controls
 
-- **Available**: Default gray background with border
-- **Selected**: Primary color background with border
-- **Planned**: Green background with border
-- **Hover**: Muted background for interactive feedback
+### Icon System
+- **Node Type Icons**: Color-coded by node category
+  - 🎯 Magic nodes (blue)
+  - 🛡️ Defensive nodes (green)
+  - ⚔️ Offensive nodes (red)
+  - ⚡ Utility nodes (yellow)
+  - 🗡️ Combat nodes (orange)
 
-### Tree Controls
+- **Relationship Icons**: Visual indicators for node connections
+  - 🔗 Prerequisites (orange badges)
+  - ➡️ Next nodes (blue badges)
+  - ✅ Planned nodes (green background)
+  - 🔄 Available nodes (gray background)
 
-- **Planning Button**: Small circular button in top-right of each node
-- **Expand/Collapse**: Small circular button in top-left for nodes with children
-- **Node Selection**: Click the main node circle to select
+- **Action Icons**: Interactive controls
+  - ➕ Add to plan (green circle)
+  - ➖ Remove from plan (red circle)
+  - 🔽 Expand node (down arrow)
+  - 🔼 Collapse node (up arrow)
 
-### Complex Relationship Handling
+### Responsive Design
+- **Desktop**: 3-column layout with sidebar detail panel
+- **Tablet**: 2-column grid with bottom detail panel
+- **Mobile**: Single column with modal detail panel
+- **Tree View**: Adaptive scaling with zoom controls
+- **Path Builder**: Full-width layout with collapsible sections
 
-The system properly handles complex scenarios like:
+### Interaction Patterns
+- **Hover Effects**: Subtle scaling and shadow changes on cards
+- **Selection States**: Ring borders and color-coded backgrounds
+- **Planning States**: Visual feedback for planned vs unplanned nodes
+- **Loading States**: Skeleton screens and spinners
+- **Error States**: Clear messaging with retry options
+- **Breadcrumb Navigation**: Clickable path history with backtracking
 
-- **Multiple Prerequisites**: Nodes requiring multiple prerequisites (e.g., "Magic Shell" requires both "Mage" and "Warrior")
-- **Shared Branches**: Multiple paths converging on the same node
-- **Cross-Branch Dependencies**: Nodes that depend on nodes from different branches
+---
 
-## Usage
+## 🔄 Reusable Components
 
-### Navigation
+### Shared Player Creation Framework
 
-Access the Destiny page via the sidebar navigation under "Progression" → "Destiny"
+The destiny feature leverages the same comprehensive shared framework as other features:
 
-### URL
+#### **PlayerCreationPage**
+- Generic layout for categorized item selection
+- Built-in search, filtering, and view mode management
+- Customizable render functions for item cards and detail panels
 
-`/destiny`
+#### **MultiAutocompleteSearch**
+- Multi-category search interface
+- Tag-based filtering system
+- Keyboard navigation support
 
-### View Selection
+#### **ItemGrid**
+- Responsive grid/list view switching
+- Selection state management
+- Empty state handling
 
-- **List View**: Browse all nodes with search and filtering
-- **Tree View**: Visual tree exploration with D3 visualization
-- **Path Builder**: Step-by-step path planning with breadcrumbs
+### Destiny-Specific Components
 
-### State Management
+#### **DestinyCard**
+- **Reusability**: Can be adapted for other tree-based entity types
+- **Customization**: Icon mapping and color schemes for different node types
+- **Accessibility**: ARIA labels and keyboard navigation
+- **Relationship Display**: Prerequisites and next nodes visualization
 
-- **Planned Nodes**: Stored in component state (not persisted)
-- **Selected Node**: Tracks currently selected node for detail display
-- **View Mode**: Manages list vs tree vs path builder state
-- **Path State**: Tracks current path in Path Builder
+#### **DestinyDetailPanel**
+- **Extensibility**: Modular sections for different node information types
+- **Data Visualization**: Effect icons and relationship mapping
+- **Information Architecture**: Hierarchical content organization
+- **Planning Integration**: Seamless planning controls
 
-## Dependencies
+#### **DestinyTreeView**
+- **Graph Visualization**: Professional D3-based tree rendering
+- **Complex Relationships**: Proper handling of shared prerequisites
+- **Interactive Planning**: Visual planning with immediate feedback
+- **Responsive Scaling**: Adaptive to container size
 
-- **react-d3-tree**: Professional tree visualization library
-- **@types/d3**: TypeScript definitions for D3
+#### **DestinyPathBuilder**
+- **Step-by-Step Experience**: Guided progression planning
+- **Breadcrumb Navigation**: Visual path history with backtracking
+- **Progressive Disclosure**: Information revealed as needed
+- **Path Validation**: Ensures valid progression sequences
 
-## Future Enhancements
+---
 
-1. **Persistent Planning**: Save planned paths to localStorage or backend
-2. **Advanced Tree Layout**: Improved tree visualization with better spacing
-3. **Path Validation**: Ensure planned paths are valid (prerequisites met)
-4. **Export/Import**: Share planned builds with other users
-5. **Level Requirements**: Add level requirement validation
-6. **Visual Icons**: Add custom icons for different node types
-7. **Zoom and Pan**: Add zoom and pan controls for large trees
-8. **Mini-map**: Add overview map for navigation in large trees
-9. **Path Highlighting**: Highlight valid paths from root to selected node
-10. **Prerequisite Validation**: Visual indicators for unmet prerequisites
-11. **Interactive Prerequisites**: Click prerequisite badges to navigate to those nodes
-12. **Progression Paths**: Show multiple possible paths to reach a target node
-13. **Path Comparison**: Compare different progression paths side by side
-14. **Path Recommendations**: Suggest optimal paths based on character goals
-15. **Path Export**: Export planned paths as images or shareable links
+## 📊 Performance Considerations
+
+### Data Loading
+- **Runtime Fetching**: Destiny nodes loaded from JSON at component mount
+- **Error Boundaries**: Graceful fallbacks for network issues
+- **Loading States**: User feedback during data fetching
+- **Data Transformation**: Efficient conversion from JSON to typed interfaces
+
+### Rendering Optimization
+- **Memoization**: Filtered results cached with `useMemo`
+- **Virtual Scrolling**: Large node lists handled efficiently
+- **Lazy Loading**: Tree nodes expanded on demand
+- **Graph Caching**: Pre-computed graph structure for tree visualization
+
+### Search Performance
+- **Debounced Input**: Search queries optimized for performance
+- **Indexed Filtering**: Pre-computed search indices for tags and prerequisites
+- **Cached Results**: Filtered results memoized to prevent recalculation
+- **Content Analysis**: Efficient tag assignment based on keyword matching
+
+### Tree Visualization Performance
+- **Graph Pre-computation**: Graph structure built once and cached
+- **Selective Rendering**: Only visible tree nodes rendered
+- **Efficient Updates**: Minimal re-renders for planning state changes
+- **Memory Management**: Proper cleanup of D3 tree instances
+
+---
+
+## 🧪 Testing Strategy
+
+### Unit Tests
+- Component rendering and props validation
+- Data transformation logic from JSON to DestinyNode
+- Filter and search functionality
+- Graph building and tree conversion algorithms
+- Planning state management
+
+### Integration Tests
+- End-to-end destiny selection and planning flow
+- Search and filter interactions across all view modes
+- Tree visualization interactions and planning
+- Path builder navigation and backtracking
+- Responsive design breakpoints
+
+### Accessibility Tests
+- Screen reader compatibility for all view modes
+- Keyboard navigation through tree and path builder
+- Color contrast compliance for all node states
+- ARIA labels and semantic HTML structure
+- Focus management in complex interactions
+
+### Performance Tests
+- Large dataset handling (1000+ nodes)
+- Tree visualization rendering performance
+- Search and filter response times
+- Memory usage during extended sessions
+- Mobile device performance validation
+
+---
+
+## 🔮 Future Enhancements
+
+### Planned Features
+1. **Persistent Planning**: Save planned paths to localStorage or backend with export/import capabilities
+2. **Advanced Tree Layout**: Improved tree visualization with better spacing and automatic layout optimization
+3. **Path Validation**: Ensure planned paths are valid with prerequisite checking and visual indicators
+4. **Visual Icons**: Add custom icons for different node types and categories
+5. **Zoom and Pan**: Add zoom and pan controls for large trees with mini-map navigation
+6. **Path Highlighting**: Highlight valid paths from root to selected node with multiple path options
+7. **Interactive Prerequisites**: Click prerequisite badges to navigate to those nodes with context preservation
+8. **Progression Paths**: Show multiple possible paths to reach a target node with difficulty indicators
+9. **Path Comparison**: Compare different progression paths side by side with statistical analysis
+10. **Path Recommendations**: AI-powered path suggestions based on character goals and playstyle preferences
+
+### Technical Improvements
+1. **Data Caching**: Implement service worker for offline access to destiny data
+2. **Real-time Updates**: WebSocket integration for live data updates and collaborative planning
+3. **Analytics**: User behavior tracking for optimization of tree layouts and path recommendations
+4. **Internationalization**: Multi-language support for destiny node descriptions and UI elements
+5. **Advanced Graph Algorithms**: Implement more sophisticated graph traversal and pathfinding algorithms
+6. **Performance Optimization**: Virtual scrolling for large trees and lazy loading for deep node hierarchies
+7. **Mobile Optimization**: Touch-friendly interactions and gesture support for tree navigation
+8. **Accessibility Enhancements**: Advanced screen reader support and voice navigation capabilities
+
+---
+
+## 📚 Related Documentation
+
+- [Player Creation Framework](../shared/components/playerCreation/README.md)
+- [UI Component Library](../shared/ui/README.md)
+- [Data Schema Documentation](../../../docs/technical-spec.md)
+- [Z-Index System](../../../docs/z-index-system.md)
+- [Tree Visualization Best Practices](../../../docs/tree-visualization.md)
+
+---
+
+*This documentation is maintained as part of the Lorerim Arcaneum project. For questions or contributions, please refer to the project's contribution guidelines.*
