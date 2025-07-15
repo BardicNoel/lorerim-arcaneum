@@ -109,7 +109,7 @@ function AppSidebar({ collapsed }: { collapsed: boolean }) {
         ))}
       </SidebarContent>
       {!collapsed && (
-        <div className="mt-auto px-3 py-2 border-t border-skyrim-gold/20 text-center">
+        <div className="flex-shrink-0 px-3 py-2 border-t border-skyrim-gold/20 text-center">
           <P className="text-xs text-skyrim-gold/50">Version 1.0.0</P>
           <button
             className="mt-2 text-skyrim-gold/70 hover:text-skyrim-gold hover:bg-skyrim-gold/10 text-xs rounded px-2 py-1"
@@ -133,18 +133,16 @@ function App() {
           sidebarCollapsed={sidebarCollapsed}
           onToggleSidebar={() => setSidebarCollapsed((c) => !c)}
         />
-        <div className="flex flex-1 relative">
+        <div className="flex flex-1">
           <div 
-            className={`absolute top-0 left-0 h-full transition-transform duration-300 ease-in-out ${
-              sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'
+            className={`transition-all duration-300 ease-in-out ${
+              sidebarCollapsed ? 'w-16' : 'w-64'
             }`}
             style={{ zIndex: Z_INDEX.SIDEBAR }}
           >
-            <AppSidebar collapsed={false} />
+            <AppSidebar collapsed={sidebarCollapsed} />
           </div>
-          <main className={`flex-1 p-8 transition-all duration-300 ease-in-out ${
-            sidebarCollapsed ? 'ml-0' : 'ml-64'
-          }`}>
+          <main className={`flex-1 p-8 transition-all duration-300 ease-in-out`}>
             <AppRouter />
           </main>
         </div>

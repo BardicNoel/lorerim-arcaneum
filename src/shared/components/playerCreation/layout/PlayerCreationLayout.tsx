@@ -15,7 +15,7 @@ export function PlayerCreationLayout({
   className = "" 
 }: PlayerCreationLayoutProps) {
   return (
-    <div className={`min-h-screen bg-background ${className}`}>
+    <div className={`bg-background ${className}`}>
       {/* Header */}
       <div className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-6">
@@ -27,7 +27,7 @@ export function PlayerCreationLayout({
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-6">
+      <div className={`px-4 py-6 ${className.includes('max-w-none') ? '' : 'container mx-auto'}`}>
         {children}
       </div>
     </div>

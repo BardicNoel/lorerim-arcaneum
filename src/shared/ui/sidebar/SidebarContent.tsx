@@ -7,7 +7,7 @@ export const SidebarContent = React.forwardRef<HTMLDivElement, SidebarContentPro
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('flex-1 flex flex-col overflow-y-auto px-2 py-2', className)}
+      className={cn('flex-1 flex flex-col justify-start overflow-y-auto px-2 py-2', className)}
       {...props}
     />
   )
