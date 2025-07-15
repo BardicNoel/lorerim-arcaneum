@@ -144,7 +144,7 @@
     "globalFormId": "0xFE26081A"
   },
   {
-    "name": "Endurance",
+    "name": "Stamina Surge",
     "description": "You regenerate stamina 100% faster.",
     "prerequisites": [
       "Battle Spirit"
@@ -239,7 +239,7 @@
     "description": "Close enemies have 100 reduced Armor Rating.",
     "prerequisites": [
       "Knight",
-      "Endurance"
+      "Stamina Surge"
     ],
     "globalFormId": "0xFE260826"
   },
@@ -255,7 +255,7 @@
     "name": "Trickster",
     "description": "You have a 10% chance to evade enemy weapon attacks.",
     "prerequisites": [
-      "Endurance",
+      "Stamina Surge",
       "Scout"
     ],
     "globalFormId": "0xFE260828"

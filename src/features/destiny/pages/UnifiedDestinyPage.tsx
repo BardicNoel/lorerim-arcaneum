@@ -14,7 +14,6 @@ import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
 import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
 import { DestinyCard } from '../components/DestinyCard'
 import { DestinyDetailPanel } from '../components/DestinyDetailPanel'
-import { DestinyTreeView } from '../components/DestinyTreeView'
 import { DestinyPathBuilder } from '../components/DestinyPathBuilder'
 import type { PlayerCreationItem, SearchCategory, SelectedTag } from '@/shared/components/playerCreation/types'
 import type { DestinyNode, PlannedNode } from '../types'
@@ -26,7 +25,6 @@ export function UnifiedDestinyPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [plannedNodes, setPlannedNodes] = useState<PlannedNode[]>([])
-  const [selectedNode, setSelectedNode] = useState<DestinyNode | undefined>(undefined)
 
   useEffect(() => {
     async function fetchDestinyData() {
@@ -173,15 +171,7 @@ export function UnifiedDestinyPage() {
     setPlannedNodes(prev => prev.filter(p => p.id !== nodeId))
   }
 
-  // Handle node selection in tree view
-  const handleTreeNodeClick = (node: DestinyNode) => {
-    setSelectedNode(node)
-    // Also update the selected item for the detail panel
-    const item = playerCreationItems.find(i => i.id === node.id)
-    if (item) {
-      handleItemSelect(item)
-    }
-  }
+
 
   const renderDestinyCard = (item: PlayerCreationItem, isSelected: boolean) => (
     <DestinyCard 
@@ -236,14 +226,13 @@ export function UnifiedDestinyPage() {
       className="max-w-none"
     >
       <div className="mb-6">
-        <Tabs defaultValue="list" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="list">List View</TabsTrigger>
-            <TabsTrigger value="tree">Tree View</TabsTrigger>
+        <Tabs defaultValue="path" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="path">Path Builder</TabsTrigger>
+            <TabsTrigger value="reference">Reference</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="list" className="space-y-4">
+          <TabsContent value="reference" className="space-y-4">
             <PlayerCreationFilters
               searchCategories={searchCategories}
               selectedTags={currentFilters.selectedTags}
@@ -253,75 +242,18 @@ export function UnifiedDestinyPage() {
               onViewModeChange={handleViewModeChange}
             />
 
-            <PlayerCreationContent>
-              <PlayerCreationItemsSection>
-                <ItemGrid
-                  items={filteredItems}
-                  viewMode={viewMode}
-                  onItemSelect={handleItemSelect}
-                  selectedItem={selectedItem}
-                  renderItemCard={renderDestinyCard}
-                />
-              </PlayerCreationItemsSection>
-
-              <PlayerCreationDetailSection>
-                {selectedItem ? (
-                  renderDestinyDetailPanel(selectedItem)
-                ) : (
-                  <PlayerCreationEmptyDetail />
-                )}
-              </PlayerCreationDetailSection>
-            </PlayerCreationContent>
+            <div className="w-full">
+              <ItemGrid
+                items={filteredItems}
+                viewMode={viewMode}
+                onItemSelect={() => {}} // Disable selection for reference view
+                selectedItem={null} // No selection in reference view
+                renderItemCard={renderDestinyCard}
+              />
+            </div>
           </TabsContent>
           
-          <TabsContent value="tree" className="space-y-4">
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex items-center space-x-4">
-                <h3 className="text-lg font-semibold">Destiny Tree</h3>
-                {plannedNodes.length > 0 && (
-                  <div className="text-sm text-muted-foreground">
-                    {plannedNodes.length} nodes planned
-                  </div>
-                )}
-              </div>
-              {plannedNodes.length > 0 && (
-                <Button 
-                  variant="outline" 
-                  onClick={() => setPlannedNodes([])}
-                >
-                  Clear Plan
-                </Button>
-              )}
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2">
-                <Card className="h-[600px] overflow-auto">
-                  <DestinyTreeView
-                    nodes={destinyNodes}
-                    plannedNodes={plannedNodes}
-                    selectedNode={selectedNode}
-                    onNodeClick={handleTreeNodeClick}
-                    onNodePlan={handlePlanNode}
-                  />
-                </Card>
-              </div>
-              
-              <div className="lg:col-span-1">
-                {selectedNode ? (
-                  <DestinyDetailPanel
-                    item={playerCreationItems.find(i => i.id === selectedNode.id)!}
-                    originalNode={selectedNode}
-                    onPlanNode={handlePlanNode}
-                    isPlanned={plannedNodes.some(p => p.id === selectedNode.id)}
-                    allNodes={destinyNodes}
-                  />
-                ) : (
-                  <PlayerCreationEmptyDetail />
-                )}
-              </div>
-            </div>
-          </TabsContent>
+
           
           <TabsContent value="path" className="space-y-4">
             <DestinyPathBuilder
