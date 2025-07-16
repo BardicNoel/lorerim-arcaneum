@@ -1,0 +1,203 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+
+# 📖 SPEC: Perk Page (React Flow Tree)
+
+---
+
+## 🗂 Page Layout
+
+```
++-----------------------------------------------------------+
+| [Header / Breadcrumbs: "Perk Planner"]                   |
++-----------------------------------------------------------+
+| [Skill Selector Tabs/Grid]                                |
++-----------------------------------------------------------+
+| [Summary Sidebar]           | React Flow Perk Tree Canvas|
+|-----------------------------|                             |
+| Totals:                     |                             |
+| - Perks selected            |  [Skill Name] Tree          |
+| - Min level per skill       |  Zoom / Pan / Fit buttons   |
+| - Reset/Clear options       |                             |
++-----------------------------+-----------------------------+
+```
+
+---
+
+## 🎯 Core Components
+
+### 1️⃣ Skill Selector
+
+- **Purpose**: Select which skill tree to view and edit.
+- **UI**:
+  - ShadCN `Tabs` or `Grid` of skill icons (desktop)
+  - ShadCN `Combobox` (mobile fallback)
+  - Badge showing selected perks per skill:
+    ```
+    [Archery (6)] [Smithing (3)] [Destruction (0)]
+    ```
+- **Interactions**:
+  - Click tab/grid item switches the React Flow canvas to that skill.
+  - Hover/tooltip shows min level for the skill.
+
+---
+
+### 2️⃣ React Flow Canvas
+
+- **Purpose**: Visualize and edit the perks for the selected skill.
+- **Rendering**:
+  - Each **perk** is a React Flow **Node**:
+    - Name
+    - Ranks (current/max) with increment/decrement buttons
+    - Level requirement
+    - Selected state (color-coded)
+  - **Edges** show prerequisites:
+    - Solid line = AND requirement
+    - Dashed line = OR requirement (if applicable)
+- **Interactions**:
+  - Click node → toggles selection
+  - +/– buttons → adjust ranks for multi-rank perks
+  - Hover node → tooltip with full description
+  - Pan/zoom canvas
+  - “Fit to View” button to center tree
+
+---
+
+### 3️⃣ Summary Sidebar
+
+- **Purpose**: Global overview of all selected perks and level requirements.
+- **UI (ShadCN Panel)**:
+  ```
+  🏹 Archery
+    - Selected Perks: 6
+    - Min Level: 50
+  ⚒ Smithing
+    - Selected Perks: 3
+    - Min Level: 30
+  🔥 Total Perks: 15
+  ```
+- **Actions**:
+  - Clear All (per skill or global)
+  - Export Plan (JSON/shareable URL)
+
+---
+
+## 🔥 Feature Interactions
+
+| Action                | Result                                                |
+| --------------------- | ----------------------------------------------------- |
+| Select skill tab      | Loads that skill’s perk tree in the React Flow canvas |
+| Click perk node       | Selects/deselects the perk                            |
+| Adjust ranks          | Increments/decrements multi-rank perks                |
+| Select locked perk    | Highlights unmet prerequisites                        |
+| Pan/Zoom              | Navigate large trees smoothly                         |
+| Fit to View           | Centers and scales tree to fit canvas                 |
+| Summary click (skill) | Switches to that skill tree                           |
+| Clear/reset           | Removes all selected perks for the skill/all skills   |
+
+---
+
+## 📦 Data Model
+
+### Perk Node
+
+```ts
+interface PerkNode {
+  id: string; // Unique perk ID
+  skill: string; // e.g., "Archery"
+  name: string;
+  description: string;
+  levelRequirement: number;
+  currentRank: number;
+  maxRank: number;
+  prerequisites: string[]; // IDs of required perks
+  selected: boolean;
+  position: { x: number; y: number }; // For React Flow layout
+}
+```
+
+### Perk Edge
+
+```ts
+interface PerkEdge {
+  id: string; // Unique edge ID
+  source: string; // PerkNode.id (prerequisite)
+  target: string; // PerkNode.id (dependent perk)
+  type: "and" | "or";
+}
+```
+
+### Global State
+
+```ts
+interface PerkPlan {
+  selectedPerks: Record<string, PerkNode[]>; // keyed by skill
+  minLevels: Record<string, number>; // skill -> min level
+  totalPerks: number;
+}
+```
+
+---
+
+## 🛠 Technical Implementation
+
+### Libraries
+
+- **React Flow**: Graph rendering and node interactions
+- **ShadCN/UI**: Skill selector, summary panel, controls
+- **Zustand/Jotai**: Global state for selected perks + level tracking
+- **TailwindCSS**: Responsive design
+
+---
+
+### React Component Tree
+
+```
+<PerkPage>
+  <SkillSelector />           // ShadCN Tabs/Grid
+  <SummarySidebar />          // Selected perks + levels
+  <PerkTreeCanvas />          // React Flow
+    <PerkNode />              // React Flow custom nodes
+    <PerkEdge />              // React Flow custom edges
+  <Toolbar />                 // Fit-to-view, reset buttons
+</PerkPage>
+```
+
+---
+
+## 🎨 Styling
+
+- **Selected node:** Blue fill, bold text
+- **Available node:** Green border, normal text
+- **Locked node:** Gray/dimmed, dashed border
+- **Edges:** Solid or dashed depending on AND/OR prerequisites
+
+---
+
+## ✅ Pros
+
+✔ Skyrim-like feel (visual trees per skill)  
+✔ Clear prerequisite relationships  
+✔ Great for users familiar with perk constellations  
+✔ Flexible (zoom/pan for large trees)
+
+---
+
+## ⚠️ Risks
+
+✖ Mobile usability (large trees on small screens)  
+✖ Requires careful layout for big skill trees (Smithing, Restoration)  
+✖ React Flow learning curve for custom node design
+
+---
+
+## 🚀 MVP Scope
+
+✅ Skill Selector (18 skills)  
+✅ One React Flow canvas per skill  
+✅ Summary panel with running totals  
+✅ Select/unselect nodes and adjust ranks  
+✅ Pan/Zoom + Fit-to-View

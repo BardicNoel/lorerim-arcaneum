@@ -9,6 +9,7 @@ import HomePage from '@/pages/HomePage'
 import NotFoundPage from '@/pages/NotFoundPage'
 import { UnifiedRacesPage } from '@/features/races'
 import { UnifiedDestinyPage } from '@/features/destiny'
+import { UnifiedPerksPage } from '@/features/perks'
 
 export const AppRouter = () => {
   return (
@@ -16,6 +17,7 @@ export const AppRouter = () => {
       <Route path="/" element={<HomePage />} />
       <Route path="/race" element={<UnifiedRacesPage />} />
       <Route path="/destiny" element={<UnifiedDestinyPage />} />
+      <Route path="/perks" element={<UnifiedPerksPage />} />
       <Route path="/birth-signs" element={<BirthSignsPage />} />
       <Route path="/traits" element={<TraitsPage />} />
       <Route path="/skills" element={<SkillsPage />} />
