@@ -136,7 +136,7 @@ function App() {
         <div className="flex flex-1">
           <div 
             className={`transition-all duration-300 ease-in-out ${
-              sidebarCollapsed ? 'w-16' : 'w-64'
+              sidebarCollapsed ? 'w-0' : 'w-64'
             }`}
             style={{ zIndex: Z_INDEX.SIDEBAR }}
           >

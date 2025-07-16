@@ -97,7 +97,7 @@ export function PlayerCreationPage<T extends PlayerCreationItem>({
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="border-b border-border bg-card">
+      <div className="border-b border-border bg-card/50">
         <div className="container mx-auto px-4 py-6">
           <H1 className="text-3xl font-bold text-primary mb-2">{title}</H1>
           {description && (

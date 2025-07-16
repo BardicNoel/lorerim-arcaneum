@@ -128,8 +128,8 @@ export function AutocompleteSearch({
       {/* Dropdown */}
       {isOpen && (
         <div 
-          className="absolute top-full left-0 right-0 mt-1 bg-white border border-border rounded-lg shadow-lg max-h-96 overflow-y-auto"
-          style={{ zIndex: Z_INDEX.AUTOCOMPLETE, backgroundColor: '#fff' }}
+          className="absolute top-full left-0 right-0 mt-1 dropdown-enhanced rounded-lg max-h-96 overflow-y-auto"
+          style={{ zIndex: Z_INDEX.AUTOCOMPLETE }}
         >
           {/* Category Selection - only show if multiple categories and no category selected */}
           {showCategorySelection && (
