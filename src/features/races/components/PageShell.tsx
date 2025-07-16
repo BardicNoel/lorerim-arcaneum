@@ -11,7 +11,7 @@ export function PageShell({ title, subtitle, children }: PageShellProps) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <div className="border-b border-border bg-card px-6 py-4">
+      <div className="border-b border-border bg-card/50 px-6 py-4">
         <div>
           <H1 className="text-2xl font-bold text-foreground">{title}</H1>
           {subtitle && (
