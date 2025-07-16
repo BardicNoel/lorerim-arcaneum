@@ -3,61 +3,61 @@
 /* ===== MODERN 2020+ DESIGN SYSTEM ===== */
 
 :root {
-  --background: 210 10% 98%;
-  --foreground: 40 20% 15%;
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
 
-  --card: 210 10% 96%;
-  --card-foreground: 40 20% 15%;
-  --popover: 210 10% 98%;
-  --popover-foreground: 40 20% 15%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 98%;
+  --popover-foreground: 222.2 84% 4.9%;
 
   --primary: 43 35% 45%;
-  --primary-foreground: 210 20% 96%;
+  --primary-foreground: 210 40% 98%;
 
-  --secondary: 0 0% 30%;
-  --secondary-foreground: 210 20% 96%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 84% 4.9%;
 
-  --muted: 210 15% 92%;
-  --muted-foreground: 210 10% 40%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
 
-  --accent: 0 5% 30%;
-  --accent-foreground: 210 20% 96%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 84% 4.9%;
 
-  --destructive: 0 60% 40%;
-  --destructive-foreground: 210 20% 96%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
 
-  --border: 210 10% 80%;
-  --input: 210 10% 80%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
   --ring: 43 35% 45%;
 }
 
 /* ===== DARK THEME ===== */
 .dark {
-  --background: 210 10% 8%;
-  --foreground: 40 20% 92%;
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
 
-  --card: 210 10% 12%;
-  --card-foreground: 40 20% 92%;
-  --popover: 210 10% 12%;
-  --popover-foreground: 40 20% 92%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 8%;
+  --popover-foreground: 0 0% 98%;
 
   --primary: 43 35% 45%;
-  --primary-foreground: 210 10% 8%;
+  --primary-foreground: 240 10% 3.9%;
 
-  --secondary: 0 0% 50%;
-  --secondary-foreground: 40 20% 92%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
 
-  --muted: 210 10% 20%;
-  --muted-foreground: 210 10% 60%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
 
-  --accent: 0 5% 40%;
-  --accent-foreground: 40 20% 92%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
 
-  --destructive: 0 60% 30%;
-  --destructive-foreground: 40 20% 92%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
 
-  --border: 210 10% 20%;
-  --input: 210 10% 20%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
   --ring: 43 35% 45%;
 }
 
@@ -310,7 +310,7 @@
   .modal-overlay {
     position: fixed;
     inset: 0;
-    z-index: 50;
+    z-index: 200; /* Z_INDEX.MODAL */
     background-color: hsl(var(--background) / 0.8);
     backdrop-filter: blur(6px);
   }
@@ -318,7 +318,7 @@
     position: fixed;
     left: 50%;
     top: 50%;
-    z-index: 50;
+    z-index: 200; /* Z_INDEX.MODAL */
     display: grid;
     width: 100%;
     max-width: 32rem;
@@ -354,6 +354,20 @@
     background-color: hsl(var(--background) / 0.8);
     backdrop-filter: blur(8px);
     border: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  /* ===== ENHANCED DROPDOWN AND POPOVER STYLES ===== */
+  .dropdown-enhanced {
+    background-color: hsl(var(--popover));
+    border: 2px solid hsl(var(--border));
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    backdrop-filter: blur(12px);
+  }
+
+  .dark .dropdown-enhanced {
+    background-color: hsl(var(--popover));
+    border: 2px solid hsl(var(--border));
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
   }
   /* ===== SUBTLE ANIMATIONS ===== */
   .fade-in {
@@ -422,8 +436,8 @@
 /* ===== FALLBACK STYLES ===== */
 /* Ensure basic styling works even if Tailwind fails */
 body {
-  background-color: #ffffff;
-  color: #000000;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   margin: 0;
   padding: 0;

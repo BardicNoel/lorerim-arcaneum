@@ -15,6 +15,10 @@ export default {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        card: "hsl(var(--card))",
+        "card-foreground": "hsl(var(--card-foreground))",
+        popover: "hsl(var(--popover))",
+        "popover-foreground": "hsl(var(--popover-foreground))",
         primary: "hsl(var(--primary))",
         "primary-foreground": "hsl(var(--primary-foreground))",
         secondary: "hsl(var(--secondary))",
@@ -30,8 +34,8 @@ export default {
         ring: "hsl(var(--ring))",
         skyrim: {
           gold: "#d4af37",
-          dark: "#1e1e1e"
-        }
+          dark: "#1e1e1e",
+        },
       },
       keyframes: {
         "accordion-down": {
