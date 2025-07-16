@@ -31,10 +31,26 @@ export interface StartingStats {
   carryWeight: number;
 }
 
+export interface RegenerationMultiplier {
+  value: number;
+  source: string;
+}
+
+export interface RegenerationAdjustment {
+  value: number;
+  source: string;
+}
+
+export interface RegenerationStat {
+  base: number;
+  multipliers?: RegenerationMultiplier[];
+  adjustments?: RegenerationAdjustment[];
+}
+
 export interface Regeneration {
-  health: number;
-  magicka: number;
-  stamina: number;
+  health: RegenerationStat;
+  magicka: RegenerationStat;
+  stamina: RegenerationStat;
 }
 
 export interface Combat {

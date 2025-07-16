@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { X } from 'lucide-react'
 import { 
   PlayerCreationLayout,
   PlayerCreationFilters
@@ -51,10 +52,6 @@ export function AccordionRacesPage() {
     const allSkills = [...new Set(races.flatMap(race => 
       race.skillBonuses.map(bonus => bonus.skill)
     ))]
-    
-    const allAbilities = [...new Set(races.flatMap(race => 
-      race.racialSpells.map(spell => spell.name)
-    ))]
 
     const categories = [...new Set(races.map(race => race.category))]
 
@@ -69,18 +66,6 @@ export function AccordionRacesPage() {
           value: keyword,
           category: 'Fuzzy Search',
           description: `Races with ${keyword} keyword`
-        }))
-      },
-      {
-        id: 'racial-abilities',
-        name: 'Racial Abilities',
-        placeholder: 'Search by ability...',
-        options: allAbilities.map(ability => ({
-          id: `ability-${ability}`,
-          label: ability,
-          value: ability,
-          category: 'Racial Abilities',
-          description: `Races with ${ability} ability`
         }))
       },
       {
@@ -123,8 +108,7 @@ export function AccordionRacesPage() {
         id: `custom-${optionOrTag}`,
         label: optionOrTag,
         value: optionOrTag,
-        category: 'Fuzzy Search',
-        type: 'custom'
+        category: 'Fuzzy Search'
       }
     } else {
       tag = {
@@ -145,25 +129,48 @@ export function AccordionRacesPage() {
     setSelectedTags(prev => prev.filter(tag => tag.id !== tagId))
   }
 
-  // Fuzzy search query is the concatenation of all custom tags in the Fuzzy Search category
+  // Apply all filters to races
+  const filteredRaces = races.filter(race => {
+    // If no tags are selected, show all races
+    if (selectedTags.length === 0) return true
+
+    // Check each selected tag
+    return selectedTags.every(tag => {
+      switch (tag.category) {
+        case 'Fuzzy Search':
+          // For fuzzy search, we'll handle this separately
+          return true
+        
+        case 'Race Categories':
+          // Filter by race category (Human, Elf, Beast)
+          return race.category === tag.value
+        
+        case 'Skill Bonuses':
+          // Filter by skill bonuses
+          return race.skillBonuses.some(bonus => bonus.skill === tag.value)
+        
+        case 'Keywords':
+          // Filter by keywords
+          return race.keywords.some(keyword => keyword.edid === tag.value)
+        
+        default:
+          return true
+      }
+    })
+  })
+
+  // Apply fuzzy search to the filtered races
   const fuzzySearchQuery = selectedTags
     .filter(tag => tag.category === 'Fuzzy Search')
     .map(tag => tag.value)
     .join(' ')
 
-  // Use fuzzy search for keyword-based searching
-  const { filteredRaces: fuzzyFilteredRaces } = useFuzzySearch(races, fuzzySearchQuery)
+  const { filteredRaces: fuzzyFilteredRaces } = useFuzzySearch(filteredRaces, fuzzySearchQuery)
 
-  // Convert fuzzy filtered races to PlayerCreationItem format
-  const fuzzyFilteredItems: PlayerCreationItem[] = fuzzyFilteredRaces.map(race => 
+  // Convert to PlayerCreationItem format
+  const displayItems: PlayerCreationItem[] = fuzzyFilteredRaces.map(race => 
     transformRaceToPlayerCreationItem(race)
   )
-
-  // Use the new filters hook for other filters (abilities, skills, categories)
-  // (You can expand this to combine with fuzzy search if needed)
-
-  // Use fuzzy filtered items when there are fuzzy tags, otherwise use all items
-  const displayItems = fuzzySearchQuery.trim() ? fuzzyFilteredItems : playerCreationItems
 
   // Handle accordion expansion
   const handleRaceToggle = (raceId: string) => {
@@ -218,17 +225,29 @@ export function AccordionRacesPage() {
       {/* Selected Tags */}
       <div className="my-4">
         {selectedTags.length > 0 && (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 items-center">
+            {/* Clear All Button */}
+            <button
+              onClick={() => setSelectedTags([])}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors duration-200 border border-border/50 hover:border-border cursor-pointer group"
+              title="Clear all filters"
+            >
+              <X className="h-3.5 w-3.5 group-hover:scale-110 transition-transform duration-200" />
+              Clear All
+            </button>
+            
+            {/* Individual Tags */}
             {selectedTags.map(tag => (
-              <span key={tag.id} className="inline-flex items-center px-3 py-1 rounded bg-muted text-sm font-medium">
+              <span 
+                key={tag.id} 
+                className="inline-flex items-center px-3 py-1.5 rounded-full bg-skyrim-gold/20 border border-skyrim-gold/30 text-sm font-medium text-skyrim-gold hover:bg-skyrim-gold/30 transition-colors duration-200 cursor-pointer group"
+                onClick={() => handleTagRemove(tag.id)}
+                title="Click to remove"
+              >
                 {tag.label}
-                <button
-                  className="ml-2 text-muted-foreground hover:text-destructive"
-                  onClick={() => handleTagRemove(tag.id)}
-                  title="Remove tag"
-                >
+                <span className="ml-2 text-skyrim-gold/70 group-hover:text-skyrim-gold transition-colors duration-200">
                   ×
-                </button>
+                </span>
               </span>
             ))}
           </div>

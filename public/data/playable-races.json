@@ -57,19 +57,25 @@
           "name": "Highborn",
           "description": "High elf blood grants great affinity to magicka as well as resistance to diseases. Magicka regenerates <50>% faster, spells are <5>% more powerful and last longer, you are <50>% less likely to contract diseases.",
           "globalFormId": "0x00105F16"
-        },
-        {
-          "edid": "REQ_Trait_NoHealthRegeneration",
-          "name": "No Natural Health Regeneration",
-          "description": "",
-          "globalFormId": "0x8C609AF0"
         }
       ],
       "keywords": [],
       "regeneration": {
-        "health": 0,
-        "magicka": 1.2000000476837158,
-        "stamina": 1.5499999523162842
+        "health": {
+          "base": 0
+        },
+        "magicka": {
+          "base": 1.2000000476837158,
+          "multipliers": [
+            {
+              "value": 1.5,
+              "source": "Highborn"
+            }
+          ]
+        },
+        "stamina": {
+          "base": 1.5499999523162842
+        }
       },
       "combat": {
         "unarmedDamage": 12,
@@ -147,12 +153,6 @@
           "globalFormId": "0x00104ACF"
         },
         {
-          "edid": "REQ_Trait_NoHealthRegeneration",
-          "name": "No Natural Health Regeneration",
-          "description": "",
-          "globalFormId": "0x8C609AF0"
-        },
-        {
           "edid": "REQ_Ability_Race_All_StrongStomach",
           "name": "Strong Stomach",
           "description": "Your metabolism can digest raw food without food poisoning.",
@@ -161,12 +161,24 @@
       ],
       "keywords": [],
       "regeneration": {
-        "health": 0,
-        "magicka": 1.100000023841858,
-        "stamina": 1.600000023841858
+        "health": {
+          "base": 0,
+          "adjustments": [
+            {
+              "value": 1,
+              "source": "Histskin"
+            }
+          ]
+        },
+        "magicka": {
+          "base": 1.100000023841858
+        },
+        "stamina": {
+          "base": 1.600000023841858
+        }
       },
       "combat": {
-        "unarmedDamage": 12,
+        "unarmedDamage": 32,
         "unarmedReach": 73
       }
     },
@@ -229,12 +241,6 @@
           "globalFormId": "0x000E40CF"
         },
         {
-          "edid": "REQ_Trait_NoHealthRegeneration",
-          "name": "No Natural Health Regeneration",
-          "description": "",
-          "globalFormId": "0x8C609AF0"
-        },
-        {
           "edid": "REQ_Ability_Race_Bosmer_EyeOfTheHunt",
           "name": "Eye of the Hunt",
           "description": "The Bosmer are naturally skilled in marksmanship, and can aim their bows more precisely. Armor penetration with ranged weapons is increased by <5>.",
@@ -249,9 +255,15 @@
       ],
       "keywords": [],
       "regeneration": {
-        "health": 0,
-        "magicka": 1.100000023841858,
-        "stamina": 1.649999976158142
+        "health": {
+          "base": 0
+        },
+        "magicka": {
+          "base": 1.100000023841858
+        },
+        "stamina": {
+          "base": 1.649999976158142
+        }
       },
       "combat": {
         "unarmedDamage": 12,
@@ -315,19 +327,19 @@
           "name": "Dragonskin",
           "description": "Bretons can naturally absorb harmful magic by chance. Increases chance to absorb the magicka from hostile spells by <10>%.",
           "globalFormId": "0x000AA022"
-        },
-        {
-          "edid": "REQ_Trait_NoHealthRegeneration",
-          "name": "No Natural Health Regeneration",
-          "description": "",
-          "globalFormId": "0x8C609AF0"
         }
       ],
       "keywords": [],
       "regeneration": {
-        "health": 0,
-        "magicka": 1.149999976158142,
-        "stamina": 1.600000023841858
+        "health": {
+          "base": 0
+        },
+        "magicka": {
+          "base": 1.149999976158142
+        },
+        "stamina": {
+          "base": 1.600000023841858
+        }
       },
       "combat": {
         "unarmedDamage": 12,
@@ -391,19 +403,19 @@
           "name": "Ashlander",
           "description": "Dunmer are naturally talented evokers and conjurers. Destruction and Conjuration spells are <10>% more powerful and last longer.",
           "globalFormId": "0x000E40D4"
-        },
-        {
-          "edid": "REQ_Trait_NoHealthRegeneration",
-          "name": "No Natural Health Regeneration",
-          "description": "",
-          "globalFormId": "0x8C609AF0"
         }
       ],
       "keywords": [],
       "regeneration": {
-        "health": 0,
-        "magicka": 1.100000023841858,
-        "stamina": 1.600000023841858
+        "health": {
+          "base": 0
+        },
+        "magicka": {
+          "base": 1.100000023841858
+        },
+        "stamina": {
+          "base": 1.600000023841858
+        }
       },
       "combat": {
         "unarmedDamage": 13,
@@ -467,19 +479,31 @@
           "name": "Imperial Diversity",
           "description": "Imperial education involves various martial and academical trainings, producing citizens with variety of skills. Health, magicka, and stamina regenerate <25>% faster.",
           "globalFormId": "0x000EB7EB"
-        },
-        {
-          "edid": "REQ_Trait_NoHealthRegeneration",
-          "name": "No Natural Health Regeneration",
-          "description": "",
-          "globalFormId": "0x8C609AF0"
         }
       ],
       "keywords": [],
       "regeneration": {
-        "health": 0,
-        "magicka": 1.100000023841858,
-        "stamina": 1.600000023841858
+        "health": {
+          "base": 0
+        },
+        "magicka": {
+          "base": 1.100000023841858,
+          "multipliers": [
+            {
+              "value": 1.25,
+              "source": "Imperial Diversity"
+            }
+          ]
+        },
+        "stamina": {
+          "base": 1.600000023841858,
+          "multipliers": [
+            {
+              "value": 1.25,
+              "source": "Imperial Diversity"
+            }
+          ]
+        }
       },
       "combat": {
         "unarmedDamage": 13,
@@ -551,12 +575,6 @@
           "globalFormId": "0x8C1AD1B0"
         },
         {
-          "edid": "REQ_Trait_NoHealthRegeneration",
-          "name": "No Natural Health Regeneration",
-          "description": "",
-          "globalFormId": "0x8C609AF0"
-        },
-        {
           "edid": "REQ_Ability_Race_All_StrongStomach",
           "name": "Strong Stomach",
           "description": "Your metabolism can digest raw food without food poisoning.",
@@ -571,12 +589,18 @@
       ],
       "keywords": [],
       "regeneration": {
-        "health": 0,
-        "magicka": 1.0499999523162842,
-        "stamina": 1.7000000476837158
+        "health": {
+          "base": 0
+        },
+        "magicka": {
+          "base": 1.0499999523162842
+        },
+        "stamina": {
+          "base": 1.7000000476837158
+        }
       },
       "combat": {
-        "unarmedDamage": 12,
+        "unarmedDamage": 32,
         "unarmedReach": 73
       }
     },
@@ -633,12 +657,6 @@
           "globalFormId": "0x000AA020"
         },
         {
-          "edid": "REQ_Trait_NoHealthRegeneration",
-          "name": "No Natural Health Regeneration",
-          "description": "",
-          "globalFormId": "0x8C609AF0"
-        },
-        {
           "edid": "REQ_Ability_Race_Nord_AncientTongues",
           "name": "Ancient Tongues",
           "description": "Nords have inherent ability to Shout, and can unleash immense power through the Voice. Shouts are <10>% more powerful and last longer, Shouts can be used <10>% more often.",
@@ -653,9 +671,15 @@
       ],
       "keywords": [],
       "regeneration": {
-        "health": 0,
-        "magicka": 1,
-        "stamina": 1.649999976158142
+        "health": {
+          "base": 0
+        },
+        "magicka": {
+          "base": 1
+        },
+        "stamina": {
+          "base": 1.649999976158142
+        }
       },
       "combat": {
         "unarmedDamage": 14,
@@ -715,12 +739,6 @@
           "globalFormId": "0x000AA026"
         },
         {
-          "edid": "REQ_Trait_NoHealthRegeneration",
-          "name": "No Natural Health Regeneration",
-          "description": "",
-          "globalFormId": "0x8C609AF0"
-        },
-        {
           "edid": "REQ_Ability_Race_All_StrongStomach",
           "name": "Strong Stomach",
           "description": "Your metabolism can digest raw food without food poisoning.",
@@ -729,9 +747,15 @@
       ],
       "keywords": [],
       "regeneration": {
-        "health": 0,
-        "magicka": 1,
-        "stamina": 1.649999976158142
+        "health": {
+          "base": 0
+        },
+        "magicka": {
+          "base": 1
+        },
+        "stamina": {
+          "base": 1.649999976158142
+        }
       },
       "combat": {
         "unarmedDamage": 14,
@@ -797,12 +821,6 @@
           "globalFormId": "0x000E40CE"
         },
         {
-          "edid": "REQ_Trait_NoHealthRegeneration",
-          "name": "No Natural Health Regeneration",
-          "description": "",
-          "globalFormId": "0x8C609AF0"
-        },
-        {
           "edid": "REQ_Ability_Race_Redguard_MartialProwess",
           "name": "Martial Prowess",
           "description": "Redguards are naturally skilled in martial arts, and can wield their weapons with great precision. Armor penetration with melee weapons is increased by <5>.",
@@ -811,9 +829,15 @@
       ],
       "keywords": [],
       "regeneration": {
-        "health": 0,
-        "magicka": 1,
-        "stamina": 1.7000000476837158
+        "health": {
+          "base": 0
+        },
+        "magicka": {
+          "base": 1
+        },
+        "stamina": {
+          "base": 1.7000000476837158
+        }
       },
       "combat": {
         "unarmedDamage": 13,

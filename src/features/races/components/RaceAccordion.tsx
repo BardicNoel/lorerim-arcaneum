@@ -118,6 +118,25 @@ export function RaceAccordion({
     }
   }
 
+  const calculateRegeneration = (regeneration: Race['regeneration']['health'] | Race['regeneration']['magicka'] | Race['regeneration']['stamina']) => {
+    let baseValue = regeneration.base;
+    if (regeneration.multipliers) {
+      for (const mult of regeneration.multipliers) {
+        baseValue *= mult.value;
+      }
+    }
+    if (regeneration.adjustments) {
+      for (const adj of regeneration.adjustments) {
+        baseValue += adj.value;
+      }
+    }
+    return baseValue;
+  };
+
+  const hasRegenerationDetails = (regeneration: Race['regeneration']['health'] | Race['regeneration']['magicka'] | Race['regeneration']['stamina']) => {
+    return (regeneration.multipliers && regeneration.multipliers.length > 0) || (regeneration.adjustments && regeneration.adjustments.length > 0);
+  };
+
   return (
     <Card className={cn('bg-card border rounded-lg shadow-sm transition-all duration-200 w-full', className)}>
       {/* Header - Always visible */}
@@ -231,32 +250,42 @@ export function RaceAccordion({
           {originalRace?.startingStats && (
             <div>
               <H4 className="mb-3">Starting Attributes</H4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <StatBar 
-                  value={originalRace.startingStats.health} 
-                  maxValue={150} 
-                  label="Health" 
-                  color="red" 
-                  size="md"
-                />
-                <StatBar 
-                  value={originalRace.startingStats.magicka} 
-                  maxValue={150} 
-                  label="Magicka" 
-                  color="blue" 
-                  size="md"
-                />
-                <StatBar 
-                  value={originalRace.startingStats.stamina} 
-                  maxValue={150} 
-                  label="Stamina" 
-                  color="green" 
-                  size="md"
-                />
-                <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-orange-500" />
-                  <span className="text-sm">Carry Weight: {originalRace.startingStats.carryWeight}</span>
-                </div>
+              <div className="space-y-3">
+                {/* Calculate the maximum value for proportional scaling */}
+                {(() => {
+                  const stats = [
+                    { value: originalRace.startingStats.health, label: 'Health', color: 'red', icon: <Heart className="h-4 w-4 text-red-500" /> },
+                    { value: originalRace.startingStats.magicka, label: 'Magicka', color: 'blue', icon: <Zap className="h-4 w-4 text-blue-500" /> },
+                    { value: originalRace.startingStats.stamina, label: 'Stamina', color: 'green', icon: <Target className="h-4 w-4 text-green-500" /> }
+                  ]
+                  const maxValue = Math.max(...stats.map(s => s.value))
+                  
+                  return (
+                    <>
+                      {stats.map((stat, index) => (
+                        <div key={index} className="flex items-center gap-3">
+                          {stat.icon}
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-sm font-medium">{stat.label}</span>
+                              <span className="text-sm text-muted-foreground">{stat.value}</span>
+                            </div>
+                            <div className="w-full bg-muted rounded-full overflow-hidden">
+                              <div 
+                                className={`h-2 bg-${stat.color}-500 transition-all duration-300 ease-out`}
+                                style={{ width: `${(stat.value / maxValue) * 100}%` }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      <div className="flex items-center gap-3 pt-2 border-t border-border/50">
+                        <Shield className="h-4 w-4 text-orange-500" />
+                        <span className="text-sm">Carry Weight: {originalRace.startingStats.carryWeight}</span>
+                      </div>
+                    </>
+                  )
+                })()}
               </div>
             </div>
           )}
@@ -305,17 +334,7 @@ export function RaceAccordion({
             </div>
           )}
 
-          {/* Keywords/Traits */}
-          {item.tags && item.tags.length > 0 && (
-            <div>
-              <H4 className="mb-2">Traits & Keywords</H4>
-              <div className="flex flex-wrap gap-2">
-                {item.tags.map((tag, index) => (
-                  <KeywordTag key={index} keyword={tag} size="md" />
-                ))}
-              </div>
-            </div>
-          )}
+
 
           {/* Regeneration & Combat (if available) */}
           {originalRace?.regeneration && (
@@ -324,16 +343,63 @@ export function RaceAccordion({
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="flex items-center gap-2">
                   <Heart className="h-4 w-4 text-red-500" />
-                  <span className="text-sm">Health: {originalRace.regeneration.health.toFixed(2)}/s</span>
+                  <span className="text-sm">
+                    Health: {calculateRegeneration(originalRace.regeneration.health).toFixed(2)}/s
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Zap className="h-4 w-4 text-blue-500" />
-                  <span className="text-sm">Magicka: {originalRace.regeneration.magicka.toFixed(2)}/s</span>
+                  <span className="text-sm">
+                    Magicka: {calculateRegeneration(originalRace.regeneration.magicka).toFixed(2)}/s
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Target className="h-4 w-4 text-green-500" />
-                  <span className="text-sm">Stamina: {originalRace.regeneration.stamina.toFixed(2)}/s</span>
+                  <span className="text-sm">
+                    Stamina: {calculateRegeneration(originalRace.regeneration.stamina).toFixed(2)}/s
+                  </span>
                 </div>
+              </div>
+              
+              {/* Show regeneration details if there are multipliers or adjustments */}
+              {(hasRegenerationDetails(originalRace.regeneration.health) || 
+                hasRegenerationDetails(originalRace.regeneration.magicka) || 
+                hasRegenerationDetails(originalRace.regeneration.stamina)) && (
+                <div className="mt-3 p-3 bg-muted/30 rounded-lg">
+                  <Small className="font-medium mb-2 block">Regeneration Details:</Small>
+                  {originalRace.regeneration.health.multipliers?.map((mult, index) => (
+                    <div key={`health-mult-${index}`} className="text-xs text-muted-foreground">
+                      Health: {mult.value}x from {mult.source}
+                    </div>
+                  ))}
+                  {originalRace.regeneration.health.adjustments?.map((adj, index) => (
+                    <div key={`health-adj-${index}`} className="text-xs text-muted-foreground">
+                      Health: +{adj.value}/s from {adj.source}
+                    </div>
+                  ))}
+                  {originalRace.regeneration.magicka.multipliers?.map((mult, index) => (
+                    <div key={`magicka-mult-${index}`} className="text-xs text-muted-foreground">
+                      Magicka: {mult.value}x from {mult.source}
+                    </div>
+                  ))}
+                  {originalRace.regeneration.stamina.multipliers?.map((mult, index) => (
+                    <div key={`stamina-mult-${index}`} className="text-xs text-muted-foreground">
+                      Stamina: {mult.value}x from {mult.source}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Physical Attributes */}
+          {originalRace?.physicalAttributes && (
+            <div>
+              <H4 className="mb-3">Physical Attributes</H4>
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium">Height:</span>
+                <span className="text-sm">Male: {(originalRace.physicalAttributes.heightMale * 100).toFixed(0)}%</span>
+                <span className="text-sm">Female: {(originalRace.physicalAttributes.heightFemale * 100).toFixed(0)}%</span>
               </div>
             </div>
           )}

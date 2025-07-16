@@ -1,5 +1,3 @@
-export { RaceCard } from './RaceCard'
-export { RaceDetailPanel } from './RaceDetailPanel'
 export { RaceAccordion } from './RaceAccordion'
 export { CategoryBadge } from './CategoryBadge'
 export { StatBar } from './StatBar'

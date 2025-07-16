@@ -22,9 +22,9 @@ export function CustomMultiAutocompleteSearch({
 
   return (
     <div className={`flex flex-wrap gap-4 justify-start ${className}`}>
-      {/* Fuzzy Search Box - for keywords */}
+      {/* Fuzzy Search Box - for keywords - takes remaining space */}
       {fuzzySearchCategory && (
-        <div className="flex-shrink-0 min-w-[200px] max-w-[300px]">
+        <div className="flex-1 min-w-[300px]">
           <FuzzySearchBox
             categories={[fuzzySearchCategory]}
             onSelect={onSelect}
@@ -35,7 +35,7 @@ export function CustomMultiAutocompleteSearch({
         </div>
       )}
 
-      {/* Regular Autocomplete Search - for other categories */}
+      {/* Regular Autocomplete Search - for other categories - fixed width */}
       {otherCategories.map((category) => (
         <div key={category.id} className="flex-shrink-0 min-w-[200px] max-w-[300px]">
           <AutocompleteSearch
