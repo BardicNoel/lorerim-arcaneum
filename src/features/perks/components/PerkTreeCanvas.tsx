@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import ReactFlow, {
   Controls,
   Background,
@@ -14,13 +14,11 @@ import type {
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { PerkNode } from "./PerkNode";
-import { SelectedPerkPreview } from "./SelectedPerkPreview";
 import type { PerkTree, PerkNode as PerkNodeType } from "../types";
 
 interface PerkTreeCanvasProps {
   tree: PerkTree | undefined;
   onTogglePerk: (perkId: string) => void;
-  onUpdateRank: (perkId: string, newRank: number) => void;
   selectedPerks: PerkNodeType[];
 }
 
@@ -28,45 +26,191 @@ const nodeTypes: NodeTypes = {
   perkNode: PerkNode,
 };
 
-// Use existing position data from perks with scaling
+// Tree node structure for building the forest
+interface TreeNode {
+  perk: PerkNodeType;
+  level: number;
+  children: string[]; // perkIds
+  parents: string[]; // perkIds
+}
+
+// Build tree structure and assign levels
+function buildTreeStructure(perks: PerkNodeType[]): Map<string, TreeNode> {
+  const treeNodes = new Map<string, TreeNode>();
+  
+  // Initialize all nodes
+  perks.forEach(perk => {
+    treeNodes.set(perk.perkId, {
+      perk,
+      level: -1, // Unassigned
+      children: [],
+      parents: []
+    });
+  });
+  
+  // Build parent-child relationships
+  perks.forEach(perk => {
+    const node = treeNodes.get(perk.perkId)!;
+    
+    // Debug: Log connections for this perk
+    console.log(`Connections for "${perk.perkName}":`, {
+      perkId: perk.perkId,
+      connections: perk.connections,
+      connectionTargets: perk.connections.map(index => 
+        index < perks.length ? perks[index].perkName : `Invalid index: ${index}`
+      )
+    });
+    
+    // Find children by looking at connections
+    perk.connections.forEach(targetIndex => {
+      if (targetIndex < perks.length) {
+        const childPerk = perks[targetIndex];
+        node.children.push(childPerk.perkId);
+        
+        // Add this node as parent to child
+        const childNode = treeNodes.get(childPerk.perkId)!;
+        childNode.parents.push(perk.perkId);
+      }
+    });
+  });
+  
+  // Find root nodes (nodes with no parents in the same tree)
+  const roots: string[] = [];
+  treeNodes.forEach((node, perkId) => {
+    const hasParentInTree = node.parents.some(parentId => 
+      treeNodes.has(parentId)
+    );
+    if (!hasParentInTree) {
+      roots.push(perkId);
+    }
+    
+    // Debug: Log prerequisite analysis for each perk
+    console.log(`Perk "${node.perk.perkName}" (${perkId}):`, {
+      hasPrerequisites: (node.perk.prerequisites?.perks?.length || 0) > 0,
+      prerequisitePerks: node.perk.prerequisites?.perks || [],
+      parentIds: node.parents,
+      hasParentInTree,
+      isRoot: !hasParentInTree
+    });
+  });
+  
+  console.log('Tree analysis:', {
+    totalNodes: perks.length,
+    rootNodes: roots.map(id => treeNodes.get(id)!.perk.perkName),
+    rootCount: roots.length
+  });
+  
+  // Assign levels starting from roots
+  const visited = new Set<string>();
+  
+  function assignLevels(nodeId: string, level: number) {
+    if (visited.has(nodeId)) {
+      const node = treeNodes.get(nodeId)!;
+      // If already visited, use the shallowest level
+      if (level < node.level || node.level === -1) {
+        node.level = level;
+      } else {
+        return; // Already processed at a better level
+      }
+    } else {
+      visited.add(nodeId);
+      treeNodes.get(nodeId)!.level = level;
+    }
+    
+    // Recursively assign levels to children
+    const node = treeNodes.get(nodeId)!;
+    node.children.forEach(childId => {
+      assignLevels(childId, level + 1);
+    });
+  }
+  
+  // Start from all roots
+  roots.forEach(rootId => {
+    assignLevels(rootId, 0);
+  });
+  
+  // Debug: Log level distribution
+  const levelDistribution = new Map<number, string[]>();
+  treeNodes.forEach((node, perkId) => {
+    if (node.level >= 0) {
+      if (!levelDistribution.has(node.level)) {
+        levelDistribution.set(node.level, []);
+      }
+      levelDistribution.get(node.level)!.push(node.perk.perkName);
+    }
+  });
+  
+  console.log('Level distribution:', Object.fromEntries(levelDistribution));
+  
+  return treeNodes;
+}
+
+// Layout nodes by branch level
 function calculateNodePositions(perks: PerkNodeType[]) {
   const positions = new Map<string, { x: number; y: number }>();
   
-  // Find the bounds of the position data
-  let minX = Infinity, maxX = -Infinity;
-  let minY = Infinity, maxY = -Infinity;
+  if (perks.length === 0) return positions;
   
-  perks.forEach(perk => {
-    const pos = perk.position;
-    minX = Math.min(minX, pos.x);
-    maxX = Math.max(maxX, pos.x);
-    minY = Math.min(minY, pos.y);
-    maxY = Math.max(maxY, pos.y);
+  // Build tree structure and assign levels
+  const treeNodes = buildTreeStructure(perks);
+  
+  // Group nodes by level
+  const levels = new Map<number, PerkNodeType[]>();
+  treeNodes.forEach((treeNode, perkId) => {
+    const level = treeNode.level;
+    if (level >= 0) {
+      if (!levels.has(level)) {
+        levels.set(level, []);
+      }
+      levels.get(level)!.push(treeNode.perk);
+    }
   });
   
-  // Calculate scaling factors for better spacing
-  const scaleX = 150; // Horizontal spacing between nodes
-  const scaleY = 120; // Vertical spacing between nodes
-  
-  // Position each perk using its original coordinates with scaling
-  perks.forEach(perk => {
-    const pos = perk.position;
-    const x = (pos.x - minX) * scaleX;
-    const y = (pos.y - minY) * scaleY;
-    positions.set(perk.perkId, { x, y });
+  console.log('Levels layout:', {
+    levelCount: levels.size,
+    maxLevel: Math.max(...levels.keys()),
+    levelSizes: Object.fromEntries(
+      Array.from(levels.entries()).map(([level, perks]) => [level, perks.length])
+    )
   });
-
+  
+  // Calculate spacing
+  const nodeWidth = 120;
+  const nodeHeight = 80;
+  const horizontalSpacing = nodeWidth + 30;
+  const verticalSpacing = nodeHeight + 40;
+  const padding = 50;
+  
+  // Position nodes by level
+  const maxLevel = Math.max(...levels.keys());
+  
+  levels.forEach((levelPerks, level) => {
+    const y = level * verticalSpacing + padding;
+    
+    // Calculate total width needed for this level
+    const totalWidth = (levelPerks.length - 1) * horizontalSpacing;
+    const startX = padding;
+    
+    // Position each perk in this level
+    levelPerks.forEach((perk, index) => {
+      const x = startX + (index * horizontalSpacing);
+      positions.set(perk.perkId, { x, y });
+      
+      // Debug: Log first few positions
+      if (level <= 2 && index < 3) {
+        console.log(`Positioned ${perk.perkName} at level ${level}: (${x}, ${y})`);
+      }
+    });
+  });
+  
   return positions;
 }
 
 export function PerkTreeCanvas({
   tree,
   onTogglePerk,
-  onUpdateRank,
   selectedPerks,
 }: PerkTreeCanvasProps) {
-  const [selectedPerk, setSelectedPerk] = useState<PerkNodeType | null>(null);
-
   // Calculate node positions to avoid collisions
   const nodePositions = useMemo(() => {
     if (!tree) return new Map();
@@ -136,8 +280,8 @@ export function PerkTreeCanvas({
 
   const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
     const perkData = node.data as PerkNodeType;
-    setSelectedPerk(perkData);
-  }, []);
+    onTogglePerk(perkData.perkId);
+  }, [onTogglePerk]);
 
   if (!tree) {
     return (
@@ -148,42 +292,30 @@ export function PerkTreeCanvas({
   }
 
   return (
-    <div className="flex h-full gap-4">
-      {/* React Flow Canvas */}
-      <div className="flex-1 bg-background rounded-lg border">
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          onNodeClick={onNodeClick}
-          nodeTypes={nodeTypes}
-          nodesDraggable={false}
-          fitView
-          fitViewOptions={{ 
-            padding: 0.2,
-            includeHiddenNodes: false,
-            minZoom: 0.5,
-            maxZoom: 1.5
-          }}
-          minZoom={0.2}
-          maxZoom={2}
-          defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
-        >
-          <Background />
-          <Controls />
-        </ReactFlow>
-      </div>
-
-      {/* Selected Perk Preview */}
-      <div className="w-80">
-        <SelectedPerkPreview
-          selectedPerk={selectedPerk}
-          onTogglePerk={onTogglePerk}
-          onUpdateRank={onUpdateRank}
-        />
-      </div>
+    <div className="w-full h-full bg-background rounded-lg border">
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        onNodeClick={onNodeClick}
+        nodeTypes={nodeTypes}
+        nodesDraggable={false}
+        fitView
+        fitViewOptions={{ 
+          padding: 0.1,
+          includeHiddenNodes: false,
+          minZoom: 0.3,
+          maxZoom: 1.5
+        }}
+        minZoom={0.2}
+        maxZoom={2}
+        defaultViewport={{ x: 0, y: 0, zoom: 0.9 }}
+      >
+        <Background />
+        <Controls />
+      </ReactFlow>
     </div>
   );
 } 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Handle, Position } from "reactflow";
 import type { PerkNode as PerkNodeType } from "../types";
 
@@ -8,8 +8,6 @@ interface PerkNodeProps {
 }
 
 export function PerkNode({ data, selected }: PerkNodeProps) {
-  const [isHovered, setIsHovered] = useState(false);
-
   const getNodeStyle = () => {
     const baseStyle = {
       padding: "8px 12px",
@@ -51,11 +49,7 @@ export function PerkNode({ data, selected }: PerkNodeProps) {
   };
 
   return (
-    <div
-      style={getNodeStyle()}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div style={getNodeStyle()}>
       <Handle type="target" position={Position.Top} />
       
       <div className="font-medium">
@@ -69,30 +63,6 @@ export function PerkNode({ data, selected }: PerkNodeProps) {
       )}
 
       <Handle type="source" position={Position.Bottom} />
-
-      {/* Hover Tooltip */}
-      {isHovered && (
-        <div
-          className="absolute z-50 bg-popover text-popover-foreground p-3 rounded-md shadow-lg border max-w-xs"
-          style={{
-            top: "-100%",
-            left: "50%",
-            transform: "translateX(-50%)",
-            pointerEvents: "none",
-          }}
-        >
-          <div className="font-semibold mb-2">{data.perkName}</div>
-          <div 
-            className="text-sm text-muted-foreground"
-            dangerouslySetInnerHTML={{ __html: data.perkDescription }}
-          />
-          {data.level > 0 && (
-            <div className="text-xs mt-2 text-primary">
-              Level {data.level} required
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 } 

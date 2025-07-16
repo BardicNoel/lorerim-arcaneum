@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { PerkNode, PerkPlan, Skill, PerkTree } from "../types";
+import type { PerkPlan, Skill, PerkTree } from "../types";
 
 export function usePerks() {
   const [perkTrees, setPerkTrees] = useState<PerkTree[]>([]);
