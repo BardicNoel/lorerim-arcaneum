@@ -1,22 +1,19 @@
 import React, { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/ui/card";
 import { Button } from "@/shared/ui/ui/button";
 import { Badge } from "@/shared/ui/ui/badge";
-import { usePerks, usePerkPlan, useSkills } from "../hooks/usePerks";
+import { usePerks, usePerkPlan } from "../hooks/usePerks";
 import { PerkTreeCanvas } from "../components/PerkTreeCanvas";
-import type { PerkTree } from "../types";
 
 export function UnifiedPerksPage() {
   const { perkTrees, loading, error } = usePerks();
-  const { skills } = useSkills();
   const [selectedTreeId, setSelectedTreeId] = useState<string | null>(null);
 
   // Get the selected tree
   const selectedTree = perkTrees.find(tree => tree.treeId === selectedTreeId);
 
   // Use perk plan for the selected tree
-  const { perkPlan, togglePerk, updatePerkRank, clearSkill, clearAll } = usePerkPlan(selectedTree);
+  const { perkPlan, togglePerk, clearSkill, clearAll } = usePerkPlan(selectedTree);
 
   // Get selected perks for the current tree
   const selectedPerks = selectedTree 
@@ -66,111 +63,104 @@ export function UnifiedPerksPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Skill Selector */}
-        <div className="lg:col-span-1">
-          <Card>
-            <CardHeader>
-              <CardTitle>Skills</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {perkTrees.map((tree) => {
-                  const skillPerks = perkPlan.selectedPerks[tree.treeName] || [];
-                  const isSelected = selectedTreeId === tree.treeId;
-                  
-                  return (
-                    <button
-                      key={tree.treeId}
-                      onClick={() => setSelectedTreeId(tree.treeId)}
-                      className={`w-full p-3 rounded-lg border text-left transition-colors ${
-                        isSelected
-                          ? "border-primary bg-primary/10"
-                          : "border-border hover:border-primary/50"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium">{tree.treeName}</div>
-                          <div className="text-sm text-muted-foreground">
-                            {skillPerks.length} perks selected
-                          </div>
-                        </div>
-                        {skillPerks.length > 0 && (
-                          <Badge variant="secondary">{skillPerks.length}</Badge>
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Summary */}
-          <Card className="mt-4">
-            <CardHeader>
-              <CardTitle>Summary</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span>Total Perks:</span>
-                  <span className="font-medium">{perkPlan.totalPerks}</span>
-                </div>
-                {selectedTree && (
-                  <div className="pt-2 border-t">
-                    <div className="flex justify-between items-center">
-                      <span>{selectedTree.treeName}:</span>
-                      <div className="flex gap-2">
-                        <span className="font-medium">
-                          {selectedPerks.length} perks
-                        </span>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={clearSkill}
-                        >
-                          Clear
-                        </Button>
+      {/* Skill Selector Tabs */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Skills</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+            {perkTrees.map((tree) => {
+              const skillPerks = perkPlan.selectedPerks[tree.treeName] || [];
+              const isSelected = selectedTreeId === tree.treeId;
+              
+              return (
+                <button
+                  key={tree.treeId}
+                  onClick={() => setSelectedTreeId(tree.treeId)}
+                  className={`p-3 rounded-lg border text-left transition-colors ${
+                    isSelected
+                      ? "border-primary bg-primary/10"
+                      : "border-border hover:border-primary/50"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium text-sm">{tree.treeName}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {skillPerks.length} perks
                       </div>
                     </div>
+                    {skillPerks.length > 0 && (
+                      <Badge variant="secondary" className="text-xs">{skillPerks.length}</Badge>
+                    )}
                   </div>
-                )}
-                <div className="pt-2 border-t">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={clearAll}
-                    className="w-full"
-                  >
-                    Clear All
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+                </button>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
 
-        {/* Perk Tree Canvas */}
-        <div className="lg:col-span-3">
-          <Card className="h-[600px]">
-            <CardHeader>
-              <CardTitle>
-                {selectedTree ? selectedTree.treeName : "Select a Skill"}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="h-full p-0">
-              <PerkTreeCanvas
-                tree={selectedTree}
-                onTogglePerk={togglePerk}
-                onUpdateRank={updatePerkRank}
-                selectedPerks={selectedPerks}
-              />
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+      {/* Perk Tree Canvas - Full Width */}
+      <Card className="h-[600px]">
+        <CardHeader>
+          <CardTitle>
+            {selectedTree ? selectedTree.treeName : "Select a Skill"}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="h-full p-0">
+          <PerkTreeCanvas
+            tree={selectedTree}
+            onTogglePerk={togglePerk}
+            selectedPerks={selectedPerks}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Summary - Bottom */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Summary</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="flex justify-between items-center p-3 bg-muted/20 rounded-lg">
+              <span className="font-medium">Total Perks:</span>
+              <span className="text-lg font-bold">{perkPlan.totalPerks}</span>
+            </div>
+            
+            {selectedTree && (
+              <div className="flex justify-between items-center p-3 bg-muted/20 rounded-lg">
+                <div>
+                  <span className="font-medium">{selectedTree.treeName}:</span>
+                  <div className="text-sm text-muted-foreground">
+                    {selectedPerks.length} perks selected
+                  </div>
+                </div>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={clearSkill}
+                >
+                  Clear
+                </Button>
+              </div>
+            )}
+            
+            <div className="flex justify-center items-center">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={clearAll}
+                className="w-full"
+              >
+                Clear All
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 } 

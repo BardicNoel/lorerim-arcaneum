@@ -75,3 +75,64 @@ Navigate to `/perks` to access the perk planner. The interface provides:
 - Implements proper TypeScript types
 - Uses ShadCN/UI components for consistency
 - Follows Tailwind CSS styling guidelines
+
+## 🌳 Perk Tree Layout Algorithm (Branch Level Rendering)
+
+### Overview
+
+To create a visually appealing and readable perk tree, we layout nodes by their **branch level** (tree depth), not just by x/y grid. This approach supports:
+- Multiple roots (perks with no prerequisite perk in the same tree)
+- Disconnected subtrees (e.g., unarmed path in One-Handed)
+- Merges (nodes with multiple parents)
+
+### Steps
+
+1. **Identify Roots**
+   - Any perk with no prerequisite perk (of type `PERK`) in the same tree is a root.
+   - There may be multiple roots (disconnected subtrees).
+
+2. **Build Forest (Set of Trees)**
+   - For each root, traverse its descendants, assigning a branch level (depth).
+   - If a node is reached from multiple roots, assign the shallowest level.
+   - Guard against cycles (rare in perk trees).
+
+3. **Layout by Level**
+   - Each branch level gets its own vertical slot.
+   - Siblings (nodes at the same level with the same parent) are spaced horizontally.
+   - Disconnected subtrees are spaced apart horizontally.
+
+4. **Draw Edges**
+   - Edges are drawn between levels, creating clear vertical connections.
+
+### Visual Example
+
+```mermaid
+flowchart TD
+  subgraph Forest
+    Root1["Root Perk 1"]
+    Root2["Root Perk 2"]
+    Root3["Root Perk 3"]
+  end
+  Root1 --> A1["Perk A"]
+  Root1 --> A2["Perk B"]
+  Root2 --> B1["Perk C"]
+  B1 --> B2["Perk D"]
+  Root3 --> C1["Perk E"]
+  C1 --> C2["Perk F"]
+  C2 --> B2
+  A2 --> B2
+  style Forest fill:#f9f,stroke:#333,stroke-width:2px
+```
+
+### Key Points
+- **Multiple roots**: Each disconnected branch starts at the top.
+- **Merges**: Nodes like `Perk D` (`B2`) can have multiple parents.
+- **Disconnected subtrees**: Each root and its descendants are spaced apart.
+- **Branch level**: Each row in the diagram is a branch level (depth).
+
+### Implementation Notes
+- The algorithm traverses from all roots, assigning levels and positions.
+- Nodes are only placed once (at the shallowest level if reached from multiple paths).
+- The layout is robust to disconnected trees and merges.
+
+---

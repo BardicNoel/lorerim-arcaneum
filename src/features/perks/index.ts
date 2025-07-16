@@ -2,7 +2,6 @@
 export {
   PerkTreeCanvas,
   PerkNode as PerkNodeComponent,
-  SelectedPerkPreview,
 } from "./components";
 export { UnifiedPerksPage } from "./pages/UnifiedPerksPage";
 
