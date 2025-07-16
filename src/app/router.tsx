@@ -7,14 +7,14 @@ import CraftingPage from '@/pages/CraftingPage'
 import SkillsPage from '@/pages/SkillsPage'
 import HomePage from '@/pages/HomePage'
 import NotFoundPage from '@/pages/NotFoundPage'
-import { UnifiedRacesPage } from '@/features/races'
+import { AccordionRacesPage } from '@/features/races/pages/AccordionRacesPage'
 import { UnifiedDestinyPage } from '@/features/destiny'
 
 export const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/race" element={<UnifiedRacesPage />} />
+      <Route path="/race" element={<AccordionRacesPage />} />
       <Route path="/destiny" element={<UnifiedDestinyPage />} />
       <Route path="/birth-signs" element={<BirthSignsPage />} />
       <Route path="/traits" element={<TraitsPage />} />
