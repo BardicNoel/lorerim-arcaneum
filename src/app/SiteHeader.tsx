@@ -1,6 +1,7 @@
 import React from 'react';
 import { Menu } from 'lucide-react';
 import { Z_INDEX } from '@/lib/constants';
+import { ThemeToggle } from '@/shared/ui/ThemeToggle';
 
 interface SiteHeaderProps {
   sidebarCollapsed: boolean;
@@ -10,8 +11,8 @@ interface SiteHeaderProps {
 export function SiteHeader({ sidebarCollapsed, onToggleSidebar }: SiteHeaderProps) {
   return (
     <header 
-      className="sticky top-0 w-full h-12 flex items-center bg-white border-b border-skyrim-gold/20 px-2 shadow-sm"
-      style={{ zIndex: Z_INDEX.NAVIGATION, backgroundColor: '#fff' }}
+      className="sticky top-0 w-full h-12 flex items-center bg-background border-b border-skyrim-gold/20 px-2 shadow-sm"
+      style={{ zIndex: Z_INDEX.NAVIGATION }}
     >
       <button
         onClick={onToggleSidebar}
@@ -22,7 +23,11 @@ export function SiteHeader({ sidebarCollapsed, onToggleSidebar }: SiteHeaderProp
       </button>
       <span className="text-skyrim-gold font-bold text-base tracking-tight select-none">Lorerim Arcaneum</span>
       <span className="ml-2 text-xs text-skyrim-gold/60 select-none">Theorycrafting Hub</span>
-      {/* Optionally add version or user info here */}
+      
+      {/* Theme Toggle */}
+      <div className="ml-auto">
+        <ThemeToggle />
+      </div>
     </header>
   );
 } 
