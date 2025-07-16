@@ -1,112 +1,120 @@
 import { useState, useEffect } from "react";
-import type { PerkNode, PerkPlan, Skill } from "../types";
+import type { PerkNode, PerkPlan, Skill, PerkTree } from "../types";
 
 export function usePerks() {
-  const [perks, setPerks] = useState<PerkNode[]>([]);
+  const [perkTrees, setPerkTrees] = useState<PerkTree[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadPerks = async () => {
       try {
-        const response = await fetch("/data/perks.json");
+        const response = await fetch(
+          `${import.meta.env.BASE_URL}data/perk-trees.json`
+        );
         if (!response.ok) {
-          throw new Error("Failed to load perks data");
+          throw new Error("Failed to load perk trees data");
         }
-        const data = await response.json();
-
-        // Transform the data to match our PerkNode interface
-        const transformedPerks: PerkNode[] = data.map(
-          (perk: Record<string, unknown>) => ({
+        const data: PerkTree[] = await response.json();
+        // Add selection/rank state to each perk
+        const treesWithState = data.map((tree) => ({
+          ...tree,
+          perks: tree.perks.map((perk) => ({
             ...perk,
-            skill: perk.category, // Map category to skill for now
             currentRank: 0,
             selected: false,
-            position: { x: 0, y: 0 }, // Will be calculated by layout algorithm
-          })
-        );
-
-        setPerks(transformedPerks);
+          })),
+        }));
+        setPerkTrees(treesWithState);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unknown error");
       } finally {
         setLoading(false);
       }
     };
-
     loadPerks();
   }, []);
 
-  return { perks, loading, error };
+  // Helper to get a tree by id
+  const getTreeById = (treeId: string) =>
+    perkTrees.find((tree) => tree.treeId === treeId);
+
+  return { perkTrees, getTreeById, loading, error };
 }
 
-export function usePerkPlan() {
+// Perk plan state is now per-tree
+export function usePerkPlan(tree: PerkTree | undefined) {
   const [perkPlan, setPerkPlan] = useState<PerkPlan>({
     selectedPerks: {},
     minLevels: {},
     totalPerks: 0,
   });
 
-  const togglePerk = (perkId: string, skill: string) => {
+  // Toggle selection for a perk in the current tree
+  const togglePerk = (perkId: string) => {
+    if (!tree) return;
     setPerkPlan((prev) => {
+      const skill = tree.treeName;
       const skillPerks = prev.selectedPerks[skill] || [];
-      const perkIndex = skillPerks.findIndex((p) => p.id === perkId);
-
+      const perkIndex = skillPerks.findIndex((p) => p.perkId === perkId);
       if (perkIndex >= 0) {
-        // Remove perk
-        const newSkillPerks = skillPerks.filter((p) => p.id !== perkId);
-        const newSelectedPerks = {
-          ...prev.selectedPerks,
-          [skill]: newSkillPerks,
-        };
-
+        // Remove
+        const newSkillPerks = skillPerks.filter((p) => p.perkId !== perkId);
         return {
           ...prev,
-          selectedPerks: newSelectedPerks,
+          selectedPerks: { ...prev.selectedPerks, [skill]: newSkillPerks },
           totalPerks: prev.totalPerks - 1,
         };
       } else {
-        // Add perk - we need to find the perk data
-        // This would need to be implemented with the actual perk data
+        // Add
+        const perkToAdd = tree.perks.find((p) => p.perkId === perkId);
+        if (perkToAdd) {
+          const newSkillPerks = [
+            ...skillPerks,
+            { ...perkToAdd, selected: true },
+          ];
+          return {
+            ...prev,
+            selectedPerks: { ...prev.selectedPerks, [skill]: newSkillPerks },
+            totalPerks: prev.totalPerks + 1,
+          };
+        }
         return prev;
       }
     });
   };
 
-  const updatePerkRank = (perkId: string, skill: string, newRank: number) => {
+  const updatePerkRank = (perkId: string, newRank: number) => {
+    if (!tree) return;
     setPerkPlan((prev) => {
+      const skill = tree.treeName;
       const skillPerks = prev.selectedPerks[skill] || [];
-      const perkIndex = skillPerks.findIndex((p) => p.id === perkId);
-
+      const perkIndex = skillPerks.findIndex((p) => p.perkId === perkId);
       if (perkIndex >= 0) {
         const updatedPerks = [...skillPerks];
         updatedPerks[perkIndex] = {
           ...updatedPerks[perkIndex],
           currentRank: Math.max(
             0,
-            Math.min(newRank, updatedPerks[perkIndex].maxRank)
+            Math.min(newRank, updatedPerks[perkIndex].ranks)
           ),
         };
-
         return {
           ...prev,
-          selectedPerks: {
-            ...prev.selectedPerks,
-            [skill]: updatedPerks,
-          },
+          selectedPerks: { ...prev.selectedPerks, [skill]: updatedPerks },
         };
       }
-
       return prev;
     });
   };
 
-  const clearSkill = (skill: string) => {
+  const clearSkill = () => {
+    if (!tree) return;
     setPerkPlan((prev) => {
+      const skill = tree.treeName;
       const skillPerks = prev.selectedPerks[skill] || [];
       const newSelectedPerks = { ...prev.selectedPerks };
       delete newSelectedPerks[skill];
-
       return {
         ...prev,
         selectedPerks: newSelectedPerks,
@@ -116,37 +124,19 @@ export function usePerkPlan() {
   };
 
   const clearAll = () => {
-    setPerkPlan({
-      selectedPerks: {},
-      minLevels: {},
-      totalPerks: 0,
-    });
+    setPerkPlan({ selectedPerks: {}, minLevels: {}, totalPerks: 0 });
   };
 
-  return {
-    perkPlan,
-    togglePerk,
-    updatePerkRank,
-    clearSkill,
-    clearAll,
-  };
+  return { perkPlan, togglePerk, updatePerkRank, clearSkill, clearAll };
 }
 
 export function useSkills() {
   const [skills, setSkills] = useState<Skill[]>([]);
 
-  // Mock skills data - this would come from a proper data source
+  // Map tree names to our skill names
   useEffect(() => {
-    const mockSkills: Skill[] = [
-      {
-        id: "archery",
-        name: "Archery",
-        icon: "🏹",
-        description: "Master the bow and arrow",
-        selectedPerks: 0,
-        minLevel: 0,
-      },
-      {
+    const skillMapping: Record<string, Skill> = {
+      Smithing: {
         id: "smithing",
         name: "Smithing",
         icon: "⚒️",
@@ -154,7 +144,7 @@ export function useSkills() {
         selectedPerks: 0,
         minLevel: 0,
       },
-      {
+      Destruction: {
         id: "destruction",
         name: "Destruction",
         icon: "🔥",
@@ -162,39 +152,7 @@ export function useSkills() {
         selectedPerks: 0,
         minLevel: 0,
       },
-      {
-        id: "restoration",
-        name: "Restoration",
-        icon: "✨",
-        description: "Healing and protective magic",
-        selectedPerks: 0,
-        minLevel: 0,
-      },
-      {
-        id: "alteration",
-        name: "Alteration",
-        icon: "🔄",
-        description: "Transform and manipulate",
-        selectedPerks: 0,
-        minLevel: 0,
-      },
-      {
-        id: "conjuration",
-        name: "Conjuration",
-        icon: "👻",
-        description: "Summon creatures and bound weapons",
-        selectedPerks: 0,
-        minLevel: 0,
-      },
-      {
-        id: "illusion",
-        name: "Illusion",
-        icon: "🎭",
-        description: "Mind manipulation and invisibility",
-        selectedPerks: 0,
-        minLevel: 0,
-      },
-      {
+      Enchanting: {
         id: "enchanting",
         name: "Enchanting",
         icon: "💎",
@@ -202,7 +160,47 @@ export function useSkills() {
         selectedPerks: 0,
         minLevel: 0,
       },
-      {
+      Restoration: {
+        id: "restoration",
+        name: "Restoration",
+        icon: "✨",
+        description: "Healing and protective magic",
+        selectedPerks: 0,
+        minLevel: 0,
+      },
+      Mysticism: {
+        id: "mysticism",
+        name: "Mysticism",
+        icon: "🔮",
+        description: "Master mystical arts",
+        selectedPerks: 0,
+        minLevel: 0,
+      },
+      Conjuration: {
+        id: "conjuration",
+        name: "Conjuration",
+        icon: "👻",
+        description: "Summon creatures and bound weapons",
+        selectedPerks: 0,
+        minLevel: 0,
+      },
+      Alteration: {
+        id: "alteration",
+        name: "Alteration",
+        icon: "🔄",
+        description: "Transform and manipulate",
+        selectedPerks: 0,
+        minLevel: 0,
+      },
+      Speechcraft: {
+        id: "speechcraft",
+        name: "Speechcraft",
+        icon: "💬",
+        description: "Persuasion and bartering",
+        selectedPerks: 0,
+        minLevel: 0,
+      },
+      Alchemy: {
         id: "alchemy",
         name: "Alchemy",
         icon: "🧪",
@@ -210,47 +208,7 @@ export function useSkills() {
         selectedPerks: 0,
         minLevel: 0,
       },
-      {
-        id: "light_armor",
-        name: "Light Armor",
-        icon: "🥋",
-        description: "Master light armor techniques",
-        selectedPerks: 0,
-        minLevel: 0,
-      },
-      {
-        id: "heavy_armor",
-        name: "Heavy Armor",
-        icon: "🛡️",
-        description: "Master heavy armor techniques",
-        selectedPerks: 0,
-        minLevel: 0,
-      },
-      {
-        id: "block",
-        name: "Block",
-        icon: "🛡️",
-        description: "Defensive blocking techniques",
-        selectedPerks: 0,
-        minLevel: 0,
-      },
-      {
-        id: "two_handed",
-        name: "Two-Handed",
-        icon: "⚔️",
-        description: "Master two-handed weapons",
-        selectedPerks: 0,
-        minLevel: 0,
-      },
-      {
-        id: "one_handed",
-        name: "One-Handed",
-        icon: "🗡️",
-        description: "Master one-handed weapons",
-        selectedPerks: 0,
-        minLevel: 0,
-      },
-      {
+      Sneak: {
         id: "sneak",
         name: "Sneak",
         icon: "👤",
@@ -258,7 +216,7 @@ export function useSkills() {
         selectedPerks: 0,
         minLevel: 0,
       },
-      {
+      Lockpicking: {
         id: "lockpicking",
         name: "Lockpicking",
         icon: "🔓",
@@ -266,7 +224,7 @@ export function useSkills() {
         selectedPerks: 0,
         minLevel: 0,
       },
-      {
+      Pickpocket: {
         id: "pickpocket",
         name: "Pickpocket",
         icon: "👛",
@@ -274,17 +232,57 @@ export function useSkills() {
         selectedPerks: 0,
         minLevel: 0,
       },
-      {
-        id: "speech",
-        name: "Speech",
-        icon: "💬",
-        description: "Persuasion and bartering",
+      "Light Armor": {
+        id: "light_armor",
+        name: "Light Armor",
+        icon: "🥋",
+        description: "Master light armor techniques",
         selectedPerks: 0,
         minLevel: 0,
       },
-    ];
+      "Heavy Armor": {
+        id: "heavy_armor",
+        name: "Heavy Armor",
+        icon: "🛡️",
+        description: "Master heavy armor techniques",
+        selectedPerks: 0,
+        minLevel: 0,
+      },
+      Block: {
+        id: "block",
+        name: "Block",
+        icon: "🛡️",
+        description: "Defensive blocking techniques",
+        selectedPerks: 0,
+        minLevel: 0,
+      },
+      Marksman: {
+        id: "marksman",
+        name: "Marksman",
+        icon: "🏹",
+        description: "Master the bow and arrow",
+        selectedPerks: 0,
+        minLevel: 0,
+      },
+      "Two Handed": {
+        id: "two_handed",
+        name: "Two-Handed",
+        icon: "⚔️",
+        description: "Master two-handed weapons",
+        selectedPerks: 0,
+        minLevel: 0,
+      },
+      "One Handed": {
+        id: "one_handed",
+        name: "One-Handed",
+        icon: "🗡️",
+        description: "Master one-handed weapons",
+        selectedPerks: 0,
+        minLevel: 0,
+      },
+    };
 
-    setSkills(mockSkills);
+    setSkills(Object.values(skillMapping));
   }, []);
 
   return { skills };

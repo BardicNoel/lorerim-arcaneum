@@ -1,25 +1,64 @@
 export interface PerkEffect {
   type: string;
-  value: number;
-  target: string;
-  name?: string;
-  cooldown?: number;
+  function: string;
+  priority: number;
+  conditions: Array<{
+    operator: string;
+    functionIndex: number;
+    comparisonValue: number;
+    runOnType: string;
+    parameter1: number;
+    parameter2: number;
+  }>;
+  entryPointData: string;
+}
+
+export interface PerkPrerequisite {
+  skillLevel?: {
+    skill: string;
+    level: number;
+  };
+  items?: Array<{
+    type: string;
+    id: string;
+  }>;
+  perks?: Array<{
+    type: string;
+    id: string;
+  }>;
+}
+
+export interface PerkTree {
+  treeId: string;
+  treeName: string;
+  treeDescription: string;
+  category: string;
+  perks: PerkNode[];
 }
 
 export interface PerkNode {
-  id: string; // Unique perk ID
-  skill: string; // e.g., "Archery"
-  name: string;
-  description: string;
-  levelRequirement: number;
-  currentRank: number;
-  maxRank: number;
-  prerequisites: string[]; // IDs of required perks
-  selected: boolean;
-  position: { x: number; y: number }; // For React Flow layout
-  category: string;
-  tier: number;
+  perkId: string; // Unique perk ID
+  perkName: string;
+  perkDescription: string;
+  level: number;
+  ranks: number;
+  isPlayable: boolean;
+  isHidden: boolean;
+  position: {
+    x: number;
+    y: number;
+    horizontal: number;
+    vertical: number;
+    index: number;
+  };
+  connections: number[];
   effects: PerkEffect[];
+  prerequisites: PerkPrerequisite;
+  uniquenessFactors: string[];
+  // Additional fields for our app
+  currentRank: number;
+  selected: boolean;
+  skill: string; // Will be set from tree data
 }
 
 export interface PerkEdge {
