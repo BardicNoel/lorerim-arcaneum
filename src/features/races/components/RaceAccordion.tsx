@@ -15,6 +15,7 @@ import type { Race } from '../types'
 import { CategoryBadge } from './CategoryBadge'
 import { StatBar } from './StatBar'
 import { KeywordTag } from './KeywordTag'
+import { RaceAvatar } from './RaceAvatar'
 
 /**
  * Component to format ability descriptions with highlighted values
@@ -144,9 +145,7 @@ export function RaceAccordion({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 flex-1">
             <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
-              <span className="text-lg font-bold text-muted-foreground">
-                {item.name.charAt(0)}
-              </span>
+              <RaceAvatar raceName={item.name} size="lg" />
             </div>
             <div className="flex-1">
               <H3 className="text-primary font-semibold">{item.name}</H3>
