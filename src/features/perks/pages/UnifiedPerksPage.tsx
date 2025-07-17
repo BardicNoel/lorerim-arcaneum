@@ -15,8 +15,8 @@ export function UnifiedPerksPage() {
   // Get the selected tree
   const selectedTree = perkTrees.find(tree => tree.treeId === selectedTreeId);
 
-  // Use perk plan for the selected tree
-  const { perkPlan, togglePerk, clearSkill, clearAll } = usePerkPlan(selectedTree);
+  // Use perk plan for the selected tree - always pass a value to avoid hook count issues
+  const { perkPlan, togglePerk, updatePerkRank, clearSkill, clearAll } = usePerkPlan(selectedTree || undefined);
 
   // Get selected perks for the current tree
   const selectedPerks = selectedTree 
@@ -116,6 +116,7 @@ export function UnifiedPerksPage() {
               <PerkTreeCanvas
                 tree={selectedTree}
                 onTogglePerk={togglePerk}
+                onRankChange={updatePerkRank}
                 selectedPerks={selectedPerks}
               />
             </CardContent>

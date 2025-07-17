@@ -21,6 +21,7 @@ import type { PerkTree, PerkNode as PerkNodeType } from "../types";
 interface PerkTreeCanvasProps {
   tree: PerkTree | undefined;
   onTogglePerk: (perkId: string) => void;
+  onRankChange?: (perkId: string, newRank: number) => void;
   selectedPerks: PerkNodeType[];
 }
 
@@ -242,29 +243,13 @@ function buildTreeStructure(perks: PerkNodeType[]): Map<string, TreeNode> {
     }
   });
   
-  // Debug: Log level assignments for multi-parent nodes
-  treeNodes.forEach((node, perkId) => {
-    if (node.parents.length > 1) {
-      const parentLevels = node.parents.map(parentId => treeNodes.get(parentId)!.level);
-      const validParentLevels = parentLevels.filter(level => level >= 0);
-      const minParentLevel = validParentLevels.length > 0 ? Math.min(...validParentLevels) : -1;
-      const expectedLevel = minParentLevel >= 0 ? minParentLevel + 1 : 0;
-      console.log(`Multi-parent node "${node.perk.perkName}": level ${node.level}, parent levels: ${parentLevels}, valid parents: ${validParentLevels}, shallowest parent: ${minParentLevel}, expected: ${expectedLevel}`);
-    }
-  });
+  // Debug: Log level assignments for multi-parent nodes (only if there are issues)
+  const multiParentNodeCount = Array.from(treeNodes.entries())
+    .filter(([perkId, node]) => node.parents.length > 1).length;
   
-  // Debug: Log level distribution
-  const levelDistribution = new Map<number, string[]>();
-  treeNodes.forEach((node, perkId) => {
-    if (node.level >= 0) {
-      if (!levelDistribution.has(node.level)) {
-        levelDistribution.set(node.level, []);
-      }
-      levelDistribution.get(node.level)!.push(node.perk.perkName);
-    }
-  });
-  
-  console.log('Level distribution:', Object.fromEntries(levelDistribution));
+  if (multiParentNodeCount > 0) {
+    console.log(`Found ${multiParentNodeCount} multi-parent nodes`);
+  }
   
   // Debug: Check for nodes that didn't get levels assigned
   const unassignedNodes = Array.from(treeNodes.entries())
@@ -561,6 +546,7 @@ function calculateNodePositions(perks: PerkNodeType[]) {
 export function PerkTreeCanvas({
   tree,
   onTogglePerk,
+  onRankChange,
   selectedPerks,
 }: PerkTreeCanvasProps) {
   // React Flow instance
@@ -568,8 +554,8 @@ export function PerkTreeCanvas({
   
   // Memoize node types to prevent React Flow warnings
   const nodeTypes: NodeTypes = useMemo(() => ({
-    perkNode: PerkNode,
-  }), []);
+    perkNode: (props: any) => <PerkNode {...props} onTogglePerk={onTogglePerk} onRankChange={onRankChange} />,
+  }), [onTogglePerk, onRankChange]);
   
   // Calculate node positions to avoid collisions
   const nodePositions = useMemo(() => {
@@ -577,7 +563,7 @@ export function PerkTreeCanvas({
     return calculateNodePositions(tree.perks);
   }, [tree]);
 
-  // Create React Flow nodes
+  // Create React Flow nodes - only recreate when tree or positions change
   const initialNodes: Node[] = useMemo(() => {
     if (!tree) return [];
     
@@ -586,7 +572,6 @@ export function PerkTreeCanvas({
     
     return tree.perks.map((perk) => {
       const position = nodePositions.get(perk.perkId) || { x: 0, y: 0 };
-      const isSelected = selectedPerks.some(p => p.perkId === perk.perkId);
       const treeNode = treeNodes.get(perk.perkId);
       const hasChildren = treeNode ? treeNode.children.length > 0 : false;
       const isRoot = (perk.prerequisites?.perks?.length || 0) === 0;
@@ -597,13 +582,13 @@ export function PerkTreeCanvas({
         position,
         data: {
           ...perk,
-          selected: isSelected,
+          selected: false, // Will be updated via useEffect
           hasChildren: hasChildren,
           isRoot: isRoot,
         },
       };
     });
-  }, [tree, nodePositions, selectedPerks]);
+  }, [tree, nodePositions]); // Removed selectedPerks dependency
 
   // Create React Flow edges from prerequisites (actual dependencies)
   const initialEdges: Edge[] = useMemo(() => {
@@ -632,11 +617,7 @@ export function PerkTreeCanvas({
       }
     });
     
-    console.log('Created edges from prerequisites:', edges.map(edge => {
-      const sourcePerk = tree.perks.find(p => p.perkId === edge.source);
-      const targetPerk = tree.perks.find(p => p.perkId === edge.target);
-      return `${sourcePerk?.perkName} -> ${targetPerk?.perkName}`;
-    }));
+    console.log(`Created ${edges.length} edges from prerequisites`);
     
     return edges;
   }, [tree]);
@@ -644,10 +625,31 @@ export function PerkTreeCanvas({
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-  // Update nodes when tree or selected perks change
+  // Update nodes when tree changes (recreate structure)
   React.useEffect(() => {
     setNodes(initialNodes);
   }, [initialNodes, setNodes]);
+
+  // Update node selection state without recreating nodes
+  React.useEffect(() => {
+    if (!tree) return;
+    
+    setNodes((currentNodes) => 
+      currentNodes.map((node) => {
+        const selectedPerk = selectedPerks.find(p => p.perkId === node.id);
+        const isSelected = selectedPerk !== undefined;
+        
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            selected: isSelected,
+            currentRank: selectedPerk?.currentRank || 0,
+          },
+        };
+      })
+    );
+  }, [selectedPerks, setNodes, tree]);
 
   // Update edges when tree changes
   React.useEffect(() => {
@@ -667,17 +669,14 @@ export function PerkTreeCanvas({
         });
       }, 100);
     }
-  }, [tree?.treeId, nodes.length, reactFlowInstance]);
+  }, [tree?.treeId, reactFlowInstance]); // Removed nodes.length dependency
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
 
-  const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
-    const perkData = node.data as PerkNodeType;
-    onTogglePerk(perkData.perkId);
-  }, [onTogglePerk]);
+
 
   if (!tree) {
     return (
@@ -688,17 +687,18 @@ export function PerkTreeCanvas({
   }
 
   return (
-    <div className="w-full h-full bg-background rounded-lg border">
+    <div className="w-full h-full bg-background rounded-lg border" style={{ zIndex: 1 }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        onNodeClick={onNodeClick}
         onInit={setReactFlowInstance}
         nodeTypes={nodeTypes}
         nodesDraggable={false}
+        nodesFocusable={false}
+        selectNodesOnDrag={false}
         fitView
         fitViewOptions={{ 
           padding: 0.1,
