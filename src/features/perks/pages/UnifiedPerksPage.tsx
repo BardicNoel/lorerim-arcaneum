@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/ui/card";
 import { Button } from "@/shared/ui/ui/button";
 import { Badge } from "@/shared/ui/ui/badge";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/shared/ui/ui/resizable";
+import { AutocompleteSearch } from "@/shared/components/playerCreation/AutocompleteSearch";
+import type { SearchCategory, SearchOption } from "@/shared/components/playerCreation/types";
 import { usePerks, usePerkPlan } from "../hooks/usePerks";
 import { PerkTreeCanvas } from "../components/PerkTreeCanvas";
 
@@ -19,6 +22,32 @@ export function UnifiedPerksPage() {
   const selectedPerks = selectedTree 
     ? perkPlan.selectedPerks[selectedTree.treeName] || []
     : [];
+
+  // Create search categories for the autocomplete
+  const searchCategories = useMemo((): SearchCategory[] => {
+    const skillsCategory: SearchCategory = {
+      id: "skills",
+      name: "Skills",
+      placeholder: "Search skills...",
+      options: perkTrees.map((tree) => {
+        const skillPerks = perkPlan.selectedPerks[tree.treeName] || [];
+        return {
+          id: tree.treeId,
+          label: tree.treeName,
+          value: tree.treeId,
+          category: "skills",
+          description: `${skillPerks.length} perks selected • ${tree.treeDescription}`
+        };
+      })
+    };
+    
+    return [skillsCategory];
+  }, [perkTrees, perkPlan.selectedPerks]);
+
+  // Handle skill selection
+  const handleSkillSelect = (option: SearchOption) => {
+    setSelectedTreeId(option.value);
+  };
 
   // Auto-select first tree if none selected
   React.useEffect(() => {
@@ -63,60 +92,38 @@ export function UnifiedPerksPage() {
         </p>
       </div>
 
-      {/* Skill Selector Tabs */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Skills</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
-            {perkTrees.map((tree) => {
-              const skillPerks = perkPlan.selectedPerks[tree.treeName] || [];
-              const isSelected = selectedTreeId === tree.treeId;
-              
-              return (
-                <button
-                  key={tree.treeId}
-                  onClick={() => setSelectedTreeId(tree.treeId)}
-                  className={`p-3 rounded-lg border text-left transition-colors ${
-                    isSelected
-                      ? "border-primary bg-primary/10"
-                      : "border-border hover:border-primary/50"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium text-sm">{tree.treeName}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {skillPerks.length} perks
-                      </div>
-                    </div>
-                    {skillPerks.length > 0 && (
-                      <Badge variant="secondary" className="text-xs">{skillPerks.length}</Badge>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
+      {/* Skill Selection */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">Skill Selection</label>
+        <AutocompleteSearch
+          categories={searchCategories}
+          onSelect={handleSkillSelect}
+          placeholder="Search for a skill..."
+          className="max-w-md"
+        />
+      </div>
 
-      {/* Perk Tree Canvas - Full Width */}
-      <Card className="h-[600px]">
-        <CardHeader>
-          <CardTitle>
-            {selectedTree ? selectedTree.treeName : "Select a Skill"}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="h-full p-0">
-          <PerkTreeCanvas
-            tree={selectedTree}
-            onTogglePerk={togglePerk}
-            selectedPerks={selectedPerks}
-          />
-        </CardContent>
-      </Card>
+      {/* Perk Tree Canvas - Resizable Card */}
+      <ResizablePanelGroup direction="vertical" className="min-h-[800px]">
+        <ResizablePanel defaultSize={100}>
+          <Card className="h-full">
+            <CardHeader>
+              <CardTitle>
+                {selectedTree ? selectedTree.treeName : "Select a Skill"}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="h-full p-0">
+              <PerkTreeCanvas
+                tree={selectedTree}
+                onTogglePerk={togglePerk}
+                selectedPerks={selectedPerks}
+              />
+            </CardContent>
+          </Card>
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={0} />
+      </ResizablePanelGroup>
 
       {/* Summary - Bottom */}
       <Card>
