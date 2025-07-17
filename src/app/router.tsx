@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import BirthSignsPage from '@/pages/BirthSignsPage'
 import TraitsPage from '@/pages/TraitsPage'
-import ReligionsPage from '@/pages/ReligionsPage'
 import EquipmentPage from '@/pages/EquipmentPage'
 import CraftingPage from '@/pages/CraftingPage'
 import SkillsPage from '@/pages/SkillsPage'
