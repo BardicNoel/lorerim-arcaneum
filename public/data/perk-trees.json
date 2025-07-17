@@ -77,7 +77,7 @@
           "items": [
             {
               "type": "INGR",
-              "id": "0x0A35B997"
+              "id": "0x8C35B997"
             }
           ]
         },
@@ -125,19 +125,19 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alchemy",
+            "skill": "Smithing",
             "level": 25
           },
           "items": [
             {
               "type": "INGR",
-              "id": "0x0A05CBC7"
+              "id": "0x8C05CBC7"
             }
           ],
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000CB40D"
+              "id": "REQ_Smithing_Craftsmanship"
             }
           ]
         },
@@ -183,23 +183,23 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alchemy",
+            "skill": "Smithing",
             "level": 50
           },
           "items": [
             {
               "type": "INGR",
-              "id": "0x0A05CBCA"
+              "id": "0x8C05CBCA"
             }
           ],
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000CB40E"
+              "id": "REQ_Smithing_DwarvenSmithing"
             },
             {
               "type": "PERK",
-              "id": "0x000CB414"
+              "id": "REQ_Smithing_AdvancedLightArmors"
             }
           ]
         },
@@ -245,23 +245,23 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alchemy",
+            "skill": "Smithing",
             "level": 75
           },
           "items": [
             {
               "type": "INGR",
-              "id": "0x0A05CBE0"
+              "id": "0x8C05CBE0"
             }
           ],
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000CB410"
+              "id": "REQ_Smithing_OrcishSmithing"
             },
             {
               "type": "PERK",
-              "id": "0x000CB40F"
+              "id": "REQ_Smithing_ElvenSmithing"
             }
           ]
         },
@@ -305,23 +305,23 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alchemy",
+            "skill": "Smithing",
             "level": 100
           },
           "items": [
             {
               "type": "INGR",
-              "id": "0x0A05CBDE"
+              "id": "0x8C05CBDE"
             }
           ],
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000CB411"
+              "id": "REQ_Smithing_GlassSmithing"
             },
             {
               "type": "PERK",
-              "id": "0x000CB412"
+              "id": "REQ_Smithing_EbonySmithing"
             }
           ]
         },
@@ -365,23 +365,23 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alchemy",
+            "skill": "Smithing",
             "level": 100
           },
           "items": [
             {
               "type": "INGR",
-              "id": "0x0A05CBDA"
+              "id": "0x8C05CBDA"
             }
           ],
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000CB411"
+              "id": "REQ_Smithing_GlassSmithing"
             },
             {
               "type": "PERK",
-              "id": "0x000CB412"
+              "id": "REQ_Smithing_EbonySmithing"
             }
           ]
         },
@@ -427,17 +427,17 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alchemy",
+            "skill": "Smithing",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000CB40D"
+              "id": "REQ_Smithing_Craftsmanship"
             },
             {
               "type": "PERK",
-              "id": "0x0D00083E"
+              "id": "REQ_Smithing_Tailoring"
             }
           ]
         },
@@ -488,13 +488,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alchemy",
+            "skill": "Smithing",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0005218E"
+              "id": "REQ_Smithing_AdvancedBlacksmithing"
             }
           ]
         },
@@ -521,19 +521,19 @@
         "effects": [],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alchemy",
+            "skill": "Smithing",
             "level": 60
           },
           "items": [
             {
               "type": "INGR",
-              "id": "0x0AAD3748"
+              "id": "0x8CAD3748"
             }
           ],
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0005218E"
+              "id": "REQ_Smithing_AdvancedBlacksmithing"
             }
           ]
         },
@@ -579,19 +579,19 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alchemy",
+            "skill": "Smithing",
             "level": 25
           },
           "items": [
             {
               "type": "INGR",
-              "id": "0x0A05CBD4"
+              "id": "0x8C05CBD4"
             }
           ],
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000CB40D"
+              "id": "REQ_Smithing_Craftsmanship"
             }
           ]
         },
@@ -637,23 +637,23 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alchemy",
+            "skill": "Smithing",
             "level": 50
           },
           "items": [
             {
               "type": "INGR",
-              "id": "0x0A05CBD7"
+              "id": "0x8C05CBD7"
             }
           ],
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000CB40E"
+              "id": "REQ_Smithing_DwarvenSmithing"
             },
             {
               "type": "PERK",
-              "id": "0x000CB414"
+              "id": "REQ_Smithing_AdvancedLightArmors"
             }
           ]
         },
@@ -699,23 +699,23 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alchemy",
+            "skill": "Smithing",
             "level": 75
           },
           "items": [
             {
               "type": "INGR",
-              "id": "0x0A05CBDC"
+              "id": "0x8C05CBDC"
             }
           ],
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000CB410"
+              "id": "REQ_Smithing_OrcishSmithing"
             },
             {
               "type": "PERK",
-              "id": "0x000CB40F"
+              "id": "REQ_Smithing_ElvenSmithing"
             }
           ]
         },
@@ -759,21 +759,21 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alchemy",
+            "skill": "Smithing",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x070B1B1F"
+              "id": "Trad_Smithing_ShiveringIlsesSmithing"
             },
             {
               "type": "PERK",
-              "id": "0x000CB412"
+              "id": "REQ_Smithing_EbonySmithing"
             },
             {
               "type": "PERK",
-              "id": "0x000CB411"
+              "id": "REQ_Smithing_GlassSmithing"
             }
           ]
         },
@@ -841,13 +841,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alchemy",
+            "skill": "Smithing",
             "level": 60
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0005218E"
+              "id": "REQ_Smithing_AdvancedBlacksmithing"
             }
           ]
         },
@@ -883,13 +883,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alchemy",
+            "skill": "Smithing",
             "level": 80
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x1003C5EB"
+              "id": "ORD_Smh60_SmithingSpecialization_Perk_60_OrdASISExclude"
             }
           ]
         },
@@ -1162,10 +1162,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA8"
+              "id": "REQ_Destruction_Mastery_000_NoviceDestruction"
             }
           ]
         },
@@ -1300,10 +1304,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44BF"
+              "id": "REQ_Destruction_Mastery_025_ApprenticeDestruction"
             }
           ]
         },
@@ -1438,10 +1446,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44C0"
+              "id": "REQ_Destruction_Mastery_050_AdeptDestruction"
             }
           ]
         },
@@ -1526,10 +1538,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 100
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44C1"
+              "id": "REQ_Destruction_Mastery_075_ExpertDestruction"
             }
           ]
         },
@@ -1579,10 +1595,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44BF"
+              "id": "REQ_Destruction_Mastery_025_ApprenticeDestruction"
             }
           ]
         },
@@ -1677,10 +1697,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA8"
+              "id": "REQ_Destruction_Mastery_000_NoviceDestruction"
             }
           ]
         },
@@ -1709,10 +1733,14 @@
         ],
         "effects": [],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000581E7"
+              "id": "REQ_Destruction_Pyromancy_025_Pyromancy1"
             }
           ]
         },
@@ -1778,10 +1806,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 100
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F392E"
+              "id": "REQ_Destruction_Pyromancy_075_Cremation"
             }
           ]
         },
@@ -1876,10 +1908,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA8"
+              "id": "REQ_Destruction_Mastery_000_NoviceDestruction"
             }
           ]
         },
@@ -1908,10 +1944,14 @@
         ],
         "effects": [],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000581EA"
+              "id": "REQ_Destruction_Cryomancy_025_Cyromancy1"
             }
           ]
         },
@@ -1977,10 +2017,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 100
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F3933"
+              "id": "REQ_Destruction_Cryomancy_075_DeepFreeze"
             }
           ]
         },
@@ -2075,10 +2119,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA8"
+              "id": "REQ_Destruction_Mastery_000_NoviceDestruction"
             }
           ]
         },
@@ -2107,10 +2155,14 @@
         ],
         "effects": [],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058200"
+              "id": "REQ_Destruction_Electromancy_025_Electromancy1"
             }
           ]
         },
@@ -2176,10 +2228,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 100
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F3F0E"
+              "id": "REQ_Destruction_Electromancy_075_ElectrostaticDischarge"
             }
           ]
         },
@@ -2226,10 +2282,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA8"
+              "id": "REQ_Destruction_Mastery_000_NoviceDestruction"
             }
           ]
         },
@@ -2255,10 +2315,14 @@
         "connections": [],
         "effects": [],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000153CF"
+              "id": "REQ_Destruction_Empower_025_EmpoweredDestruction"
             }
           ]
         },
@@ -2351,10 +2415,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA8"
+              "id": "REQ_Destruction_Mastery_000_NoviceDestruction"
             }
           ]
         },
@@ -2381,10 +2449,14 @@
         "connections": [],
         "effects": [],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x07005B03"
+              "id": "REQ_Destruction_Arcane_025_ArcaneFocus1"
             }
           ]
         },
@@ -2477,10 +2549,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA8"
+              "id": "REQ_Destruction_Mastery_000_NoviceDestruction"
             }
           ]
         },
@@ -2507,10 +2583,14 @@
         "connections": [],
         "effects": [],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x07005B05"
+              "id": "REQ_Destruction_Entropic_025_EntropicFocus1"
             }
           ]
         },
@@ -2553,10 +2633,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44BF"
+              "id": "REQ_Destruction_Mastery_025_ApprenticeDestruction"
             }
           ]
         },
@@ -2599,10 +2683,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44BF"
+              "id": "REQ_Destruction_Mastery_025_ApprenticeDestruction"
             }
           ]
         },
@@ -2695,10 +2783,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA8"
+              "id": "REQ_Destruction_Mastery_000_NoviceDestruction"
             }
           ]
         },
@@ -2742,10 +2834,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Destruction",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x07005C66"
+              "id": "REQ_Destruction_BloodMagic_025_BloodMagic1"
             }
           ]
         },
@@ -2839,10 +2935,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Enchanting",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BEE97"
+              "id": "REQ_Enchanting_Enchantment_000_EnchantersInsight1"
             }
           ]
         },
@@ -2887,10 +2987,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Enchanting",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F80"
+              "id": "REQ_Enchanting_Enchantment_025_ElementalLore"
             }
           ]
         },
@@ -2935,10 +3039,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Enchanting",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F81"
+              "id": "REQ_Enchanting_Enchantment_050_CorpusLore"
             }
           ]
         },
@@ -2997,14 +3105,18 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Enchanting",
+            "level": 90
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F7D"
+              "id": "REQ_Enchanting_Artificer_075_ArtificersInsight"
             },
             {
               "type": "PERK",
-              "id": "0x00058F82"
+              "id": "REQ_Enchanting_Enchantment_075_SkillLore"
             }
           ]
         },
@@ -3042,10 +3154,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Enchanting",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BEE97"
+              "id": "REQ_Enchanting_Enchantment_000_EnchantersInsight1"
             }
           ]
         },
@@ -3088,10 +3204,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Enchanting",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F7C"
+              "id": "REQ_Enchanting_Artificer_025_SoulGemMastery"
             }
           ]
         },
@@ -3135,10 +3255,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Enchanting",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F7E"
+              "id": "REQ_Enchanting_Artificer_050_ArcaneExperimentation"
             }
           ]
         },
@@ -3187,10 +3311,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Enchanting",
+            "level": 100
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F7F"
+              "id": "REQ_Enchanting_Enchantment_100_EnchantmentMastery"
             }
           ]
         },
@@ -3333,10 +3461,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Enchanting",
+            "level": 20
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BEE97"
+              "id": "REQ_Enchanting_Enchantment_000_EnchantersInsight1"
             }
           ]
         },
@@ -3430,10 +3562,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Enchanting",
+            "level": 30
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x02000858"
+              "id": "Feat_Perk_Skill_Enchanting_ArcaneArtificery1"
             }
           ]
         },
@@ -3470,10 +3606,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Enchanting",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0200085B"
+              "id": "Feat_Perk_Char_Enchanting_StaffChanneling1"
             }
           ]
         },
@@ -3508,10 +3648,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Enchanting",
+            "level": 60
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0600085B"
+              "id": "Feat_Perk_Char_Enchanting_StaffChanneling1"
             }
           ]
         },
@@ -3562,14 +3706,18 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Enchanting",
+            "level": 80
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x1003ECBD"
+              "id": "ORD_Enc70_ChargeTap_Perk_70_OrdASISExclude"
             },
             {
               "type": "PERK",
-              "id": "0x0F000803"
+              "id": "REQ_Enchanting_50_WandMastery"
             }
           ]
         },
@@ -3842,10 +3990,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CAA"
+              "id": "REQ_Restoration_Mastery_000_NoviceRestoration"
             }
           ]
         },
@@ -3980,10 +4132,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44C7"
+              "id": "REQ_Restoration_Mastery_025_ApprenticeRestoration"
             }
           ]
         },
@@ -4118,10 +4274,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44C8"
+              "id": "REQ_Restoration_Mastery_050_AdeptRestoration"
             }
           ]
         },
@@ -4206,10 +4366,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 100
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44C9"
+              "id": "REQ_Restoration_Mastery_075_ExpertRestoration"
             }
           ]
         },
@@ -4304,10 +4468,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CAA"
+              "id": "REQ_Restoration_Mastery_000_NoviceRestoration"
             }
           ]
         },
@@ -4367,10 +4535,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x07005FBD"
+              "id": "REQ_Restoration_Turning_025_ImprovedTurning"
             }
           ]
         },
@@ -4396,10 +4568,14 @@
         "connections": [],
         "effects": [],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000581F8"
+              "id": "REQ_Restoration_Healing_025_ImprovedHealing"
             }
           ]
         },
@@ -4449,10 +4625,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x07005FBE"
+              "id": "REQ_Restoration_Protection_025_ImprovedProtection"
             }
           ]
         },
@@ -4497,10 +4677,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CAA"
+              "id": "REQ_Restoration_Mastery_000_NoviceRestoration"
             }
           ]
         },
@@ -4536,10 +4720,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44C7"
+              "id": "REQ_Restoration_Mastery_025_ApprenticeRestoration"
             }
           ]
         },
@@ -4576,10 +4764,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000581F4"
+              "id": "REQ_Restoration_Recovery_025_FocusedMind"
             }
           ]
         },
@@ -4621,10 +4813,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000A3F64"
+              "id": "REQ_Restoration_Recovery_050_PowerOfLife"
             }
           ]
         },
@@ -4763,10 +4959,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CAA"
+              "id": "REQ_Restoration_Mastery_000_NoviceRestoration"
             }
           ]
         },
@@ -4793,10 +4993,14 @@
         "connections": [],
         "effects": [],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x07005C69"
+              "id": "REQ_Restoration_Venomancy_025_Venomancy"
             }
           ]
         },
@@ -4889,10 +5093,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CAA"
+              "id": "REQ_Restoration_Mastery_000_NoviceRestoration"
             }
           ]
         },
@@ -4919,10 +5127,14 @@
         "connections": [],
         "effects": [],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x2B005D7A"
+              "id": "REQ_Restoration_Heliomancy_025_Heliomancy"
             }
           ]
         },
@@ -4999,10 +5211,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CAA"
+              "id": "REQ_Restoration_Mastery_000_NoviceRestoration"
             }
           ]
         },
@@ -5080,10 +5296,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CAA"
+              "id": "REQ_Restoration_Mastery_000_NoviceRestoration"
             }
           ]
         },
@@ -5134,10 +5354,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Restoration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CAA"
+              "id": "REQ_Restoration_Mastery_000_NoviceRestoration"
             }
           ]
         },
@@ -5354,10 +5578,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA9"
+              "id": "REQ_Illusion_Mastery_000_NovicelIllusion"
             }
           ]
         },
@@ -5384,10 +5612,14 @@
         "connections": [],
         "effects": [],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000581E1"
+              "id": "REQ_Illusion_Perceptual_025_PerceptualIllusions"
             }
           ]
         },
@@ -5464,10 +5696,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44C4"
+              "id": "REQ_Illusion_Mastery_050_AdeptIllusion"
             }
           ]
         },
@@ -5494,10 +5730,14 @@
         "connections": [],
         "effects": [],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44B5"
+              "id": "REQ_Illusion_Delusive_050_DelusiveIllusions"
             }
           ]
         },
@@ -5574,10 +5814,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA9"
+              "id": "REQ_Illusion_Mastery_000_NovicelIllusion"
             }
           ]
         },
@@ -5604,10 +5848,14 @@
         "connections": [],
         "effects": [],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00059B77"
+              "id": "REQ_Illusion_Emotional_025_EmotionalIllusions"
             }
           ]
         },
@@ -5684,10 +5932,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44C4"
+              "id": "REQ_Illusion_Mastery_050_AdeptIllusion"
             }
           ]
         },
@@ -5821,10 +6073,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA9"
+              "id": "REQ_Illusion_Mastery_000_NovicelIllusion"
             }
           ]
         },
@@ -5959,10 +6215,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44C3"
+              "id": "REQ_Illusion_Mastery_025_ApprenticeIllusion"
             }
           ]
         },
@@ -6097,10 +6357,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44C4"
+              "id": "REQ_Illusion_Mastery_050_AdeptIllusion"
             }
           ]
         },
@@ -6185,10 +6449,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 100
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44C5"
+              "id": "REQ_Illusion_Mastery_075_ExpertIllusion"
             }
           ]
         },
@@ -6233,10 +6501,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA9"
+              "id": "REQ_Illusion_Mastery_000_NovicelIllusion"
             }
           ]
         },
@@ -6279,10 +6551,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000581FD"
+              "id": "REQ_Illusion_Shadow_050_ShadowShaping"
             }
           ]
         },
@@ -6325,10 +6601,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00059B77"
+              "id": "REQ_Illusion_Emotional_025_EmotionalIllusions"
             }
           ]
         },
@@ -6387,10 +6667,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000581E1"
+              "id": "REQ_Illusion_Perceptual_025_PerceptualIllusions"
             }
           ]
         },
@@ -6465,10 +6749,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44B5"
+              "id": "REQ_Illusion_Delusive_050_DelusiveIllusions"
             }
           ]
         },
@@ -6519,10 +6807,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Illusion",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000581FD"
+              "id": "REQ_Illusion_Shadow_050_ShadowShaping"
             }
           ]
         },
@@ -6795,10 +7087,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA7"
+              "id": "REQ_Conjuration_Mastery_000_NoviceConjuration"
             }
           ]
         },
@@ -6933,10 +7229,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44BB"
+              "id": "REQ_Conjuration_Mastery_025_ApprenticeConjuration"
             }
           ]
         },
@@ -7071,10 +7371,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44BC"
+              "id": "REQ_Conjuration_Mastery_050_AdeptConjuration"
             }
           ]
         },
@@ -7159,10 +7463,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 100
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44BD"
+              "id": "REQ_Conjuration_Mastery_075_ExpertConjuration"
             }
           ]
         },
@@ -7209,10 +7517,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA7"
+              "id": "REQ_Conjuration_Mastery_000_NoviceConjuration"
             }
           ]
         },
@@ -7246,10 +7558,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000153CE"
+              "id": "REQ_Conjuration_Empower_025_EmpoweredConjuration"
             }
           ]
         },
@@ -7342,10 +7658,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA7"
+              "id": "REQ_Conjuration_Mastery_000_NoviceConjuration"
             }
           ]
         },
@@ -7423,10 +7743,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000581DD"
+              "id": "REQ_Conjuration_Necromancy_025_Necromancy"
             }
           ]
         },
@@ -7486,10 +7810,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0517911B"
+              "id": "REQ_Conjuration_Necromancy_050_Ritualism"
             }
           ]
         },
@@ -7550,10 +7878,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA7"
+              "id": "REQ_Conjuration_Mastery_000_NoviceConjuration"
             }
           ]
         },
@@ -7605,10 +7937,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000640B3"
+              "id": "REQ_Conjuration_Bound_025_MysticBinding"
             }
           ]
         },
@@ -7670,10 +8006,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000D799E"
+              "id": "REQ_Conjuration_Bound_050_MysticInfusion"
             }
           ]
         },
@@ -7748,10 +8088,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 100
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000D799C"
+              "id": "REQ_Conjuration_Bound_075_MysticEmpowerment"
             }
           ]
         },
@@ -7813,10 +8157,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA7"
+              "id": "REQ_Conjuration_Mastery_000_NoviceConjuration"
             }
           ]
         },
@@ -7909,10 +8257,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00105F30"
+              "id": "REQ_Conjuration_Daedric_025_DaedricBinding"
             }
           ]
         },
@@ -7956,10 +8308,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000CB419"
+              "id": "REQ_Conjuration_Daedric_050_GatesOfOblivion"
             }
           ]
         },
@@ -8002,10 +8358,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x18006049"
+              "id": "REQ_Conjuration_Spirit_050_SpiritualBond"
             }
           ]
         },
@@ -8050,10 +8410,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA7"
+              "id": "REQ_Conjuration_Mastery_000_NoviceConjuration"
             }
           ]
         },
@@ -8114,10 +8478,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x18006048"
+              "id": "REQ_Conjuration_Spirit_025_SpiritCalling"
             }
           ]
         },
@@ -8151,10 +8519,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x18006049"
+              "id": "REQ_Conjuration_Spirit_050_SpiritualBond"
             }
           ]
         },
@@ -8189,10 +8561,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0517911B"
+              "id": "REQ_Conjuration_Necromancy_050_Ritualism"
             }
           ]
         },
@@ -8227,10 +8603,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000CB419"
+              "id": "REQ_Conjuration_Daedric_050_GatesOfOblivion"
             }
           ]
         },
@@ -8324,10 +8704,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44BC"
+              "id": "REQ_Conjuration_Mastery_050_AdeptConjuration"
             }
           ]
         },
@@ -8354,10 +8738,14 @@
         "connections": [],
         "effects": [],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Conjuration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x070060AD"
+              "id": "REQ_Conjuration_SoulMagic_025_SoulMagic"
             }
           ]
         },
@@ -8629,10 +9017,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA6"
+              "id": "REQ_Alteration_Mastery_000_NoviceAlteration"
             }
           ]
         },
@@ -8767,10 +9159,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44B7"
+              "id": "REQ_Alteration_Mastery_025_ApprenticeAlteration"
             }
           ]
         },
@@ -8905,10 +9301,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44B8"
+              "id": "REQ_Alteration_Mastery_050_AdeptAlteration"
             }
           ]
         },
@@ -8993,10 +9393,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 100
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44B9"
+              "id": "REQ_Alteration_Mastery_075_ExpertAlteration"
             }
           ]
         },
@@ -9032,10 +9436,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 100
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44B9"
+              "id": "REQ_Alteration_Mastery_075_ExpertAlteration"
             }
           ]
         },
@@ -9095,10 +9503,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000D7999"
+              "id": "REQ_Alteration_MageArmor_025_ImprovedMageArmor"
             }
           ]
         },
@@ -9143,10 +9555,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44B8"
+              "id": "REQ_Alteration_Mastery_050_AdeptAlteration"
             }
           ]
         },
@@ -9191,10 +9607,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000581FC"
+              "id": "REQ_Alteration_Metamagic_050_Stability"
             }
           ]
         },
@@ -9253,10 +9673,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 100
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0421792B"
+              "id": "REQ_Alteration_Metamagic_075_MetamagicalThesis"
             }
           ]
         },
@@ -9284,10 +9708,14 @@
         ],
         "effects": [],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44B7"
+              "id": "REQ_Alteration_Mastery_025_ApprenticeAlteration"
             }
           ]
         },
@@ -9330,10 +9758,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA6"
+              "id": "REQ_Alteration_Mastery_000_NoviceAlteration"
             }
           ]
         },
@@ -9369,10 +9801,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44B7"
+              "id": "REQ_Alteration_Mastery_025_ApprenticeAlteration"
             }
           ]
         },
@@ -9466,10 +9902,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000F2CA6"
+              "id": "REQ_Alteration_Mastery_000_NoviceAlteration"
             }
           ]
         },
@@ -9504,10 +9944,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x07005DAA"
+              "id": "REQ_Alteration_Transmutation_025_Transmutation"
             }
           ]
         },
@@ -9608,10 +10052,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 25
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44B7"
+              "id": "REQ_Alteration_Mastery_025_ApprenticeAlteration"
             }
           ]
         },
@@ -9662,10 +10110,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x2B005C63"
+              "id": "REQ_Alteration_Kinetomancy_025_Kinetomancy"
             }
           ]
         },
@@ -9758,10 +10210,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 50
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C44B8"
+              "id": "REQ_Alteration_Mastery_050_AdeptAlteration"
             }
           ]
         },
@@ -9805,10 +10261,14 @@
           }
         ],
         "prerequisites": {
+          "skillLevel": {
+            "skill": "Alteration",
+            "level": 75
+          },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x2B005E9A"
+              "id": "REQ_Alteration_WeatherMagic_050_WeatherMagic"
             }
           ]
         },
@@ -10246,13 +10706,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Enchanting",
+            "skill": "Speech",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE128"
+              "id": "REQ_Speech_Haggling"
             }
           ]
         },
@@ -10290,13 +10750,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Enchanting",
+            "skill": "Speech",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F7A"
+              "id": "REQ_Speech_Merchant"
             }
           ]
         },
@@ -10374,13 +10834,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Enchanting",
+            "skill": "Speech",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE128"
+              "id": "REQ_Speech_Haggling"
             }
           ]
         },
@@ -10409,13 +10869,13 @@
         "effects": [],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Enchanting",
+            "skill": "Speech",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F72"
+              "id": "REQ_Speech_SilverTongue"
             }
           ]
         },
@@ -10442,13 +10902,13 @@
         "effects": [],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Enchanting",
+            "skill": "Speech",
             "level": 75
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F72"
+              "id": "REQ_Speech_SilverTongue"
             }
           ]
         },
@@ -10518,7 +10978,7 @@
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0E0D02C5"
+              "id": "REQ_Speech_LoreOfTheThuum"
             }
           ]
         },
@@ -10565,7 +11025,7 @@
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0E0D02C5"
+              "id": "REQ_Speech_LoreOfTheThuum"
             }
           ]
         },
@@ -10611,7 +11071,7 @@
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0E0D02C5"
+              "id": "REQ_Speech_LoreOfTheThuum"
             }
           ]
         },
@@ -10657,7 +11117,7 @@
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0E0D02C5"
+              "id": "REQ_Speech_LoreOfTheThuum"
             }
           ]
         },
@@ -10694,7 +11154,7 @@
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0E0D02C5"
+              "id": "REQ_Speech_LoreOfTheThuum"
             }
           ]
         },
@@ -10730,13 +11190,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Enchanting",
+            "skill": "Speech",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE128"
+              "id": "REQ_Speech_Haggling"
             }
           ]
         },
@@ -10890,13 +11350,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Restoration",
+            "skill": "Alchemy",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE127"
+              "id": "REQ_Alchemy_AlchemicalLore1"
             }
           ]
         },
@@ -10942,13 +11402,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Restoration",
+            "skill": "Alchemy",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058216"
+              "id": "REQ_Alchemy_ImprovedElixirs"
             }
           ]
         },
@@ -10985,17 +11445,17 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Restoration",
+            "skill": "Alchemy",
             "level": 75
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058218"
+              "id": "REQ_Alchemy_Catalysis1"
             },
             {
               "type": "PERK",
-              "id": "0x00058217"
+              "id": "REQ_Alchemy_ImprovedPoisons"
             }
           ]
         },
@@ -11038,13 +11498,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Restoration",
+            "skill": "Alchemy",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00105F2C"
+              "id": "REQ_Alchemy_Immunization"
             }
           ]
         },
@@ -11093,7 +11553,7 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Restoration",
+            "skill": "Alchemy",
             "level": 75
           },
           "items": [
@@ -11103,21 +11563,21 @@
             },
             {
               "type": "INGR",
-              "id": "0x0A043661"
+              "id": "0x8C043661"
             }
           ],
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0A1CD497"
+              "id": "REQ_Alchemy_FortifiedMuscles"
             },
             {
               "type": "PERK",
-              "id": "0x0A1CD497"
+              "id": "REQ_Alchemy_FortifiedMuscles"
             },
             {
               "type": "PERK",
-              "id": "0x00105F2C"
+              "id": "REQ_Alchemy_Immunization"
             }
           ]
         },
@@ -11177,7 +11637,7 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Restoration",
+            "skill": "Alchemy",
             "level": 100
           },
           "items": [
@@ -11193,15 +11653,15 @@
           "perks": [
             {
               "type": "PERK",
-              "id": "0x061D9AAB"
+              "id": "REQ_Alchemy_AlchemicalIntellect"
             },
             {
               "type": "PERK",
-              "id": "0x061D9AAB"
+              "id": "REQ_Alchemy_AlchemicalIntellect"
             },
             {
               "type": "PERK",
-              "id": "0x00105F2C"
+              "id": "REQ_Alchemy_Immunization"
             }
           ]
         },
@@ -11245,7 +11705,7 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Restoration",
+            "skill": "Alchemy",
             "level": 25
           },
           "items": [
@@ -11257,11 +11717,11 @@
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0A1CD495"
+              "id": "REQ_Alchemy_NightVision"
             },
             {
               "type": "PERK",
-              "id": "0x00058216"
+              "id": "REQ_Alchemy_ImprovedElixirs"
             }
           ]
         },
@@ -11318,7 +11778,7 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Restoration",
+            "skill": "Alchemy",
             "level": 50
           },
           "items": [
@@ -11338,19 +11798,19 @@
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058216"
+              "id": "REQ_Alchemy_ImprovedElixirs"
             },
             {
               "type": "PERK",
-              "id": "0x0A1CD48F"
+              "id": "REQ_Alchemy_Regeneration"
             },
             {
               "type": "PERK",
-              "id": "0x0A1CD48F"
+              "id": "REQ_Alchemy_Regeneration"
             },
             {
               "type": "PERK",
-              "id": "0x0A1CD48F"
+              "id": "REQ_Alchemy_Regeneration"
             }
           ]
         },
@@ -11414,13 +11874,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Restoration",
+            "skill": "Alchemy",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE127"
+              "id": "REQ_Alchemy_AlchemicalLore1"
             }
           ]
         },
@@ -11466,13 +11926,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Restoration",
+            "skill": "Alchemy",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00105F2F"
+              "id": "REQ_Alchemy_ConcentratedPoisons"
             }
           ]
         },
@@ -11608,13 +12068,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Restoration",
+            "skill": "Alchemy",
             "level": 60
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058217"
+              "id": "REQ_Alchemy_ImprovedPoisons"
             }
           ]
         },
@@ -11649,13 +12109,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Restoration",
+            "skill": "Alchemy",
             "level": 90
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x1003F228"
+              "id": "ORD_Alc60_Alkahest_Perk_60"
             }
           ]
         },
@@ -11752,13 +12212,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Illusion",
+            "skill": "Sneak",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE126"
+              "id": "REQ_Sneak_Mastery_000_Stealth1"
             }
           ]
         },
@@ -11916,13 +12376,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Illusion",
+            "skill": "Sneak",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058210"
+              "id": "REQ_Sneak_Assassin_025_DeftStrike"
             }
           ]
         },
@@ -12047,13 +12507,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Illusion",
+            "skill": "Sneak",
             "level": 75
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x001036F0"
+              "id": "REQ_Sneak_Assassin_050_AnatomicalLore"
             }
           ]
         },
@@ -12107,13 +12567,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Illusion",
+            "skill": "Sneak",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE126"
+              "id": "REQ_Sneak_Mastery_000_Stealth1"
             }
           ]
         },
@@ -12151,13 +12611,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Illusion",
+            "skill": "Sneak",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058213"
+              "id": "REQ_Sneak_Mastery_025_MuffledMovement"
             }
           ]
         },
@@ -12220,13 +12680,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Illusion",
+            "skill": "Sneak",
             "level": 75
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0005820C"
+              "id": "REQ_Sneak_Mastery_050_LightSteps"
             }
           ]
         },
@@ -12302,13 +12762,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Illusion",
+            "skill": "Sneak",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00105F23"
+              "id": "REQ_Sneak_Mastery_075_Acrobatics"
             }
           ]
         },
@@ -12376,13 +12836,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Illusion",
+            "skill": "Sneak",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE126"
+              "id": "REQ_Sneak_Mastery_000_Stealth1"
             }
           ]
         },
@@ -12517,13 +12977,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Illusion",
+            "skill": "Sneak",
             "level": 80
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x001036F0"
+              "id": "REQ_Sneak_Assassin_050_AnatomicalLore"
             }
           ]
         },
@@ -12586,13 +13046,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Illusion",
+            "skill": "Sneak",
             "level": 40
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE126"
+              "id": "REQ_Sneak_Mastery_000_Stealth1"
             }
           ]
         },
@@ -12629,13 +13089,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Illusion",
+            "skill": "Sneak",
             "level": 20
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE126"
+              "id": "REQ_Sneak_Mastery_000_Stealth1"
             }
           ]
         },
@@ -12663,13 +13123,13 @@
         "effects": [],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Illusion",
+            "skill": "Sneak",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x100379AA"
+              "id": "ORD_Sne20_Tripwire_Perk_20_OrdASISExclude"
             }
           ]
         },
@@ -12704,13 +13164,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Illusion",
+            "skill": "Sneak",
             "level": 70
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x10037F0F"
+              "id": "ORD_Sne30_FogOfWar_Perk_30_OrdASISExclude"
             }
           ]
         },
@@ -12756,13 +13216,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Destruction",
+            "skill": "Lockpicking",
             "level": 60
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x02000802"
+              "id": "0xFEADE802"
             }
           ]
         },
@@ -12823,13 +13283,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Destruction",
+            "skill": "Lockpicking",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x02000806"
+              "id": "REQ_Lockpicking_70_Maverick"
             }
           ]
         },
@@ -12873,13 +13333,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Destruction",
+            "skill": "Lockpicking",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x02000800"
+              "id": "0xFEADE800"
             }
           ]
         },
@@ -12926,13 +13386,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Destruction",
+            "skill": "Lockpicking",
             "level": 40
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058208"
+              "id": "REQ_Lockpicking_25_Locksmith"
             }
           ]
         },
@@ -12986,13 +13446,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Destruction",
+            "skill": "Lockpicking",
             "level": 60
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00105F26"
+              "id": "REQ_Lockpicking_40_TreasureHunter"
             }
           ]
         },
@@ -13035,13 +13495,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Destruction",
+            "skill": "Lockpicking",
             "level": 90
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0200080E"
+              "id": "REQ_Lockpicking_60_ExtraPocketsReplacer"
             }
           ]
         },
@@ -13079,13 +13539,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Destruction",
+            "skill": "Lockpicking",
             "level": 40
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x02000808"
+              "id": "0xFEADE808"
             }
           ]
         },
@@ -13146,13 +13606,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Destruction",
+            "skill": "Lockpicking",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0200080B"
+              "id": "0xFEADE80B"
             }
           ]
         },
@@ -13194,13 +13654,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Destruction",
+            "skill": "Lockpicking",
             "level": 60
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x02000803"
+              "id": "BBWayfarerFood"
             }
           ]
         },
@@ -13238,13 +13698,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Destruction",
+            "skill": "Lockpicking",
             "level": 40
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x02000800"
+              "id": "0xFEADF800"
             }
           ]
         },
@@ -13291,13 +13751,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Destruction",
+            "skill": "Lockpicking",
             "level": 40
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058208"
+              "id": "REQ_Lockpicking_25_Locksmith"
             }
           ]
         },
@@ -13343,13 +13803,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Destruction",
+            "skill": "Lockpicking",
             "level": 60
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x10034DEC"
+              "id": "ORD_Loc30_Lockdown_Perk_30_OrdASISExclude"
             }
           ]
         },
@@ -13409,13 +13869,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Destruction",
+            "skill": "Lockpicking",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x100358D3"
+              "id": "ORD_Loc50_Hotwire_Perk_50_OrdASISExclude"
             }
           ]
         },
@@ -13662,13 +14122,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x02000800"
+              "id": "0xFEAE0800"
             }
           ]
         },
@@ -13705,13 +14165,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 77
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00107830"
+              "id": "REQ_Pickpocket_50_Thief"
             }
           ]
         },
@@ -13790,13 +14250,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 30
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE124"
+              "id": "REQ_Pickpocket_Mastery_000_NimbleFingers1"
             }
           ]
         },
@@ -13843,13 +14303,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058204"
+              "id": "REQ_Pickpocket_30_Cutpurse"
             }
           ]
         },
@@ -13895,13 +14355,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 70
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058202"
+              "id": "REQ_Pickpocket_50_NightThief"
             }
           ]
         },
@@ -13961,13 +14421,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058201"
+              "id": "REQ_Pickpocket_70_Misdirection"
             }
           ]
         },
@@ -14004,17 +14464,17 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 30
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE124"
+              "id": "REQ_Pickpocket_Mastery_000_NimbleFingers1"
             },
             {
               "type": "PERK",
-              "id": "0x06000001"
+              "id": "LoreRimTrapper_Rank1"
             }
           ]
         },
@@ -14053,13 +14513,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 60
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00105F28"
+              "id": "REQ_Pickpocket_30_Sound_Body"
             }
           ]
         },
@@ -14127,13 +14587,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 80
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x02000801"
+              "id": "Req_Pickpocket_60_Sound_Mind"
             }
           ]
         },
@@ -14205,13 +14665,13 @@
         "effects": [],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x05000001"
+              "id": "LoreRimTrapper_Rank1"
             }
           ]
         },
@@ -14238,13 +14698,13 @@
         "effects": [],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x05000004"
+              "id": "LoreRimTrapper_Rank2"
             }
           ]
         },
@@ -14273,13 +14733,13 @@
         "effects": [],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x06000001"
+              "id": "LoreRimTrapper_Rank1"
             }
           ]
         },
@@ -14306,13 +14766,13 @@
         "effects": [],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x07000802"
+              "id": "REQ_Pickpocket_25_Pocket_sand"
             }
           ]
         },
@@ -14347,13 +14807,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x1003222D"
+              "id": "ORD_Pic40_DeathsEmperor_Perk_40_OrdASISExclude"
             }
           ]
         },
@@ -14423,17 +14883,17 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 70
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00107830"
+              "id": "REQ_Pickpocket_50_Thief"
             },
             {
               "type": "PERK",
-              "id": "0x00058202"
+              "id": "REQ_Pickpocket_50_NightThief"
             }
           ]
         },
@@ -14470,13 +14930,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Conjuration",
+            "skill": "Pickpocket",
             "level": 40
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0B000800"
+              "id": "0xFEAE0800"
             }
           ]
         },
@@ -15823,13 +16283,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alteration",
+            "skill": "Light Armor",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE123"
+              "id": "REQ_Evasion_Agility"
             }
           ]
         },
@@ -15883,17 +16343,17 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alteration",
+            "skill": "Light Armor",
             "level": 75
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00051B1B"
+              "id": "REQ_Evasion_Finesse"
             },
             {
               "type": "PERK",
-              "id": "0x0E18F5A8"
+              "id": "REQ_Evasion_VexingFlanker"
             }
           ]
         },
@@ -15954,17 +16414,17 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alteration",
+            "skill": "Light Armor",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00105F22"
+              "id": "REQ_Evasion_WindWalker"
             },
             {
               "type": "PERK",
-              "id": "0x00051B17"
+              "id": "REQ_Evasion_CombatReflexes"
             }
           ]
         },
@@ -16058,13 +16518,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alteration",
+            "skill": "Light Armor",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00051B1B"
+              "id": "REQ_Evasion_Finesse"
             }
           ]
         },
@@ -16125,13 +16585,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alteration",
+            "skill": "Light Armor",
             "level": 75
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00051B1C"
+              "id": "REQ_Evasion_Dexterity"
             }
           ]
         },
@@ -16179,13 +16639,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alteration",
+            "skill": "Light Armor",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00051B1B"
+              "id": "REQ_Evasion_Finesse"
             }
           ]
         },
@@ -16214,13 +16674,13 @@
         "effects": [],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alteration",
+            "skill": "Light Armor",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE123"
+              "id": "REQ_Evasion_Agility"
             }
           ]
         },
@@ -16264,13 +16724,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alteration",
+            "skill": "Light Armor",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE123"
+              "id": "REQ_Evasion_Agility"
             }
           ]
         },
@@ -16321,13 +16781,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alteration",
+            "skill": "Light Armor",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BE123"
+              "id": "REQ_Evasion_Agility"
             }
           ]
         },
@@ -16365,13 +16825,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alteration",
+            "skill": "Light Armor",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00051B1B"
+              "id": "REQ_Evasion_Finesse"
             }
           ]
         },
@@ -16421,13 +16881,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alteration",
+            "skill": "Light Armor",
             "level": 40
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x06000868"
+              "id": "Feat_Perk_Skill_Evasion_Athletics1"
             }
           ]
         },
@@ -16462,13 +16922,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alteration",
+            "skill": "Light Armor",
             "level": 60
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00079376"
+              "id": "REQ_Evasion_Dodge"
             }
           ]
         },
@@ -16529,13 +16989,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Alteration",
+            "skill": "Light Armor",
             "level": 40
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00079376"
+              "id": "REQ_Evasion_Dodge"
             }
           ]
         },
@@ -17968,13 +18428,13 @@
         "effects": [],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Speech",
+            "skill": "Heavy Armor",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BCD2A"
+              "id": "REQ_HeavyArmor_Conditioning"
             }
           ]
         },
@@ -18003,13 +18463,13 @@
         "effects": [],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Speech",
+            "skill": "Heavy Armor",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F6E"
+              "id": "REQ_HeavyArmor_CombatCasting"
             }
           ]
         },
@@ -18038,13 +18498,13 @@
         "effects": [],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Speech",
+            "skill": "Heavy Armor",
             "level": 75
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BCD2B"
+              "id": "REQ_HeavyArmor_CombatTrance"
             }
           ]
         },
@@ -18088,13 +18548,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Speech",
+            "skill": "Heavy Armor",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F6D"
+              "id": "REQ_HeavyArmor_CombatMeditation"
             }
           ]
         },
@@ -18138,13 +18598,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Speech",
+            "skill": "Heavy Armor",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BCD2A"
+              "id": "REQ_HeavyArmor_Conditioning"
             }
           ]
         },
@@ -18182,13 +18642,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Speech",
+            "skill": "Heavy Armor",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F6F"
+              "id": "REQ_HeavyArmor_CombatTraining"
             }
           ]
         },
@@ -18242,13 +18702,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Speech",
+            "skill": "Heavy Armor",
             "level": 75
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F6C"
+              "id": "REQ_HeavyArmor_Fortitude"
             }
           ]
         },
@@ -18325,13 +18785,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Speech",
+            "skill": "Heavy Armor",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00107832"
+              "id": "REQ_HeavyArmor_PowerOfTheCombatant"
             }
           ]
         },
@@ -18385,13 +18845,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Speech",
+            "skill": "Heavy Armor",
             "level": 20
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BCD2A"
+              "id": "REQ_HeavyArmor_Conditioning"
             }
           ]
         },
@@ -18479,13 +18939,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Speech",
+            "skill": "Heavy Armor",
             "level": 30
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0007935E"
+              "id": "REQ_HeavyArmor_RelentlessOnslaught"
             }
           ]
         },
@@ -18547,13 +19007,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Speech",
+            "skill": "Heavy Armor",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x10008029"
+              "id": "ORD_Hea20_Cushioned_Perk_50"
             }
           ]
         },
@@ -18599,13 +19059,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Speech",
+            "skill": "Heavy Armor",
             "level": 75
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x1004DFCE"
+              "id": "ORD_Hea40_Defiance_Perk_40"
             }
           ]
         },
@@ -18656,13 +19116,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Speech",
+            "skill": "Heavy Armor",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x10007ABA"
+              "id": "ORD_Hea60_NeverKneel_Perk_60"
             }
           ]
         },
@@ -18862,13 +19322,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Sneak",
+            "skill": "Block",
             "level": 15
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BCCAE"
+              "id": "REQ_Block_ImprovedBlocking"
             }
           ]
         },
@@ -18915,13 +19375,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Sneak",
+            "skill": "Block",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F68"
+              "id": "REQ_Block_StrongGrip"
             }
           ]
         },
@@ -18999,13 +19459,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Sneak",
+            "skill": "Block",
             "level": 75
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F69"
+              "id": "REQ_Block_ElementalProtection"
             }
           ]
         },
@@ -19098,17 +19558,17 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Sneak",
+            "skill": "Block",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F66"
+              "id": "REQ_Block_DisarmingBash"
             },
             {
               "type": "PERK",
-              "id": "0x00106253"
+              "id": "REQ_Block_DefensiveStance"
             }
           ]
         },
@@ -19171,13 +19631,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Sneak",
+            "skill": "Block",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BCCAE"
+              "id": "REQ_Block_ImprovedBlocking"
             }
           ]
         },
@@ -19223,13 +19683,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Sneak",
+            "skill": "Block",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F67"
+              "id": "REQ_Block_PowerfulBashes"
             }
           ]
         },
@@ -19291,13 +19751,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Sneak",
+            "skill": "Block",
             "level": 75
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0005F594"
+              "id": "REQ_Block_OverpoweringBashes"
             }
           ]
         },
@@ -19332,13 +19792,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Sneak",
+            "skill": "Block",
             "level": 20
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BCCAE"
+              "id": "REQ_Block_ImprovedBlocking"
             }
           ]
         },
@@ -19405,13 +19865,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Sneak",
+            "skill": "Block",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F67"
+              "id": "REQ_Block_PowerfulBashes"
             }
           ]
         },
@@ -19473,13 +19933,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Sneak",
+            "skill": "Block",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BCCAE"
+              "id": "REQ_Block_ImprovedBlocking"
             }
           ]
         },
@@ -19525,21 +19985,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Sneak",
+            "skill": "Block",
             "level": 20
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BABE4"
-            },
-            {
-              "type": "PERK",
-              "id": "0x000BABE8"
-            },
-            {
-              "type": "PERK",
-              "id": "0x000BCCAE"
+              "id": "REQ_Block_ImprovedBlocking"
             }
           ]
         },
@@ -19696,13 +20148,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BABED"
+              "id": "REQ_Marksmanship_RangedCombatTraining"
             }
           ]
         },
@@ -19760,13 +20212,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F61"
+              "id": "REQ_Marksmanship_EagleEye"
             }
           ]
         },
@@ -19803,13 +20255,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F61"
+              "id": "REQ_Marksmanship_EagleEye"
             }
           ]
         },
@@ -19852,13 +20304,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F61"
+              "id": "REQ_Marksmanship_EagleEye"
             }
           ]
         },
@@ -19896,13 +20348,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 75
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F61"
+              "id": "REQ_Marksmanship_EagleEye"
             }
           ]
         },
@@ -19947,17 +20399,17 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00105F1E"
+              "id": "REQ_Marksmanship_PenetratingShot"
             },
             {
               "type": "PERK",
-              "id": "0x00058F62"
+              "id": "REQ_Marksmanship_PowerShot"
             }
           ]
         },
@@ -20019,13 +20471,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 20
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BABED"
+              "id": "REQ_Marksmanship_RangedCombatTraining"
             }
           ]
         },
@@ -20087,13 +20539,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 40
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0007934A"
+              "id": "REQ_Marksmanship_PreciseAim"
             }
           ]
         },
@@ -20155,13 +20607,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 80
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00105F1C"
+              "id": "REQ_Marksmanship_PiercingShot"
             }
           ]
         },
@@ -20196,13 +20648,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 15
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BABED"
+              "id": "REQ_Marksmanship_RangedCombatTraining"
             }
           ]
         },
@@ -20247,13 +20699,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 15
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BABED"
+              "id": "REQ_Marksmanship_RangedCombatTraining"
             }
           ]
         },
@@ -20280,13 +20732,13 @@
         "effects": [],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 15
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BABED"
+              "id": "REQ_Marksmanship_RangedCombatTraining"
             }
           ]
         },
@@ -20330,13 +20782,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00058F61"
+              "id": "REQ_Marksmanship_EagleEye"
             }
           ]
         },
@@ -20469,13 +20921,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 30
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0007934A"
+              "id": "REQ_Marksmanship_PreciseAim"
             }
           ]
         },
@@ -20521,13 +20973,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 75
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00105F1C"
+              "id": "REQ_Marksmanship_PiercingShot"
             }
           ]
         },
@@ -20585,17 +21037,17 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Lockpicking",
+            "skill": "Marksman",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00105F1E"
+              "id": "REQ_Marksmanship_PenetratingShot"
             },
             {
               "type": "PERK",
-              "id": "0x00058F62"
+              "id": "REQ_Marksmanship_PowerShot"
             }
           ]
         },
@@ -20650,14 +21102,7 @@
             "entryPointData": "Float"
           }
         ],
-        "prerequisites": {
-          "perks": [
-            {
-              "type": "PERK",
-              "id": "0x06000800"
-            }
-          ]
-        },
+        "prerequisites": {},
         "uniquenessFactors": [
           "Named perk"
         ]
@@ -20707,13 +21152,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 20
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BABE8"
+              "id": "REQ_TwoHanded_GreatWeaponMastery1"
             }
           ]
         },
@@ -20776,13 +21221,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00052D51"
+              "id": "REQ_TwoHanded_BarbaricMight"
             }
           ]
         },
@@ -20828,17 +21273,17 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 75
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000CB407"
+              "id": "REQ_TwoHanded_DevastatingCharge"
             },
             {
               "type": "PERK",
-              "id": "0x00052D52"
+              "id": "REQ_TwoHanded_DevastatingStrike"
             }
           ]
         },
@@ -20884,13 +21329,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0003AF9E"
+              "id": "REQ_TwoHanded_Cleave"
             }
           ]
         },
@@ -21170,13 +21615,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0003AFA7"
+              "id": "REQ_TwoHanded_DevastatingCleave"
             }
           ]
         },
@@ -21223,13 +21668,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00052D51"
+              "id": "REQ_TwoHanded_BarbaricMight"
             }
           ]
         },
@@ -21282,13 +21727,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00052D51"
+              "id": "REQ_TwoHanded_BarbaricMight"
             }
           ]
         },
@@ -21352,13 +21797,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00052D51"
+              "id": "REQ_TwoHanded_BarbaricMight"
             }
           ]
         },
@@ -21412,13 +21857,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00052D51"
+              "id": "REQ_TwoHanded_BarbaricMight"
             }
           ]
         },
@@ -21482,13 +21927,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00052D51"
+              "id": "REQ_TwoHanded_BarbaricMight"
             }
           ]
         },
@@ -21551,13 +21996,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0003AF83"
+              "id": "REQ_TwoHanded_GreatswordFocus1"
             }
           ]
         },
@@ -21619,13 +22064,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0003AF84"
+              "id": "REQ_TwoHanded_WarhammerFocus1"
             }
           ]
         },
@@ -21687,13 +22132,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000C5C05"
+              "id": "REQ_TwoHanded_BattleAxeFocus1"
             }
           ]
         },
@@ -21753,13 +22198,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 80
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0700089F"
+              "id": "REQ_TwoHanded_Quarterstaff_DefensiveStrike"
             }
           ]
         },
@@ -21829,13 +22274,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 80
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x07000897"
+              "id": "REQ_TwoHanded_Battleaxe_ShieldBreaker"
             }
           ]
         },
@@ -21897,13 +22342,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x08ADDFB0"
+              "id": "REQ_TwoHanded_QuarterstaffFocus1"
             }
           ]
         },
@@ -21947,13 +22392,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 80
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0700089B"
+              "id": "REQ_TwoHanded_Warhammer_Onslaught"
             }
           ]
         },
@@ -22045,13 +22490,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Pickpocket",
+            "skill": "Two-Handed",
             "level": 80
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x07000896"
+              "id": "REQ_TwoHanded_Greatsword_ReverseSlash"
             }
           ]
         },
@@ -22105,14 +22550,7 @@
             "entryPointData": "Float"
           }
         ],
-        "prerequisites": {
-          "perks": [
-            {
-              "type": "PERK",
-              "id": "0x06000800"
-            }
-          ]
-        },
+        "prerequisites": {},
         "uniquenessFactors": [
           "Named perk"
         ]
@@ -22162,13 +22600,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 20
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BABE4"
+              "id": "REQ_OneHanded_WeaponMastery1"
             }
           ]
         },
@@ -22231,13 +22669,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00052D50"
+              "id": "REQ_OneHanded_PenetratingStrikes"
             }
           ]
         },
@@ -22473,17 +22911,17 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 100
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000CB406"
+              "id": "REQ_OneHanded_PowerfulCharge"
             },
             {
               "type": "PERK",
-              "id": "0x0003AF81"
+              "id": "REQ_OneHanded_PowerfulStrike"
             }
           ]
         },
@@ -22530,13 +22968,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00052D50"
+              "id": "REQ_OneHanded_PenetratingStrikes"
             }
           ]
         },
@@ -22589,13 +23027,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00052D50"
+              "id": "REQ_OneHanded_PenetratingStrikes"
             }
           ]
         },
@@ -22650,13 +23088,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00052D50"
+              "id": "REQ_OneHanded_PenetratingStrikes"
             }
           ]
         },
@@ -22720,13 +23158,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00052D50"
+              "id": "REQ_OneHanded_PenetratingStrikes"
             }
           ]
         },
@@ -22773,13 +23211,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BABE4"
+              "id": "REQ_OneHanded_WeaponMastery1"
             }
           ]
         },
@@ -22839,13 +23277,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 75
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00106256"
+              "id": "REQ_OneHanded_Flurry1"
             }
           ]
         },
@@ -22972,13 +23410,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x00052D50"
+              "id": "REQ_OneHanded_PenetratingStrikes"
             }
           ]
         },
@@ -23026,13 +23464,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0005F56F"
+              "id": "REQ_OneHanded_SwordFocus1"
             }
           ]
         },
@@ -23094,13 +23532,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0005F592"
+              "id": "REQ_OneHanded_MaceFocus1"
             }
           ]
         },
@@ -23162,13 +23600,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0003FFFA"
+              "id": "REQ_OneHanded_WarAxeFocus1"
             }
           ]
         },
@@ -23230,13 +23668,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x01AD399A"
+              "id": "REQ_OneHanded_DaggerFocus1"
             }
           ]
         },
@@ -23282,13 +23720,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x080AD7A3"
+              "id": "REQ_OneHanded_HandToHand"
             }
           ]
         },
@@ -23332,13 +23770,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0A000A8E"
+              "id": "REQ_OneHanded_Grapple_Grappling"
             }
           ]
         },
@@ -23464,13 +23902,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 25
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x080AD7A3"
+              "id": "REQ_OneHanded_HandToHand"
             }
           ]
         },
@@ -23506,13 +23944,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0A000A90"
+              "id": "REQ_OneHanded_Unarmed_UnarmedDefense"
             }
           ]
         },
@@ -23564,13 +24002,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BABE4"
+              "id": "REQ_OneHanded_WeaponMastery1"
             }
           ]
         },
@@ -23631,13 +24069,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 50
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x000BABE4"
+              "id": "REQ_OneHanded_WeaponMastery1"
             }
           ]
         },
@@ -23729,13 +24167,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 80
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x07000888"
+              "id": "REQ_OneHanded_Sword_DisarmingBlade"
             }
           ]
         },
@@ -23780,13 +24218,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 80
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x07000891"
+              "id": "REQ_OneHanded_Mace_StunningBlow"
             }
           ]
         },
@@ -23856,13 +24294,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 80
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x0700088B"
+              "id": "REQ_OneHanded_WarAxe_Armsbreaker"
             }
           ]
         },
@@ -23906,13 +24344,13 @@
         ],
         "prerequisites": {
           "skillLevel": {
-            "skill": "Light Armor",
+            "skill": "One-Handed",
             "level": 80
           },
           "perks": [
             {
               "type": "PERK",
-              "id": "0x07000895"
+              "id": "REQ_OneHanded_Dagger_Puncture"
             }
           ]
         },
