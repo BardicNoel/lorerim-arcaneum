@@ -14,6 +14,68 @@ import type { PlayerCreationItem } from '@/shared/components/playerCreation/type
 import type { Religion } from '../types'
 
 /**
+ * Component to format any description with highlighted values in angle brackets
+ */
+function FormattedText({ text, className = "text-sm text-muted-foreground" }: { 
+  text: string; 
+  className?: string 
+}) {
+  if (!text) return null
+  
+  // First, clean up any existing angle brackets that might interfere
+  let processedText = text.replace(/<[^>]*>/g, '')
+  
+  // Replace common variable names with simple letters wrapped in angle brackets
+  processedText = processedText
+    // Simple variable replacements
+    .replace(/Global_modifier/g, '<X>')
+    .replace(/Global_Modifier/g, '<X>')
+    .replace(/global_modifier/g, '<X>')
+    .replace(/Magnitude/g, '<Y>')
+    .replace(/magnitude/g, '<Y>')
+    .replace(/Duration/g, '<Z>')
+    .replace(/duration/g, '<Z>')
+    .replace(/Area/g, '<A>')
+    .replace(/area/g, '<A>')
+    // Complex variable patterns
+    .replace(/Global=WSN_Favor_Global_Fractional%/g, '<X>')
+    .replace(/Global=WSN_[^%]+%/g, '<X>')
+    .replace(/WSN_[^%]+%/g, '<X>')
+    .replace(/Global=[^%]+%/g, '<X>')
+    .replace(/[A-Z_]+_Global_[A-Z_]+/g, '<X>')
+    .replace(/[A-Z_]+_Favor_[A-Z_]+/g, '<X>')
+    .replace(/[A-Z_]+_Fractional%/g, '<X>')
+    .replace(/[A-Z_]+_Global%/g, '<X>')
+    .replace(/[A-Z_]+_Favor%/g, '<X>')
+    .replace(/Global_[A-Z_]+%/g, '<X>')
+    .replace(/Favor_[A-Z_]+%/g, '<X>')
+    .replace(/[A-Z_]+_Global/g, '<X>')
+    .replace(/[A-Z_]+_Favor/g, '<X>')
+    .replace(/Global_[A-Z_]+/g, '<X>')
+    .replace(/Favor_[A-Z_]+/g, '<X>')
+  
+  // Split the processed text by angle bracket patterns and highlight the values
+  const parts = processedText.split(/(<[^>]+>)/g)
+  
+  return (
+    <div className={className}>
+      {parts.map((part, index) => {
+        if (part.startsWith('<') && part.endsWith('>')) {
+          // This is a value to highlight - remove the brackets and style it
+          const value = part.slice(1, -1)
+          return (
+            <span key={index} className="font-bold italic text-skyrim-gold">
+              {value}
+            </span>
+          )
+        }
+        return part
+      })}
+    </div>
+  )
+}
+
+/**
  * Component to format ability descriptions with highlighted values
  */
 function FormattedDescription({ description }: { description: string }) {
@@ -29,7 +91,7 @@ function FormattedDescription({ description }: { description: string }) {
           // This is a value to highlight - remove the brackets and style it
           const value = part.slice(1, -1)
           return (
-            <span key={index} className="font-bold text-skyrim-gold">
+            <span key={index} className="font-bold italic text-skyrim-gold">
               {value}
             </span>
           )
@@ -64,12 +126,121 @@ function formatBlessingDescription(description: string, magnitude: number, durat
   return formatted
 }
 
+/**
+ * Component to format blessing descriptions with styled values
+ */
+function FormattedBlessingDescription({ description, magnitude, duration, area = 0 }: { 
+  description: string; 
+  magnitude: number; 
+  duration: number; 
+  area?: number 
+}) {
+  if (!description) return null
+  
+  // First, clean up any existing angle brackets that might interfere
+  let formatted = description.replace(/<[^>]*>/g, '')
+  
+  // Replace magnitude placeholders
+  formatted = formatted.replace(/<mag>/g, magnitude.toString())
+  formatted = formatted.replace(/<magnitude>/g, magnitude.toString())
+  
+  // Replace duration placeholders
+  formatted = formatted.replace(/<dur>/g, duration.toString())
+  formatted = formatted.replace(/<duration>/g, duration.toString())
+  
+  // Replace area placeholders
+  if (area > 0) {
+    formatted = formatted.replace(/<area>/g, area.toString())
+  }
+  
+  // Replace common variable names with simple letters
+  formatted = formatted
+    // Simple variable replacements
+    .replace(/Global_modifier/g, '<X>')
+    .replace(/Global_Modifier/g, '<X>')
+    .replace(/global_modifier/g, '<X>')
+    .replace(/Magnitude/g, '<Y>')
+    .replace(/magnitude/g, '<Y>')
+    .replace(/Duration/g, '<Z>')
+    .replace(/duration/g, '<Z>')
+    .replace(/Area/g, '<A>')
+    .replace(/area/g, '<A>')
+    // Complex variable patterns
+    .replace(/Global=WSN_Favor_Global_Fractional%/g, '<X>')
+    .replace(/Global=WSN_[^%]+%/g, '<X>')
+    .replace(/WSN_[^%]+%/g, '<X>')
+    .replace(/Global=[^%]+%/g, '<X>')
+    .replace(/[A-Z_]+_Global_[A-Z_]+/g, '<X>')
+    .replace(/[A-Z_]+_Favor_[A-Z_]+/g, '<X>')
+    .replace(/[A-Z_]+_Fractional%/g, '<X>')
+    .replace(/[A-Z_]+_Global%/g, '<X>')
+    .replace(/[A-Z_]+_Favor%/g, '<X>')
+    .replace(/Global_[A-Z_]+%/g, '<X>')
+    .replace(/Favor_[A-Z_]+%/g, '<X>')
+    .replace(/[A-Z_]+_Global/g, '<X>')
+    .replace(/[A-Z_]+_Favor/g, '<X>')
+    .replace(/Global_[A-Z_]+/g, '<X>')
+    .replace(/Favor_[A-Z_]+/g, '<X>')
+  
+  // Split the formatted description by angle bracket patterns and highlight the values
+  const parts = formatted.split(/(<[^>]+>)/g)
+  
+  return (
+    <P className="text-xs text-muted-foreground">
+      {parts.map((part, index) => {
+        if (part.startsWith('<') && part.endsWith('>')) {
+          // This is a value to highlight - remove the brackets and style it
+          const value = part.slice(1, -1)
+          return (
+            <span key={index} className="font-bold italic text-skyrim-gold">
+              {value}
+            </span>
+          )
+        }
+        return part
+      })}
+    </P>
+  )
+}
+
+/**
+ * Function to format seconds to a readable time format
+ */
+function formatDuration(durationSeconds: number): string {
+  if (durationSeconds < 60) {
+    return `${durationSeconds}s`
+  } else if (durationSeconds < 3600) {
+    const minutes = Math.round(durationSeconds / 60)
+    return `${minutes}m`
+  } else {
+    const hours = Math.round(durationSeconds / 3600)
+    return `${hours}h`
+  }
+}
+
+/**
+ * Function to check if a description contains magnitude or duration placeholders
+ */
+function hasPlaceholders(description: string): { hasMagnitude: boolean; hasDuration: boolean } {
+  const magnitudePatterns = [/<mag>/g, /<magnitude>/g]
+  const durationPatterns = [/<dur>/g, /<duration>/g]
+  
+  const hasMagnitude = magnitudePatterns.some(pattern => pattern.test(description))
+  const hasDuration = durationPatterns.some(pattern => pattern.test(description))
+  
+  return { hasMagnitude, hasDuration }
+}
+
 interface ReligionAccordionProps {
   item: PlayerCreationItem
   originalReligion?: Religion
   isExpanded?: boolean
   onToggle?: () => void
   className?: string
+  showBlessings?: boolean
+  showTenets?: boolean
+  showBoons?: boolean
+  showFavoredRaces?: boolean
 }
 
 // Enhanced icon mapping for religion effects
@@ -114,7 +285,11 @@ export function ReligionAccordion({
   originalReligion, 
   isExpanded = false, 
   onToggle, 
-  className
+  className,
+  showBlessings = true,
+  showTenets = true,
+  showBoons = true,
+  showFavoredRaces = true
 }: ReligionAccordionProps) {
   const getEffectIcon = (effectType: string) => {
     return effectIcons[effectType] || <Star className="h-4 w-4 text-gray-500" />
@@ -158,6 +333,26 @@ export function ReligionAccordion({
               </Badge>
             )}
             
+            {/* Favored Races badges */}
+            {originalReligion?.favoredRaces && originalReligion.favoredRaces.length > 0 && (
+              <div className="flex items-center gap-1">
+                {originalReligion.favoredRaces.map((race, index) => (
+                  <Badge
+                    key={index}
+                    variant="outline"
+                    className={cn(
+                      'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
+                      sizeClasses.sm,
+                      'font-medium transition-colors'
+                    )}
+                  >
+                    <Star className="h-3 w-3 mr-1" />
+                    Favors {race}
+                  </Badge>
+                ))}
+              </div>
+            )}
+            
             {/* Quick effects preview */}
             {item.effects && item.effects.length > 0 && (
               <div className="hidden md:flex items-center gap-2 text-xs text-muted-foreground">
@@ -194,9 +389,10 @@ export function ReligionAccordion({
           <div className="space-y-3">
             {/* Description */}
             <div className="line-clamp-2">
-              <MarkdownText className="text-sm text-muted-foreground">
-                {item.summary || item.description}
-              </MarkdownText>
+              <FormattedText 
+                text={item.summary || item.description} 
+                className="text-sm text-muted-foreground"
+              />
             </div>
             
             {/* Quick effects */}
@@ -227,36 +423,19 @@ export function ReligionAccordion({
 
       {/* Expanded content - Detailed view */}
       {isExpanded && (
-        <CardContent className="pt-0 space-y-6">
+        <CardContent className="pt-0 space-y-4">
           {/* Description */}
           <div>
-            <H4 className="mb-2">Description</H4>
-            <MarkdownText className="text-sm text-muted-foreground leading-relaxed">
-              {item.description}
-            </MarkdownText>
+            <FormattedText 
+              text={item.description} 
+              className="text-sm text-muted-foreground leading-relaxed"
+            />
           </div>
 
-          {/* Religion Type */}
-          {item.category && (
-            <div>
-              <H4 className="mb-3">Religion Type</H4>
-              <Badge 
-                variant="outline"
-                className={cn(
-                  religionTypeStyles[item.category] || 'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200',
-                  sizeClasses.md,
-                  'font-medium transition-colors'
-                )}
-              >
-                {item.category}
-              </Badge>
-            </div>
-          )}
-
           {/* Favored Races */}
-          {originalReligion?.favoredRaces && originalReligion.favoredRaces.length > 0 && (
+          {showFavoredRaces && originalReligion?.favoredRaces && originalReligion.favoredRaces.length > 0 && (
             <div>
-              <H4 className="mb-3">Favored Races</H4>
+              <h5 className="text-lg font-medium text-foreground mb-3">Favored Races</h5>
               <div className="flex flex-wrap gap-2">
                 {originalReligion.favoredRaces.map((race, index) => (
                   <div
@@ -274,13 +453,13 @@ export function ReligionAccordion({
           {/* Worship Restrictions */}
           {originalReligion?.worshipRestrictions && originalReligion.worshipRestrictions.length > 0 && (
             <div>
-              <H4 className="mb-3">Worship Restrictions</H4>
+              <h5 className="text-lg font-medium text-foreground mb-3">Worship Restrictions</h5>
               <div className="space-y-2">
                 {originalReligion.worshipRestrictions.map((restriction, index) => (
                   <div key={index} className="p-3 bg-muted/30 rounded-lg border border-border">
                     <div className="flex items-start gap-2">
                       <Minus className="h-4 w-4 text-red-500 mt-0.5" />
-                      <P className="text-sm text-muted-foreground">{restriction}</P>
+                      <FormattedText text={restriction} className="text-sm text-muted-foreground" />
                     </div>
                   </div>
                 ))}
@@ -289,13 +468,16 @@ export function ReligionAccordion({
           )}
 
           {/* Blessing Details */}
-          {originalReligion?.blessing && (
+          {showBlessings && originalReligion?.blessing && (
             <div>
-              <H4 className="mb-3">Blessing</H4>
-              <div className="p-4 bg-muted/30 rounded-lg border border-border">
-                <P className="text-sm font-medium mb-3">Spell: {originalReligion.blessing.spellName}</P>
-                <div className="space-y-3">
-                  {originalReligion.blessing.effects.map((effect, index) => (
+              <h5 className="text-lg font-medium text-foreground mb-3">Blessing of {item.name}</h5>
+              <div className="space-y-3">
+                {originalReligion.blessing.effects
+                  .filter(effect => effect.effectType !== '1' && effect.effectType !== '3')
+                  .map((effect, index) => {
+                  const { hasMagnitude, hasDuration } = hasPlaceholders(effect.effectDescription)
+                  
+                  return (
                     <div key={index} className="p-3 bg-muted/50 rounded-lg border border-border">
                       <div className="flex items-start gap-3">
                         <div className="flex items-center gap-2">
@@ -304,111 +486,146 @@ export function ReligionAccordion({
                         </div>
                         <div className="flex-1">
                           <P className="font-medium text-sm mb-1">{effect.effectName}</P>
-                          <P className="text-xs text-muted-foreground">
-                            {formatBlessingDescription(effect.effectDescription, effect.magnitude, effect.duration, effect.area)}
-                          </P>
+                          <FormattedBlessingDescription 
+                            description={effect.effectDescription}
+                            magnitude={effect.magnitude}
+                            duration={effect.duration}
+                            area={effect.area}
+                          />
+                          {hasDuration && effect.duration > 0 && (
+                            <P className="text-xs text-muted-foreground mt-1">
+                              Lasts for {formatDuration(effect.duration)}.
+                            </P>
+                          )}
                           <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
-                            <span>Magnitude: {effect.magnitude}</span>
-                            <span>Duration: {effect.duration}s</span>
                             {effect.area > 0 && <span>Area: {effect.area}</span>}
                           </div>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  )
+                })}
               </div>
             </div>
           )}
 
           {/* Tenet Effects */}
-          {originalReligion?.tenet?.effects && originalReligion.tenet.effects.length > 0 && (
+          {showTenets && originalReligion?.tenet?.effects && originalReligion.tenet.effects.length > 0 && (
             <div>
-              <H4 className="mb-3">Tenets</H4>
-              <div className="space-y-3">
-                {originalReligion.tenet.effects.map((effect, index) => (
-                  <div key={index} className="p-3 bg-muted/50 rounded-lg border border-border">
-                    <div className="flex items-start gap-3">
+              <h5 className="text-lg font-medium text-foreground mb-3">Tenets of {item.name}</h5>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {originalReligion.tenet.effects.map((effect, index) => {
+                  // Split the effect description by periods to create separate tenets
+                  const tenetSentences = effect.effectDescription.split('.').filter(sentence => sentence.trim().length > 0)
+                  
+                  return tenetSentences.map((tenet, tenetIndex) => (
+                    <div
+                      key={`${index}-${tenetIndex}`}
+                      className="flex items-start gap-2 p-3 bg-muted/50 rounded-lg border border-border"
+                    >
                       <div className="flex items-center gap-2">
                         {getEffectIconByType('positive')}
                         {effect.targetAttribute && getEffectIcon(effect.targetAttribute)}
                       </div>
                       <div className="flex-1">
-                        <P className="font-medium text-sm mb-1">{effect.effectName}</P>
-                        <FormattedDescription description={effect.effectDescription} />
-                        {effect.magnitude && (
-                          <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
-                            <span>Magnitude: {effect.magnitude}</span>
-                            {effect.targetAttribute && <span>• Target: {effect.targetAttribute}</span>}
+                        <FormattedDescription description={tenet.trim() + '.'} />
+                      </div>
+                    </div>
+                  ))
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Boons Section - Follower and Devotee Powers */}
+          {showBoons && (originalReligion?.boon1 || originalReligion?.boon2) && (
+            <div>
+              <h5 className="text-lg font-medium text-foreground mb-3">Boons of {item.name}</h5>
+              <div className="space-y-4">
+                {/* Follower Power (Boon 1) */}
+                {originalReligion?.boon1 && (
+                  <div>
+                    <h6 className="text-md font-medium text-foreground mb-2">Follower Boon</h6>
+                    <div className="space-y-3">
+                      {originalReligion.boon1.effects.map((effect, index) => {
+                        const { hasMagnitude, hasDuration } = hasPlaceholders(effect.effectDescription)
+                        
+                        return (
+                          <div key={index} className="p-3 bg-muted/50 rounded-lg border border-border">
+                            <div className="flex items-start gap-3">
+                              <div className="flex items-center gap-2">
+                                {getEffectIconByType('positive')}
+                                {effect.effectType && getEffectIcon(effect.effectType)}
+                              </div>
+                              <div className="flex-1">
+                                <P className="font-medium text-sm mb-1">{effect.effectName}</P>
+                                <FormattedBlessingDescription 
+                                  description={effect.effectDescription}
+                                  magnitude={effect.magnitude}
+                                  duration={effect.duration}
+                                  area={effect.area}
+                                />
+                                {hasDuration && effect.duration > 0 && (
+                                  <P className="text-xs text-muted-foreground mt-1">
+                                    Lasts for {formatDuration(effect.duration)}.
+                                  </P>
+                                )}
+                                <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
+                                  {effect.area > 0 && <span>Area: {effect.area}</span>}
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                        )}
-                      </div>
+                        )
+                      })}
                     </div>
                   </div>
-                ))}
+                )}
+
+                {/* Devotee Power (Boon 2) */}
+                {originalReligion?.boon2 && (
+                  <div>
+                    <h6 className="text-md font-medium text-foreground mb-2">Devotee Boon</h6>
+                    <div className="space-y-3">
+                      {originalReligion.boon2.effects.map((effect, index) => {
+                        const { hasMagnitude, hasDuration } = hasPlaceholders(effect.effectDescription)
+                        
+                        return (
+                          <div key={index} className="p-3 bg-muted/50 rounded-lg border border-border">
+                            <div className="flex items-start gap-3">
+                              <div className="flex items-center gap-2">
+                                {getEffectIconByType('positive')}
+                                {effect.effectType && getEffectIcon(effect.effectType)}
+                              </div>
+                              <div className="flex-1">
+                                <P className="font-medium text-sm mb-1">{effect.effectName}</P>
+                                <FormattedBlessingDescription 
+                                  description={effect.effectDescription}
+                                  magnitude={effect.magnitude}
+                                  duration={effect.duration}
+                                  area={effect.area}
+                                />
+                                {hasDuration && effect.duration > 0 && (
+                                  <P className="text-xs text-muted-foreground mt-1">
+                                    Lasts for {formatDuration(effect.duration)}.
+                                  </P>
+                                )}
+                                <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
+                                  {effect.area > 0 && <span>Area: {effect.area}</span>}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
 
-          {/* Follower Power (Boon 1) */}
-          {originalReligion?.boon1 && (
-            <div>
-              <H4 className="mb-3">Follower Power: {originalReligion.boon1.spellName}</H4>
-              <div className="space-y-3">
-                {originalReligion.boon1.effects.map((effect, index) => (
-                  <div key={index} className="p-3 bg-muted/50 rounded-lg border border-border">
-                    <div className="flex items-start gap-3">
-                      <div className="flex items-center gap-2">
-                        {getEffectIconByType('positive')}
-                        {effect.effectType && getEffectIcon(effect.effectType)}
-                      </div>
-                      <div className="flex-1">
-                        <P className="font-medium text-sm mb-1">{effect.effectName}</P>
-                        <P className="text-xs text-muted-foreground">
-                          {formatBlessingDescription(effect.effectDescription, effect.magnitude, effect.duration, effect.area)}
-                        </P>
-                        <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
-                          <span>Magnitude: {effect.magnitude}</span>
-                          <span>Duration: {effect.duration}s</span>
-                          {effect.area > 0 && <span>Area: {effect.area}</span>}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
 
-          {/* Devotee Power (Boon 2) */}
-          {originalReligion?.boon2 && (
-            <div>
-              <H4 className="mb-3">Devotee Power: {originalReligion.boon2.spellName}</H4>
-              <div className="space-y-3">
-                {originalReligion.boon2.effects.map((effect, index) => (
-                  <div key={index} className="p-3 bg-muted/50 rounded-lg border border-border">
-                    <div className="flex items-start gap-3">
-                      <div className="flex items-center gap-2">
-                        {getEffectIconByType('positive')}
-                        {effect.effectType && getEffectIcon(effect.effectType)}
-                      </div>
-                      <div className="flex-1">
-                        <P className="font-medium text-sm mb-1">{effect.effectName}</P>
-                        <P className="text-xs text-muted-foreground">
-                          {formatBlessingDescription(effect.effectDescription, effect.magnitude, effect.duration, effect.area)}
-                        </P>
-                        <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
-                          <span>Magnitude: {effect.magnitude}</span>
-                          <span>Duration: {effect.duration}s</span>
-                          {effect.area > 0 && <span>Area: {effect.area}</span>}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </CardContent>
       )}
     </Card>

@@ -1,16 +1,30 @@
 import React, { useState, useEffect } from 'react'
-import { X } from 'lucide-react'
+import { X, ChevronDown, ChevronUp, ArrowUpDown, ArrowDownUp, Settings, Maximize2, Minimize2 } from 'lucide-react'
 import { 
   PlayerCreationLayout,
-  PlayerCreationFilters
 } from '@/shared/components/playerCreation'
-import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
-import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
+import { 
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/shared/ui/ui/accordion'
 import { ReligionAccordion } from '../components/ReligionAccordion'
-import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import { CustomMultiAutocompleteSearch } from '../components/CustomMultiAutocompleteSearch'
+import { useFuzzySearch } from '../hooks/useFuzzySearch'
+import { Button } from '@/shared/ui/ui/button'
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/ui/ui/dropdown-menu'
+import { Switch } from '@/shared/ui/ui/switch'
+import { Label } from '@/shared/ui/ui/label'
 import type { PlayerCreationItem, SearchCategory, SelectedTag, SearchOption } from '@/shared/components/playerCreation/types'
 import type { Religion, ReligionPantheon } from '../types'
+
+type SortOption = 'alphabetical' | 'divine-type'
 
 export function AccordionReligionsPage() {
   // Load religion data from public/data/wintersun-religion-docs.json at runtime
@@ -18,6 +32,13 @@ export function AccordionReligionsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [expandedReligions, setExpandedReligions] = useState<Set<string>>(new Set())
+  const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
+  
+  // Data visibility controls
+  const [showBlessings, setShowBlessings] = useState(true)
+  const [showTenets, setShowTenets] = useState(true)
+  const [showBoons, setShowBoons] = useState(true)
+  const [showFavoredRaces, setShowFavoredRaces] = useState(true)
 
   useEffect(() => {
     async function fetchReligions() {
@@ -77,28 +98,14 @@ export function AccordionReligionsPage() {
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
     const pantheons = [...new Set(religions.map(religion => religion.type))]
-    const effectTypes = [...new Set(religions.flatMap(religion => 
-      [
-        ...(religion.blessing?.effects?.map(effect => effect.effectType) || []),
-        ...(religion.tenet?.effects?.map(effect => effect.effectType) || []),
-        ...(religion.boon1?.effects?.map(effect => effect.effectType) || []),
-        ...(religion.boon2?.effects?.map(effect => effect.effectType) || [])
-      ]
-    ))]
     const allTags = [...new Set(religionItems.flatMap(item => item.tags))]
 
     return [
       {
         id: 'fuzzy-search',
         name: 'Fuzzy Search',
-        placeholder: 'Search by name, description, or effects...',
-        options: religions.map(religion => ({
-          id: `religion-${religion.name}`,
-          label: religion.name,
-          value: religion.name,
-          category: 'Fuzzy Search',
-          description: `Religion: ${religion.name}`
-        }))
+        placeholder: 'Search by name, description, or abilities...',
+        options: [] // Fuzzy search doesn't need predefined options
       },
       {
         id: 'pantheons',
@@ -110,18 +117,6 @@ export function AccordionReligionsPage() {
           value: pantheon,
           category: 'Pantheons',
           description: `Religions from ${pantheon} pantheon`
-        }))
-      },
-      {
-        id: 'effect-types',
-        name: 'Effect Types',
-        placeholder: 'Search by effect type...',
-        options: effectTypes.map(effectType => ({
-          id: `effect-${effectType}`,
-          label: effectType,
-          value: effectType,
-          category: 'Effect Types',
-          description: `Religions with ${effectType} effects`
         }))
       },
       {
@@ -189,16 +184,6 @@ export function AccordionReligionsPage() {
           // Filter by pantheon type
           return religion.type === tag.value
         
-        case 'Effect Types':
-          // Filter by effect types
-          const allEffects = [
-            ...(religion.blessing?.effects || []),
-            ...(religion.tenet?.effects || []),
-            ...(religion.boon1?.effects || []),
-            ...(religion.boon2?.effects || [])
-          ]
-          return allEffects.some(effect => effect.effectType === tag.value)
-        
         case 'Favored Races':
           // Filter by favored races
           return religion.favoredRaces.some(race => race === tag.value)
@@ -247,6 +232,38 @@ export function AccordionReligionsPage() {
     category: religion.type
   }))
 
+  // Sort the display items
+  const sortedDisplayItems = [...displayItems].sort((a, b) => {
+    switch (sortBy) {
+      case 'alphabetical':
+        return a.name.localeCompare(b.name)
+      case 'divine-type':
+        // Define priority order for divine types based on actual data
+        const getTypePriority = (type: string | undefined) => {
+          switch (type) {
+            case 'Divine': return 1
+            case 'Daedric Prince': return 2
+            case 'Tribunal': return 3
+            case 'Ancestor': return 4
+            case 'Nordic Deity': return 5
+            case 'Yokudan Deity': return 6
+            case 'Khajiiti Deity': return 7
+            case 'Deity': return 8
+            default: return 9
+          }
+        }
+        
+        const aPriority = getTypePriority(a.category)
+        const bPriority = getTypePriority(b.category)
+        
+        // First sort by priority, then alphabetically within each category
+        if (aPriority !== bPriority) return aPriority - bPriority
+        return a.name.localeCompare(b.name)
+      default:
+        return 0
+    }
+  })
+
   // Handle accordion expansion
   const handleReligionToggle = (religionId: string) => {
     const newExpanded = new Set(expandedReligions)
@@ -257,6 +274,24 @@ export function AccordionReligionsPage() {
     }
     setExpandedReligions(newExpanded)
   }
+
+  // Handle expand all accordions
+  const handleExpandAll = () => {
+    const allReligionIds = sortedDisplayItems.map(item => item.id)
+    setExpandedReligions(new Set(allReligionIds))
+  }
+
+  // Handle collapse all accordions
+  const handleCollapseAll = () => {
+    setExpandedReligions(new Set())
+  }
+
+  // Check if all accordions are expanded
+  const allExpanded = sortedDisplayItems.length > 0 && 
+    sortedDisplayItems.every(item => expandedReligions.has(item.id))
+
+  // Check if any accordions are expanded
+  const anyExpanded = sortedDisplayItems.some(item => expandedReligions.has(item.id))
 
   if (loading) {
     return (
@@ -291,11 +326,48 @@ export function AccordionReligionsPage() {
       description="Choose your character's religion. Each deity offers unique blessings, tenets, and powers that will guide your spiritual journey through Tamriel."
     >
       {/* Custom MultiAutocompleteSearch with FuzzySearchBox for keywords */}
-      <CustomMultiAutocompleteSearch
-        categories={searchCategories}
-        onSelect={handleTagSelect}
-        onCustomSearch={handleTagSelect}
-      />
+      <div className="flex items-center gap-4 mb-4">
+        <div className="flex-1">
+          <CustomMultiAutocompleteSearch
+            categories={searchCategories}
+            onSelect={handleTagSelect}
+            onCustomSearch={handleTagSelect}
+          />
+        </div>
+        
+        {/* Sort Options */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="flex items-center gap-2">
+              <ChevronDown className="h-4 w-4" />
+              {sortBy === 'alphabetical' ? 'A-Z' : 'Type'}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setSortBy('alphabetical')}>
+              Alphabetical
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setSortBy('divine-type')}>
+              Divine Type
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Expand/Collapse All Button */}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={allExpanded ? handleCollapseAll : handleExpandAll}
+          className="flex items-center justify-center"
+          title={allExpanded ? "Collapse all accordions" : "Expand all accordions"}
+        >
+          {allExpanded ? (
+            <Minimize2 className="h-4 w-4" />
+          ) : (
+            <Maximize2 className="h-4 w-4" />
+          )}
+        </Button>
+      </div>
 
       {/* Selected Tags */}
       <div className="my-4">
@@ -329,8 +401,108 @@ export function AccordionReligionsPage() {
         )}
       </div>
 
-      <div className="flex flex-col gap-4 w-full">
-        {displayItems.map((item) => {
+      {/* Controls Section */}
+      {sortedDisplayItems.length > 0 && (
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="customize-display" className="border-none">
+            <AccordionTrigger className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-background hover:bg-muted/50 transition-colors data-[state=open]:rounded-b-none data-[state=open]:border-b-0 justify-start">
+              <Settings className="h-4 w-4" />
+              <span className="text-sm font-medium">Customize Display</span>
+            </AccordionTrigger>
+            <AccordionContent className="px-3 py-3 rounded-b-lg border border-t-0 bg-background">
+              <div className="flex flex-wrap items-center gap-4">
+                {/* Toggle All Control */}
+                <div className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-muted/30 border-border">
+                  <Switch
+                    checked={showBlessings && showTenets && showBoons && showFavoredRaces}
+                    onCheckedChange={(checked) => {
+                      setShowBlessings(checked)
+                      setShowTenets(checked)
+                      setShowBoons(checked)
+                      setShowFavoredRaces(checked)
+                    }}
+                  />
+                  <span className="text-sm font-medium">Toggle All</span>
+                </div>
+
+                {/* Data Visibility Controls - First */}
+                <div className="flex items-stretch gap-3 w-full">
+                  {/* Blessings Card */}
+                  <div 
+                    className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
+                    onClick={() => setShowBlessings(!showBlessings)}
+                  >
+                    <div className="space-y-0.5">
+                      <Label className="text-base font-medium">Blessings</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Deity blessings and effects
+                      </p>
+                    </div>
+                    <Switch
+                      checked={showBlessings}
+                      onCheckedChange={setShowBlessings}
+                    />
+                  </div>
+                  
+                  {/* Tenets Card */}
+                  <div 
+                    className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
+                    onClick={() => setShowTenets(!showTenets)}
+                  >
+                    <div className="space-y-0.5">
+                      <Label className="text-base font-medium">Tenets</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Religious tenets and rules
+                      </p>
+                    </div>
+                    <Switch
+                      checked={showTenets}
+                      onCheckedChange={setShowTenets}
+                    />
+                  </div>
+                  
+                  {/* Boons Card */}
+                  <div 
+                    className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
+                    onClick={() => setShowBoons(!showBoons)}
+                  >
+                    <div className="space-y-0.5">
+                      <Label className="text-base font-medium">Boons</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Follower and devotee powers
+                      </p>
+                    </div>
+                    <Switch
+                      checked={showBoons}
+                      onCheckedChange={setShowBoons}
+                    />
+                  </div>
+                  
+                  {/* Favored Races Card */}
+                  <div 
+                    className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
+                    onClick={() => setShowFavoredRaces(!showFavoredRaces)}
+                  >
+                    <div className="space-y-0.5">
+                      <Label className="text-base font-medium">Favored Races</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Races favored by this deity
+                      </p>
+                    </div>
+                    <Switch
+                      checked={showFavoredRaces}
+                      onCheckedChange={setShowFavoredRaces}
+                    />
+                  </div>
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+        )}
+
+      <div className="flex flex-col gap-4 w-full mt-6">
+        {sortedDisplayItems.map((item) => {
           const originalReligion = religions.find(religion => {
             const religionName = item.id.replace('religion-', '')
             return religion.name.toLowerCase().replace(/\s+/g, '-') === religionName
@@ -345,11 +517,15 @@ export function AccordionReligionsPage() {
               isExpanded={isExpanded}
               onToggle={() => handleReligionToggle(item.id)}
               className="w-full"
+              showBlessings={showBlessings}
+              showTenets={showTenets}
+              showBoons={showBoons}
+              showFavoredRaces={showFavoredRaces}
             />
           )
         })}
         
-        {displayItems.length === 0 && (
+        {sortedDisplayItems.length === 0 && (
           <div className="text-center py-12">
             <p className="text-muted-foreground">No religions found matching your criteria.</p>
             <p className="text-sm text-muted-foreground mt-2">
