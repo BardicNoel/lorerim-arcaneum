@@ -89,6 +89,14 @@ export type PerkNodeWithUI = PerkNode & {
   isRoot?: boolean;
 };
 
+// Extended PerkNode type for React Flow data
+export type PerkNodeData = PerkNode & {
+  selected?: boolean;
+  currentRank?: number;
+  hasChildren?: boolean;
+  isRoot?: boolean;
+};
+
 // Validation functions
 export const validatePerkTree = (data: unknown): PerkTree => {
   return PerkTreeSchema.parse(data);
