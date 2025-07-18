@@ -2,6 +2,7 @@ import { H1, Lead } from '@/shared/ui/ui/typography';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/shared/ui/ui/card';
 import { Button } from '@/shared/ui/ui/button';
 import { User, Shield, Hammer, BookOpen } from 'lucide-react';
+import { BuildStatus } from '@/shared/components/BuildStatus';
 
 export default function HomePage() {
   return (
@@ -11,6 +12,11 @@ export default function HomePage() {
         <Lead>
           Your theorycrafting playground and reference hub for Lorerim players.
         </Lead>
+      </div>
+      
+      {/* Character Build Status */}
+      <div className="max-w-md">
+        <BuildStatus />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="hover:shadow-md transition-shadow">
