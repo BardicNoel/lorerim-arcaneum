@@ -1,4 +1,4 @@
-# Religions Feature Documentation
+# Birthsigns Feature Documentation
 
 ## 📋 General Rule for Feature Documentation
 
@@ -9,43 +9,51 @@ All features in the Lorerim Arcaneum project must follow this standardized docum
 ## 🎯 Feature Overview
 
 ### Purpose
-The Religions feature provides a comprehensive interface for browsing and selecting character religions in the Lorerim Arcaneum application. It leverages a shared player creation framework to deliver a consistent, searchable, and filterable experience for religion selection, enabling players to explore divine pantheons, daedric princes, and custom faiths with detailed information about blessings, tenets, and powers.
+The Birthsigns feature provides a comprehensive interface for browsing and selecting character birthsigns in the Lorerim Arcaneum application. It leverages a shared player creation framework to deliver a consistent, searchable, and filterable experience for birthsign selection, enabling players to explore celestial constellations and their associated magical effects, abilities, and character bonuses.
 
 ### Core Functionality
-- **Religion Browsing**: Display all available religions in grid/list view modes with visual pantheon indicators
-- **Advanced Search**: Multi-category autocomplete search by pantheons, effect types, and tags
-- **Detailed Information**: Comprehensive religion details including blessings, tenets, follower/devotee powers, and restrictions
-- **Filtering**: Tag-based filtering system for pantheons, effect types, and tags
+- **Birthsign Browsing**: Display all available birthsigns in grid/list view modes with visual constellation indicators
+- **Advanced Search**: Multi-category autocomplete search by constellation types, effect categories, and tags
+- **Detailed Information**: Comprehensive birthsign details including abilities, effects, requirements, and lore
+- **Filtering**: Tag-based filtering system for constellation types, effect categories, and tags
 - **Responsive Design**: Mobile-friendly interface with adaptive layouts
 - **Markdown Support**: Rich text rendering with support for bold formatting, lists, and emphasis
 
 ### Data Structure
-Religions are defined with the following structure:
+Birthsigns are defined with the following structure:
 
 ```typescript
-interface Religion {
+interface Birthsign {
+  id: string
   name: string
-  type: string
-  blessing: ReligionSpell
-  boon1: ReligionSpell // Follower power
-  boon2: ReligionSpell // Devotee power
-  tenet: ReligionTenet
-  favoredRaces: string[]
-  worshipRestrictions: string[]
+  constellation: string
+  description: string
+  lore: string
+  abilities: BirthsignAbility[]
+  requirements: string[]
+  tags: string[]
+  levelRequirement?: number
+  globalFormId?: string
 }
 
-interface ReligionSpell {
+interface BirthsignAbility {
+  name: string
+  description: string
+  effectType: 'passive' | 'active' | 'conditional'
+  magnitude: number
+  duration?: number
+  cooldown?: number
+  requirements?: string[]
+  effects: string[]
+}
+
+interface BirthsignEffect {
   name: string
   description: string
   magnitude: number
   duration: number
-  effects: string[]
-}
-
-interface ReligionTenet {
-  name: string
-  description: string
-  requirements: string[]
+  targetAttribute: string
+  keywords: string[]
 }
 ```
 
@@ -55,7 +63,7 @@ interface ReligionTenet {
 
 ### Component Tree
 ```
-UnifiedReligionsPage
+UnifiedBirthsignsPage
 ├── PlayerCreationPage (shared)
 │   ├── Header (title + description)
 │   ├── Search & Filters
@@ -64,40 +72,40 @@ UnifiedReligionsPage
 │   │   ├── SelectedTags
 │   │   └── ViewModeToggle (grid/list)
 │   ├── ItemGrid
-│   │   └── ReligionCard (custom render)
+│   │   └── BirthsignCard (custom render)
 │   └── DetailPanel
-│       └── ReligionDetailPanel (custom render)
+│       └── BirthsignDetailPanel (custom render)
 └── Loading/Error States
 ```
 
 ### Component Responsibilities
 
-#### **UnifiedReligionsPage** (`pages/UnifiedReligionsPage.tsx`)
-- **Purpose**: Primary orchestrator and data manager for religion selection
+#### **UnifiedBirthsignsPage** (`pages/UnifiedBirthsignsPage.tsx`)
+- **Purpose**: Primary orchestrator and data manager for birthsign selection
 - **Key Functions**:
-  - Data fetching from `public/data/wintersun-religion-docs.json`
-  - Data transformation from `Religion` to `PlayerCreationItem` format
-  - Search category generation for autocomplete (Pantheons, Effect Types, Tags)
-  - Custom render function provision for religion-specific components
+  - Data fetching from `public/data/birthsigns.json`
+  - Data transformation from `Birthsign` to `PlayerCreationItem` format
+  - Search category generation for autocomplete (Constellations, Effect Types, Tags)
+  - Custom render function provision for birthsign-specific components
   - Error handling and loading states
 
-#### **ReligionCard** (`components/ReligionCard.tsx`)
-- **Purpose**: Compact religion representation in grid/list views
+#### **BirthsignCard** (`components/BirthsignCard.tsx`)
+- **Purpose**: Compact birthsign representation in grid/list views
 - **Features**:
-  - Visual pantheon indicators with icons and color coding
+  - Visual constellation indicators with icons and color coding
   - Tag display with overflow handling
   - Selection state management
   - Responsive design with hover effects
   - Accessibility considerations with ARIA labels
 
-#### **ReligionDetailPanel** (`components/ReligionDetailPanel.tsx`)
-- **Purpose**: Comprehensive religion information display with tabbed interface
+#### **BirthsignDetailPanel** (`components/BirthsignDetailPanel.tsx`)
+- **Purpose**: Comprehensive birthsign information display with tabbed interface
 - **Features**:
-  - **Follower Tab**: Tenets, follower powers, and devotee powers
-  - **Blessing Tab**: Shrine blessings available to all players
+  - **Abilities Tab**: Active and passive abilities with effect details
+  - **Lore Tab**: Constellation lore and background information
+  - **Requirements Tab**: Level requirements and prerequisites
   - Effect details with magnitude and duration visualization
   - Markdown rendering for descriptions
-  - Restrictions and favored races display
   - Tag categorization and display
 
 ---
@@ -108,10 +116,10 @@ UnifiedReligionsPage
 
 ```mermaid
 graph TD
-    A[wintersun-religion-docs.json] --> B[UnifiedReligionsPage]
+    A[birthsigns.json] --> B[UnifiedBirthsignsPage]
     B --> C[usePlayerCreation Hook]
     C --> D[PlayerCreationPage]
-    D --> E[ReligionCard/ReligionDetailPanel]
+    D --> E[BirthsignCard/BirthsignDetailPanel]
     
     F[User Search] --> G[MultiAutocompleteSearch]
     G --> H[Filter Logic]
@@ -123,60 +131,59 @@ graph TD
 
 The feature uses a combination of local state and shared hooks:
 
-1. **Local State** (`UnifiedReligionsPage`):
-   - `religions`: Raw religion data from JSON
+1. **Local State** (`UnifiedBirthsignsPage`):
+   - `birthsigns`: Raw birthsign data from JSON
    - `loading`: Data fetching state
    - `error`: Error handling state
 
 2. **Shared State** (`usePlayerCreation`):
-   - `selectedItem`: Currently selected religion
+   - `selectedItem`: Currently selected birthsign
    - `viewMode`: Grid or list view preference
    - `currentFilters`: Active search and filter state
    - `filteredItems`: Computed filtered results
 
 ### Data Transformation
 
-The feature transforms religion data between two formats:
+The feature transforms birthsign data between two formats:
 
-**Source Format** (`Religion`):
+**Source Format** (`Birthsign`):
 ```typescript
 {
-  name: "Akatosh",
-  type: "Divine",
-  blessing: {...},
-  boon1: {...},
-  boon2: {...},
-  tenet: {...},
-  favoredRaces: [...],
-  worshipRestrictions: [...]
+  id: "warrior",
+  name: "The Warrior",
+  constellation: "Warrior",
+  description: "The Warrior grants increased combat abilities...",
+  abilities: [...],
+  requirements: [...],
+  tags: ["Combat", "Strength"]
 }
 ```
 
 **Target Format** (`PlayerCreationItem`):
 ```typescript
 {
-  id: "akatosh",
-  name: "Akatosh",
-  description: "Fulfill your destiny...",
-  tags: ["Divine", "Quest Required"],
+  id: "warrior",
+  name: "The Warrior",
+  description: "The Warrior grants increased combat abilities...",
+  tags: ["Combat", "Strength"],
   effects: [...],
-  category: "Divine"
+  category: "Warrior"
 }
 ```
 
 ### Search & Filtering System
 
 #### Search Categories
-- **Pantheons**: Search by pantheon types (Divine, Daedric, Yokudan, Custom)
-- **Effect Types**: Filter by effect categories (Resist Magic, Fortify Health, etc.)
-- **Tags**: Filter by religion tags (Quest Required, Alignment Restricted, etc.)
+- **Constellations**: Search by constellation types (Warrior, Mage, Thief, Serpent, etc.)
+- **Effect Types**: Filter by effect categories (Combat, Magic, Stealth, Utility)
+- **Tags**: Filter by birthsign tags (Combat, Strength, Intelligence, etc.)
 
 #### Filter Logic
 ```typescript
 // Multi-layered filtering
-1. Text Search: name, description, effect names
-2. Pantheon Filter: Divine/Daedric/Yokudan/Custom categorization
-3. Tag Filter: Tag-based filtering with restrictions and requirements
+1. Text Search: name, description, ability names
+2. Constellation Filter: Warrior/Mage/Thief/Serpent categorization
+3. Tag Filter: Tag-based filtering with effect types and requirements
 ```
 
 ---
@@ -184,24 +191,27 @@ The feature transforms religion data between two formats:
 ## 🎨 UI/UX Design Patterns
 
 ### Visual Hierarchy
-1. **Primary**: Religion name and pantheon
-2. **Secondary**: Tabbed interface (Follower vs Blessing)
+1. **Primary**: Birthsign name and constellation
+2. **Secondary**: Tabbed interface (Abilities vs Lore vs Requirements)
 3. **Tertiary**: Detailed content within each tab
 
 ### Icon System
-- **Pantheon Icons**: Color-coded by pantheon
-  - 🕊️ Divine (blue)
-  - 🔥 Daedric (red)
-  - ⚔️ Yokudan (orange)
-  - ✨ Custom (purple)
+- **Constellation Icons**: Color-coded by constellation type
+  - ⚔️ Warrior (red)
+  - 🔮 Mage (blue)
+  - 🗡️ Thief (green)
+  - 🐍 Serpent (purple)
+  - ⭐ Other constellations (gold)
 
 - **Tab Icons**: Visual indicators for content types
-  - 🙏 Follower tab (blue dot) - Tenets and powers
-  - ✨ Blessing tab (yellow dot) - Shrine blessings
+  - ⚡ Abilities tab (blue dot) - Active and passive abilities
+  - 📖 Lore tab (yellow dot) - Constellation lore
+  - 🔒 Requirements tab (gray dot) - Prerequisites and requirements
 - **Effect Icons**: Color-coded by effect type
-  - 🎯 Follower powers (blue)
-  - 🔥 Devotee powers (purple)
-  - 🔒 Restrictions (gray)
+  - ⚔️ Combat abilities (red)
+  - 🔮 Magic abilities (blue)
+  - 🗡️ Stealth abilities (green)
+  - ⚡ Utility abilities (purple)
 
 ### Responsive Design
 - **Desktop**: 3-column grid with sidebar detail panel
@@ -220,7 +230,7 @@ The feature transforms religion data between two formats:
 
 ### Shared Framework Components
 
-The religions feature leverages the same comprehensive shared framework as races and traits:
+The birthsigns feature leverages the same comprehensive shared framework as races and religions:
 
 #### **PlayerCreationPage**
 - Generic layout for categorized item selection
@@ -237,15 +247,15 @@ The religions feature leverages the same comprehensive shared framework as races
 - Selection state management
 - Empty state handling
 
-### Religion-Specific Components
+### Birthsign-Specific Components
 
-#### **ReligionCard**
+#### **BirthsignCard**
 - **Reusability**: Can be adapted for other entity types
 - **Customization**: Icon mapping and color schemes
 - **Accessibility**: ARIA labels and keyboard navigation
 
-#### **ReligionDetailPanel**
-- **Extensibility**: Modular blessing, tenet, and power sections
+#### **BirthsignDetailPanel**
+- **Extensibility**: Modular ability, lore, and requirement sections
 - **Data Visualization**: Effect icons and color coding
 - **Information Architecture**: Hierarchical content organization
 
@@ -254,7 +264,7 @@ The religions feature leverages the same comprehensive shared framework as races
 ## 📊 Performance Considerations
 
 ### Data Loading
-- **Runtime Fetching**: Religions loaded from JSON at component mount
+- **Runtime Fetching**: Birthsigns loaded from JSON at component mount
 - **Error Boundaries**: Graceful fallbacks for network issues
 - **Loading States**: User feedback during data fetching
 
@@ -278,7 +288,7 @@ The religions feature leverages the same comprehensive shared framework as races
 - Filter and search functionality
 
 ### Integration Tests
-- End-to-end religion selection flow
+- End-to-end birthsign selection flow
 - Search and filter interactions
 - Responsive design breakpoints
 
@@ -292,12 +302,12 @@ The religions feature leverages the same comprehensive shared framework as races
 ## 🔮 Future Enhancements
 
 ### Planned Features
-1. **Religion Comparison**: Side-by-side religion comparison tool
-2. **Favorites System**: Save preferred religions for quick access
+1. **Birthsign Comparison**: Side-by-side birthsign comparison tool
+2. **Favorites System**: Save preferred birthsigns for quick access
 3. **Advanced Filtering**: Multi-select filters and saved searches
-4. **Religion Recommendations**: AI-powered religion suggestions based on playstyle
-5. **Favor Tracking**: Visual indicators for favor gain/loss mechanics
-6. **Quest Integration**: Link religions to required quests
+4. **Birthsign Recommendations**: AI-powered birthsign suggestions based on playstyle
+5. **Constellation Visualization**: Interactive star map showing birthsign positions
+6. **Seasonal Effects**: Dynamic effects based on in-game seasons or time
 
 ### Technical Improvements
 1. **Data Caching**: Implement service worker for offline access
@@ -342,4 +352,4 @@ The religions feature leverages the same comprehensive shared framework as races
 
 ---
 
-*This documentation ensures the Religions feature in the Lorerim Arcaneum project maintains consistent, comprehensive documentation that supports development, maintenance, and future enhancements.* 
+*This documentation ensures the Birthsigns feature in the Lorerim Arcaneum project maintains consistent, comprehensive documentation that supports development, maintenance, and future enhancements.* 
