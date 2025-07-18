@@ -119,18 +119,37 @@ export function usePerkPlan(tree: PerkTree | undefined) {
           const nextRank = (currentRank + 1) % (perk.ranks + 1); // 0 -> 1 -> 2 -> 3 -> 0
           
           if (nextRank === 0) {
-            // Cycling to rank 0 - remove this perk and all descendants
-            const descendants = getAllDescendants(perkId);
-            const perksToRemove = new Set([perkId, ...descendants]);
-            const selectedPerksToRemove = skillPerks.filter(p => perksToRemove.has(p.perkId));
-            const newSkillPerks = skillPerks.filter((p) => !perksToRemove.has(p.perkId));
+            // Cycling to rank 0 - check if this perk has other parents that might keep it selected
+            const hasOtherParents = perk.prerequisites?.perks?.some(prereq => 
+              prereq.type === "PERK" && 
+              prereq.id !== perkId && 
+              skillPerks.some(p => p.perkId === prereq.id)
+            ) || false;
             
-            console.log(`Cycling to rank 0, removing ${selectedPerksToRemove.length} perks:`, selectedPerksToRemove.map(p => p.perkName));
-            return {
-              ...prev,
-              selectedPerks: { ...prev.selectedPerks, [skill]: newSkillPerks },
-              totalPerks: prev.totalPerks - selectedPerksToRemove.length,
-            };
+            if (hasOtherParents) {
+              // This perk has other selected parents, so we can't fully deselect it
+              // Just set it to rank 0 but keep it in the list
+              const updatedPerks = [...skillPerks];
+              updatedPerks[perkIndex] = { ...currentPerk, currentRank: 0 };
+              console.log(`Cycling ${perk.perkName} to rank 0 (kept due to other parents)`);
+              return {
+                ...prev,
+                selectedPerks: { ...prev.selectedPerks, [skill]: updatedPerks },
+              };
+            } else {
+              // No other parents, so we can fully deselect this perk and all descendants
+              const descendants = getAllDescendants(perkId);
+              const perksToRemove = new Set([perkId, ...descendants]);
+              const selectedPerksToRemove = skillPerks.filter(p => perksToRemove.has(p.perkId));
+              const newSkillPerks = skillPerks.filter((p) => !perksToRemove.has(p.perkId));
+              
+              console.log(`Cycling to rank 0, removing ${selectedPerksToRemove.length} perks:`, selectedPerksToRemove.map(p => p.perkName));
+              return {
+                ...prev,
+                selectedPerks: { ...prev.selectedPerks, [skill]: newSkillPerks },
+                totalPerks: prev.totalPerks - selectedPerksToRemove.length,
+              };
+            }
           } else {
             // Update rank
             const updatedPerks = [...skillPerks];
@@ -165,27 +184,44 @@ export function usePerkPlan(tree: PerkTree | undefined) {
           .map(id => tree.perks.find(p => p.perkId === id))
           .filter((perk): perk is NonNullable<typeof perk> => perk !== undefined)
           .map(perk => {
-            // If this is the clicked perk and it's multi-rank, set rank to 1
-            // If this is a prerequisite that's multi-rank, set rank to 1 (minimum)
-            // Otherwise, set rank to 0
-            const shouldHaveRank = perk.perkId === perkId || (perk.ranks > 1 && perksToAdd.has(perk.perkId));
-            return {
-              ...perk, 
-              selected: true,
-              currentRank: shouldHaveRank && perk.ranks > 1 ? 1 : 0
-            };
+            // Check if this perk is already selected (might happen with multi-parent perks)
+            const existingPerk = skillPerks.find(p => p.perkId === perk.perkId);
+            
+            if (existingPerk) {
+              // Perk already exists - preserve its current rank if it's higher than 1
+              return {
+                ...perk, 
+                selected: true,
+                currentRank: existingPerk.currentRank || 0
+              };
+            } else {
+              // New perk - if it's the clicked perk or a multi-rank prerequisite, set rank to 1
+              const shouldHaveRank = perk.perkId === perkId || (perk.ranks > 1 && perksToAdd.has(perk.perkId));
+              return {
+                ...perk, 
+                selected: true,
+                currentRank: shouldHaveRank && perk.ranks > 1 ? 1 : 0
+              };
+            }
           });
         
-        // Combine with existing perks, avoiding duplicates
+        // Combine with existing perks, updating existing ones and adding new ones
         const existingPerkIds = new Set(skillPerks.map(p => p.perkId));
-        const uniqueNewPerks = newPerks.filter(perk => !existingPerkIds.has(perk.perkId));
+        const perksToUpdate = newPerks.filter(perk => existingPerkIds.has(perk.perkId));
+        const newPerksToAdd = newPerks.filter(perk => !existingPerkIds.has(perk.perkId));
         
-        const newSkillPerks = [...skillPerks, ...uniqueNewPerks];
-        console.log(`Adding ${uniqueNewPerks.length} perks:`, uniqueNewPerks.map(p => p.perkName));
+        // Update existing perks with new data
+        const updatedSkillPerks = skillPerks.map(existingPerk => {
+          const updateData = perksToUpdate.find(p => p.perkId === existingPerk.perkId);
+          return updateData ? { ...existingPerk, ...updateData } : existingPerk;
+        });
+        
+        const newSkillPerks = [...updatedSkillPerks, ...newPerksToAdd];
+        console.log(`Adding ${newPerksToAdd.length} new perks and updating ${perksToUpdate.length} existing perks:`, newPerksToAdd.map(p => p.perkName));
         return {
           ...prev,
           selectedPerks: { ...prev.selectedPerks, [skill]: newSkillPerks },
-          totalPerks: prev.totalPerks + uniqueNewPerks.length,
+          totalPerks: prev.totalPerks + newPerksToAdd.length,
         };
       }
     });

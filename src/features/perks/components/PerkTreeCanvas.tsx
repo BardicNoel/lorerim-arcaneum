@@ -102,6 +102,57 @@ function buildTreeStructure(perks: PerkNodeType[]): Map<string, TreeNode> {
       });
     }
   });
+
+  // Step 2.5: Clean up redundant parent connections (remove direct parent if grandparent exists)
+  console.log('Cleaning up redundant parent connections...');
+  treeNodes.forEach((node, perkId) => {
+    if (node.parents.length > 1) {
+      const redundantParents: string[] = [];
+      
+      // Check each parent to see if it's redundant
+      node.parents.forEach(parentId => {
+        const parentNode = treeNodes.get(parentId)!;
+        
+        // Check if this parent has any of the other parents as ancestors
+        const hasAncestor = (ancestorId: string, currentId: string, visited = new Set<string>()): boolean => {
+          if (visited.has(currentId)) return false; // Prevent cycles
+          visited.add(currentId);
+          
+          const current = treeNodes.get(currentId)!;
+          return current.parents.some(pId => {
+            if (pId === ancestorId) return true;
+            return hasAncestor(ancestorId, pId, visited);
+          });
+        };
+        
+        // Check if this parent is redundant (has other parents as ancestors)
+        const isRedundant = node.parents.some(otherParentId => 
+          otherParentId !== parentId && hasAncestor(otherParentId, parentId)
+        );
+        
+        if (isRedundant) {
+          redundantParents.push(parentId);
+          console.log(`Removing redundant parent "${parentNode.perk.perkName}" from "${node.perk.perkName}" (grandparent relationship exists)`);
+        }
+      });
+      
+      // Remove redundant parents
+      redundantParents.forEach(parentId => {
+        // Remove from this node's parents
+        const parentIndex = node.parents.indexOf(parentId);
+        if (parentIndex > -1) {
+          node.parents.splice(parentIndex, 1);
+        }
+        
+        // Remove this node from parent's children
+        const parentNode = treeNodes.get(parentId)!;
+        const childIndex = parentNode.children.indexOf(perkId);
+        if (childIndex > -1) {
+          parentNode.children.splice(childIndex, 1);
+        }
+      });
+    }
+  });
   
   // Step 3: Detect cycles and multi-parent relationships
   const cycles = new Set<string>();
@@ -176,13 +227,13 @@ function buildTreeStructure(perks: PerkNodeType[]): Map<string, TreeNode> {
       const currentLevel = nodeLevels.get(nodeId) || -1;
       
       if (currentLevel >= 0) {
-        // Node already has a level, use the shallowest one (lower level number)
-        if (level < currentLevel) {
+        // Node already has a level, use the DEEPEST one (higher level number)
+        if (level > currentLevel) {
           nodeLevels.set(nodeId, level);
           node.level = level;
-          console.log(`Node "${node.perk.perkName}" level updated from ${currentLevel} to ${level} (shallowest path)`);
+          console.log(`Node "${node.perk.perkName}" level updated from ${currentLevel} to ${level} (deepest path)`);
         } else {
-          continue; // Already processed at a better (shallowest) level
+          continue; // Already processed at a better (deepest) level
         }
       } else {
         // First time visiting this node
@@ -223,9 +274,10 @@ function buildTreeStructure(perks: PerkNodeType[]): Map<string, TreeNode> {
         
         if (validParentLevels.length > 0) {
           // All parents have levels, we can assign this node's level
-          const minParentLevel = Math.min(...validParentLevels);
-          const expectedLevel = minParentLevel + 1;
-          console.log(`Iteration ${iteration}: Node "${node.perk.perkName}" assigned level ${expectedLevel} from parents (${validParentLevels})`);
+          // Use the DEEPEST parent level + 1 (not the shallowest)
+          const maxParentLevel = Math.max(...validParentLevels);
+          const expectedLevel = maxParentLevel + 1;
+          console.log(`Iteration ${iteration}: Node "${node.perk.perkName}" assigned level ${expectedLevel} from parents (${validParentLevels}) - using deepest parent`);
           node.level = expectedLevel;
           nodeLevels.set(perkId, expectedLevel);
           hasChanges = true;

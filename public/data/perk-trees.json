@@ -21,7 +21,7 @@
           "index": 6
         },
         "connections": [
-          5
+          "REQ_Smithing_AdvancedLightArmors"
         ],
         "effects": [
           {
@@ -103,7 +103,7 @@
           "index": 3
         },
         "connections": [
-          8
+          "REQ_Smithing_ElvenSmithing"
         ],
         "effects": [
           {
@@ -161,7 +161,7 @@
           "index": 4
         },
         "connections": [
-          9
+          "REQ_Smithing_GlassSmithing"
         ],
         "effects": [
           {
@@ -223,7 +223,7 @@
           "index": 10
         },
         "connections": [
-          15
+          "Trad_Smithing_ShiveringIlsesSmithing"
         ],
         "effects": [
           {
@@ -405,7 +405,7 @@
           "index": 14
         },
         "connections": [
-          17
+          "ORD_Smh60_SmithingSpecialization_Perk_60_OrdASISExclude"
         ],
         "effects": [
           {
@@ -557,7 +557,7 @@
           "index": 5
         },
         "connections": [
-          4
+          "REQ_Smithing_OrcishSmithing"
         ],
         "effects": [
           {
@@ -615,7 +615,7 @@
           "index": 8
         },
         "connections": [
-          10
+          "REQ_Smithing_EbonySmithing"
         ],
         "effects": [
           {
@@ -677,7 +677,7 @@
           "index": 9
         },
         "connections": [
-          15
+          "Trad_Smithing_ShiveringIlsesSmithing"
         ],
         "effects": [
           {
@@ -828,7 +828,7 @@
           "index": 17
         },
         "connections": [
-          18
+          "ORD_Smh80_IronLore_Perk_80_OrdASISExclude"
         ],
         "effects": [
           {
@@ -922,7 +922,7 @@
           "index": 13
         },
         "connections": [
-          24
+          "REQ_Destruction_BloodMagic_025_BloodMagic1"
         ],
         "effects": [
           {
@@ -1053,7 +1053,7 @@
           "index": 3
         },
         "connections": [
-          23
+          "REQ_Destruction_Battlemage_075_ImprovedCloaks"
         ],
         "effects": [
           {
@@ -1195,7 +1195,7 @@
           "index": 5
         },
         "connections": [
-          6
+          "REQ_Destruction_Mastery_075_ExpertDestruction"
         ],
         "effects": [
           {
@@ -1337,7 +1337,7 @@
           "index": 6
         },
         "connections": [
-          12
+          "REQ_Destruction_Mastery_100_MasterDestruction"
         ],
         "effects": [
           {
@@ -1628,7 +1628,7 @@
           "index": 7
         },
         "connections": [
-          1
+          "REQ_Destruction_Pyromancy_075_Cremation"
         ],
         "effects": [
           {
@@ -1729,7 +1729,7 @@
           "index": 1
         },
         "connections": [
-          14
+          "REQ_Destruction_Pyromancy_100_FireMastery"
         ],
         "effects": [],
         "prerequisites": {
@@ -1839,7 +1839,7 @@
           "index": 8
         },
         "connections": [
-          9
+          "REQ_Destruction_Cryomancy_075_DeepFreeze"
         ],
         "effects": [
           {
@@ -1940,7 +1940,7 @@
           "index": 9
         },
         "connections": [
-          15
+          "REQ_Destruction_Cryomancy_100_FrostMastery"
         ],
         "effects": [],
         "prerequisites": {
@@ -2050,7 +2050,7 @@
           "index": 16
         },
         "connections": [
-          10
+          "REQ_Destruction_Electromancy_075_ElectrostaticDischarge"
         ],
         "effects": [
           {
@@ -2151,7 +2151,7 @@
           "index": 10
         },
         "connections": [
-          17
+          "REQ_Destruction_Electromancy_100_LightningMastery"
         ],
         "effects": [],
         "prerequisites": {
@@ -2261,7 +2261,7 @@
           "index": 2
         },
         "connections": [
-          4
+          "REQ_Destruction_Empower_050_Impact"
         ],
         "effects": [
           {
@@ -2346,7 +2346,7 @@
           "index": 18
         },
         "connections": [
-          19
+          "REQ_Destruction_Arcane_075_ArcaneDisruption"
         ],
         "effects": [
           {
@@ -2480,7 +2480,7 @@
           "index": 20
         },
         "connections": [
-          21
+          "REQ_Destruction_Entropic_075_EntropicDisarray"
         ],
         "effects": [
           {
@@ -2714,7 +2714,7 @@
           "index": 24
         },
         "connections": [
-          25
+          "REQ_Destruction_BloodMagic_075_ConsumeLife"
         ],
         "effects": [
           {
@@ -2873,7 +2873,7 @@
           "index": 3
         },
         "connections": [
-          13
+          "Feat_Perk_Skill_Enchanting_ArcaneArtificery1"
         ],
         "effects": [
           {
@@ -2914,7 +2914,7 @@
           "index": 7
         },
         "connections": [
-          8
+          "REQ_Enchanting_Enchantment_050_CorpusLore"
         ],
         "effects": [
           {
@@ -2966,7 +2966,7 @@
           "index": 8
         },
         "connections": [
-          1
+          "REQ_Enchanting_Enchantment_075_SkillLore"
         ],
         "effects": [
           {
@@ -3018,7 +3018,7 @@
           "index": 1
         },
         "connections": [
-          12
+          "REQ_Enchanting_Enchantment_100_EnchantmentMastery"
         ],
         "effects": [
           {
@@ -3070,7 +3070,7 @@
           "index": 12
         },
         "connections": [
-          9
+          "REQ_Enchanting_Artifact_100_ArtifactEnchanter"
         ],
         "effects": [
           {
@@ -3142,7 +3142,7 @@
           "index": 6
         },
         "connections": [
-          11
+          "REQ_Enchanting_Artificer_050_ArcaneExperimentation"
         ],
         "effects": [
           {
@@ -3185,7 +3185,7 @@
           "index": 11
         },
         "connections": [
-          10
+          "REQ_Enchanting_Artificer_075_ArtificersInsight"
         ],
         "effects": [
           {
@@ -3236,7 +3236,7 @@
           "index": 10
         },
         "connections": [
-          12
+          "REQ_Enchanting_Enchantment_100_EnchantmentMastery"
         ],
         "effects": [
           {
@@ -3344,7 +3344,7 @@
           "index": 13
         },
         "connections": [
-          14
+          "Feat_Perk_Char_Enchanting_StaffChanneling1"
         ],
         "effects": [
           {
@@ -3493,7 +3493,7 @@
           "index": 14
         },
         "connections": [
-          16
+          "ORD_Enc70_ChargeTap_Perk_70_OrdASISExclude"
         ],
         "effects": [
           {
@@ -3594,7 +3594,7 @@
           "index": 15
         },
         "connections": [
-          18
+          "ORD_Enc90_YouShallNotPass_Perk_90_OrdASISExclude"
         ],
         "effects": [
           {
@@ -3750,7 +3750,7 @@
           "index": 12
         },
         "connections": [
-          21
+          "Feat_Perk_Skill_Restoration_WardMastery1"
         ],
         "effects": [
           {
@@ -3881,7 +3881,7 @@
           "index": 4
         },
         "connections": [
-          5
+          "REQ_Restoration_Mastery_050_AdeptRestoration"
         ],
         "effects": [
           {
@@ -4023,7 +4023,7 @@
           "index": 5
         },
         "connections": [
-          6
+          "REQ_Restoration_Mastery_075_ExpertRestoration"
         ],
         "effects": [
           {
@@ -4165,7 +4165,7 @@
           "index": 6
         },
         "connections": [
-          9
+          "REQ_Restoration_Mastery_100_MasterRestoration"
         ],
         "effects": [
           {
@@ -4399,7 +4399,7 @@
           "index": 8
         },
         "connections": [
-          7
+          "REQ_Restoration_Healing_075_Respite"
         ],
         "effects": [
           {
@@ -4656,7 +4656,7 @@
           "index": 2
         },
         "connections": [
-          12
+          "REQ_Restoration_Mastery_000_NoviceRestoration"
         ],
         "effects": [
           {
@@ -4708,7 +4708,7 @@
           "index": 13
         },
         "connections": [
-          4
+          "REQ_Restoration_Mastery_025_ApprenticeRestoration"
         ],
         "effects": [
           {
@@ -4752,7 +4752,7 @@
           "index": 1
         },
         "connections": [
-          3
+          "REQ_Restoration_Recovery_075_EssenceOfLife"
         ],
         "effects": [
           {
@@ -4890,7 +4890,7 @@
           "index": 14
         },
         "connections": [
-          16
+          "REQ_Restoration_Venomancy_075_ParalyzingPoison"
         ],
         "effects": [
           {
@@ -5024,7 +5024,7 @@
           "index": 17
         },
         "connections": [
-          18
+          "REQ_Restoration_Heliomancy_075_ScorchingLight"
         ],
         "effects": [
           {
@@ -5158,7 +5158,7 @@
           "index": 19
         },
         "connections": [
-          11
+          "REQ_Restoration_Turning_075_MysticTurning"
         ],
         "effects": [
           {
@@ -5243,7 +5243,7 @@
           "index": 20
         },
         "connections": [
-          10
+          "REQ_Restoration_Protection_075_ImprovedWards"
         ],
         "effects": [
           {
@@ -5394,7 +5394,7 @@
           "index": 13
         },
         "connections": [
-          2
+          "REQ_Illusion_Empower_025_EmpoweredIllusion"
         ],
         "effects": [
           {
@@ -5525,7 +5525,7 @@
           "index": 7
         },
         "connections": [
-          16
+          "REQ_Illusion_Perceptual_050_DeceptiveImage"
         ],
         "effects": [
           {
@@ -5643,7 +5643,7 @@
           "index": 1
         },
         "connections": [
-          18
+          "REQ_Illusion_Shadow_075_ShadowsOfConflict"
         ],
         "effects": [
           {
@@ -5761,7 +5761,7 @@
           "index": 10
         },
         "connections": [
-          15
+          "REQ_Illusion_Emotional_050_Mesmerize"
         ],
         "effects": [
           {
@@ -5879,7 +5879,7 @@
           "index": 3
         },
         "connections": [
-          17
+          "REQ_Illusion_Delusive_075_Curse"
         ],
         "effects": [
           {
@@ -5964,7 +5964,7 @@
           "index": 4
         },
         "connections": [
-          5
+          "REQ_Illusion_Mastery_050_AdeptIllusion"
         ],
         "effects": [
           {
@@ -6106,7 +6106,7 @@
           "index": 5
         },
         "connections": [
-          1
+          "REQ_Illusion_Shadow_050_ShadowShaping"
         ],
         "effects": [
           {
@@ -6248,7 +6248,7 @@
           "index": 6
         },
         "connections": [
-          12
+          "REQ_Illusion_Mastery_100_MasterIllusion"
         ],
         "effects": [
           {
@@ -6847,7 +6847,7 @@
           "index": 15
         },
         "connections": [
-          18
+          "REQ_Conjuration_Spirit_025_SpiritCalling"
         ],
         "effects": [
           {
@@ -6978,7 +6978,7 @@
           "index": 4
         },
         "connections": [
-          9
+          "REQ_Conjuration_Mastery_050_AdeptConjuration"
         ],
         "effects": [
           {
@@ -7120,7 +7120,7 @@
           "index": 9
         },
         "connections": [
-          24
+          "REQ_Conjuration_SoulMagic_025_SoulMagic"
         ],
         "effects": [
           {
@@ -7262,7 +7262,7 @@
           "index": 11
         },
         "connections": [
-          12
+          "REQ_Conjuration_Mastery_100_MasterConjuration"
         ],
         "effects": [
           {
@@ -7496,7 +7496,7 @@
           "index": 14
         },
         "connections": [
-          19
+          "REQ_Conjuration_Empower_050_CognitiveFlexibility1"
         ],
         "effects": [
           {
@@ -7589,7 +7589,7 @@
           "index": 7
         },
         "connections": [
-          17
+          "REQ_Conjuration_Necromancy_050_Ritualism"
         ],
         "effects": [
           {
@@ -7690,7 +7690,7 @@
           "index": 17
         },
         "connections": [
-          22
+          "REQ_Conjuration_Necromancy_050_SiphonCorpse"
         ],
         "effects": [
           {
@@ -7841,7 +7841,7 @@
           "index": 1
         },
         "connections": [
-          10
+          "REQ_Conjuration_Bound_050_MysticInfusion"
         ],
         "effects": [
           {
@@ -7909,7 +7909,7 @@
           "index": 10
         },
         "connections": [
-          13
+          "REQ_Conjuration_Bound_075_MysticEmpowerment"
         ],
         "effects": [
           {
@@ -7969,7 +7969,7 @@
           "index": 13
         },
         "connections": [
-          16
+          "REQ_Conjuration_Bound_100_MysticDisruption"
         ],
         "effects": [
           {
@@ -8120,7 +8120,7 @@
           "index": 3
         },
         "connections": [
-          6
+          "REQ_Conjuration_Daedric_050_GatesOfOblivion"
         ],
         "effects": [
           {
@@ -8188,7 +8188,7 @@
           "index": 6
         },
         "connections": [
-          23
+          "REQ_Conjuration_Daedric_050_DarkChanneling"
         ],
         "effects": [
           {
@@ -8389,7 +8389,7 @@
           "index": 18
         },
         "connections": [
-          20
+          "REQ_Conjuration_Spirit_050_SpiritualBond"
         ],
         "effects": [
           {
@@ -8441,7 +8441,7 @@
           "index": 20
         },
         "connections": [
-          21
+          "REQ_Conjuration_Spirit_050_SpiritGuardian"
         ],
         "effects": [
           {
@@ -8635,7 +8635,7 @@
           "index": 24
         },
         "connections": [
-          25
+          "REQ_Conjuration_SoulMagic_075_Necropotence"
         ],
         "effects": [
           {
@@ -8777,7 +8777,7 @@
           "index": 14
         },
         "connections": [
-          4
+          "REQ_Alteration_Transmutation_025_Transmutation"
         ],
         "effects": [
           {
@@ -8908,7 +8908,7 @@
           "index": 6
         },
         "connections": [
-          16
+          "REQ_Alteration_Kinetomancy_025_Kinetomancy"
         ],
         "effects": [
           {
@@ -9050,7 +9050,7 @@
           "index": 9
         },
         "connections": [
-          18
+          "REQ_Alteration_WeatherMagic_050_WeatherMagic"
         ],
         "effects": [
           {
@@ -9192,7 +9192,7 @@
           "index": 10
         },
         "connections": [
-          1
+          "REQ_Alteration_MagicalAbsorption_100_MagicalAbsorption"
         ],
         "effects": [
           {
@@ -9534,7 +9534,7 @@
           "index": 7
         },
         "connections": [
-          8
+          "REQ_Alteration_Metamagic_075_MetamagicalThesis"
         ],
         "effects": [
           {
@@ -9586,7 +9586,7 @@
           "index": 8
         },
         "connections": [
-          13
+          "REQ_Alteration_Metamagic_100_MetamagicalEmpowerment"
         ],
         "effects": [
           {
@@ -9704,7 +9704,7 @@
           "index": 2
         },
         "connections": [
-          5
+          "REQ_Alteration_MageArmor_050_VersatileArmor"
         ],
         "effects": [],
         "prerequisites": {
@@ -9789,7 +9789,7 @@
           "index": 3
         },
         "connections": [
-          6
+          "REQ_Alteration_Mastery_025_ApprenticeAlteration"
         ],
         "effects": [
           {
@@ -9833,7 +9833,7 @@
           "index": 4
         },
         "connections": [
-          15
+          "REQ_Alteration_Transmutation_075_TransmutationalMending"
         ],
         "effects": [
           {
@@ -9976,7 +9976,7 @@
           "index": 16
         },
         "connections": [
-          17
+          "REQ_Alteration_Kinetomancy_075_PowerOfTheForce"
         ],
         "effects": [
           {
@@ -10141,7 +10141,7 @@
           "index": 18
         },
         "connections": [
-          19
+          "REQ_Alteration_WeatherMagic_075_MasterOfStorms"
         ],
         "effects": [
           {
@@ -10613,7 +10613,7 @@
           "index": 1
         },
         "connections": [
-          13
+          "Feat_Perk_Skill_Speechcraft_Commander1"
         ],
         "effects": [
           {
@@ -10671,7 +10671,7 @@
           "index": 4
         },
         "connections": [
-          9
+          "REQ_Speech_Fencing"
         ],
         "effects": [
           {
@@ -10781,7 +10781,7 @@
           "index": 7
         },
         "connections": [
-          15
+          "Feat_Perk_Skill_Speechcraft_WarCry"
         ],
         "effects": [
           {
@@ -10932,7 +10932,7 @@
           "index": 5
         },
         "connections": [
-          12
+          "REQ_Speech_TheWayOfTheVoice"
         ],
         "effects": [
           {
@@ -11270,6 +11270,48 @@
           "Multiple effects",
           "Spell modification"
         ]
+      },
+      {
+        "perkId": "Feat_Perk_Skill_Speechcraft_WarCry",
+        "perkName": "War Cry",
+        "perkDescription": "Overwhelm your enemies with a roaring shout, striking fear into their hearts and sending weakner enemies fleeing.<br>[living enemies up to level 30 do 20% less damage, enemies up to level 20 flee from combat for one minute]",
+        "level": 0,
+        "ranks": 1,
+        "isPlayable": true,
+        "isHidden": false,
+        "position": {
+          "x": 5,
+          "y": 1,
+          "horizontal": 0.5,
+          "vertical": 0.5,
+          "index": 15
+        },
+        "connections": [],
+        "effects": [
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [],
+            "spellId": "0xFE678806"
+          }
+        ],
+        "prerequisites": {
+          "skillLevel": {
+            "skill": "Speech",
+            "level": 50
+          },
+          "perks": [
+            {
+              "type": "PERK",
+              "id": "REQ_Speech_SilverTongue"
+            }
+          ]
+        },
+        "uniquenessFactors": [
+          "Named perk",
+          "Spell modification"
+        ]
       }
     ]
   },
@@ -11295,7 +11337,7 @@
           "index": 2
         },
         "connections": [
-          8
+          "REQ_Alchemy_ConcentratedPoisons"
         ],
         "effects": [
           {
@@ -11328,7 +11370,7 @@
           "index": 4
         },
         "connections": [
-          12
+          "REQ_Alchemy_Regeneration"
         ],
         "effects": [
           {
@@ -11380,7 +11422,7 @@
           "index": 6
         },
         "connections": [
-          1
+          "REQ_Alchemy_Immunization"
         ],
         "effects": [
           {
@@ -11432,7 +11474,7 @@
           "index": 1
         },
         "connections": [
-          16
+          "REQ_Alchemy_AlchemicalIntellect"
         ],
         "effects": [
           {
@@ -11836,7 +11878,7 @@
           "index": 8
         },
         "connections": [
-          5
+          "REQ_Alchemy_ImprovedPoisons"
         ],
         "effects": [
           {
@@ -11904,7 +11946,7 @@
           "index": 5
         },
         "connections": [
-          20
+          "ORD_Alc60_Alkahest_Perk_60"
         ],
         "effects": [
           {
@@ -11990,6 +12032,63 @@
         ]
       },
       {
+        "perkId": "Feat_Perk_Char_Alchemy_Gourmet1",
+        "perkName": "Gourmet",
+        "perkDescription": "You keep a healthy diet, maximizing the nutrition of foods. [Requires Level 10]<br>[Food effects are 50% stronger and longer lasting]",
+        "level": 0,
+        "ranks": 1,
+        "isPlayable": true,
+        "isHidden": false,
+        "position": {
+          "x": 4,
+          "y": 1,
+          "horizontal": 0,
+          "vertical": 0,
+          "index": 18
+        },
+        "connections": [],
+        "effects": [
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [
+              {
+                "operator": "Equal to",
+                "functionIndex": 560,
+                "comparisonValue": 1,
+                "runOnType": "Subject",
+                "parameter1": 33556496,
+                "parameter2": 0
+              }
+            ],
+            "entryPointData": "Float"
+          },
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [
+              {
+                "operator": "Equal to",
+                "functionIndex": 560,
+                "comparisonValue": 1,
+                "runOnType": "Subject",
+                "parameter1": 33556496,
+                "parameter2": 0
+              }
+            ],
+            "entryPointData": "Float"
+          }
+        ],
+        "prerequisites": {
+          "characterLevel": 10
+        },
+        "uniquenessFactors": [
+          "Named perk"
+        ]
+      },
+      {
         "perkId": "Feat_Perk_Char_Alchemy_Herbalist1",
         "perkName": "Herbalist",
         "perkDescription": "You can directly consume alchemical ingredients to draw their effects. [Requires Level 10]<br>[2x magnitude for ingredients consumed]",
@@ -12046,7 +12145,7 @@
           "index": 20
         },
         "connections": [
-          21
+          "ORD_Alc90_WorldSerpent_Perk_90_OrdASISExclude"
         ],
         "effects": [
           {
@@ -12148,7 +12247,7 @@
           "index": 3
         },
         "connections": [
-          12
+          "ORD_Sne30_FogOfWar_Perk_30_OrdASISExclude"
         ],
         "effects": [
           {
@@ -12190,7 +12289,7 @@
           "index": 10
         },
         "connections": [
-          2
+          "REQ_Sneak_Assassin_050_AnatomicalLore"
         ],
         "effects": [
           {
@@ -12242,7 +12341,7 @@
           "index": 2
         },
         "connections": [
-          11
+          "ORD_Sne80_ProblemSolver_Perk_80"
         ],
         "effects": [
           {
@@ -12538,7 +12637,7 @@
           "index": 7
         },
         "connections": [
-          6
+          "REQ_Sneak_Mastery_050_LightSteps"
         ],
         "effects": [
           {
@@ -12598,7 +12697,7 @@
           "index": 6
         },
         "connections": [
-          4
+          "REQ_Sneak_Mastery_075_Acrobatics"
         ],
         "effects": [
           {
@@ -12642,7 +12741,7 @@
           "index": 4
         },
         "connections": [
-          1
+          "REQ_Sneak_Mastery_100_Shadowrunner"
         ],
         "effects": [
           {
@@ -13008,7 +13107,7 @@
           "index": 12
         },
         "connections": [
-          15
+          "ORD_Sne90_CloakAndDagger_Perk_90"
         ],
         "effects": [
           {
@@ -13076,7 +13175,7 @@
           "index": 13
         },
         "connections": [
-          14
+          "ORD_Sne40_Whiplash_Perk_40_OrdASISExclude"
         ],
         "effects": [
           {
@@ -13188,6 +13287,128 @@
     "category": "Stealth",
     "perks": [
       {
+        "perkId": "REQ_Lockpicking_00_Looter",
+        "perkName": "Cheap Tricks",
+        "perkDescription": "You have learned the basics of the art of picking locks and carrying found goods.<br>[+3 lockpicking expertise, +25 carry weight, forge lockpicks with Craftsmanship]",
+        "level": 0,
+        "ranks": 5,
+        "isPlayable": true,
+        "isHidden": false,
+        "position": {
+          "x": 3,
+          "y": 0,
+          "horizontal": -0.35714298486709595,
+          "vertical": -0.05714299902319908,
+          "index": 10
+        },
+        "connections": [
+          "BBWayfarer1"
+        ],
+        "effects": [
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [],
+            "spellId": "0x8CAD388C"
+          }
+        ],
+        "prerequisites": {},
+        "uniquenessFactors": [
+          "Named perk",
+          "Multiple ranks",
+          "Spell modification"
+        ]
+      },
+      {
+        "perkId": "REQ_Lockpicking_30_LoneWolf",
+        "perkName": "Lone Wolf",
+        "perkDescription": "Gain 15% magic resistance and 150 armor rating when fighting alone.",
+        "level": 0,
+        "ranks": 1,
+        "isPlayable": true,
+        "isHidden": false,
+        "position": {
+          "x": 1,
+          "y": 1,
+          "horizontal": 0.14285700023174286,
+          "vertical": 0.20000000298023224,
+          "index": 1
+        },
+        "connections": [
+          "REQ_Lockpicking_50_Solo"
+        ],
+        "effects": [
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [],
+            "spellId": "0xFEADE810"
+          }
+        ],
+        "prerequisites": {
+          "skillLevel": {
+            "skill": "Lockpicking",
+            "level": 25
+          },
+          "perks": [
+            {
+              "type": "PERK",
+              "id": "REQ_Lockpicking_00_Looter"
+            }
+          ]
+        },
+        "uniquenessFactors": [
+          "Named perk",
+          "Spell modification"
+        ]
+      },
+      {
+        "perkId": "REQ_Lockpicking_50_Solo",
+        "perkName": "Solo",
+        "perkDescription": "Regenerate health, stamina and magicka 50% faster when you are fighting alone.",
+        "level": 0,
+        "ranks": 1,
+        "isPlayable": true,
+        "isHidden": false,
+        "position": {
+          "x": 1,
+          "y": 1,
+          "horizontal": 0.14285700023174286,
+          "vertical": 1.159999966621399,
+          "index": 7
+        },
+        "connections": [
+          "REQ_Lockpicking_70_Maverick"
+        ],
+        "effects": [
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [],
+            "spellId": "0xFEADE805"
+          }
+        ],
+        "prerequisites": {
+          "skillLevel": {
+            "skill": "Lockpicking",
+            "level": 40
+          },
+          "perks": [
+            {
+              "type": "PERK",
+              "id": "REQ_Lockpicking_30_LoneWolf"
+            }
+          ]
+        },
+        "uniquenessFactors": [
+          "Named perk",
+          "Spell modification"
+        ]
+      },
+      {
         "perkId": "REQ_Lockpicking_70_Maverick",
         "perkName": "Maverick",
         "perkDescription": "You resist 10% fire, frost and shock damage when fighting alone.",
@@ -13203,7 +13424,7 @@
           "index": 8
         },
         "connections": [
-          9
+          "REQ_Lockpicking_100_OneManLegion"
         ],
         "effects": [
           {
@@ -13222,7 +13443,7 @@
           "perks": [
             {
               "type": "PERK",
-              "id": "0xFEADE802"
+              "id": "REQ_Lockpicking_50_Solo"
             }
           ]
         },
@@ -13313,7 +13534,7 @@
           "index": 2
         },
         "connections": [
-          18
+          "ORD_Loc30_Lockdown_Perk_30_OrdASISExclude"
         ],
         "effects": [
           {
@@ -13339,7 +13560,7 @@
           "perks": [
             {
               "type": "PERK",
-              "id": "0xFEADE800"
+              "id": "REQ_Lockpicking_00_Looter"
             }
           ]
         },
@@ -13364,7 +13585,7 @@
           "index": 3
         },
         "connections": [
-          4
+          "REQ_Lockpicking_60_ExtraPocketsReplacer"
         ],
         "effects": [
           {
@@ -13417,7 +13638,7 @@
           "index": 4
         },
         "connections": [
-          5
+          "REQ_Lockpicking_90_VeteranDelver"
         ],
         "effects": [
           {
@@ -13511,6 +13732,50 @@
         ]
       },
       {
+        "perkId": "REQ_Lockpicking_30_Leader",
+        "perkName": "Leader",
+        "perkDescription": "Nearby allies, but not the player, gain 150 armor rating and 15% magical resistance.",
+        "level": 0,
+        "ranks": 1,
+        "isPlayable": true,
+        "isHidden": false,
+        "position": {
+          "x": 4,
+          "y": 1,
+          "horizontal": 0,
+          "vertical": 0.20000000298023224,
+          "index": 11
+        },
+        "connections": [
+          "REQ_Lockpicking_50_Captain"
+        ],
+        "effects": [
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [],
+            "spellId": "0xFEADE811"
+          }
+        ],
+        "prerequisites": {
+          "skillLevel": {
+            "skill": "Lockpicking",
+            "level": 25
+          },
+          "perks": [
+            {
+              "type": "PERK",
+              "id": "REQ_Lockpicking_00_Looter"
+            }
+          ]
+        },
+        "uniquenessFactors": [
+          "Named perk",
+          "Spell modification"
+        ]
+      },
+      {
         "perkId": "REQ_Lockpicking_50_Captain",
         "perkName": "Captain",
         "perkDescription": "Allies, but not the player, regenerate health, stamina and magicka 50% faster.",
@@ -13526,7 +13791,7 @@
           "index": 12
         },
         "connections": [
-          13
+          "REQ_Lockpicking_70_Commander"
         ],
         "effects": [
           {
@@ -13545,7 +13810,51 @@
           "perks": [
             {
               "type": "PERK",
-              "id": "0xFEADE808"
+              "id": "REQ_Lockpicking_30_Leader"
+            }
+          ]
+        },
+        "uniquenessFactors": [
+          "Named perk",
+          "Spell modification"
+        ]
+      },
+      {
+        "perkId": "REQ_Lockpicking_70_Commander",
+        "perkName": "Commander",
+        "perkDescription": "Nearby allies, but not the player, gain 10% resist to fire, frost and shock.",
+        "level": 0,
+        "ranks": 1,
+        "isPlayable": true,
+        "isHidden": false,
+        "position": {
+          "x": 4,
+          "y": 2,
+          "horizontal": 0,
+          "vertical": 0.7599999904632568,
+          "index": 13
+        },
+        "connections": [
+          "REQ_Lockpicking_100_Legion"
+        ],
+        "effects": [
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [],
+            "spellId": "0xFEADE804"
+          }
+        ],
+        "prerequisites": {
+          "skillLevel": {
+            "skill": "Lockpicking",
+            "level": 60
+          },
+          "perks": [
+            {
+              "type": "PERK",
+              "id": "REQ_Lockpicking_50_Captain"
             }
           ]
         },
@@ -13612,7 +13921,7 @@
           "perks": [
             {
               "type": "PERK",
-              "id": "0xFEADE80B"
+              "id": "REQ_Lockpicking_70_Commander"
             }
           ]
         },
@@ -13685,7 +13994,7 @@
           "index": 16
         },
         "connections": [
-          15
+          "BBWayfarerTaming"
         ],
         "effects": [
           {
@@ -13704,13 +14013,66 @@
           "perks": [
             {
               "type": "PERK",
-              "id": "0xFEADF800"
+              "id": "BBWayfarer1"
             }
           ]
         },
         "uniquenessFactors": [
           "Named perk",
           "Spell modification"
+        ]
+      },
+      {
+        "perkId": "BBWayfarer1",
+        "perkName": "Hunter",
+        "perkDescription": "You've spent significant time hunting in the wilderness and can deal more damage to most animals.<br>Deal 20% more damage to all animals.",
+        "level": 0,
+        "ranks": 3,
+        "isPlayable": true,
+        "isHidden": false,
+        "position": {
+          "x": 0,
+          "y": 1,
+          "horizontal": 0.05714299902319908,
+          "vertical": 0.1857140064239502,
+          "index": 17
+        },
+        "connections": [
+          "BBWayfarerFood"
+        ],
+        "effects": [
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [
+              {
+                "operator": "Equal to",
+                "functionIndex": 560,
+                "comparisonValue": 1,
+                "runOnType": "Subject",
+                "parameter1": 79768,
+                "parameter2": 0
+              }
+            ],
+            "entryPointData": "Float"
+          }
+        ],
+        "prerequisites": {
+          "skillLevel": {
+            "skill": "Lockpicking",
+            "level": 20
+          },
+          "perks": [
+            {
+              "type": "PERK",
+              "id": "REQ_Lockpicking_00_Looter"
+            }
+          ]
+        },
+        "uniquenessFactors": [
+          "Named perk",
+          "Multiple ranks"
         ]
       },
       {
@@ -13729,7 +14091,7 @@
           "index": 18
         },
         "connections": [
-          19
+          "ORD_Loc50_Hotwire_Perk_50_OrdASISExclude"
         ],
         "effects": [
           {
@@ -13781,7 +14143,7 @@
           "index": 19
         },
         "connections": [
-          20
+          "ORD_Loc90_PercussiveMaintenance_Perk_90_OrdASISExclude"
         ],
         "effects": [
           {
@@ -13907,7 +14269,7 @@
           "index": 8
         },
         "connections": [
-          3
+          "REQ_Pickpocket_30_Sound_Body"
         ],
         "effects": [
           {
@@ -13934,6 +14296,50 @@
         ]
       },
       {
+        "perkId": "REQ_Pickpocket_20_Outlaw1",
+        "perkName": "Outlaw",
+        "perkDescription": "You've been in and out of jail, where most people wither away you've used the time to reflect and train <br> Gain 5 Health, Magicka and Stamina per Jail Escapes, Up To 5 Times.",
+        "level": 0,
+        "ranks": 1,
+        "isPlayable": true,
+        "isHidden": false,
+        "position": {
+          "x": 3,
+          "y": 1,
+          "horizontal": -0.04285699874162674,
+          "vertical": -0.028571000322699547,
+          "index": 1
+        },
+        "connections": [
+          "ORD_Pic50_LawlessWorld_Perk_50_OrdASISExclude"
+        ],
+        "effects": [
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 1,
+            "conditions": [],
+            "spellId": "0xFEAE0811"
+          }
+        ],
+        "prerequisites": {
+          "skillLevel": {
+            "skill": "Pickpocket",
+            "level": 20
+          },
+          "perks": [
+            {
+              "type": "PERK",
+              "id": "REQ_Pickpocket_Mastery_000_NimbleFingers1"
+            }
+          ]
+        },
+        "uniquenessFactors": [
+          "Named perk",
+          "Spell modification"
+        ]
+      },
+      {
         "perkId": "REQ_Pickpocket_50_Thief",
         "perkName": "Thief",
         "perkDescription": "Gain carry weight, light armor rating and sneak ability per pocket picked, <br> 10 carry weight, 2% light armor rating and 3% sneak ability per 20 pockets picked, maxing out at 100.",
@@ -13949,7 +14355,7 @@
           "index": 7
         },
         "connections": [
-          18
+          "ORD_Pic40_DeathsEmperor_Perk_40_OrdASISExclude"
         ],
         "effects": [
           {
@@ -14128,7 +14534,7 @@
           "perks": [
             {
               "type": "PERK",
-              "id": "0xFEAE0800"
+              "id": "REQ_Pickpocket_20_Outlaw1"
             }
           ]
         },
@@ -14196,7 +14602,7 @@
           "index": 2
         },
         "connections": [
-          4
+          "REQ_Pickpocket_50_NightThief"
         ],
         "effects": [
           {
@@ -14281,7 +14687,7 @@
           "index": 4
         },
         "connections": [
-          18
+          "ORD_Pic40_DeathsEmperor_Perk_40_OrdASISExclude"
         ],
         "effects": [
           {
@@ -14333,7 +14739,7 @@
           "index": 5
         },
         "connections": [
-          6
+          "REQ_Pickpocket_100_PerfectTouch"
         ],
         "effects": [
           {
@@ -14451,7 +14857,7 @@
           "index": 3
         },
         "connections": [
-          10
+          "Req_Pickpocket_60_Sound_Mind"
         ],
         "effects": [
           {
@@ -14500,7 +14906,7 @@
           "index": 10
         },
         "connections": [
-          11
+          "REQ_Pickpocket_80_Sound_Spirit"
         ],
         "effects": [
           {
@@ -14619,7 +15025,7 @@
           "index": 12
         },
         "connections": [
-          15
+          "REQ_Pickpocket_25_Pocket_sand"
         ],
         "effects": [
           {
@@ -14660,7 +15066,7 @@
           "index": 13
         },
         "connections": [
-          14
+          "LoreRimTrapper_Rank3"
         ],
         "effects": [],
         "prerequisites": {
@@ -14728,7 +15134,7 @@
           "index": 15
         },
         "connections": [
-          16
+          "REQ_Pickpocket_50_quick_sand"
         ],
         "effects": [],
         "prerequisites": {
@@ -14838,7 +15244,7 @@
           "index": 18
         },
         "connections": [
-          17
+          "ORD_Pic90_Mutiny_Perk_90_OrdASISExclude"
         ],
         "effects": [
           {
@@ -14936,7 +15342,7 @@
           "perks": [
             {
               "type": "PERK",
-              "id": "0xFEAE0800"
+              "id": "REQ_Pickpocket_20_Outlaw1"
             }
           ]
         },
@@ -14969,7 +15375,7 @@
           "index": 1
         },
         "connections": [
-          10
+          "Feat_Perk_Skill_Evasion_Unarmored1"
         ],
         "effects": [
           {
@@ -16069,7 +16475,7 @@
           "index": 2
         },
         "connections": [
-          11
+          "Feat_Perk_Skill_Evasion_Athletics1"
         ],
         "effects": [
           {
@@ -16314,7 +16720,7 @@
           "index": 3
         },
         "connections": [
-          5
+          "REQ_Evasion_MeteoricReflexes"
         ],
         "effects": [
           {
@@ -16448,7 +16854,7 @@
           "index": 6
         },
         "connections": [
-          4
+          "REQ_Evasion_WindWalker"
         ],
         "effects": [
           {
@@ -16549,7 +16955,7 @@
           "index": 4
         },
         "connections": [
-          5
+          "REQ_Evasion_MeteoricReflexes"
         ],
         "effects": [
           {
@@ -16617,7 +17023,7 @@
           "index": 8
         },
         "connections": [
-          3
+          "REQ_Evasion_CombatReflexes"
         ],
         "effects": [
           {
@@ -16669,7 +17075,7 @@
           "index": 9
         },
         "connections": [
-          14
+          "ORD_Lia30_AsALeaf_Perk_30"
         ],
         "effects": [],
         "prerequisites": {
@@ -16812,7 +17218,7 @@
           "index": 11
         },
         "connections": [
-          12
+          "ORD_Lia20_AnnoyingMosquitoes_Perk_20"
         ],
         "effects": [
           {
@@ -17027,7 +17433,7 @@
           "index": 1
         },
         "connections": [
-          10
+          "REQ_HeavyArmor_RelentlessOnslaught"
         ],
         "effects": [
           {
@@ -18423,7 +18829,7 @@
           "index": 8
         },
         "connections": [
-          7
+          "REQ_HeavyArmor_CombatTrance"
         ],
         "effects": [],
         "prerequisites": {
@@ -18458,7 +18864,7 @@
           "index": 7
         },
         "connections": [
-          4
+          "REQ_HeavyArmor_CombatMeditation"
         ],
         "effects": [],
         "prerequisites": {
@@ -18493,7 +18899,7 @@
           "index": 4
         },
         "connections": [
-          9
+          "REQ_HeavyArmor_BattleMage"
         ],
         "effects": [],
         "prerequisites": {
@@ -18578,7 +18984,7 @@
           "index": 5
         },
         "connections": [
-          12
+          "Feat_Perk_Skill_HeavyArmor_Immovable1"
         ],
         "effects": [
           {
@@ -18629,7 +19035,7 @@
           "index": 3
         },
         "connections": [
-          6
+          "REQ_HeavyArmor_PowerOfTheCombatant"
         ],
         "effects": [
           {
@@ -18673,7 +19079,7 @@
           "index": 6
         },
         "connections": [
-          2
+          "REQ_HeavyArmor_Juggernaut"
         ],
         "effects": [
           {
@@ -18816,7 +19222,7 @@
           "index": 10
         },
         "connections": [
-          14
+          "ORD_Hea20_Cushioned_Perk_50"
         ],
         "effects": [
           {
@@ -18858,6 +19264,139 @@
         "uniquenessFactors": [
           "Named perk",
           "Spell modification"
+        ]
+      },
+      {
+        "perkId": "Feat_Perk_Skill_HeavyArmor_DevastatingTackle1",
+        "perkName": "Devastating Tackle",
+        "perkDescription": "When in full heavy armor, you can cause devastating impact when bull-rushing.<br>[Bull-rush while wearing 4 or more pieces of heavy armor does double damage and has higher chance to knockdown]",
+        "level": 0,
+        "ranks": 1,
+        "isPlayable": true,
+        "isHidden": false,
+        "position": {
+          "x": 4,
+          "y": 2,
+          "horizontal": 0,
+          "vertical": 0,
+          "index": 11
+        },
+        "connections": [],
+        "effects": [
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [
+              {
+                "operator": "Equal to",
+                "functionIndex": 72,
+                "comparisonValue": 1,
+                "runOnType": "Subject",
+                "parameter1": 24548136,
+                "parameter2": 0
+              }
+            ],
+            "entryPointData": "Float"
+          }
+        ],
+        "prerequisites": {
+          "skillLevel": {
+            "skill": "Heavy Armor",
+            "level": 50
+          },
+          "perks": [
+            {
+              "type": "PERK",
+              "id": "REQ_HeavyArmor_RelentlessOnslaught"
+            }
+          ]
+        },
+        "uniquenessFactors": [
+          "Named perk"
+        ]
+      },
+      {
+        "perkId": "Feat_Perk_Skill_HeavyArmor_Immovable1",
+        "perkName": "Immovable",
+        "perkDescription": "When in full heavy armor, you can pose a defensive stance to reduce incoming impact.<br>[Resist physical, elemental and poise damage by 33% while attacking, casting, walking or standing still wearing 4 or more pieces of heavy armor]",
+        "level": 0,
+        "ranks": 1,
+        "isPlayable": true,
+        "isHidden": false,
+        "position": {
+          "x": 2,
+          "y": 2,
+          "horizontal": 0,
+          "vertical": 0,
+          "index": 12
+        },
+        "connections": [],
+        "effects": [
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [
+              {
+                "operator": "Equal to",
+                "functionIndex": 632,
+                "comparisonValue": 1,
+                "runOnType": "Subject",
+                "parameter1": 0,
+                "parameter2": 0
+              }
+            ],
+            "entryPointData": "Float"
+          },
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 1,
+            "conditions": [
+              {
+                "operator": "Equal to",
+                "functionIndex": 560,
+                "comparisonValue": 1,
+                "runOnType": "Subject",
+                "parameter1": 118447,
+                "parameter2": 0
+              }
+            ],
+            "entryPointData": "Float"
+          },
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 2,
+            "conditions": [
+              {
+                "operator": "Equal to",
+                "functionIndex": 632,
+                "comparisonValue": 1,
+                "runOnType": "Subject",
+                "parameter1": 0,
+                "parameter2": 0
+              }
+            ],
+            "entryPointData": "Float"
+          }
+        ],
+        "prerequisites": {
+          "skillLevel": {
+            "skill": "Heavy Armor",
+            "level": 50
+          },
+          "perks": [
+            {
+              "type": "PERK",
+              "id": "REQ_HeavyArmor_CombatTraining"
+            }
+          ]
+        },
+        "uniquenessFactors": [
+          "Named perk",
+          "Multiple effects"
         ]
       },
       {
@@ -18917,7 +19456,7 @@
           "index": 14
         },
         "connections": [
-          15
+          "ORD_Hea40_Defiance_Perk_40"
         ],
         "effects": [
           {
@@ -18969,7 +19508,7 @@
           "index": 15
         },
         "connections": [
-          16
+          "ORD_Hea60_NeverKneel_Perk_60"
         ],
         "effects": [
           {
@@ -19037,7 +19576,7 @@
           "index": 16
         },
         "connections": [
-          17
+          "ORD_Hea70_ReapTheWhirlwind_Perk_70_OrdASISExclude"
         ],
         "effects": [
           {
@@ -19155,7 +19694,7 @@
           "index": 6
         },
         "connections": [
-          14
+          "REQ_Block_Shortsword"
         ],
         "effects": [
           {
@@ -19229,7 +19768,7 @@
           "index": 8
         },
         "connections": [
-          4
+          "REQ_Block_ElementalProtection"
         ],
         "effects": [
           {
@@ -19353,7 +19892,7 @@
           "index": 4
         },
         "connections": [
-          3
+          "REQ_Block_DefensiveStance"
         ],
         "effects": [
           {
@@ -19405,7 +19944,7 @@
           "index": 3
         },
         "connections": [
-          9
+          "REQ_Block_UnstoppableCharge"
         ],
         "effects": [
           {
@@ -19593,7 +20132,7 @@
           "index": 7
         },
         "connections": [
-          10
+          "Feat_Perk_Skill_Block_ShieldStrike1"
         ],
         "effects": [
           {
@@ -19661,7 +20200,7 @@
           "index": 1
         },
         "connections": [
-          5
+          "REQ_Block_DisarmingBash"
         ],
         "effects": [
           {
@@ -19713,7 +20252,7 @@
           "index": 5
         },
         "connections": [
-          9
+          "REQ_Block_UnstoppableCharge"
         ],
         "effects": [
           {
@@ -19963,7 +20502,7 @@
           "index": 12
         },
         "connections": [
-          13
+          "REQ_PenetratingStrikes_Master"
         ],
         "effects": [
           {
@@ -19998,6 +20537,155 @@
         "uniquenessFactors": [
           "Named perk"
         ]
+      },
+      {
+        "perkId": "REQ_PenetratingStrikes_Master",
+        "perkName": "Masterly Strike",
+        "perkDescription": "Your power attacks are now devastating enough to penetrate enemy armor and less exhausting.<br>[-30% power attack stamina cost, +30% armor penetration]",
+        "level": 0,
+        "ranks": 1,
+        "isPlayable": true,
+        "isHidden": false,
+        "position": {
+          "x": 3,
+          "y": 2,
+          "horizontal": 0.4428569972515106,
+          "vertical": -0.3714289963245392,
+          "index": 13
+        },
+        "connections": [],
+        "effects": [
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [
+              {
+                "operator": "Equal to",
+                "functionIndex": 72,
+                "comparisonValue": 1,
+                "runOnType": "Subject",
+                "parameter1": 50334335,
+                "parameter2": 0
+              }
+            ],
+            "entryPointData": "Float"
+          },
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 1,
+            "conditions": [],
+            "spellId": "0x8CAD39AA"
+          },
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 1,
+            "conditions": [],
+            "spellId": "0x8CAD39BA"
+          }
+        ],
+        "prerequisites": {
+          "skillLevel": {
+            "skill": "Block",
+            "level": 60
+          },
+          "perks": [
+            {
+              "type": "PERK",
+              "id": "REQ_WeaponsMaster1"
+            }
+          ]
+        },
+        "uniquenessFactors": [
+          "Named perk",
+          "Multiple effects",
+          "Spell modification"
+        ]
+      },
+      {
+        "perkId": "REQ_Block_Shortsword",
+        "perkName": "Shield's Best Friend",
+        "perkDescription": "Like the Imperial Legions of old, you understand the advantage of shortswords in combat.<br>[20% more bash damage, 20% more block and 20% less poise damage when wielding a shortsword]",
+        "level": 0,
+        "ranks": 1,
+        "isPlayable": true,
+        "isHidden": false,
+        "position": {
+          "x": 3,
+          "y": 0,
+          "horizontal": -0.48571398854255676,
+          "vertical": 1.2000000476837158,
+          "index": 14
+        },
+        "connections": [],
+        "effects": [
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [
+              {
+                "operator": "Equal to",
+                "functionIndex": 682,
+                "comparisonValue": 1,
+                "runOnType": "Subject",
+                "parameter1": 83888187,
+                "parameter2": 0
+              }
+            ],
+            "entryPointData": "Float"
+          },
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [
+              {
+                "operator": "Equal to",
+                "functionIndex": 682,
+                "comparisonValue": 1,
+                "runOnType": "Subject",
+                "parameter1": 83888187,
+                "parameter2": 0
+              }
+            ],
+            "entryPointData": "Float"
+          },
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 1,
+            "conditions": [
+              {
+                "operator": "Equal to",
+                "functionIndex": 682,
+                "comparisonValue": 1,
+                "runOnType": "Subject",
+                "parameter1": 83888187,
+                "parameter2": 0
+              }
+            ],
+            "entryPointData": "Float"
+          }
+        ],
+        "prerequisites": {
+          "skillLevel": {
+            "skill": "Block",
+            "level": 30
+          },
+          "perks": [
+            {
+              "type": "PERK",
+              "id": "REQ_Block_ImprovedBlocking"
+            }
+          ]
+        },
+        "uniquenessFactors": [
+          "Named perk",
+          "Multiple effects"
+        ]
       }
     ]
   },
@@ -20023,7 +20711,7 @@
           "index": 1
         },
         "connections": [
-          16
+          "Feat_Perk_Skill_Marksmanship_BowStrike1"
         ],
         "effects": [
           {
@@ -20119,7 +20807,7 @@
           "index": 4
         },
         "connections": [
-          14
+          "REQ_Marksmanship_SharpThrow"
         ],
         "effects": [
           {
@@ -20335,7 +21023,7 @@
           "index": 5
         },
         "connections": [
-          19
+          "ORD_Arc90_LionsArrow_Perk_90_OrdASISExclude"
         ],
         "effects": [
           {
@@ -20433,7 +21121,7 @@
           "index": 11
         },
         "connections": [
-          17
+          "ORD_Arc30_FocusOnThePrey_Perk_30_OrdASISExclude"
         ],
         "effects": [
           {
@@ -20501,7 +21189,7 @@
           "index": 9
         },
         "connections": [
-          18
+          "ORD_Arc75_ThreeCrows_Perk_75_OrdASISExclude"
         ],
         "effects": [
           {
@@ -20569,7 +21257,7 @@
           "index": 3
         },
         "connections": [
-          19
+          "ORD_Arc90_LionsArrow_Perk_90_OrdASISExclude"
         ],
         "effects": [
           {
@@ -20863,6 +21551,81 @@
         ]
       },
       {
+        "perkId": "Feat_Perk_Skill_Marksmanship_BowStrike1",
+        "perkName": "Bow Strike",
+        "perkDescription": "You can use your bow or crossbow as a melee weapon in close combat.<br>[Double damage with bow bash, bow bash staggers targets, 50% less bow bash stamina cost]",
+        "level": 0,
+        "ranks": 1,
+        "isPlayable": true,
+        "isHidden": false,
+        "position": {
+          "x": 1,
+          "y": 1,
+          "horizontal": 0,
+          "vertical": 0,
+          "index": 16
+        },
+        "connections": [],
+        "effects": [
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [],
+            "spellId": "0xFE678856"
+          },
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [
+              {
+                "operator": "Equal to",
+                "functionIndex": 682,
+                "comparisonValue": 1,
+                "runOnType": "Subject",
+                "parameter1": 124693,
+                "parameter2": 0
+              }
+            ],
+            "entryPointData": "Float"
+          },
+          {
+            "type": "Unknown",
+            "function": "Unknown",
+            "priority": 0,
+            "conditions": [
+              {
+                "operator": "Equal to",
+                "functionIndex": 597,
+                "comparisonValue": 7,
+                "runOnType": "Subject",
+                "parameter1": 0,
+                "parameter2": 0
+              }
+            ],
+            "entryPointData": "FormID (SPEL)"
+          }
+        ],
+        "prerequisites": {
+          "skillLevel": {
+            "skill": "Marksman",
+            "level": 25
+          },
+          "perks": [
+            {
+              "type": "PERK",
+              "id": "REQ_Marksmanship_RangedCombatTraining"
+            }
+          ]
+        },
+        "uniquenessFactors": [
+          "Named perk",
+          "Multiple effects",
+          "Spell modification"
+        ]
+      },
+      {
         "perkId": "ORD_Arc30_FocusOnThePrey_Perk_30_OrdASISExclude",
         "perkName": "Focus on the Prey",
         "perkDescription": "Cannot be staggered while holding a drawn bow or reloading a crossbow.",
@@ -21082,7 +21845,7 @@
           "index": 7
         },
         "connections": [
-          1
+          "REQ_TwoHanded_BarbaricMight"
         ],
         "effects": [
           {
@@ -21123,7 +21886,7 @@
           "index": 1
         },
         "connections": [
-          11
+          "REQ_TwoHanded_QuarterstaffFocus1"
         ],
         "effects": [
           {
@@ -21183,7 +21946,7 @@
           "index": 2
         },
         "connections": [
-          3
+          "REQ_TwoHanded_Cleave"
         ],
         "effects": [
           {
@@ -21251,7 +22014,7 @@
           "index": 3
         },
         "connections": [
-          10
+          "REQ_TwoHanded_DevastatingCleave"
         ],
         "effects": [
           {
@@ -21307,7 +22070,7 @@
           "index": 10
         },
         "connections": [
-          9
+          "REQ_TwoHanded_MightyStrike"
         ],
         "effects": [
           {
@@ -21646,7 +22409,7 @@
           "index": 8
         },
         "connections": [
-          3
+          "REQ_TwoHanded_Cleave"
         ],
         "effects": [
           {
@@ -21698,7 +22461,7 @@
           "index": 4
         },
         "connections": [
-          14
+          "REQ_TwoHanded_Battleaxe_ShieldBreaker"
         ],
         "effects": [
           {
@@ -21759,7 +22522,7 @@
           "index": 5
         },
         "connections": [
-          12
+          "REQ_TwoHanded_Greatsword_ReverseSlash"
         ],
         "effects": [
           {
@@ -21828,7 +22591,7 @@
           "index": 6
         },
         "connections": [
-          13
+          "REQ_TwoHanded_Warhammer_Onslaught"
         ],
         "effects": [
           {
@@ -21889,7 +22652,7 @@
           "index": 11
         },
         "connections": [
-          19
+          "REQ_TwoHanded_Quarterstaff_DefensiveStrike"
         ],
         "effects": [
           {
@@ -21958,7 +22721,7 @@
           "index": 12
         },
         "connections": [
-          21
+          "ORD_Two60_DeathOrGlory_Perk_60"
         ],
         "effects": [
           {
@@ -22026,7 +22789,7 @@
           "index": 13
         },
         "connections": [
-          20
+          "ORD_Two70_GrandSlam_Perk_70_OrdASISExclude"
         ],
         "effects": [
           {
@@ -22094,7 +22857,7 @@
           "index": 14
         },
         "connections": [
-          18
+          "ORD_Two50_Execute_Perk_50_OrdASISExclude"
         ],
         "effects": [
           {
@@ -22291,7 +23054,7 @@
       {
         "perkId": "REQ_TwoHanded_Quarterstaff_DefensiveStrike",
         "perkName": "Defensive Strike",
-        "perkDescription": "You can more efficiently block and parry incoming attacks with quarterstaves.<br>[quaterstaves block 50% better, and bashes do twice the damage]",
+        "perkDescription": "You can more efficiently block and parry incoming attacks with quarterstaves.<br>[quarterstaves block 50% better, and bashes do twice the damage]",
         "level": 0,
         "ranks": 1,
         "isPlayable": true,
@@ -22304,7 +23067,7 @@
           "index": 19
         },
         "connections": [
-          17
+          "ORD_Two90_BearHide_Perk_90"
         ],
         "effects": [
           {
@@ -22314,10 +23077,10 @@
             "conditions": [
               {
                 "operator": "Equal to",
-                "functionIndex": 682,
+                "functionIndex": 560,
                 "comparisonValue": 1,
                 "runOnType": "Subject",
-                "parameter1": 145612673,
+                "parameter1": 68044161,
                 "parameter2": 0
               }
             ],
@@ -22330,10 +23093,10 @@
             "conditions": [
               {
                 "operator": "Equal to",
-                "functionIndex": 682,
+                "functionIndex": 560,
                 "comparisonValue": 1,
                 "runOnType": "Subject",
-                "parameter1": 145612673,
+                "parameter1": 68044161,
                 "parameter2": 0
               }
             ],
@@ -22530,7 +23293,7 @@
           "index": 7
         },
         "connections": [
-          22
+          "Feat_Perk_Skill_OneHanded_ArmedSpellcasting1"
         ],
         "effects": [
           {
@@ -22571,7 +23334,7 @@
           "index": 1
         },
         "connections": [
-          4
+          "REQ_OneHanded_SwordFocus1"
         ],
         "effects": [
           {
@@ -22631,7 +23394,7 @@
           "index": 2
         },
         "connections": [
-          9
+          "REQ_OneHanded_StunningCharge"
         ],
         "effects": [
           {
@@ -22946,7 +23709,7 @@
           "index": 11
         },
         "connections": [
-          9
+          "REQ_OneHanded_StunningCharge"
         ],
         "effects": [
           {
@@ -22998,7 +23761,7 @@
           "index": 3
         },
         "connections": [
-          15
+          "REQ_OneHanded_WarAxe_Armsbreaker"
         ],
         "effects": [
           {
@@ -23059,7 +23822,7 @@
           "index": 5
         },
         "connections": [
-          14
+          "REQ_OneHanded_Mace_StunningBlow"
         ],
         "effects": [
           {
@@ -23120,7 +23883,7 @@
           "index": 4
         },
         "connections": [
-          13
+          "REQ_OneHanded_Sword_DisarmingBlade"
         ],
         "effects": [
           {
@@ -23189,7 +23952,7 @@
           "index": 6
         },
         "connections": [
-          10
+          "REQ_OneHanded_StormOfSteel"
         ],
         "effects": [
           {
@@ -23307,7 +24070,7 @@
           "index": 8
         },
         "connections": [
-          19
+          "REQ_OneHanded_Unarmed_UnarmedDefense"
         ],
         "effects": [
           {
@@ -23356,7 +24119,7 @@
           "index": 12
         },
         "connections": [
-          16
+          "REQ_OneHanded_Dagger_Puncture"
         ],
         "effects": [
           {
@@ -23442,7 +24205,7 @@
           "index": 13
         },
         "connections": [
-          23
+          "SWORDORD_One60_DeathOrGlory_Perk_60"
         ],
         "effects": [
           {
@@ -23494,7 +24257,7 @@
           "index": 14
         },
         "connections": [
-          24
+          "MACEORD_One70_GrandSlam_Perk_70_OrdASISExclude"
         ],
         "effects": [
           {
@@ -23562,7 +24325,7 @@
           "index": 15
         },
         "connections": [
-          25
+          "AXEORD_One50_Execute_Perk_50_OrdASISExclude"
         ],
         "effects": [
           {
@@ -23630,7 +24393,7 @@
           "index": 16
         },
         "connections": [
-          26
+          "DAGGERORD_One70_DeathAdder_Perk_70_OrdASISExclude"
         ],
         "effects": [
           {
@@ -23698,7 +24461,7 @@
           "index": 17
         },
         "connections": [
-          18
+          "REQ_OneHanded_Grapple_Takedown"
         ],
         "effects": [
           {
@@ -23800,7 +24563,7 @@
           "index": 19
         },
         "connections": [
-          20
+          "REQ_OneHanded_Unarmed_UnarmedStance"
         ],
         "effects": [
           {
