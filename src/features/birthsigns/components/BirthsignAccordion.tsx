@@ -15,7 +15,7 @@ import type { Birthsign } from '../types'
 import { parseDescription, getUserFriendlyStat } from '../utils'
 
 /**
- * Component to format any description with highlighted values in angle brackets
+ * Component to format any description with highlighted values in angle brackets, numeric stat increases, and bold attributes/skills
  */
 function FormattedText({ text, className = "text-sm text-muted-foreground" }: { 
   text: string; 
@@ -26,23 +26,95 @@ function FormattedText({ text, className = "text-sm text-muted-foreground" }: {
   // Parse the description to replace placeholders
   const parsedText = parseDescription(text)
   
-  // Split the processed text by angle bracket patterns and highlight the values
-  const parts = parsedText.split(/(<[^>]+>)/g)
+  // Define attributes and skills that should be bolded
+  const attributesAndSkills = [
+    // Core attributes
+    'health', 'magicka', 'stamina',
+    // Attribute variations
+    'health regeneration', 'magicka regeneration', 'stamina regeneration',
+    // Skills
+    'one-handed', 'two-handed', 'archery', 'block', 'heavy armor', 'light armor',
+    'smithing', 'alchemy', 'enchanting', 'restoration', 'destruction', 'alteration',
+    'illusion', 'conjuration', 'mysticism', 'speech', 'lockpicking', 'sneak',
+    'pickpocket', 'lockpicking', 'pickpocketing', 'stealth', 'acrobatics',
+    // Skill variations
+    'one handed', 'two handed', 'heavy armor', 'light armor',
+    // Combat stats
+    'weapon damage', 'armor rating', 'armor penetration', 'unarmed damage',
+    'movement speed', 'sprint speed', 'carry weight', 'spell strength',
+    'shout cooldown', 'price modification', 'damage reflection',
+    // Resistances
+    'poison resistance', 'fire resistance', 'frost resistance', 'shock resistance',
+    'magic resistance', 'disease resistance',
+    // Special effects
+    'lockpicking durability', 'lockpicking expertise', 'pickpocketing success',
+    'stealth detection', 'enchanting strength'
+  ]
+  
+  // Create a regex pattern for attributes and skills (case insensitive)
+  const attributesPattern = new RegExp(`\\b(${attributesAndSkills.join('|')})\\b`, 'gi')
+  
+  // First, split by angle bracket patterns and highlight those values
+  let parts = parsedText.split(/(<[^>]+>)/g)
+  
+  // Then, for each part that's not an angle bracket value, process attributes and numeric values
+  const processedParts = parts.map((part, index) => {
+    if (part.startsWith('<') && part.endsWith('>')) {
+      // This is an angle bracket value - remove the brackets and style it
+      const value = part.slice(1, -1)
+      return (
+        <span key={`bracket-${index}`} className="font-bold italic text-skyrim-gold">
+          {value}
+        </span>
+      )
+    } else {
+      // This is regular text - first bold attributes and skills, then highlight numeric values
+      let processedPart = part
+      
+      // Replace attributes and skills with bold versions
+      processedPart = processedPart.replace(attributesPattern, (match) => {
+        return `<bold>${match}</bold>`
+      })
+      
+      // Split by the bold markers and numeric patterns
+      const subParts = processedPart.split(/(<bold>.*?<\/bold>|\+?\d+(?:\.\d+)?%?)/g)
+      
+      return subParts.map((subPart, subIndex) => {
+        if (subPart.startsWith('<bold>') && subPart.endsWith('</bold>')) {
+          // This is a bold attribute/skill - remove markers and style it
+          const attribute = subPart.slice(6, -7) // Remove <bold> and </bold>
+          return (
+            <span key={`attribute-${index}-${subIndex}`} className="font-semibold text-primary">
+              {attribute}
+            </span>
+          )
+                 } else if (/^[+-]?\d+(?:\.\d+)?%?$/.test(subPart)) {
+           // This is a numeric value - determine if it's positive or negative
+           const numericValue = parseFloat(subPart)
+           const isPositive = subPart.startsWith('+') || numericValue > 0
+           const isNegative = subPart.startsWith('-') || numericValue < 0
+           
+           let colorClass = 'text-skyrim-gold' // Default for neutral values
+           if (isPositive) {
+             colorClass = 'text-green-600'
+           } else if (isNegative) {
+             colorClass = 'text-red-600'
+           }
+           
+           return (
+             <span key={`numeric-${index}-${subIndex}`} className={`font-bold ${colorClass}`}>
+               {subPart}
+             </span>
+           )
+        }
+        return subPart
+      })
+    }
+  })
   
   return (
     <div className={className}>
-      {parts.map((part, index) => {
-        if (part.startsWith('<') && part.endsWith('>')) {
-          // This is a value to highlight - remove the brackets and style it
-          const value = part.slice(1, -1)
-          return (
-            <span key={index} className="font-bold italic text-skyrim-gold">
-              {value}
-            </span>
-          )
-        }
-        return part
-      })}
+      {processedParts}
     </div>
   )
 }
@@ -109,12 +181,19 @@ const groupIcons: Record<string, string> = {
   'Other': '⭐'
 }
 
-const groupColors: Record<string, string> = {
-  'Warrior': 'text-red-600',
-  'Mage': 'text-blue-600',
-  'Thief': 'text-green-600',
-  'Serpent': 'text-purple-600',
-  'Other': 'text-yellow-500'
+// Birthsign group styling - matching religion type styling pattern
+const birthsignGroupStyles: Record<string, string> = {
+  'Warrior': 'bg-red-100 text-red-800 border-red-200 hover:bg-red-200',
+  'Mage': 'bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-200',
+  'Thief': 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200',
+  'Serpent': 'bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-200',
+  'Other': 'bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-200'
+}
+
+const sizeClasses = {
+  sm: 'text-xs px-2 py-0.5',
+  md: 'text-sm px-2.5 py-1',
+  lg: 'text-base px-3 py-1.5'
 }
 
 export function BirthsignAccordion({ 
@@ -131,7 +210,6 @@ export function BirthsignAccordion({
   if (!originalBirthsign) return null
 
   const groupIcon = groupIcons[originalBirthsign.group] || groupIcons['Other']
-  const groupColor = groupColors[originalBirthsign.group] || groupColors['Other']
 
   const getEffectIcon = (effectType: string) => {
     return effectIcons[effectType.toLowerCase()] || <Star className="h-4 w-4 text-muted-foreground" />
@@ -140,9 +218,9 @@ export function BirthsignAccordion({
   const getEffectIconByType = (type: 'positive' | 'negative' | 'neutral') => {
     switch (type) {
       case 'positive':
-        return <Plus className="h-4 w-4 text-green-500" />
+        return null // Removed redundant plus icon
       case 'negative':
-        return <Minus className="h-4 w-4 text-red-500" />
+        return null // Removed redundant minus icon
       case 'neutral':
         return <Circle className="h-4 w-4 text-blue-500" />
       default:
@@ -155,45 +233,78 @@ export function BirthsignAccordion({
 
   return (
     <Card className={cn("transition-all duration-200", className)}>
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-3 cursor-pointer" onClick={onToggle}>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-1">
             <span className="text-2xl">{groupIcon}</span>
-            <div>
-              <H3 className="text-lg font-semibold">{originalBirthsign.name}</H3>
-              <div className="flex items-center gap-2 mt-1">
-                <Badge 
-                  variant="secondary" 
-                  className={cn('text-xs', groupColor)}
-                >
-                  {originalBirthsign.group}
-                </Badge>
-                {originalBirthsign.powers.length > 0 && (
-                  <Badge variant="outline" className="text-xs">
-                    {originalBirthsign.powers.length} power{originalBirthsign.powers.length !== 1 ? 's' : ''}
-                  </Badge>
-                )}
-              </div>
+            <div className="flex-1">
+              <H3 className="text-primary font-semibold">{originalBirthsign.name}</H3>
             </div>
           </div>
           
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onToggle}
-            className="h-8 w-8 p-0"
-          >
-            {isExpanded ? (
-              <ChevronUp className="h-4 w-4" />
-            ) : (
-              <ChevronRight className="h-4 w-4" />
+          {/* Right side: Classification + Effects + Button */}
+          <div className="flex items-center gap-3">
+            {/* Birthsign group tag */}
+            {originalBirthsign.group && (
+              <Badge 
+                variant="outline"
+                className={cn(
+                  birthsignGroupStyles[originalBirthsign.group] || 'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200',
+                  sizeClasses.sm,
+                  'font-medium transition-colors'
+                )}
+              >
+                {originalBirthsign.group}
+              </Badge>
             )}
-          </Button>
+            
+            {/* Powers count badge */}
+            {originalBirthsign.powers.length > 0 && (
+              <Badge
+                variant="outline"
+                className={cn(
+                  'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
+                  sizeClasses.sm,
+                  'font-medium transition-colors'
+                )}
+              >
+                <Lightning className="h-3 w-3 mr-1" />
+                {originalBirthsign.powers.length} power{originalBirthsign.powers.length !== 1 ? 's' : ''}
+              </Badge>
+            )}
+            
+            {/* Quick effects preview */}
+            {item.effects && item.effects.length > 0 && (
+              <div className="hidden md:flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <Star className="h-3 w-3 text-yellow-500" />
+                  <span>{item.effects.length} effects</span>
+                </div>
+              </div>
+            )}
+            
+            {/* Expand/collapse button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 w-8 p-0"
+              onClick={(e) => {
+                e.stopPropagation()
+                onToggle?.()
+              }}
+            >
+              {isExpanded ? (
+                <ChevronUp className="h-4 w-4" />
+              ) : (
+                <ChevronRight className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
         </div>
         
         <FormattedText 
           text={parsedDescription} 
-          className="text-sm text-muted-foreground mt-2"
+          className="text-base text-muted-foreground mt-2"
         />
       </CardHeader>
 
@@ -203,10 +314,7 @@ export function BirthsignAccordion({
             {/* Stats Section */}
             {showStats && originalBirthsign.stat_modifications.length > 0 && (
               <div>
-                <H4 className="text-base font-semibold mb-3 flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-blue-500" />
-                  Stat Modifications
-                </H4>
+                <h5 className="text-lg font-medium text-foreground mb-3">Stat Modifications</h5>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {originalBirthsign.stat_modifications.map((stat, index) => (
                     <div key={index} className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
@@ -217,12 +325,14 @@ export function BirthsignAccordion({
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
-                        {getEffectIconByType(stat.type === 'bonus' ? 'positive' : 'negative')}
                         <span className={cn(
                           "font-bold",
                           stat.type === 'bonus' ? "text-green-600" : "text-red-600"
                         )}>
-                          {stat.type === 'bonus' ? '+' : '-'}{stat.value}{stat.value_type === 'percentage' ? '%' : ''}
+                          {stat.type === 'bonus' 
+                            ? (stat.value >= 0 ? '+' : '') + stat.value + (stat.value_type === 'percentage' ? '%' : '')
+                            : (stat.value < 0 ? '' : '-') + stat.value + (stat.value_type === 'percentage' ? '%' : '')
+                          }
                         </span>
                       </div>
                     </div>
@@ -234,10 +344,7 @@ export function BirthsignAccordion({
             {/* Powers Section */}
             {showPowers && originalBirthsign.powers.length > 0 && (
               <div>
-                <H4 className="text-base font-semibold mb-3 flex items-center gap-2">
-                  <Lightning className="h-4 w-4 text-yellow-500" />
-                  Powers
-                </H4>
+                <h5 className="text-lg font-medium text-foreground mb-3">Powers</h5>
                 <div className="space-y-3">
                   {originalBirthsign.powers.map((power, index) => (
                     <div key={index} className="p-4 rounded-lg border bg-muted/30">
@@ -262,10 +369,7 @@ export function BirthsignAccordion({
             {/* Skills Section */}
             {showSkills && originalBirthsign.skill_bonuses.length > 0 && (
               <div>
-                <H4 className="text-base font-semibold mb-3 flex items-center gap-2">
-                  <BookOpen className="h-4 w-4 text-green-500" />
-                  Skill Bonuses
-                </H4>
+                <h5 className="text-lg font-medium text-foreground mb-3">Skill Bonuses</h5>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {originalBirthsign.skill_bonuses.map((skill, index) => (
                     <div key={index} className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
@@ -276,7 +380,6 @@ export function BirthsignAccordion({
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
-                        {getEffectIconByType('positive')}
                         <span className="font-bold text-green-600">
                           +{skill.value}{skill.value_type === 'percentage' ? '%' : ''}
                         </span>
@@ -290,10 +393,7 @@ export function BirthsignAccordion({
             {/* Effects Section */}
             {showEffects && (originalBirthsign.conditional_effects?.length > 0 || originalBirthsign.mastery_effects?.length > 0) && (
               <div>
-                <H4 className="text-base font-semibold mb-3 flex items-center gap-2">
-                  <Star className="h-4 w-4 text-purple-500" />
-                  Special Effects
-                </H4>
+                <h5 className="text-lg font-medium text-foreground mb-3">Special Effects</h5>
                 <div className="space-y-3">
                   {/* Conditional Effects */}
                   {originalBirthsign.conditional_effects?.map((effect, index) => (
@@ -345,7 +445,7 @@ export function BirthsignAccordion({
             {/* Tags */}
             {item.tags && item.tags.length > 0 && (
               <div>
-                <H4 className="text-base font-semibold mb-3">Tags</H4>
+                <h5 className="text-lg font-medium text-foreground mb-3">Tags</h5>
                 <div className="flex flex-wrap gap-2">
                   {item.tags.map((tag, index) => (
                     <Badge key={index} variant="outline" className="text-xs">
