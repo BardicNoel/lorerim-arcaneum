@@ -15,7 +15,7 @@ import { SiteHeader } from './SiteHeader'
 import { Z_INDEX } from '@/lib/constants'
 import { Home } from 'lucide-react'
 import { useURLSync } from '@/shared/hooks/useURLSync'
-import { FloatingBuildStatus } from '@/shared/components/FloatingBuildStatus'
+import { FloatingBuildButton } from '@/shared/components/FloatingBuildButton'
 
 const navSections = [
   {
@@ -170,7 +170,7 @@ function App() {
           </main>
         </div>
       </div>
-      <FloatingBuildStatus />
+      <FloatingBuildButton />
     </HashRouter>
   )
 }

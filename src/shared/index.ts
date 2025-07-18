@@ -3,7 +3,7 @@ export * from './components/playerCreation'
 
 // Build Components
 export * from './components/BuildStatus'
-export * from './components/FloatingBuildStatus'
+export * from './components/FloatingBuildButton'
 
 // Hooks
 export * from './hooks/usePlayerCreation'
