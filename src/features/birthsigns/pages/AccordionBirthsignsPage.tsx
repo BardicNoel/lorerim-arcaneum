@@ -67,7 +67,6 @@ export function AccordionBirthsignsPage() {
   const generateSearchCategories = (): SearchCategory[] => {
     const groups = getAllGroups(birthsigns)
     const stats = getAllStats(birthsigns)
-    const powers = getAllPowers(birthsigns)
 
     return [
       {
@@ -98,18 +97,6 @@ export function AccordionBirthsignsPage() {
           value: stat,
           category: 'Stats & Skills',
           description: `Birthsigns that affect ${stat}`
-        }))
-      },
-      {
-        id: 'powers',
-        name: 'Powers',
-        placeholder: 'Search by powers...',
-        options: powers.map(power => ({
-          id: `power-${power}`,
-          label: power,
-          value: power,
-          category: 'Powers',
-          description: `Birthsigns with ${power} power`
         }))
       }
     ]
@@ -172,10 +159,6 @@ export function AccordionBirthsignsPage() {
             ...birthsign.skill_bonuses.map(skill => skill.stat)
           ]
           return allStats.some(stat => stat === tag.value)
-        
-        case 'Powers':
-          // Filter by powers
-          return birthsign.powers.some(power => power.name === tag.value)
         
         default:
           return true
@@ -305,7 +288,7 @@ export function AccordionBirthsignsPage() {
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="flex items-center gap-2">
               <ChevronDown className="h-4 w-4" />
-              {sortBy === 'alphabetical' ? 'A-Z' : sortBy === 'group' ? 'Group' : 'Power Count'}
+              {sortBy === 'alphabetical' ? 'A-Z' : sortBy === 'group' ? 'Type' : 'Count'}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

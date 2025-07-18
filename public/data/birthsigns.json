@@ -412,7 +412,7 @@
   {
     "name": "Serpent",
     "group": "Serpent",
-    "description": "Those under the sign of the serpent have improved precision, resistance to poison and paraylsis, and can cast Serpent's Curse once a day. Armor penetration with all weapons is increased by <15>, poison deals <50>% less damage to you, doubling at level <40>, most paralysis effects don't adversely affect you, you receive <Serpent's Curse> power.",
+    "description": "Those under the sign of the serpent have improved precision, resistance to poison and paralysis, and can cast Serpent's Curse once a day. Armor penetration with all weapons is increased by <15>, poison deals <50>% less damage to you, doubling at level <40>, most paralysis effects don't adversely affect you, you receive <Serpent's Curse> power.",
     "powers": [
       {
         "name": "Serpent's Curse",
