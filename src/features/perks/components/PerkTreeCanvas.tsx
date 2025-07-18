@@ -16,7 +16,7 @@ import type {
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { PerkNode } from "./PerkNode";
-import type { PerkTree, PerkNode as PerkNodeType } from "../types";
+import type { PerkTree, PerkNode as PerkNodeType, PerkNodeData } from "../types";
 import { validatePerkTreeSafe } from "../utils";
 
 interface PerkTreeCanvasProps {
@@ -136,7 +136,7 @@ function buildTreeStructure(perks: PerkNodeType[]): Map<string, TreeNode> {
   return treeNodes;
 }
 
-// Hierarchical layout algorithm with parent-child alignment
+// Multi-parent aware layout algorithm
 function calculateNodePositions(perks: PerkNodeType[]) {
   const positions = new Map<string, { x: number; y: number }>();
   
@@ -151,7 +151,7 @@ function calculateNodePositions(perks: PerkNodeType[]) {
   // Calculate spacing
   const nodeWidth = 140;
   const nodeHeight = 80;
-  const horizontalSpacing = nodeWidth * 1.5;
+  const horizontalSpacing = nodeWidth * 0.5; // 50% of node width (70px)
   const verticalSpacing = nodeHeight + 20;
   const padding = 50;
   
@@ -208,47 +208,10 @@ function calculateNodePositions(perks: PerkNodeType[]) {
     calculateSubtreeWidth(perkId);
   });
   
-  // Position nodes recursively (top-down)
-  const positionNode = (perkId: string, centerX: number, level: number) => {
-    const node = treeNodes.get(perkId)!;
-    const subtreeWidth = subtreeWidths.get(perkId)!;
-    
-    // Calculate Y position (inverted: roots at bottom, higher levels at top)
-    const y = (maxDepth - level) * verticalSpacing + padding;
-    
-    // Position this node at the center
-    const x = centerX - (nodeWidth / 2);
-    positions.set(perkId, { x, y });
-    
-    // Position children
-    if (node.children.length > 0) {
-      const childrenLevel = level + 1;
-      
-      // Calculate total width needed for all children
-      let totalChildrenWidth = 0;
-      node.children.forEach(childId => {
-        totalChildrenWidth += subtreeWidths.get(childId)!;
-      });
-      
-      // Add spacing between children
-      if (node.children.length > 1) {
-        totalChildrenWidth += (node.children.length - 1) * horizontalSpacing;
-      }
-      
-      // Start positioning children from the left edge of the parent's subtree
-      let currentX = centerX - (totalChildrenWidth / 2);
-      
-      node.children.forEach(childId => {
-        const childSubtreeWidth = subtreeWidths.get(childId)!;
-        const childCenterX = currentX + (childSubtreeWidth / 2);
-        
-        positionNode(childId, childCenterX, childrenLevel);
-        currentX += childSubtreeWidth + horizontalSpacing;
-      });
-    }
-  };
+  // Position nodes level by level (bottom-up approach)
+  const positionedNodes = new Set<string>();
   
-  // Find root nodes and position them
+  // Start with root nodes (level 0)
   const rootNodes = Array.from(treeNodes.entries())
     .filter(([_, node]) => node.parents.length === 0)
     .map(([perkId, _]) => perkId);
@@ -274,9 +237,46 @@ function calculateNodePositions(perks: PerkNodeType[]) {
     rootNodes.forEach(perkId => {
       const subtreeWidth = subtreeWidths.get(perkId)!;
       const centerX = currentX + (subtreeWidth / 2);
+      const y = (maxDepth - 0) * verticalSpacing + padding;
+      const x = centerX - (nodeWidth / 2);
       
-      positionNode(perkId, centerX, 0);
+      positions.set(perkId, { x, y });
+      positionedNodes.add(perkId);
       currentX += subtreeWidth + horizontalSpacing;
+    });
+  }
+  
+  // Position remaining levels
+  for (let level = 1; level <= maxDepth; level++) {
+    const levelNodes = nodesByLevel.get(level) || [];
+    
+    levelNodes.forEach(perkId => {
+      if (positionedNodes.has(perkId)) return;
+      
+      const node = treeNodes.get(perkId)!;
+      const y = (maxDepth - level) * verticalSpacing + padding;
+      
+      // Calculate center position based on parents
+      if (node.parents.length > 0) {
+        let totalParentX = 0;
+        let validParents = 0;
+        
+        node.parents.forEach(parentId => {
+          if (positions.has(parentId)) {
+            const parentPos = positions.get(parentId)!;
+            totalParentX += parentPos.x + (nodeWidth / 2); // Center of parent
+            validParents++;
+          }
+        });
+        
+        if (validParents > 0) {
+          // Center between all parents
+          const centerX = totalParentX / validParents;
+          const x = centerX - (nodeWidth / 2);
+          positions.set(perkId, { x, y });
+          positionedNodes.add(perkId);
+        }
+      }
     });
   }
   
@@ -353,7 +353,7 @@ export function PerkTreeCanvas({
           selected: false, // Will be updated via useEffect
           hasChildren: hasChildren,
           isRoot: isRoot,
-        },
+        } as PerkNodeData,
       };
     });
     
@@ -367,33 +367,55 @@ export function PerkTreeCanvas({
     
     const edges: Edge[] = [];
     
+    console.log('Creating edges for tree:', validatedTree.treeName);
+    console.log('Total perks:', validatedTree.perks.length);
+    
     validatedTree.perks.forEach((perk) => {
       const perkId = perk.edid;
       const perkName = perk.name;
       
+      console.log(`Processing perk: ${perkName} (${perkId})`);
+      console.log('Connections:', perk.connections);
+      
       // Handle connections object (new format)
       if (perk.connections && perk.connections.children && perk.connections.children.length > 0) {
+        console.log(`Found ${perk.connections.children.length} children for ${perkName}`);
+        
         perk.connections.children.forEach((childId: string) => {
           // Skip self-references
-          if (childId === perkId) return;
+          if (childId === perkId) {
+            console.log(`Skipping self-reference for ${perkName}`);
+            return;
+          }
           
           // Check if child exists in our tree
           const childExists = validatedTree.perks.some(p => p.edid === childId);
           if (childExists) {
+            const childPerk = validatedTree.perks.find(p => p.edid === childId);
+            console.log(`Creating edge: ${perkName} -> ${childPerk?.name} (${childId})`);
+            
             edges.push({
               id: `${perkId}-${childId}`,
               source: perkId,
               target: childId,
+              type: "straight",
               style: { 
                 stroke: "#d4af37", 
                 strokeWidth: 3,
                 opacity: 0.8
               },
             });
+          } else {
+            console.log(`Child ${childId} not found in tree for ${perkName}`);
           }
         });
+      } else {
+        console.log(`No connections for ${perkName}`);
       }
     });
+    
+    console.log(`Created ${edges.length} edges total`);
+    console.log('Edge details:', edges.map(e => `${e.source} -> ${e.target}`));
     
     return edges;
   }, [validatedTree]);
@@ -420,8 +442,8 @@ export function PerkTreeCanvas({
           data: {
             ...node.data,
             selected: isSelected,
-            currentRank: selectedPerk?.currentRank || 0,
-          },
+            currentRank: (selectedPerk as PerkNodeData)?.currentRank || 0,
+          } as PerkNodeData,
         };
       })
     );
