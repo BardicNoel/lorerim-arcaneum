@@ -1,0 +1,231 @@
+# 📐 Design Spec: Zustand + URL Sync for Build (Skyrim Character Builder)
+
+---
+
+## 🏹 1. Data Model (Build State)
+
+### 📦 Shape of `build`
+
+```ts
+interface BuildState {
+  v: number; // Schema version
+  name: string; // Character name
+  notes: string; // RP flavor text
+  race: string | null; // EDID
+  stone: string | null; // EDID
+  religion: string | null; // EDID
+  traits: string[]; // Array of EDIDs
+  skills: {
+    major: string[]; // Array of EDIDs
+    minor: string[]; // Array of EDIDs
+  };
+  equipment: string[]; // Array of EDIDs
+}
+```
+
+### 🌱 Default Build
+
+```ts
+const DEFAULT_BUILD: BuildState = {
+  v: 1,
+  name: "",
+  notes: "",
+  race: null,
+  stone: null,
+  religion: null,
+  traits: [],
+  skills: {
+    major: [],
+    minor: []
+  },
+  equipment: []
+};
+```
+
+---
+
+## 🏪 2. Zustand Store
+
+### 🔥 Store API
+
+```ts
+interface CharacterStore {
+  build: BuildState;
+  setBuild: (build: BuildState) => void;
+  updateBuild: (partial: Partial<BuildState>) => void;
+  resetBuild: () => void;
+}
+```
+
+### 🛠 Store Implementation
+
+```ts
+import create from "zustand";
+
+export const useCharacterStore = create<CharacterStore>((set) => ({
+  build: DEFAULT_BUILD,
+  setBuild: (build) => set({ build }),
+  updateBuild: (partial) =>
+    set((state) => ({
+      build: { ...state.build, ...partial }
+    })),
+  resetBuild: () => set({ build: DEFAULT_BUILD })
+}));
+```
+
+✅ `setBuild` → Replace entire build
+✅ `updateBuild` → Partial update (merge)
+✅ `resetBuild` → Back to default
+
+---
+
+## 🔗 3. URL Sync Logic
+
+### 🗜️ Encoding Helper (Base64 URL-safe)
+
+```ts
+const encode = (obj: any): string =>
+  btoa(unescape(encodeURIComponent(JSON.stringify(obj))))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+
+const decode = (str: string): any => {
+  try {
+    const b64 = str.replace(/-/g, "+").replace(/_/g, "/");
+    return JSON.parse(decodeURIComponent(escape(atob(b64))));
+  } catch {
+    return null;
+  }
+};
+```
+
+✅ Removes `+`, `/`, `=` for clean URLs
+✅ Handles errors gracefully
+
+---
+
+### 📡 Sync Hook (`useURLSync`)
+
+```ts
+import { useEffect } from "react";
+import { useCharacterStore } from "./useCharacterStore";
+
+export const useURLSync = () => {
+  const { build, setBuild } = useCharacterStore();
+
+  // Hydrate on load
+  useEffect(() => {
+    const hash = window.location.hash;
+    const params = new URLSearchParams(hash.split("?")[1]);
+    const encodedBuild = params.get("b");
+    if (encodedBuild) {
+      const decoded = decode(encodedBuild);
+      if (decoded?.v === 1) {
+        setBuild(decoded);
+      } else {
+        console.warn("Invalid or outdated build schema in URL");
+      }
+    }
+  }, [setBuild]);
+
+  // Update URL on state change
+  useEffect(() => {
+    const encodedBuild = encode(build);
+    const newHash = `#/build?b=${encodedBuild}`;
+    window.history.replaceState(null, "", newHash);
+  }, [build]);
+};
+```
+
+✅ Hydrates state from URL **on initial load**
+✅ Keeps URL in sync **on any build change**
+✅ Uses `replaceState` → No history spam
+
+---
+
+## 🖥️ 4. App Integration
+
+### 🌳 App Root
+
+```tsx
+import { HashRouter, Route, Routes } from "react-router-dom";
+import { useURLSync } from "./useURLSync";
+import BuildPage from "./BuildPage";
+
+export default function App() {
+  useURLSync();
+
+  return (
+    <HashRouter>
+      <Routes>
+        <Route path="/build" element={<BuildPage />} />
+      </Routes>
+    </HashRouter>
+  );
+}
+```
+
+### 📄 Dummy BuildPage
+
+```tsx
+import { useCharacterStore } from "./useCharacterStore";
+
+export default function BuildPage() {
+  const { build, updateBuild, resetBuild } = useCharacterStore();
+
+  return (
+    <div>
+      <h1>Character Builder</h1>
+      <input
+        type="text"
+        placeholder="Name"
+        value={build.name}
+        onChange={(e) => updateBuild({ name: e.target.value })}
+      />
+      <textarea
+        placeholder="Notes"
+        value={build.notes}
+        onChange={(e) => updateBuild({ notes: e.target.value })}
+      />
+      <button onClick={resetBuild}>Reset</button>
+      <pre>{JSON.stringify(build, null, 2)}</pre>
+    </div>
+  );
+}
+```
+
+✅ Every change updates state → triggers URL sync
+✅ Copy URL → open in new tab → state restored
+
+---
+
+## 🌐 Example URL (Result)
+
+```
+https://yourbuilder.github.io/#/build?b=eyJ2IjoxLCJuYW1lIjoiQXJkZW50aWEiLCJub3RlcyI6IlRoZSBTcGVsbHN3b3JkIn0
+```
+
+---
+
+# 🏁 Deliverables
+
+| Part              | Status  |
+| ----------------- | ------- |
+| Zustand Store     | ✅ Ready |
+| URL Sync Hook     | ✅ Ready |
+| React Integration | ✅ Ready |
+| GitHub Pages Safe | ✅ Yes   |
+
+---
+
+# 🚀 Next Steps
+
+1. Build and test with `build` only.
+2. Later extend pattern to `pinned` wishlist using a separate URL param (`p`).
+3. Add data lookups to resolve EDIDs into full record objects at runtime.
+---
+description:
+globs:
+alwaysApply: false
+---

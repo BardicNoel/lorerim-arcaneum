@@ -9,11 +9,13 @@ import NotFoundPage from '@/pages/NotFoundPage'
 import { AccordionRacesPage } from '@/features/races/pages/AccordionRacesPage'
 import { AccordionReligionsPage } from '@/features/religions/pages/AccordionReligionsPage'
 import { UnifiedDestinyPage } from '@/features/destiny'
+import BuildPage from '@/pages/BuildPage'
 
 export const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/build" element={<BuildPage />} />
       <Route path="/race" element={<AccordionRacesPage />} />
       <Route path="/destiny" element={<UnifiedDestinyPage />} />
       <Route path="/birth-signs" element={<AccordionBirthsignsPage />} />

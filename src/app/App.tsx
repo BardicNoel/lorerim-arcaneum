@@ -14,11 +14,14 @@ import { SidebarRail } from '@/shared/ui/sidebar/SidebarRail'
 import { SiteHeader } from './SiteHeader'
 import { Z_INDEX } from '@/lib/constants'
 import { Home } from 'lucide-react'
+import { useURLSync } from '@/shared/hooks/useURLSync'
+import { FloatingBuildStatus } from '@/shared/components/FloatingBuildStatus'
 
 const navSections = [
   {
     label: 'Character Creation',
     items: [
+      { to: '/build', label: 'Character Builder' },
       { to: '/race', label: 'Races' },
       { to: '/birth-signs', label: 'Birth Signs' },
       { to: '/traits', label: 'Traits' },
@@ -65,12 +68,28 @@ function AppSidebar({ collapsed }: { collapsed: boolean }) {
   const navigate = useNavigate()
   const currentPath = window.location.hash.replace(/^#\/?/, '/')
 
+  // Custom navigation that preserves build parameters
+  const navigateWithBuild = (to: string) => {
+    const currentHash = window.location.hash
+    const [currentPath, paramsString] = currentHash.split("?")
+    const params = new URLSearchParams(paramsString || "")
+    const buildParam = params.get("b")
+    
+    if (buildParam) {
+      // Preserve the build parameter when navigating
+      navigate(`${to}?b=${buildParam}`)
+    } else {
+      // No build parameter, just navigate normally
+      navigate(to)
+    }
+  }
+
   return (
     <Sidebar collapsed={collapsed}>
       <SidebarHeader>
         {!collapsed && (
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigateWithBuild('/')}
             className="flex items-center justify-center w-full gap-2 hover:bg-skyrim-gold/15 hover:shadow-md hover:scale-[1.02] active:scale-[0.98] rounded px-2 py-1 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-skyrim-gold/50 focus:ring-offset-1"
           >
             <Home className="w-4 h-4 text-skyrim-gold transition-transform duration-200 group-hover:scale-110" />
@@ -94,7 +113,7 @@ function AppSidebar({ collapsed }: { collapsed: boolean }) {
                     <SidebarMenuButton
                       asChild
                       isActive={isActive}
-                      onClick={() => navigate(item.to)}
+                      onClick={() => navigateWithBuild(item.to)}
                       tabIndex={0}
                     >
                       <span className="w-full text-left truncate">
@@ -126,6 +145,10 @@ function AppSidebar({ collapsed }: { collapsed: boolean }) {
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  
+  // Initialize URL sync for build state
+  useURLSync()
+  
   return (
     <HashRouter>
       <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -147,6 +170,7 @@ function App() {
           </main>
         </div>
       </div>
+      <FloatingBuildStatus />
     </HashRouter>
   )
 }
