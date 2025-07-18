@@ -4,7 +4,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/shared/ui/ui/ho
 import type { PerkNode as PerkNodeType } from "../types";
 
 interface PerkNodeProps {
-  data: PerkNodeType & { hasChildren?: boolean; isRoot?: boolean; selected?: boolean };
+  data: PerkNodeType & { hasChildren?: boolean; isRoot?: boolean; selected?: boolean; currentRank?: number };
   selected?: boolean;
   onTogglePerk?: (perkId: string) => void;
   onRankChange?: (perkId: string, newRank: number) => void;
@@ -13,17 +13,20 @@ interface PerkNodeProps {
 export function PerkNode({ data, selected, onTogglePerk, onRankChange }: PerkNodeProps) {
   // For multi-rank perks, consider them selected if rank > 0
   // For single-rank perks, use the boolean selected state
-  const isSelected = data.ranks > 1 
+  const totalRanks = data.totalRanks;
+  const isSelected = totalRanks > 1 
     ? (data.currentRank || 0) > 0 
     : (data.selected || selected);
 
   const handleToggle = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(`Toggling perk: ${data.perkName} (${data.perkId}), currently selected: ${isSelected}, current rank: ${data.currentRank}`);
+    const perkId = data.edid;
+    const perkName = data.name;
+    console.log(`Toggling perk: ${perkName} (${perkId}), currently selected: ${isSelected}, current rank: ${data.currentRank}`);
     
     if (onTogglePerk) {
-      onTogglePerk(data.perkId);
+      onTogglePerk(perkId);
     }
   };
 
@@ -33,9 +36,11 @@ export function PerkNode({ data, selected, onTogglePerk, onRankChange }: PerkNod
     
     // If the perk isn't selected yet, use togglePerk to select it with rank 1
     if (!isSelected) {
-      console.log(`Selecting multi-rank perk: ${data.perkName} with rank 1`);
+      const perkName = data.name;
+      console.log(`Selecting multi-rank perk: ${perkName} with rank 1`);
       if (onTogglePerk) {
-        onTogglePerk(data.perkId);
+        const perkId = data.edid;
+        onTogglePerk(perkId);
       }
       return;
     }
@@ -44,10 +49,12 @@ export function PerkNode({ data, selected, onTogglePerk, onRankChange }: PerkNod
     if (!onRankChange) return;
     
     const currentRank = data.currentRank || 0;
-    const nextRank = (currentRank + 1) % (data.ranks + 1); // 0 -> 1 -> 2 -> 3 -> 0
+    const nextRank = (currentRank + 1) % (totalRanks + 1); // 0 -> 1 -> 2 -> 3 -> 0
     
-    console.log(`Cycling rank for ${data.perkName}: ${currentRank} -> ${nextRank}`);
-    onRankChange(data.perkId, nextRank);
+    const perkName = data.name;
+    console.log(`Cycling rank for ${perkName}: ${currentRank} -> ${nextRank}`);
+    const perkId = data.edid;
+    onRankChange(perkId, nextRank);
   };
 
   const getNodeStyle = () => {
@@ -76,12 +83,13 @@ export function PerkNode({ data, selected, onTogglePerk, onRankChange }: PerkNod
       };
     }
 
-    if (data.level <= 0) {
+    // Don't make root nodes transparent - they should be fully visible
+    if (data.isRoot) {
       return {
         ...baseStyle,
-        borderColor: "hsl(var(--muted))",
-        color: "hsl(var(--muted-foreground))",
-        opacity: 0.7,
+        borderColor: "hsl(var(--border))",
+        backgroundColor: "hsl(var(--background))",
+        color: "hsl(var(--foreground))",
       };
     }
 
@@ -91,25 +99,28 @@ export function PerkNode({ data, selected, onTogglePerk, onRankChange }: PerkNod
     };
   };
 
+  // Get the description from the first rank
+  const description = data.ranks[0]?.description?.base || '';
+
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
         <div 
           style={getNodeStyle()} 
-          onClick={data.ranks > 1 ? handleRankCycle : handleToggle}
+          onClick={totalRanks > 1 ? handleRankCycle : handleToggle}
           onMouseDown={(e) => e.stopPropagation()}
         >
           {/* Only show target handle if this node is not a root (has prerequisites) */}
           {!data.isRoot && <Handle type="target" position={Position.Bottom} />}
           
           <div className="font-medium">
-            {data.perkName}
+            {data.name}
           </div>
 
           {/* Show rank info for multi-rank perks */}
-          {data.ranks > 1 && (
+          {totalRanks > 1 && (
             <div className="text-xs text-muted-foreground mt-1">
-              {data.currentRank || 0}/{data.ranks} ranks
+              {data.currentRank || 0}/{totalRanks} ranks
             </div>
           )}
 
@@ -120,13 +131,13 @@ export function PerkNode({ data, selected, onTogglePerk, onRankChange }: PerkNod
       
       <HoverCardContent className="w-80 bg-background border border-border shadow-lg" style={{ zIndex: 1000 }}>
         <div className="space-y-2">
-          <h4 className="font-semibold text-sm">{data.perkName}</h4>
+          <h4 className="font-semibold text-sm">{data.name}</h4>
           <div className="text-sm text-muted-foreground">
-            {data.perkDescription}
+            {description}
           </div>
-          {data.ranks > 1 && (
+          {totalRanks > 1 && (
             <div className="text-xs text-muted-foreground pt-2 border-t">
-              <strong>Ranks:</strong> {data.currentRank || 0}/{data.ranks}
+              <strong>Ranks:</strong> {data.currentRank || 0}/{totalRanks}
               <br />
               <em>Click to cycle through ranks</em>
             </div>
