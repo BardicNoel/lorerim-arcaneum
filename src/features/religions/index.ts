@@ -1,6 +1,9 @@
-export { UnifiedReligionsPage } from './pages/UnifiedReligionsPage'
-export { ReligionCard } from './components/ReligionCard'
-export { ReligionDetailPanel } from './components/ReligionDetailPanel'
-export { BlessingCard } from './components/BlessingCard'
-export { BlessingDetailPanel } from './components/BlessingDetailPanel'
-export type { Religion, ReligionPantheon, ReligionEffect, ReligionSpell, ReligionTenet } from './types' 
+export { AccordionReligionsPage } from "./pages/AccordionReligionsPage";
+export { ReligionAccordion } from "./components/ReligionAccordion";
+export type {
+  Religion,
+  ReligionPantheon,
+  ReligionEffect,
+  ReligionSpell,
+  ReligionTenet,
+} from "./types";
