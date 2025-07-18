@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import BirthSignsPage from '@/pages/BirthSignsPage'
+import { AccordionBirthsignsPage } from '@/features/birthsigns/pages/AccordionBirthsignsPage'
 import TraitsPage from '@/pages/TraitsPage'
 import EquipmentPage from '@/pages/EquipmentPage'
 import CraftingPage from '@/pages/CraftingPage'
@@ -16,7 +16,7 @@ export const AppRouter = () => {
       <Route path="/" element={<HomePage />} />
       <Route path="/race" element={<AccordionRacesPage />} />
       <Route path="/destiny" element={<UnifiedDestinyPage />} />
-      <Route path="/birth-signs" element={<BirthSignsPage />} />
+      <Route path="/birth-signs" element={<AccordionBirthsignsPage />} />
       <Route path="/traits" element={<TraitsPage />} />
       <Route path="/skills" element={<SkillsPage />} />
       <Route path="/religions" element={<AccordionReligionsPage />} />
