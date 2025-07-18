@@ -3,7 +3,7 @@ import { AccordionBirthsignsPage } from '@/features/birthsigns/pages/AccordionBi
 import { AccordionTraitsPage } from '@/features/traits/pages/AccordionTraitsPage'
 import EquipmentPage from '@/pages/EquipmentPage'
 import CraftingPage from '@/pages/CraftingPage'
-import SkillsPage from '@/pages/SkillsPage'
+import { AccordionSkillsPage } from '@/features/skills'
 import HomePage from '@/pages/HomePage'
 import NotFoundPage from '@/pages/NotFoundPage'
 import { AccordionRacesPage } from '@/features/races/pages/AccordionRacesPage'
@@ -18,7 +18,7 @@ export const AppRouter = () => {
       <Route path="/destiny" element={<UnifiedDestinyPage />} />
       <Route path="/birth-signs" element={<AccordionBirthsignsPage />} />
       <Route path="/traits" element={<AccordionTraitsPage />} />
-      <Route path="/skills" element={<SkillsPage />} />
+      <Route path="/skills" element={<AccordionSkillsPage />} />
       <Route path="/religions" element={<AccordionReligionsPage />} />
       <Route path="/equipment" element={<EquipmentPage />} />
       <Route path="/crafting" element={<CraftingPage />} />
