@@ -1,5 +1,11 @@
 // Core generic components
-export { GenericAccordionCard } from "./GenericAccordionCard";
+export {
+  GenericAccordionCard,
+  AccordionLeftControls,
+  AccordionHeader,
+  AccordionCollapsedContentSlot,
+  AccordionExpandedContentSlot,
+} from "./GenericAccordionCard";
 export { EntityAvatar } from "./EntityAvatar";
 export { CategoryBadge } from "./CategoryBadge";
 
