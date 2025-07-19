@@ -1,9 +1,12 @@
 import { useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useCharacterStore } from '../stores/characterStore'
-import { encode, decode } from '../utils/urlEncoding'
+import { decode, encode } from '../utils/urlEncoding'
 
 export const useURLSync = () => {
   const { build, setBuild } = useCharacterStore()
+  const location = useLocation()
+  const navigate = useNavigate()
 
   // Hydrate on load
   useEffect(() => {
