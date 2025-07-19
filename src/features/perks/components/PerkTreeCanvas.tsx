@@ -136,26 +136,32 @@ function buildTreeStructure(perks: PerkNodeType[]): Map<string, TreeNode> {
   return treeNodes;
 }
 
-// Multi-parent aware layout algorithm
+// Subtree-aware tree layout algorithm that maintains parent-child alignment
 function calculateNodePositions(perks: PerkNodeType[]) {
   const positions = new Map<string, { x: number; y: number }>();
   
   if (perks.length === 0) return positions;
+  
+  console.log('=== STARTING SUBTREE-AWARE NODE POSITIONING ===');
+  console.log(`Total perks to position: ${perks.length}`);
   
   // Build tree structure
   const treeNodes = buildTreeStructure(perks);
   
   // Find max depth
   const maxDepth = Math.max(...Array.from(treeNodes.values()).map(node => node.level));
+  console.log(`Max depth: ${maxDepth}`);
   
-  // Calculate spacing
+  // Node dimensions and spacing
   const nodeWidth = 140;
   const nodeHeight = 80;
-  const horizontalSpacing = nodeWidth * 0.5; // 50% of node width (70px)
-  const verticalSpacing = nodeHeight + 20;
+  const horizontalSpacing = nodeWidth * 1.5; // 210px - generous spacing
+  const verticalSpacing = nodeHeight + 50; // 130px - generous vertical spacing
   const padding = 50;
   
-  // Calculate the maximum number of nodes at any level
+  console.log(`Node dimensions: ${nodeWidth}x${nodeHeight}, spacing: ${horizontalSpacing}px horizontal, ${verticalSpacing}px vertical`);
+  
+  // Group nodes by level
   const nodesByLevel = new Map<number, string[]>();
   treeNodes.forEach((node, perkId) => {
     const level = node.level;
@@ -165,120 +171,250 @@ function calculateNodePositions(perks: PerkNodeType[]) {
     nodesByLevel.get(level)!.push(perkId);
   });
   
-  const maxNodesAtLevel = Math.max(...Array.from(nodesByLevel.values()).map(nodes => nodes.length));
-  
-  // Calculate total graph width needed
-  const totalGraphWidth = maxNodesAtLevel * nodeWidth + (maxNodesAtLevel - 1) * horizontalSpacing + 2 * padding;
-  
-  // Calculate subtree widths for each node
-  const subtreeWidths = new Map<string, number>();
-  
-  // Calculate subtree width recursively (bottom-up)
-  const calculateSubtreeWidth = (perkId: string): number => {
-    if (subtreeWidths.has(perkId)) {
-      return subtreeWidths.get(perkId)!;
-    }
-    
-    const node = treeNodes.get(perkId)!;
-    if (node.children.length === 0) {
-      // Leaf node - width is just the node width
-      subtreeWidths.set(perkId, nodeWidth);
-      return nodeWidth;
-    }
-    
-    // Calculate total width of all children
-    let totalChildrenWidth = 0;
-    node.children.forEach(childId => {
-      totalChildrenWidth += calculateSubtreeWidth(childId);
-    });
-    
-    // Add spacing between children
-    if (node.children.length > 1) {
-      totalChildrenWidth += (node.children.length - 1) * horizontalSpacing;
-    }
-    
-    // Use the larger of: node width or children width
-    const subtreeWidth = Math.max(nodeWidth, totalChildrenWidth);
-    subtreeWidths.set(perkId, subtreeWidth);
-    return subtreeWidth;
-  };
-  
-  // Calculate subtree widths for all nodes
-  treeNodes.forEach((node, perkId) => {
-    calculateSubtreeWidth(perkId);
+  console.log('Nodes by level:');
+  nodesByLevel.forEach((nodes, level) => {
+    console.log(`  Level ${level}: ${nodes.length} nodes`);
   });
   
-  // Position nodes level by level (bottom-up approach)
-  const positionedNodes = new Set<string>();
-  
-  // Start with root nodes (level 0)
-  const rootNodes = Array.from(treeNodes.entries())
-    .filter(([_, node]) => node.parents.length === 0)
-    .map(([perkId, _]) => perkId);
-  
-  if (rootNodes.length > 0) {
-    // Calculate total width needed for all root nodes
-    let totalRootWidth = 0;
-    rootNodes.forEach(perkId => {
-      totalRootWidth += subtreeWidths.get(perkId)!;
-    });
+  // Find separate trees (connected components)
+  const findConnectedComponents = (): string[][] => {
+    const visited = new Set<string>();
+    const components: string[][] = [];
     
-    // Add spacing between root nodes
-    if (rootNodes.length > 1) {
-      totalRootWidth += (rootNodes.length - 1) * horizontalSpacing;
-    }
-    
-    // Center the root nodes within the total graph width
-    const graphCenterX = totalGraphWidth / 2;
-    const rootStartX = graphCenterX - (totalRootWidth / 2);
-    
-    // Position root nodes
-    let currentX = rootStartX;
-    rootNodes.forEach(perkId => {
-      const subtreeWidth = subtreeWidths.get(perkId)!;
-      const centerX = currentX + (subtreeWidth / 2);
-      const y = (maxDepth - 0) * verticalSpacing + padding;
-      const x = centerX - (nodeWidth / 2);
-      
-      positions.set(perkId, { x, y });
-      positionedNodes.add(perkId);
-      currentX += subtreeWidth + horizontalSpacing;
-    });
-  }
-  
-  // Position remaining levels
-  for (let level = 1; level <= maxDepth; level++) {
-    const levelNodes = nodesByLevel.get(level) || [];
-    
-    levelNodes.forEach(perkId => {
-      if (positionedNodes.has(perkId)) return;
+    const dfs = (perkId: string, component: string[]) => {
+      if (visited.has(perkId)) return;
+      visited.add(perkId);
+      component.push(perkId);
       
       const node = treeNodes.get(perkId)!;
-      const y = (maxDepth - level) * verticalSpacing + padding;
-      
-      // Calculate center position based on parents
-      if (node.parents.length > 0) {
-        let totalParentX = 0;
-        let validParents = 0;
-        
-        node.parents.forEach(parentId => {
-          if (positions.has(parentId)) {
-            const parentPos = positions.get(parentId)!;
-            totalParentX += parentPos.x + (nodeWidth / 2); // Center of parent
-            validParents++;
-          }
-        });
-        
-        if (validParents > 0) {
-          // Center between all parents
-          const centerX = totalParentX / validParents;
-          const x = centerX - (nodeWidth / 2);
-          positions.set(perkId, { x, y });
-          positionedNodes.add(perkId);
-        }
+      // Visit children
+      node.children.forEach(childId => {
+        dfs(childId, component);
+      });
+      // Visit parents
+      node.parents.forEach(parentId => {
+        dfs(parentId, component);
+      });
+    };
+    
+    treeNodes.forEach((node, perkId) => {
+      if (!visited.has(perkId)) {
+        const component: string[] = [];
+        dfs(perkId, component);
+        components.push(component);
       }
     });
-  }
+    
+    return components;
+  };
+  
+  const connectedComponents = findConnectedComponents();
+  console.log(`Found ${connectedComponents.length} connected components (trees)`);
+  
+  // Helper function to get all descendants of a node (including the node itself)
+  const getSubtreeNodes = (rootId: string): Set<string> => {
+    const subtree = new Set<string>();
+    const queue = [rootId];
+    
+    while (queue.length > 0) {
+      const currentId = queue.shift()!;
+      if (subtree.has(currentId)) continue;
+      
+      subtree.add(currentId);
+      const node = treeNodes.get(currentId)!;
+      node.children.forEach(childId => {
+        queue.push(childId);
+      });
+    }
+    
+    return subtree;
+  };
+  
+  // Helper function to move an entire subtree by a given offset
+  const moveSubtree = (rootId: string, offsetX: number) => {
+    const subtreeNodes = getSubtreeNodes(rootId);
+    console.log(`  Moving subtree rooted at ${rootId} by ${offsetX}px (${subtreeNodes.size} nodes)`);
+    
+    subtreeNodes.forEach(nodeId => {
+      const pos = positions.get(nodeId);
+      if (pos) {
+        pos.x += offsetX;
+        positions.set(nodeId, pos);
+        console.log(`    Moved ${nodeId} to x=${pos.x.toFixed(0)}`);
+      } else {
+        console.log(`    Warning: ${nodeId} has no position yet, skipping`);
+      }
+    });
+  };
+  
+  // Position each tree separately
+  let currentTreeX = padding;
+  
+  connectedComponents.forEach((component, treeIndex) => {
+    console.log(`\n=== POSITIONING TREE ${treeIndex} ===`);
+    console.log(`Starting X position: ${currentTreeX}`);
+    
+    // Find root nodes in this component
+    const rootNodes = component.filter(perkId => {
+      const node = treeNodes.get(perkId)!;
+      return node.parents.length === 0;
+    });
+    
+    console.log(`Root nodes in tree ${treeIndex}: ${rootNodes.length}`);
+    rootNodes.forEach(perkId => {
+      console.log(`  Root: ${perkId}`);
+    });
+    
+    if (rootNodes.length === 0) return;
+    
+    // Calculate total width needed for root nodes
+    const totalRootWidth = rootNodes.length * nodeWidth + (rootNodes.length - 1) * horizontalSpacing;
+    console.log(`Total root width: ${totalRootWidth}`);
+    
+    // Position root nodes for this tree with exact spacing
+    let currentX = currentTreeX;
+    rootNodes.forEach(perkId => {
+      const y = (maxDepth - 0) * verticalSpacing + padding;
+      const x = currentX;
+      
+      console.log(`Positioning root ${perkId}: x=${x.toFixed(0)}, y=${y.toFixed(0)}`);
+      
+      positions.set(perkId, { x, y });
+      currentX += nodeWidth + horizontalSpacing;
+    });
+    
+    // Position remaining nodes level by level
+    const positionedNodes = new Set<string>(rootNodes);
+    
+    for (let level = 1; level <= maxDepth; level++) {
+      console.log(`\n--- POSITIONING LEVEL ${level} ---`);
+      
+      const levelNodes = nodesByLevel.get(level) || [];
+      const treeLevelNodes = levelNodes.filter(perkId => component.includes(perkId));
+      
+      console.log(`Level ${level} nodes in this tree: ${treeLevelNodes.length}`);
+      
+      if (treeLevelNodes.length === 0) continue;
+      
+      // Step 1: Calculate ideal positions based on parents
+      const idealPositions = new Map<string, number>();
+      
+      treeLevelNodes.forEach(perkId => {
+        if (positionedNodes.has(perkId)) return;
+        
+        const node = treeNodes.get(perkId)!;
+        
+        console.log(`\nCalculating ideal position for ${perkId}:`);
+        console.log(`  Parents: ${node.parents.join(', ')}`);
+        
+        // Calculate center position based on parents
+        if (node.parents.length > 0) {
+          let totalParentX = 0;
+          let validParents = 0;
+          const parentPositions: number[] = [];
+          
+          node.parents.forEach(parentId => {
+            if (positions.has(parentId)) {
+              const parentPos = positions.get(parentId)!;
+              const parentCenterX = parentPos.x + (nodeWidth / 2);
+              totalParentX += parentCenterX;
+              parentPositions.push(parentCenterX);
+              validParents++;
+              console.log(`    Parent ${parentId}: x=${parentPos.x.toFixed(0)}, centerX=${parentCenterX.toFixed(0)}`);
+            }
+          });
+          
+          if (validParents > 0) {
+            let idealX: number;
+            
+            if (validParents === 1) {
+              // Single parent: center directly above the parent
+              idealX = totalParentX / validParents;
+              console.log(`    Single parent: centering directly above at ${idealX.toFixed(0)}`);
+            } else {
+              // Multiple parents: center at the midpoint between the leftmost and rightmost parent
+              const minParentX = Math.min(...parentPositions);
+              const maxParentX = Math.max(...parentPositions);
+              idealX = (minParentX + maxParentX) / 2;
+              console.log(`    Multiple parents: centering at midpoint between ${minParentX.toFixed(0)} and ${maxParentX.toFixed(0)} = ${idealX.toFixed(0)}`);
+            }
+            
+            idealPositions.set(perkId, idealX);
+            console.log(`    Final ideal centerX: ${idealX.toFixed(0)}`);
+          }
+        }
+      });
+      
+      // Step 2: Sort nodes by their ideal positions
+      const sortedNodes = treeLevelNodes
+        .filter(perkId => !positionedNodes.has(perkId) && idealPositions.has(perkId))
+        .sort((a, b) => {
+          const idealA = idealPositions.get(a)!;
+          const idealB = idealPositions.get(b)!;
+          return idealA - idealB;
+        });
+      
+      console.log(`\nSorted nodes by ideal position: ${sortedNodes.join(', ')}`);
+      
+      // Step 3: Position nodes with guaranteed spacing, moving subtrees as needed
+      if (sortedNodes.length > 0) {
+        console.log(`\nPositioning ${sortedNodes.length} nodes with subtree-aware spacing:`);
+        
+        // Start with the first node at its ideal position
+        const firstNode = sortedNodes[0];
+        const firstIdealX = idealPositions.get(firstNode)!;
+        const firstX = firstIdealX - (nodeWidth / 2);
+        const y = (maxDepth - level) * verticalSpacing + padding;
+        
+        console.log(`  First node ${firstNode}: ideal center=${firstIdealX.toFixed(0)}, x=${firstX.toFixed(0)}`);
+        positions.set(firstNode, { x: firstX, y });
+        positionedNodes.add(firstNode);
+        
+        // Position remaining nodes with proper spacing
+        for (let i = 1; i < sortedNodes.length; i++) {
+          const currentNode = sortedNodes[i];
+          const previousNode = sortedNodes[i - 1];
+          const previousPos = positions.get(previousNode)!;
+          const currentIdealX = idealPositions.get(currentNode)!;
+          
+          // Calculate minimum required position (previous node + spacing)
+          const minRequiredX = previousPos.x + nodeWidth + horizontalSpacing;
+          
+          // Calculate ideal position for current node
+          const idealX = currentIdealX - (nodeWidth / 2);
+          
+          // Use the larger of minimum required and ideal position
+          const finalX = Math.max(minRequiredX, idealX);
+          
+          console.log(`  Node ${currentNode}: ideal=${idealX.toFixed(0)}, min required=${minRequiredX.toFixed(0)}, final=${finalX.toFixed(0)}`);
+          
+          // Always position the current node first
+          positions.set(currentNode, { x: finalX, y });
+          positionedNodes.add(currentNode);
+          
+          // If we had to move the node beyond its ideal position, move its entire subtree
+          if (finalX > idealX) {
+            const offset = finalX - idealX;
+            console.log(`    Moving subtree rooted at ${currentNode} by ${offset.toFixed(0)}px to maintain spacing`);
+            moveSubtree(currentNode, offset);
+          }
+        }
+      }
+    }
+    
+    // Move to next tree position
+    currentTreeX += totalRootWidth + horizontalSpacing * 2;
+    console.log(`\nMoving to next tree at X position: ${currentTreeX}`);
+  });
+  
+  // Debug: Log final positions
+  console.log('\n=== FINAL POSITIONS ===');
+  treeNodes.forEach((node, perkId) => {
+    const pos = positions.get(perkId);
+    if (pos) {
+      console.log(`${perkId}: x=${pos.x.toFixed(0)}, y=${pos.y.toFixed(0)}, children=${node.children.length}, parents=${node.parents.length}`);
+    }
+  });
   
   return positions;
 }
@@ -459,12 +595,12 @@ export function PerkTreeCanvas({
     if (validatedTree && nodes.length > 0 && reactFlowInstance) {
       setTimeout(() => {
         reactFlowInstance.fitView({ 
-          padding: 0.1,
+          padding: 0.2, // Increased padding for better spacing
           includeHiddenNodes: false,
-          minZoom: 0.3,
+          minZoom: 0.2,
           maxZoom: 1.5
         });
-      }, 100);
+      }, 200); // Increased delay to ensure positioning is complete
     }
   }, [validatedTree?.treeId, reactFlowInstance]);
 
@@ -502,14 +638,14 @@ export function PerkTreeCanvas({
         elementsSelectable={true}
         fitView
         fitViewOptions={{ 
-          padding: 0.1,
+          padding: 0.2,
           includeHiddenNodes: false,
-          minZoom: 0.3,
+          minZoom: 0.2,
           maxZoom: 1.5
         }}
-        minZoom={0.2}
+        minZoom={0.1}
         maxZoom={2}
-        defaultViewport={{ x: 0, y: 0, zoom: 0.9 }}
+        defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
       >
         <Background />
         <Controls />
