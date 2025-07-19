@@ -11,6 +11,7 @@ import type { Race } from '../types'
 import { CategoryBadge } from './CategoryBadge'
 import { StatBar } from './StatBar'
 import { RaceAvatar } from './RaceAvatar'
+import { AddToBuildSwitch, AddToBuildSwitchSimple, PinButton } from '@/shared/components/playerCreation'
 
 /**
  * Component to format ability descriptions with highlighted values
@@ -131,7 +132,7 @@ export function renderRaceHeader(item: PlayerCreationItem, originalRace?: Race) 
         <H3 className="text-primary font-semibold">{item.name}</H3>
       </div>
       
-      {/* Right side: Classification + Stats */}
+      {/* Right side: Classification + Stats + Controls */}
       <div className="flex items-center gap-3">
         {/* Classification tag */}
         {item.category && (
@@ -155,8 +156,23 @@ export function renderRaceHeader(item: PlayerCreationItem, originalRace?: Race) 
             </div>
           </div>
         )}
+
+
       </div>
     </>
+  )
+}
+
+/**
+ * Render the left controls for a race accordion
+ */
+export function renderRaceLeftControls(item: PlayerCreationItem) {
+  return (
+    <AddToBuildSwitchSimple
+      itemId={item.id}
+      itemType="race"
+      itemName={item.name}
+    />
   )
 }
 

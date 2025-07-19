@@ -1,7 +1,5 @@
 import React from 'react'
-import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
 import { Badge } from '@/shared/ui/ui/badge'
-import { Button } from '@/shared/ui/ui/button'
 import { H3, H4, P, Small } from '@/shared/ui/ui/typography'
 import { MarkdownText } from '@/shared/components/MarkdownText'
 import { 
@@ -13,6 +11,14 @@ import { cn } from '@/lib/utils'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import type { Trait } from '../types'
 import { parseDescription, getUserFriendlyEffectType } from '../utils'
+import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
+import { 
+  GenericAccordionCard,
+  AccordionLeftControls,
+  AccordionHeader,
+  AccordionCollapsedContentSlot,
+  AccordionExpandedContentSlot
+} from '@/shared/components/generic'
 
 /**
  * Component to format any description with highlighted values in asterisks and bold attributes/skills
@@ -188,6 +194,8 @@ const sizeClasses = {
   lg: 'text-base px-3 py-1.5'
 }
 
+
+
 export function TraitAccordion({ 
   item, 
   originalTrait, 
@@ -206,170 +214,155 @@ export function TraitAccordion({
     return effectIcons[effectType.toLowerCase()] || <Star className="h-4 w-4 text-muted-foreground" />
   }
 
-  const getEffectIconByType = (type: 'positive' | 'negative' | 'neutral') => {
-    switch (type) {
-      case 'positive':
-        return null // Removed redundant plus icon
-      case 'negative':
-        return null // Removed redundant minus icon
-      case 'neutral':
-        return <Circle className="h-4 w-4 text-blue-500" />
-      default:
-        return <Star className="h-4 w-4 text-muted-foreground" />
-    }
-  }
-
   // Parse the description to replace placeholders
   const parsedDescription = parseDescription(originalTrait.description)
 
   return (
-    <Card className={cn("transition-all duration-200", className)}>
-      <CardHeader className="pb-3 cursor-pointer" onClick={onToggle}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3 flex-1">
-            <span className="text-2xl">{categoryIcon}</span>
-            <div className="flex-1">
-              <H3 className="text-primary font-semibold">{originalTrait.name}</H3>
-            </div>
-          </div>
-          
-          {/* Right side: Classification + Effects + Button */}
-          <div className="flex items-center gap-3">
-            {/* Trait category tag */}
-            {originalTrait.category && (
-              <Badge 
-                variant="outline"
-                className={cn(
-                  traitCategoryStyles[originalTrait.category] || 'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200',
-                  sizeClasses.sm,
-                  'font-medium transition-colors'
-                )}
-              >
-                {originalTrait.category}
-              </Badge>
-            )}
-            
-            {/* Effects count badge */}
-            {originalTrait.effects.length > 0 && (
-              <Badge
-                variant="outline"
-                className={cn(
-                  sizeClasses.sm,
-                  'font-medium transition-colors'
-                )}
-              >
-                {originalTrait.effects.length} effects
-              </Badge>
-            )}
-            
-            {/* Quick effects preview */}
-            {item.effects && item.effects.length > 0 && (
-              <div className="hidden md:flex items-center gap-2 text-xs text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <Star className="h-3 w-3 text-yellow-500" />
-                  <span>{item.effects.length} effects</span>
-                </div>
-              </div>
-            )}
-            
-            {/* Expand/collapse button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 w-8 p-0"
-              onClick={(e) => {
-                e.stopPropagation()
-                onToggle?.()
-              }}
-            >
-              {isExpanded ? (
-                <ChevronUp className="h-4 w-4" />
-              ) : (
-                <ChevronRight className="h-4 w-4" />
-              )}
-            </Button>
-          </div>
+    <GenericAccordionCard
+      isExpanded={isExpanded}
+      onToggle={onToggle || (() => {})}
+      className={className}
+    >
+      {/* Left Controls */}
+      <AccordionLeftControls>
+        <AddToBuildSwitchSimple
+          itemId={item.id}
+          itemType="trait"
+          itemName={item.name}
+        />
+      </AccordionLeftControls>
+
+      {/* Header Content */}
+      <AccordionHeader>
+        {/* Left side: Icon + Name */}
+        <div className="flex items-center gap-3">
+          <span className="text-2xl">{categoryIcon}</span>
+          <H3 className="text-primary font-semibold">{originalTrait.name}</H3>
         </div>
         
-        <FormattedText 
-          text={parsedDescription} 
-          className="text-base text-muted-foreground mt-2"
-        />
-      </CardHeader>
-
-      {isExpanded && (
-        <CardContent className="pt-0">
-          <div className="space-y-6">
-            {/* Effects Section */}
-            {showEffects && originalTrait.effects.length > 0 && (
-              <div>
-                <h5 className="text-lg font-medium text-foreground mb-3">Effects</h5>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {originalTrait.effects.map((effect, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
-                      <div className="flex items-center gap-2">
-                        {getEffectIcon(effect.type)}
-                        <span className="font-medium">
-                          {getUserFriendlyEffectType(effect.type)}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className={cn(
-                          "font-bold",
-                          effect.flags.includes('Detrimental') ? "text-red-600" : "text-green-600"
-                        )}>
-                          {effect.value > 0 ? '+' : ''}{effect.value}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+        {/* Right side: Classification + Effects */}
+        <div className="flex items-center gap-3 ml-auto">
+          {/* Trait category tag */}
+          {originalTrait.category && (
+            <Badge 
+              variant="outline"
+              className={cn(
+                traitCategoryStyles[originalTrait.category] || 'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200',
+                sizeClasses.sm,
+                'font-medium transition-colors'
+              )}
+            >
+              {originalTrait.category}
+            </Badge>
+          )}
+          
+          {/* Effects count badge */}
+          {originalTrait.effects.length > 0 && (
+            <Badge
+              variant="outline"
+              className={cn(
+                sizeClasses.sm,
+                'font-medium transition-colors'
+              )}
+            >
+              {originalTrait.effects.length} effects
+            </Badge>
+          )}
+          
+          {/* Quick effects preview */}
+          {item.effects && item.effects.length > 0 && (
+            <div className="hidden md:flex items-center gap-2 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <Star className="h-3 w-3 text-yellow-500" />
+                <span>{item.effects.length} effects</span>
               </div>
-            )}
+            </div>
+          )}
+        </div>
+      </AccordionHeader>
 
-            {/* Spells Section */}
-            {showSpells && originalTrait.spell && (
-              <div>
-                <h5 className="text-lg font-medium text-foreground mb-3">Spell Information</h5>
-                <div className="p-4 rounded-lg border bg-muted/30">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    <div>
-                      <span className="font-medium text-muted-foreground">Type:</span>
-                      <div className="mt-1">{originalTrait.spell.type}</div>
+      {/* Collapsed Content */}
+      <AccordionCollapsedContentSlot>
+        <div className="space-y-3">
+          <FormattedText 
+            text={parsedDescription} 
+            className="text-base text-muted-foreground"
+          />
+        </div>
+      </AccordionCollapsedContentSlot>
+
+      {/* Expanded Content */}
+      <AccordionExpandedContentSlot>
+        <div className="space-y-6">
+          {/* Effects Section */}
+          {showEffects && originalTrait.effects.length > 0 && (
+            <div>
+              <h5 className="text-lg font-medium text-foreground mb-3">Effects</h5>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {originalTrait.effects.map((effect, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
+                    <div className="flex items-center gap-2">
+                      {getEffectIcon(effect.type)}
+                      <span className="font-medium">
+                        {getUserFriendlyEffectType(effect.type)}
+                      </span>
                     </div>
-                    <div>
-                      <span className="font-medium text-muted-foreground">Cast Type:</span>
-                      <div className="mt-1">{originalTrait.spell.castType}</div>
+                    <div className="flex items-center gap-2">
+                      <span className={cn(
+                        "font-bold",
+                        effect.flags.includes('Detrimental') ? "text-red-600" : "text-green-600"
+                      )}>
+                        {effect.value > 0 ? '+' : ''}{effect.value}
+                      </span>
                     </div>
-                    <div>
-                      <span className="font-medium text-muted-foreground">Delivery:</span>
-                      <div className="mt-1">{originalTrait.spell.delivery}</div>
-                    </div>
-                    <div>
-                      <span className="font-medium text-muted-foreground">Cost:</span>
-                      <div className="mt-1">{originalTrait.spell.cost}</div>
-                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Spells Section */}
+          {showSpells && originalTrait.spell && (
+            <div>
+              <h5 className="text-lg font-medium text-foreground mb-3">Spell Information</h5>
+              <div className="p-4 rounded-lg border bg-muted/30">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                  <div>
+                    <span className="font-medium text-muted-foreground">Type:</span>
+                    <div className="mt-1">{originalTrait.spell.type}</div>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">Cast Type:</span>
+                    <div className="mt-1">{originalTrait.spell.castType}</div>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">Delivery:</span>
+                    <div className="mt-1">{originalTrait.spell.delivery}</div>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">Cost:</span>
+                    <div className="mt-1">{originalTrait.spell.cost}</div>
                   </div>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Tags */}
-            {showTags && item.tags && item.tags.length > 0 && (
-              <div>
-                <h5 className="text-lg font-medium text-foreground mb-3">Tags</h5>
-                <div className="flex flex-wrap gap-2">
-                  {item.tags.map((tag, index) => (
-                    <Badge key={index} variant="outline" className="text-xs">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
+          {/* Tags */}
+          {showTags && item.tags && item.tags.length > 0 && (
+            <div>
+              <h5 className="text-lg font-medium text-foreground mb-3">Tags</h5>
+              <div className="flex flex-wrap gap-2">
+                {item.tags.map((tag, index) => (
+                  <Badge key={index} variant="outline" className="text-xs">
+                    {tag}
+                  </Badge>
+                ))}
               </div>
-            )}
-          </div>
-        </CardContent>
-      )}
-    </Card>
+            </div>
+          )}
+        </div>
+      </AccordionExpandedContentSlot>
+    </GenericAccordionCard>
   )
 } 
