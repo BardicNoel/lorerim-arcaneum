@@ -8,7 +8,11 @@ interface MarkdownTextProps {
   components?: React.ComponentProps<typeof ReactMarkdown>['components']
 }
 
-export function MarkdownText({ children, className, components }: MarkdownTextProps) {
+export function MarkdownText({
+  children,
+  className,
+  components,
+}: MarkdownTextProps) {
   const defaultComponents = {
     // Customize paragraph styling
     p: ({ children, ...props }: any) => (
@@ -18,7 +22,10 @@ export function MarkdownText({ children, className, components }: MarkdownTextPr
     ),
     // Customize strong/bold styling - this handles ***text*** patterns
     strong: ({ children, ...props }: any) => (
-      <strong className="font-semibold text-foreground bg-primary/10 px-1 py-0.5 rounded" {...props}>
+      <strong
+        className="font-semibold text-foreground bg-primary/10 px-1 py-0.5 rounded"
+        {...props}
+      >
         {children}
       </strong>
     ),
@@ -30,24 +37,36 @@ export function MarkdownText({ children, className, components }: MarkdownTextPr
     ),
     // Customize code styling
     code: ({ children, ...props }: any) => (
-      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono" {...props}>
+      <code
+        className="bg-muted px-1 py-0.5 rounded text-xs font-mono"
+        {...props}
+      >
         {children}
       </code>
     ),
     // Customize inline code styling
     inlineCode: ({ children, ...props }: any) => (
-      <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono" {...props}>
+      <code
+        className="bg-muted px-1 py-0.5 rounded text-xs font-mono"
+        {...props}
+      >
         {children}
       </code>
     ),
     // Customize list styling
     ul: ({ children, ...props }: any) => (
-      <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground" {...props}>
+      <ul
+        className="list-disc list-inside space-y-1 text-sm text-muted-foreground"
+        {...props}
+      >
         {children}
       </ul>
     ),
     ol: ({ children, ...props }: any) => (
-      <ol className="list-decimal list-inside space-y-1 text-sm text-muted-foreground" {...props}>
+      <ol
+        className="list-decimal list-inside space-y-1 text-sm text-muted-foreground"
+        {...props}
+      >
         {children}
       </ol>
     ),
@@ -70,4 +89,4 @@ export function MarkdownText({ children, className, components }: MarkdownTextPr
       </ReactMarkdown>
     </div>
   )
-} 
+}

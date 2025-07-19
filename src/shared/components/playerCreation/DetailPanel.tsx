@@ -65,7 +65,10 @@ export function DetailPanel({ item, onClose, className }: DetailPanelProps) {
             <H4 className="mb-3">Effects</H4>
             <div className="space-y-2">
               {item.effects.map((effect, index) => (
-                <div key={index} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
+                <div
+                  key={index}
+                  className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg"
+                >
                   {getEffectIcon(effect.type)}
                   <div className="flex-1">
                     <P className="font-medium text-sm">{effect.name}</P>
@@ -89,7 +92,7 @@ export function DetailPanel({ item, onClose, className }: DetailPanelProps) {
           <div>
             <H4 className="mb-3">Associated Items</H4>
             <div className="grid grid-cols-2 gap-2">
-              {item.associatedItems.map((associatedItem) => (
+              {item.associatedItems.map(associatedItem => (
                 <div
                   key={associatedItem.id}
                   className="p-2 bg-muted/30 rounded border border-border hover:bg-muted/50 transition-colors"
@@ -100,7 +103,9 @@ export function DetailPanel({ item, onClose, className }: DetailPanelProps) {
                       <span className="text-lg">{associatedItem.icon}</span>
                     )}
                     <div>
-                      <P className="text-sm font-medium">{associatedItem.name}</P>
+                      <P className="text-sm font-medium">
+                        {associatedItem.name}
+                      </P>
                       <Small className="text-xs text-muted-foreground">
                         {associatedItem.type}
                       </Small>
@@ -128,4 +133,4 @@ export function DetailPanel({ item, onClose, className }: DetailPanelProps) {
       </CardContent>
     </Card>
   )
-} 
+}

@@ -14,11 +14,14 @@ import { SidebarRail } from '@/shared/ui/sidebar/SidebarRail'
 import { SiteHeader } from './SiteHeader'
 import { Z_INDEX } from '@/lib/constants'
 import { Home } from 'lucide-react'
+import { useURLSync } from '@/shared/hooks/useURLSync'
+import { FloatingBuildButton } from '@/shared/components/FloatingBuildButton'
 
 const navSections = [
   {
     label: 'Character Creation',
     items: [
+      { to: '/build', label: 'Character Builder' },
       { to: '/race', label: 'Races' },
       { to: '/birth-signs', label: 'Birth Signs' },
       { to: '/traits', label: 'Traits' },
@@ -53,7 +56,7 @@ const navSections = [
   {
     label: 'Ascensions',
     items: [
-      { to: "/shouts", label: "Shouts of the Dragonborn" },
+      { to: '/shouts', label: 'Shouts of the Dragonborn' },
       { to: '/lichdom', label: 'Lichdom' },
       { to: '/lycanthropy', label: 'Lycanthropy' },
       { to: '/vampirism', label: 'Vampirism' },
@@ -65,21 +68,39 @@ function AppSidebar({ collapsed }: { collapsed: boolean }) {
   const navigate = useNavigate()
   const currentPath = window.location.hash.replace(/^#\/?/, '/')
 
+  // Custom navigation that preserves build parameters
+  const navigateWithBuild = (to: string) => {
+    const currentHash = window.location.hash
+    const [currentPath, paramsString] = currentHash.split('?')
+    const params = new URLSearchParams(paramsString || '')
+    const buildParam = params.get('b')
+
+    if (buildParam) {
+      // Preserve the build parameter when navigating
+      navigate(`${to}?b=${buildParam}`)
+    } else {
+      // No build parameter, just navigate normally
+      navigate(to)
+    }
+  }
+
   return (
     <Sidebar collapsed={collapsed}>
       <SidebarHeader>
         {!collapsed && (
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigateWithBuild('/')}
             className="flex items-center justify-center w-full gap-2 hover:bg-skyrim-gold/15 hover:shadow-md hover:scale-[1.02] active:scale-[0.98] rounded px-2 py-1 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-skyrim-gold/50 focus:ring-offset-1"
           >
             <Home className="w-4 h-4 text-skyrim-gold transition-transform duration-200 group-hover:scale-110" />
-            <span className="text-sm font-semibold text-skyrim-gold tracking-wide">Home</span>
+            <span className="text-sm font-semibold text-skyrim-gold tracking-wide">
+              Home
+            </span>
           </button>
         )}
       </SidebarHeader>
       <SidebarContent>
-        {navSections.map((section) => (
+        {navSections.map(section => (
           <SidebarGroup key={section.label}>
             {!collapsed && (
               <div className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-wider text-skyrim-gold/60">
@@ -87,14 +108,14 @@ function AppSidebar({ collapsed }: { collapsed: boolean }) {
               </div>
             )}
             <SidebarMenu>
-              {section.items.map((item) => {
+              {section.items.map(item => {
                 const isActive = currentPath === item.to
                 return (
                   <SidebarMenuItem key={item.to}>
                     <SidebarMenuButton
                       asChild
                       isActive={isActive}
-                      onClick={() => navigate(item.to)}
+                      onClick={() => navigateWithBuild(item.to)}
                       tabIndex={0}
                     >
                       <span className="w-full text-left truncate">
@@ -126,15 +147,19 @@ function AppSidebar({ collapsed }: { collapsed: boolean }) {
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+
+  // Initialize URL sync for build state
+  useURLSync()
+
   return (
     <HashRouter>
       <div className="min-h-screen bg-background text-foreground flex flex-col">
         <SiteHeader
           sidebarCollapsed={sidebarCollapsed}
-          onToggleSidebar={() => setSidebarCollapsed((c) => !c)}
+          onToggleSidebar={() => setSidebarCollapsed(c => !c)}
         />
         <div className="flex flex-1">
-          <div 
+          <div
             className={`transition-all duration-300 ease-in-out ${
               sidebarCollapsed ? 'w-0' : 'w-64'
             }`}
@@ -142,11 +167,14 @@ function App() {
           >
             <AppSidebar collapsed={sidebarCollapsed} />
           </div>
-          <main className={`flex-1 p-8 transition-all duration-300 ease-in-out`}>
+          <main
+            className={`flex-1 p-8 transition-all duration-300 ease-in-out`}
+          >
             <AppRouter />
           </main>
         </div>
       </div>
+      <FloatingBuildButton />
     </HashRouter>
   )
 }

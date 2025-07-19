@@ -1,11 +1,18 @@
 # Religions Feature Documentation
 
+## 📋 General Rule for Feature Documentation
+
+All features in the Lorerim Arcaneum project must follow this standardized documentation structure. This ensures consistency, maintainability, and comprehensive coverage of feature functionality, architecture, and implementation details.
+
+---
+
 ## 🎯 Feature Overview
 
-The Religions feature provides a comprehensive interface for browsing and selecting character religions in the Lorerim Arcaneum application. It leverages a shared player creation framework to deliver a consistent, searchable, and filterable experience for religion selection.
+### Purpose
+The Religions feature provides a comprehensive interface for browsing and selecting character religions in the Lorerim Arcaneum application. It leverages a shared player creation framework to deliver a consistent, searchable, and filterable experience for religion selection, enabling players to explore divine pantheons, daedric princes, and custom faiths with detailed information about blessings, tenets, and powers.
 
 ### Core Functionality
-- **Religion Browsing**: Display all available religions in grid/list view modes
+- **Religion Browsing**: Display all available religions in grid/list view modes with visual pantheon indicators
 - **Advanced Search**: Multi-category autocomplete search by pantheons, effect types, and tags
 - **Detailed Information**: Comprehensive religion details including blessings, tenets, follower/devotee powers, and restrictions
 - **Filtering**: Tag-based filtering system for pantheons, effect types, and tags
@@ -14,6 +21,7 @@ The Religions feature provides a comprehensive interface for browsing and select
 
 ### Data Structure
 Religions are defined with the following structure:
+
 ```typescript
 interface Religion {
   name: string
@@ -25,7 +33,23 @@ interface Religion {
   favoredRaces: string[]
   worshipRestrictions: string[]
 }
+
+interface ReligionSpell {
+  name: string
+  description: string
+  magnitude: number
+  duration: number
+  effects: string[]
+}
+
+interface ReligionTenet {
+  name: string
+  description: string
+  requirements: string[]
+}
 ```
+
+---
 
 ## 🏗️ Component Architecture
 
@@ -49,12 +73,12 @@ UnifiedReligionsPage
 ### Component Responsibilities
 
 #### **UnifiedReligionsPage** (`pages/UnifiedReligionsPage.tsx`)
-- **Purpose**: Main page component that orchestrates the religion selection interface
+- **Purpose**: Primary orchestrator and data manager for religion selection
 - **Key Functions**:
   - Data fetching from `public/data/wintersun-religion-docs.json`
   - Data transformation from `Religion` to `PlayerCreationItem` format
   - Search category generation for autocomplete (Pantheons, Effect Types, Tags)
-  - Custom render functions for religion-specific components
+  - Custom render function provision for religion-specific components
   - Error handling and loading states
 
 #### **ReligionCard** (`components/ReligionCard.tsx`)
@@ -64,16 +88,19 @@ UnifiedReligionsPage
   - Tag display with overflow handling
   - Selection state management
   - Responsive design with hover effects
+  - Accessibility considerations with ARIA labels
 
 #### **ReligionDetailPanel** (`components/ReligionDetailPanel.tsx`)
 - **Purpose**: Comprehensive religion information display with tabbed interface
 - **Features**:
   - **Follower Tab**: Tenets, follower powers, and devotee powers
   - **Blessing Tab**: Shrine blessings available to all players
-  - Effect details with magnitude and duration
+  - Effect details with magnitude and duration visualization
   - Markdown rendering for descriptions
   - Restrictions and favored races display
   - Tag categorization and display
+
+---
 
 ## 🔧 Technical Design
 
@@ -152,6 +179,8 @@ The feature transforms religion data between two formats:
 3. Tag Filter: Tag-based filtering with restrictions and requirements
 ```
 
+---
+
 ## 🎨 UI/UX Design Patterns
 
 ### Visual Hierarchy
@@ -185,9 +214,11 @@ The feature transforms religion data between two formats:
 - **Loading States**: Skeleton screens and spinners
 - **Error States**: Clear messaging with retry options
 
+---
+
 ## 🔄 Reusable Components
 
-### Shared Player Creation Framework
+### Shared Framework Components
 
 The religions feature leverages the same comprehensive shared framework as races and traits:
 
@@ -218,6 +249,8 @@ The religions feature leverages the same comprehensive shared framework as races
 - **Data Visualization**: Effect icons and color coding
 - **Information Architecture**: Hierarchical content organization
 
+---
+
 ## 📊 Performance Considerations
 
 ### Data Loading
@@ -234,6 +267,8 @@ The religions feature leverages the same comprehensive shared framework as races
 - **Debounced Input**: Search queries optimized for performance
 - **Indexed Filtering**: Pre-computed search indices
 - **Cached Results**: Filtered results memoized
+
+---
 
 ## 🧪 Testing Strategy
 
@@ -252,6 +287,8 @@ The religions feature leverages the same comprehensive shared framework as races
 - Keyboard navigation
 - Color contrast compliance
 
+---
+
 ## 🔮 Future Enhancements
 
 ### Planned Features
@@ -268,13 +305,41 @@ The religions feature leverages the same comprehensive shared framework as races
 3. **Analytics**: User behavior tracking for optimization
 4. **Internationalization**: Multi-language support
 
+---
+
 ## 📚 Related Documentation
 
-- [Player Creation Framework](../shared/components/playerCreation/README.md)
+- [Shared Framework Documentation](../shared/components/playerCreation/README.md)
 - [UI Component Library](../shared/ui/README.md)
-- [Data Schema Documentation](../../../docs/technical-spec.md)
-- [Z-Index System](../../../docs/z-index-system.md)
+- [Technical Specifications](../../../docs/technical-spec.md)
+- [Design System](../../../docs/ui-styling.md)
 
 ---
 
-*This documentation is maintained as part of the Lorerim Arcaneum project. For questions or contributions, please refer to the project's contribution guidelines.* 
+## ✅ Documentation Checklist
+
+### Required Sections
+- [x] Feature Overview with clear purpose statement
+- [x] Component Architecture with visual hierarchy
+- [x] Technical Design with data flow diagrams
+- [x] UI/UX Design Patterns with responsive considerations
+- [x] Reusable Components documentation
+- [x] Performance Considerations
+- [x] Testing Strategy
+- [x] Future Enhancements roadmap
+- [x] Related Documentation links
+
+### Quality Standards
+- [x] Clear, concise language throughout
+- [x] Code examples for all interfaces and transformations
+- [x] Visual diagrams for complex flows
+- [x] Consistent emoji usage for section headers
+- [x] Proper TypeScript interface definitions
+- [x] Mermaid diagrams for data flow
+- [x] Comprehensive component responsibility descriptions
+- [x] Accessibility considerations documented
+- [x] Performance optimization strategies outlined
+
+---
+
+*This documentation ensures the Religions feature in the Lorerim Arcaneum project maintains consistent, comprehensive documentation that supports development, maintenance, and future enhancements.* 

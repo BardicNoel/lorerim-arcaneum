@@ -12,7 +12,13 @@ interface DestinyCardProps {
   viewMode?: 'grid' | 'list'
 }
 
-export function DestinyCard({ item, isSelected, originalNode, allNodes = [], viewMode = 'grid' }: DestinyCardProps) {
+export function DestinyCard({
+  item,
+  isSelected,
+  originalNode,
+  allNodes = [],
+  viewMode = 'grid',
+}: DestinyCardProps) {
   // Get next nodes by finding nodes that have this node as a prerequisite
   const getNextNodes = (nodeName: string) => {
     return allNodes
@@ -22,11 +28,11 @@ export function DestinyCard({ item, isSelected, originalNode, allNodes = [], vie
 
   if (viewMode === 'list') {
     return (
-      <div className={`flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 p-3 rounded-lg border ${
-        isSelected 
-          ? 'ring-2 ring-primary bg-primary/5' 
-          : 'hover:bg-muted/50'
-      }`}>
+      <div
+        className={`flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 p-3 rounded-lg border ${
+          isSelected ? 'ring-2 ring-primary bg-primary/5' : 'hover:bg-muted/50'
+        }`}
+      >
         {/* Name and Description - Always visible */}
         <div className="flex-1 min-w-0">
           <h3 className="font-medium text-foreground truncate text-base">
@@ -43,9 +49,9 @@ export function DestinyCard({ item, isSelected, originalNode, allNodes = [], vie
           {originalNode && originalNode.prerequisites.length > 0 && (
             <div className="hidden md:flex gap-1">
               {originalNode.prerequisites.slice(0, 1).map((prereq, index) => (
-                <Badge 
-                  key={index} 
-                  variant="outline" 
+                <Badge
+                  key={index}
+                  variant="outline"
                   className="text-xs bg-orange-50 text-orange-700 border-orange-200"
                 >
                   {prereq}
@@ -62,22 +68,27 @@ export function DestinyCard({ item, isSelected, originalNode, allNodes = [], vie
           {/* Next Nodes - Show on large screens and up */}
           {originalNode && (
             <div className="hidden lg:flex gap-1">
-              {getNextNodes(originalNode.name).slice(0, 1).map((nextNode, index) => (
-                <Badge 
-                  key={index} 
-                  variant="outline" 
-                  className="text-xs bg-blue-50 text-blue-700 border-blue-200"
-                >
-                  {nextNode}
-                </Badge>
-              ))}
+              {getNextNodes(originalNode.name)
+                .slice(0, 1)
+                .map((nextNode, index) => (
+                  <Badge
+                    key={index}
+                    variant="outline"
+                    className="text-xs bg-blue-50 text-blue-700 border-blue-200"
+                  >
+                    {nextNode}
+                  </Badge>
+                ))}
               {getNextNodes(originalNode.name).length > 1 && (
                 <Badge variant="outline" className="text-xs">
                   +{getNextNodes(originalNode.name).length - 1}
                 </Badge>
               )}
               {getNextNodes(originalNode.name).length === 0 && (
-                <Badge variant="outline" className="text-xs text-muted-foreground">
+                <Badge
+                  variant="outline"
+                  className="text-xs text-muted-foreground"
+                >
                   Terminal
                 </Badge>
               )}
@@ -88,11 +99,7 @@ export function DestinyCard({ item, isSelected, originalNode, allNodes = [], vie
           {item.tags.length > 0 && (
             <div className="flex gap-1">
               {item.tags.slice(0, 2).map((tag, index) => (
-                <Badge 
-                  key={index} 
-                  variant="secondary" 
-                  className="text-xs"
-                >
+                <Badge key={index} variant="secondary" className="text-xs">
                   {tag}
                 </Badge>
               ))}
@@ -122,11 +129,9 @@ export function DestinyCard({ item, isSelected, originalNode, allNodes = [], vie
   }
 
   return (
-    <Card 
+    <Card
       className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
-        isSelected 
-          ? 'ring-2 ring-primary bg-primary/5' 
-          : 'hover:bg-muted/50'
+        isSelected ? 'ring-2 ring-primary bg-primary/5' : 'hover:bg-muted/50'
       }`}
     >
       <CardHeader className="pb-2">
@@ -143,8 +148,8 @@ export function DestinyCard({ item, isSelected, originalNode, allNodes = [], vie
           </div>
           {item.imageUrl && (
             <div className="w-8 h-8 ml-2">
-              <img 
-                src={item.imageUrl} 
+              <img
+                src={item.imageUrl}
                 alt={item.name}
                 className="w-full h-full object-contain"
               />
@@ -152,21 +157,23 @@ export function DestinyCard({ item, isSelected, originalNode, allNodes = [], vie
           )}
         </div>
       </CardHeader>
-      
+
       <CardContent className="pt-0">
         <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
           {item.description}
         </p>
-        
+
         {/* Prerequisites */}
         {originalNode && originalNode.prerequisites.length > 0 && (
           <div className="mb-2">
-            <p className="text-xs font-medium text-foreground mb-1">Prerequisites:</p>
+            <p className="text-xs font-medium text-foreground mb-1">
+              Prerequisites:
+            </p>
             <div className="flex flex-wrap gap-1">
               {originalNode.prerequisites.map((prereq, index) => (
-                <Badge 
-                  key={index} 
-                  variant="outline" 
+                <Badge
+                  key={index}
+                  variant="outline"
                   className="text-xs bg-orange-50 text-orange-700 border-orange-200"
                 >
                   {prereq}
@@ -175,36 +182,36 @@ export function DestinyCard({ item, isSelected, originalNode, allNodes = [], vie
             </div>
           </div>
         )}
-        
+
         {/* Next Nodes */}
         {originalNode && (
           <div className="mb-2">
-            <p className="text-xs font-medium text-foreground mb-1">Leads to:</p>
+            <p className="text-xs font-medium text-foreground mb-1">
+              Leads to:
+            </p>
             <div className="flex flex-wrap gap-1">
               {getNextNodes(originalNode.name).map((nextNode, index) => (
-                <Badge 
-                  key={index} 
-                  variant="outline" 
+                <Badge
+                  key={index}
+                  variant="outline"
                   className="text-xs bg-blue-50 text-blue-700 border-blue-200"
                 >
                   {nextNode}
                 </Badge>
               ))}
               {getNextNodes(originalNode.name).length === 0 && (
-                <span className="text-xs text-muted-foreground">No further progression</span>
+                <span className="text-xs text-muted-foreground">
+                  No further progression
+                </span>
               )}
             </div>
           </div>
         )}
-        
+
         {item.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-2">
             {item.tags.slice(0, 3).map((tag, index) => (
-              <Badge 
-                key={index} 
-                variant="secondary" 
-                className="text-xs"
-              >
+              <Badge key={index} variant="secondary" className="text-xs">
                 {tag}
               </Badge>
             ))}
@@ -215,15 +222,20 @@ export function DestinyCard({ item, isSelected, originalNode, allNodes = [], vie
             )}
           </div>
         )}
-        
+
         {item.effects && item.effects.length > 0 && (
           <div className="space-y-1">
             {item.effects.slice(0, 2).map((effect, index) => (
               <div key={index} className="text-xs text-muted-foreground">
-                <span className={`inline-block w-2 h-2 rounded-full mr-2 ${
-                  effect.type === 'positive' ? 'bg-green-500' :
-                  effect.type === 'negative' ? 'bg-red-500' : 'bg-blue-500'
-                }`} />
+                <span
+                  className={`inline-block w-2 h-2 rounded-full mr-2 ${
+                    effect.type === 'positive'
+                      ? 'bg-green-500'
+                      : effect.type === 'negative'
+                        ? 'bg-red-500'
+                        : 'bg-blue-500'
+                  }`}
+                />
                 {effect.name}
               </div>
             ))}
@@ -237,4 +249,4 @@ export function DestinyCard({ item, isSelected, originalNode, allNodes = [], vie
       </CardContent>
     </Card>
   )
-} 
+}

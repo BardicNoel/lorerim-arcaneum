@@ -46,4 +46,4 @@ export interface ReligionFilters {
   domain: string
   alignment: string
   tags: string[]
-} 
+}

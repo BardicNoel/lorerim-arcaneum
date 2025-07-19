@@ -13,12 +13,12 @@ interface DestinyDetailPanelProps {
   allNodes?: DestinyNode[]
 }
 
-export function DestinyDetailPanel({ 
-  item, 
-  originalNode, 
+export function DestinyDetailPanel({
+  item,
+  originalNode,
   onPlanNode,
   isPlanned = false,
-  allNodes = []
+  allNodes = [],
 }: DestinyDetailPanelProps) {
   // Get next nodes by finding nodes that have this node as a prerequisite
   const getNextNodes = (nodeName: string) => {
@@ -41,8 +41,8 @@ export function DestinyDetailPanel({
             </div>
             {item.imageUrl && (
               <div className="w-12 h-12 ml-4">
-                <img 
-                  src={item.imageUrl} 
+                <img
+                  src={item.imageUrl}
                   alt={item.name}
                   className="w-full h-full object-contain"
                 />
@@ -50,7 +50,7 @@ export function DestinyDetailPanel({
             )}
           </div>
         </CardHeader>
-        
+
         <CardContent className="space-y-4">
           <div>
             <h4 className="font-semibold text-sm mb-2">Description</h4>
@@ -77,14 +77,24 @@ export function DestinyDetailPanel({
               <h4 className="font-semibold text-sm mb-2">Effects</h4>
               <div className="space-y-2">
                 {item.effects.map((effect, index) => (
-                  <div key={index} className="flex items-start space-x-2 p-2 rounded bg-muted/50">
-                    <span className={`inline-block w-3 h-3 rounded-full mt-1 flex-shrink-0 ${
-                      effect.type === 'positive' ? 'bg-green-500' :
-                      effect.type === 'negative' ? 'bg-red-500' : 'bg-blue-500'
-                    }`} />
+                  <div
+                    key={index}
+                    className="flex items-start space-x-2 p-2 rounded bg-muted/50"
+                  >
+                    <span
+                      className={`inline-block w-3 h-3 rounded-full mt-1 flex-shrink-0 ${
+                        effect.type === 'positive'
+                          ? 'bg-green-500'
+                          : effect.type === 'negative'
+                            ? 'bg-red-500'
+                            : 'bg-blue-500'
+                      }`}
+                    />
                     <div className="flex-1">
                       <p className="text-sm font-medium">{effect.name}</p>
-                      <p className="text-xs text-muted-foreground">{effect.description}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {effect.description}
+                      </p>
                       {effect.value && (
                         <p className="text-xs text-muted-foreground">
                           Value: {effect.value}
@@ -138,12 +148,12 @@ export function DestinyDetailPanel({
 
           {onPlanNode && (
             <div className="pt-4 border-t">
-              <Button 
+              <Button
                 onClick={() => onPlanNode(item.id)}
-                variant={isPlanned ? "outline" : "default"}
+                variant={isPlanned ? 'outline' : 'default'}
                 className="w-full"
               >
-                {isPlanned ? "Remove from Plan" : "Add to Plan"}
+                {isPlanned ? 'Remove from Plan' : 'Add to Plan'}
               </Button>
             </div>
           )}
@@ -151,4 +161,4 @@ export function DestinyDetailPanel({
       </Card>
     </div>
   )
-} 
+}

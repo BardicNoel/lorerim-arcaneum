@@ -18,7 +18,7 @@ export function useDestinyPath({
   nodes,
   plannedNodes,
   onNodePlan,
-  onNodeUnplan
+  onNodeUnplan,
 }: UseDestinyPathProps) {
   const [selectedPath, setSelectedPath] = useState<DestinyNode[]>([])
 
@@ -53,14 +53,15 @@ export function useDestinyPath({
         paths.push({
           path: [...currentPath],
           isComplete: true,
-          endNode: lastNode
+          endNode: lastNode,
         })
         return
       }
 
       // Continue building paths for each next node
       nextNodes.forEach(nextNode => {
-        const pathKey = currentPath.map(n => n.id).join('->') + '->' + nextNode.id
+        const pathKey =
+          currentPath.map(n => n.id).join('->') + '->' + nextNode.id
         if (!visited.has(pathKey)) {
           visited.add(pathKey)
           buildPaths([...currentPath, nextNode])
@@ -95,7 +96,7 @@ export function useDestinyPath({
     plannedNodes.forEach(node => {
       onNodeUnplan(node.id)
     })
-    
+
     // Add all nodes from the selected path to planned nodes
     path.forEach(node => {
       onNodePlan(node.id)
@@ -104,7 +105,7 @@ export function useDestinyPath({
 
   // Get current node name for the header
   const getCurrentNodeName = () => {
-    if (selectedPath.length === 0) return "Destiny"
+    if (selectedPath.length === 0) return 'Destiny'
     return selectedPath[selectedPath.length - 1].name
   }
 
@@ -144,6 +145,6 @@ export function useDestinyPath({
     backtrack,
     handleBreadcrumbClick,
     startPath,
-    startNewPath
+    startNewPath,
   }
-} 
+}

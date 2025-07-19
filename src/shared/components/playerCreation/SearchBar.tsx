@@ -8,14 +8,21 @@ interface SearchBarProps {
   className?: string
 }
 
-export function SearchBar({ placeholder = "Search...", onSearch, className }: SearchBarProps) {
+export function SearchBar({
+  placeholder = 'Search...',
+  onSearch,
+  className,
+}: SearchBarProps) {
   const [query, setQuery] = useState('')
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const newQuery = e.target.value
-    setQuery(newQuery)
-    onSearch(newQuery)
-  }, [onSearch])
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newQuery = e.target.value
+      setQuery(newQuery)
+      onSearch(newQuery)
+    },
+    [onSearch]
+  )
 
   return (
     <div className={`relative ${className}`}>
@@ -29,4 +36,4 @@ export function SearchBar({ placeholder = "Search...", onSearch, className }: Se
       />
     </div>
   )
-} 
+}
