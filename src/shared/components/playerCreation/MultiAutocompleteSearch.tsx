@@ -11,12 +11,15 @@ interface MultiAutocompleteSearchProps {
 export function MultiAutocompleteSearch({
   categories,
   onSelect,
-  className = ""
+  className = '',
 }: MultiAutocompleteSearchProps) {
   return (
     <div className={`flex flex-wrap gap-4 justify-start ${className}`}>
-      {categories.map((category) => (
-        <div key={category.id} className="flex-shrink-0 min-w-[200px] max-w-[300px]">
+      {categories.map(category => (
+        <div
+          key={category.id}
+          className="flex-shrink-0 min-w-[200px] max-w-[300px]"
+        >
           <AutocompleteSearch
             categories={[category]}
             onSelect={onSelect}
@@ -27,4 +30,4 @@ export function MultiAutocompleteSearch({
       ))}
     </div>
   )
-} 
+}

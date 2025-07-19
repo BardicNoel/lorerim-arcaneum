@@ -16,30 +16,47 @@ export function RaceStatsSummary({ races }: RaceStatsSummaryProps) {
     health: {
       max: Math.max(...races.map(r => r.startingStats.health)),
       min: Math.min(...races.map(r => r.startingStats.health)),
-      avg: Math.round(races.reduce((sum, r) => sum + r.startingStats.health, 0) / races.length)
+      avg: Math.round(
+        races.reduce((sum, r) => sum + r.startingStats.health, 0) / races.length
+      ),
     },
     magicka: {
       max: Math.max(...races.map(r => r.startingStats.magicka)),
       min: Math.min(...races.map(r => r.startingStats.magicka)),
-      avg: Math.round(races.reduce((sum, r) => sum + r.startingStats.magicka, 0) / races.length)
+      avg: Math.round(
+        races.reduce((sum, r) => sum + r.startingStats.magicka, 0) /
+          races.length
+      ),
     },
     stamina: {
       max: Math.max(...races.map(r => r.startingStats.stamina)),
       min: Math.min(...races.map(r => r.startingStats.stamina)),
-      avg: Math.round(races.reduce((sum, r) => sum + r.startingStats.stamina, 0) / races.length)
-    }
+      avg: Math.round(
+        races.reduce((sum, r) => sum + r.startingStats.stamina, 0) /
+          races.length
+      ),
+    },
   }
 
   // Find races with best stats
-  const bestHealth = races.find(r => r.startingStats.health === stats.health.max)
-  const bestMagicka = races.find(r => r.startingStats.magicka === stats.magicka.max)
-  const bestStamina = races.find(r => r.startingStats.stamina === stats.stamina.max)
+  const bestHealth = races.find(
+    r => r.startingStats.health === stats.health.max
+  )
+  const bestMagicka = races.find(
+    r => r.startingStats.magicka === stats.magicka.max
+  )
+  const bestStamina = races.find(
+    r => r.startingStats.stamina === stats.stamina.max
+  )
 
   // Count categories
-  const categoryCounts = races.reduce((acc, race) => {
-    acc[race.category] = (acc[race.category] || 0) + 1
-    return acc
-  }, {} as Record<string, number>)
+  const categoryCounts = races.reduce(
+    (acc, race) => {
+      acc[race.category] = (acc[race.category] || 0) + 1
+      return acc
+    },
+    {} as Record<string, number>
+  )
 
   return (
     <Card className="bg-muted/30">
@@ -49,17 +66,21 @@ export function RaceStatsSummary({ races }: RaceStatsSummaryProps) {
           Race Statistics Summary
         </H4>
         <P className="text-sm text-muted-foreground">
-          Overview of {races.length} races across {Object.keys(categoryCounts).length} categories
+          Overview of {races.length} races across{' '}
+          {Object.keys(categoryCounts).length} categories
         </P>
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         {/* Category Distribution */}
         <div>
           <Small className="font-medium mb-2 block">Categories:</Small>
           <div className="flex gap-2">
             {Object.entries(categoryCounts).map(([category, count]) => (
-              <span key={category} className="px-2 py-1 bg-background rounded text-xs">
+              <span
+                key={category}
+                className="px-2 py-1 bg-background rounded text-xs"
+              >
                 {category}: {count}
               </span>
             ))}
@@ -81,7 +102,10 @@ export function RaceStatsSummary({ races }: RaceStatsSummaryProps) {
               <div className="flex justify-between">
                 <span>Min: {stats.health.min}</span>
                 <span className="text-red-600">
-                  {races.find(r => r.startingStats.health === stats.health.min)?.name}
+                  {
+                    races.find(r => r.startingStats.health === stats.health.min)
+                      ?.name
+                  }
                 </span>
               </div>
               <div className="flex justify-between">
@@ -103,7 +127,11 @@ export function RaceStatsSummary({ races }: RaceStatsSummaryProps) {
               <div className="flex justify-between">
                 <span>Min: {stats.magicka.min}</span>
                 <span className="text-red-600">
-                  {races.find(r => r.startingStats.magicka === stats.magicka.min)?.name}
+                  {
+                    races.find(
+                      r => r.startingStats.magicka === stats.magicka.min
+                    )?.name
+                  }
                 </span>
               </div>
               <div className="flex justify-between">
@@ -125,7 +153,11 @@ export function RaceStatsSummary({ races }: RaceStatsSummaryProps) {
               <div className="flex justify-between">
                 <span>Min: {stats.stamina.min}</span>
                 <span className="text-red-600">
-                  {races.find(r => r.startingStats.stamina === stats.stamina.min)?.name}
+                  {
+                    races.find(
+                      r => r.startingStats.stamina === stats.stamina.min
+                    )?.name
+                  }
                 </span>
               </div>
               <div className="flex justify-between">
@@ -159,4 +191,4 @@ export function RaceStatsSummary({ races }: RaceStatsSummaryProps) {
       </CardContent>
     </Card>
   )
-} 
+}

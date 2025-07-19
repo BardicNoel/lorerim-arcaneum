@@ -4,21 +4,25 @@ import type { PlayerCreationItem } from '@/shared/components/playerCreation/type
 /**
  * Transform trait data to PlayerCreationItem format
  */
-export function transformTraitToPlayerCreationItem(trait: Trait): PlayerCreationItem {
+export function transformTraitToPlayerCreationItem(
+  trait: Trait
+): PlayerCreationItem {
   // Extract effects from trait data
   const effects = trait.effects.map(effect => ({
-    type: effect.flags.includes('Detrimental') ? 'negative' as const : 'positive' as const,
+    type: effect.flags.includes('Detrimental')
+      ? ('negative' as const)
+      : ('positive' as const),
     name: effect.type,
     description: effect.condition || '',
     value: effect.value,
-    target: effect.type
+    target: effect.type,
   }))
 
   // Generate tags from the trait data
   const tags = [
     trait.category,
     ...trait.tags,
-    ...trait.effects.map(effect => effect.type)
+    ...trait.effects.map(effect => effect.type),
   ].filter((tag, index, arr) => arr.indexOf(tag) === index) // Remove duplicates
 
   return {
@@ -27,7 +31,7 @@ export function transformTraitToPlayerCreationItem(trait: Trait): PlayerCreation
     description: trait.description,
     tags,
     effects,
-    category: trait.category
+    category: trait.category,
   }
 }
 
@@ -43,7 +47,7 @@ export function getAllCategories(traits: Trait[]): string[] {
  * Extract all unique effect types from traits
  */
 export function getAllEffectTypes(traits: Trait[]): string[] {
-  const allEffectTypes = traits.flatMap(trait => 
+  const allEffectTypes = traits.flatMap(trait =>
     trait.effects.map(effect => effect.type)
   )
   return [...new Set(allEffectTypes)].sort()
@@ -62,36 +66,39 @@ export function getAllTags(traits: Trait[]): string[] {
  */
 export function getUserFriendlyEffectType(effectType: string): string {
   const effectTypeMapping: Record<string, string> = {
-    'special_effect': 'Special Effect',
-    'damage_dealt': 'Damage Dealt',
-    'health': 'Health',
-    'magicka': 'Magicka',
-    'stamina': 'Stamina',
-    'movement_speed': 'Movement Speed',
-    'carry_weight': 'Carry Weight',
-    'armor_rating': 'Armor Rating',
-    'weapon_damage': 'Weapon Damage',
-    'spell_strength': 'Spell Strength',
-    'magicka_regeneration': 'Magicka Regeneration',
-    'stamina_regeneration': 'Stamina Regeneration',
-    'health_regeneration': 'Health Regeneration',
-    'lockpicking': 'Lockpicking',
-    'pickpocketing': 'Pickpocketing',
-    'sneak': 'Sneak',
-    'speech': 'Speech',
-    'alchemy': 'Alchemy',
-    'enchanting': 'Enchanting',
-    'smithing': 'Smithing',
-    'price_modification': 'Price Modification',
-    'poison_resistance': 'Poison Resistance',
-    'fire_resistance': 'Fire Resistance',
-    'frost_resistance': 'Frost Resistance',
-    'shock_resistance': 'Shock Resistance',
-    'magic_resistance': 'Magic Resistance',
-    'disease_resistance': 'Disease Resistance'
+    special_effect: 'Special Effect',
+    damage_dealt: 'Damage Dealt',
+    health: 'Health',
+    magicka: 'Magicka',
+    stamina: 'Stamina',
+    movement_speed: 'Movement Speed',
+    carry_weight: 'Carry Weight',
+    armor_rating: 'Armor Rating',
+    weapon_damage: 'Weapon Damage',
+    spell_strength: 'Spell Strength',
+    magicka_regeneration: 'Magicka Regeneration',
+    stamina_regeneration: 'Stamina Regeneration',
+    health_regeneration: 'Health Regeneration',
+    lockpicking: 'Lockpicking',
+    pickpocketing: 'Pickpocketing',
+    sneak: 'Sneak',
+    speech: 'Speech',
+    alchemy: 'Alchemy',
+    enchanting: 'Enchanting',
+    smithing: 'Smithing',
+    price_modification: 'Price Modification',
+    poison_resistance: 'Poison Resistance',
+    fire_resistance: 'Fire Resistance',
+    frost_resistance: 'Frost Resistance',
+    shock_resistance: 'Shock Resistance',
+    magic_resistance: 'Magic Resistance',
+    disease_resistance: 'Disease Resistance',
   }
-  
-  return effectTypeMapping[effectType] || effectType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+
+  return (
+    effectTypeMapping[effectType] ||
+    effectType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+  )
 }
 
 /**
@@ -99,4 +106,4 @@ export function getUserFriendlyEffectType(effectType: string): string {
  */
 export function parseDescription(description: string): string {
   return description.replace(/\*\*\*(\d+)\*\*\*/g, '$1')
-} 
+}

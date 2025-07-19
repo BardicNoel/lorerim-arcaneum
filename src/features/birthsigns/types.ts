@@ -80,4 +80,4 @@ export interface BirthsignSearchResult {
   tags: string[]
   matchType: 'name' | 'description' | 'power' | 'tag'
   matchScore: number
-} 
+}

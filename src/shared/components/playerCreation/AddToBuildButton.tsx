@@ -22,13 +22,13 @@ export function AddToBuildButton({
   className,
   size = 'sm',
   variant = 'default',
-  onClick
+  onClick,
 }: AddToBuildButtonProps) {
-  const { 
-    setRace, 
-    setStone, 
-    setReligion, 
-    addTrait, 
+  const {
+    setRace,
+    setStone,
+    setReligion,
+    addTrait,
     removeTrait,
     addMajorSkill,
     removeMajorSkill,
@@ -36,7 +36,7 @@ export function AddToBuildButton({
     removeMinorSkill,
     addEquipment,
     removeEquipment,
-    build
+    build,
   } = useCharacterBuild()
 
   // Check if item is currently in build
@@ -51,7 +51,10 @@ export function AddToBuildButton({
       case 'trait':
         return build.traits.includes(itemId)
       case 'skill':
-        return build.skills.major.includes(itemId) || build.skills.minor.includes(itemId)
+        return (
+          build.skills.major.includes(itemId) ||
+          build.skills.minor.includes(itemId)
+        )
       case 'equipment':
         return build.equipment.includes(itemId)
       default:
@@ -63,13 +66,13 @@ export function AddToBuildButton({
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
-    
+
     // Call custom onClick handler if provided
     if (onClick) {
       onClick(e)
       return
     }
-    
+
     // Default build state management
     switch (itemType) {
       case 'race':
@@ -161,8 +164,8 @@ export function AddToBuildButton({
       variant={currentIsInBuild ? 'default' : variant}
       className={cn(
         'transition-all duration-200 group relative overflow-hidden',
-        currentIsInBuild 
-          ? 'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90 hover:shadow-lg hover:scale-105' 
+        currentIsInBuild
+          ? 'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90 hover:shadow-lg hover:scale-105'
           : 'hover:bg-primary hover:text-primary-foreground hover:shadow-md hover:scale-105 hover:border-primary',
         className
       )}
@@ -175,4 +178,4 @@ export function AddToBuildButton({
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%]" />
     </Button>
   )
-} 
+}

@@ -1,7 +1,10 @@
 import React from 'react'
 import { AutocompleteSearch } from '@/shared/components/playerCreation/AutocompleteSearch'
 import { FuzzySearchBox } from './FuzzySearchBox'
-import type { SearchCategory, SearchOption } from '@/shared/components/playerCreation/types'
+import type {
+  SearchCategory,
+  SearchOption,
+} from '@/shared/components/playerCreation/types'
 
 interface CustomMultiAutocompleteSearchProps {
   categories: SearchCategory[]
@@ -14,7 +17,7 @@ export function CustomMultiAutocompleteSearch({
   categories,
   onSelect,
   onCustomSearch,
-  className = ""
+  className = '',
 }: CustomMultiAutocompleteSearchProps) {
   // Separate fuzzy search category from other categories
   const fuzzySearchCategory = categories.find(cat => cat.id === 'fuzzy-search')
@@ -36,8 +39,11 @@ export function CustomMultiAutocompleteSearch({
       )}
 
       {/* Regular Autocomplete Search - for other categories - fixed width */}
-      {otherCategories.map((category) => (
-        <div key={category.id} className="flex-shrink-0 min-w-[200px] max-w-[300px]">
+      {otherCategories.map(category => (
+        <div
+          key={category.id}
+          className="flex-shrink-0 min-w-[200px] max-w-[300px]"
+        >
           <AutocompleteSearch
             categories={[category]}
             onSelect={onSelect}
@@ -48,4 +54,4 @@ export function CustomMultiAutocompleteSearch({
       ))}
     </div>
   )
-} 
+}

@@ -1,24 +1,28 @@
 import React, { useState, useEffect } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
 import { Button } from '@/shared/ui/ui/button'
-import { 
+import {
   PlayerCreationLayout,
   PlayerCreationContent,
   PlayerCreationItemsSection,
   PlayerCreationDetailSection,
   PlayerCreationEmptyDetail,
   PlayerCreationFilters,
-  ItemGrid
+  ItemGrid,
 } from '@/shared/components/playerCreation'
 import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
 import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
 import { DestinyCard } from '../components/DestinyCard'
 import { DestinyDetailPanel } from '../components/DestinyDetailPanel'
 import { DestinyPathBuilder } from '../components/DestinyPathBuilder'
-import type { PlayerCreationItem, SearchCategory, SelectedTag } from '@/shared/components/playerCreation/types'
+import type {
+  PlayerCreationItem,
+  SearchCategory,
+  SelectedTag,
+} from '@/shared/components/playerCreation/types'
 import type { DestinyNode, PlannedNode } from '../types'
 import { Card } from '@/shared/ui/ui/card'
-import { DestinyAccordionList } from '../components/DestinyAccordionList';
+import { DestinyAccordionList } from '../components/DestinyAccordionList'
 
 export function UnifiedDestinyPage() {
   // Load destiny data from public/data/subclasses.json at runtime
@@ -31,39 +35,50 @@ export function UnifiedDestinyPage() {
     async function fetchDestinyData() {
       try {
         setLoading(true)
-        const res = await fetch(`${import.meta.env.BASE_URL}data/subclasses.json`)
+        const res = await fetch(
+          `${import.meta.env.BASE_URL}data/subclasses.json`
+        )
         if (!res.ok) throw new Error('Failed to fetch destiny data')
         const data = await res.json()
-        
+
         // Transform the data to match our DestinyNode interface
-        const transformedNodes: DestinyNode[] = data.map((node: any, index: number) => ({
-          id: node.globalFormId || `destiny-${index}`,
-          name: node.name,
-          description: node.description,
-          tags: [], // We'll need to add tags based on the content
-          prerequisites: node.prerequisites || [],
-          nextBranches: [], // We'll need to derive this from prerequisites
-          levelRequirement: undefined, // Not in current data
-          lore: undefined, // Not in current data
-          globalFormId: node.globalFormId
-        }))
-        
+        const transformedNodes: DestinyNode[] = data.map(
+          (node: any, index: number) => ({
+            id: node.globalFormId || `destiny-${index}`,
+            name: node.name,
+            description: node.description,
+            tags: [], // We'll need to add tags based on the content
+            prerequisites: node.prerequisites || [],
+            nextBranches: [], // We'll need to derive this from prerequisites
+            levelRequirement: undefined, // Not in current data
+            lore: undefined, // Not in current data
+            globalFormId: node.globalFormId,
+          })
+        )
+
         // Note: nextBranches are now calculated dynamically in the tree view
         // based on the graph structure, so we don't need to pre-calculate them
-        
+
         // Add some basic tags based on content
         transformedNodes.forEach(node => {
           const tags = []
-          if (node.description.toLowerCase().includes('magicka')) tags.push('Magic')
-          if (node.description.toLowerCase().includes('health')) tags.push('Defensive')
-          if (node.description.toLowerCase().includes('stamina')) tags.push('Utility')
-          if (node.description.toLowerCase().includes('damage')) tags.push('Offensive')
-          if (node.description.toLowerCase().includes('armor')) tags.push('Defensive')
-          if (node.description.toLowerCase().includes('spell')) tags.push('Magic')
-          if (node.description.toLowerCase().includes('weapon')) tags.push('Combat')
+          if (node.description.toLowerCase().includes('magicka'))
+            tags.push('Magic')
+          if (node.description.toLowerCase().includes('health'))
+            tags.push('Defensive')
+          if (node.description.toLowerCase().includes('stamina'))
+            tags.push('Utility')
+          if (node.description.toLowerCase().includes('damage'))
+            tags.push('Offensive')
+          if (node.description.toLowerCase().includes('armor'))
+            tags.push('Defensive')
+          if (node.description.toLowerCase().includes('spell'))
+            tags.push('Magic')
+          if (node.description.toLowerCase().includes('weapon'))
+            tags.push('Combat')
           node.tags = tags
         })
-        
+
         setDestinyNodes(transformedNodes)
       } catch (err) {
         setError('Failed to load destiny data')
@@ -85,13 +100,15 @@ export function UnifiedDestinyPage() {
     effects: [],
     associatedItems: [],
     imageUrl: undefined,
-    category: undefined
+    category: undefined,
   }))
 
   // Generate search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
     const tags = [...new Set(destinyNodes.flatMap(node => node.tags))]
-    const prerequisites = [...new Set(destinyNodes.flatMap(node => node.prerequisites))]
+    const prerequisites = [
+      ...new Set(destinyNodes.flatMap(node => node.prerequisites)),
+    ]
 
     return [
       {
@@ -103,8 +120,8 @@ export function UnifiedDestinyPage() {
           label: tag,
           value: tag,
           category: 'Tags',
-          description: `Destiny nodes with ${tag} tag`
-        }))
+          description: `Destiny nodes with ${tag} tag`,
+        })),
       },
       {
         id: 'prerequisites',
@@ -115,9 +132,9 @@ export function UnifiedDestinyPage() {
           label: prereq,
           value: prereq,
           category: 'Prerequisites',
-          description: `Destiny nodes requiring ${prereq}`
-        }))
-      }
+          description: `Destiny nodes requiring ${prereq}`,
+        })),
+      },
     ]
   }
 
@@ -131,41 +148,41 @@ export function UnifiedDestinyPage() {
     handleItemSelect,
     handleFiltersChange,
     handleSearch,
-    handleViewModeChange
+    handleViewModeChange,
   } = usePlayerCreation({
     items: playerCreationItems,
-    filters: []
+    filters: [],
   })
 
   // Override view mode to default to list for destiny reference
   const viewMode = 'list'
 
   // Use the new filters hook
-  const {
-    handleTagSelect,
-    handleTagRemove
-  } = usePlayerCreationFilters({
+  const { handleTagSelect, handleTagRemove } = usePlayerCreationFilters({
     initialFilters: currentFilters,
     onFiltersChange: handleFiltersChange,
-    onSearch: handleSearch
+    onSearch: handleSearch,
   })
 
   // Handle planning nodes
   const handlePlanNode = (nodeId: string) => {
     const node = destinyNodes.find(n => n.id === nodeId)
     if (!node) return
-    
+
     setPlannedNodes(prev => {
       const isPlanned = prev.some(p => p.id === nodeId)
       if (isPlanned) {
         return prev.filter(p => p.id !== nodeId)
       } else {
-        return [...prev, { 
-          id: nodeId, 
-          name: node.name, 
-          description: node.description,
-          levelRequirement: node.levelRequirement 
-        }]
+        return [
+          ...prev,
+          {
+            id: nodeId,
+            name: node.name,
+            description: node.description,
+            levelRequirement: node.levelRequirement,
+          },
+        ]
       }
     })
   }
@@ -175,11 +192,9 @@ export function UnifiedDestinyPage() {
     setPlannedNodes(prev => prev.filter(p => p.id !== nodeId))
   }
 
-
-
   const renderDestinyCard = (item: PlayerCreationItem, isSelected: boolean) => (
-    <DestinyCard 
-      item={item} 
+    <DestinyCard
+      item={item}
       isSelected={isSelected}
       originalNode={destinyNodes.find(node => node.id === item.id)}
       allNodes={destinyNodes}
@@ -188,7 +203,7 @@ export function UnifiedDestinyPage() {
   )
 
   const renderDestinyDetailPanel = (item: PlayerCreationItem) => (
-    <DestinyDetailPanel 
+    <DestinyDetailPanel
       item={item}
       originalNode={destinyNodes.find(node => node.id === item.id)}
       onPlanNode={handlePlanNode}
@@ -213,7 +228,7 @@ export function UnifiedDestinyPage() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <p className="text-destructive mb-4">{error}</p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
           >
@@ -236,7 +251,7 @@ export function UnifiedDestinyPage() {
             <TabsTrigger value="path">Path Builder</TabsTrigger>
             <TabsTrigger value="reference">Reference</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="reference" className="space-y-4">
             <PlayerCreationFilters
               searchCategories={searchCategories}
@@ -251,9 +266,7 @@ export function UnifiedDestinyPage() {
               />
             </div>
           </TabsContent>
-          
 
-          
           <TabsContent value="path" className="space-y-4">
             <DestinyPathBuilder
               nodes={destinyNodes}
@@ -266,4 +279,4 @@ export function UnifiedDestinyPage() {
       </div>
     </PlayerCreationLayout>
   )
-} 
+}

@@ -1,1 +1,1 @@
-export { useFuzzySearch } from './useFuzzySearch' 
+export { useFuzzySearch } from './useFuzzySearch'

@@ -26,41 +26,50 @@ export function useFuzzySearch(birthsigns: Birthsign[], searchQuery: string) {
       name: birthsign.name,
       description: birthsign.description,
       group: birthsign.group,
-      statModifications: birthsign.stat_modifications.map(stat => 
-        `${stat.stat} ${stat.type} ${stat.value}${stat.value_type === 'percentage' ? '%' : ''}`
+      statModifications: birthsign.stat_modifications.map(
+        stat =>
+          `${stat.stat} ${stat.type} ${stat.value}${stat.value_type === 'percentage' ? '%' : ''}`
       ),
-      skillBonuses: birthsign.skill_bonuses.map(skill => 
-        `${skill.stat} +${skill.value}${skill.value_type === 'percentage' ? '%' : ''}`
+      skillBonuses: birthsign.skill_bonuses.map(
+        skill =>
+          `${skill.stat} +${skill.value}${skill.value_type === 'percentage' ? '%' : ''}`
       ),
-      powers: birthsign.powers.map(power => 
-        `${power.name} ${power.description}`
+      powers: birthsign.powers.map(
+        power => `${power.name} ${power.description}`
       ),
-      conditionalEffects: birthsign.conditional_effects?.map(effect => 
-        `${effect.stat} ${effect.description} ${effect.condition || ''}`
-      ) || [],
-      masteryEffects: birthsign.mastery_effects?.map(effect => 
-        `${effect.stat} ${effect.description} ${effect.condition || ''}`
-      ) || [],
-      originalBirthsign: birthsign
+      conditionalEffects:
+        birthsign.conditional_effects?.map(
+          effect =>
+            `${effect.stat} ${effect.description} ${effect.condition || ''}`
+        ) || [],
+      masteryEffects:
+        birthsign.mastery_effects?.map(
+          effect =>
+            `${effect.stat} ${effect.description} ${effect.condition || ''}`
+        ) || [],
+      originalBirthsign: birthsign,
     }))
   }, [birthsigns])
 
   // Configure Fuse.js options
-  const fuseOptions = useMemo(() => ({
-    keys: [
-      { name: 'name', weight: 0.4 },
-      { name: 'description', weight: 0.3 },
-      { name: 'powers', weight: 0.2 },
-      { name: 'statModifications', weight: 0.15 },
-      { name: 'skillBonuses', weight: 0.15 },
-      { name: 'conditionalEffects', weight: 0.1 },
-      { name: 'masteryEffects', weight: 0.1 },
-      { name: 'group', weight: 0.1 }
-    ],
-    threshold: 0.3, // Lower threshold = more strict matching
-    includeScore: true,
-    includeMatches: true
-  }), [])
+  const fuseOptions = useMemo(
+    () => ({
+      keys: [
+        { name: 'name', weight: 0.4 },
+        { name: 'description', weight: 0.3 },
+        { name: 'powers', weight: 0.2 },
+        { name: 'statModifications', weight: 0.15 },
+        { name: 'skillBonuses', weight: 0.15 },
+        { name: 'conditionalEffects', weight: 0.1 },
+        { name: 'masteryEffects', weight: 0.1 },
+        { name: 'group', weight: 0.1 },
+      ],
+      threshold: 0.3, // Lower threshold = more strict matching
+      includeScore: true,
+      includeMatches: true,
+    }),
+    []
+  )
 
   // Create Fuse instance
   const fuse = useMemo(() => {
@@ -73,7 +82,7 @@ export function useFuzzySearch(birthsigns: Birthsign[], searchQuery: string) {
       return searchableBirthsigns.map(birthsign => ({
         item: birthsign,
         score: 0,
-        matches: []
+        matches: [],
       }))
     }
 
@@ -88,6 +97,6 @@ export function useFuzzySearch(birthsigns: Birthsign[], searchQuery: string) {
   return {
     filteredBirthsigns,
     searchResults,
-    searchableBirthsigns
+    searchableBirthsigns,
   }
-} 
+}

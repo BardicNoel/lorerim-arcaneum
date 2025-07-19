@@ -29,4 +29,4 @@ export interface TraitFilters {
   search: string
   category: string
   tags: string[]
-} 
+}

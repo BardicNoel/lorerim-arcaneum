@@ -1,4 +1,4 @@
-import { H1, P } from '@/shared/ui/ui/typography';
+import { H1, P } from '@/shared/ui/ui/typography'
 
 export default function BirthSignsPage() {
   return (
@@ -6,5 +6,5 @@ export default function BirthSignsPage() {
       <H1>Birth Signs</H1>
       <P>Birth Signs page coming soon.</P>
     </div>
-  );
-} 
+  )
+}

@@ -18,13 +18,13 @@ export function AddToBuildSwitch({
   itemName,
   isInBuild = false,
   className,
-  onCheckedChange
+  onCheckedChange,
 }: AddToBuildSwitchProps) {
-  const { 
-    setRace, 
-    setStone, 
-    setReligion, 
-    addTrait, 
+  const {
+    setRace,
+    setStone,
+    setReligion,
+    addTrait,
     removeTrait,
     addMajorSkill,
     removeMajorSkill,
@@ -32,7 +32,7 @@ export function AddToBuildSwitch({
     removeMinorSkill,
     addEquipment,
     removeEquipment,
-    build
+    build,
   } = useCharacterBuild()
 
   // Check if item is currently in build
@@ -47,7 +47,10 @@ export function AddToBuildSwitch({
       case 'trait':
         return build.traits.includes(itemId)
       case 'skill':
-        return build.skills.major.includes(itemId) || build.skills.minor.includes(itemId)
+        return (
+          build.skills.major.includes(itemId) ||
+          build.skills.minor.includes(itemId)
+        )
       case 'equipment':
         return build.equipment.includes(itemId)
       default:
@@ -63,7 +66,7 @@ export function AddToBuildSwitch({
       onCheckedChange(checked)
       return
     }
-    
+
     // Default build state management
     switch (itemType) {
       case 'race':
@@ -111,25 +114,25 @@ export function AddToBuildSwitch({
   }
 
   return (
-    <div 
+    <div
       className={cn(
         'flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm cursor-pointer hover:bg-muted/50 transition-colors w-40',
         currentIsInBuild ? 'border-[#d4af37] bg-[#d4af37]/20 shadow-md' : '',
         className
       )}
-      onClick={(e) => {
+      onClick={e => {
         e.stopPropagation()
         handleCheckedChange(!currentIsInBuild)
       }}
       title={getTooltip()}
     >
       <div className="space-y-0.5">
-        <span className={cn(
-          'text-sm font-medium transition-colors duration-200',
-          currentIsInBuild 
-            ? 'text-[#d4af37]' 
-            : 'text-foreground'
-        )}>
+        <span
+          className={cn(
+            'text-sm font-medium transition-colors duration-200',
+            currentIsInBuild ? 'text-[#d4af37]' : 'text-foreground'
+          )}
+        >
           {currentIsInBuild ? 'In Build' : 'Add to Build'}
         </span>
       </div>
@@ -143,4 +146,4 @@ export function AddToBuildSwitch({
       />
     </div>
   )
-} 
+}

@@ -1,5 +1,11 @@
 import { useCharacterBuild } from '../hooks/useCharacterBuild'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '../ui/ui/card'
 import { Badge } from '../ui/ui/badge'
 import { Button } from '../ui/ui/button'
 import { useNavigate } from 'react-router-dom'
@@ -19,10 +25,7 @@ export const BuildStatus = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button 
-            onClick={() => navigate('/build')}
-            className="w-full"
-          >
+          <Button onClick={() => navigate('/build')} className="w-full">
             Create Character Build
           </Button>
         </CardContent>
@@ -35,17 +38,15 @@ export const BuildStatus = () => {
       <CardHeader>
         <CardTitle className="text-lg flex items-center justify-between">
           <span>{summary.name}</span>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             size="sm"
             onClick={() => navigate('/build')}
           >
             Edit
           </Button>
         </CardTitle>
-        <CardDescription>
-          Current character build status
-        </CardDescription>
+        <CardDescription>Current character build status</CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="grid grid-cols-2 gap-2 text-sm">
@@ -68,7 +69,7 @@ export const BuildStatus = () => {
             </Badge>
           </div>
         </div>
-        
+
         <div className="flex gap-2 text-xs text-muted-foreground">
           <span>{summary.traitCount} traits</span>
           <span>•</span>
@@ -81,4 +82,4 @@ export const BuildStatus = () => {
       </CardContent>
     </Card>
   )
-} 
+}

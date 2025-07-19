@@ -1,5 +1,11 @@
-import { H1, Muted } from '@/shared/ui/ui/typography';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/shared/ui/ui/card';
+import { H1, Muted } from '@/shared/ui/ui/typography'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from '@/shared/ui/ui/card'
 
 export default function EquipmentPage() {
   return (
@@ -11,14 +17,17 @@ export default function EquipmentPage() {
       <Card>
         <CardHeader>
           <CardTitle>Coming Soon</CardTitle>
-          <CardDescription>Equipment database is under development</CardDescription>
+          <CardDescription>
+            Equipment database is under development
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Muted>
-            This section will provide a comprehensive database of all equipment in the game.
+            This section will provide a comprehensive database of all equipment
+            in the game.
           </Muted>
         </CardContent>
       </Card>
     </div>
-  );
-} 
+  )
+}

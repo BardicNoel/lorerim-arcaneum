@@ -4,30 +4,33 @@ import type { PlayerCreationItem } from '@/shared/components/playerCreation/type
 /**
  * Transform birthsign data to PlayerCreationItem format
  */
-export function transformBirthsignToPlayerCreationItem(birthsign: Birthsign): PlayerCreationItem {
+export function transformBirthsignToPlayerCreationItem(
+  birthsign: Birthsign
+): PlayerCreationItem {
   // Extract effects from various sources
   const effects = [
     ...birthsign.stat_modifications.map(stat => ({
-      type: stat.type === 'bonus' ? 'positive' as const : 'negative' as const,
+      type:
+        stat.type === 'bonus' ? ('positive' as const) : ('negative' as const),
       name: `${stat.stat} ${stat.type === 'bonus' ? '+' : '-'}${stat.value}${stat.value_type === 'percentage' ? '%' : ''}`,
       description: `${stat.stat} ${stat.type === 'bonus' ? 'increased' : 'decreased'} by ${stat.value}${stat.value_type === 'percentage' ? '%' : ''}`,
       value: stat.value,
-      target: stat.stat
+      target: stat.stat,
     })),
     ...birthsign.skill_bonuses.map(skill => ({
       type: 'positive' as const,
       name: `${skill.stat} +${skill.value}${skill.value_type === 'percentage' ? '%' : ''}`,
       description: `${skill.stat} skill increased by ${skill.value}${skill.value_type === 'percentage' ? '%' : ''}`,
       value: skill.value,
-      target: skill.stat
+      target: skill.stat,
     })),
     ...birthsign.powers.map(power => ({
       type: 'positive' as const,
       name: power.name,
       description: power.description,
       value: power.magnitude || 0,
-      target: 'power'
-    }))
+      target: 'power',
+    })),
   ]
 
   // Generate tags from the birthsign data
@@ -35,7 +38,7 @@ export function transformBirthsignToPlayerCreationItem(birthsign: Birthsign): Pl
     birthsign.group,
     ...birthsign.stat_modifications.map(stat => stat.stat),
     ...birthsign.skill_bonuses.map(skill => skill.stat),
-    ...birthsign.powers.map(power => power.name)
+    ...birthsign.powers.map(power => power.name),
   ].filter((tag, index, arr) => arr.indexOf(tag) === index) // Remove duplicates
 
   return {
@@ -44,7 +47,7 @@ export function transformBirthsignToPlayerCreationItem(birthsign: Birthsign): Pl
     description: birthsign.description,
     tags,
     effects,
-    category: birthsign.group
+    category: birthsign.group,
   }
 }
 
@@ -62,7 +65,7 @@ export function getAllGroups(birthsigns: Birthsign[]): string[] {
 export function getAllStats(birthsigns: Birthsign[]): string[] {
   const allStats = birthsigns.flatMap(birthsign => [
     ...birthsign.stat_modifications.map(stat => stat.stat),
-    ...birthsign.skill_bonuses.map(skill => skill.stat)
+    ...birthsign.skill_bonuses.map(skill => skill.stat),
   ])
   return [...new Set(allStats)].sort()
 }
@@ -71,7 +74,7 @@ export function getAllStats(birthsigns: Birthsign[]): string[] {
  * Extract all unique powers from birthsigns
  */
 export function getAllPowers(birthsigns: Birthsign[]): string[] {
-  const allPowers = birthsigns.flatMap(birthsign => 
+  const allPowers = birthsigns.flatMap(birthsign =>
     birthsign.powers.map(power => power.name)
   )
   return [...new Set(allPowers)].sort()
@@ -82,31 +85,34 @@ export function getAllPowers(birthsigns: Birthsign[]): string[] {
  */
 export function getUserFriendlyStat(stat: string): string {
   const statMapping: Record<string, string> = {
-    'health': 'Health',
-    'magicka': 'Magicka',
-    'stamina': 'Stamina',
-    'weapon_damage': 'Weapon Damage',
-    'armor_penetration': 'Armor Penetration',
-    'unarmed_damage': 'Unarmed Damage',
-    'movement_speed': 'Movement Speed',
-    'sprint_speed': 'Sprint Speed',
-    'carry_weight': 'Carry Weight',
-    'spell_strength': 'Spell Strength',
-    'magicka_regeneration': 'Magicka Regeneration',
-    'lockpicking_durability': 'Lockpicking Durability',
-    'lockpicking_expertise': 'Lockpicking Expertise',
-    'pickpocketing_success': 'Pickpocketing Success',
-    'stealth_detection': 'Stealth Detection',
-    'speech': 'Speech',
-    'shout_cooldown': 'Shout Cooldown',
-    'price_modification': 'Price Modification',
-    'damage_reflection': 'Damage Reflection',
-    'poison_resistance': 'Poison Resistance',
-    'fire_resistance': 'Fire Resistance',
-    'enchanting_strength': 'Enchanting Strength'
+    health: 'Health',
+    magicka: 'Magicka',
+    stamina: 'Stamina',
+    weapon_damage: 'Weapon Damage',
+    armor_penetration: 'Armor Penetration',
+    unarmed_damage: 'Unarmed Damage',
+    movement_speed: 'Movement Speed',
+    sprint_speed: 'Sprint Speed',
+    carry_weight: 'Carry Weight',
+    spell_strength: 'Spell Strength',
+    magicka_regeneration: 'Magicka Regeneration',
+    lockpicking_durability: 'Lockpicking Durability',
+    lockpicking_expertise: 'Lockpicking Expertise',
+    pickpocketing_success: 'Pickpocketing Success',
+    stealth_detection: 'Stealth Detection',
+    speech: 'Speech',
+    shout_cooldown: 'Shout Cooldown',
+    price_modification: 'Price Modification',
+    damage_reflection: 'Damage Reflection',
+    poison_resistance: 'Poison Resistance',
+    fire_resistance: 'Fire Resistance',
+    enchanting_strength: 'Enchanting Strength',
   }
-  
-  return statMapping[stat] || stat.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+
+  return (
+    statMapping[stat] ||
+    stat.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+  )
 }
 
 /**
@@ -114,4 +120,4 @@ export function getUserFriendlyStat(stat: string): string {
  */
 export function parseDescription(description: string): string {
   return description.replace(/<(\d+)>/g, '$1')
-} 
+}
