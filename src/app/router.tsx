@@ -9,6 +9,7 @@ import NotFoundPage from '@/pages/NotFoundPage'
 import { AccordionRacesPage } from '@/features/races/pages/AccordionRacesPage'
 import { AccordionReligionsPage } from '@/features/religions/pages/AccordionReligionsPage'
 import { UnifiedDestinyPage } from '@/features/destiny'
+import { UnifiedPerksPage } from '@/features/perks'
 import BuildPage from '@/pages/BuildPage'
 
 export const AppRouter = () => {
@@ -18,6 +19,7 @@ export const AppRouter = () => {
       <Route path="/build" element={<BuildPage />} />
       <Route path="/race" element={<AccordionRacesPage />} />
       <Route path="/destiny" element={<UnifiedDestinyPage />} />
+      <Route path="/perks" element={<UnifiedPerksPage />} />
       <Route path="/birth-signs" element={<AccordionBirthsignsPage />} />
       <Route path="/traits" element={<AccordionTraitsPage />} />
       <Route path="/skills" element={<AccordionSkillsPage />} />
