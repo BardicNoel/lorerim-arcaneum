@@ -877,6 +877,51 @@ function layoutSingleTree(hierarchy: { nodes: Map<string, any>; roots: string[] 
     });
   });
   
+  // Check for circular references by attempting to calculate subtree widths
+  const hasCircularReferences = layoutNodes.some(node => {
+    try {
+      // Use a more aggressive test - try to calculate width for all nodes
+      const testVisited = new Set<string>();
+      const testResult = calculateSubtreeWidth(node.id, nodes, config, testVisited);
+      // If we get a reasonable result, no circular reference
+      return false;
+    } catch (error) {
+      console.log(`Circular reference detected in tree, will use original positions for ${node.id}`);
+      return true;
+    }
+  });
+  
+  if (hasCircularReferences) {
+    console.log('Using original position data due to circular references');
+    console.log(`Tree has ${layoutNodes.length} nodes, checking original positions...`);
+    
+    // Use original position data from the perk records
+    layoutNodes.forEach(node => {
+      const hierarchyNode = nodes.get(node.id);
+      if (hierarchyNode && hierarchyNode.perk) {
+        // Scale original positions to our coordinate system
+        const originalX = hierarchyNode.perk.position.x * config.gridScaleX;
+        const originalY = -hierarchyNode.perk.position.y * config.gridScaleY; // Invert Y for upward branching
+        
+        console.log(`${node.id.split('_').pop()}: original pos (${hierarchyNode.perk.position.x}, ${hierarchyNode.perk.position.y}) -> scaled (${originalX.toFixed(0)}, ${originalY.toFixed(0)})`);
+        
+        node.x = originalX;
+        node.y = originalY;
+        node.originalX = originalX;
+        node.originalY = originalY;
+      } else {
+        console.warn(`No original position data for node: ${node.id}`);
+      }
+    });
+    
+    // Apply collision detection and forces for circular reference trees
+    applyCircularTreeForces(layoutNodes, config);
+    return layoutNodes;
+  }
+  
+  // Proceed with hierarchical layout if no circular references
+  console.log('No circular references detected, using hierarchical layout');
+  
   // Find root nodes (nodes with no parents in this tree)
   const rootNodes = layoutNodes.filter(node => {
     const hasParentInTree = layoutNodes.some(other => 
@@ -1098,6 +1143,129 @@ function applyMildForces(layoutNodes: LayoutNode[], config: LayoutConfig): Layou
   return layoutNodes;
 }
 
+// Helper function to apply collision detection and forces for circular reference trees
+function applyCircularTreeForces(layoutNodes: LayoutNode[], config: LayoutConfig): LayoutNode[] {
+  console.log('=== APPLYING CIRCULAR TREE FORCES ===');
+  
+  const forceStrength = 0.08; // Stronger force for collision resolution
+  const attractionStrength = 0.03; // Moderate attraction to original positions
+  const minVerticalSeparation = config.nodeHeight * 0.8; // Minimum vertical separation between nodes
+  const maxIterations = 50; // More iterations to ensure no touching
+  
+  // Store original positions for attraction
+  const originalPositions = new Map<string, { x: number; y: number }>();
+  layoutNodes.forEach(node => {
+    originalPositions.set(node.id, { x: node.x, y: node.y });
+  });
+  
+  // Phase 1: Vertical-only repulsion forces until no touching
+  console.log('=== PHASE 1: VERTICAL-ONLY REPULSION ===');
+  let iteration = 0;
+  let totalTouching = 1; // Start with 1 to enter loop
+  
+  while (totalTouching > 0 && iteration < maxIterations) {
+    iteration++;
+    totalTouching = 0;
+    let maxForceApplied = 0;
+    
+    // Check each pair of nodes
+    for (let i = 0; i < layoutNodes.length; i++) {
+      for (let j = i + 1; j < layoutNodes.length; j++) {
+        const nodeA = layoutNodes[i];
+        const nodeB = layoutNodes[j];
+        
+        // Check for overlapping bounding boxes
+        const overlapX = Math.max(0, 
+          Math.min(nodeA.x + config.nodeWidth, nodeB.x + config.nodeWidth) - 
+          Math.max(nodeA.x, nodeB.x)
+        );
+        const overlapY = Math.max(0, 
+          Math.min(nodeA.y + config.nodeHeight, nodeB.y + config.nodeHeight) - 
+          Math.max(nodeA.y, nodeB.y)
+        );
+        
+        // Check for minimum vertical separation
+        const centerAY = nodeA.y + config.nodeHeight * 0.5;
+        const centerBY = nodeB.y + config.nodeHeight * 0.5;
+        const verticalDistance = Math.abs(centerBY - centerAY);
+        const needsVerticalSeparation = verticalDistance < minVerticalSeparation;
+        
+        // If nodes are touching (overlapping) or too close vertically, apply vertical force
+        if ((overlapX > 0 && overlapY > 0) || needsVerticalSeparation) {
+          totalTouching++;
+          
+          // Calculate vertical force based on overlap or minimum separation needed
+          let forceY = 0;
+          if (overlapX > 0 && overlapY > 0) {
+            // Nodes are overlapping, use overlap-based force
+            forceY = overlapY * forceStrength;
+          } else if (needsVerticalSeparation) {
+            // Nodes are too close vertically, push them apart
+            const separationNeeded = minVerticalSeparation - verticalDistance;
+            forceY = separationNeeded * forceStrength;
+          }
+          
+          // Push nodes apart vertically (up and down)
+          if (nodeA.y < nodeB.y) {
+            // nodeA is above nodeB, push nodeA up and nodeB down
+            nodeA.y -= forceY;
+            nodeB.y += forceY;
+          } else {
+            // nodeA is below nodeB, push nodeA down and nodeB up
+            nodeA.y += forceY;
+            nodeB.y -= forceY;
+          }
+          
+          maxForceApplied = Math.max(maxForceApplied, forceY);
+          
+          if (iteration === 1) {
+            if (overlapX > 0 && overlapY > 0) {
+              console.log(`  💥 Vertical repulsion (overlap) between ${nodeA.id.split('_').pop()} and ${nodeB.id.split('_').pop()}: forceY=${forceY.toFixed(2)}`);
+            } else {
+              console.log(`  📏 Vertical separation between ${nodeA.id.split('_').pop()} and ${nodeB.id.split('_').pop()}: forceY=${forceY.toFixed(2)}`);
+            }
+          }
+        }
+      }
+    }
+    
+    console.log(`  Iteration ${iteration}: ${totalTouching} touching/close pairs, max force: ${maxForceApplied.toFixed(2)}`);
+    
+    // Stop if no nodes are touching or too close
+    if (totalTouching === 0) {
+      console.log(`  No more touching or close nodes after iteration ${iteration}`);
+      break;
+    }
+  }
+  
+  if (iteration >= maxIterations) {
+    console.log(`  Warning: Reached maximum iterations (${maxIterations}) with ${totalTouching} still touching/close`);
+  }
+  
+  // Phase 2: Attraction back to original positions (vertical only)
+  console.log('=== PHASE 2: VERTICAL ATTRACTION TO ORIGINAL POSITIONS ===');
+  
+  layoutNodes.forEach(node => {
+    const original = originalPositions.get(node.id);
+    if (!original) return;
+    
+    const deltaY = original.y - node.y;
+    
+    // Apply vertical attraction only
+    const newY = node.y + deltaY * attractionStrength;
+    
+    if (Math.abs(newY - node.y) > 1) {
+      console.log(`  🎯 Vertical attraction for ${node.id.split('_').pop()}: y=${node.y.toFixed(0)}->${newY.toFixed(0)}`);
+    }
+    
+    node.y = newY;
+    node.originalY = newY;
+  });
+  
+  console.log('Circular tree forces completed');
+  return layoutNodes;
+}
+
 // Helper function to position trees as siblings
 function positionTreesAsSiblings(treeLayouts: LayoutNode[][], config: LayoutConfig): LayoutNode[] {
   console.log(`Positioning ${treeLayouts.length} trees as siblings`);
@@ -1183,13 +1351,24 @@ function positionTreesAsSiblings(treeLayouts: LayoutNode[][], config: LayoutConf
 function calculateSubtreeWidth(
   perkId: string,
   nodes: Map<string, any>, // Using any for the hierarchy nodes
-  config: LayoutConfig
+  config: LayoutConfig,
+  visited: Set<string> = new Set() // Added visited parameter
 ): number {
+  // Prevent infinite recursion by tracking visited nodes
+  if (visited.has(perkId)) {
+    throw new Error(`Circular reference detected for perkId: ${perkId}`);
+  }
+  
   const perkNode = nodes.get(perkId);
   if (!perkNode) return config.nodeWidth; // Fallback if node not found
 
+  // Add current node to visited set
+  visited.add(perkId);
+
   const children = perkNode.children || [];
-  const childSubtreeWidths = children.map((childId: string) => calculateSubtreeWidth(childId, nodes, config));
+  const childSubtreeWidths = children.map((childId: string) => 
+    calculateSubtreeWidth(childId, nodes, config, new Set(visited))
+  );
 
   if (childSubtreeWidths.length === 0) {
     return config.nodeWidth; // Leaf node
