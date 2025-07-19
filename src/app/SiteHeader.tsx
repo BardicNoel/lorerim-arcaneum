@@ -1,16 +1,19 @@
-import React from 'react';
-import { Menu } from 'lucide-react';
-import { Z_INDEX } from '@/lib/constants';
-import { ThemeToggle } from '@/shared/ui/ThemeToggle';
+import React from 'react'
+import { Menu } from 'lucide-react'
+import { Z_INDEX } from '@/lib/constants'
+import { ThemeToggle } from '@/shared/ui/ThemeToggle'
 
 interface SiteHeaderProps {
-  sidebarCollapsed: boolean;
-  onToggleSidebar: () => void;
+  sidebarCollapsed: boolean
+  onToggleSidebar: () => void
 }
 
-export function SiteHeader({ sidebarCollapsed, onToggleSidebar }: SiteHeaderProps) {
+export function SiteHeader({
+  sidebarCollapsed,
+  onToggleSidebar,
+}: SiteHeaderProps) {
   return (
-    <header 
+    <header
       className="sticky top-0 w-full h-12 flex items-center bg-background border-b border-skyrim-gold/20 px-2 shadow-sm"
       style={{ zIndex: Z_INDEX.NAVIGATION }}
     >
@@ -21,13 +24,17 @@ export function SiteHeader({ sidebarCollapsed, onToggleSidebar }: SiteHeaderProp
       >
         <Menu className="w-5 h-5 text-skyrim-gold transition-transform duration-200 group-hover:rotate-12" />
       </button>
-      <span className="text-skyrim-gold font-bold text-base tracking-tight select-none">Lorerim Arcaneum</span>
-      <span className="ml-2 text-xs text-skyrim-gold/60 select-none">Theorycrafting Hub</span>
-      
+      <span className="text-skyrim-gold font-bold text-base tracking-tight select-none">
+        Lorerim Arcaneum
+      </span>
+      <span className="ml-2 text-xs text-skyrim-gold/60 select-none">
+        Theorycrafting Hub
+      </span>
+
       {/* Theme Toggle */}
       <div className="ml-auto">
         <ThemeToggle />
       </div>
     </header>
-  );
-} 
+  )
+}

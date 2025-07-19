@@ -25,17 +25,19 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Save theme to localStorage
     localStorage.setItem('theme', theme)
-    
+
     // Determine resolved theme
     let resolved: 'light' | 'dark'
     if (theme === 'system') {
-      resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      resolved = window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
     } else {
       resolved = theme
     }
-    
+
     setResolvedTheme(resolved)
-    
+
     // Apply theme to document
     const root = document.documentElement
     if (resolved === 'dark') {
@@ -52,7 +54,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       if (theme === 'system') {
         const resolved = mediaQuery.matches ? 'dark' : 'light'
         setResolvedTheme(resolved)
-        
+
         const root = document.documentElement
         if (resolved === 'dark') {
           root.classList.add('dark')
@@ -79,4 +81,4 @@ export function useTheme() {
     throw new Error('useTheme must be used within a ThemeProvider')
   }
   return context
-} 
+}

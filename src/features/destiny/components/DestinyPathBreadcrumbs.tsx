@@ -19,19 +19,18 @@ export function DestinyPathBreadcrumbs({
   isPlanned,
   onBreadcrumbClick,
   showChevrons = true,
-  badgeClassName = ""
+  badgeClassName = '',
 }: DestinyPathBreadcrumbsProps) {
   return (
     <div className="flex flex-wrap items-center gap-2">
       {path.map((node, index) => (
         <React.Fragment key={node.id}>
           <div className="flex items-center gap-2">
-            <DestinyNodeHoverCard 
-              node={node} 
-              isPlanned={isPlanned(node.id)}
-            >
-              <Badge 
-                variant={index === selectedPathLength - 1 ? "default" : "secondary"}
+            <DestinyNodeHoverCard node={node} isPlanned={isPlanned(node.id)}>
+              <Badge
+                variant={
+                  index === selectedPathLength - 1 ? 'default' : 'secondary'
+                }
                 className={`cursor-pointer hover:bg-primary/80 ${badgeClassName}`}
                 onClick={() => onBreadcrumbClick(index)}
               >
@@ -46,4 +45,4 @@ export function DestinyPathBreadcrumbs({
       ))}
     </div>
   )
-} 
+}

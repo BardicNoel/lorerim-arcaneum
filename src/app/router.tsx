@@ -1,30 +1,32 @@
 import { Routes, Route } from 'react-router-dom'
-import BirthSignsPage from '@/pages/BirthSignsPage'
-import TraitsPage from '@/pages/TraitsPage'
-import ReligionsPage from '@/pages/ReligionsPage'
+import { AccordionBirthsignsPage } from '@/features/birthsigns/pages/AccordionBirthsignsPage'
+import { AccordionTraitsPage } from '@/features/traits/pages/AccordionTraitsPage'
 import EquipmentPage from '@/pages/EquipmentPage'
 import CraftingPage from '@/pages/CraftingPage'
-import SkillsPage from '@/pages/SkillsPage'
+import { AccordionSkillsPage } from '@/features/skills'
 import HomePage from '@/pages/HomePage'
 import NotFoundPage from '@/pages/NotFoundPage'
-import { UnifiedRacesPage } from '@/features/races'
+import { AccordionRacesPage } from '@/features/races/pages/AccordionRacesPage'
+import { AccordionReligionsPage } from '@/features/religions/pages/AccordionReligionsPage'
 import { UnifiedDestinyPage } from '@/features/destiny'
 import { UnifiedPerksPage } from '@/features/perks'
+import BuildPage from '@/pages/BuildPage'
 
 export const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/race" element={<UnifiedRacesPage />} />
+      <Route path="/build" element={<BuildPage />} />
+      <Route path="/race" element={<AccordionRacesPage />} />
       <Route path="/destiny" element={<UnifiedDestinyPage />} />
       <Route path="/perks" element={<UnifiedPerksPage />} />
-      <Route path="/birth-signs" element={<BirthSignsPage />} />
-      <Route path="/traits" element={<TraitsPage />} />
-      <Route path="/skills" element={<SkillsPage />} />
-      <Route path="/religions" element={<ReligionsPage />} />
+      <Route path="/birth-signs" element={<AccordionBirthsignsPage />} />
+      <Route path="/traits" element={<AccordionTraitsPage />} />
+      <Route path="/skills" element={<AccordionSkillsPage />} />
+      <Route path="/religions" element={<AccordionReligionsPage />} />
       <Route path="/equipment" element={<EquipmentPage />} />
       <Route path="/crafting" element={<CraftingPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
-} 
+}

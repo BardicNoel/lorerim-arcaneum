@@ -59,7 +59,7 @@ export const adaptPerkToWishlistItem = (perk: PerkData): WishlistItem => ({
   name: perk.name,
   description: perk.description,
   category: perk.category,
-  type: 'perk'
+  type: 'perk',
 })
 
 export const adaptRaceToWishlistItem = (race: RaceData): WishlistItem => ({
@@ -67,7 +67,7 @@ export const adaptRaceToWishlistItem = (race: RaceData): WishlistItem => ({
   name: race.name,
   description: race.description,
   category: 'race',
-  type: 'race'
+  type: 'race',
 })
 
 export const adaptTraitToWishlistItem = (trait: TraitData): WishlistItem => ({
@@ -75,11 +75,11 @@ export const adaptTraitToWishlistItem = (trait: TraitData): WishlistItem => ({
   name: trait.name,
   description: trait.description,
   category: trait.category,
-  type: 'trait'
+  type: 'trait',
 })
 
 export const adaptDataToWishlistItems = {
   perks: (perks: PerkData[]) => perks.map(adaptPerkToWishlistItem),
   races: (races: RaceData[]) => races.map(adaptRaceToWishlistItem),
-  traits: (traits: TraitData[]) => traits.map(adaptTraitToWishlistItem)
-} 
+  traits: (traits: TraitData[]) => traits.map(adaptTraitToWishlistItem),
+}

@@ -1,0 +1,66 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+
+# 📄 Spec: Add to Build & Pin Controls on Race Cards
+
+## Overview
+
+Each Race card in the `AccordionRacesPage` provides two independent actions:
+
+- **Add to Build** – marks the race as the active selection for the user’s character build.
+- **Pin as Reference** – toggles the race as pinned for quick access or comparison.
+
+The two actions are **not mutually exclusive**. A race may be:  
+✅ Pinned  
+✅ Added to Build  
+✅ Both pinned and added  
+✅ Neither
+
+---
+
+## Controls
+
+### 🎯 Add to Build Button
+
+- **Type:** Primary button
+- **Label:**
+  - Default: `Add to Build`
+  - Active: `In Build`
+- **Visual State:**
+  - Default: Neutral background (theme-aware)
+  - Active: Gold-plated or Silver-plated button depending on current theme.
+- **Behavior:**
+  - Clicking replaces any previously added race in the build (only 1 race can be active in the build at a time).
+  - If the current race is already in the build:
+    - Button remains in `In Build` state
+    - Clicking again has no effect (or optional “Remove from Build” toggle if desired).
+- **Tooltip:**
+  - `Add this race to your character build`
+  - Active: `This race is currently in your build`
+
+---
+
+### 📌 Pin Toggle
+
+- **Type:** Icon button (pin icon)
+- **Visual State:**
+  - Unpinned: Outline pin icon (neutral color)
+  - Pinned: Filled pin icon with highlighted color (gold or silver per theme)
+- **Behavior:**
+  - Clicking toggles pinned state for the race.
+  - Multiple races can be pinned simultaneously.
+  - Pinned state persists locally in page state; extendable to global storage (Zustand) for cross-page persistence.
+- **Tooltip:**
+  - `Pin this race for quick reference`
+  - Active: `Unpin this race`
+
+---
+
+## Placement
+
+### 📌 Summary Area (Collapsed Card)
+
+Both controls are visible at all times:
