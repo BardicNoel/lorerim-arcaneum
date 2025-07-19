@@ -24,6 +24,7 @@ interface GenericAccordionCardProps<T> {
   renderHeader: (item: T, isExpanded: boolean) => React.ReactNode
   renderCollapsedContent: (item: T) => React.ReactNode
   renderExpandedContent: (item: T) => React.ReactNode
+  renderLeftControls?: (item: T) => React.ReactNode
   className?: string
 }
 
@@ -34,6 +35,7 @@ export function GenericAccordionCard<T>({
   renderHeader,
   renderCollapsedContent,
   renderExpandedContent,
+  renderLeftControls,
   className
 }: GenericAccordionCardProps<T>) {
   return (
@@ -41,6 +43,13 @@ export function GenericAccordionCard<T>({
       {/* Header - Always visible */}
       <CardHeader className="pb-3 cursor-pointer" onClick={onToggle}>
         <div className="flex items-center justify-between">
+          {/* Left controls column */}
+          {renderLeftControls && (
+            <div className="flex flex-col items-center gap-2 mr-4">
+              {renderLeftControls(item)}
+            </div>
+          )}
+          
           {/* Custom header content */}
           <div className="flex items-center gap-3 flex-1">
             {renderHeader(item, isExpanded)}

@@ -5,7 +5,8 @@ import type { Race } from '../types'
 import { 
   renderRaceHeader, 
   renderRaceCollapsedContent, 
-  renderRaceExpandedContent 
+  renderRaceExpandedContent,
+  renderRaceLeftControls
 } from './RaceAccordionRenderers'
 
 interface RaceAccordionProps {
@@ -35,6 +36,7 @@ export function RaceAccordion({
       renderHeader={(item) => renderRaceHeader(item, originalRace)}
       renderCollapsedContent={(item) => renderRaceCollapsedContent(item, originalRace)}
       renderExpandedContent={(item) => renderRaceExpandedContent(item, originalRace)}
+      renderLeftControls={(item) => renderRaceLeftControls(item)}
       className={className}
     />
   )

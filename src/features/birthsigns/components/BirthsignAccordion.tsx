@@ -1,7 +1,5 @@
 import React from 'react'
-import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
 import { Badge } from '@/shared/ui/ui/badge'
-import { Button } from '@/shared/ui/ui/button'
 import { H3, H4, P, Small } from '@/shared/ui/ui/typography'
 import { MarkdownText } from '@/shared/components/MarkdownText'
 import { 
@@ -13,6 +11,8 @@ import { cn } from '@/lib/utils'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import type { Birthsign } from '../types'
 import { parseDescription, getUserFriendlyStat } from '../utils'
+import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
+import { GenericAccordionCard } from '@/shared/components/generic'
 
 /**
  * Component to format any description with highlighted values in angle brackets, numeric stat increases, and bold attributes/skills
@@ -196,6 +196,19 @@ const sizeClasses = {
   lg: 'text-base px-3 py-1.5'
 }
 
+/**
+ * Render the left controls for a birthsign accordion
+ */
+export function renderBirthsignLeftControls(item: PlayerCreationItem) {
+  return (
+    <AddToBuildSwitchSimple
+      itemId={item.id}
+      itemType="stone"
+      itemName={item.name}
+    />
+  )
+}
+
 export function BirthsignAccordion({ 
   item, 
   originalBirthsign, 
@@ -242,7 +255,7 @@ export function BirthsignAccordion({
             </div>
           </div>
           
-          {/* Right side: Classification + Effects + Button */}
+          {/* Right side: Classification + Effects + Controls */}
           <div className="flex items-center gap-3">
             {/* Birthsign group tag */}
             {originalBirthsign.group && (
@@ -282,6 +295,20 @@ export function BirthsignAccordion({
                 </div>
               </div>
             )}
+
+                    {/* Build and Pin Controls */}
+        <div className="flex items-center gap-2">
+          <AddToBuildSwitch
+            itemId={item.id}
+            itemType="stone"
+            itemName={item.name}
+          />
+          <PinButton
+            itemId={item.id}
+            size="sm"
+            variant="ghost"
+          />
+        </div>
             
             {/* Expand/collapse button */}
             <Button

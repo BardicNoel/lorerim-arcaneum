@@ -1,7 +1,5 @@
 import React from 'react'
-import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
 import { Badge } from '@/shared/ui/ui/badge'
-import { Button } from '@/shared/ui/ui/button'
 import { H3, H4, H5, P, Small } from '@/shared/ui/ui/typography'
 import { MarkdownText } from '@/shared/components/MarkdownText'
 import { 
@@ -13,6 +11,8 @@ import {
 import { cn } from '@/lib/utils'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import type { Skill } from '../types'
+import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
+import { GenericAccordionCard } from '@/shared/components/generic'
 
 // Enhanced icon mapping for skill effects
 const effectIcons: Record<string, React.ReactNode> = {
@@ -62,9 +62,149 @@ interface SkillAccordionProps {
   showTags?: boolean
 }
 
+/**
+ * Render the left controls for a skill accordion
+ */
+export function renderSkillLeftControls(item: PlayerCreationItem) {
+  return (
+    <AddToBuildSwitchSimple
+      itemId={item.id}
+      itemType="skill"
+      itemName={item.name}
+    />
+  )
+}
+
+/**
+ * Render the header for a skill accordion
+ */
+export function renderSkillHeader(item: PlayerCreationItem, originalSkill?: Skill) {
+  const categoryIcon = categoryIcons[item.category || ''] || '⭐'
+  const categoryStyle = skillCategoryStyles[item.category || ''] || 'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200'
+
+  return (
+    <>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-3 mb-2">
+          <H3 className="text-primary font-semibold">{item.name}</H3>
+          {originalSkill?.abbreviation && (
+            <Badge variant="secondary" className="text-xs font-mono">
+              {originalSkill.abbreviation}
+            </Badge>
+          )}
+        </div>
+        
+        {/* Description always visible */}
+        <P className="text-sm text-muted-foreground line-clamp-2">
+          {item.description}
+        </P>
+      </div>
+      
+      {/* Right side: Category */}
+      <div className="flex items-start gap-3 flex-shrink-0">
+        {/* Category tag */}
+        {item.category && (
+          <Badge 
+            variant="outline"
+            className={cn(
+              categoryStyle,
+              sizeClasses.sm,
+              'font-medium transition-colors'
+            )}
+          >
+            <span className="mr-1">{categoryIcon}</span>
+            {item.category}
+          </Badge>
+        )}
+      </div>
+    </>
+  )
+}
+
+/**
+ * Render the collapsed content for a skill accordion
+ */
+export function renderSkillCollapsedContent(item: PlayerCreationItem, originalSkill?: Skill) {
+  return (
+    <div className="space-y-3">
+      {/* Additional collapsed content if needed */}
+    </div>
+  )
+}
+
+/**
+ * Render the expanded content for a skill accordion
+ */
+export function renderSkillExpandedContent(item: PlayerCreationItem, originalSkill?: Skill) {
+  const getEffectIcon = (effectType: string) => {
+    return effectIcons[effectType] || <Star className="h-4 w-4 text-skyrim-gold" />
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Scaling Section */}
+      {originalSkill?.scaling && (
+        <div className="space-y-2">
+          <H5 className="text-sm font-semibold text-foreground flex items-center gap-2">
+            {getEffectIcon('scaling')}
+            Scaling
+          </H5>
+          <div className="pl-6">
+            <P className="text-sm text-muted-foreground">
+              {originalSkill.scaling}
+            </P>
+          </div>
+        </div>
+      )}
+
+      {/* Key Abilities Section */}
+      {originalSkill?.keyAbilities && originalSkill.keyAbilities.length > 0 && (
+        <div className="space-y-2">
+          <H5 className="text-sm font-semibold text-foreground flex items-center gap-2">
+            {getEffectIcon('ability')}
+            Key Abilities
+          </H5>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {originalSkill.keyAbilities.map((ability, index) => (
+              <div key={index} className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
+                <div className="flex items-center gap-2">
+                  <Circle className="h-4 w-4 text-blue-500" />
+                  <span className="font-medium text-sm">
+                    {ability}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Meta Tags Section */}
+      {originalSkill?.metaTags && originalSkill.metaTags.length > 0 && (
+        <div className="space-y-2">
+          <H5 className="text-sm font-semibold text-foreground">
+            Tags
+          </H5>
+          <div className="flex flex-wrap gap-1.5">
+            {originalSkill.metaTags.map((tag, index) => (
+              <Badge 
+                key={index} 
+                variant="secondary" 
+                className="text-xs bg-muted/50 text-muted-foreground hover:bg-muted"
+              >
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function SkillAccordion({ 
   item, 
-  originalSkill,
+  originalSkill, 
   isExpanded = false, 
   onToggle, 
   className,
@@ -72,149 +212,16 @@ export function SkillAccordion({
   showAbilities = true,
   showTags = true
 }: SkillAccordionProps) {
-  const getEffectIcon = (effectType: string) => {
-    return effectIcons[effectType] || <Star className="h-4 w-4 text-skyrim-gold" />
-  }
-
-  const getEffectIconByType = (type: 'positive' | 'negative' | 'neutral') => {
-    switch (type) {
-      case 'positive':
-        return <Plus className="h-4 w-4 text-green-500" />
-      case 'negative':
-        return <Minus className="h-4 w-4 text-red-500" />
-      default:
-        return <Circle className="h-4 w-4 text-gray-500" />
-    }
-  }
-
-  const categoryIcon = categoryIcons[item.category || ''] || '⭐'
-  const categoryStyle = skillCategoryStyles[item.category || ''] || 'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200'
-
   return (
-    <Card className={cn('bg-card border rounded-lg shadow-sm transition-all duration-200 w-full', className)}>
-      <CardHeader 
-        className="pb-3 cursor-pointer" 
-        onClick={onToggle}
-      >
-        <div className="flex items-start justify-between">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3 mb-2">
-              <H3 className="text-primary font-semibold">{item.name}</H3>
-              {originalSkill?.abbreviation && (
-                <Badge variant="secondary" className="text-xs font-mono">
-                  {originalSkill.abbreviation}
-                </Badge>
-              )}
-            </div>
-            
-            {/* Description always visible */}
-            <P className="text-sm text-muted-foreground line-clamp-2">
-              {item.description}
-            </P>
-          </div>
-          
-          {/* Right side: Category + Button */}
-          <div className="flex items-start gap-3 flex-shrink-0">
-            {/* Category tag */}
-            {item.category && (
-              <Badge 
-                variant="outline"
-                className={cn(
-                  categoryStyle,
-                  sizeClasses.sm,
-                  'font-medium transition-colors'
-                )}
-              >
-                <span className="mr-1">{categoryIcon}</span>
-                {item.category}
-              </Badge>
-            )}
-            
-            {/* Expand/collapse button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 w-8 p-0"
-              onClick={(e) => {
-                e.stopPropagation()
-                onToggle?.()
-              }}
-            >
-              {isExpanded ? (
-                <ChevronDown className="h-4 w-4" />
-              ) : (
-                <ChevronRight className="h-4 w-4" />
-              )}
-            </Button>
-          </div>
-        </div>
-      </CardHeader>
-
-
-
-      {/* Expanded content - Detailed view */}
-      {isExpanded && (
-        <CardContent className="pt-0">
-          <div className="space-y-4">
-            {/* Scaling Section */}
-            {showScaling && originalSkill?.scaling && (
-              <div className="space-y-2">
-                <H5 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                  {getEffectIcon('scaling')}
-                  Scaling
-                </H5>
-                <div className="pl-6">
-                  <P className="text-sm text-muted-foreground">
-                    {originalSkill.scaling}
-                  </P>
-                </div>
-              </div>
-            )}
-
-            {/* Key Abilities Section */}
-            {showAbilities && originalSkill?.keyAbilities && originalSkill.keyAbilities.length > 0 && (
-              <div className="space-y-2">
-                <H5 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                  {getEffectIcon('ability')}
-                  Key Abilities
-                </H5>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {originalSkill.keyAbilities.map((ability, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
-                      <div className="flex items-center gap-2">
-                        <Circle className="h-4 w-4 text-blue-500" />
-                        <span className="font-medium text-sm">
-                          {ability}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Meta Tags Section */}
-            {showTags && originalSkill?.metaTags && originalSkill.metaTags.length > 0 && (
-              <div className="space-y-2">
-                <H5 className="text-sm font-semibold text-foreground">
-                  Tags
-                </H5>
-                <div className="flex flex-wrap gap-1.5">
-                  {originalSkill.metaTags.map((tag, index) => (
-                    <Badge 
-                      key={index} 
-                      variant="secondary" 
-                      className="text-xs bg-muted/50 text-muted-foreground hover:bg-muted"
-                    >
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </CardContent>
-      )}
-    </Card>
+    <GenericAccordionCard
+      item={item}
+      isExpanded={isExpanded}
+      onToggle={onToggle || (() => {})}
+      renderHeader={(item) => renderSkillHeader(item, originalSkill)}
+      renderCollapsedContent={(item) => renderSkillCollapsedContent(item, originalSkill)}
+      renderExpandedContent={(item) => renderSkillExpandedContent(item, originalSkill)}
+      renderLeftControls={(item) => renderSkillLeftControls(item)}
+      className={className}
+    />
   )
 } 
