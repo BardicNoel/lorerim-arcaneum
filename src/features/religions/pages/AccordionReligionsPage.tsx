@@ -21,6 +21,7 @@ import {
 } from '@/shared/ui/ui/dropdown-menu'
 import { Switch } from '@/shared/ui/ui/switch'
 import { Label } from '@/shared/ui/ui/label'
+import { SwitchCard, DisplayCustomizeTools, ControlGrid } from '@/shared/components/ui'
 import type { PlayerCreationItem, SearchCategory, SelectedTag, SearchOption } from '@/shared/components/playerCreation/types'
 import type { Religion, ReligionPantheon } from '../types'
 
@@ -403,103 +404,53 @@ export function AccordionReligionsPage() {
 
       {/* Controls Section */}
       {sortedDisplayItems.length > 0 && (
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="customize-display" className="border-none">
-            <AccordionTrigger className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-background hover:bg-muted/50 transition-colors data-[state=open]:rounded-b-none data-[state=open]:border-b-0 justify-start">
-              <Settings className="h-4 w-4" />
-              <span className="text-sm font-medium">Customize Display</span>
-            </AccordionTrigger>
-            <AccordionContent className="px-3 py-3 rounded-b-lg border border-t-0 bg-background">
-              <div className="flex flex-wrap items-center gap-4">
-                {/* Toggle All Control */}
-                <div className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-muted/30 border-border">
-                  <Switch
-                    checked={showBlessings && showTenets && showBoons && showFavoredRaces}
-                    onCheckedChange={(checked) => {
-                      setShowBlessings(checked)
-                      setShowTenets(checked)
-                      setShowBoons(checked)
-                      setShowFavoredRaces(checked)
-                    }}
-                  />
-                  <span className="text-sm font-medium">Toggle All</span>
-                </div>
+        <DisplayCustomizeTools>
+          {/* Toggle All Control */}
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-muted/30 border-border">
+            <Switch
+              checked={showBlessings && showTenets && showBoons && showFavoredRaces}
+              onCheckedChange={(checked) => {
+                setShowBlessings(checked)
+                setShowTenets(checked)
+                setShowBoons(checked)
+                setShowFavoredRaces(checked)
+              }}
+            />
+            <span className="text-sm font-medium">Toggle All</span>
+          </div>
 
-                {/* Data Visibility Controls - First */}
-                <div className="flex items-stretch gap-3 w-full">
-                  {/* Blessings Card */}
-                  <div 
-                    className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => setShowBlessings(!showBlessings)}
-                  >
-                    <div className="space-y-0.5">
-                      <Label className="text-base font-medium">Blessings</Label>
-                      <p className="text-sm text-muted-foreground">
-                        Deity blessings and effects
-                      </p>
-                    </div>
-                    <Switch
-                      checked={showBlessings}
-                      onCheckedChange={setShowBlessings}
-                    />
-                  </div>
-                  
-                  {/* Tenets Card */}
-                  <div 
-                    className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => setShowTenets(!showTenets)}
-                  >
-                    <div className="space-y-0.5">
-                      <Label className="text-base font-medium">Tenets</Label>
-                      <p className="text-sm text-muted-foreground">
-                        Religious tenets and rules
-                      </p>
-                    </div>
-                    <Switch
-                      checked={showTenets}
-                      onCheckedChange={setShowTenets}
-                    />
-                  </div>
-                  
-                  {/* Boons Card */}
-                  <div 
-                    className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => setShowBoons(!showBoons)}
-                  >
-                    <div className="space-y-0.5">
-                      <Label className="text-base font-medium">Boons</Label>
-                      <p className="text-sm text-muted-foreground">
-                        Follower and devotee powers
-                      </p>
-                    </div>
-                    <Switch
-                      checked={showBoons}
-                      onCheckedChange={setShowBoons}
-                    />
-                  </div>
-                  
-                  {/* Favored Races Card */}
-                  <div 
-                    className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => setShowFavoredRaces(!showFavoredRaces)}
-                  >
-                    <div className="space-y-0.5">
-                      <Label className="text-base font-medium">Favored Races</Label>
-                      <p className="text-sm text-muted-foreground">
-                        Races favored by this deity
-                      </p>
-                    </div>
-                    <Switch
-                      checked={showFavoredRaces}
-                      onCheckedChange={setShowFavoredRaces}
-                    />
-                  </div>
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-        )}
+          {/* Data Visibility Controls */}
+          <ControlGrid columns={4}>
+            <SwitchCard
+              title="Blessings"
+              description="Deity blessings and effects"
+              checked={showBlessings}
+              onCheckedChange={setShowBlessings}
+            />
+            
+            <SwitchCard
+              title="Tenets"
+              description="Religious tenets and rules"
+              checked={showTenets}
+              onCheckedChange={setShowTenets}
+            />
+            
+            <SwitchCard
+              title="Boons"
+              description="Follower and devotee powers"
+              checked={showBoons}
+              onCheckedChange={setShowBoons}
+            />
+            
+            <SwitchCard
+              title="Favored Races"
+              description="Races favored by this deity"
+              checked={showFavoredRaces}
+              onCheckedChange={setShowFavoredRaces}
+            />
+          </ControlGrid>
+        </DisplayCustomizeTools>
+      )}
 
       <div className="flex flex-col gap-4 w-full mt-6">
         {sortedDisplayItems.map((item) => {
