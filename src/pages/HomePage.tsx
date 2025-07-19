@@ -1,8 +1,14 @@
-import { H1, Lead } from '@/shared/ui/ui/typography';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/shared/ui/ui/card';
-import { Button } from '@/shared/ui/ui/button';
-import { User, Shield, Hammer, BookOpen } from 'lucide-react';
-import { BuildStatus } from '@/shared/components/BuildStatus';
+import { H1, Lead } from '@/shared/ui/ui/typography'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from '@/shared/ui/ui/card'
+import { Button } from '@/shared/ui/ui/button'
+import { User, Shield, Hammer, BookOpen } from 'lucide-react'
+import { BuildStatus } from '@/shared/components/BuildStatus'
 
 export default function HomePage() {
   return (
@@ -13,7 +19,7 @@ export default function HomePage() {
           Your theorycrafting playground and reference hub for Lorerim players.
         </Lead>
       </div>
-      
+
       {/* Character Build Status */}
       <div className="max-w-md">
         <BuildStatus />
@@ -25,7 +31,9 @@ export default function HomePage() {
               <User className="h-5 w-5" />
               Player Creation
             </CardTitle>
-            <CardDescription>Design your character with races, traits, and birthsigns</CardDescription>
+            <CardDescription>
+              Design your character with races, traits, and birthsigns
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline" className="w-full">
@@ -39,7 +47,9 @@ export default function HomePage() {
               <Shield className="h-5 w-5" />
               Equipment
             </CardTitle>
-            <CardDescription>Browse and compare weapons, armor, and items</CardDescription>
+            <CardDescription>
+              Browse and compare weapons, armor, and items
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline" className="w-full">
@@ -53,7 +63,9 @@ export default function HomePage() {
               <Hammer className="h-5 w-5" />
               Crafting
             </CardTitle>
-            <CardDescription>Plan your crafting recipes and material requirements</CardDescription>
+            <CardDescription>
+              Plan your crafting recipes and material requirements
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline" className="w-full">
@@ -67,7 +79,9 @@ export default function HomePage() {
               <BookOpen className="h-5 w-5" />
               Skills
             </CardTitle>
-            <CardDescription>Explore skill trees and perk combinations</CardDescription>
+            <CardDescription>
+              Explore skill trees and perk combinations
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline" className="w-full">
@@ -77,5 +91,5 @@ export default function HomePage() {
         </Card>
       </div>
     </div>
-  );
-} 
+  )
+}

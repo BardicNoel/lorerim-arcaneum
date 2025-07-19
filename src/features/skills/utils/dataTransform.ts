@@ -1,7 +1,9 @@
 import type { Skill, TransformedSkill } from '../types'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 
-export function transformSkillToPlayerCreationItem(skill: Skill): PlayerCreationItem {
+export function transformSkillToPlayerCreationItem(
+  skill: Skill
+): PlayerCreationItem {
   return {
     id: skill.name.toLowerCase().replace(/\s+/g, '-'),
     name: skill.name,
@@ -13,15 +15,15 @@ export function transformSkillToPlayerCreationItem(skill: Skill): PlayerCreation
         type: 'positive' as const,
         name: 'Scaling',
         description: skill.scaling,
-        target: 'scaling'
+        target: 'scaling',
       },
       ...skill.keyAbilities.map(ability => ({
         type: 'positive' as const,
         name: 'Key Ability',
         description: ability,
-        target: 'ability'
-      }))
-    ]
+        target: 'ability',
+      })),
+    ],
   }
 }
 
@@ -57,9 +59,13 @@ export function getAllKeyAbilities(skills: Skill[]): string[] {
 
 export function getCategoryPriority(category: string): number {
   switch (category) {
-    case 'Combat': return 1
-    case 'Magic': return 2
-    case 'Stealth': return 3
-    default: return 4
+    case 'Combat':
+      return 1
+    case 'Magic':
+      return 2
+    case 'Stealth':
+      return 3
+    default:
+      return 4
   }
-} 
+}

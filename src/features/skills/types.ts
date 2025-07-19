@@ -37,4 +37,4 @@ export interface SkillSearchResult {
   tags: string[]
   matchType: 'name' | 'description' | 'ability' | 'tag'
   matchScore: number
-} 
+}

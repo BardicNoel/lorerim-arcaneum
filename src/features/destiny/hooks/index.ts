@@ -1,1 +1,1 @@
-export { useDestinyPath } from './useDestinyPath' 
+export { useDestinyPath } from './useDestinyPath'

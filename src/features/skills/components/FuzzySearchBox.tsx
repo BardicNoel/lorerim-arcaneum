@@ -3,7 +3,10 @@ import { Search, Plus, ChevronDown, X } from 'lucide-react'
 import { Button } from '@/shared/ui/ui/button'
 import { Input } from '@/shared/ui/ui/input'
 import { Z_INDEX } from '@/lib/constants'
-import type { SearchCategory, SearchOption } from '@/shared/components/playerCreation/types'
+import type {
+  SearchCategory,
+  SearchOption,
+} from '@/shared/components/playerCreation/types'
 
 interface FuzzySearchBoxProps {
   categories: SearchCategory[]
@@ -17,11 +20,12 @@ export function FuzzySearchBox({
   categories,
   onSelect,
   onCustomSearch,
-  placeholder = "Search by name, description, or abilities...",
-  className = ""
+  placeholder = 'Search by name, description, or abilities...',
+  className = '',
 }: FuzzySearchBoxProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState<SearchCategory | null>(null)
+  const [selectedCategory, setSelectedCategory] =
+    useState<SearchCategory | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [activeIndex, setActiveIndex] = useState(-1)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -33,7 +37,10 @@ export function FuzzySearchBox({
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false)
         setSelectedCategory(null)
         setActiveIndex(-1)
@@ -45,17 +52,24 @@ export function FuzzySearchBox({
   }, [])
 
   // Filter options based on search query
-  const filteredOptions = selectedCategory || singleCategory
-    ? (selectedCategory || singleCategory)!.options.filter(option =>
-        option.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        option.description?.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : categories.flatMap(category => 
-        category.options.filter(option =>
-          option.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          option.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredOptions =
+    selectedCategory || singleCategory
+      ? (selectedCategory || singleCategory)!.options.filter(
+          option =>
+            option.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            option.description
+              ?.toLowerCase()
+              .includes(searchQuery.toLowerCase())
         )
-      )
+      : categories.flatMap(category =>
+          category.options.filter(
+            option =>
+              option.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              option.description
+                ?.toLowerCase()
+                .includes(searchQuery.toLowerCase())
+          )
+        )
 
   const handleInputChange = (value: string) => {
     setSearchQuery(value)
@@ -115,9 +129,11 @@ export function FuzzySearchBox({
 
   const currentCategory = selectedCategory || singleCategory
   const showCategorySelection = !singleCategory && !selectedCategory
-  const hasCustomQuery = searchQuery.trim() && !filteredOptions.some(option => 
-    option.label.toLowerCase() === searchQuery.toLowerCase()
-  )
+  const hasCustomQuery =
+    searchQuery.trim() &&
+    !filteredOptions.some(
+      option => option.label.toLowerCase() === searchQuery.toLowerCase()
+    )
 
   return (
     <div ref={containerRef} className={`relative ${className}`}>
@@ -126,14 +142,16 @@ export function FuzzySearchBox({
         <Input
           ref={inputRef}
           type="text"
-          placeholder={currentCategory ? currentCategory.placeholder : placeholder}
+          placeholder={
+            currentCategory ? currentCategory.placeholder : placeholder
+          }
           value={searchQuery}
-          onChange={(e) => handleInputChange(e.target.value)}
+          onChange={e => handleInputChange(e.target.value)}
           onFocus={handleInputFocus}
           onKeyDown={handleKeyDown}
           className="pl-10 pr-20"
         />
-        
+
         {/* Custom Search Button */}
         {hasCustomQuery && (
           <Button
@@ -146,7 +164,7 @@ export function FuzzySearchBox({
             <Plus className="h-4 w-4" />
           </Button>
         )}
-        
+
         {/* Dropdown Toggle Button */}
         <Button
           variant="ghost"
@@ -154,21 +172,25 @@ export function FuzzySearchBox({
           className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+          <ChevronDown
+            className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          />
         </Button>
       </div>
 
       {/* Dropdown */}
       {isOpen && (
-        <div 
+        <div
           className="absolute top-full left-0 right-0 mt-1 dropdown-enhanced rounded-lg max-h-96 overflow-y-auto"
           style={{ zIndex: Z_INDEX.AUTOCOMPLETE }}
         >
           {/* Category Selection - only show if multiple categories and no category selected */}
           {showCategorySelection && (
             <div className="p-2 border-b border-border">
-              <div className="text-sm font-medium text-muted-foreground mb-2 px-2">Categories</div>
-              {categories.map((category) => (
+              <div className="text-sm font-medium text-muted-foreground mb-2 px-2">
+                Categories
+              </div>
+              {categories.map(category => (
                 <button
                   key={category.id}
                   onClick={() => handleCategorySelect(category)}
@@ -190,7 +212,9 @@ export function FuzzySearchBox({
               >
                 <Plus className="h-4 w-4 text-primary" />
                 <span className="font-medium">Search for "{searchQuery}"</span>
-                <span className="text-xs text-muted-foreground">(Custom search)</span>
+                <span className="text-xs text-muted-foreground">
+                  (Custom search)
+                </span>
               </button>
             </div>
           )}
@@ -207,12 +231,16 @@ export function FuzzySearchBox({
                   key={option.id}
                   onClick={() => handleOptionSelect(option)}
                   className={`w-full text-left px-2 py-2 rounded text-sm ${
-                    index === activeIndex ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
+                    index === activeIndex
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
                   }`}
                 >
                   <div className="font-medium">{option.label}</div>
                   {option.description && (
-                    <div className="text-xs text-muted-foreground mt-1">{option.description}</div>
+                    <div className="text-xs text-muted-foreground mt-1">
+                      {option.description}
+                    </div>
                   )}
                 </button>
               ))
@@ -222,4 +250,4 @@ export function FuzzySearchBox({
       )}
     </div>
   )
-} 
+}

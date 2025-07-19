@@ -45,10 +45,10 @@ export function TraitCard({ item, isSelected }: TraitCardProps) {
   }
 
   return (
-    <Card 
+    <Card
       className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
-        isSelected 
-          ? 'ring-2 ring-primary ring-offset-2 bg-primary/5' 
+        isSelected
+          ? 'ring-2 ring-primary ring-offset-2 bg-primary/5'
           : 'hover:bg-muted/50'
       }`}
     >
@@ -58,13 +58,11 @@ export function TraitCard({ item, isSelected }: TraitCardProps) {
             <span className="text-lg">
               {getCategoryIcon(item.category || '')}
             </span>
-            <h3 className="font-semibold text-lg leading-tight">
-              {item.name}
-            </h3>
+            <h3 className="font-semibold text-lg leading-tight">{item.name}</h3>
           </div>
           {item.category && (
-            <Badge 
-              variant="secondary" 
+            <Badge
+              variant="secondary"
               className={`text-xs ${getCategoryColor(item.category)}`}
             >
               {item.category}
@@ -81,19 +79,12 @@ export function TraitCard({ item, isSelected }: TraitCardProps) {
         {item.tags.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {item.tags.slice(0, 3).map((tag, index) => (
-              <Badge 
-                key={index} 
-                variant="outline" 
-                className="text-xs"
-              >
+              <Badge key={index} variant="outline" className="text-xs">
                 {tag}
               </Badge>
             ))}
             {item.tags.length > 3 && (
-              <Badge 
-                variant="outline" 
-                className="text-xs"
-              >
+              <Badge variant="outline" className="text-xs">
                 +{item.tags.length - 3} more
               </Badge>
             )}
@@ -102,4 +93,4 @@ export function TraitCard({ item, isSelected }: TraitCardProps) {
       </CardContent>
     </Card>
   )
-} 
+}

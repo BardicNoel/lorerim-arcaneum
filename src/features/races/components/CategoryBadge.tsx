@@ -11,7 +11,11 @@ interface CategoryBadgeProps {
  * Race-specific category badge component that uses the generic CategoryBadge.
  * This maintains backward compatibility while leveraging the generic component.
  */
-export function CategoryBadge({ category, size = 'md', className }: CategoryBadgeProps) {
+export function CategoryBadge({
+  category,
+  size = 'md',
+  className,
+}: CategoryBadgeProps) {
   return (
     <GenericCategoryBadge
       category={category}
@@ -20,4 +24,4 @@ export function CategoryBadge({ category, size = 'md', className }: CategoryBadg
       className={className}
     />
   )
-} 
+}

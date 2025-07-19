@@ -2,7 +2,11 @@ import React, { useMemo } from 'react'
 import { MultiAutocompleteSearch } from '@/shared/components/playerCreation/MultiAutocompleteSearch'
 import { SelectedTags } from '@/shared/components/playerCreation/SelectedTags'
 import type { DestinyNode } from '../types'
-import type { SearchCategory, SearchOption, SelectedTag } from '@/shared/components/playerCreation/types'
+import type {
+  SearchCategory,
+  SearchOption,
+  SelectedTag,
+} from '@/shared/components/playerCreation/types'
 
 interface PredictivePath {
   path: DestinyNode[]
@@ -21,19 +25,19 @@ export function DestinyPathSearch({
   predictivePaths,
   selectedTags,
   onTagSelect,
-  onTagRemove
+  onTagRemove,
 }: DestinyPathSearchProps) {
   // Generate search categories for path filtering
   const searchCategories = useMemo((): SearchCategory[] => {
     // Get all unique nodes from all paths with their levels
     const nodeLevelMap = new Map<string, { name: string; level: number }>()
-    
+
     predictivePaths.forEach(path => {
       path.path.forEach((node, index) => {
         // Calculate level based on position in path (0-based)
         const level = index
         const existing = nodeLevelMap.get(node.name)
-        
+
         // Keep the lowest level if a node appears in multiple paths
         if (!existing || level < existing.level) {
           nodeLevelMap.set(node.name, { name: node.name, level })
@@ -64,21 +68,23 @@ export function DestinyPathSearch({
     // Filter paths based on already selected tags
     const filteredPaths = predictivePaths.filter(path => {
       if (selectedTags.length === 0) return true
-      
+
       return selectedTags.every(tag => {
         const [filterType, nodeName] = tag.value.split(':')
-        
+
         if (filterType === 'contains') {
           // Path must contain the specified node
-          return path.path.some(node => 
+          return path.path.some(node =>
             node.name.toLowerCase().includes(nodeName.toLowerCase())
           )
         } else if (filterType === 'ends') {
           // Path must end with the specified node (and be complete)
-          return path.isComplete && 
-                 path.endNode.name.toLowerCase().includes(nodeName.toLowerCase())
+          return (
+            path.isComplete &&
+            path.endNode.name.toLowerCase().includes(nodeName.toLowerCase())
+          )
         }
-        
+
         return true
       })
     })
@@ -115,21 +121,23 @@ export function DestinyPathSearch({
             label: `${name} (Level ${level})`,
             value: `contains:${name}`,
             category: 'Contains Node',
-            description: `Paths that include ${name}`
-          }))
+            description: `Paths that include ${name}`,
+          })),
       },
       {
         id: 'ends-with-nodes',
         name: 'Ends With Node',
         placeholder: 'Search for paths ending at a specific node...',
-        options: Array.from(filteredTerminalNodes).sort().map(node => ({
-          id: `ends-${node}`,
-          label: node,
-          value: `ends:${node}`,
-          category: 'Ends With Node',
-          description: `Paths that end at ${node}`
-        }))
-      }
+        options: Array.from(filteredTerminalNodes)
+          .sort()
+          .map(node => ({
+            id: `ends-${node}`,
+            label: node,
+            value: `ends:${node}`,
+            category: 'Ends With Node',
+            description: `Paths that end at ${node}`,
+          })),
+      },
     ]
   }, [predictivePaths, selectedTags])
 
@@ -150,4 +158,4 @@ export function DestinyPathSearch({
       />
     </div>
   )
-} 
+}

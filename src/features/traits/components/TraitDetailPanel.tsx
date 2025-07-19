@@ -39,10 +39,7 @@ export function TraitDetailPanel({ item }: TraitDetailPanelProps) {
           <div>
             <h2 className="text-2xl font-bold">{item.name}</h2>
             {item.category && (
-              <Badge 
-                variant="secondary" 
-                className="mt-1"
-              >
+              <Badge variant="secondary" className="mt-1">
                 {item.category}
               </Badge>
             )}
@@ -71,10 +68,7 @@ export function TraitDetailPanel({ item }: TraitDetailPanelProps) {
           <CardContent>
             <div className="flex flex-wrap gap-2">
               {item.tags.map((tag, index) => (
-                <Badge 
-                  key={index} 
-                  variant="outline"
-                >
+                <Badge key={index} variant="outline">
                   {tag}
                 </Badge>
               ))}
@@ -84,4 +78,4 @@ export function TraitDetailPanel({ item }: TraitDetailPanelProps) {
       )}
     </div>
   )
-} 
+}

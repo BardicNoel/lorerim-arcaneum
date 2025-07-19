@@ -9,14 +9,18 @@ interface SelectedTagsProps {
   className?: string
 }
 
-export function SelectedTags({ tags, onRemove, className = "" }: SelectedTagsProps) {
+export function SelectedTags({
+  tags,
+  onRemove,
+  className = '',
+}: SelectedTagsProps) {
   if (tags.length === 0) {
     return null
   }
 
   return (
     <div className={`flex flex-wrap gap-2 ${className}`}>
-      {tags.map((tag) => (
+      {tags.map(tag => (
         <Badge
           key={tag.id}
           variant="secondary"
@@ -34,4 +38,4 @@ export function SelectedTags({ tags, onRemove, className = "" }: SelectedTagsPro
       ))}
     </div>
   )
-} 
+}

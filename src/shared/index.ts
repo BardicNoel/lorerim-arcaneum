@@ -21,4 +21,4 @@ export * from './types/build'
 export * from './utils/urlEncoding'
 
 // Context
-export * from './context/ThemeContext' 
+export * from './context/ThemeContext'

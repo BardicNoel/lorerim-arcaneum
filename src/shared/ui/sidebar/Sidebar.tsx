@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { cn } from '@/lib/utils';
+import * as React from 'react'
+import { cn } from '@/lib/utils'
 
 export interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
-  collapsed?: boolean;
+  collapsed?: boolean
 }
 
 export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
@@ -18,7 +18,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
         )}
         {...props}
       />
-    );
+    )
   }
-);
-Sidebar.displayName = 'Sidebar'; 
+)
+Sidebar.displayName = 'Sidebar'

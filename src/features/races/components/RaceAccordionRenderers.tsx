@@ -1,9 +1,22 @@
 import React from 'react'
 import { H3, H4, P, Small } from '@/shared/ui/ui/typography'
 import { MarkdownText } from '@/shared/components/MarkdownText'
-import { 
-  Shield, Zap, Heart, Brain, Target, Flame, Droplets, Skull, 
-  Sword, BookOpen, Eye, Hand, Plus, Minus, Circle
+import {
+  Shield,
+  Zap,
+  Heart,
+  Brain,
+  Target,
+  Flame,
+  Droplets,
+  Skull,
+  Sword,
+  BookOpen,
+  Eye,
+  Hand,
+  Plus,
+  Minus,
+  Circle,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
@@ -11,17 +24,21 @@ import type { Race } from '../types'
 import { CategoryBadge } from './CategoryBadge'
 import { StatBar } from './StatBar'
 import { RaceAvatar } from './RaceAvatar'
-import { AddToBuildSwitch, AddToBuildSwitchSimple, PinButton } from '@/shared/components/playerCreation'
+import {
+  AddToBuildSwitch,
+  AddToBuildSwitchSimple,
+  PinButton,
+} from '@/shared/components/playerCreation'
 
 /**
  * Component to format ability descriptions with highlighted values
  */
 function FormattedDescription({ description }: { description: string }) {
   if (!description) return null
-  
+
   // Split the description by angle bracket patterns and highlight the values
   const parts = description.split(/(<[^>]+>)/g)
-  
+
   return (
     <P className="text-xs text-muted-foreground">
       {parts.map((part, index) => {
@@ -42,47 +59,49 @@ function FormattedDescription({ description }: { description: string }) {
 
 // Enhanced icon mapping for abilities and skills
 const abilityIcons: Record<string, React.ReactNode> = {
-  'Waterbreathing': <Droplets className="h-4 w-4 text-blue-500" />,
+  Waterbreathing: <Droplets className="h-4 w-4 text-blue-500" />,
   'Night Eye': <Eye className="h-4 w-4 text-blue-500" />,
-  'Claws': <Hand className="h-4 w-4 text-gray-500" />,
-  'Histskin': <Heart className="h-4 w-4 text-green-500" />,
-  'Dragonskin': <Shield className="h-4 w-4 text-yellow-500" />,
+  Claws: <Hand className="h-4 w-4 text-gray-500" />,
+  Histskin: <Heart className="h-4 w-4 text-green-500" />,
+  Dragonskin: <Shield className="h-4 w-4 text-yellow-500" />,
   'Magic Resistance': <Zap className="h-4 w-4 text-purple-500" />,
   'Voice of the Emperor': <Brain className="h-4 w-4 text-blue-500" />,
   'Battle Cry': <Target className="h-4 w-4 text-red-500" />,
   'Strong Stomach': <Heart className="h-4 w-4 text-green-500" />,
   'Feline Agility': <Target className="h-4 w-4 text-cyan-500" />,
-  'Fingersmith': <Hand className="h-4 w-4 text-purple-500" />,
+  Fingersmith: <Hand className="h-4 w-4 text-purple-500" />,
   'Imperial Diversity': <Brain className="h-4 w-4 text-blue-500" />,
-  'Ancestor\'s Wrath': <Flame className="h-4 w-4 text-orange-500" />,
+  "Ancestor's Wrath": <Flame className="h-4 w-4 text-orange-500" />,
   'Berserker Rage': <Target className="h-4 w-4 text-red-500" />,
   'Adrenaline Rush': <Zap className="h-4 w-4 text-yellow-500" />,
-  'Command Animal': <Target className="h-4 w-4 text-brown-500" />
+  'Command Animal': <Target className="h-4 w-4 text-brown-500" />,
 }
 
 const skillIcons: Record<string, React.ReactNode> = {
-  'Destruction': <Flame className="h-4 w-4 text-red-500" />,
-  'Restoration': <Heart className="h-4 w-4 text-green-500" />,
-  'Alteration': <Shield className="h-4 w-4 text-blue-500" />,
-  'Illusion': <Brain className="h-4 w-4 text-purple-500" />,
-  'Conjuration': <Zap className="h-4 w-4 text-purple-500" />,
-  'Enchanting': <BookOpen className="h-4 w-4 text-blue-500" />,
-  'Alchemy': <Droplets className="h-4 w-4 text-green-500" />,
+  Destruction: <Flame className="h-4 w-4 text-red-500" />,
+  Restoration: <Heart className="h-4 w-4 text-green-500" />,
+  Alteration: <Shield className="h-4 w-4 text-blue-500" />,
+  Illusion: <Brain className="h-4 w-4 text-purple-500" />,
+  Conjuration: <Zap className="h-4 w-4 text-purple-500" />,
+  Enchanting: <BookOpen className="h-4 w-4 text-blue-500" />,
+  Alchemy: <Droplets className="h-4 w-4 text-green-500" />,
   'Light Armor': <Shield className="h-4 w-4 text-blue-500" />,
   'Heavy Armor': <Shield className="h-4 w-4 text-gray-500" />,
   'One-Handed': <Sword className="h-4 w-4 text-orange-500" />,
   'Two-Handed': <Sword className="h-4 w-4 text-red-500" />,
-  'Archery': <Target className="h-4 w-4 text-green-500" />,
-  'Block': <Shield className="h-4 w-4 text-yellow-500" />,
-  'Smithing': <Shield className="h-4 w-4 text-gray-500" />,
-  'Speechcraft': <Brain className="h-4 w-4 text-blue-500" />,
-  'Sneak': <Eye className="h-4 w-4 text-purple-500" />,
-  'Lockpicking': <Hand className="h-4 w-4 text-yellow-500" />,
-  'Pickpocket': <Hand className="h-4 w-4 text-purple-500" />
+  Archery: <Target className="h-4 w-4 text-green-500" />,
+  Block: <Shield className="h-4 w-4 text-yellow-500" />,
+  Smithing: <Shield className="h-4 w-4 text-gray-500" />,
+  Speechcraft: <Brain className="h-4 w-4 text-blue-500" />,
+  Sneak: <Eye className="h-4 w-4 text-purple-500" />,
+  Lockpicking: <Hand className="h-4 w-4 text-yellow-500" />,
+  Pickpocket: <Hand className="h-4 w-4 text-purple-500" />,
 }
 
 const getAbilityIcon = (abilityName: string) => {
-  return abilityIcons[abilityName] || <Target className="h-4 w-4 text-gray-500" />
+  return (
+    abilityIcons[abilityName] || <Target className="h-4 w-4 text-gray-500" />
+  )
 }
 
 const getSkillIcon = (skillName: string) => {
@@ -100,29 +119,45 @@ const getEffectIcon = (type: 'positive' | 'negative' | 'neutral') => {
   }
 }
 
-const calculateRegeneration = (regeneration: Race['regeneration']['health'] | Race['regeneration']['magicka'] | Race['regeneration']['stamina']) => {
-  let baseValue = regeneration.base;
+const calculateRegeneration = (
+  regeneration:
+    | Race['regeneration']['health']
+    | Race['regeneration']['magicka']
+    | Race['regeneration']['stamina']
+) => {
+  let baseValue = regeneration.base
   if (regeneration.multipliers) {
     for (const mult of regeneration.multipliers) {
-      baseValue *= mult.value;
+      baseValue *= mult.value
     }
   }
   if (regeneration.adjustments) {
     for (const adj of regeneration.adjustments) {
-      baseValue += adj.value;
+      baseValue += adj.value
     }
   }
-  return baseValue;
-};
+  return baseValue
+}
 
-const hasRegenerationDetails = (regeneration: Race['regeneration']['health'] | Race['regeneration']['magicka'] | Race['regeneration']['stamina']) => {
-  return (regeneration.multipliers && regeneration.multipliers.length > 0) || (regeneration.adjustments && regeneration.adjustments.length > 0);
-};
+const hasRegenerationDetails = (
+  regeneration:
+    | Race['regeneration']['health']
+    | Race['regeneration']['magicka']
+    | Race['regeneration']['stamina']
+) => {
+  return (
+    (regeneration.multipliers && regeneration.multipliers.length > 0) ||
+    (regeneration.adjustments && regeneration.adjustments.length > 0)
+  )
+}
 
 /**
  * Render the header content for a race accordion
  */
-export function renderRaceHeader(item: PlayerCreationItem, originalRace?: Race) {
+export function renderRaceHeader(
+  item: PlayerCreationItem,
+  originalRace?: Race
+) {
   return (
     <>
       <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
@@ -131,14 +166,17 @@ export function renderRaceHeader(item: PlayerCreationItem, originalRace?: Race) 
       <div className="flex-1">
         <H3 className="text-primary font-semibold">{item.name}</H3>
       </div>
-      
+
       {/* Right side: Classification + Stats + Controls */}
       <div className="flex items-center gap-3">
         {/* Classification tag */}
         {item.category && (
-          <CategoryBadge category={item.category as 'Human' | 'Elf' | 'Beast'} size="sm" />
+          <CategoryBadge
+            category={item.category as 'Human' | 'Elf' | 'Beast'}
+            size="sm"
+          />
         )}
-        
+
         {/* Quick stats preview */}
         {originalRace?.startingStats && (
           <div className="hidden md:flex items-center gap-4 text-xs text-muted-foreground">
@@ -156,8 +194,6 @@ export function renderRaceHeader(item: PlayerCreationItem, originalRace?: Race) 
             </div>
           </div>
         )}
-
-
       </div>
     </>
   )
@@ -179,7 +215,10 @@ export function renderRaceLeftControls(item: PlayerCreationItem) {
 /**
  * Render the collapsed content for a race accordion
  */
-export function renderRaceCollapsedContent(item: PlayerCreationItem, originalRace?: Race) {
+export function renderRaceCollapsedContent(
+  item: PlayerCreationItem,
+  originalRace?: Race
+) {
   return (
     <div className="space-y-3">
       {/* Description */}
@@ -188,7 +227,7 @@ export function renderRaceCollapsedContent(item: PlayerCreationItem, originalRac
           {item.summary || item.description}
         </MarkdownText>
       </div>
-      
+
       {/* Quick abilities and skills */}
       <div className="flex flex-wrap gap-2">
         {item.effects?.slice(0, 2).map((ability, index) => (
@@ -207,7 +246,9 @@ export function renderRaceCollapsedContent(item: PlayerCreationItem, originalRac
             className="flex items-center gap-1 px-2 py-1 bg-muted/50 rounded text-xs"
           >
             {getSkillIcon(skill.skill)}
-            <span className="font-medium">{skill.skill} +{skill.bonus}</span>
+            <span className="font-medium">
+              {skill.skill} +{skill.bonus}
+            </span>
           </div>
         ))}
       </div>
@@ -218,7 +259,10 @@ export function renderRaceCollapsedContent(item: PlayerCreationItem, originalRac
 /**
  * Render the expanded content for a race accordion
  */
-export function renderRaceExpandedContent(item: PlayerCreationItem, originalRace?: Race) {
+export function renderRaceExpandedContent(
+  item: PlayerCreationItem,
+  originalRace?: Race
+) {
   return (
     <>
       {/* Description */}
@@ -237,12 +281,27 @@ export function renderRaceExpandedContent(item: PlayerCreationItem, originalRace
             {/* Calculate the maximum value for proportional scaling */}
             {(() => {
               const stats = [
-                { value: originalRace.startingStats.health, label: 'Health', color: 'red', icon: <Heart className="h-4 w-4 text-red-500" /> },
-                { value: originalRace.startingStats.magicka, label: 'Magicka', color: 'blue', icon: <Zap className="h-4 w-4 text-blue-500" /> },
-                { value: originalRace.startingStats.stamina, label: 'Stamina', color: 'green', icon: <Target className="h-4 w-4 text-green-500" /> }
+                {
+                  value: originalRace.startingStats.health,
+                  label: 'Health',
+                  color: 'red',
+                  icon: <Heart className="h-4 w-4 text-red-500" />,
+                },
+                {
+                  value: originalRace.startingStats.magicka,
+                  label: 'Magicka',
+                  color: 'blue',
+                  icon: <Zap className="h-4 w-4 text-blue-500" />,
+                },
+                {
+                  value: originalRace.startingStats.stamina,
+                  label: 'Stamina',
+                  color: 'green',
+                  icon: <Target className="h-4 w-4 text-green-500" />,
+                },
               ]
               const maxValue = Math.max(...stats.map(s => s.value))
-              
+
               return (
                 <>
                   {stats.map((stat, index) => (
@@ -250,13 +309,19 @@ export function renderRaceExpandedContent(item: PlayerCreationItem, originalRace
                       {stat.icon}
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium">{stat.label}</span>
-                          <span className="text-sm text-muted-foreground">{stat.value}</span>
+                          <span className="text-sm font-medium">
+                            {stat.label}
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            {stat.value}
+                          </span>
                         </div>
                         <div className="w-full bg-muted rounded-full overflow-hidden">
-                          <div 
+                          <div
                             className={`h-2 bg-${stat.color}-500 transition-all duration-300 ease-out`}
-                            style={{ width: `${(stat.value / maxValue) * 100}%` }}
+                            style={{
+                              width: `${(stat.value / maxValue) * 100}%`,
+                            }}
                           />
                         </div>
                       </div>
@@ -264,7 +329,9 @@ export function renderRaceExpandedContent(item: PlayerCreationItem, originalRace
                   ))}
                   <div className="flex items-center gap-3 pt-2 border-t border-border/50">
                     <Shield className="h-4 w-4 text-orange-500" />
-                    <span className="text-sm">Carry Weight: {originalRace.startingStats.carryWeight}</span>
+                    <span className="text-sm">
+                      Carry Weight: {originalRace.startingStats.carryWeight}
+                    </span>
                   </div>
                 </>
               )
@@ -286,7 +353,9 @@ export function renderRaceExpandedContent(item: PlayerCreationItem, originalRace
                 {getSkillIcon(skill.skill)}
                 <div>
                   <P className="font-medium text-sm">{skill.skill}</P>
-                  <Small className="text-muted-foreground">+{skill.bonus} bonus</Small>
+                  <Small className="text-muted-foreground">
+                    +{skill.bonus} bonus
+                  </Small>
                 </div>
               </div>
             ))}
@@ -300,7 +369,10 @@ export function renderRaceExpandedContent(item: PlayerCreationItem, originalRace
           <H4 className="mb-3">Racial Abilities</H4>
           <div className="space-y-3">
             {item.effects.map((effect, index) => (
-              <div key={index} className="p-3 bg-muted/50 rounded-lg border border-border">
+              <div
+                key={index}
+                className="p-3 bg-muted/50 rounded-lg border border-border"
+              >
                 <div className="flex items-start gap-3">
                   <div className="flex items-center gap-2">
                     {getAbilityIcon(effect.name)}
@@ -325,49 +397,83 @@ export function renderRaceExpandedContent(item: PlayerCreationItem, originalRace
             <div className="flex items-center gap-2">
               <Heart className="h-4 w-4 text-red-500" />
               <span className="text-sm">
-                Health: {calculateRegeneration(originalRace.regeneration.health).toFixed(2)}/s
+                Health:{' '}
+                {calculateRegeneration(
+                  originalRace.regeneration.health
+                ).toFixed(2)}
+                /s
               </span>
             </div>
             <div className="flex items-center gap-2">
               <Zap className="h-4 w-4 text-blue-500" />
               <span className="text-sm">
-                Magicka: {calculateRegeneration(originalRace.regeneration.magicka).toFixed(2)}/s
+                Magicka:{' '}
+                {calculateRegeneration(
+                  originalRace.regeneration.magicka
+                ).toFixed(2)}
+                /s
               </span>
             </div>
             <div className="flex items-center gap-2">
               <Target className="h-4 w-4 text-green-500" />
               <span className="text-sm">
-                Stamina: {calculateRegeneration(originalRace.regeneration.stamina).toFixed(2)}/s
+                Stamina:{' '}
+                {calculateRegeneration(
+                  originalRace.regeneration.stamina
+                ).toFixed(2)}
+                /s
               </span>
             </div>
           </div>
-          
+
           {/* Show regeneration details if there are multipliers or adjustments */}
-          {(hasRegenerationDetails(originalRace.regeneration.health) || 
-            hasRegenerationDetails(originalRace.regeneration.magicka) || 
+          {(hasRegenerationDetails(originalRace.regeneration.health) ||
+            hasRegenerationDetails(originalRace.regeneration.magicka) ||
             hasRegenerationDetails(originalRace.regeneration.stamina)) && (
             <div className="mt-3 p-3 bg-muted/30 rounded-lg">
-              <Small className="font-medium mb-2 block">Regeneration Details:</Small>
-              {originalRace.regeneration.health.multipliers?.map((mult, index) => (
-                <div key={`health-mult-${index}`} className="text-xs text-muted-foreground">
-                  Health: {mult.value}x from {mult.source}
-                </div>
-              ))}
-              {originalRace.regeneration.health.adjustments?.map((adj, index) => (
-                <div key={`health-adj-${index}`} className="text-xs text-muted-foreground">
-                  Health: +{adj.value}/s from {adj.source}
-                </div>
-              ))}
-              {originalRace.regeneration.magicka.multipliers?.map((mult, index) => (
-                <div key={`magicka-mult-${index}`} className="text-xs text-muted-foreground">
-                  Magicka: {mult.value}x from {mult.source}
-                </div>
-              ))}
-              {originalRace.regeneration.stamina.multipliers?.map((mult, index) => (
-                <div key={`stamina-mult-${index}`} className="text-xs text-muted-foreground">
-                  Stamina: {mult.value}x from {mult.source}
-                </div>
-              ))}
+              <Small className="font-medium mb-2 block">
+                Regeneration Details:
+              </Small>
+              {originalRace.regeneration.health.multipliers?.map(
+                (mult, index) => (
+                  <div
+                    key={`health-mult-${index}`}
+                    className="text-xs text-muted-foreground"
+                  >
+                    Health: {mult.value}x from {mult.source}
+                  </div>
+                )
+              )}
+              {originalRace.regeneration.health.adjustments?.map(
+                (adj, index) => (
+                  <div
+                    key={`health-adj-${index}`}
+                    className="text-xs text-muted-foreground"
+                  >
+                    Health: +{adj.value}/s from {adj.source}
+                  </div>
+                )
+              )}
+              {originalRace.regeneration.magicka.multipliers?.map(
+                (mult, index) => (
+                  <div
+                    key={`magicka-mult-${index}`}
+                    className="text-xs text-muted-foreground"
+                  >
+                    Magicka: {mult.value}x from {mult.source}
+                  </div>
+                )
+              )}
+              {originalRace.regeneration.stamina.multipliers?.map(
+                (mult, index) => (
+                  <div
+                    key={`stamina-mult-${index}`}
+                    className="text-xs text-muted-foreground"
+                  >
+                    Stamina: {mult.value}x from {mult.source}
+                  </div>
+                )
+              )}
             </div>
           )}
         </div>
@@ -379,8 +485,14 @@ export function renderRaceExpandedContent(item: PlayerCreationItem, originalRace
           <H4 className="mb-3">Physical Attributes</H4>
           <div className="flex items-center gap-4">
             <span className="text-sm font-medium">Height:</span>
-            <span className="text-sm">Male: {(originalRace.physicalAttributes.heightMale * 100).toFixed(0)}%</span>
-            <span className="text-sm">Female: {(originalRace.physicalAttributes.heightFemale * 100).toFixed(0)}%</span>
+            <span className="text-sm">
+              Male:{' '}
+              {(originalRace.physicalAttributes.heightMale * 100).toFixed(0)}%
+            </span>
+            <span className="text-sm">
+              Female:{' '}
+              {(originalRace.physicalAttributes.heightFemale * 100).toFixed(0)}%
+            </span>
           </div>
         </div>
       )}
@@ -391,15 +503,19 @@ export function renderRaceExpandedContent(item: PlayerCreationItem, originalRace
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-center gap-2">
               <Sword className="h-4 w-4 text-orange-500" />
-              <span className="text-sm">Unarmed Damage: {originalRace.combat.unarmedDamage}</span>
+              <span className="text-sm">
+                Unarmed Damage: {originalRace.combat.unarmedDamage}
+              </span>
             </div>
             <div className="flex items-center gap-2">
               <Target className="h-4 w-4 text-blue-500" />
-              <span className="text-sm">Unarmed Reach: {originalRace.combat.unarmedReach}</span>
+              <span className="text-sm">
+                Unarmed Reach: {originalRace.combat.unarmedReach}
+              </span>
             </div>
           </div>
         </div>
       )}
     </>
   )
-} 
+}

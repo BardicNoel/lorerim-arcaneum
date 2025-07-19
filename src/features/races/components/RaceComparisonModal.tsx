@@ -13,7 +13,11 @@ interface RaceComparisonModalProps {
   onClose: () => void
 }
 
-export function RaceComparisonModal({ races, isOpen, onClose }: RaceComparisonModalProps) {
+export function RaceComparisonModal({
+  races,
+  isOpen,
+  onClose,
+}: RaceComparisonModalProps) {
   if (!isOpen || races.length === 0) return null
 
   const maxHealth = Math.max(...races.map(r => r.startingStats.health))
@@ -32,10 +36,10 @@ export function RaceComparisonModal({ races, isOpen, onClose }: RaceComparisonMo
             <X className="h-4 w-4" />
           </Button>
         </CardHeader>
-        
+
         <CardContent className="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {races.map((race) => (
+            {races.map(race => (
               <Card key={race.edid} className="border-2">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between mb-2">
@@ -46,19 +50,21 @@ export function RaceComparisonModal({ races, isOpen, onClose }: RaceComparisonMo
                     {race.description}
                   </P>
                 </CardHeader>
-                
+
                 <CardContent className="space-y-4">
                   {/* Starting Stats */}
                   <div>
-                    <H4 className="text-sm font-medium mb-2">Starting Attributes</H4>
+                    <H4 className="text-sm font-medium mb-2">
+                      Starting Attributes
+                    </H4>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <span className="text-xs w-12">Health:</span>
-                        <StatBar 
-                          value={race.startingStats.health} 
-                          maxValue={maxHealth} 
-                          label={`${race.startingStats.health}`} 
-                          color="red" 
+                        <StatBar
+                          value={race.startingStats.health}
+                          maxValue={maxHealth}
+                          label={`${race.startingStats.health}`}
+                          color="red"
                           size="sm"
                         />
                         {race.startingStats.health === maxHealth && (
@@ -67,11 +73,11 @@ export function RaceComparisonModal({ races, isOpen, onClose }: RaceComparisonMo
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-xs w-12">Magicka:</span>
-                        <StatBar 
-                          value={race.startingStats.magicka} 
-                          maxValue={maxMagicka} 
-                          label={`${race.startingStats.magicka}`} 
-                          color="blue" 
+                        <StatBar
+                          value={race.startingStats.magicka}
+                          maxValue={maxMagicka}
+                          label={`${race.startingStats.magicka}`}
+                          color="blue"
                           size="sm"
                         />
                         {race.startingStats.magicka === maxMagicka && (
@@ -80,11 +86,11 @@ export function RaceComparisonModal({ races, isOpen, onClose }: RaceComparisonMo
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-xs w-12">Stamina:</span>
-                        <StatBar 
-                          value={race.startingStats.stamina} 
-                          maxValue={maxStamina} 
-                          label={`${race.startingStats.stamina}`} 
-                          color="green" 
+                        <StatBar
+                          value={race.startingStats.stamina}
+                          maxValue={maxStamina}
+                          label={`${race.startingStats.stamina}`}
+                          color="green"
                           size="sm"
                         />
                         {race.startingStats.stamina === maxStamina && (
@@ -102,7 +108,10 @@ export function RaceComparisonModal({ races, isOpen, onClose }: RaceComparisonMo
                         .sort((a, b) => b.bonus - a.bonus)
                         .slice(0, 3)
                         .map((skill, index) => (
-                          <span key={index} className="px-2 py-1 bg-muted rounded text-xs">
+                          <span
+                            key={index}
+                            className="px-2 py-1 bg-muted rounded text-xs"
+                          >
                             {skill.skill} +{skill.bonus}
                           </span>
                         ))}
@@ -131,7 +140,12 @@ export function RaceComparisonModal({ races, isOpen, onClose }: RaceComparisonMo
                       </div>
                       <div>
                         <span className="text-muted-foreground">Height:</span>
-                        <div>{(race.physicalAttributes.heightMale * 100).toFixed(0)}%</div>
+                        <div>
+                          {(race.physicalAttributes.heightMale * 100).toFixed(
+                            0
+                          )}
+                          %
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -143,4 +157,4 @@ export function RaceComparisonModal({ races, isOpen, onClose }: RaceComparisonMo
       </div>
     </div>
   )
-} 
+}
