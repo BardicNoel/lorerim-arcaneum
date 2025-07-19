@@ -20,17 +20,17 @@ export function PinButton({
   className,
   size = 'sm',
   variant = 'ghost',
-  onClick
+  onClick,
 }: PinButtonProps) {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
-    
+
     // Call custom onClick handler if provided
     if (onClick) {
       onClick(e)
       return
     }
-    
+
     // Default toggle behavior
     if (onToggle) {
       onToggle(itemId)
@@ -46,8 +46,8 @@ export function PinButton({
       variant={variant}
       className={cn(
         'transition-all duration-200 group relative overflow-hidden',
-        isPinned 
-          ? 'text-skyrim-gold hover:text-skyrim-gold/80 hover:scale-110 hover:shadow-md' 
+        isPinned
+          ? 'text-skyrim-gold hover:text-skyrim-gold/80 hover:scale-110 hover:shadow-md'
           : 'hover:bg-muted hover:text-foreground hover:scale-110 hover:shadow-md',
         className
       )}
@@ -64,4 +64,4 @@ export function PinButton({
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%]" />
     </Button>
   )
-} 
+}

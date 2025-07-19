@@ -30,9 +30,9 @@ export function ThemeToggle() {
   }
 
   return (
-    <Button 
-      variant="ghost" 
-      size="icon" 
+    <Button
+      variant="ghost"
+      size="icon"
       className="h-8 w-8"
       onClick={cycleTheme}
       title={`Current theme: ${theme}. Click to cycle themes.`}
@@ -41,4 +41,4 @@ export function ThemeToggle() {
       <span className="sr-only">Toggle theme</span>
     </Button>
   )
-} 
+}

@@ -26,4 +26,4 @@ export function DestinyPathList({ path }: DestinyPathListProps) {
       ))}
     </div>
   )
-} 
+}

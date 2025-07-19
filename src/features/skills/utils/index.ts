@@ -1,1 +1,1 @@
-export * from './dataTransform' 
+export * from './dataTransform'

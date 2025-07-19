@@ -21,34 +21,33 @@ interface TreeNode {
 interface GraphNode {
   node: DestinyNode
   children: Set<string> // Set of child node IDs
-  parents: Set<string>  // Set of parent node IDs
+  parents: Set<string> // Set of parent node IDs
 }
 
-export function DestinyTreeView({ 
-  nodes, 
-  plannedNodes, 
-  selectedNode, 
-  onNodeClick, 
-  onNodePlan 
+export function DestinyTreeView({
+  nodes,
+  plannedNodes,
+  selectedNode,
+  onNodeClick,
+  onNodePlan,
 }: DestinyTreeViewProps) {
-  
   // Build a proper graph structure first
   const buildGraph = useMemo(() => {
     const graph = new Map<string, GraphNode>()
-    
+
     // Initialize all nodes in the graph
     nodes.forEach(node => {
       graph.set(node.id, {
         node,
         children: new Set(),
-        parents: new Set()
+        parents: new Set(),
       })
     })
-    
+
     // Build parent-child relationships
     nodes.forEach(node => {
       const graphNode = graph.get(node.id)!
-      
+
       // Add children based on prerequisites
       node.prerequisites.forEach(prereqName => {
         const prereqNode = nodes.find(n => n.name === prereqName)
@@ -59,36 +58,41 @@ export function DestinyTreeView({
         }
       })
     })
-    
+
     return graph
   }, [nodes])
 
   // Convert graph to tree structure, handling shared nodes properly
-  const buildTreeFromGraph = (nodeId: string, visited: Set<string> = new Set()): TreeNode | null => {
+  const buildTreeFromGraph = (
+    nodeId: string,
+    visited: Set<string> = new Set()
+  ): TreeNode | null => {
     if (visited.has(nodeId)) {
       return null // This node is already being processed in this branch
     }
-    
+
     const graphNode = buildGraph.get(nodeId)
     if (!graphNode) return null
-    
+
     visited.add(nodeId)
-    
+
     // Get all children that aren't already visited in this branch
     const children = Array.from(graphNode.children)
       .map(childId => buildTreeFromGraph(childId, new Set(visited)))
       .filter(Boolean) as TreeNode[]
-    
+
     return {
       name: graphNode.node.name,
       attributes: {
         id: graphNode.node.id,
         description: graphNode.node.description,
         tags: graphNode.node.tags.join(', '),
-        isPlanned: plannedNodes.some(p => p.id === graphNode.node.id) ? 'true' : 'false',
-        isSelected: selectedNode?.id === graphNode.node.id ? 'true' : 'false'
+        isPlanned: plannedNodes.some(p => p.id === graphNode.node.id)
+          ? 'true'
+          : 'false',
+        isSelected: selectedNode?.id === graphNode.node.id ? 'true' : 'false',
       },
-      children: children.length > 0 ? children : undefined
+      children: children.length > 0 ? children : undefined,
     }
   }
 
@@ -100,20 +104,20 @@ export function DestinyTreeView({
   // Transform data for react-d3-tree
   const treeData = useMemo(() => {
     if (rootNodes.length === 0) return null
-    
+
     // If there's only one root, use it directly
     if (rootNodes.length === 1) {
       return buildTreeFromGraph(rootNodes[0].id)
     }
-    
+
     // If multiple roots, create a virtual root
     const rootChildren = rootNodes
       .map(root => buildTreeFromGraph(root.id))
       .filter(Boolean) as TreeNode[]
-    
+
     return {
       name: 'Destiny Tree',
-      children: rootChildren
+      children: rootChildren,
     }
   }, [rootNodes, buildGraph, plannedNodes, selectedNode])
 
@@ -122,16 +126,16 @@ export function DestinyTreeView({
     const isPlanned = nodeDatum.attributes?.isPlanned === 'true'
     const isSelected = nodeDatum.attributes?.isSelected === 'true'
     const tags = nodeDatum.attributes?.tags?.split(', ').filter(Boolean) || []
-    
+
     return (
       <g>
         {/* Node circle */}
         <circle
           r={20}
           className={`cursor-pointer transition-all duration-200 ${
-            isSelected 
-              ? 'fill-primary stroke-primary stroke-2' 
-              : isPlanned 
+            isSelected
+              ? 'fill-primary stroke-primary stroke-2'
+              : isPlanned
                 ? 'fill-green-500 stroke-green-500 stroke-2'
                 : 'fill-background stroke-border hover:fill-muted'
           }`}
@@ -142,7 +146,7 @@ export function DestinyTreeView({
             }
           }}
         />
-        
+
         {/* Node text */}
         <text
           className="text-xs font-medium pointer-events-none"
@@ -150,30 +154,29 @@ export function DestinyTreeView({
           dy="0.3em"
           fill={isSelected || isPlanned ? 'white' : 'currentColor'}
         >
-          {nodeDatum.name.length > 8 
-            ? nodeDatum.name.substring(0, 8) + '...' 
-            : nodeDatum.name
-          }
+          {nodeDatum.name.length > 8
+            ? nodeDatum.name.substring(0, 8) + '...'
+            : nodeDatum.name}
         </text>
-        
+
         {/* Planning button */}
         <circle
           r={8}
           cx={15}
           cy={-15}
           className={`cursor-pointer transition-all duration-200 ${
-            isPlanned 
-              ? 'fill-green-500 stroke-green-500' 
+            isPlanned
+              ? 'fill-green-500 stroke-green-500'
               : 'fill-muted stroke-border hover:fill-primary hover:stroke-primary'
           }`}
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation()
             onNodePlan(nodeDatum.attributes?.id)
           }}
         >
           <title>{isPlanned ? 'Remove from plan' : 'Add to plan'}</title>
         </circle>
-        
+
         {/* Planning indicator */}
         <text
           x={15}
@@ -185,7 +188,7 @@ export function DestinyTreeView({
         >
           {isPlanned ? '✓' : '+'}
         </text>
-        
+
         {/* Expand/collapse button for nodes with children */}
         {nodeDatum.children && (
           <circle
@@ -198,7 +201,7 @@ export function DestinyTreeView({
             <title>{nodeDatum.__rd3t.collapsed ? 'Expand' : 'Collapse'}</title>
           </circle>
         )}
-        
+
         {/* Expand/collapse indicator */}
         {nodeDatum.children && (
           <text
@@ -251,4 +254,4 @@ export function DestinyTreeView({
       />
     </div>
   )
-} 
+}

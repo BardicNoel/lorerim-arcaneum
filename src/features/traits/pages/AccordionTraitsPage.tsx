@@ -1,9 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { X, ChevronDown, ChevronUp, ArrowUpDown, ArrowDownUp, Settings, Maximize2, Minimize2 } from 'lucide-react'
-import { 
-  PlayerCreationLayout,
-} from '@/shared/components/playerCreation'
-import { 
+import {
+  X,
+  ChevronDown,
+  ChevronUp,
+  ArrowUpDown,
+  ArrowDownUp,
+  Settings,
+  Maximize2,
+  Minimize2,
+} from 'lucide-react'
+import { PlayerCreationLayout } from '@/shared/components/playerCreation'
+import {
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -12,7 +19,7 @@ import {
 import { TraitAccordion, CustomMultiAutocompleteSearch } from '../components'
 import { useFuzzySearch } from '../hooks'
 import { Button } from '@/shared/ui/ui/button'
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -20,9 +27,18 @@ import {
 } from '@/shared/ui/ui/dropdown-menu'
 import { Switch } from '@/shared/ui/ui/switch'
 import { Label } from '@/shared/ui/ui/label'
-import type { PlayerCreationItem, SearchCategory, SelectedTag, SearchOption } from '@/shared/components/playerCreation/types'
+import type {
+  PlayerCreationItem,
+  SearchCategory,
+  SelectedTag,
+  SearchOption,
+} from '@/shared/components/playerCreation/types'
 import type { Trait } from '../types'
-import { transformTraitToPlayerCreationItem, getAllCategories, getAllTags } from '../utils'
+import {
+  transformTraitToPlayerCreationItem,
+  getAllCategories,
+  getAllTags,
+} from '../utils'
 
 type SortOption = 'alphabetical' | 'category' | 'effect-count'
 
@@ -33,7 +49,7 @@ export function AccordionTraitsPage() {
   const [error, setError] = useState<string | null>(null)
   const [expandedTraits, setExpandedTraits] = useState<Set<string>>(new Set())
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
-  
+
   // Data visibility controls
   const [showEffects, setShowEffects] = useState(true)
   const [showSpells, setShowSpells] = useState(true)
@@ -72,7 +88,7 @@ export function AccordionTraitsPage() {
         id: 'fuzzy-search',
         name: 'Fuzzy Search',
         placeholder: 'Search by name, description, or abilities...',
-        options: [] // Fuzzy search doesn't need predefined options
+        options: [], // Fuzzy search doesn't need predefined options
       },
       {
         id: 'categories',
@@ -83,8 +99,8 @@ export function AccordionTraitsPage() {
           label: category,
           value: category,
           category: 'Categories',
-          description: `Traits in ${category} category`
-        }))
+          description: `Traits in ${category} category`,
+        })),
       },
       {
         id: 'tags',
@@ -95,9 +111,9 @@ export function AccordionTraitsPage() {
           label: tag,
           value: tag,
           category: 'Tags',
-          description: `Traits tagged with ${tag}`
-        }))
-      }
+          description: `Traits tagged with ${tag}`,
+        })),
+      },
     ]
   }
 
@@ -114,18 +130,22 @@ export function AccordionTraitsPage() {
         id: `custom-${optionOrTag}`,
         label: optionOrTag,
         value: optionOrTag,
-        category: 'Fuzzy Search'
+        category: 'Fuzzy Search',
       }
     } else {
       tag = {
         id: `${optionOrTag.category}-${optionOrTag.id}`,
         label: optionOrTag.label,
         value: optionOrTag.value,
-        category: optionOrTag.category
+        category: optionOrTag.category,
       }
     }
     // Prevent duplicate tags
-    if (!selectedTags.some(t => t.value === tag.value && t.category === tag.category)) {
+    if (
+      !selectedTags.some(
+        t => t.value === tag.value && t.category === tag.category
+      )
+    ) {
       setSelectedTags(prev => [...prev, tag])
     }
   }
@@ -146,15 +166,15 @@ export function AccordionTraitsPage() {
         case 'Fuzzy Search':
           // For fuzzy search, we'll handle this separately
           return true
-        
+
         case 'Categories':
           // Filter by trait category
           return trait.category === tag.value
-        
+
         case 'Tags':
           // Filter by tags
           return trait.tags.some(traitTag => traitTag === tag.value)
-        
+
         default:
           return true
       }
@@ -167,10 +187,15 @@ export function AccordionTraitsPage() {
     .map(tag => tag.value)
     .join(' ')
 
-  const { filteredTraits: fuzzyFilteredTraits } = useFuzzySearch(filteredTraits, fuzzySearchQuery)
+  const { filteredTraits: fuzzyFilteredTraits } = useFuzzySearch(
+    filteredTraits,
+    fuzzySearchQuery
+  )
 
   // Convert to PlayerCreationItem format
-  const displayItems: PlayerCreationItem[] = fuzzyFilteredTraits.map(transformTraitToPlayerCreationItem)
+  const displayItems: PlayerCreationItem[] = fuzzyFilteredTraits.map(
+    transformTraitToPlayerCreationItem
+  )
 
   // Sort the display items
   const sortedDisplayItems = [...displayItems].sort((a, b) => {
@@ -181,18 +206,24 @@ export function AccordionTraitsPage() {
         // Define priority order for trait categories
         const getCategoryPriority = (category: string | undefined) => {
           switch (category) {
-            case 'combat': return 1
-            case 'magic': return 2
-            case 'survival': return 3
-            case 'social': return 4
-            case 'crafting': return 5
-            default: return 6
+            case 'combat':
+              return 1
+            case 'magic':
+              return 2
+            case 'survival':
+              return 3
+            case 'social':
+              return 4
+            case 'crafting':
+              return 5
+            default:
+              return 6
           }
         }
-        
+
         const aPriority = getCategoryPriority(a.category)
         const bPriority = getCategoryPriority(b.category)
-        
+
         if (aPriority !== bPriority) {
           return aPriority - bPriority
         }
@@ -248,7 +279,7 @@ export function AccordionTraitsPage() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <p className="text-destructive mb-4">{error}</p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
           >
@@ -273,13 +304,21 @@ export function AccordionTraitsPage() {
             onCustomSearch={handleTagSelect}
           />
         </div>
-        
+
         {/* Sort Options */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+            >
               <ChevronDown className="h-4 w-4" />
-              {sortBy === 'alphabetical' ? 'A-Z' : sortBy === 'category' ? 'Type' : 'Count'}
+              {sortBy === 'alphabetical'
+                ? 'A-Z'
+                : sortBy === 'category'
+                  ? 'Type'
+                  : 'Count'}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -301,7 +340,9 @@ export function AccordionTraitsPage() {
           size="sm"
           onClick={allExpanded ? handleCollapseAll : handleExpandAll}
           className="flex items-center justify-center"
-          title={allExpanded ? "Collapse all accordions" : "Expand all accordions"}
+          title={
+            allExpanded ? 'Collapse all accordions' : 'Expand all accordions'
+          }
         >
           {allExpanded ? (
             <Minimize2 className="h-4 w-4" />
@@ -324,11 +365,11 @@ export function AccordionTraitsPage() {
               <X className="h-3.5 w-3.5 group-hover:scale-110 transition-transform duration-200" />
               Clear All
             </button>
-            
+
             {/* Individual Tags */}
             {selectedTags.map(tag => (
-              <span 
-                key={tag.id} 
+              <span
+                key={tag.id}
                 className="inline-flex items-center px-3 py-1.5 rounded-full bg-skyrim-gold/20 border border-skyrim-gold/30 text-sm font-medium text-skyrim-gold hover:bg-skyrim-gold/30 transition-colors duration-200 cursor-pointer group"
                 onClick={() => handleTagRemove(tag.id)}
                 title="Click to remove"
@@ -357,7 +398,7 @@ export function AccordionTraitsPage() {
                 <div className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-muted/30 border-border">
                   <Switch
                     checked={showEffects && showSpells && showTags}
-                    onCheckedChange={(checked) => {
+                    onCheckedChange={checked => {
                       setShowEffects(checked)
                       setShowSpells(checked)
                       setShowTags(checked)
@@ -369,7 +410,7 @@ export function AccordionTraitsPage() {
                 {/* Data Visibility Controls */}
                 <div className="flex items-stretch gap-3 w-full">
                   {/* Effects Card */}
-                  <div 
+                  <div
                     className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
                     onClick={() => setShowEffects(!showEffects)}
                   >
@@ -384,9 +425,9 @@ export function AccordionTraitsPage() {
                       onCheckedChange={setShowEffects}
                     />
                   </div>
-                  
+
                   {/* Spells Card */}
-                  <div 
+                  <div
                     className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
                     onClick={() => setShowSpells(!showSpells)}
                   >
@@ -401,9 +442,9 @@ export function AccordionTraitsPage() {
                       onCheckedChange={setShowSpells}
                     />
                   </div>
-                  
+
                   {/* Tags Card */}
-                  <div 
+                  <div
                     className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
                     onClick={() => setShowTags(!showTags)}
                   >
@@ -413,10 +454,7 @@ export function AccordionTraitsPage() {
                         Trait categories and tags
                       </p>
                     </div>
-                    <Switch
-                      checked={showTags}
-                      onCheckedChange={setShowTags}
-                    />
+                    <Switch checked={showTags} onCheckedChange={setShowTags} />
                   </div>
                 </div>
               </div>
@@ -426,10 +464,10 @@ export function AccordionTraitsPage() {
       )}
 
       <div className="flex flex-col gap-4 w-full mt-6">
-        {sortedDisplayItems.map((item) => {
+        {sortedDisplayItems.map(item => {
           const originalTrait = traits.find(trait => trait.edid === item.id)
           const isExpanded = expandedTraits.has(item.id)
-          
+
           return (
             <TraitAccordion
               key={item.id}
@@ -444,10 +482,12 @@ export function AccordionTraitsPage() {
             />
           )
         })}
-        
+
         {sortedDisplayItems.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">No traits found matching your criteria.</p>
+            <p className="text-muted-foreground">
+              No traits found matching your criteria.
+            </p>
             <p className="text-sm text-muted-foreground mt-2">
               Try adjusting your search or filters.
             </p>
@@ -456,4 +496,4 @@ export function AccordionTraitsPage() {
       </div>
     </PlayerCreationLayout>
   )
-} 
+}

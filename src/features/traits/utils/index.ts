@@ -1,8 +1,8 @@
-export { 
-  transformTraitToPlayerCreationItem, 
-  getAllCategories, 
-  getAllEffectTypes, 
+export {
+  transformTraitToPlayerCreationItem,
+  getAllCategories,
+  getAllEffectTypes,
   getAllTags,
   getUserFriendlyEffectType,
-  parseDescription
-} from './dataTransform' 
+  parseDescription,
+} from './dataTransform'

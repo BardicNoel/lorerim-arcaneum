@@ -23,27 +23,30 @@ export function useFuzzySearch(traits: Trait[], searchQuery: string) {
       name: trait.name,
       description: trait.description,
       category: trait.category,
-      effects: trait.effects.map(effect => 
-        `${effect.type} ${effect.condition || ''} ${effect.value}`
+      effects: trait.effects.map(
+        effect => `${effect.type} ${effect.condition || ''} ${effect.value}`
       ),
       tags: trait.tags,
-      originalTrait: trait
+      originalTrait: trait,
     }))
   }, [traits])
 
   // Configure Fuse.js options
-  const fuseOptions = useMemo(() => ({
-    keys: [
-      { name: 'name', weight: 0.4 },
-      { name: 'description', weight: 0.3 },
-      { name: 'effects', weight: 0.2 },
-      { name: 'tags', weight: 0.15 },
-      { name: 'category', weight: 0.1 }
-    ],
-    threshold: 0.3, // Lower threshold = more strict matching
-    includeScore: true,
-    includeMatches: true
-  }), [])
+  const fuseOptions = useMemo(
+    () => ({
+      keys: [
+        { name: 'name', weight: 0.4 },
+        { name: 'description', weight: 0.3 },
+        { name: 'effects', weight: 0.2 },
+        { name: 'tags', weight: 0.15 },
+        { name: 'category', weight: 0.1 },
+      ],
+      threshold: 0.3, // Lower threshold = more strict matching
+      includeScore: true,
+      includeMatches: true,
+    }),
+    []
+  )
 
   // Create Fuse instance
   const fuse = useMemo(() => {
@@ -56,7 +59,7 @@ export function useFuzzySearch(traits: Trait[], searchQuery: string) {
       return searchableTraits.map(trait => ({
         item: trait,
         score: 0,
-        matches: []
+        matches: [],
       }))
     }
 
@@ -71,6 +74,6 @@ export function useFuzzySearch(traits: Trait[], searchQuery: string) {
   return {
     filteredTraits,
     searchResults,
-    searchableTraits
+    searchableTraits,
   }
-} 
+}

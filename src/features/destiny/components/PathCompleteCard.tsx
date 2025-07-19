@@ -9,10 +9,10 @@ interface PathCompleteCardProps {
   onStartNewPath: () => void
 }
 
-export function PathCompleteCard({ 
-  selectedPath, 
+export function PathCompleteCard({
+  selectedPath,
   currentOptions,
-  onStartNewPath 
+  onStartNewPath,
 }: PathCompleteCardProps) {
   // Only show if there's a selected path AND no further options available
   if (selectedPath.length === 0 || currentOptions.length > 0) return null
@@ -25,13 +25,13 @@ export function PathCompleteCard({
       <CardContent>
         <div className="text-center py-8">
           <p className="text-muted-foreground mb-4">
-            You've reached the end of this path. "{selectedPath[selectedPath.length - 1].name}" has no further progression options.
+            You've reached the end of this path. "
+            {selectedPath[selectedPath.length - 1].name}" has no further
+            progression options.
           </p>
-          <Button onClick={onStartNewPath}>
-            Start New Path
-          </Button>
+          <Button onClick={onStartNewPath}>Start New Path</Button>
         </div>
       </CardContent>
     </Card>
   )
-} 
+}

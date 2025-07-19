@@ -24,7 +24,7 @@ export function PlayerCreationFilters({
   onTagRemove,
   onViewModeChange,
   children,
-  className = ""
+  className = '',
 }: PlayerCreationFiltersProps) {
   return (
     <div className={`mb-8 space-y-4 ${className}`}>
@@ -70,11 +70,7 @@ export function PlayerCreationFilters({
       />
 
       {/* Custom Content After Filters */}
-      {children && (
-        <div className="pt-4">
-          {children}
-        </div>
-      )}
+      {children && <div className="pt-4">{children}</div>}
     </div>
   )
-} 
+}

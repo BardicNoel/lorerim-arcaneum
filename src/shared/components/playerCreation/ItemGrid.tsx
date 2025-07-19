@@ -17,14 +17,14 @@ export function ItemGrid<T extends PlayerCreationItem>({
   onItemSelect,
   selectedItem,
   renderItemCard,
-  className
+  className,
 }: ItemGridProps<T>) {
   return (
     <div className={`space-y-4 ${className}`}>
       {/* Items Display */}
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {items.map((item) => (
+          {items.map(item => (
             <div
               key={item.id}
               onClick={() => onItemSelect(item)}
@@ -37,7 +37,7 @@ export function ItemGrid<T extends PlayerCreationItem>({
       ) : (
         <ScrollArea className="h-[calc(100vh-300px)]">
           <div className="space-y-1 pr-4">
-            {items.map((item) => (
+            {items.map(item => (
               <div
                 key={item.id}
                 onClick={() => onItemSelect(item)}
@@ -53,9 +53,11 @@ export function ItemGrid<T extends PlayerCreationItem>({
       {/* Empty State */}
       {items.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">No items found matching your criteria.</p>
+          <p className="text-muted-foreground">
+            No items found matching your criteria.
+          </p>
         </div>
       )}
     </div>
   )
-} 
+}

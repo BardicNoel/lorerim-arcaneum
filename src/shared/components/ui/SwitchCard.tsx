@@ -22,7 +22,7 @@ export function SwitchCard({
   className,
   disabled = false,
   onClick,
-  showSwitch = true
+  showSwitch = true,
 }: SwitchCardProps) {
   const handleClick = () => {
     if (onClick) {
@@ -33,10 +33,10 @@ export function SwitchCard({
   }
 
   return (
-    <div 
+    <div
       className={cn(
-        "flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors",
-        disabled && "opacity-50 cursor-not-allowed",
+        'flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors',
+        disabled && 'opacity-50 cursor-not-allowed',
         className
       )}
       onClick={handleClick}
@@ -44,9 +44,7 @@ export function SwitchCard({
       <div className="space-y-0.5">
         <Label className="text-base font-medium">{title}</Label>
         {description && (
-          <p className="text-sm text-muted-foreground">
-            {description}
-          </p>
+          <p className="text-sm text-muted-foreground">{description}</p>
         )}
       </div>
       {showSwitch && (
@@ -58,4 +56,4 @@ export function SwitchCard({
       )}
     </div>
   )
-} 
+}

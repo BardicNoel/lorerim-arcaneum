@@ -84,4 +84,4 @@ export interface PlayerCreationPageProps<T extends PlayerCreationItem> {
   renderItemCard: (item: T, isSelected: boolean) => React.ReactNode
   renderDetailPanel: (item: T) => React.ReactNode
   searchPlaceholder?: string
-} 
+}

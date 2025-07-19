@@ -28,38 +28,45 @@ export function useFuzzySearch(religions: Religion[], searchQuery: string) {
       description: religion.tenet?.description || '',
       type: religion.type,
       favoredRaces: religion.favoredRaces || [],
-      tenetEffects: religion.tenet?.effects?.map(effect => 
-        `${effect.effectName} ${effect.effectDescription}`
-      ) || [],
-      blessingEffects: religion.blessing?.effects?.map(effect => 
-        `${effect.effectName} ${effect.effectDescription}`
-      ) || [],
-      followerPowers: religion.boon1?.effects?.map(effect => 
-        `${effect.effectName} ${effect.effectDescription}`
-      ) || [],
-      devoteePowers: religion.boon2?.effects?.map(effect => 
-        `${effect.effectName} ${effect.effectDescription}`
-      ) || [],
-      originalReligion: religion
+      tenetEffects:
+        religion.tenet?.effects?.map(
+          effect => `${effect.effectName} ${effect.effectDescription}`
+        ) || [],
+      blessingEffects:
+        religion.blessing?.effects?.map(
+          effect => `${effect.effectName} ${effect.effectDescription}`
+        ) || [],
+      followerPowers:
+        religion.boon1?.effects?.map(
+          effect => `${effect.effectName} ${effect.effectDescription}`
+        ) || [],
+      devoteePowers:
+        religion.boon2?.effects?.map(
+          effect => `${effect.effectName} ${effect.effectDescription}`
+        ) || [],
+      originalReligion: religion,
     }))
   }, [religions])
 
   // Configure Fuse.js options
-  const fuseOptions = useMemo(() => ({
-    keys: [
-      { name: 'name', weight: 0.4 },
-      { name: 'description', weight: 0.3 },
-      { name: 'tenetEffects', weight: 0.2 },
-      { name: 'blessingEffects', weight: 0.2 },
-      { name: 'followerPowers', weight: 0.15 },
-      { name: 'devoteePowers', weight: 0.15 },
-      { name: 'favoredRaces', weight: 0.1 },
-      { name: 'type', weight: 0.1 }
-    ],
-    threshold: 0.3, // Lower threshold = more strict matching
-    includeScore: true,
-    includeMatches: true
-  }), [])
+  const fuseOptions = useMemo(
+    () => ({
+      keys: [
+        { name: 'name', weight: 0.4 },
+        { name: 'description', weight: 0.3 },
+        { name: 'tenetEffects', weight: 0.2 },
+        { name: 'blessingEffects', weight: 0.2 },
+        { name: 'followerPowers', weight: 0.15 },
+        { name: 'devoteePowers', weight: 0.15 },
+        { name: 'favoredRaces', weight: 0.1 },
+        { name: 'type', weight: 0.1 },
+      ],
+      threshold: 0.3, // Lower threshold = more strict matching
+      includeScore: true,
+      includeMatches: true,
+    }),
+    []
+  )
 
   // Create Fuse instance
   const fuse = useMemo(() => {
@@ -72,7 +79,7 @@ export function useFuzzySearch(religions: Religion[], searchQuery: string) {
       return searchableReligions.map(religion => ({
         item: religion,
         score: 0,
-        matches: []
+        matches: [],
       }))
     }
 
@@ -87,6 +94,6 @@ export function useFuzzySearch(religions: Religion[], searchQuery: string) {
   return {
     filteredReligions,
     searchResults,
-    searchableReligions
+    searchableReligions,
   }
 }

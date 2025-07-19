@@ -34,6 +34,6 @@ export const Z_INDEX = {
 
   // Maximum z-index for critical overlays
   MAX: 999,
-} as const;
+} as const
 
-export type ZIndexKey = keyof typeof Z_INDEX;
+export type ZIndexKey = keyof typeof Z_INDEX

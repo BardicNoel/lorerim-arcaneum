@@ -7,7 +7,13 @@ import { DetailPanel } from './DetailPanel'
 import { Button } from '@/shared/ui/ui/button'
 import { Grid3X3, List } from 'lucide-react'
 import { Z_INDEX } from '@/lib/constants'
-import type { PlayerCreationPageProps, PlayerCreationFilters, PlayerCreationItem, SearchOption, SelectedTag } from './types'
+import type {
+  PlayerCreationPageProps,
+  PlayerCreationFilters,
+  PlayerCreationItem,
+  SearchOption,
+  SelectedTag,
+} from './types'
 
 /**
  * @deprecated This component is deprecated. Use the new composable components instead:
@@ -17,7 +23,7 @@ import type { PlayerCreationPageProps, PlayerCreationFilters, PlayerCreationItem
  * - PlayerCreationDetailSection
  * - PlayerCreationEmptyDetail
  * - PlayerCreationFilters
- * 
+ *
  * See docs/player-creation-migration-guide.md for migration instructions.
  */
 export function PlayerCreationPage<T extends PlayerCreationItem>({
@@ -37,8 +43,8 @@ export function PlayerCreationPage<T extends PlayerCreationItem>({
   renderDetailPanel,
   searchPlaceholder,
   currentFilters,
-  customContentAfterFilters
-}: PlayerCreationPageProps<T> & { 
+  customContentAfterFilters,
+}: PlayerCreationPageProps<T> & {
   currentFilters?: PlayerCreationFilters
   customContentAfterFilters?: React.ReactNode
 }) {
@@ -46,7 +52,7 @@ export function PlayerCreationPage<T extends PlayerCreationItem>({
     currentFilters || {
       search: '',
       selectedFilters: {},
-      selectedTags: []
+      selectedTags: [],
     }
   )
 
@@ -68,15 +74,17 @@ export function PlayerCreationPage<T extends PlayerCreationItem>({
       id: `${option.category}-${option.id}`,
       label: option.label,
       value: option.value,
-      category: option.category
+      category: option.category,
     }
-    
+
     // Check if tag already exists
-    const tagExists = localFilters.selectedTags.some(tag => tag.id === newTag.id)
+    const tagExists = localFilters.selectedTags.some(
+      tag => tag.id === newTag.id
+    )
     if (!tagExists) {
       const updatedFilters = {
         ...localFilters,
-        selectedTags: [...localFilters.selectedTags, newTag]
+        selectedTags: [...localFilters.selectedTags, newTag],
       }
       setLocalFilters(updatedFilters)
       onTagSelect(newTag)
@@ -87,7 +95,7 @@ export function PlayerCreationPage<T extends PlayerCreationItem>({
   const handleTagRemove = (tagId: string) => {
     const updatedFilters = {
       ...localFilters,
-      selectedTags: localFilters.selectedTags.filter(tag => tag.id !== tagId)
+      selectedTags: localFilters.selectedTags.filter(tag => tag.id !== tagId),
     }
     setLocalFilters(updatedFilters)
     onTagRemove(tagId)
@@ -153,9 +161,7 @@ export function PlayerCreationPage<T extends PlayerCreationItem>({
 
           {/* Custom Content After Filters */}
           {customContentAfterFilters && (
-            <div className="pt-4">
-              {customContentAfterFilters}
-            </div>
+            <div className="pt-4">{customContentAfterFilters}</div>
           )}
         </div>
 
@@ -175,17 +181,11 @@ export function PlayerCreationPage<T extends PlayerCreationItem>({
           {/* Detail Panel */}
           <div className="lg:col-span-1">
             {selectedItem ? (
-              <div 
-                className="sticky top-6"
-                style={{ zIndex: Z_INDEX.STICKY }}
-              >
+              <div className="sticky top-6" style={{ zIndex: Z_INDEX.STICKY }}>
                 {renderDetailPanel(selectedItem)}
               </div>
             ) : (
-              <div 
-                className="sticky top-6"
-                style={{ zIndex: Z_INDEX.STICKY }}
-              >
+              <div className="sticky top-6" style={{ zIndex: Z_INDEX.STICKY }}>
                 <div className="bg-card border border-border rounded-lg p-6 text-center">
                   <H2 className="text-lg font-semibold mb-2">Select an Item</H2>
                   <P className="text-muted-foreground">
@@ -199,4 +199,4 @@ export function PlayerCreationPage<T extends PlayerCreationItem>({
       </div>
     </div>
   )
-} 
+}

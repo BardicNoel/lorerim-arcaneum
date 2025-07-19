@@ -8,11 +8,11 @@ interface PlayerCreationLayoutProps {
   className?: string
 }
 
-export function PlayerCreationLayout({ 
-  title, 
-  description, 
-  children, 
-  className = "" 
+export function PlayerCreationLayout({
+  title,
+  description,
+  children,
+  className = '',
 }: PlayerCreationLayoutProps) {
   return (
     <div className={`bg-background ${className}`}>
@@ -27,9 +27,11 @@ export function PlayerCreationLayout({
       </div>
 
       {/* Main Content */}
-      <div className={`px-4 py-6 ${className.includes('max-w-none') ? '' : 'max-w-none mx-auto'}`}>
+      <div
+        className={`px-4 py-6 ${className.includes('max-w-none') ? '' : 'max-w-none mx-auto'}`}
+      >
         {children}
       </div>
     </div>
   )
-} 
+}

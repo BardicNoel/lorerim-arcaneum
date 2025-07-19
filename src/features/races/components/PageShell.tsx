@@ -14,16 +14,12 @@ export function PageShell({ title, subtitle, children }: PageShellProps) {
       <div className="border-b border-border bg-card/50 px-6 py-4">
         <div>
           <H1 className="text-2xl font-bold text-foreground">{title}</H1>
-          {subtitle && (
-            <Muted className="text-sm mt-1">{subtitle}</Muted>
-          )}
+          {subtitle && <Muted className="text-sm mt-1">{subtitle}</Muted>}
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-6">
-        {children}
-      </div>
+      <div className="flex-1 p-6">{children}</div>
     </div>
   )
-} 
+}

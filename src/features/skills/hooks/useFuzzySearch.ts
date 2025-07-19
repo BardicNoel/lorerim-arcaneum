@@ -10,16 +10,22 @@ interface UseFuzzySearchReturn {
   }>
 }
 
-export function useFuzzySearch(skills: Skill[], query: string): UseFuzzySearchReturn {
+export function useFuzzySearch(
+  skills: Skill[],
+  query: string
+): UseFuzzySearchReturn {
   const { filteredSkills, searchResults } = useMemo(() => {
     if (!query.trim()) {
       return {
         filteredSkills: skills,
-        searchResults: []
+        searchResults: [],
       }
     }
 
-    const searchTerms = query.toLowerCase().split(/\s+/).filter(term => term.length > 0)
+    const searchTerms = query
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(term => term.length > 0)
     const results: Array<{
       skill: Skill
       matchType: 'name' | 'description' | 'ability' | 'tag'
@@ -86,7 +92,7 @@ export function useFuzzySearch(skills: Skill[], query: string): UseFuzzySearchRe
         results.push({
           skill,
           matchType: bestMatchType,
-          matchScore: bestMatchScore
+          matchScore: bestMatchScore,
         })
       }
     })
@@ -96,9 +102,9 @@ export function useFuzzySearch(skills: Skill[], query: string): UseFuzzySearchRe
 
     return {
       filteredSkills: results.map(r => r.skill),
-      searchResults: results
+      searchResults: results,
     }
   }, [skills, query])
 
   return { filteredSkills, searchResults }
-} 
+}
