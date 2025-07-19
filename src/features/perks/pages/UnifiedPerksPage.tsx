@@ -6,7 +6,7 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/shared/u
 import { AutocompleteSearch } from "@/shared/components/playerCreation/AutocompleteSearch";
 import type { SearchCategory, SearchOption } from "@/shared/components/playerCreation/types";
 import { usePerks, usePerkPlan } from "../hooks/usePerks";
-import { PerkTreeCanvas } from "../components/PerkTreeCanvas";
+import { PerkTreeCanvasII } from "../components/PerkTreeCanvasII";
 
 export function UnifiedPerksPage() {
   const { perkTrees, loading, error } = usePerks();
@@ -113,7 +113,7 @@ export function UnifiedPerksPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="h-full p-0">
-              <PerkTreeCanvas
+              <PerkTreeCanvasII
                 tree={selectedTree}
                 onTogglePerk={togglePerk}
                 onRankChange={updatePerkRank}

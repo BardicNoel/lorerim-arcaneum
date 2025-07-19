@@ -1,28 +1,28 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 // Prerequisite item schema
 export const PrerequisiteItemSchema = z.object({
   type: z.string(),
   id: z.string(),
-});
+})
 
 // Skill level prerequisite schema
 export const SkillLevelPrerequisiteSchema = z.object({
   skill: z.string(),
   level: z.number(),
-});
+})
 
 // Prerequisites schema
 export const PrerequisitesSchema = z.object({
   skillLevel: SkillLevelPrerequisiteSchema.optional(),
   items: z.array(PrerequisiteItemSchema).optional(),
-});
+})
 
 // Description schema
 export const DescriptionSchema = z.object({
   base: z.string(),
   subtext: z.string(),
-});
+})
 
 // Rank schema
 export const RankSchema = z.object({
@@ -31,7 +31,7 @@ export const RankSchema = z.object({
   name: z.string(),
   description: DescriptionSchema,
   prerequisites: PrerequisitesSchema,
-});
+})
 
 // Position schema
 export const PositionSchema = z.object({
@@ -39,13 +39,13 @@ export const PositionSchema = z.object({
   y: z.number(),
   horizontal: z.number(),
   vertical: z.number(),
-});
+})
 
 // Connections schema
 export const ConnectionsSchema = z.object({
   parents: z.array(z.string()),
   children: z.array(z.string()),
-});
+})
 
 // Perk node schema
 export const PerkNodeSchema = z.object({
@@ -56,7 +56,7 @@ export const PerkNodeSchema = z.object({
   connections: ConnectionsSchema,
   isRoot: z.boolean(),
   position: PositionSchema,
-});
+})
 
 // Perk tree schema
 export const PerkTreeSchema = z.object({
@@ -65,60 +65,79 @@ export const PerkTreeSchema = z.object({
   treeDescription: z.string(),
   category: z.string(),
   perks: z.array(PerkNodeSchema),
-});
+})
 
 // Array of perk trees
-export const PerkTreesSchema = z.array(PerkTreeSchema);
+export const PerkTreesSchema = z.array(PerkTreeSchema)
 
 // TypeScript types inferred from schemas
-export type PrerequisiteItem = z.infer<typeof PrerequisiteItemSchema>;
-export type SkillLevelPrerequisite = z.infer<typeof SkillLevelPrerequisiteSchema>;
-export type Prerequisites = z.infer<typeof PrerequisitesSchema>;
-export type Description = z.infer<typeof DescriptionSchema>;
-export type Rank = z.infer<typeof RankSchema>;
-export type Position = z.infer<typeof PositionSchema>;
-export type Connections = z.infer<typeof ConnectionsSchema>;
-export type PerkNode = z.infer<typeof PerkNodeSchema>;
-export type PerkTree = z.infer<typeof PerkTreeSchema>;
+export type PrerequisiteItem = z.infer<typeof PrerequisiteItemSchema>
+export type SkillLevelPrerequisite = z.infer<
+  typeof SkillLevelPrerequisiteSchema
+>
+export type Prerequisites = z.infer<typeof PrerequisitesSchema>
+export type Description = z.infer<typeof DescriptionSchema>
+export type Rank = z.infer<typeof RankSchema>
+export type Position = z.infer<typeof PositionSchema>
+export type Connections = z.infer<typeof ConnectionsSchema>
+export type PerkNode = z.infer<typeof PerkNodeSchema>
+export type PerkTree = z.infer<typeof PerkTreeSchema>
 
 // Extended PerkNode type for component usage
 export type PerkNodeWithUI = PerkNode & {
-  selected?: boolean;
-  currentRank?: number;
-  hasChildren?: boolean;
-  isRoot?: boolean;
-};
+  selected?: boolean
+  currentRank?: number
+  hasChildren?: boolean
+  isRoot?: boolean
+}
 
 // Extended PerkNode type for React Flow data
 export type PerkNodeData = PerkNode & {
-  selected?: boolean;
-  currentRank?: number;
-  hasChildren?: boolean;
-  isRoot?: boolean;
-};
+  selected?: boolean
+  currentRank?: number
+  hasChildren?: boolean
+  isRoot?: boolean
+}
+
+// Perk plan type for managing selected perks
+export type PerkPlan = {
+  selectedPerks: Record<string, PerkNode[]>
+  minLevels: Record<string, number>
+  totalPerks: number
+}
+
+// Skill type for skill selection
+export type Skill = {
+  id: string
+  name: string
+  icon: string
+  description: string
+  selectedPerks: number
+  minLevel: number
+}
 
 // Validation functions
 export const validatePerkTree = (data: unknown): PerkTree => {
-  return PerkTreeSchema.parse(data);
-};
+  return PerkTreeSchema.parse(data)
+}
 
 export const validatePerkNode = (data: unknown): PerkNode => {
-  return PerkNodeSchema.parse(data);
-};
+  return PerkNodeSchema.parse(data)
+}
 
 export const validatePerkTrees = (data: unknown): PerkTree[] => {
-  return PerkTreesSchema.parse(data);
-};
+  return PerkTreesSchema.parse(data)
+}
 
 // Type guards
 export const isPerkTree = (data: unknown): data is PerkTree => {
-  return PerkTreeSchema.safeParse(data).success;
-};
+  return PerkTreeSchema.safeParse(data).success
+}
 
 export const isPerkNode = (data: unknown): data is PerkNode => {
-  return PerkNodeSchema.safeParse(data).success;
-};
+  return PerkNodeSchema.safeParse(data).success
+}
 
 export const isPerkTrees = (data: unknown): data is PerkTree[] => {
-  return PerkTreesSchema.safeParse(data).success;
-};
+  return PerkTreesSchema.safeParse(data).success
+}
