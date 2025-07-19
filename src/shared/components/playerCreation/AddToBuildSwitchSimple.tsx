@@ -18,13 +18,13 @@ export function AddToBuildSwitchSimple({
   itemName,
   isInBuild = false,
   className,
-  onCheckedChange
+  onCheckedChange,
 }: AddToBuildSwitchSimpleProps) {
-  const { 
-    setRace, 
-    setStone, 
-    setReligion, 
-    addTrait, 
+  const {
+    setRace,
+    setStone,
+    setReligion,
+    addTrait,
     removeTrait,
     addMajorSkill,
     removeMajorSkill,
@@ -32,7 +32,7 @@ export function AddToBuildSwitchSimple({
     removeMinorSkill,
     addEquipment,
     removeEquipment,
-    build
+    build,
   } = useCharacterBuild()
 
   // Check if item is currently in build
@@ -47,7 +47,10 @@ export function AddToBuildSwitchSimple({
       case 'trait':
         return build.traits.includes(itemId)
       case 'skill':
-        return build.skills.major.includes(itemId) || build.skills.minor.includes(itemId)
+        return (
+          build.skills.major.includes(itemId) ||
+          build.skills.minor.includes(itemId)
+        )
       case 'equipment':
         return build.equipment.includes(itemId)
       default:
@@ -63,7 +66,7 @@ export function AddToBuildSwitchSimple({
       onCheckedChange(checked)
       return
     }
-    
+
     // Default build state management
     switch (itemType) {
       case 'race':
@@ -111,13 +114,15 @@ export function AddToBuildSwitchSimple({
   }
 
   return (
-    <div 
+    <div
       className={cn(
         'flex items-center justify-center p-2 rounded-lg border transition-all duration-200 cursor-pointer hover:bg-muted/50',
-        currentIsInBuild ? 'border-[#d4af37] bg-[#d4af37]/20 shadow-md' : 'border-border',
+        currentIsInBuild
+          ? 'border-[#d4af37] bg-[#d4af37]/20 shadow-md'
+          : 'border-border',
         className
       )}
-      onClick={(e) => {
+      onClick={e => {
         e.stopPropagation()
         handleCheckedChange(!currentIsInBuild)
       }}
@@ -133,4 +138,4 @@ export function AddToBuildSwitchSimple({
       />
     </div>
   )
-} 
+}

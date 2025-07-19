@@ -27,23 +27,26 @@ export function useFuzzySearch(races: Race[], searchQuery: string) {
       abilities: race.racialSpells.map(spell => spell.name),
       skills: race.skillBonuses.map(bonus => bonus.skill),
       keywords: race.keywords.map(keyword => keyword.edid),
-      originalRace: race
+      originalRace: race,
     }))
   }, [races])
 
   // Configure Fuse.js options
-  const fuseOptions = useMemo(() => ({
-    keys: [
-      { name: 'name', weight: 0.4 },
-      { name: 'description', weight: 0.3 },
-      { name: 'abilities', weight: 0.2 },
-      { name: 'skills', weight: 0.1 },
-      { name: 'keywords', weight: 0.1 }
-    ],
-    threshold: 0.3, // Lower threshold = more strict matching
-    includeScore: true,
-    includeMatches: true
-  }), [])
+  const fuseOptions = useMemo(
+    () => ({
+      keys: [
+        { name: 'name', weight: 0.4 },
+        { name: 'description', weight: 0.3 },
+        { name: 'abilities', weight: 0.2 },
+        { name: 'skills', weight: 0.1 },
+        { name: 'keywords', weight: 0.1 },
+      ],
+      threshold: 0.3, // Lower threshold = more strict matching
+      includeScore: true,
+      includeMatches: true,
+    }),
+    []
+  )
 
   // Create Fuse instance
   const fuse = useMemo(() => {
@@ -56,7 +59,7 @@ export function useFuzzySearch(races: Race[], searchQuery: string) {
       return searchableRaces.map(race => ({
         item: race,
         score: 0,
-        matches: []
+        matches: [],
       }))
     }
 
@@ -71,6 +74,6 @@ export function useFuzzySearch(races: Race[], searchQuery: string) {
   return {
     filteredRaces,
     searchResults,
-    searchableRaces
+    searchableRaces,
   }
-} 
+}

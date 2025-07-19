@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react'
-import type { PlayerCreationFilters, SearchOption, SelectedTag } from '@/shared/components/playerCreation/types'
+import type {
+  PlayerCreationFilters,
+  SearchOption,
+  SelectedTag,
+} from '@/shared/components/playerCreation/types'
 
 interface UsePlayerCreationFiltersProps {
   initialFilters?: PlayerCreationFilters
@@ -14,13 +18,13 @@ export function usePlayerCreationFilters({
   onFiltersChange,
   onSearch,
   onTagSelect,
-  onTagRemove
+  onTagRemove,
 }: UsePlayerCreationFiltersProps = {}) {
   const [localFilters, setLocalFilters] = useState<PlayerCreationFilters>(
     initialFilters || {
       search: '',
       selectedFilters: {},
-      selectedTags: []
+      selectedTags: [],
     }
   )
 
@@ -42,15 +46,17 @@ export function usePlayerCreationFilters({
       id: `${option.category}-${option.id}`,
       label: option.label,
       value: option.value,
-      category: option.category
+      category: option.category,
     }
-    
+
     // Check if tag already exists
-    const tagExists = localFilters.selectedTags.some(tag => tag.id === newTag.id)
+    const tagExists = localFilters.selectedTags.some(
+      tag => tag.id === newTag.id
+    )
     if (!tagExists) {
       const updatedFilters = {
         ...localFilters,
-        selectedTags: [...localFilters.selectedTags, newTag]
+        selectedTags: [...localFilters.selectedTags, newTag],
       }
       setLocalFilters(updatedFilters)
       onTagSelect?.(newTag)
@@ -61,7 +67,7 @@ export function usePlayerCreationFilters({
   const handleTagRemove = (tagId: string) => {
     const updatedFilters = {
       ...localFilters,
-      selectedTags: localFilters.selectedTags.filter(tag => tag.id !== tagId)
+      selectedTags: localFilters.selectedTags.filter(tag => tag.id !== tagId),
     }
     setLocalFilters(updatedFilters)
     onTagRemove?.(tagId)
@@ -78,6 +84,6 @@ export function usePlayerCreationFilters({
     handleSearch,
     handleTagSelect,
     handleTagRemove,
-    updateFilters
+    updateFilters,
   }
-} 
+}

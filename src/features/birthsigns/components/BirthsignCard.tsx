@@ -14,22 +14,27 @@ interface BirthsignCardProps {
 }
 
 const groupIcons: Record<string, string> = {
-  'Warrior': '⚔️',
-  'Mage': '🔮',
-  'Thief': '🗡️',
-  'Serpent': '🐍',
-  'Other': '⭐'
+  Warrior: '⚔️',
+  Mage: '🔮',
+  Thief: '🗡️',
+  Serpent: '🐍',
+  Other: '⭐',
 }
 
 const groupColors: Record<string, string> = {
-  'Warrior': 'text-red-600',
-  'Mage': 'text-blue-600',
-  'Thief': 'text-green-600',
-  'Serpent': 'text-purple-600',
-  'Other': 'text-yellow-500'
+  Warrior: 'text-red-600',
+  Mage: 'text-blue-600',
+  Thief: 'text-green-600',
+  Serpent: 'text-purple-600',
+  Other: 'text-yellow-500',
 }
 
-export function BirthsignCard({ birthsign, item, isSelected = false, onClick }: BirthsignCardProps) {
+export function BirthsignCard({
+  birthsign,
+  item,
+  isSelected = false,
+  onClick,
+}: BirthsignCardProps) {
   const groupIcon = groupIcons[birthsign.group] || groupIcons['Other']
   const groupColor = groupColors[birthsign.group] || groupColors['Other']
 
@@ -40,11 +45,11 @@ export function BirthsignCard({ birthsign, item, isSelected = false, onClick }: 
   const tags = [
     birthsign.group,
     ...birthsign.stat_modifications.slice(0, 2).map(stat => stat.stat),
-    ...birthsign.powers.slice(0, 1).map(power => power.name)
+    ...birthsign.powers.slice(0, 1).map(power => power.name),
   ].filter((tag, index, arr) => arr.indexOf(tag) === index) // Remove duplicates
 
   return (
-    <Card 
+    <Card
       className={cn(
         'cursor-pointer transition-all duration-200 hover:shadow-md',
         isSelected && 'ring-2 ring-primary ring-offset-2',
@@ -58,20 +63,17 @@ export function BirthsignCard({ birthsign, item, isSelected = false, onClick }: 
             <span className="text-xl">{groupIcon}</span>
             <h3 className="font-semibold text-lg">{birthsign.name}</h3>
           </div>
-          <Badge 
-            variant="secondary" 
-            className={cn('text-xs', groupColor)}
-          >
+          <Badge variant="secondary" className={cn('text-xs', groupColor)}>
             {birthsign.group}
           </Badge>
         </div>
       </CardHeader>
-      
+
       <CardContent className="pt-0">
         <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
           {parsedDescription}
         </p>
-        
+
         <div className="flex flex-wrap gap-1">
           {tags.slice(0, 3).map((tag, index) => (
             <Badge key={index} variant="outline" className="text-xs">
@@ -84,13 +86,14 @@ export function BirthsignCard({ birthsign, item, isSelected = false, onClick }: 
             </Badge>
           )}
         </div>
-        
+
         {birthsign.powers.length > 0 && (
           <div className="mt-2 text-xs text-muted-foreground">
-            {birthsign.powers.length} power{birthsign.powers.length !== 1 ? 's' : ''}
+            {birthsign.powers.length} power
+            {birthsign.powers.length !== 1 ? 's' : ''}
           </div>
         )}
       </CardContent>
     </Card>
   )
-} 
+}

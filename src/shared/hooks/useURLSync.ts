@@ -1,38 +1,38 @@
-import { useEffect } from "react";
-import { useCharacterStore } from "../stores/characterStore";
-import { encode, decode } from "../utils/urlEncoding";
+import { useEffect } from 'react'
+import { useCharacterStore } from '../stores/characterStore'
+import { encode, decode } from '../utils/urlEncoding'
 
 export const useURLSync = () => {
-  const { build, setBuild } = useCharacterStore();
+  const { build, setBuild } = useCharacterStore()
 
   // Hydrate on load
   useEffect(() => {
-    const hash = window.location.hash;
-    const [path, paramsString] = hash.split("?");
-    const params = new URLSearchParams(paramsString || "");
-    const encodedBuild = params.get("b");
+    const hash = window.location.hash
+    const [path, paramsString] = hash.split('?')
+    const params = new URLSearchParams(paramsString || '')
+    const encodedBuild = params.get('b')
     if (encodedBuild) {
-      const decoded = decode(encodedBuild);
+      const decoded = decode(encodedBuild)
       if (decoded?.v === 1) {
-        setBuild(decoded);
+        setBuild(decoded)
       } else {
-        console.warn("Invalid or outdated build schema in URL");
+        console.warn('Invalid or outdated build schema in URL')
       }
     }
-  }, [setBuild]);
+  }, [setBuild])
 
   // Update URL on state change
   useEffect(() => {
-    const encodedBuild = encode(build);
-    const currentHash = window.location.hash;
-    const [path, existingParams] = currentHash.split("?");
-    const params = new URLSearchParams(existingParams || "");
-    
+    const encodedBuild = encode(build)
+    const currentHash = window.location.hash
+    const [path, existingParams] = currentHash.split('?')
+    const params = new URLSearchParams(existingParams || '')
+
     // Update or add the build parameter
-    params.set("b", encodedBuild);
-    
+    params.set('b', encodedBuild)
+
     // Preserve the current path, just update the parameters
-    const newHash = `${path}?${params.toString()}`;
-    window.history.replaceState(null, "", newHash);
-  }, [build]);
-}; 
+    const newHash = `${path}?${params.toString()}`
+    window.history.replaceState(null, '', newHash)
+  }, [build])
+}

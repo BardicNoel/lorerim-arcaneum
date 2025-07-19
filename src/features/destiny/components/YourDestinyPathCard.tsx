@@ -19,7 +19,7 @@ export function YourDestinyPathCard({
   rootNodes,
   isPlanned,
   onBacktrack,
-  onStartPath
+  onStartPath,
 }: YourDestinyPathCardProps) {
   return (
     <Card>
@@ -46,7 +46,7 @@ export function YourDestinyPathCard({
               isPlanned={isPlanned}
               onBreadcrumbClick={onBacktrack}
             />
-            
+
             {/* Selected Path List */}
             <DestinyPathList path={selectedPath} />
           </div>
@@ -54,4 +54,4 @@ export function YourDestinyPathCard({
       </CardContent>
     </Card>
   )
-} 
+}

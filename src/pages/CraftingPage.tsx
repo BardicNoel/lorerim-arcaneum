@@ -1,5 +1,11 @@
-import { H1, Muted } from '@/shared/ui/ui/typography';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/shared/ui/ui/card';
+import { H1, Muted } from '@/shared/ui/ui/typography'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from '@/shared/ui/ui/card'
 
 export default function CraftingPage() {
   return (
@@ -11,7 +17,9 @@ export default function CraftingPage() {
       <Card>
         <CardHeader>
           <CardTitle>Coming Soon</CardTitle>
-          <CardDescription>Crafting system is under development</CardDescription>
+          <CardDescription>
+            Crafting system is under development
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Muted>
@@ -20,5 +28,5 @@ export default function CraftingPage() {
         </CardContent>
       </Card>
     </div>
-  );
-} 
+  )
+}

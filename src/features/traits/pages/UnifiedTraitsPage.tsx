@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import { 
+import {
   PlayerCreationLayout,
   PlayerCreationContent,
   PlayerCreationItemsSection,
   PlayerCreationDetailSection,
   PlayerCreationEmptyDetail,
   PlayerCreationFilters,
-  ItemGrid
+  ItemGrid,
 } from '@/shared/components/playerCreation'
 import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
 import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
 import { TraitCard } from '../components/TraitCard'
 import { TraitDetailPanel } from '../components/TraitDetailPanel'
-import type { PlayerCreationItem, SearchCategory, SelectedTag } from '@/shared/components/playerCreation/types'
+import type {
+  PlayerCreationItem,
+  SearchCategory,
+  SelectedTag,
+} from '@/shared/components/playerCreation/types'
 import type { Trait } from '../types'
 
 export function UnifiedTraitsPage() {
@@ -51,17 +55,21 @@ export function UnifiedTraitsPage() {
       name: effect.type,
       description: effect.condition || '',
       value: effect.value,
-      target: ''
+      target: '',
     })),
     associatedItems: [],
     imageUrl: undefined,
-    category: trait.category
+    category: trait.category,
   }))
 
   // Generate search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
     const categories = [...new Set(traits.map(trait => trait.category))]
-    const effectTypes = [...new Set(traits.flatMap(trait => trait.effects.map(effect => effect.type)))]
+    const effectTypes = [
+      ...new Set(
+        traits.flatMap(trait => trait.effects.map(effect => effect.type))
+      ),
+    ]
     const tags = [...new Set(traits.flatMap(trait => trait.tags))]
 
     return [
@@ -74,8 +82,8 @@ export function UnifiedTraitsPage() {
           label: category,
           value: category,
           category: 'Categories',
-          description: `Traits in ${category} category`
-        }))
+          description: `Traits in ${category} category`,
+        })),
       },
       {
         id: 'effect-types',
@@ -86,8 +94,8 @@ export function UnifiedTraitsPage() {
           label: effectType.replace('_', ' ').toUpperCase(),
           value: effectType,
           category: 'Effect Types',
-          description: `Traits with ${effectType} effects`
-        }))
+          description: `Traits with ${effectType} effects`,
+        })),
       },
       {
         id: 'tags',
@@ -98,9 +106,9 @@ export function UnifiedTraitsPage() {
           label: tag,
           value: tag,
           category: 'Tags',
-          description: `Traits tagged with ${tag}`
-        }))
-      }
+          description: `Traits tagged with ${tag}`,
+        })),
+      },
     ]
   }
 
@@ -114,33 +122,25 @@ export function UnifiedTraitsPage() {
     handleItemSelect,
     handleFiltersChange,
     handleSearch,
-    handleViewModeChange
+    handleViewModeChange,
   } = usePlayerCreation({
     items: playerCreationItems,
-    filters: []
+    filters: [],
   })
 
   // Use the new filters hook
-  const {
-    handleTagSelect,
-    handleTagRemove
-  } = usePlayerCreationFilters({
+  const { handleTagSelect, handleTagRemove } = usePlayerCreationFilters({
     initialFilters: currentFilters,
     onFiltersChange: handleFiltersChange,
-    onSearch: handleSearch
+    onSearch: handleSearch,
   })
 
   const renderTraitCard = (item: PlayerCreationItem, isSelected: boolean) => (
-    <TraitCard 
-      item={item} 
-      isSelected={isSelected}
-    />
+    <TraitCard item={item} isSelected={isSelected} />
   )
 
   const renderTraitDetailPanel = (item: PlayerCreationItem) => (
-    <TraitDetailPanel 
-      item={item}
-    />
+    <TraitDetailPanel item={item} />
   )
 
   if (loading) {
@@ -159,7 +159,7 @@ export function UnifiedTraitsPage() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <p className="text-destructive mb-4">{error}</p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
           >
@@ -205,4 +205,4 @@ export function UnifiedTraitsPage() {
       </PlayerCreationContent>
     </PlayerCreationLayout>
   )
-} 
+}

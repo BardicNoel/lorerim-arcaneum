@@ -14,20 +14,23 @@ interface BirthsignDetailPanelProps {
 }
 
 const groupIcons: Record<string, string> = {
-  'Warrior': '⚔️',
-  'Mage': '🔮',
-  'Thief': '🗡️',
-  'Serpent': '🐍',
-  'Other': '⭐'
+  Warrior: '⚔️',
+  Mage: '🔮',
+  Thief: '🗡️',
+  Serpent: '🐍',
+  Other: '⭐',
 }
 
 const effectTypeColors: Record<string, string> = {
-  'bonus': 'bg-green-100 text-green-800 border-green-200',
-  'penalty': 'bg-red-100 text-red-800 border-red-200',
-  'conditional': 'bg-purple-100 text-purple-800 border-purple-200'
+  bonus: 'bg-green-100 text-green-800 border-green-200',
+  penalty: 'bg-red-100 text-red-800 border-red-200',
+  conditional: 'bg-purple-100 text-purple-800 border-purple-200',
 }
 
-export function BirthsignDetailPanel({ birthsign, item }: BirthsignDetailPanelProps) {
+export function BirthsignDetailPanel({
+  birthsign,
+  item,
+}: BirthsignDetailPanelProps) {
   const groupIcon = groupIcons[birthsign.group] || groupIcons['Other']
   const parsedDescription = parseDescription(birthsign.description)
 
@@ -36,7 +39,7 @@ export function BirthsignDetailPanel({ birthsign, item }: BirthsignDetailPanelPr
     birthsign.group,
     ...birthsign.stat_modifications.map(stat => stat.stat),
     ...birthsign.skill_bonuses.map(skill => skill.stat),
-    ...birthsign.powers.map(power => power.name)
+    ...birthsign.powers.map(power => power.name),
   ].filter((tag, index, arr) => arr.indexOf(tag) === index) // Remove duplicates
 
   return (
@@ -58,9 +61,7 @@ export function BirthsignDetailPanel({ birthsign, item }: BirthsignDetailPanelPr
           </Badge>
         ))}
         {tags.length > 6 && (
-          <Badge variant="outline">
-            +{tags.length - 6} more
-          </Badge>
+          <Badge variant="outline">+{tags.length - 6} more</Badge>
         )}
       </div>
 
@@ -82,7 +83,7 @@ export function BirthsignDetailPanel({ birthsign, item }: BirthsignDetailPanelPr
               <MarkdownText>{parsedDescription}</MarkdownText>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader>
               <CardTitle>Game Information</CardTitle>
@@ -93,7 +94,8 @@ export function BirthsignDetailPanel({ birthsign, item }: BirthsignDetailPanelPr
                   <span className="font-medium">EDID:</span> {birthsign.edid}
                 </div>
                 <div>
-                  <span className="font-medium">Form ID:</span> {birthsign.formid}
+                  <span className="font-medium">Form ID:</span>{' '}
+                  {birthsign.formid}
                 </div>
               </div>
             </CardContent>
@@ -110,21 +112,35 @@ export function BirthsignDetailPanel({ birthsign, item }: BirthsignDetailPanelPr
                 <CardContent>
                   <div className="space-y-2">
                     {birthsign.stat_modifications.map((stat, index) => (
-                      <div key={index} className="flex items-center justify-between p-2 border rounded">
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 border rounded"
+                      >
                         <div className="flex items-center gap-2">
-                          <Badge 
-                            variant="outline" 
-                            className={cn('text-xs', effectTypeColors[stat.type])}
+                          <Badge
+                            variant="outline"
+                            className={cn(
+                              'text-xs',
+                              effectTypeColors[stat.type]
+                            )}
                           >
                             {stat.type}
                           </Badge>
-                          <span className="font-medium">{getUserFriendlyStat(stat.stat)}</span>
+                          <span className="font-medium">
+                            {getUserFriendlyStat(stat.stat)}
+                          </span>
                         </div>
-                        <span className={cn(
-                          'font-bold',
-                          stat.type === 'bonus' ? 'text-green-600' : 'text-red-600'
-                        )}>
-                          {stat.type === 'bonus' ? '+' : ''}{stat.value}{stat.value_type === 'percentage' ? '%' : ''}
+                        <span
+                          className={cn(
+                            'font-bold',
+                            stat.type === 'bonus'
+                              ? 'text-green-600'
+                              : 'text-red-600'
+                          )}
+                        >
+                          {stat.type === 'bonus' ? '+' : ''}
+                          {stat.value}
+                          {stat.value_type === 'percentage' ? '%' : ''}
                         </span>
                       </div>
                     ))}
@@ -141,10 +157,16 @@ export function BirthsignDetailPanel({ birthsign, item }: BirthsignDetailPanelPr
                 <CardContent>
                   <div className="space-y-2">
                     {birthsign.skill_bonuses.map((skill, index) => (
-                      <div key={index} className="flex items-center justify-between p-2 border rounded">
-                        <span className="font-medium">{getUserFriendlyStat(skill.stat)}</span>
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 border rounded"
+                      >
+                        <span className="font-medium">
+                          {getUserFriendlyStat(skill.stat)}
+                        </span>
                         <span className="font-bold text-green-600">
-                          +{skill.value}{skill.value_type === 'percentage' ? '%' : ''}
+                          +{skill.value}
+                          {skill.value_type === 'percentage' ? '%' : ''}
                         </span>
                       </div>
                     ))}
@@ -167,16 +189,18 @@ export function BirthsignDetailPanel({ birthsign, item }: BirthsignDetailPanelPr
                     <p className="text-sm text-muted-foreground mb-3">
                       {power.description}
                     </p>
-                    
+
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       {power.magnitude && (
                         <div>
-                          <span className="font-medium">Magnitude:</span> {power.magnitude}
+                          <span className="font-medium">Magnitude:</span>{' '}
+                          {power.magnitude}
                         </div>
                       )}
                       {power.duration && (
                         <div>
-                          <span className="font-medium">Duration:</span> {power.duration}s
+                          <span className="font-medium">Duration:</span>{' '}
+                          {power.duration}s
                         </div>
                       )}
                     </div>
@@ -187,7 +211,9 @@ export function BirthsignDetailPanel({ birthsign, item }: BirthsignDetailPanelPr
           ) : (
             <Card>
               <CardContent className="text-center py-8">
-                <p className="text-muted-foreground">No special powers for this birthsign.</p>
+                <p className="text-muted-foreground">
+                  No special powers for this birthsign.
+                </p>
               </CardContent>
             </Card>
           )}
@@ -205,12 +231,19 @@ export function BirthsignDetailPanel({ birthsign, item }: BirthsignDetailPanelPr
                     {birthsign.conditional_effects.map((effect, index) => (
                       <div key={index} className="p-2 border rounded">
                         <div className="flex items-center gap-2 mb-1">
-                          <Badge variant="outline" className="text-xs bg-purple-100 text-purple-800 border-purple-200">
+                          <Badge
+                            variant="outline"
+                            className="text-xs bg-purple-100 text-purple-800 border-purple-200"
+                          >
                             Conditional
                           </Badge>
-                          <span className="font-medium">{getUserFriendlyStat(effect.stat)}</span>
+                          <span className="font-medium">
+                            {getUserFriendlyStat(effect.stat)}
+                          </span>
                         </div>
-                        <p className="text-sm text-muted-foreground">{effect.description}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {effect.description}
+                        </p>
                         <p className="text-xs text-muted-foreground mt-1">
                           <strong>Condition:</strong> {effect.condition}
                         </p>
@@ -231,12 +264,19 @@ export function BirthsignDetailPanel({ birthsign, item }: BirthsignDetailPanelPr
                     {birthsign.mastery_effects.map((effect, index) => (
                       <div key={index} className="p-2 border rounded">
                         <div className="flex items-center gap-2 mb-1">
-                          <Badge variant="outline" className="text-xs bg-blue-100 text-blue-800 border-blue-200">
+                          <Badge
+                            variant="outline"
+                            className="text-xs bg-blue-100 text-blue-800 border-blue-200"
+                          >
                             Mastery
                           </Badge>
-                          <span className="font-medium">{getUserFriendlyStat(effect.stat)}</span>
+                          <span className="font-medium">
+                            {getUserFriendlyStat(effect.stat)}
+                          </span>
                         </div>
-                        <p className="text-sm text-muted-foreground">{effect.description}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {effect.description}
+                        </p>
                         {effect.condition && (
                           <p className="text-xs text-muted-foreground mt-1">
                             <strong>Requirement:</strong> {effect.condition}
@@ -249,16 +289,19 @@ export function BirthsignDetailPanel({ birthsign, item }: BirthsignDetailPanelPr
               </Card>
             )}
 
-            {birthsign.conditional_effects.length === 0 && birthsign.mastery_effects.length === 0 && (
-              <Card>
-                <CardContent className="text-center py-8">
-                  <p className="text-muted-foreground">No conditional or mastery effects for this birthsign.</p>
-                </CardContent>
-              </Card>
-            )}
+            {birthsign.conditional_effects.length === 0 &&
+              birthsign.mastery_effects.length === 0 && (
+                <Card>
+                  <CardContent className="text-center py-8">
+                    <p className="text-muted-foreground">
+                      No conditional or mastery effects for this birthsign.
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
           </div>
         </TabsContent>
       </Tabs>
     </div>
   )
-} 
+}

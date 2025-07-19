@@ -2,7 +2,13 @@ import { useCharacterStore } from '@/shared/stores/characterStore'
 import { Button } from '@/shared/ui/ui/button'
 import { Input } from '@/shared/ui/ui/input'
 import { Label } from '@/shared/ui/ui/label'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/shared/ui/ui/card'
 
 export default function BuildPage() {
   const { build, updateBuild, resetBuild } = useCharacterStore()
@@ -10,9 +16,12 @@ export default function BuildPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-skyrim-gold mb-2">Character Builder</h1>
+        <h1 className="text-3xl font-bold text-skyrim-gold mb-2">
+          Character Builder
+        </h1>
         <p className="text-muted-foreground">
-          Your build state is automatically synced to the URL. Copy the URL to share your character!
+          Your build state is automatically synced to the URL. Copy the URL to
+          share your character!
         </p>
       </div>
 
@@ -30,17 +39,19 @@ export default function BuildPage() {
                 id="name"
                 placeholder="Enter character name"
                 value={build.name}
-                onChange={(e) => updateBuild({ name: e.target.value })}
+                onChange={e => updateBuild({ name: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="notes">Character Notes</Label>
               <textarea
                 id="notes"
                 placeholder="Enter character background, roleplay notes, etc."
                 value={build.notes}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateBuild({ notes: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  updateBuild({ notes: e.target.value })
+                }
                 rows={4}
                 className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               />
@@ -60,8 +71,8 @@ export default function BuildPage() {
               <select
                 id="race"
                 className="w-full p-2 border rounded-md bg-background"
-                value={build.race || ""}
-                onChange={(e) => updateBuild({ race: e.target.value || null })}
+                value={build.race || ''}
+                onChange={e => updateBuild({ race: e.target.value || null })}
               >
                 <option value="">Select a race...</option>
                 <option value="nord">Nord</option>
@@ -91,8 +102,8 @@ export default function BuildPage() {
               <select
                 id="stone"
                 className="w-full p-2 border rounded-md bg-background"
-                value={build.stone || ""}
-                onChange={(e) => updateBuild({ stone: e.target.value || null })}
+                value={build.stone || ''}
+                onChange={e => updateBuild({ stone: e.target.value || null })}
               >
                 <option value="">Select a birth sign...</option>
                 <option value="warrior">The Warrior</option>
@@ -124,8 +135,10 @@ export default function BuildPage() {
               <select
                 id="religion"
                 className="w-full p-2 border rounded-md bg-background"
-                value={build.religion || ""}
-                onChange={(e) => updateBuild({ religion: e.target.value || null })}
+                value={build.religion || ''}
+                onChange={e =>
+                  updateBuild({ religion: e.target.value || null })
+                }
               >
                 <option value="">Select a religion...</option>
                 <option value="nine_divines">Nine Divines</option>
@@ -146,13 +159,10 @@ export default function BuildPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex gap-4">
-            <Button 
-              onClick={resetBuild}
-              variant="destructive"
-            >
+            <Button onClick={resetBuild} variant="destructive">
               Reset Build
             </Button>
-            <Button 
+            <Button
               onClick={() => {
                 const url = window.location.href
                 navigator.clipboard.writeText(url)
@@ -169,7 +179,9 @@ export default function BuildPage() {
       <Card>
         <CardHeader>
           <CardTitle>Current Build State (Debug)</CardTitle>
-          <CardDescription>JSON representation of your current build</CardDescription>
+          <CardDescription>
+            JSON representation of your current build
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <pre className="bg-muted p-4 rounded-md text-sm overflow-auto">
@@ -179,4 +191,4 @@ export default function BuildPage() {
       </Card>
     </div>
   )
-} 
+}

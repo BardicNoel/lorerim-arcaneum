@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
-import { 
+import {
   PlayerCreationLayout,
-  PlayerCreationFilters
+  PlayerCreationFilters,
 } from '@/shared/components/playerCreation'
 import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
 import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
 import { RaceAccordion } from '../components/RaceAccordion'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import { CustomMultiAutocompleteSearch } from '../components/CustomMultiAutocompleteSearch'
-import type { PlayerCreationItem, SearchCategory, SelectedTag, SearchOption } from '@/shared/components/playerCreation/types'
+import type {
+  PlayerCreationItem,
+  SearchCategory,
+  SelectedTag,
+  SearchOption,
+} from '@/shared/components/playerCreation/types'
 import type { Race } from '../types'
 import { transformRaceToPlayerCreationItem } from '../utils/dataTransform'
 
@@ -24,7 +29,9 @@ export function AccordionRacesPage() {
     async function fetchRaces() {
       try {
         setLoading(true)
-        const res = await fetch(`${import.meta.env.BASE_URL}data/playable-races.json`)
+        const res = await fetch(
+          `${import.meta.env.BASE_URL}data/playable-races.json`
+        )
         if (!res.ok) throw new Error('Failed to fetch race data')
         const data = await res.json()
         setRaces(data.races as Race[])
@@ -39,19 +46,23 @@ export function AccordionRacesPage() {
   }, [])
 
   // Convert races to PlayerCreationItem format using new transformation
-  const playerCreationItems: PlayerCreationItem[] = races.map(race => 
+  const playerCreationItems: PlayerCreationItem[] = races.map(race =>
     transformRaceToPlayerCreationItem(race)
   )
 
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
-    const allKeywords = [...new Set(races.flatMap(race => 
-      race.keywords.map(keyword => keyword.edid)
-    ))]
-    
-    const allSkills = [...new Set(races.flatMap(race => 
-      race.skillBonuses.map(bonus => bonus.skill)
-    ))]
+    const allKeywords = [
+      ...new Set(
+        races.flatMap(race => race.keywords.map(keyword => keyword.edid))
+      ),
+    ]
+
+    const allSkills = [
+      ...new Set(
+        races.flatMap(race => race.skillBonuses.map(bonus => bonus.skill))
+      ),
+    ]
 
     const categories = [...new Set(races.map(race => race.category))]
 
@@ -65,8 +76,8 @@ export function AccordionRacesPage() {
           label: keyword,
           value: keyword,
           category: 'Fuzzy Search',
-          description: `Races with ${keyword} keyword`
-        }))
+          description: `Races with ${keyword} keyword`,
+        })),
       },
       {
         id: 'skill-bonuses',
@@ -77,8 +88,8 @@ export function AccordionRacesPage() {
           label: skill,
           value: skill,
           category: 'Skill Bonuses',
-          description: `Races with ${skill} bonus`
-        }))
+          description: `Races with ${skill} bonus`,
+        })),
       },
       {
         id: 'categories',
@@ -89,9 +100,9 @@ export function AccordionRacesPage() {
           label: category,
           value: category,
           category: 'Race Categories',
-          description: `${category} races`
-        }))
-      }
+          description: `${category} races`,
+        })),
+      },
     ]
   }
 
@@ -108,18 +119,22 @@ export function AccordionRacesPage() {
         id: `custom-${optionOrTag}`,
         label: optionOrTag,
         value: optionOrTag,
-        category: 'Fuzzy Search'
+        category: 'Fuzzy Search',
       }
     } else {
       tag = {
         id: `${optionOrTag.category}-${optionOrTag.id}`,
         label: optionOrTag.label,
         value: optionOrTag.value,
-        category: optionOrTag.category
+        category: optionOrTag.category,
       }
     }
     // Prevent duplicate tags
-    if (!selectedTags.some(t => t.value === tag.value && t.category === tag.category)) {
+    if (
+      !selectedTags.some(
+        t => t.value === tag.value && t.category === tag.category
+      )
+    ) {
       setSelectedTags(prev => [...prev, tag])
     }
   }
@@ -140,19 +155,19 @@ export function AccordionRacesPage() {
         case 'Fuzzy Search':
           // For fuzzy search, we'll handle this separately
           return true
-        
+
         case 'Race Categories':
           // Filter by race category (Human, Elf, Beast)
           return race.category === tag.value
-        
+
         case 'Skill Bonuses':
           // Filter by skill bonuses
           return race.skillBonuses.some(bonus => bonus.skill === tag.value)
-        
+
         case 'Keywords':
           // Filter by keywords
           return race.keywords.some(keyword => keyword.edid === tag.value)
-        
+
         default:
           return true
       }
@@ -165,10 +180,13 @@ export function AccordionRacesPage() {
     .map(tag => tag.value)
     .join(' ')
 
-  const { filteredRaces: fuzzyFilteredRaces } = useFuzzySearch(filteredRaces, fuzzySearchQuery)
+  const { filteredRaces: fuzzyFilteredRaces } = useFuzzySearch(
+    filteredRaces,
+    fuzzySearchQuery
+  )
 
   // Convert to PlayerCreationItem format
-  const displayItems: PlayerCreationItem[] = fuzzyFilteredRaces.map(race => 
+  const displayItems: PlayerCreationItem[] = fuzzyFilteredRaces.map(race =>
     transformRaceToPlayerCreationItem(race)
   )
 
@@ -199,7 +217,7 @@ export function AccordionRacesPage() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <p className="text-destructive mb-4">{error}</p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
           >
@@ -235,11 +253,11 @@ export function AccordionRacesPage() {
               <X className="h-3.5 w-3.5 group-hover:scale-110 transition-transform duration-200" />
               Clear All
             </button>
-            
+
             {/* Individual Tags */}
             {selectedTags.map(tag => (
-              <span 
-                key={tag.id} 
+              <span
+                key={tag.id}
                 className="inline-flex items-center px-3 py-1.5 rounded-full bg-skyrim-gold/20 border border-skyrim-gold/30 text-sm font-medium text-skyrim-gold hover:bg-skyrim-gold/30 transition-colors duration-200 cursor-pointer group"
                 onClick={() => handleTagRemove(tag.id)}
                 title="Click to remove"
@@ -255,12 +273,12 @@ export function AccordionRacesPage() {
       </div>
 
       <div className="flex flex-col gap-4 w-full">
-        {displayItems.map((item) => {
-          const originalRace = races.find(race => 
-            race.edid.toLowerCase().replace('race', '') === item.id
+        {displayItems.map(item => {
+          const originalRace = races.find(
+            race => race.edid.toLowerCase().replace('race', '') === item.id
           )
           const isExpanded = expandedRaces.has(item.id)
-          
+
           return (
             <RaceAccordion
               key={item.id}
@@ -272,10 +290,12 @@ export function AccordionRacesPage() {
             />
           )
         })}
-        
+
         {displayItems.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">No races found matching your criteria.</p>
+            <p className="text-muted-foreground">
+              No races found matching your criteria.
+            </p>
             <p className="text-sm text-muted-foreground mt-2">
               Try adjusting your search or filters.
             </p>
@@ -284,4 +304,4 @@ export function AccordionRacesPage() {
       </div>
     </PlayerCreationLayout>
   )
-} 
+}

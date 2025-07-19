@@ -14,11 +14,11 @@ interface DestinyPathBuilderProps {
   onNodeUnplan: (nodeId: string) => void
 }
 
-export function DestinyPathBuilder({ 
-  nodes, 
-  plannedNodes, 
-  onNodePlan, 
-  onNodeUnplan 
+export function DestinyPathBuilder({
+  nodes,
+  plannedNodes,
+  onNodePlan,
+  onNodeUnplan,
 }: DestinyPathBuilderProps) {
   const {
     selectedPath,
@@ -30,22 +30,22 @@ export function DestinyPathBuilder({
     backtrack,
     handleBreadcrumbClick,
     startPath,
-    startNewPath
+    startNewPath,
   } = useDestinyPath({
     nodes,
     plannedNodes,
     onNodePlan,
-    onNodeUnplan
+    onNodeUnplan,
   })
 
   // Use the player creation filters hook for tag management
   const {
     handleTagSelect,
     handleTagRemove,
-    filters: { selectedTags }
+    filters: { selectedTags },
   } = usePlayerCreationFilters({
     onFiltersChange: () => {}, // No-op since we're not using the full filter system
-    onSearch: () => {} // No-op since we're not using the search system
+    onSearch: () => {}, // No-op since we're not using the search system
   })
 
   return (
@@ -79,4 +79,4 @@ export function DestinyPathBuilder({
       />
     </div>
   )
-} 
+}

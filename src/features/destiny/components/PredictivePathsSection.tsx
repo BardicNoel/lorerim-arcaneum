@@ -33,7 +33,7 @@ export function PredictivePathsSection({
   getCurrentNodeName,
   selectedTags,
   onTagSelect,
-  onTagRemove
+  onTagRemove,
 }: PredictivePathsSectionProps) {
   // Filter paths based on selected tags
   const filteredPaths = useMemo(() => {
@@ -44,18 +44,20 @@ export function PredictivePathsSection({
       // Check each tag filter
       return selectedTags.every(tag => {
         const [filterType, nodeName] = tag.value.split(':')
-        
+
         if (filterType === 'contains') {
           // Path must contain the specified node
-          return path.path.some(node => 
+          return path.path.some(node =>
             node.name.toLowerCase().includes(nodeName.toLowerCase())
           )
         } else if (filterType === 'ends') {
           // Path must end with the specified node (and be complete)
-          return path.isComplete && 
-                 path.endNode.name.toLowerCase().includes(nodeName.toLowerCase())
+          return (
+            path.isComplete &&
+            path.endNode.name.toLowerCase().includes(nodeName.toLowerCase())
+          )
         }
-        
+
         return true
       })
     })
@@ -81,10 +83,9 @@ export function PredictivePathsSection({
             Possible Paths ({filteredPaths.length} of {predictivePaths.length})
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            {selectedPath.length === 0 
-              ? "All possible destiny paths from the beginning"
-              : `Paths available from your current position at "${getCurrentNodeName()}"`
-            }
+            {selectedPath.length === 0
+              ? 'All possible destiny paths from the beginning'
+              : `Paths available from your current position at "${getCurrentNodeName()}"`}
             {selectedTags.length > 0 && (
               <span> • Filtered by {selectedTags.length} criteria</span>
             )}
@@ -104,7 +105,7 @@ export function PredictivePathsSection({
                 </div>
               ) : (
                 filteredPaths.map((predictivePath, pathIndex) => (
-                  <div 
+                  <div
                     key={pathIndex}
                     className="p-3 border rounded-lg hover:bg-muted/50 transition-colors"
                   >
@@ -112,28 +113,33 @@ export function PredictivePathsSection({
                       <div className="flex flex-wrap items-center gap-1">
                         {predictivePath.path.map((node, nodeIndex) => (
                           <React.Fragment key={node.id}>
-                            <DestinyNodeHoverCard 
-                              node={node} 
+                            <DestinyNodeHoverCard
+                              node={node}
                               isPlanned={isPlanned(node.id)}
                             >
-                              <Badge 
+                              <Badge
                                 variant={
-                                  nodeIndex < selectedPath.length 
-                                    ? "default" 
-                                    : nodeIndex === selectedPath.length 
-                                      ? "secondary"
-                                      : "outline"
+                                  nodeIndex < selectedPath.length
+                                    ? 'default'
+                                    : nodeIndex === selectedPath.length
+                                      ? 'secondary'
+                                      : 'outline'
                                 }
                                 className={`text-xs cursor-pointer hover:scale-105 transition-transform ${
                                   nodeIndex < selectedPath.length
-                                    ? "bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600"
-                                    : predictivePath.isComplete && nodeIndex === predictivePath.path.length - 1
-                                      ? "bg-red-800 text-red-100 border-red-700"
-                                      : ""
+                                    ? 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600'
+                                    : predictivePath.isComplete &&
+                                        nodeIndex ===
+                                          predictivePath.path.length - 1
+                                      ? 'bg-red-800 text-red-100 border-red-700'
+                                      : ''
                                 }`}
-                                onClick={(e) => {
+                                onClick={e => {
                                   e.stopPropagation()
-                                  onBreadcrumbClick(predictivePath.path, nodeIndex)
+                                  onBreadcrumbClick(
+                                    predictivePath.path,
+                                    nodeIndex
+                                  )
                                 }}
                               >
                                 {node.name}
@@ -152,7 +158,10 @@ export function PredictivePathsSection({
                         <span>• Ends at: {predictivePath.endNode.name}</span>
                       )}
                       {predictivePath.path.length > selectedPath.length && (
-                        <span>• {predictivePath.path.length - selectedPath.length} more choices</span>
+                        <span>
+                          • {predictivePath.path.length - selectedPath.length}{' '}
+                          more choices
+                        </span>
                       )}
                     </div>
                   </div>
@@ -164,4 +173,4 @@ export function PredictivePathsSection({
       </Card>
     </div>
   )
-} 
+}

@@ -11,7 +11,11 @@ interface RaceAvatarProps {
  * Race-specific avatar component that uses the generic EntityAvatar.
  * This maintains backward compatibility while leveraging the generic component.
  */
-export function RaceAvatar({ raceName, size = 'md', className }: RaceAvatarProps) {
+export function RaceAvatar({
+  raceName,
+  size = 'md',
+  className,
+}: RaceAvatarProps) {
   return (
     <EntityAvatar
       entityName={raceName}
@@ -20,4 +24,4 @@ export function RaceAvatar({ raceName, size = 'md', className }: RaceAvatarProps
       className={className}
     />
   )
-} 
+}

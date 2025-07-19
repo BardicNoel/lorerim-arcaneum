@@ -14,18 +14,20 @@ export function SectionHeader({
   description,
   className,
   titleClassName,
-  descriptionClassName
+  descriptionClassName,
 }: SectionHeaderProps) {
   return (
-    <div className={cn("space-y-1", className)}>
-      <h3 className={cn("text-lg font-medium text-foreground", titleClassName)}>
+    <div className={cn('space-y-1', className)}>
+      <h3 className={cn('text-lg font-medium text-foreground', titleClassName)}>
         {title}
       </h3>
       {description && (
-        <p className={cn("text-sm text-muted-foreground", descriptionClassName)}>
+        <p
+          className={cn('text-sm text-muted-foreground', descriptionClassName)}
+        >
           {description}
         </p>
       )}
     </div>
   )
-} 
+}

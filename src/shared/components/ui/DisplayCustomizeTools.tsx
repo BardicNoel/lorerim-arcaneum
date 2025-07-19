@@ -1,5 +1,10 @@
 import React from 'react'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui/ui/accordion'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/shared/ui/ui/accordion'
 import { Settings } from 'lucide-react'
 
 interface DisplayCustomizeToolsProps {
@@ -12,13 +17,18 @@ interface DisplayCustomizeToolsProps {
 
 export function DisplayCustomizeTools({
   children,
-  title = "Customize Display",
-  description = "Configure what information to show",
+  title = 'Customize Display',
+  description = 'Configure what information to show',
   defaultOpen = false,
-  className
+  className,
 }: DisplayCustomizeToolsProps) {
   return (
-    <Accordion type="single" collapsible defaultValue={defaultOpen ? "customize-display" : undefined} className={className}>
+    <Accordion
+      type="single"
+      collapsible
+      defaultValue={defaultOpen ? 'customize-display' : undefined}
+      className={className}
+    >
       <AccordionItem value="customize-display" className="border-none">
         <AccordionTrigger className="hover:no-underline">
           <div className="flex items-center gap-2">
@@ -30,11 +40,9 @@ export function DisplayCustomizeTools({
           </div>
         </AccordionTrigger>
         <AccordionContent>
-          <div className="space-y-4 pt-2">
-            {children}
-          </div>
+          <div className="space-y-4 pt-2">{children}</div>
         </AccordionContent>
       </AccordionItem>
     </Accordion>
   )
-} 
+}
