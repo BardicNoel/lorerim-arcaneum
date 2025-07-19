@@ -1,21 +1,20 @@
-import { HashRouter } from 'react-router-dom'
-import { AppRouter } from './router'
-import { useNavigate } from 'react-router-dom'
-import { P } from '@/shared/ui/ui/typography'
-import { useState } from 'react'
+import { Z_INDEX } from '@/lib/constants'
+import { FloatingBuildButton } from '@/shared/components/FloatingBuildButton'
+import { useURLSync } from '@/shared/hooks/useURLSync'
 import { Sidebar } from '@/shared/ui/sidebar/Sidebar'
-import { SidebarHeader } from '@/shared/ui/sidebar/SidebarHeader'
 import { SidebarContent } from '@/shared/ui/sidebar/SidebarContent'
 import { SidebarGroup } from '@/shared/ui/sidebar/SidebarGroup'
+import { SidebarHeader } from '@/shared/ui/sidebar/SidebarHeader'
 import { SidebarMenu } from '@/shared/ui/sidebar/SidebarMenu'
-import { SidebarMenuItem } from '@/shared/ui/sidebar/SidebarMenuItem'
 import { SidebarMenuButton } from '@/shared/ui/sidebar/SidebarMenuButton'
+import { SidebarMenuItem } from '@/shared/ui/sidebar/SidebarMenuItem'
 import { SidebarRail } from '@/shared/ui/sidebar/SidebarRail'
-import { SiteHeader } from './SiteHeader'
-import { Z_INDEX } from '@/lib/constants'
+import { P } from '@/shared/ui/ui/typography'
 import { Home } from 'lucide-react'
-import { useURLSync } from '@/shared/hooks/useURLSync'
-import { FloatingBuildButton } from '@/shared/components/FloatingBuildButton'
+import { useState } from 'react'
+import { HashRouter, useNavigate } from 'react-router-dom'
+import { AppRouter } from './router'
+import { SiteHeader } from './SiteHeader'
 
 const navSections = [
   {
@@ -145,36 +144,41 @@ function AppSidebar({ collapsed }: { collapsed: boolean }) {
   )
 }
 
-function App() {
+// Component that uses URL sync inside Router context
+function AppContent() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
-  // Initialize URL sync for build state
+  // Initialize URL sync for build state (now inside Router context)
   useURLSync()
 
   return (
-    <HashRouter>
-      <div className="min-h-screen bg-background text-foreground flex flex-col">
-        <SiteHeader
-          sidebarCollapsed={sidebarCollapsed}
-          onToggleSidebar={() => setSidebarCollapsed(c => !c)}
-        />
-        <div className="flex flex-1">
-          <div
-            className={`transition-all duration-300 ease-in-out ${
-              sidebarCollapsed ? 'w-0' : 'w-64'
-            }`}
-            style={{ zIndex: Z_INDEX.SIDEBAR }}
-          >
-            <AppSidebar collapsed={sidebarCollapsed} />
-          </div>
-          <main
-            className={`flex-1 p-8 transition-all duration-300 ease-in-out`}
-          >
-            <AppRouter />
-          </main>
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      <SiteHeader
+        sidebarCollapsed={sidebarCollapsed}
+        onToggleSidebar={() => setSidebarCollapsed(c => !c)}
+      />
+      <div className="flex flex-1">
+        <div
+          className={`transition-all duration-300 ease-in-out ${
+            sidebarCollapsed ? 'w-0' : 'w-64'
+          }`}
+          style={{ zIndex: Z_INDEX.SIDEBAR }}
+        >
+          <AppSidebar collapsed={sidebarCollapsed} />
         </div>
+        <main className={`flex-1 p-8 transition-all duration-300 ease-in-out`}>
+          <AppRouter />
+        </main>
       </div>
       <FloatingBuildButton />
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <HashRouter>
+      <AppContent />
     </HashRouter>
   )
 }

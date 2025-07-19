@@ -1,6 +1,5 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import Tree from 'react-d3-tree'
-import { Badge } from '@/shared/ui/ui/badge'
 import type { DestinyNode, PlannedNode } from '../types'
 
 interface DestinyTreeViewProps {
