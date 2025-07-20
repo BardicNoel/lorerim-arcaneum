@@ -1,23 +1,17 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import {
-  X,
-  ChevronDown,
-  ChevronUp,
-  ArrowUpDown,
-  ArrowDownUp,
-  Settings,
-  Maximize2,
-  Minimize2,
-} from 'lucide-react'
 import { PlayerCreationLayout } from '@/shared/components/playerCreation'
+import type {
+  PlayerCreationItem,
+  SearchCategory,
+  SearchOption,
+  SelectedTag,
+} from '@/shared/components/playerCreation/types'
+import { AccordionGrid } from '@/shared/components/ui'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/shared/ui/ui/accordion'
-import { TraitAccordion, CustomMultiAutocompleteSearch } from '../components'
-import { useFuzzySearch } from '../hooks'
 import { Button } from '@/shared/ui/ui/button'
 import {
   DropdownMenu,
@@ -25,32 +19,38 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/ui/dropdown-menu'
-import { Switch } from '@/shared/ui/ui/switch'
 import { Label } from '@/shared/ui/ui/label'
-import type {
-  PlayerCreationItem,
-  SearchCategory,
-  SelectedTag,
-  SearchOption,
-} from '@/shared/components/playerCreation/types'
+import { Switch } from '@/shared/ui/ui/switch'
+import {
+  ChevronDown,
+  Grid3X3,
+  List,
+  Maximize2,
+  Minimize2,
+  Settings,
+  X,
+} from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { CustomMultiAutocompleteSearch, TraitAccordion } from '../components'
+import { useFuzzySearch } from '../hooks'
 import type { Trait } from '../types'
 import {
-  transformTraitToPlayerCreationItem,
   getAllCategories,
   getAllTags,
+  transformTraitToPlayerCreationItem,
 } from '../utils'
 
 type SortOption = 'alphabetical' | 'category' | 'effect-count'
+type ViewMode = 'list' | 'grid'
 
 export function AccordionTraitsPage() {
-  // Load trait data from public/data/traits.json at runtime
   const [traits, setTraits] = useState<Trait[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [expandedTraits, setExpandedTraits] = useState<Set<string>>(new Set())
+  const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
-
-  // Data visibility controls
+  const [expandedTraits, setExpandedTraits] = useState<Set<string>>(new Set())
+  const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [showEffects, setShowEffects] = useState(true)
   const [showSpells, setShowSpells] = useState(true)
   const [showTags, setShowTags] = useState(true)
@@ -118,9 +118,6 @@ export function AccordionTraitsPage() {
   }
 
   const searchCategories = generateSearchCategories()
-
-  // --- Custom tag/filter state for fuzzy search ---
-  const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
 
   // Add a tag (from autocomplete or custom input)
   const handleTagSelect = (optionOrTag: SearchOption | string) => {
@@ -246,11 +243,45 @@ export function AccordionTraitsPage() {
   const handleTraitToggle = (traitId: string) => {
     setExpandedTraits(prev => {
       const newSet = new Set(prev)
-      if (newSet.has(traitId)) {
-        newSet.delete(traitId)
+
+      if (viewMode === 'grid') {
+        // In grid mode, expand/collapse all items in the same row
+        const columns = 3 // Match the AccordionGrid columns prop
+        const itemIndex = sortedDisplayItems.findIndex(
+          item => item.id === traitId
+        )
+        const rowIndex = Math.floor(itemIndex / columns)
+        const rowStartIndex = rowIndex * columns
+        const rowEndIndex = Math.min(
+          rowStartIndex + columns,
+          sortedDisplayItems.length
+        )
+
+        // Check if any item in the row is currently expanded
+        const isRowExpanded = sortedDisplayItems
+          .slice(rowStartIndex, rowEndIndex)
+          .some(item => newSet.has(item.id))
+
+        if (isRowExpanded) {
+          // Collapse all items in the row
+          sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
+            newSet.delete(item.id)
+          })
+        } else {
+          // Expand all items in the row
+          sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
+            newSet.add(item.id)
+          })
+        }
       } else {
-        newSet.add(traitId)
+        // In list mode, toggle individual items
+        if (newSet.has(traitId)) {
+          newSet.delete(traitId)
+        } else {
+          newSet.add(traitId)
+        }
       }
+
       return newSet
     })
   }
@@ -333,6 +364,28 @@ export function AccordionTraitsPage() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        {/* View Mode Toggle */}
+        <div className="flex border rounded-lg p-1 bg-muted">
+          <Button
+            variant={viewMode === 'list' ? 'default' : 'ghost'}
+            size="sm"
+            onClick={() => setViewMode('list')}
+            className="h-8 px-3"
+            title="List view"
+          >
+            <List className="h-4 w-4" />
+          </Button>
+          <Button
+            variant={viewMode === 'grid' ? 'default' : 'ghost'}
+            size="sm"
+            onClick={() => setViewMode('grid')}
+            className="h-8 px-3"
+            title="Grid view"
+          >
+            <Grid3X3 className="h-4 w-4" />
+          </Button>
+        </div>
 
         {/* Expand/Collapse All Button */}
         <Button
@@ -463,37 +516,60 @@ export function AccordionTraitsPage() {
         </Accordion>
       )}
 
-      <div className="flex flex-col gap-4 w-full mt-6">
-        {sortedDisplayItems.map(item => {
-          const originalTrait = traits.find(trait => trait.edid === item.id)
-          const isExpanded = expandedTraits.has(item.id)
+      {viewMode === 'grid' ? (
+        <AccordionGrid columns={3} gap="md" className="w-full mt-6">
+          {sortedDisplayItems.map(item => {
+            const originalTrait = traits.find(trait => trait.edid === item.id)
+            const isExpanded = expandedTraits.has(item.id)
 
-          return (
-            <TraitAccordion
-              key={item.id}
-              item={item}
-              originalTrait={originalTrait}
-              isExpanded={isExpanded}
-              onToggle={() => handleTraitToggle(item.id)}
-              className="w-full"
-              showEffects={showEffects}
-              showSpells={showSpells}
-              showTags={showTags}
-            />
-          )
-        })}
+            return (
+              <TraitAccordion
+                key={item.id}
+                item={item}
+                originalTrait={originalTrait}
+                isExpanded={isExpanded}
+                onToggle={() => handleTraitToggle(item.id)}
+                className="w-full"
+                showEffects={showEffects}
+                showSpells={showSpells}
+                showTags={showTags}
+              />
+            )
+          })}
+        </AccordionGrid>
+      ) : (
+        <div className="flex flex-col gap-4 w-full mt-6">
+          {sortedDisplayItems.map(item => {
+            const originalTrait = traits.find(trait => trait.edid === item.id)
+            const isExpanded = expandedTraits.has(item.id)
 
-        {sortedDisplayItems.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              No traits found matching your criteria.
-            </p>
-            <p className="text-sm text-muted-foreground mt-2">
-              Try adjusting your search or filters.
-            </p>
-          </div>
-        )}
-      </div>
+            return (
+              <TraitAccordion
+                key={item.id}
+                item={item}
+                originalTrait={originalTrait}
+                isExpanded={isExpanded}
+                onToggle={() => handleTraitToggle(item.id)}
+                className="w-full"
+                showEffects={showEffects}
+                showSpells={showSpells}
+                showTags={showTags}
+              />
+            )
+          })}
+        </div>
+      )}
+
+      {sortedDisplayItems.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground">
+            No traits found matching your criteria.
+          </p>
+          <p className="text-sm text-muted-foreground mt-2">
+            Try adjusting your search or filters.
+          </p>
+        </div>
+      )}
     </PlayerCreationLayout>
   )
 }
