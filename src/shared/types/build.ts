@@ -5,12 +5,23 @@ export interface BuildState {
   race: string | null // EDID
   stone: string | null // EDID
   religion: string | null // EDID
-  traits: string[] // Array of EDIDs
+  traits: {
+    regular: string[] // Array of EDIDs
+    bonus: string[] // Array of EDIDs (requires game completion)
+  }
+  traitLimits: {
+    regular: number // Maximum number of regular traits (default: 2)
+    bonus: number // Maximum number of bonus traits (default: 1)
+  }
   skills: {
     major: string[] // Array of EDIDs
     minor: string[] // Array of EDIDs
   }
   equipment: string[] // Array of EDIDs
+  userProgress: {
+    gameCompleted: boolean // Whether user has completed the game
+    unlocks: string[] // Array of unlock IDs
+  }
 }
 
 export const DEFAULT_BUILD: BuildState = {
@@ -20,10 +31,21 @@ export const DEFAULT_BUILD: BuildState = {
   race: null,
   stone: null,
   religion: null,
-  traits: [],
+  traits: {
+    regular: [],
+    bonus: [],
+  },
+  traitLimits: {
+    regular: 2,
+    bonus: 1,
+  },
   skills: {
     major: [],
     minor: [],
   },
   equipment: [],
+  userProgress: {
+    gameCompleted: false,
+    unlocks: [],
+  },
 }

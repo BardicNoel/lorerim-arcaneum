@@ -1,7 +1,7 @@
-import React from 'react'
+import { cn } from '@/lib/utils'
 import { Button } from '@/shared/ui/ui/button'
 import { Pin, PinOff } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import React from 'react'
 
 interface PinButtonProps {
   itemId: string
@@ -35,8 +35,6 @@ export function PinButton({
     if (onToggle) {
       onToggle(itemId)
     }
-    // For now, this is a placeholder - no functionality
-    console.log(`Pin button clicked for item: ${itemId}`)
   }
 
   return (

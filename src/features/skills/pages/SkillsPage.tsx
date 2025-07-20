@@ -9,14 +9,14 @@ import type {
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import type { SkillLevel } from './SkillCard'
-import { SkillCard } from './SkillCard'
+import type { SkillLevel } from '../components/SkillCard'
+import { SkillCard } from '../components/SkillCard'
 
 const MAX_MAJORS = 3
 const MAX_MINORS = 3
 
-export function SkillCardDemo() {
-  const [skills, setSkills] = useState<Skill[]>([])
+export function SkillsPage() {
+  const [skillsData, setSkillsData] = useState<Skill[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
@@ -24,6 +24,8 @@ export function SkillCardDemo() {
   // Use the global build state
   const {
     build,
+    majorSkills,
+    minorSkills,
     addMajorSkill,
     removeMajorSkill,
     addMinorSkill,
@@ -46,7 +48,7 @@ export function SkillCardDemo() {
         const sortedSkills = (data.skills || []).sort((a: Skill, b: Skill) =>
           a.name.localeCompare(b.name)
         )
-        setSkills(sortedSkills)
+        setSkillsData(sortedSkills)
       } catch (err) {
         setError('Failed to load skills data')
         console.error('Error loading skills:', err)
@@ -58,17 +60,21 @@ export function SkillCardDemo() {
   }, [])
 
   const handleSkillLevelChange = (skillId: string, level: SkillLevel) => {
-    // Remove from both major and minor first
-    removeMajorSkill(skillId)
-    removeMinorSkill(skillId)
-
-    // Add to the appropriate category
+    // Remove from the appropriate category only
     if (level === 'major') {
-      addMajorSkill(skillId)
+      removeMinorSkill(skillId) // Remove from minor if present
+      addMajorSkill(skillId) // Add to major
     } else if (level === 'minor') {
-      addMinorSkill(skillId)
+      removeMajorSkill(skillId) // Remove from major if present
+      addMinorSkill(skillId) // Add to minor
+    } else {
+      // For 'none', only remove from the category where the skill actually exists
+      if (hasMajorSkill(skillId)) {
+        removeMajorSkill(skillId)
+      } else if (hasMinorSkill(skillId)) {
+        removeMinorSkill(skillId)
+      }
     }
-    // If level is 'none', we've already removed it from both
   }
 
   // Helper function to get current skill level from build state
@@ -79,8 +85,8 @@ export function SkillCardDemo() {
   }
 
   // Calculate current counts from build state
-  const majorCount = build.skills.major.length
-  const minorCount = build.skills.minor.length
+  const majorCount = majorSkills.length
+  const minorCount = minorSkills.length
 
   // Reset all skills function
   const resetAllSkills = () => {
@@ -94,8 +100,10 @@ export function SkillCardDemo() {
 
   // Generate search categories for skills
   const generateSearchCategories = (): SearchCategory[] => {
-    const allCategories = [...new Set(skills.map(skill => skill.category))]
-    const allMetaTags = [...new Set(skills.flatMap(skill => skill.metaTags))]
+    const allCategories = [...new Set(skillsData.map(skill => skill.category))]
+    const allMetaTags = [
+      ...new Set(skillsData.flatMap(skill => skill.metaTags)),
+    ]
 
     return [
       {
@@ -167,7 +175,7 @@ export function SkillCardDemo() {
   }
 
   // Apply filters to skills
-  const filteredSkills = skills.filter(skill => {
+  const filteredSkills = skillsData.filter(skill => {
     // If no tags are selected, show all skills
     if (selectedTags.length === 0) return true
 
@@ -311,8 +319,8 @@ export function SkillCardDemo() {
               </h4>
             </div>
             <div className="flex flex-wrap gap-2">
-              {build.skills.major.map(skillId => {
-                const skill = skills.find(s => s.edid === skillId)
+              {majorSkills.map(skillId => {
+                const skill = skillsData.find(s => s.edid === skillId)
                 if (!skill) return null
 
                 return (
@@ -331,7 +339,7 @@ export function SkillCardDemo() {
                   </div>
                 )
               })}
-              {build.skills.major.length === 0 && (
+              {majorSkills.length === 0 && (
                 <p className="text-yellow-600/70 text-sm italic">
                   No major skills selected
                 </p>
@@ -348,8 +356,8 @@ export function SkillCardDemo() {
               </h4>
             </div>
             <div className="flex flex-wrap gap-2">
-              {build.skills.minor.map(skillId => {
-                const skill = skills.find(s => s.edid === skillId)
+              {minorSkills.map(skillId => {
+                const skill = skillsData.find(s => s.edid === skillId)
                 if (!skill) return null
 
                 return (
@@ -368,7 +376,7 @@ export function SkillCardDemo() {
                   </div>
                 )
               })}
-              {build.skills.minor.length === 0 && (
+              {minorSkills.length === 0 && (
                 <p className="text-gray-500/70 text-sm italic">
                   No minor skills selected
                 </p>
@@ -382,7 +390,8 @@ export function SkillCardDemo() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold">
-            Available Skills ({fuzzyFilteredSkills.length} of {skills.length})
+            Available Skills ({fuzzyFilteredSkills.length} of{' '}
+            {skillsData.length})
           </h3>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 gap-4">

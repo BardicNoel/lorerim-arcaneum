@@ -1,96 +1,123 @@
-import React from 'react'
-import { Card, CardContent } from '@/shared/ui/ui/card'
-import { Badge } from '@/shared/ui/ui/badge'
-import { MarkdownText } from '@/shared/components/MarkdownText'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
+import {
+  SelectionCard,
+  type SelectionOption,
+} from '@/shared/components/ui/SelectionCard'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import { parseDescription } from '../utils/dataTransform'
 
 interface TraitCardProps {
   item: PlayerCreationItem
-  isSelected: boolean
 }
 
-export function TraitCard({ item, isSelected }: TraitCardProps) {
-  const getCategoryIcon = (category: string) => {
-    switch (category?.toLowerCase()) {
-      case 'magic':
-        return '✨'
-      case 'combat':
-        return '⚔️'
-      case 'stealth':
-        return '👤'
-      case 'crafting':
-        return '🔨'
-      case 'survival':
-        return '🌿'
-      default:
-        return '🎯'
+export function TraitCard({ item }: TraitCardProps) {
+  const {
+    hasRegularTrait,
+    hasBonusTrait,
+    addRegularTrait,
+    addBonusTrait,
+    removeTrait,
+    getRegularTraitLimit,
+    getBonusTraitLimit,
+    canAddRegularTrait,
+    canAddBonusTrait,
+  } = useCharacterBuild()
+
+  // Determine current trait level
+  const getTraitLevel = (): 'primary' | 'secondary' | 'none' => {
+    if (hasRegularTrait(item.id)) return 'primary'
+    if (hasBonusTrait(item.id)) return 'secondary'
+    return 'none'
+  }
+
+  const traitLevel = getTraitLevel()
+  const regularLimit = getRegularTraitLimit()
+  const bonusLimit = getBonusTraitLimit()
+
+  // Parse and clean the description
+  const cleanedDescription = parseDescription(item.description)
+
+  const handleTraitLevelChange = (value: string | undefined) => {
+    if (!value) {
+      // Clear the trait
+      removeTrait(item.id)
+    } else if (value === 'primary') {
+      if (traitLevel === 'primary') {
+        // Toggle off primary trait
+        removeTrait(item.id)
+      } else if (canAddRegularTrait()) {
+        // Add regular trait (this will automatically remove any existing trait)
+        removeTrait(item.id) // Clear any existing trait first
+        addRegularTrait(item.id)
+      }
+    } else if (value === 'secondary') {
+      if (traitLevel === 'secondary') {
+        // Toggle off secondary trait
+        removeTrait(item.id)
+      } else if (canAddBonusTrait()) {
+        // Add bonus trait (this will automatically remove any existing trait)
+        removeTrait(item.id) // Clear any existing trait first
+        addBonusTrait(item.id)
+      }
     }
   }
 
-  const getCategoryColor = (category: string) => {
-    switch (category?.toLowerCase()) {
-      case 'magic':
-        return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
-      case 'combat':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-      case 'stealth':
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
-      case 'crafting':
-        return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
-      case 'survival':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-      default:
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+  const isRegularLimitReached =
+    !canAddRegularTrait() && traitLevel !== 'primary'
+  const isBonusLimitReached = !canAddBonusTrait() && traitLevel !== 'secondary'
+
+  // Define selection options
+  const options: SelectionOption[] = [
+    {
+      value: 'primary',
+      label: '+ Regular',
+      color: {
+        selected: 'skyrim-gold',
+        hover: 'skyrim-gold/10',
+        border: 'skyrim-gold',
+      },
+      disabled: isRegularLimitReached,
+      tooltip: isRegularLimitReached
+        ? `Maximum ${regularLimit} regular traits reached`
+        : undefined,
+    },
+    {
+      value: 'secondary',
+      label: '+ Extra Unlock',
+      color: {
+        selected: 'skyrim-gold',
+        hover: 'skyrim-gold/10',
+        border: 'skyrim-gold',
+      },
+      disabled: isBonusLimitReached,
+      tooltip: isBonusLimitReached
+        ? `Maximum ${bonusLimit} extra unlock traits reached`
+        : undefined,
+    },
+  ]
+
+  // Define card theming based on selection state
+  const getCardTheming = (selectedValue: string | undefined) => {
+    if (selectedValue === 'primary') {
+      return 'border-yellow-500 bg-yellow-50/50 shadow-yellow-500/20'
     }
+    if (selectedValue === 'secondary') {
+      return 'border-gray-400 bg-gray-50/50 shadow-gray-400/20'
+    }
+    return ''
   }
 
   return (
-    <Card
-      className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
-        isSelected
-          ? 'ring-2 ring-primary ring-offset-2 bg-primary/5'
-          : 'hover:bg-muted/50'
-      }`}
-    >
-      <CardContent className="p-4">
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <span className="text-lg">
-              {getCategoryIcon(item.category || '')}
-            </span>
-            <h3 className="font-semibold text-lg leading-tight">{item.name}</h3>
-          </div>
-          {item.category && (
-            <Badge
-              variant="secondary"
-              className={`text-xs ${getCategoryColor(item.category)}`}
-            >
-              {item.category}
-            </Badge>
-          )}
-        </div>
-
-        <div className="mb-3 line-clamp-3">
-          <MarkdownText className="text-sm text-muted-foreground">
-            {item.description}
-          </MarkdownText>
-        </div>
-
-        {item.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {item.tags.slice(0, 3).map((tag, index) => (
-              <Badge key={index} variant="outline" className="text-xs">
-                {tag}
-              </Badge>
-            ))}
-            {item.tags.length > 3 && (
-              <Badge variant="outline" className="text-xs">
-                +{item.tags.length - 3} more
-              </Badge>
-            )}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+    <SelectionCard
+      title={item.name}
+      description={cleanedDescription}
+      options={options}
+      selectedValue={traitLevel}
+      onValueChange={handleTraitLevelChange}
+      minWidth="min-w-[320px]"
+      cardClassName={getCardTheming}
+      showCardTheming={true}
+      mutuallyExclusive={true}
+    />
   )
 }
