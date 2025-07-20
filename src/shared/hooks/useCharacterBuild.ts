@@ -133,6 +133,27 @@ export function useCharacterBuild() {
     })
   }
 
+  // Reset build (alias for clearBuild)
+  const resetBuild = clearBuild
+
+  // Get trait limits
+  const getRegularTraitLimit = () => build.traitLimits.regular
+  const getBonusTraitLimit = () => build.traitLimits.bonus
+
+  // Get build summary
+  const getSummary = () => {
+    return {
+      name: build.name || 'Unnamed Character',
+      race: build.race || 'Not selected',
+      stone: build.stone || 'Not selected',
+      religion: build.religion || 'Not selected',
+      traitCount: build.traits.regular.length + build.traits.bonus.length,
+      majorSkillCount: build.skills.major.length,
+      minorSkillCount: build.skills.minor.length,
+      equipmentCount: build.equipment.length,
+    }
+  }
+
   return {
     // Current build state
     build,
@@ -165,5 +186,11 @@ export function useCharacterBuild() {
     // Build management
     updateBuild,
     clearBuild,
+    resetBuild,
+
+    // Summary and limits
+    getSummary,
+    getRegularTraitLimit,
+    getBonusTraitLimit,
   }
 }

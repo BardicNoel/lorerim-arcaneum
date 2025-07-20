@@ -3,3 +3,71 @@ description:
 globs:
 alwaysApply: false
 ---
+
+# Ancillary Rule: State Management for React with Zustand
+
+## 🎯 Objective
+
+Define clear guidelines for using **Zustand** vs **React local state** in React/Vite/Tailwind projects. Agents must apply these rules during critical analysis to enforce consistent and maintainable state management practices.
+
+---
+
+## 🏗 State Management Principles
+
+### ✅ Use React Local State When
+
+- The state is **only used within a single component** or a tightly coupled subtree.
+- It is **transient UI state** (e.g., `isOpen`, `hovered`, `formInputValue`).
+- The data does not need to be shared between unrelated components.
+- The state should reset on unmount (e.g., temporary form drafts).
+
+### ✅ Use Zustand Store When
+
+- The state needs to be **shared across multiple components** in different parts of the tree.
+- The state is **long-lived** and should persist across navigations.
+- The state involves **complex business logic or derived selectors**.
+- You require features like **persistence** (localStorage/sessionStorage) or middleware (e.g., logging, devtools).
+- Mutations need to be invoked from outside React components (e.g., background processes).
+
+### 🚫 Avoid Using Zustand For
+
+- Ephemeral, UI-only state tied to a single component's lifecycle.
+- Situations where lifting state up or using context is sufficient.
+- Storing derived values that can be computed directly in React.
+
+---
+
+## 🔥 Best Practices for Zustand
+
+- **Fine-grained subscriptions:** Use selectors (`useStore(state => state.value)`) to avoid unnecessary re-renders.
+- **Colocate mutations:** Keep state mutations inside the store definition rather than scattering them in components.
+- **Keep stores flat:** Avoid deeply nested state trees in Zustand; prefer multiple small stores if needed.
+
+---
+
+## 📌 Agent Checklist
+
+- [ ] Check if React local state is used for component-local, UI-specific data.
+- [ ] Verify Zustand is only used for shared or persistent state.
+- [ ] Ensure components subscribe to specific store slices using selectors.
+- [ ] Flag any unnecessary Zustand usage for single-component state.
+
+---
+
+## 💡 Example
+
+### ❌ Bad
+
+```tsx
+const [isOpen, setIsOpen] = useStore(state => [state.isOpen, state.setIsOpen])
+```
+
+_Problem:_ UI-only state pulled into global store.
+
+### ✅ Good
+
+```tsx
+const [isOpen, setIsOpen] = useState(false)
+```
+
+_Reason:_ `isOpen` only affects this compone
