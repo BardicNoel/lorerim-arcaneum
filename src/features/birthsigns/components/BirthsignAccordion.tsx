@@ -382,6 +382,14 @@ export function BirthsignAccordion({
       {/* Expanded Content */}
       <AccordionExpandedContentSlot>
         <div className="space-y-6">
+          {/* Description */}
+          <div>
+            <FormattedText
+              text={parsedDescription}
+              className="text-sm text-muted-foreground leading-relaxed"
+            />
+          </div>
+
           {/* Stats Section */}
           {showStats && originalBirthsign.stat_modifications.length > 0 && (
             <div>
