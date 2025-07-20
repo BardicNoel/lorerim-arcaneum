@@ -29,6 +29,7 @@ import {
 import React from 'react'
 import type { Birthsign } from '../types'
 import { getUserFriendlyStat, parseDescription } from '../utils'
+import { BirthsignAvatar } from './BirthsignAvatar'
 
 /**
  * Component to format any description with highlighted values in angle brackets, numeric stat increases, and bold attributes/skills
@@ -243,13 +244,7 @@ const effectIcons: Record<string, React.ReactNode> = {
   power: <Lightning className="h-4 w-4 text-yellow-500" />,
 }
 
-const groupIcons: Record<string, string> = {
-  Warrior: '⚔️',
-  Mage: '🔮',
-  Thief: '🗡️',
-  Serpent: '🐍',
-  Other: '⭐',
-}
+
 
 // Birthsign group styling - matching religion type styling pattern
 const birthsignGroupStyles: Record<string, string> = {
@@ -279,8 +274,6 @@ export function BirthsignAccordion({
   showEffects = true,
 }: BirthsignAccordionProps) {
   if (!originalBirthsign) return null
-
-  const groupIcon = groupIcons[originalBirthsign.group] || groupIcons['Other']
 
   const getEffectIcon = (effectType: string) => {
     return (
@@ -325,7 +318,7 @@ export function BirthsignAccordion({
       <AccordionHeader>
         {/* Left side: Icon + Name */}
         <div className="flex items-center gap-3">
-          <span className="text-2xl">{groupIcon}</span>
+          <BirthsignAvatar birthsignName={originalBirthsign.name} size="md" />
           <H3 className="text-primary font-semibold">
             {originalBirthsign.name}
           </H3>
