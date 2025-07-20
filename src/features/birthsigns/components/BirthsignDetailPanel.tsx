@@ -7,19 +7,14 @@ import { cn } from '@/lib/utils'
 import type { Birthsign } from '../types'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { parseDescription, getUserFriendlyStat } from '../utils/dataTransform'
+import { BirthsignAvatar } from './BirthsignAvatar'
 
 interface BirthsignDetailPanelProps {
   birthsign: Birthsign
   item: PlayerCreationItem
 }
 
-const groupIcons: Record<string, string> = {
-  Warrior: '⚔️',
-  Mage: '🔮',
-  Thief: '🗡️',
-  Serpent: '🐍',
-  Other: '⭐',
-}
+
 
 const effectTypeColors: Record<string, string> = {
   bonus: 'bg-green-100 text-green-800 border-green-200',
@@ -31,7 +26,6 @@ export function BirthsignDetailPanel({
   birthsign,
   item,
 }: BirthsignDetailPanelProps) {
-  const groupIcon = groupIcons[birthsign.group] || groupIcons['Other']
   const parsedDescription = parseDescription(birthsign.description)
 
   // Generate tags from the birthsign data
@@ -46,7 +40,7 @@ export function BirthsignDetailPanel({
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
-        <span className="text-3xl">{groupIcon}</span>
+        <BirthsignAvatar birthsignName={birthsign.name} size="lg" />
         <div>
           <h2 className="text-2xl font-bold">{birthsign.name}</h2>
           <p className="text-muted-foreground">{birthsign.group} Birthsign</p>
@@ -70,7 +64,7 @@ export function BirthsignDetailPanel({
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">📋 Overview</TabsTrigger>
           <TabsTrigger value="stats">⚡ Stats</TabsTrigger>
-          <TabsTrigger value="powers">🔮 Powers</TabsTrigger>
+          <TabsTrigger value="powers">Powers</TabsTrigger>
           <TabsTrigger value="effects">🎯 Effects</TabsTrigger>
         </TabsList>
 
