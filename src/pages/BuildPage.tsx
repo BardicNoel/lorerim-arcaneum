@@ -1,3 +1,5 @@
+import { RaceSelectionCard } from '@/features/races/components'
+import { TraitSelectionCard } from '@/features/traits/components'
 import { FloatingBuildButton } from '@/shared/components/FloatingBuildButton'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Badge } from '@/shared/ui/ui/badge'
@@ -9,33 +11,26 @@ import { AlertTriangle, Info } from 'lucide-react'
 import { useState } from 'react'
 
 export function BuildPage() {
-  const {
-    build,
-    setName,
-    setNotes,
-    setGameCompleted,
-    isGameCompleted,
-    setRegularTraitLimit,
-    setBonusTraitLimit,
-    getRegularTraitLimit,
-    getBonusTraitLimit,
-    getRegularTraitCount,
-    getBonusTraitCount,
-  } = useCharacterBuild()
+  const { build, setBuildName, setBuildNotes, updateBuild } =
+    useCharacterBuild()
 
-  const [regularLimit, setRegularLimit] = useState(getRegularTraitLimit())
-  const [bonusLimit, setBonusLimit] = useState(getBonusTraitLimit())
+  const [regularLimit, setRegularLimit] = useState(build.traitLimits.regular)
+  const [bonusLimit, setBonusLimit] = useState(build.traitLimits.bonus)
 
   const handleRegularLimitChange = (value: string) => {
     const numValue = parseInt(value) || 0
     setRegularLimit(numValue)
-    setRegularTraitLimit(numValue)
+    updateBuild({
+      traitLimits: { ...build.traitLimits, regular: numValue },
+    })
   }
 
   const handleBonusLimitChange = (value: string) => {
     const numValue = parseInt(value) || 0
     setBonusLimit(numValue)
-    setBonusTraitLimit(numValue)
+    updateBuild({
+      traitLimits: { ...build.traitLimits, bonus: numValue },
+    })
   }
 
   const isUsingCustomLimits = regularLimit !== 2 || bonusLimit !== 1
@@ -48,64 +43,77 @@ export function BuildPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Basic Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Basic Information</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="name">Character Name</Label>
-              <Input
-                id="name"
-                value={build.name}
-                onChange={e => setName(e.target.value)}
-                placeholder="Enter character name..."
-              />
-            </div>
-            <div>
-              <Label htmlFor="notes">Notes</Label>
-              <textarea
-                id="notes"
-                value={build.notes}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                  setNotes(e.target.value)
-                }
-                placeholder="Add character notes, roleplay details, or build explanations..."
-                rows={4}
-                className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              />
-            </div>
-          </CardContent>
-        </Card>
+        {/* Race Selection and Display */}
+        <RaceSelectionCard />
 
-        {/* Game Progress */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Game Progress</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <Label htmlFor="game-completed">Game Completed</Label>
-                <p className="text-sm text-muted-foreground">
-                  Unlocks late game trait slot
-                </p>
-              </div>
-              <Switch
-                id="game-completed"
-                checked={isGameCompleted()}
-                onCheckedChange={setGameCompleted}
-              />
-            </div>
-            {isGameCompleted() && (
-              <Badge variant="secondary" className="w-fit">
-                Late game traits unlocked
-              </Badge>
-            )}
-          </CardContent>
-        </Card>
+        {/* Trait Selection and Display */}
+        <TraitSelectionCard />
       </div>
+
+      {/* Basic Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Basic Information</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label htmlFor="name">Character Name</Label>
+            <Input
+              id="name"
+              value={build.name}
+              onChange={e => setBuildName(e.target.value)}
+              placeholder="Enter character name..."
+            />
+          </div>
+          <div>
+            <Label htmlFor="notes">Notes</Label>
+            <textarea
+              id="notes"
+              value={build.notes}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                setBuildNotes(e.target.value)
+              }
+              placeholder="Add character notes, roleplay details, or build explanations..."
+              rows={4}
+              className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Game Progress */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Game Progress</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <Label htmlFor="game-completed">Game Completed</Label>
+              <p className="text-sm text-muted-foreground">
+                Unlocks late game trait slot
+              </p>
+            </div>
+            <Switch
+              id="game-completed"
+              checked={build.userProgress.gameCompleted}
+              onCheckedChange={checked =>
+                updateBuild({
+                  userProgress: {
+                    ...build.userProgress,
+                    gameCompleted: checked,
+                  },
+                })
+              }
+            />
+          </div>
+          {build.userProgress.gameCompleted && (
+            <Badge variant="secondary" className="w-fit">
+              Late game traits unlocked
+            </Badge>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Trait Limits Configuration */}
       <Card>
@@ -141,7 +149,7 @@ export function BuildPage() {
                 className="mt-1"
               />
               <p className="text-xs text-muted-foreground mt-1">
-                Currently selected: {getRegularTraitCount()}
+                Currently selected: {build.traits.regular.length}
               </p>
             </div>
             <div>
@@ -156,8 +164,9 @@ export function BuildPage() {
                 className="mt-1"
               />
               <p className="text-xs text-muted-foreground mt-1">
-                Currently selected: {getBonusTraitCount()}
-                {!isGameCompleted() && ' (requires game completion)'}
+                Currently selected: {build.traits.bonus.length}
+                {!build.userProgress.gameCompleted &&
+                  ' (requires game completion)'}
               </p>
             </div>
           </div>
@@ -203,8 +212,8 @@ export function BuildPage() {
             <div>
               <span className="font-medium">Traits:</span>
               <div className="text-muted-foreground">
-                {getRegularTraitCount()}/{regularLimit} regular,{' '}
-                {getBonusTraitCount()}/{bonusLimit} extra unlock
+                {build.traits.regular.length}/{regularLimit} regular,{' '}
+                {build.traits.bonus.length}/{bonusLimit} extra unlock
               </div>
             </div>
           </div>

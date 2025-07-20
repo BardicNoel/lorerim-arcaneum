@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils'
 import { PlayerCreationLayout } from '@/shared/components/playerCreation'
 import type {
   PlayerCreationItem,
@@ -6,9 +7,11 @@ import type {
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
 import { AccordionGrid } from '@/shared/components/ui'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Button } from '@/shared/ui/ui/button'
-import { Grid3X3, List, X } from 'lucide-react'
+import { ArrowLeft, Grid3X3, List, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { CustomMultiAutocompleteSearch } from '../components/CustomMultiAutocompleteSearch'
 import { RaceAccordion } from '../components/RaceAccordion'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
@@ -18,6 +21,9 @@ import { transformRaceToPlayerCreationItem } from '../utils/dataTransform'
 type ViewMode = 'list' | 'grid'
 
 export function AccordionRacesPage() {
+  const navigate = useNavigate()
+  const { build } = useCharacterBuild()
+
   // Load race data from public/data/playable-races.json at runtime
   const [races, setRaces] = useState<Race[]>([])
   const [loading, setLoading] = useState(true)
@@ -262,6 +268,19 @@ export function AccordionRacesPage() {
       title="Races"
       description="Choose your character's race. Each race has unique abilities, starting attributes, and racial traits that will shape your journey through Tamriel."
     >
+      {/* Header with back button */}
+      <div className="flex items-center justify-between mb-6">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => navigate('/build')}
+          className="flex items-center gap-2"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Build
+        </Button>
+      </div>
+
       {/* Custom MultiAutocompleteSearch with FuzzySearchBox for keywords */}
       <div className="flex items-center gap-4 mb-4">
         <div className="flex-1">
@@ -334,6 +353,7 @@ export function AccordionRacesPage() {
               race => race.edid.toLowerCase().replace('race', '') === item.id
             )
             const isExpanded = expandedRaces.has(item.id)
+            const isSelected = build.race === originalRace?.edid
 
             return (
               <RaceAccordion
@@ -342,7 +362,11 @@ export function AccordionRacesPage() {
                 originalRace={originalRace}
                 isExpanded={isExpanded}
                 onToggle={() => handleRaceToggle(item.id)}
-                className="w-full"
+                className={cn(
+                  'w-full',
+                  isSelected &&
+                    'bg-skyrim-gold/20 border-2 border-skyrim-gold/30 shadow-sm'
+                )}
               />
             )
           })}
@@ -354,6 +378,7 @@ export function AccordionRacesPage() {
               race => race.edid.toLowerCase().replace('race', '') === item.id
             )
             const isExpanded = expandedRaces.has(item.id)
+            const isSelected = build.race === originalRace?.edid
 
             return (
               <RaceAccordion
@@ -362,7 +387,11 @@ export function AccordionRacesPage() {
                 originalRace={originalRace}
                 isExpanded={isExpanded}
                 onToggle={() => handleRaceToggle(item.id)}
-                className="w-full"
+                className={cn(
+                  'w-full',
+                  isSelected &&
+                    'bg-skyrim-gold/20 border-2 border-skyrim-gold/30 shadow-sm'
+                )}
               />
             )
           })}

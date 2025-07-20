@@ -1,33 +1,18 @@
-import React from 'react'
-import { Badge } from '@/shared/ui/ui/badge'
-import { H3, P } from '@/shared/ui/ui/typography'
-import {
-  Star,
-  Shield,
-  Zap,
-  Heart,
-  Brain,
-  Target,
-  Flame,
-  Droplets,
-  Skull,
-  Sword,
-  BookOpen,
-  Eye,
-  Hand,
-} from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
-import type { Race } from '../types'
-import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
-import { RaceAvatar } from './RaceAvatar'
 import {
-  GenericAccordionCard,
-  AccordionLeftControls,
-  AccordionHeader,
   AccordionCollapsedContentSlot,
   AccordionExpandedContentSlot,
+  AccordionHeader,
+  AccordionLeftControls,
+  GenericAccordionCard,
 } from '@/shared/components/generic'
+import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
+import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
+import { Badge } from '@/shared/ui/ui/badge'
+import { H3, P } from '@/shared/ui/ui/typography'
+import { Star } from 'lucide-react'
+import type { Race } from '../types'
+import { RaceAvatar } from './RaceAvatar'
 
 interface RaceAccordionProps {
   item: PlayerCreationItem
@@ -53,7 +38,7 @@ export function RaceAccordion({
       {/* Left Controls */}
       <AccordionLeftControls>
         <AddToBuildSwitchSimple
-          itemId={item.id}
+          itemId={originalRace?.edid || item.id}
           itemType="race"
           itemName={item.name}
         />

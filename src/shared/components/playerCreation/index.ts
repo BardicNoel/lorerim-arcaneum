@@ -1,22 +1,22 @@
 // New composable components (recommended)
 export {
-  PlayerCreationLayout,
   PlayerCreationContent,
-  PlayerCreationItemsSection,
   PlayerCreationDetailSection,
   PlayerCreationEmptyDetail,
   PlayerCreationFilters,
+  PlayerCreationItemsSection,
+  PlayerCreationLayout,
 } from './layout'
 
 // Existing components
-export { MultiAutocompleteSearch } from './MultiAutocompleteSearch'
-export { SelectedTags } from './SelectedTags'
-export { ItemGrid } from './ItemGrid'
-export { DetailPanel } from './DetailPanel'
 export { AutocompleteSearch } from './AutocompleteSearch'
+export { DetailPanel } from './DetailPanel'
 export { FilterSidebar } from './FilterSidebar'
-export { SearchBar } from './SearchBar'
 export { GenericItemCard } from './GenericItemCard'
+export { ItemGrid } from './ItemGrid'
+export { MultiAutocompleteSearch } from './MultiAutocompleteSearch'
+export { SearchBar } from './SearchBar'
+export { SelectedTags } from './SelectedTags'
 
 // Build and Pin controls
 export { AddToBuildButton } from './AddToBuildButton'
@@ -30,3 +30,9 @@ export { PlayerCreationPage } from './PlayerCreationPage'
 
 // Types
 export type * from './types'
+
+// Generic entity components for build page
+export { EntityDisplayCard } from './EntityDisplayCard'
+export type { EntityDetail } from './EntityDisplayCard'
+export { EntitySelectionCard } from './EntitySelectionCard'
+export type { EntityOption } from './EntitySelectionCard'

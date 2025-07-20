@@ -1,0 +1,102 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+
+# Cursor Rule: Connecting to GitHub for Issue Data
+
+## 🎯 Objective
+
+Cursor agents must connect to GitHub to pull issue data for a repository. Agents should accept the **issue number as a prompt argument** instead of relying on `.env` for dynamic selection.
+
+---
+
+## 🔒 Configuration
+
+- Read `GITHUB_TOKEN`, `GITHUB_OWNER`, and `GITHUB_REPO` from the environment.
+- Do not store or hardcode issue numbers in `.env`.
+
+Example `.env` configuration:
+
+```bash
+GITHUB_OWNER=BardicNoel
+GITHUB_REPO=lorerim-arcaneum
+GITHUB_TOKEN=<read from variable>
+```
+
+---
+
+## 📡 API Usage
+
+### REST API
+
+Fetch a specific issue:
+
+```bash
+GET /repos/$GITHUB_OWNER/$GITHUB_REPO/issues/<issue_number>
+Authorization: token $GITHUB_TOKEN
+Accept: application/vnd.github.v3+json
+```
+
+### GraphQL API
+
+Query a specific issue:
+
+```graphql
+query {
+  repository(owner: "BardicNoel", name: "lorerim-arcaneum") {
+    issue(number: <issue_number>) {
+      number
+      title
+      body
+      labels(first: 5) { nodes { name } }
+    }
+  }
+}
+```
+
+Headers:
+
+```
+Authorization: bearer $GITHUB_TOKEN
+Content-Type: application/json
+```
+
+---
+
+## 🏗 Agent Behavior
+
+- Accept **issue number as prompt input or argument**.
+  - Example: `readGithubIssue 42`
+
+- Prompt user for issue number if not supplied.
+
+  > "Which GitHub issue should I fetch from BardicNoel/lorerim-arcaneum? (e.g., 42)"
+
+- Fetch and return issue details (title, body, labels).
+- Cache results locally to minimize API requests.
+
+---
+
+## 📌 Enforcement Checklist
+
+- [ ] Issue number must not be read from `.env`.
+- [ ] Require `GITHUB_OWNER`, `GITHUB_REPO`, and `GITHUB_TOKEN` in `.env`.
+- [ ] Accept issue number dynamically from user input.
+- [ ] Handle rate limits and API errors gracefully.
+
+---
+
+## 💡 Example Usage
+
+**Prompt:**
+
+```
+readGithubIssue 17
+```
+
+**Agent Response:**
+
+> ✅ Issue #17: "Add perk dependency resolution"
+> 📄 _This issue tracks parsing perk dependency chains for Lorerim._

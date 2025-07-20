@@ -6,6 +6,7 @@ export function useCharacterBuild() {
   const minorSkills = useCharacterStore(state => state.build.skills.minor)
   const build = useCharacterStore(state => state.build)
   const updateBuild = useCharacterStore(state => state.updateBuild)
+  const resetBuild = useCharacterStore(state => state.resetBuild)
 
   // Helper functions
   const hasMajorSkill = (skillId: string) => majorSkills.includes(skillId)
@@ -79,6 +80,28 @@ export function useCharacterBuild() {
     // If both are full, don't add (this should be prevented by UI)
   }
 
+  const addRegularTrait = (traitId: string) => {
+    const { regular } = build.traits
+    const { regular: regularLimit } = build.traitLimits
+
+    if (regular.length < regularLimit) {
+      updateBuild({
+        traits: { ...build.traits, regular: [...regular, traitId] },
+      })
+    }
+  }
+
+  const addBonusTrait = (traitId: string) => {
+    const { bonus } = build.traits
+    const { bonus: bonusLimit } = build.traitLimits
+
+    if (bonus.length < bonusLimit) {
+      updateBuild({
+        traits: { ...build.traits, bonus: [...bonus, traitId] },
+      })
+    }
+  }
+
   const removeTrait = (traitId: string) => {
     const { regular, bonus } = build.traits
     updateBuild({
@@ -96,6 +119,14 @@ export function useCharacterBuild() {
     )
   }
 
+  const hasRegularTrait = (traitId: string) => {
+    return build.traits.regular.includes(traitId)
+  }
+
+  const hasBonusTrait = (traitId: string) => {
+    return build.traits.bonus.includes(traitId)
+  }
+
   // Race management
   const setRace = (raceId: string | null) => {
     updateBuild({ race: raceId })
@@ -104,6 +135,31 @@ export function useCharacterBuild() {
   // Birthsign management
   const setBirthsign = (birthsignId: string | null) => {
     updateBuild({ stone: birthsignId })
+  }
+
+  // Alias for setBirthsign (for backward compatibility)
+  const setStone = (stoneId: string | null) => {
+    updateBuild({ stone: stoneId })
+  }
+
+  // Religion management
+  const setReligion = (religionId: string | null) => {
+    updateBuild({ religion: religionId })
+  }
+
+  // Equipment management
+  const addEquipment = (equipmentId: string) => {
+    if (!build.equipment.includes(equipmentId)) {
+      updateBuild({
+        equipment: [...build.equipment, equipmentId],
+      })
+    }
+  }
+
+  const removeEquipment = (equipmentId: string) => {
+    updateBuild({
+      equipment: build.equipment.filter(id => id !== equipmentId),
+    })
   }
 
   // Build name and notes
@@ -133,6 +189,34 @@ export function useCharacterBuild() {
     })
   }
 
+  // Build summary for display
+  const getSummary = () => {
+    return {
+      name: build.name || 'Unnamed Character',
+      race: build.race || 'Not selected',
+      stone: build.stone || 'Not selected',
+      religion: build.religion || 'Not selected',
+      traitCount: build.traits.regular.length + build.traits.bonus.length,
+      majorSkillCount: build.skills.major.length,
+      minorSkillCount: build.skills.minor.length,
+      equipmentCount: build.equipment.length,
+    }
+  }
+
+  // Trait limit getters
+  const getRegularTraitLimit = () => build.traitLimits.regular
+  const getBonusTraitLimit = () => build.traitLimits.bonus
+
+  // Trait count getters
+  const getRegularTraitCount = () => build.traits.regular.length
+  const getBonusTraitCount = () => build.traits.bonus.length
+
+  // Trait availability checkers
+  const canAddRegularTrait = () =>
+    build.traits.regular.length < build.traitLimits.regular
+  const canAddBonusTrait = () =>
+    build.traits.bonus.length < build.traitLimits.bonus
+
   return {
     // Current build state
     build,
@@ -151,12 +235,22 @@ export function useCharacterBuild() {
 
     // Trait management
     addTrait,
+    addRegularTrait,
+    addBonusTrait,
     removeTrait,
     hasTrait,
+    hasRegularTrait,
+    hasBonusTrait,
 
     // Race and birthsign
     setRace,
     setBirthsign,
+    setStone,
+    setReligion,
+
+    // Equipment management
+    addEquipment,
+    removeEquipment,
 
     // Build metadata
     setBuildName,
@@ -165,5 +259,17 @@ export function useCharacterBuild() {
     // Build management
     updateBuild,
     clearBuild,
+    resetBuild,
+
+    // Build summary
+    getSummary,
+
+    // Trait limits and counts
+    getRegularTraitLimit,
+    getBonusTraitLimit,
+    getRegularTraitCount,
+    getBonusTraitCount,
+    canAddRegularTrait,
+    canAddBonusTrait,
   }
 }

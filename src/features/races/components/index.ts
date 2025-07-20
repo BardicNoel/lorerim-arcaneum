@@ -1,5 +1,11 @@
-export { RaceAccordion } from './RaceAccordion'
 export { CategoryBadge } from './CategoryBadge'
-export { StatBar } from './StatBar'
 export { KeywordTag } from './KeywordTag'
 export { PageShell } from './PageShell'
+export { RaceAccordion } from './RaceAccordion'
+export { StatBar } from './StatBar'
+
+// Unified race card component
+export { RaceCard } from './RaceCard'
+
+// Build page components
+export { RaceSelectionCard } from './RaceSelectionCard'
