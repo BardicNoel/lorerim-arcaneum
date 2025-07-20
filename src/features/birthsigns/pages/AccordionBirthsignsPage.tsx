@@ -30,12 +30,12 @@ import {
   Settings,
   X,
 } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import {
   BirthsignAccordion,
   CustomMultiAutocompleteSearch,
 } from '../components'
-import { useFuzzySearch } from '../hooks'
+import { useFuzzySearch, useBirthsignData, useBirthsignFilters, useDisplayControls } from '../hooks'
 import type { Birthsign } from '../types'
 import {
   getAllGroups,
@@ -43,45 +43,34 @@ import {
   transformBirthsignToPlayerCreationItem,
 } from '../utils'
 
-type SortOption = 'alphabetical' | 'group' | 'power-count'
-type ViewMode = 'list' | 'grid'
-
 export function AccordionBirthsignsPage() {
-  // Load birthsign data from public/data/birthsigns.json at runtime
-  const [birthsigns, setBirthsigns] = useState<Birthsign[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [expandedBirthsigns, setExpandedBirthsigns] = useState<Set<string>>(
-    new Set()
-  )
-  const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
-  const [viewMode, setViewMode] = useState<ViewMode>('grid')
-
-  // Data visibility controls
-  const [showStats, setShowStats] = useState(true)
-  const [showPowers, setShowPowers] = useState(true)
-  const [showSkills, setShowSkills] = useState(true)
-  const [showEffects, setShowEffects] = useState(true)
-
-  useEffect(() => {
-    async function fetchBirthsigns() {
-      try {
-        setLoading(true)
-        const res = await fetch(
-          `${import.meta.env.BASE_URL}data/birthsigns.json`
-        )
-        if (!res.ok) throw new Error('Failed to fetch birthsign data')
-        const data = await res.json()
-        setBirthsigns(data)
-      } catch (err) {
-        setError('Failed to load birthsign data')
-        console.error('Error loading birthsigns:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchBirthsigns()
-  }, [])
+  // Use custom hooks for state management
+  const { birthsigns, loading, error, refetch } = useBirthsignData()
+  const {
+    selectedTags,
+    sortBy,
+    viewMode,
+    expandedBirthsigns,
+    addTag,
+    removeTag,
+    clearAllTags,
+    setSort,
+    setViewMode,
+    toggleExpanded,
+    expandAll,
+    collapseAll,
+  } = useBirthsignFilters()
+  const {
+    showStats,
+    showPowers,
+    showSkills,
+    showEffects,
+    toggleStats,
+    togglePowers,
+    toggleSkills,
+    toggleEffects,
+    toggleAll,
+  } = useDisplayControls()
 
   // Convert birthsigns to PlayerCreationItem format for consolidated view
   const birthsignItems: PlayerCreationItem[] = useMemo(() => {
@@ -129,9 +118,6 @@ export function AccordionBirthsignsPage() {
 
   const searchCategories = generateSearchCategories()
 
-  // --- Custom tag/filter state for fuzzy search ---
-  const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
-
   // Add a tag (from autocomplete or custom input)
   const handleTagSelect = (optionOrTag: SearchOption | string) => {
     let tag: SelectedTag
@@ -150,19 +136,7 @@ export function AccordionBirthsignsPage() {
         category: optionOrTag.category,
       }
     }
-    // Prevent duplicate tags
-    if (
-      !selectedTags.some(
-        t => t.value === tag.value && t.category === tag.category
-      )
-    ) {
-      setSelectedTags(prev => [...prev, tag])
-    }
-  }
-
-  // Remove a tag
-  const handleTagRemove = (tagId: string) => {
-    setSelectedTags(prev => prev.filter(tag => tag.id !== tagId))
+    addTag(tag)
   }
 
   // Apply all filters to birthsigns
@@ -256,8 +230,6 @@ export function AccordionBirthsignsPage() {
 
   // Handle accordion expansion
   const handleBirthsignToggle = (birthsignId: string) => {
-    const newExpanded = new Set(expandedBirthsigns)
-
     if (viewMode === 'grid') {
       // In grid mode, expand/collapse all items in the same row
       const columns = 3 // Match the AccordionGrid columns prop
@@ -274,40 +246,42 @@ export function AccordionBirthsignsPage() {
       // Check if any item in the row is currently expanded
       const isRowExpanded = sortedDisplayItems
         .slice(rowStartIndex, rowEndIndex)
-        .some(item => newExpanded.has(item.id))
+        .some(item => expandedBirthsigns.has(item.id))
 
       if (isRowExpanded) {
         // Collapse all items in the row
+        const newExpanded = new Set(expandedBirthsigns)
         sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
           newExpanded.delete(item.id)
         })
+        // Update state by collapsing all and then expanding the remaining items
+        collapseAll()
+        const remainingExpanded = Array.from(newExpanded)
+        if (remainingExpanded.length > 0) {
+          expandAll(remainingExpanded)
+        }
       } else {
         // Expand all items in the row
-        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
-          newExpanded.add(item.id)
-        })
+        const rowIds = sortedDisplayItems
+          .slice(rowStartIndex, rowEndIndex)
+          .map(item => item.id)
+        expandAll([...Array.from(expandedBirthsigns), ...rowIds])
       }
     } else {
       // In list mode, toggle individual items
-      if (newExpanded.has(birthsignId)) {
-        newExpanded.delete(birthsignId)
-      } else {
-        newExpanded.add(birthsignId)
-      }
+      toggleExpanded(birthsignId)
     }
-
-    setExpandedBirthsigns(newExpanded)
   }
 
   // Handle expand all accordions
   const handleExpandAll = () => {
     const allBirthsignIds = sortedDisplayItems.map(item => item.id)
-    setExpandedBirthsigns(new Set(allBirthsignIds))
+    expandAll(allBirthsignIds)
   }
 
   // Handle collapse all accordions
   const handleCollapseAll = () => {
-    setExpandedBirthsigns(new Set())
+    collapseAll()
   }
 
   // Check if all accordions are expanded
@@ -379,13 +353,13 @@ export function AccordionBirthsignsPage() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setSortBy('alphabetical')}>
+            <DropdownMenuItem onClick={() => setSort('alphabetical')}>
               Alphabetical
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setSortBy('group')}>
+            <DropdownMenuItem onClick={() => setSort('group')}>
               Birthsign Group
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setSortBy('power-count')}>
+            <DropdownMenuItem onClick={() => setSort('power-count')}>
               Power Count
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -437,7 +411,7 @@ export function AccordionBirthsignsPage() {
           <div className="flex flex-wrap gap-2 items-center">
             {/* Clear All Button */}
             <button
-              onClick={() => setSelectedTags([])}
+              onClick={clearAllTags}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors duration-200 border border-border/50 hover:border-border cursor-pointer group"
               title="Clear all filters"
             >
@@ -450,7 +424,7 @@ export function AccordionBirthsignsPage() {
               <span
                 key={tag.id}
                 className="inline-flex items-center px-3 py-1.5 rounded-full bg-skyrim-gold/20 border border-skyrim-gold/30 text-sm font-medium text-skyrim-gold hover:bg-skyrim-gold/30 transition-colors duration-200 cursor-pointer group"
-                onClick={() => handleTagRemove(tag.id)}
+                onClick={() => removeTag(tag.id)}
                 title="Click to remove"
               >
                 {tag.label}
@@ -479,12 +453,7 @@ export function AccordionBirthsignsPage() {
                     checked={
                       showStats && showPowers && showSkills && showEffects
                     }
-                    onCheckedChange={checked => {
-                      setShowStats(checked)
-                      setShowPowers(checked)
-                      setShowSkills(checked)
-                      setShowEffects(checked)
-                    }}
+                    onCheckedChange={toggleAll}
                   />
                   <span className="text-sm font-medium">Toggle All</span>
                 </div>
@@ -494,7 +463,7 @@ export function AccordionBirthsignsPage() {
                   {/* Stats Card */}
                   <div
                     className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => setShowStats(!showStats)}
+                    onClick={toggleStats}
                   >
                     <div className="space-y-0.5">
                       <Label className="text-base font-medium">Stats</Label>
@@ -504,14 +473,14 @@ export function AccordionBirthsignsPage() {
                     </div>
                     <Switch
                       checked={showStats}
-                      onCheckedChange={setShowStats}
+                      onCheckedChange={toggleStats}
                     />
                   </div>
 
                   {/* Powers Card */}
                   <div
                     className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => setShowPowers(!showPowers)}
+                    onClick={togglePowers}
                   >
                     <div className="space-y-0.5">
                       <Label className="text-base font-medium">Powers</Label>
@@ -521,14 +490,14 @@ export function AccordionBirthsignsPage() {
                     </div>
                     <Switch
                       checked={showPowers}
-                      onCheckedChange={setShowPowers}
+                      onCheckedChange={togglePowers}
                     />
                   </div>
 
                   {/* Skills Card */}
                   <div
                     className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => setShowSkills(!showSkills)}
+                    onClick={toggleSkills}
                   >
                     <div className="space-y-0.5">
                       <Label className="text-base font-medium">Skills</Label>
@@ -538,14 +507,14 @@ export function AccordionBirthsignsPage() {
                     </div>
                     <Switch
                       checked={showSkills}
-                      onCheckedChange={setShowSkills}
+                      onCheckedChange={toggleSkills}
                     />
                   </div>
 
                   {/* Effects Card */}
                   <div
                     className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => setShowEffects(!showEffects)}
+                    onClick={toggleEffects}
                   >
                     <div className="space-y-0.5">
                       <Label className="text-base font-medium">Effects</Label>
@@ -555,7 +524,7 @@ export function AccordionBirthsignsPage() {
                     </div>
                     <Switch
                       checked={showEffects}
-                      onCheckedChange={setShowEffects}
+                      onCheckedChange={toggleEffects}
                     />
                   </div>
                 </div>
