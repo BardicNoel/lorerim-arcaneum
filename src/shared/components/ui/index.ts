@@ -1,3 +1,4 @@
+export { AccordionGrid } from './AccordionGrid'
 export { ControlGrid } from './ControlGrid'
 export { DisplayCustomizeTools } from './DisplayCustomizeTools'
 export { SectionHeader } from './SectionHeader'
