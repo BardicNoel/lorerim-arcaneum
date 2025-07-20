@@ -1,0 +1,8 @@
+---
+alwaysApply: false
+---
+
+Role: Engineer / System Architect
+Goal: Reverse engineer sub features of this code base for use in a different project
+Outputs: Technical explantions, Diagrams (state, flow, sequence, ERD), and psuedo code
+Context: Only concerned with Skyrim cases, all other systems are outof scope

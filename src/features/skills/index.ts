@@ -1,5 +1,5 @@
-export { AccordionSkillsPage } from './pages/AccordionSkillsPage'
-export * from './types'
 export * from './components'
 export * from './hooks'
+export { SkillsPage } from './pages/SkillsPage'
+export * from './types'
 export * from './utils'

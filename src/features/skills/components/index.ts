@@ -1,3 +1,5 @@
-export { SkillAccordion } from './SkillAccordion'
 export { CustomMultiAutocompleteSearch } from './CustomMultiAutocompleteSearch'
 export { FuzzySearchBox } from './FuzzySearchBox'
+export { SkillAccordion } from './SkillAccordion'
+export { SkillCard } from './SkillCard'
+export type { SkillLevel } from './SkillCard'

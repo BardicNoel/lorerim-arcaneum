@@ -1,6 +1,10 @@
+import { Z_INDEX } from '@/lib/constants'
+import { Copy, ExternalLink, Trash2, User } from 'lucide-react'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useCharacterBuild } from '../hooks/useCharacterBuild'
-import { Button } from '../ui/ui/button'
 import { Badge } from '../ui/ui/badge'
+import { Button } from '../ui/ui/button'
 import {
   Sheet,
   SheetContent,
@@ -9,13 +13,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '../ui/ui/sheet'
-import { User, Settings, Trash2, Copy, ExternalLink } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-import { Z_INDEX } from '@/lib/constants'
-import { useState } from 'react'
 
 export const FloatingBuildButton = () => {
-  const { build, resetBuild, getSummary } = useCharacterBuild()
+  const {
+    build,
+    resetBuild,
+    getSummary,
+    getRegularTraitLimit,
+    getBonusTraitLimit,
+  } = useCharacterBuild()
   const navigate = useNavigate()
   const summary = getSummary()
   const [isOpen, setIsOpen] = useState(false)
@@ -24,7 +30,8 @@ export const FloatingBuildButton = () => {
   const hasBuildContent =
     build.name ||
     build.race ||
-    build.traits.length > 0 ||
+    build.traits.regular.length > 0 ||
+    build.traits.bonus.length > 0 ||
     build.stone ||
     build.religion ||
     build.skills.major.length > 0 ||
@@ -50,6 +57,10 @@ export const FloatingBuildButton = () => {
     setIsOpen(false)
     navigate(path)
   }
+
+  const regularLimit = getRegularTraitLimit()
+  const bonusLimit = getBonusTraitLimit()
+  const totalTraitLimit = regularLimit + bonusLimit
 
   return (
     <div
@@ -133,20 +144,36 @@ export const FloatingBuildButton = () => {
                 )}
 
                 {/* Traits */}
-                {build.traits.length > 0 && (
+                {(build.traits.regular.length > 0 ||
+                  build.traits.bonus.length > 0) && (
                   <div className="space-y-2">
                     <h3 className="text-sm font-medium text-muted-foreground">
-                      Traits ({build.traits.length})
+                      Traits (
+                      {build.traits.regular.length + build.traits.bonus.length}/
+                      {totalTraitLimit})
                     </h3>
                     <div className="space-y-2">
-                      {build.traits.map(traitId => (
+                      {/* Regular Traits */}
+                      {build.traits.regular.map(traitId => (
                         <div
-                          key={traitId}
+                          key={`regular-${traitId}`}
                           className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
                         >
                           <span className="font-medium">{traitId}</span>
-                          <Badge variant="secondary" className="bg-green-500">
-                            Added
+                          <Badge variant="secondary" className="bg-blue-500">
+                            Regular
+                          </Badge>
+                        </div>
+                      ))}
+                      {/* Extra Unlock Traits */}
+                      {build.traits.bonus.map(traitId => (
+                        <div
+                          key={`bonus-${traitId}`}
+                          className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                        >
+                          <span className="font-medium">{traitId}</span>
+                          <Badge variant="secondary" className="bg-gray-400">
+                            Extra Unlock
                           </Badge>
                         </div>
                       ))}

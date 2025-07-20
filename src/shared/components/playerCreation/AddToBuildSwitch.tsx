@@ -1,7 +1,6 @@
-import React from 'react'
-import { Switch } from '@/shared/ui/ui/switch'
-import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { cn } from '@/lib/utils'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import { Switch } from '@/shared/ui/ui/switch'
 
 interface AddToBuildSwitchProps {
   itemId: string
@@ -25,6 +24,8 @@ export function AddToBuildSwitch({
     setStone,
     setReligion,
     addTrait,
+    addRegularTrait,
+    addBonusTrait,
     removeTrait,
     addMajorSkill,
     removeMajorSkill,
@@ -45,7 +46,10 @@ export function AddToBuildSwitch({
       case 'religion':
         return build.religion === itemId
       case 'trait':
-        return build.traits.includes(itemId)
+        return (
+          build.traits.regular.includes(itemId) ||
+          build.traits.bonus.includes(itemId)
+        )
       case 'skill':
         return (
           build.skills.major.includes(itemId) ||
@@ -80,7 +84,13 @@ export function AddToBuildSwitch({
         break
       case 'trait':
         if (checked) {
-          addTrait(itemId)
+          // Check if we can add a trait
+          if (build.traits.regular.length < 2) {
+            addRegularTrait(itemId)
+          } else if (build.traits.bonus.length < 1) {
+            addBonusTrait(itemId)
+          }
+          // If both are full, don't add (UI should prevent this)
         } else {
           removeTrait(itemId)
         }
