@@ -1,23 +1,17 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import {
-  X,
-  ChevronDown,
-  ChevronUp,
-  ArrowUpDown,
-  ArrowDownUp,
-  Settings,
-  Maximize2,
-  Minimize2,
-} from 'lucide-react'
 import { PlayerCreationLayout } from '@/shared/components/playerCreation'
+import type {
+  PlayerCreationItem,
+  SearchCategory,
+  SearchOption,
+  SelectedTag,
+} from '@/shared/components/playerCreation/types'
+import { AccordionGrid } from '@/shared/components/ui'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/shared/ui/ui/accordion'
-import { SkillAccordion, CustomMultiAutocompleteSearch } from '../components'
-import { useFuzzySearch } from '../hooks'
 import { Button } from '@/shared/ui/ui/button'
 import {
   DropdownMenu,
@@ -25,24 +19,30 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/ui/dropdown-menu'
-import { Switch } from '@/shared/ui/ui/switch'
 import { Label } from '@/shared/ui/ui/label'
-import type {
-  PlayerCreationItem,
-  SearchCategory,
-  SelectedTag,
-  SearchOption,
-} from '@/shared/components/playerCreation/types'
+import { Switch } from '@/shared/ui/ui/switch'
+import {
+  ChevronDown,
+  Grid3X3,
+  List,
+  Maximize2,
+  Minimize2,
+  Settings,
+  X,
+} from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { CustomMultiAutocompleteSearch, SkillAccordion } from '../components'
+import { useFuzzySearch } from '../hooks'
 import type { Skill } from '../types'
 import {
-  transformSkillToPlayerCreationItem,
   getAllCategories,
   getAllMetaTags,
-  getAllKeyAbilities,
   getCategoryPriority,
+  transformSkillToPlayerCreationItem,
 } from '../utils'
 
 type SortOption = 'alphabetical' | 'category' | 'ability-count'
+type ViewMode = 'list' | 'grid'
 
 export function AccordionSkillsPage() {
   // Load skills data from public/data/skills.json at runtime
@@ -51,6 +51,7 @@ export function AccordionSkillsPage() {
   const [error, setError] = useState<string | null>(null)
   const [expandedSkills, setExpandedSkills] = useState<Set<string>>(new Set())
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
+  const [viewMode, setViewMode] = useState<ViewMode>('grid')
 
   // Data visibility controls
   const [showScaling, setShowScaling] = useState(true)
@@ -228,11 +229,45 @@ export function AccordionSkillsPage() {
   // Handle accordion expansion
   const handleSkillToggle = (skillId: string) => {
     const newExpanded = new Set(expandedSkills)
-    if (newExpanded.has(skillId)) {
-      newExpanded.delete(skillId)
+
+    if (viewMode === 'grid') {
+      // In grid mode, expand/collapse all items in the same row
+      const columns = 3 // Match the AccordionGrid columns prop
+      const itemIndex = sortedDisplayItems.findIndex(
+        item => item.id === skillId
+      )
+      const rowIndex = Math.floor(itemIndex / columns)
+      const rowStartIndex = rowIndex * columns
+      const rowEndIndex = Math.min(
+        rowStartIndex + columns,
+        sortedDisplayItems.length
+      )
+
+      // Check if any item in the row is currently expanded
+      const isRowExpanded = sortedDisplayItems
+        .slice(rowStartIndex, rowEndIndex)
+        .some(item => newExpanded.has(item.id))
+
+      if (isRowExpanded) {
+        // Collapse all items in the row
+        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
+          newExpanded.delete(item.id)
+        })
+      } else {
+        // Expand all items in the row
+        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
+          newExpanded.add(item.id)
+        })
+      }
     } else {
-      newExpanded.add(skillId)
+      // In list mode, toggle individual items
+      if (newExpanded.has(skillId)) {
+        newExpanded.delete(skillId)
+      } else {
+        newExpanded.add(skillId)
+      }
     }
+
     setExpandedSkills(newExpanded)
   }
 
@@ -327,6 +362,28 @@ export function AccordionSkillsPage() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        {/* View Mode Toggle */}
+        <div className="flex border rounded-lg p-1 bg-muted">
+          <Button
+            variant={viewMode === 'list' ? 'default' : 'ghost'}
+            size="sm"
+            onClick={() => setViewMode('list')}
+            className="h-8 px-3"
+            title="List view"
+          >
+            <List className="h-4 w-4" />
+          </Button>
+          <Button
+            variant={viewMode === 'grid' ? 'default' : 'ghost'}
+            size="sm"
+            onClick={() => setViewMode('grid')}
+            className="h-8 px-3"
+            title="Grid view"
+          >
+            <Grid3X3 className="h-4 w-4" />
+          </Button>
+        </div>
 
         {/* Expand/Collapse All Button */}
         <Button
@@ -459,40 +516,66 @@ export function AccordionSkillsPage() {
         </Accordion>
       )}
 
-      <div className="flex flex-col gap-2 w-full mt-6">
-        {sortedDisplayItems.map(item => {
-          const originalSkill = skills.find(skill => {
-            const skillName = item.id
-            return skill.name.toLowerCase().replace(/\s+/g, '-') === skillName
-          })
-          const isExpanded = expandedSkills.has(item.id)
+      {viewMode === 'grid' ? (
+        <AccordionGrid columns={3} gap="md" className="w-full mt-6">
+          {sortedDisplayItems.map(item => {
+            const originalSkill = skills.find(skill => {
+              const skillName = item.id
+              return skill.name.toLowerCase().replace(/\s+/g, '-') === skillName
+            })
+            const isExpanded = expandedSkills.has(item.id)
 
-          return (
-            <SkillAccordion
-              key={item.id}
-              item={item}
-              originalSkill={originalSkill}
-              isExpanded={isExpanded}
-              onToggle={() => handleSkillToggle(item.id)}
-              className="w-full"
-              showScaling={showScaling}
-              showAbilities={showAbilities}
-              showTags={showTags}
-            />
-          )
-        })}
+            return (
+              <SkillAccordion
+                key={item.id}
+                item={item}
+                originalSkill={originalSkill}
+                isExpanded={isExpanded}
+                onToggle={() => handleSkillToggle(item.id)}
+                className="w-full"
+                showScaling={showScaling}
+                showAbilities={showAbilities}
+                showTags={showTags}
+              />
+            )
+          })}
+        </AccordionGrid>
+      ) : (
+        <div className="flex flex-col gap-2 w-full mt-6">
+          {sortedDisplayItems.map(item => {
+            const originalSkill = skills.find(skill => {
+              const skillName = item.id
+              return skill.name.toLowerCase().replace(/\s+/g, '-') === skillName
+            })
+            const isExpanded = expandedSkills.has(item.id)
 
-        {sortedDisplayItems.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              No skills found matching your criteria.
-            </p>
-            <p className="text-sm text-muted-foreground mt-2">
-              Try adjusting your search or filters.
-            </p>
-          </div>
-        )}
-      </div>
+            return (
+              <SkillAccordion
+                key={item.id}
+                item={item}
+                originalSkill={originalSkill}
+                isExpanded={isExpanded}
+                onToggle={() => handleSkillToggle(item.id)}
+                className="w-full"
+                showScaling={showScaling}
+                showAbilities={showAbilities}
+                showTags={showTags}
+              />
+            )
+          })}
+        </div>
+      )}
+
+      {sortedDisplayItems.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground">
+            No skills found matching your criteria.
+          </p>
+          <p className="text-sm text-muted-foreground mt-2">
+            Try adjusting your search or filters.
+          </p>
+        </div>
+      )}
     </PlayerCreationLayout>
   )
 }

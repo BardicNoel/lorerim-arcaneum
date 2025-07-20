@@ -1,24 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import {
-  X,
-  ChevronDown,
-  ChevronUp,
-  ArrowUpDown,
-  ArrowDownUp,
-  Settings,
-  Maximize2,
-  Minimize2,
-} from 'lucide-react'
 import { PlayerCreationLayout } from '@/shared/components/playerCreation'
+import type {
+  PlayerCreationItem,
+  SearchCategory,
+  SearchOption,
+  SelectedTag,
+} from '@/shared/components/playerCreation/types'
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/shared/ui/ui/accordion'
-import { ReligionAccordion } from '../components/ReligionAccordion'
-import { CustomMultiAutocompleteSearch } from '../components/CustomMultiAutocompleteSearch'
-import { useFuzzySearch } from '../hooks/useFuzzySearch'
+  AccordionGrid,
+  ControlGrid,
+  DisplayCustomizeTools,
+  SwitchCard,
+} from '@/shared/components/ui'
 import { Button } from '@/shared/ui/ui/button'
 import {
   DropdownMenu,
@@ -27,21 +19,22 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/ui/dropdown-menu'
 import { Switch } from '@/shared/ui/ui/switch'
-import { Label } from '@/shared/ui/ui/label'
 import {
-  SwitchCard,
-  DisplayCustomizeTools,
-  ControlGrid,
-} from '@/shared/components/ui'
-import type {
-  PlayerCreationItem,
-  SearchCategory,
-  SelectedTag,
-  SearchOption,
-} from '@/shared/components/playerCreation/types'
+  ChevronDown,
+  Grid3X3,
+  List,
+  Maximize2,
+  Minimize2,
+  X,
+} from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { CustomMultiAutocompleteSearch } from '../components/CustomMultiAutocompleteSearch'
+import { ReligionAccordion } from '../components/ReligionAccordion'
+import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { Religion, ReligionPantheon } from '../types'
 
 type SortOption = 'alphabetical' | 'divine-type'
+type ViewMode = 'list' | 'grid'
 
 export function AccordionReligionsPage() {
   // Load religion data from public/data/wintersun-religion-docs.json at runtime
@@ -52,6 +45,7 @@ export function AccordionReligionsPage() {
     new Set()
   )
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
+  const [viewMode, setViewMode] = useState<ViewMode>('grid')
 
   // Data visibility controls
   const [showBlessings, setShowBlessings] = useState(true)
@@ -307,11 +301,45 @@ export function AccordionReligionsPage() {
   // Handle accordion expansion
   const handleReligionToggle = (religionId: string) => {
     const newExpanded = new Set(expandedReligions)
-    if (newExpanded.has(religionId)) {
-      newExpanded.delete(religionId)
+
+    if (viewMode === 'grid') {
+      // In grid mode, expand/collapse all items in the same row
+      const columns = 3 // Match the AccordionGrid columns prop
+      const itemIndex = sortedDisplayItems.findIndex(
+        item => item.id === religionId
+      )
+      const rowIndex = Math.floor(itemIndex / columns)
+      const rowStartIndex = rowIndex * columns
+      const rowEndIndex = Math.min(
+        rowStartIndex + columns,
+        sortedDisplayItems.length
+      )
+
+      // Check if any item in the row is currently expanded
+      const isRowExpanded = sortedDisplayItems
+        .slice(rowStartIndex, rowEndIndex)
+        .some(item => newExpanded.has(item.id))
+
+      if (isRowExpanded) {
+        // Collapse all items in the row
+        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
+          newExpanded.delete(item.id)
+        })
+      } else {
+        // Expand all items in the row
+        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
+          newExpanded.add(item.id)
+        })
+      }
     } else {
-      newExpanded.add(religionId)
+      // In list mode, toggle individual items
+      if (newExpanded.has(religionId)) {
+        newExpanded.delete(religionId)
+      } else {
+        newExpanded.add(religionId)
+      }
     }
+
     setExpandedReligions(newExpanded)
   }
 
@@ -399,6 +427,28 @@ export function AccordionReligionsPage() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        {/* View Mode Toggle */}
+        <div className="flex border rounded-lg p-1 bg-muted">
+          <Button
+            variant={viewMode === 'list' ? 'default' : 'ghost'}
+            size="sm"
+            onClick={() => setViewMode('list')}
+            className="h-8 px-3"
+            title="List view"
+          >
+            <List className="h-4 w-4" />
+          </Button>
+          <Button
+            variant={viewMode === 'grid' ? 'default' : 'ghost'}
+            size="sm"
+            onClick={() => setViewMode('grid')}
+            className="h-8 px-3"
+            title="Grid view"
+          >
+            <Grid3X3 className="h-4 w-4" />
+          </Button>
+        </div>
 
         {/* Expand/Collapse All Button */}
         <Button
@@ -502,43 +552,74 @@ export function AccordionReligionsPage() {
         </DisplayCustomizeTools>
       )}
 
-      <div className="flex flex-col gap-4 w-full mt-6">
-        {sortedDisplayItems.map(item => {
-          const originalReligion = religions.find(religion => {
-            const religionName = item.id.replace('religion-', '')
+      {viewMode === 'grid' ? (
+        <AccordionGrid columns={3} gap="md" className="w-full mt-6">
+          {sortedDisplayItems.map(item => {
+            const originalReligion = religions.find(religion => {
+              const religionName = item.id.replace('religion-', '')
+              return (
+                religion.name.toLowerCase().replace(/\s+/g, '-') ===
+                religionName
+              )
+            })
+            const isExpanded = expandedReligions.has(item.id)
+
             return (
-              religion.name.toLowerCase().replace(/\s+/g, '-') === religionName
+              <ReligionAccordion
+                key={item.id}
+                item={item}
+                originalReligion={originalReligion}
+                isExpanded={isExpanded}
+                onToggle={() => handleReligionToggle(item.id)}
+                className="w-full"
+                showBlessings={showBlessings}
+                showTenets={showTenets}
+                showBoons={showBoons}
+                showFavoredRaces={showFavoredRaces}
+              />
             )
-          })
-          const isExpanded = expandedReligions.has(item.id)
+          })}
+        </AccordionGrid>
+      ) : (
+        <div className="flex flex-col gap-4 w-full mt-6">
+          {sortedDisplayItems.map(item => {
+            const originalReligion = religions.find(religion => {
+              const religionName = item.id.replace('religion-', '')
+              return (
+                religion.name.toLowerCase().replace(/\s+/g, '-') ===
+                religionName
+              )
+            })
+            const isExpanded = expandedReligions.has(item.id)
 
-          return (
-            <ReligionAccordion
-              key={item.id}
-              item={item}
-              originalReligion={originalReligion}
-              isExpanded={isExpanded}
-              onToggle={() => handleReligionToggle(item.id)}
-              className="w-full"
-              showBlessings={showBlessings}
-              showTenets={showTenets}
-              showBoons={showBoons}
-              showFavoredRaces={showFavoredRaces}
-            />
-          )
-        })}
+            return (
+              <ReligionAccordion
+                key={item.id}
+                item={item}
+                originalReligion={originalReligion}
+                isExpanded={isExpanded}
+                onToggle={() => handleReligionToggle(item.id)}
+                className="w-full"
+                showBlessings={showBlessings}
+                showTenets={showTenets}
+                showBoons={showBoons}
+                showFavoredRaces={showFavoredRaces}
+              />
+            )
+          })}
+        </div>
+      )}
 
-        {sortedDisplayItems.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              No religions found matching your criteria.
-            </p>
-            <p className="text-sm text-muted-foreground mt-2">
-              Try adjusting your search or filters.
-            </p>
-          </div>
-        )}
-      </div>
+      {sortedDisplayItems.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground">
+            No religions found matching your criteria.
+          </p>
+          <p className="text-sm text-muted-foreground mt-2">
+            Try adjusting your search or filters.
+          </p>
+        </div>
+      )}
     </PlayerCreationLayout>
   )
 }
