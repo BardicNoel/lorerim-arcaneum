@@ -1,20 +1,19 @@
+import { DEFAULT_BUILD, type BuildState } from '@/shared/types/build'
 import { create } from 'zustand'
-import type { BuildState } from '../types/build'
-import { DEFAULT_BUILD } from '../types/build'
 
-export interface CharacterStore {
+interface CharacterStore {
   build: BuildState
+  updateBuild: (updates: Partial<BuildState>) => void
   setBuild: (build: BuildState) => void
-  updateBuild: (partial: Partial<BuildState>) => void
   resetBuild: () => void
 }
 
 export const useCharacterStore = create<CharacterStore>(set => ({
   build: DEFAULT_BUILD,
-  setBuild: build => set({ build }),
-  updateBuild: partial =>
+  updateBuild: updates =>
     set(state => ({
-      build: { ...state.build, ...partial },
+      build: { ...state.build, ...updates },
     })),
+  setBuild: build => set({ build }),
   resetBuild: () => set({ build: DEFAULT_BUILD }),
 }))

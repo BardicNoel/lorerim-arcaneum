@@ -1,7 +1,7 @@
-import React from 'react'
-import { Button } from '@/shared/ui/ui/button'
-import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { cn } from '@/lib/utils'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import { Button } from '@/shared/ui/ui/button'
+import React from 'react'
 
 interface AddToBuildButtonProps {
   itemId: string
@@ -29,6 +29,8 @@ export function AddToBuildButton({
     setStone,
     setReligion,
     addTrait,
+    addRegularTrait,
+    addBonusTrait,
     removeTrait,
     addMajorSkill,
     removeMajorSkill,
@@ -49,7 +51,10 @@ export function AddToBuildButton({
       case 'religion':
         return build.religion === itemId
       case 'trait':
-        return build.traits.includes(itemId)
+        return (
+          build.traits.regular.includes(itemId) ||
+          build.traits.bonus.includes(itemId)
+        )
       case 'skill':
         return (
           build.skills.major.includes(itemId) ||
@@ -88,7 +93,13 @@ export function AddToBuildButton({
         if (currentIsInBuild) {
           removeTrait(itemId)
         } else {
-          addTrait(itemId)
+          // Check if we can add a trait
+          if (build.traits.regular.length < 2) {
+            addRegularTrait(itemId)
+          } else if (build.traits.bonus.length < 1) {
+            addBonusTrait(itemId)
+          }
+          // If both are full, don't add (UI should prevent this)
         }
         break
       case 'skill':

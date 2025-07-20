@@ -1,5 +1,5 @@
-import type { Trait } from '../types'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
+import type { Trait } from '../types'
 
 /**
  * Transform trait data to PlayerCreationItem format
@@ -19,11 +19,9 @@ export function transformTraitToPlayerCreationItem(
   }))
 
   // Generate tags from the trait data
-  const tags = [
-    trait.category,
-    ...trait.tags,
-    ...trait.effects.map(effect => effect.type),
-  ].filter((tag, index, arr) => arr.indexOf(tag) === index) // Remove duplicates
+  const tags = [trait.category, ...trait.tags].filter(
+    (tag, index, arr) => arr.indexOf(tag) === index
+  ) // Remove duplicates
 
   return {
     id: trait.edid,
@@ -103,7 +101,15 @@ export function getUserFriendlyEffectType(effectType: string): string {
 
 /**
  * Parse description placeholders like ***50*** and replace with actual values
+ * Also removes markdown bold formatting since we're doing our own styling
  */
 export function parseDescription(description: string): string {
-  return description.replace(/\*\*\*(\d+)\*\*\*/g, '$1')
+  // Remove markdown bold formatting (***text***)
+  let cleaned = description.replace(/\*\*\*(.*?)\*\*\*/g, '$1')
+
+  // Remove any remaining markdown formatting
+  cleaned = cleaned.replace(/\*\*(.*?)\*\*/g, '$1') // **bold**
+  cleaned = cleaned.replace(/\*(.*?)\*/g, '$1') // *italic*
+
+  return cleaned
 }

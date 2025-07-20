@@ -5,13 +5,6 @@ import type {
   SearchOption,
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
-import { AccordionGrid } from '@/shared/components/ui'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/shared/ui/ui/accordion'
 import { Button } from '@/shared/ui/ui/button'
 import {
   DropdownMenu,
@@ -19,19 +12,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/ui/dropdown-menu'
-import { Label } from '@/shared/ui/ui/label'
-import { Switch } from '@/shared/ui/ui/switch'
-import {
-  ChevronDown,
-  Grid3X3,
-  List,
-  Maximize2,
-  Minimize2,
-  Settings,
-  X,
-} from 'lucide-react'
+import { ChevronDown, Grid3X3, List, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
-import { CustomMultiAutocompleteSearch, TraitAccordion } from '../components'
+import { CustomMultiAutocompleteSearch, TraitCard } from '../components'
 import { useFuzzySearch } from '../hooks'
 import type { Trait } from '../types'
 import {
@@ -49,11 +32,7 @@ export function AccordionTraitsPage() {
   const [error, setError] = useState<string | null>(null)
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
-  const [expandedTraits, setExpandedTraits] = useState<Set<string>>(new Set())
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
-  const [showEffects, setShowEffects] = useState(true)
-  const [showSpells, setShowSpells] = useState(true)
-  const [showTags, setShowTags] = useState(true)
 
   useEffect(() => {
     async function fetchTraits() {
@@ -200,99 +179,34 @@ export function AccordionTraitsPage() {
       case 'alphabetical':
         return a.name.localeCompare(b.name)
       case 'category':
-        // Define priority order for trait categories
         const getCategoryPriority = (category: string | undefined) => {
-          switch (category) {
-            case 'combat':
-              return 1
-            case 'magic':
-              return 2
-            case 'survival':
-              return 3
-            case 'social':
-              return 4
-            case 'crafting':
-              return 5
-            default:
-              return 6
+          const priorities: Record<string, number> = {
+            combat: 1,
+            magic: 2,
+            survival: 3,
+            social: 4,
+            crafting: 5,
+            other: 6,
           }
+          return priorities[category || 'other'] || 6
         }
-
-        const aPriority = getCategoryPriority(a.category)
-        const bPriority = getCategoryPriority(b.category)
-
-        if (aPriority !== bPriority) {
-          return aPriority - bPriority
+        const categoryA = getCategoryPriority(a.category)
+        const categoryB = getCategoryPriority(b.category)
+        if (categoryA !== categoryB) {
+          return categoryA - categoryB
         }
         return a.name.localeCompare(b.name)
       case 'effect-count':
-        const aEffectCount = a.effects?.length || 0
-        const bEffectCount = b.effects?.length || 0
-        if (aEffectCount !== bEffectCount) {
-          return bEffectCount - aEffectCount // Descending order
+        const effectCountA = a.effects?.length || 0
+        const effectCountB = b.effects?.length || 0
+        if (effectCountA !== effectCountB) {
+          return effectCountB - effectCountA // Descending order
         }
         return a.name.localeCompare(b.name)
       default:
         return 0
     }
   })
-
-  // Expand/collapse all functionality
-  const allExpanded = expandedTraits.size === sortedDisplayItems.length
-
-  const handleTraitToggle = (traitId: string) => {
-    setExpandedTraits(prev => {
-      const newSet = new Set(prev)
-
-      if (viewMode === 'grid') {
-        // In grid mode, expand/collapse all items in the same row
-        const columns = 3 // Match the AccordionGrid columns prop
-        const itemIndex = sortedDisplayItems.findIndex(
-          item => item.id === traitId
-        )
-        const rowIndex = Math.floor(itemIndex / columns)
-        const rowStartIndex = rowIndex * columns
-        const rowEndIndex = Math.min(
-          rowStartIndex + columns,
-          sortedDisplayItems.length
-        )
-
-        // Check if any item in the row is currently expanded
-        const isRowExpanded = sortedDisplayItems
-          .slice(rowStartIndex, rowEndIndex)
-          .some(item => newSet.has(item.id))
-
-        if (isRowExpanded) {
-          // Collapse all items in the row
-          sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
-            newSet.delete(item.id)
-          })
-        } else {
-          // Expand all items in the row
-          sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
-            newSet.add(item.id)
-          })
-        }
-      } else {
-        // In list mode, toggle individual items
-        if (newSet.has(traitId)) {
-          newSet.delete(traitId)
-        } else {
-          newSet.add(traitId)
-        }
-      }
-
-      return newSet
-    })
-  }
-
-  const handleExpandAll = () => {
-    setExpandedTraits(new Set(sortedDisplayItems.map(item => item.id)))
-  }
-
-  const handleCollapseAll = () => {
-    setExpandedTraits(new Set())
-  }
 
   if (loading) {
     return (
@@ -366,7 +280,7 @@ export function AccordionTraitsPage() {
         </DropdownMenu>
 
         {/* View Mode Toggle */}
-        <div className="flex border rounded-lg p-1 bg-muted">
+        <div className="flex items-center gap-1 p-1 bg-muted rounded-lg">
           <Button
             variant={viewMode === 'list' ? 'default' : 'ghost'}
             size="sm"
@@ -386,23 +300,6 @@ export function AccordionTraitsPage() {
             <Grid3X3 className="h-4 w-4" />
           </Button>
         </div>
-
-        {/* Expand/Collapse All Button */}
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={allExpanded ? handleCollapseAll : handleExpandAll}
-          className="flex items-center justify-center"
-          title={
-            allExpanded ? 'Collapse all accordions' : 'Expand all accordions'
-          }
-        >
-          {allExpanded ? (
-            <Minimize2 className="h-4 w-4" />
-          ) : (
-            <Maximize2 className="h-4 w-4" />
-          )}
-        </Button>
       </div>
 
       {/* Selected Tags */}
@@ -437,126 +334,18 @@ export function AccordionTraitsPage() {
         )}
       </div>
 
-      {/* Controls Section */}
-      {sortedDisplayItems.length > 0 && (
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="customize-display" className="border-none">
-            <AccordionTrigger className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-background hover:bg-muted/50 transition-colors data-[state=open]:rounded-b-none data-[state=open]:border-b-0 justify-start">
-              <Settings className="h-4 w-4" />
-              <span className="text-sm font-medium">Customize Display</span>
-            </AccordionTrigger>
-            <AccordionContent className="px-3 py-3 rounded-b-lg border border-t-0 bg-background">
-              <div className="flex flex-wrap items-center gap-4">
-                {/* Toggle All Control */}
-                <div className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-muted/30 border-border">
-                  <Switch
-                    checked={showEffects && showSpells && showTags}
-                    onCheckedChange={checked => {
-                      setShowEffects(checked)
-                      setShowSpells(checked)
-                      setShowTags(checked)
-                    }}
-                  />
-                  <span className="text-sm font-medium">Toggle All</span>
-                </div>
-
-                {/* Data Visibility Controls */}
-                <div className="flex items-stretch gap-3 w-full">
-                  {/* Effects Card */}
-                  <div
-                    className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => setShowEffects(!showEffects)}
-                  >
-                    <div className="space-y-0.5">
-                      <Label className="text-base font-medium">Effects</Label>
-                      <p className="text-sm text-muted-foreground">
-                        Trait effects and abilities
-                      </p>
-                    </div>
-                    <Switch
-                      checked={showEffects}
-                      onCheckedChange={setShowEffects}
-                    />
-                  </div>
-
-                  {/* Spells Card */}
-                  <div
-                    className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => setShowSpells(!showSpells)}
-                  >
-                    <div className="space-y-0.5">
-                      <Label className="text-base font-medium">Spells</Label>
-                      <p className="text-sm text-muted-foreground">
-                        Associated spells and abilities
-                      </p>
-                    </div>
-                    <Switch
-                      checked={showSpells}
-                      onCheckedChange={setShowSpells}
-                    />
-                  </div>
-
-                  {/* Tags Card */}
-                  <div
-                    className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => setShowTags(!showTags)}
-                  >
-                    <div className="space-y-0.5">
-                      <Label className="text-base font-medium">Tags</Label>
-                      <p className="text-sm text-muted-foreground">
-                        Trait categories and tags
-                      </p>
-                    </div>
-                    <Switch checked={showTags} onCheckedChange={setShowTags} />
-                  </div>
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      )}
-
+      {/* Trait Grid/List */}
       {viewMode === 'grid' ? (
-        <AccordionGrid columns={3} gap="md" className="w-full mt-6">
-          {sortedDisplayItems.map(item => {
-            const originalTrait = traits.find(trait => trait.edid === item.id)
-            const isExpanded = expandedTraits.has(item.id)
-
-            return (
-              <TraitAccordion
-                key={item.id}
-                item={item}
-                originalTrait={originalTrait}
-                isExpanded={isExpanded}
-                onToggle={() => handleTraitToggle(item.id)}
-                className="w-full"
-                showEffects={showEffects}
-                showSpells={showSpells}
-                showTags={showTags}
-              />
-            )
-          })}
-        </AccordionGrid>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
+          {sortedDisplayItems.map(item => (
+            <TraitCard key={item.id} item={item} isSelected={false} />
+          ))}
+        </div>
       ) : (
         <div className="flex flex-col gap-4 w-full mt-6">
-          {sortedDisplayItems.map(item => {
-            const originalTrait = traits.find(trait => trait.edid === item.id)
-            const isExpanded = expandedTraits.has(item.id)
-
-            return (
-              <TraitAccordion
-                key={item.id}
-                item={item}
-                originalTrait={originalTrait}
-                isExpanded={isExpanded}
-                onToggle={() => handleTraitToggle(item.id)}
-                className="w-full"
-                showEffects={showEffects}
-                showSpells={showSpells}
-                showTags={showTags}
-              />
-            )
-          })}
+          {sortedDisplayItems.map(item => (
+            <TraitCard key={item.id} item={item} isSelected={false} />
+          ))}
         </div>
       )}
 
