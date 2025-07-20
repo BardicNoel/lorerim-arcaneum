@@ -7,6 +7,7 @@ import { AccordionTraitsPage } from '@/features/traits/pages/AccordionTraitsPage
 import BuildPage from '@/pages/BuildPage'
 import CraftingPage from '@/pages/CraftingPage'
 import EquipmentPage from '@/pages/EquipmentPage'
+
 import HomePage from '@/pages/HomePage'
 import NotFoundPage from '@/pages/NotFoundPage'
 import { SkillCardDemo } from '@/shared/components/ui/SkillCardDemo'
@@ -26,6 +27,7 @@ export const AppRouter = () => {
       <Route path="/religions" element={<AccordionReligionsPage />} />
       <Route path="/equipment" element={<EquipmentPage />} />
       <Route path="/crafting" element={<CraftingPage />} />
+
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )

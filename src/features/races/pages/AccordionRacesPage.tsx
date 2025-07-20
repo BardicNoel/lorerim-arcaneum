@@ -1,22 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import { X } from 'lucide-react'
-import {
-  PlayerCreationLayout,
-  PlayerCreationFilters,
-} from '@/shared/components/playerCreation'
-import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
-import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
-import { RaceAccordion } from '../components/RaceAccordion'
-import { useFuzzySearch } from '../hooks/useFuzzySearch'
-import { CustomMultiAutocompleteSearch } from '../components/CustomMultiAutocompleteSearch'
+import { PlayerCreationLayout } from '@/shared/components/playerCreation'
 import type {
   PlayerCreationItem,
   SearchCategory,
-  SelectedTag,
   SearchOption,
+  SelectedTag,
 } from '@/shared/components/playerCreation/types'
+import { AccordionGrid } from '@/shared/components/ui'
+import { Button } from '@/shared/ui/ui/button'
+import { Grid3X3, List, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { CustomMultiAutocompleteSearch } from '../components/CustomMultiAutocompleteSearch'
+import { RaceAccordion } from '../components/RaceAccordion'
+import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { Race } from '../types'
 import { transformRaceToPlayerCreationItem } from '../utils/dataTransform'
+
+type ViewMode = 'list' | 'grid'
 
 export function AccordionRacesPage() {
   // Load race data from public/data/playable-races.json at runtime
@@ -24,6 +23,7 @@ export function AccordionRacesPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [expandedRaces, setExpandedRaces] = useState<Set<string>>(new Set())
+  const [viewMode, setViewMode] = useState<ViewMode>('grid')
 
   useEffect(() => {
     async function fetchRaces() {
@@ -193,11 +193,40 @@ export function AccordionRacesPage() {
   // Handle accordion expansion
   const handleRaceToggle = (raceId: string) => {
     const newExpanded = new Set(expandedRaces)
-    if (newExpanded.has(raceId)) {
-      newExpanded.delete(raceId)
+
+    if (viewMode === 'grid') {
+      // In grid mode, expand/collapse all items in the same row
+      const columns = 3 // Match the AccordionGrid columns prop
+      const itemIndex = displayItems.findIndex(item => item.id === raceId)
+      const rowIndex = Math.floor(itemIndex / columns)
+      const rowStartIndex = rowIndex * columns
+      const rowEndIndex = Math.min(rowStartIndex + columns, displayItems.length)
+
+      // Check if any item in the row is currently expanded
+      const isRowExpanded = displayItems
+        .slice(rowStartIndex, rowEndIndex)
+        .some(item => newExpanded.has(item.id))
+
+      if (isRowExpanded) {
+        // Collapse all items in the row
+        displayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
+          newExpanded.delete(item.id)
+        })
+      } else {
+        // Expand all items in the row
+        displayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
+          newExpanded.add(item.id)
+        })
+      }
     } else {
-      newExpanded.add(raceId)
+      // In list mode, toggle individual items
+      if (newExpanded.has(raceId)) {
+        newExpanded.delete(raceId)
+      } else {
+        newExpanded.add(raceId)
+      }
     }
+
     setExpandedRaces(newExpanded)
   }
 
@@ -234,11 +263,37 @@ export function AccordionRacesPage() {
       description="Choose your character's race. Each race has unique abilities, starting attributes, and racial traits that will shape your journey through Tamriel."
     >
       {/* Custom MultiAutocompleteSearch with FuzzySearchBox for keywords */}
-      <CustomMultiAutocompleteSearch
-        categories={searchCategories}
-        onSelect={handleTagSelect}
-        onCustomSearch={handleTagSelect}
-      />
+      <div className="flex items-center gap-4 mb-4">
+        <div className="flex-1">
+          <CustomMultiAutocompleteSearch
+            categories={searchCategories}
+            onSelect={handleTagSelect}
+            onCustomSearch={handleTagSelect}
+          />
+        </div>
+
+        {/* View Mode Toggle */}
+        <div className="flex border rounded-lg p-1 bg-muted">
+          <Button
+            variant={viewMode === 'list' ? 'default' : 'ghost'}
+            size="sm"
+            onClick={() => setViewMode('list')}
+            className="h-8 px-3"
+            title="List view"
+          >
+            <List className="h-4 w-4" />
+          </Button>
+          <Button
+            variant={viewMode === 'grid' ? 'default' : 'ghost'}
+            size="sm"
+            onClick={() => setViewMode('grid')}
+            className="h-8 px-3"
+            title="Grid view"
+          >
+            <Grid3X3 className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
 
       {/* Selected Tags */}
       <div className="my-4">
@@ -272,36 +327,58 @@ export function AccordionRacesPage() {
         )}
       </div>
 
-      <div className="flex flex-col gap-4 w-full">
-        {displayItems.map(item => {
-          const originalRace = races.find(
-            race => race.edid.toLowerCase().replace('race', '') === item.id
-          )
-          const isExpanded = expandedRaces.has(item.id)
+      {viewMode === 'grid' ? (
+        <AccordionGrid columns={3} gap="md" className="w-full">
+          {displayItems.map(item => {
+            const originalRace = races.find(
+              race => race.edid.toLowerCase().replace('race', '') === item.id
+            )
+            const isExpanded = expandedRaces.has(item.id)
 
-          return (
-            <RaceAccordion
-              key={item.id}
-              item={item}
-              originalRace={originalRace}
-              isExpanded={isExpanded}
-              onToggle={() => handleRaceToggle(item.id)}
-              className="w-full"
-            />
-          )
-        })}
+            return (
+              <RaceAccordion
+                key={item.id}
+                item={item}
+                originalRace={originalRace}
+                isExpanded={isExpanded}
+                onToggle={() => handleRaceToggle(item.id)}
+                className="w-full"
+              />
+            )
+          })}
+        </AccordionGrid>
+      ) : (
+        <div className="flex flex-col gap-4 w-full">
+          {displayItems.map(item => {
+            const originalRace = races.find(
+              race => race.edid.toLowerCase().replace('race', '') === item.id
+            )
+            const isExpanded = expandedRaces.has(item.id)
 
-        {displayItems.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              No races found matching your criteria.
-            </p>
-            <p className="text-sm text-muted-foreground mt-2">
-              Try adjusting your search or filters.
-            </p>
-          </div>
-        )}
-      </div>
+            return (
+              <RaceAccordion
+                key={item.id}
+                item={item}
+                originalRace={originalRace}
+                isExpanded={isExpanded}
+                onToggle={() => handleRaceToggle(item.id)}
+                className="w-full"
+              />
+            )
+          })}
+        </div>
+      )}
+
+      {displayItems.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground">
+            No races found matching your criteria.
+          </p>
+          <p className="text-sm text-muted-foreground mt-2">
+            Try adjusting your search or filters.
+          </p>
+        </div>
+      )}
     </PlayerCreationLayout>
   )
 }
