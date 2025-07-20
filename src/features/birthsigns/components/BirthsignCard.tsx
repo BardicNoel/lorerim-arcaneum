@@ -5,20 +5,13 @@ import { cn } from '@/lib/utils'
 import type { Birthsign } from '../types'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { parseDescription } from '../utils/dataTransform'
+import { BirthsignAvatar } from './BirthsignAvatar'
 
 interface BirthsignCardProps {
   birthsign: Birthsign
   item: PlayerCreationItem
   isSelected?: boolean
   onClick?: () => void
-}
-
-const groupIcons: Record<string, string> = {
-  Warrior: '⚔️',
-  Mage: '🔮',
-  Thief: '🗡️',
-  Serpent: '🐍',
-  Other: '⭐',
 }
 
 const groupColors: Record<string, string> = {
@@ -35,7 +28,6 @@ export function BirthsignCard({
   isSelected = false,
   onClick,
 }: BirthsignCardProps) {
-  const groupIcon = groupIcons[birthsign.group] || groupIcons['Other']
   const groupColor = groupColors[birthsign.group] || groupColors['Other']
 
   // Parse the description to replace placeholders
@@ -60,7 +52,7 @@ export function BirthsignCard({
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-xl">{groupIcon}</span>
+            <BirthsignAvatar birthsignName={birthsign.name} size="md" />
             <h3 className="font-semibold text-lg">{birthsign.name}</h3>
           </div>
           <Badge variant="secondary" className={cn('text-xs', groupColor)}>

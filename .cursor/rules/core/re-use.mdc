@@ -1,0 +1,115 @@
+---
+alwaysApply: true
+---
+
+### ✅ Shared Generics
+
+**Path:** `src/shared/components/generic/`
+
+Contains **reusable, UI-agnostic building blocks**:
+
+- No business logic or feature dependencies.
+- APIs designed for wide usage.
+
+**Example:**
+
+```text
+src/shared/components/generic/
+└── EntityAvatar.tsx ✅
+```
+
+---
+
+### ✅ Assets
+
+**Path:** `public/assets/<context>/`
+
+Holds static assets related to UI components. Mirror component hierarchy for clarity.
+
+**Example:**
+
+```text
+public/assets/sign-avatar/
+└── apprentice.svg ✅
+```
+
+---
+
+## 🏗 Component API Principles
+
+| Rule                           | ✅ Good Example                        | ❌ Bad Example                           |
+| ------------------------------ | -------------------------------------- | ---------------------------------------- |
+| Composition over configuration | `<Card><CardHeader /></Card>`          | `<Card headerRender={() => …} />`        |
+| Reuse via shared generics      | `EntityAvatar` in shared/generic       | `BirthsignAvatar` reused across features |
+| Feature-specific binding       | `BirthsignAvatar` wraps `EntityAvatar` | `EntityAvatar` hardcodes Birthsign logic |
+| Slotted children APIs          | `<Dialog><DialogFooter /></Dialog>`    | `<Dialog footerRender={() => …} />`      |
+
+---
+
+### 👎 Anti-Pattern Example
+
+```tsx
+// Bad: tightly coupled to Birthsign
+const BirthsignAvatar = ({ sign }: { sign: string }) => (
+  <img src={`/assets/sign-avatar/${sign}.svg`} alt={sign} />
+)
+```
+
+❌ _Problems:_ Cannot reuse for other entity types.
+
+---
+
+### ✅ Refactored Pattern
+
+```tsx
+// Shared generic
+const EntityAvatar = ({
+  assetPath,
+  alt,
+}: {
+  assetPath: string
+  alt: string
+}) => <img src={assetPath} alt={alt} />
+
+// Feature-specific wrapper
+const BirthsignAvatar = ({ sign }: { sign: string }) => (
+  <EntityAvatar assetPath={`/assets/sign-avatar/${sign}.svg`} alt={sign} />
+)
+```
+
+✅ _Result:_
+
+- `EntityAvatar` is generic.
+- `BirthsignAvatar` is feature-bound.
+
+---
+
+## 📌 Agent Enforcement Checklist
+
+### 📁 Directory Placement
+
+- [ ] Is the component **feature-specific**? → Place in `src/features/<feature>/components/`.
+- [ ] Is the component **generic/reusable**? → Place in `src/shared/components/generic/`.
+- [ ] Are static assets mirrored under `public/assets/<context>/`?
+
+### 🏗 API Design
+
+- [ ] Does the component use **slotted children** instead of render props?
+- [ ] Is internal markup **extensible** by consumers?
+- [ ] Are visuals/business logic kept out of shared generics?
+
+### 🚫 Prohibited Patterns
+
+- [ ] `*_Render` or `render*` props for UI injection.
+- [ ] Feature-specific assets in `shared/generic/`.
+
+---
+
+## 💡 Agent Quick Tip
+
+Ask:
+
+> "Could this logically live in another feature without changes?"
+
+If **YES** → put in `shared/generic/`.
+If **NO** → put in `features/<feature>/components/`.

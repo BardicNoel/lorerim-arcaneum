@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 /**
  * Entity type definitions for avatar mapping
  */
-export type EntityType = 'race' | 'religion' | 'trait' | 'destiny'
+export type EntityType = 'race' | 'religion' | 'trait' | 'destiny' | 'birthsign'
 
 /**
  * Avatar size options
@@ -49,6 +49,11 @@ const entityAvatarMaps: Record<EntityType, Record<string, string>> = {
   },
   destiny: {
     // Add destiny avatars as they become available
+  },
+  birthsign: {
+    Apprentice: 'apprentice.svg',
+    // Add more birthsign avatars as they become available
+    // Current birthsigns: Warrior, Lady, Lord, Steed, Mage, Apprentice, Atronach, Ritual, Blessed Fire, Dead Horde, Thief, Lover, Shadow, Moonshadow, Tower, Serpent, Serpent's Curse
   },
 }
 
@@ -105,7 +110,7 @@ export function EntityAvatar({
       )}
     >
       <img
-        src={`${import.meta.env.BASE_URL}assets/${entityType}-avatar/${avatarFileName}`}
+        src={`${import.meta.env.BASE_URL}assets/${entityType === 'birthsign' ? 'sign-avatar' : `${entityType}-avatar`}/${avatarFileName}`}
         alt={`${entityName} avatar`}
         className="w-full h-full object-cover"
         onError={() => setImageError(true)}
