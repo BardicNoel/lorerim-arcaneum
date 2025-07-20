@@ -1,42 +1,33 @@
-import React from 'react'
-import { Badge } from '@/shared/ui/ui/badge'
-import { H3, H4, P, Small } from '@/shared/ui/ui/typography'
-import { MarkdownText } from '@/shared/components/MarkdownText'
-import {
-  Shield,
-  Zap,
-  Heart,
-  Brain,
-  Target,
-  Flame,
-  Droplets,
-  Skull,
-  Sword,
-  BookOpen,
-  Eye,
-  Hand,
-  ChevronDown,
-  ChevronRight,
-  ChevronUp,
-  Plus,
-  Minus,
-  Circle,
-  Star,
-  Activity,
-  Zap as Lightning,
-} from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
-import type { Trait } from '../types'
-import { parseDescription, getUserFriendlyEffectType } from '../utils'
-import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import {
-  GenericAccordionCard,
-  AccordionLeftControls,
-  AccordionHeader,
   AccordionCollapsedContentSlot,
   AccordionExpandedContentSlot,
+  AccordionHeader,
+  AccordionLeftControls,
+  GenericAccordionCard,
 } from '@/shared/components/generic'
+import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
+import { Badge } from '@/shared/ui/ui/badge'
+import { H3 } from '@/shared/ui/ui/typography'
+import {
+  Activity,
+  BookOpen,
+  Circle,
+  Droplets,
+  Eye,
+  Flame,
+  Hand,
+  Heart,
+  Shield,
+  Star,
+  Sword,
+  Target,
+  Zap,
+} from 'lucide-react'
+import React from 'react'
+import type { Trait } from '../types'
+import { getUserFriendlyEffectType, parseDescription } from '../utils'
+import { TraitSelectionControl } from './TraitSelectionControl'
 
 /**
  * Component to format any description with highlighted values in asterisks and bold attributes/skills
@@ -50,172 +41,10 @@ function FormattedText({
 }) {
   if (!text) return null
 
-  // Parse the description to replace placeholders
+  // Parse the description to replace placeholders and remove markdown
   const parsedText = parseDescription(text)
 
-  // Define attributes and skills that should be bolded
-  const attributesAndSkills = [
-    // Core attributes
-    'health',
-    'magicka',
-    'stamina',
-    // Attribute variations
-    'health regeneration',
-    'magicka regeneration',
-    'stamina regeneration',
-    // Skills
-    'one-handed',
-    'two-handed',
-    'archery',
-    'block',
-    'heavy armor',
-    'light armor',
-    'smithing',
-    'alchemy',
-    'enchanting',
-    'restoration',
-    'destruction',
-    'alteration',
-    'illusion',
-    'conjuration',
-    'mysticism',
-    'speech',
-    'lockpicking',
-    'sneak',
-    'pickpocket',
-    'lockpicking',
-    'pickpocketing',
-    'stealth',
-    'acrobatics',
-    // Skill variations
-    'one handed',
-    'two handed',
-    'heavy armor',
-    'light armor',
-    // Combat stats
-    'weapon damage',
-    'armor rating',
-    'armor penetration',
-    'unarmed damage',
-    'movement speed',
-    'sprint speed',
-    'carry weight',
-    'spell strength',
-    'shout cooldown',
-    'price modification',
-    'damage reflection',
-    // Resistances
-    'poison resistance',
-    'fire resistance',
-    'frost resistance',
-    'shock resistance',
-    'magic resistance',
-    'disease resistance',
-    // Special effects
-    'lockpicking durability',
-    'lockpicking expertise',
-    'pickpocketing success',
-    'stealth detection',
-    'enchanting strength',
-    // Trait-specific terms
-    'fishing',
-    'mudcrab',
-    'slaughterfish',
-    'fishing rod',
-    'insect',
-    'fish',
-    'armor',
-    'clothing',
-    'armor slot',
-    'empty armor slot',
-    'level',
-    'sonic spells',
-    'sound magic',
-    'physical attacks',
-    'followers',
-    'instrument',
-    'inn',
-    'melody',
-    'vibration',
-    'booming presence',
-  ]
-
-  // Create a regex pattern for attributes and skills (case insensitive)
-  const attributesPattern = new RegExp(
-    `\\b(${attributesAndSkills.join('|')})\\b`,
-    'gi'
-  )
-
-  // First, split by asterisk patterns and highlight those values
-  const parts = parsedText.split(/(\*\*\*\d+\*\*\*)/g)
-
-  // Then, for each part that's not an asterisk value, process attributes and numeric values
-  const processedParts = parts.map((part, index) => {
-    if (part.match(/^\*\*\*\d+\*\*\*$/)) {
-      // This is an asterisk value - remove the asterisks and style it
-      const value = part.replace(/\*\*\*/g, '')
-      return (
-        <span
-          key={`asterisk-${index}`}
-          className="font-bold italic text-skyrim-gold"
-        >
-          {value}
-        </span>
-      )
-    } else {
-      // This is regular text - first bold attributes and skills, then highlight numeric values
-      let processedPart = part
-
-      // Replace attributes and skills with bold versions
-      processedPart = processedPart.replace(attributesPattern, match => {
-        return `<bold>${match}</bold>`
-      })
-
-      // Split by the bold markers and numeric patterns
-      const subParts = processedPart.split(
-        /(<bold>.*?<\/bold>|\+?\d+(?:\.\d+)?%?)/g
-      )
-
-      return subParts.map((subPart, subIndex) => {
-        if (subPart.startsWith('<bold>') && subPart.endsWith('</bold>')) {
-          // This is a bold attribute/skill - remove markers and style it
-          const attribute = subPart.slice(6, -7) // Remove <bold> and </bold>
-          return (
-            <span
-              key={`attribute-${index}-${subIndex}`}
-              className="font-semibold text-primary"
-            >
-              {attribute}
-            </span>
-          )
-        } else if (/^[+-]?\d+(?:\.\d+)?%?$/.test(subPart)) {
-          // This is a numeric value - determine if it's positive or negative
-          const numericValue = parseFloat(subPart)
-          const isPositive = subPart.startsWith('+') || numericValue > 0
-          const isNegative = subPart.startsWith('-') || numericValue < 0
-
-          let colorClass = 'text-skyrim-gold' // Default for neutral values
-          if (isPositive) {
-            colorClass = 'text-green-600'
-          } else if (isNegative) {
-            colorClass = 'text-red-600'
-          }
-
-          return (
-            <span
-              key={`numeric-${index}-${subIndex}`}
-              className={`font-bold ${colorClass}`}
-            >
-              {subPart}
-            </span>
-          )
-        }
-        return subPart
-      })
-    }
-  })
-
-  return <div className={className}>{processedParts}</div>
+  return <div className={className}>{parsedText}</div>
 }
 
 interface TraitAccordionProps {
@@ -317,19 +146,17 @@ export function TraitAccordion({
     >
       {/* Left Controls */}
       <AccordionLeftControls>
-        <AddToBuildSwitchSimple
-          itemId={item.id}
-          itemType="trait"
-          itemName={item.name}
-        />
+        <TraitSelectionControl itemId={item.id} itemName={item.name} />
       </AccordionLeftControls>
 
       {/* Header Content */}
       <AccordionHeader>
         {/* Left side: Icon + Name */}
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">{categoryIcon}</span>
-          <H3 className="text-primary font-semibold">{originalTrait.name}</H3>
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          <span className="text-2xl flex-shrink-0">{categoryIcon}</span>
+          <H3 className="text-primary font-semibold truncate">
+            {originalTrait.name}
+          </H3>
         </div>
 
         {/* Right side: Classification + Effects */}
@@ -358,16 +185,6 @@ export function TraitAccordion({
               {originalTrait.effects.length} effects
             </Badge>
           )}
-
-          {/* Quick effects preview */}
-          {item.effects && item.effects.length > 0 && (
-            <div className="hidden md:flex items-center gap-2 text-xs text-muted-foreground">
-              <div className="flex items-center gap-1">
-                <Star className="h-3 w-3 text-yellow-500" />
-                <span>{item.effects.length} effects</span>
-              </div>
-            </div>
-          )}
         </div>
       </AccordionHeader>
 
@@ -384,6 +201,19 @@ export function TraitAccordion({
       {/* Expanded Content */}
       <AccordionExpandedContentSlot>
         <div className="space-y-6">
+          {/* Description Section */}
+          <div>
+            <h5 className="text-lg font-medium text-foreground mb-3">
+              Description
+            </h5>
+            <div className="p-4 rounded-lg border bg-muted/30">
+              <FormattedText
+                text={parsedDescription}
+                className="text-base text-muted-foreground leading-relaxed"
+              />
+            </div>
+          </div>
+
           {/* Effects Section */}
           {showEffects && originalTrait.effects.length > 0 && (
             <div>

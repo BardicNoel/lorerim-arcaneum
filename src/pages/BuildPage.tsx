@@ -1,57 +1,77 @@
-import { useCharacterStore } from '@/shared/stores/characterStore'
-import { Button } from '@/shared/ui/ui/button'
+import { FloatingBuildButton } from '@/shared/components/FloatingBuildButton'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import { Badge } from '@/shared/ui/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Input } from '@/shared/ui/ui/input'
 import { Label } from '@/shared/ui/ui/label'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/shared/ui/ui/card'
+import { Switch } from '@/shared/ui/ui/switch'
+import { AlertTriangle, Info } from 'lucide-react'
+import { useState } from 'react'
 
-export default function BuildPage() {
-  const { build, updateBuild, resetBuild } = useCharacterStore()
+export function BuildPage() {
+  const {
+    build,
+    setName,
+    setNotes,
+    setGameCompleted,
+    isGameCompleted,
+    setRegularTraitLimit,
+    setBonusTraitLimit,
+    getRegularTraitLimit,
+    getBonusTraitLimit,
+    getRegularTraitCount,
+    getBonusTraitCount,
+  } = useCharacterBuild()
+
+  const [regularLimit, setRegularLimit] = useState(getRegularTraitLimit())
+  const [bonusLimit, setBonusLimit] = useState(getBonusTraitLimit())
+
+  const handleRegularLimitChange = (value: string) => {
+    const numValue = parseInt(value) || 0
+    setRegularLimit(numValue)
+    setRegularTraitLimit(numValue)
+  }
+
+  const handleBonusLimitChange = (value: string) => {
+    const numValue = parseInt(value) || 0
+    setBonusLimit(numValue)
+    setBonusTraitLimit(numValue)
+  }
+
+  const isUsingCustomLimits = regularLimit !== 2 || bonusLimit !== 1
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-skyrim-gold mb-2">
-          Character Builder
-        </h1>
-        <p className="text-muted-foreground">
-          Your build state is automatically synced to the URL. Copy the URL to
-          share your character!
-        </p>
+    <div className="container mx-auto p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Character Builder</h1>
+        <FloatingBuildButton />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Character Details */}
+        {/* Basic Information */}
         <Card>
           <CardHeader>
-            <CardTitle>Character Details</CardTitle>
-            <CardDescription>Basic character information</CardDescription>
+            <CardTitle>Basic Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
+            <div>
               <Label htmlFor="name">Character Name</Label>
               <Input
                 id="name"
-                placeholder="Enter character name"
                 value={build.name}
-                onChange={e => updateBuild({ name: e.target.value })}
+                onChange={e => setName(e.target.value)}
+                placeholder="Enter character name..."
               />
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="notes">Character Notes</Label>
+            <div>
+              <Label htmlFor="notes">Notes</Label>
               <textarea
                 id="notes"
-                placeholder="Enter character background, roleplay notes, etc."
                 value={build.notes}
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                  updateBuild({ notes: e.target.value })
+                  setNotes(e.target.value)
                 }
+                placeholder="Add character notes, roleplay details, or build explanations..."
                 rows={4}
                 className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               />
@@ -59,134 +79,135 @@ export default function BuildPage() {
           </CardContent>
         </Card>
 
-        {/* Race Selection */}
+        {/* Game Progress */}
         <Card>
           <CardHeader>
-            <CardTitle>Race</CardTitle>
-            <CardDescription>Select your character's race</CardDescription>
+            <CardTitle>Game Progress</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <Label htmlFor="race">Race</Label>
-              <select
-                id="race"
-                className="w-full p-2 border rounded-md bg-background"
-                value={build.race || ''}
-                onChange={e => updateBuild({ race: e.target.value || null })}
-              >
-                <option value="">Select a race...</option>
-                <option value="nord">Nord</option>
-                <option value="imperial">Imperial</option>
-                <option value="breton">Breton</option>
-                <option value="redguard">Redguard</option>
-                <option value="altmer">Altmer</option>
-                <option value="bosmer">Bosmer</option>
-                <option value="dunmer">Dunmer</option>
-                <option value="orsimer">Orsimer</option>
-                <option value="khajiit">Khajiit</option>
-                <option value="argonian">Argonian</option>
-              </select>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="game-completed">Game Completed</Label>
+                <p className="text-sm text-muted-foreground">
+                  Unlocks late game trait slot
+                </p>
+              </div>
+              <Switch
+                id="game-completed"
+                checked={isGameCompleted()}
+                onCheckedChange={setGameCompleted}
+              />
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Birth Sign */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Birth Sign</CardTitle>
-            <CardDescription>Select your birth sign</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <Label htmlFor="stone">Birth Sign</Label>
-              <select
-                id="stone"
-                className="w-full p-2 border rounded-md bg-background"
-                value={build.stone || ''}
-                onChange={e => updateBuild({ stone: e.target.value || null })}
-              >
-                <option value="">Select a birth sign...</option>
-                <option value="warrior">The Warrior</option>
-                <option value="mage">The Mage</option>
-                <option value="thief">The Thief</option>
-                <option value="lady">The Lady</option>
-                <option value="steed">The Steed</option>
-                <option value="lord">The Lord</option>
-                <option value="apprentice">The Apprentice</option>
-                <option value="atronach">The Atronach</option>
-                <option value="ritual">The Ritual</option>
-                <option value="lover">The Lover</option>
-                <option value="shadow">The Shadow</option>
-                <option value="tower">The Tower</option>
-              </select>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Religion */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Religion</CardTitle>
-            <CardDescription>Select your character's religion</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <Label htmlFor="religion">Religion</Label>
-              <select
-                id="religion"
-                className="w-full p-2 border rounded-md bg-background"
-                value={build.religion || ''}
-                onChange={e =>
-                  updateBuild({ religion: e.target.value || null })
-                }
-              >
-                <option value="">Select a religion...</option>
-                <option value="nine_divines">Nine Divines</option>
-                <option value="daedra">Daedra Worship</option>
-                <option value="ancestor">Ancestor Worship</option>
-                <option value="none">No Religion</option>
-              </select>
-            </div>
+            {isGameCompleted() && (
+              <Badge variant="secondary" className="w-fit">
+                Late game traits unlocked
+              </Badge>
+            )}
           </CardContent>
         </Card>
       </div>
 
-      {/* Actions */}
+      {/* Trait Limits Configuration */}
       <Card>
         <CardHeader>
-          <CardTitle>Actions</CardTitle>
-          <CardDescription>Manage your character build</CardDescription>
+          <CardTitle className="flex items-center gap-2">
+            Trait Limits Configuration
+            <Info className="h-4 w-4 text-muted-foreground" />
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex gap-4">
-            <Button onClick={resetBuild} variant="destructive">
-              Reset Build
-            </Button>
-            <Button
-              onClick={() => {
-                const url = window.location.href
-                navigator.clipboard.writeText(url)
-                alert('URL copied to clipboard!')
-              }}
-            >
-              Copy Share URL
-            </Button>
+          <div className="flex items-start gap-2 p-4 rounded-lg border border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950">
+            <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400 mt-0.5 flex-shrink-0" />
+            <div className="text-sm">
+              <strong>
+                Default configuration is 2 regular + 1 extra unlock traits.
+              </strong>
+              Increasing these limits requires corresponding MCM (Mod
+              Configuration Menu) changes in-game. Make sure your MCM settings
+              match these limits to avoid conflicts.
+            </div>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="regular-limit">Regular Traits Limit</Label>
+              <Input
+                id="regular-limit"
+                type="number"
+                min="0"
+                max="10"
+                value={regularLimit}
+                onChange={e => handleRegularLimitChange(e.target.value)}
+                className="mt-1"
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Currently selected: {getRegularTraitCount()}
+              </p>
+            </div>
+            <div>
+              <Label htmlFor="bonus-limit">Extra Unlock Traits Limit</Label>
+              <Input
+                id="bonus-limit"
+                type="number"
+                min="0"
+                max="5"
+                value={bonusLimit}
+                onChange={e => handleBonusLimitChange(e.target.value)}
+                className="mt-1"
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Currently selected: {getBonusTraitCount()}
+                {!isGameCompleted() && ' (requires game completion)'}
+              </p>
+            </div>
+          </div>
+
+          {isUsingCustomLimits && (
+            <div className="flex items-start gap-2 p-4 rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
+              <Info className="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+              <div className="text-sm">
+                <strong>Custom limits detected:</strong> {regularLimit} regular
+                + {bonusLimit} extra unlock traits. Remember to update your MCM
+                settings accordingly.
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
-      {/* Debug: Current Build State */}
+      {/* Build Summary */}
       <Card>
         <CardHeader>
-          <CardTitle>Current Build State (Debug)</CardTitle>
-          <CardDescription>
-            JSON representation of your current build
-          </CardDescription>
+          <CardTitle>Build Summary</CardTitle>
         </CardHeader>
         <CardContent>
-          <pre className="bg-muted p-4 rounded-md text-sm overflow-auto">
-            {JSON.stringify(build, null, 2)}
-          </pre>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <span className="font-medium">Race:</span>
+              <div className="text-muted-foreground">
+                {build.race || 'Not selected'}
+              </div>
+            </div>
+            <div>
+              <span className="font-medium">Birth Sign:</span>
+              <div className="text-muted-foreground">
+                {build.stone || 'Not selected'}
+              </div>
+            </div>
+            <div>
+              <span className="font-medium">Religion:</span>
+              <div className="text-muted-foreground">
+                {build.religion || 'Not selected'}
+              </div>
+            </div>
+            <div>
+              <span className="font-medium">Traits:</span>
+              <div className="text-muted-foreground">
+                {getRegularTraitCount()}/{regularLimit} regular,{' '}
+                {getBonusTraitCount()}/{bonusLimit} extra unlock
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>

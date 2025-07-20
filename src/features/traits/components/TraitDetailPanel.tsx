@@ -1,8 +1,6 @@
-import React from 'react'
+import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
-import { MarkdownText } from '@/shared/components/MarkdownText'
-import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import type { Trait } from '../types'
 
 interface TraitDetailPanelProps {
@@ -32,12 +30,12 @@ export function TraitDetailPanel({ item }: TraitDetailPanelProps) {
     <div className="space-y-6">
       {/* Header */}
       <div className="space-y-2">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">
+        <div className="flex items-center gap-3 min-w-0">
+          <span className="text-2xl flex-shrink-0">
             {getCategoryIcon(item.category || '')}
           </span>
-          <div>
-            <h2 className="text-2xl font-bold">{item.name}</h2>
+          <div className="min-w-0 flex-1">
+            <h2 className="text-2xl font-bold truncate">{item.name}</h2>
             {item.category && (
               <Badge variant="secondary" className="mt-1">
                 {item.category}
@@ -53,9 +51,9 @@ export function TraitDetailPanel({ item }: TraitDetailPanelProps) {
           <CardTitle className="text-lg">Description</CardTitle>
         </CardHeader>
         <CardContent>
-          <MarkdownText className="text-muted-foreground leading-relaxed">
+          <p className="text-muted-foreground leading-relaxed">
             {item.description}
-          </MarkdownText>
+          </p>
         </CardContent>
       </Card>
 
