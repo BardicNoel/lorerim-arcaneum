@@ -1,5 +1,317 @@
----
-description:
-globs:
-alwaysApply: false
+# 🎨 Arcaneum UI Styling Rules
+
+## 📋 Overview
+
+This document defines the UI styling rules for Lorerim Arcaneum, based on our centralized configuration system and theme-aware design patterns.
+
+## 🎯 Core Principles
+
+### 1. **Configuration-First Approach**
+
+- All styling configuration should be externalized to `src/shared/config/`
+- No hardcoded colors, icons, or styling values in components
+- Use the centralized configuration system for consistency
+
+### 2. **Theme Integration**
+
+- Colors must use CSS variables: `hsl(var(--primary))`
+- Support both light and dark themes
+- Maintain Skyrim aesthetic with gold accents
+
+### 3. **Component Architecture**
+
+- Generic components in `src/shared/components/generic/`
+- Feature-specific wrappers in `src/features/<feature>/components/`
+- Reusable styling patterns across all features
+
+## 🛠 Configuration System
+
+### Theme Configuration (`src/shared/config/theme.ts`)
+
+```typescript
+// ✅ Use theme-aware colors
+import {
+  themeColors,
+  effectTypeColors,
+  groupColors,
+} from '@/shared/config/theme'
+
+// ✅ Correct usage
+className = 'text-primary' // Uses hsl(var(--primary))
+className = 'bg-skyrim-gold/20' // Uses theme-aware gold
+
+// ❌ Avoid hardcoded colors
+className = 'text-red-500' // Hardcoded color
+className = 'bg-blue-100' // Hardcoded background
+```
+
+### Icon Configuration (`src/shared/config/icons.ts`)
+
+```typescript
+// ✅ Use centralized icon configuration
+import { getEffectIcon } from '@/shared/config/icons'
+
+const config = getEffectIcon('health')
+return <config.icon className={`h-4 w-4 ${config.color}`} />
+
+// ❌ Avoid hardcoded icons
+return <Heart className="h-4 w-4 text-red-500" />
+```
+
+### Avatar Configuration (`src/shared/config/avatars.ts`)
+
+```typescript
+// ✅ Use avatar configuration
+import { getAvatarFileName } from '@/shared/config/avatars'
+
+const avatarFileName = getAvatarFileName(entityType, entityName)
+
+// ❌ Avoid hardcoded mappings
+const avatarMap = { Altmer: 'altmer.png' } // Hardcoded
+```
+
+## 🎨 Color System
+
+### Primary Colors
+
+- **Primary**: `hsl(var(--primary))` - Main brand color
+- **Secondary**: `hsl(var(--secondary))` - Supporting color
+- **Accent**: `hsl(var(--accent))` - Highlight color
+- **Muted**: `hsl(var(--muted))` - Subtle text/backgrounds
+
+### Skyrim Theme Colors
+
+- **Skyrim Gold**: `#d4af37` - Signature accent color
+- **Skyrim Dark**: `#1e1e1e` - Dark backgrounds
+
+### Effect Type Colors
+
+- **Positive**: `text-green-600` - Bonuses, improvements
+- **Negative**: `text-red-600` - Penalties, damage
+- **Neutral**: `text-skyrim-gold` - Default values
+- **Conditional**: `text-purple-600` - Conditional effects
+- **Mastery**: `text-blue-600` - Mastery bonuses
+
+### Group Colors
+
+- **Warrior**: `text-red-600` - Combat, strength
+- **Mage**: `text-blue-600` - Magic, intelligence
+- **Thief**: `text-green-600` - Stealth, agility
+- **Serpent**: `text-purple-600` - Mysticism, corruption
+- **Other**: `text-yellow-500` - Miscellaneous
+
+## 🧩 Component Styling Patterns
+
+### 1. **Generic Components**
+
+```typescript
+// ✅ Generic component with configurable styling
+interface GenericComponentProps {
+  variant?: 'default' | 'outline' | 'ghost'
+  size?: 'sm' | 'md' | 'lg'
+  className?: string
+}
+
+// Use configuration for variants
+const variantStyles = {
+  default: 'bg-primary text-primary-foreground',
+  outline: 'border border-input bg-background',
+  ghost: 'hover:bg-accent hover:text-accent-foreground',
+}
+```
+
+### 2. **Feature-Specific Wrappers**
+
+```typescript
+// ✅ Feature wrapper using shared configuration
+import { getBirthsignGroupStyle } from '../config/birthsignConfig'
+
+const groupStyle = getBirthsignGroupStyle(birthsign.group)
+className={`${groupStyle.background} ${groupStyle.text} ${groupStyle.border}`}
+```
+
+### 3. **Text Formatting**
+
+```typescript
+// ✅ Use shared text formatting
+import { BirthsignFormattedText } from './BirthsignFormattedText'
+
+<BirthsignFormattedText
+  text={description}
+  className="text-sm text-muted-foreground"
+/>
+```
+
+## 📱 Responsive Design
+
+### Breakpoint System
+
+- **Mobile**: `< 768px` - Single column layouts
+- **Tablet**: `768px - 1024px` - Two column layouts
+- **Desktop**: `> 1024px` - Multi-column layouts
+
+### Responsive Patterns
+
+```typescript
+// ✅ Responsive grid layouts
+className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
+
+// ✅ Responsive text sizing
+className = 'text-sm md:text-base lg:text-lg'
+
+// ✅ Responsive spacing
+className = 'p-4 md:p-6 lg:p-8'
+```
+
+## 🎭 State Management
+
+### Interactive States
+
+- **Hover**: `hover:bg-accent hover:text-accent-foreground`
+- **Focus**: `focus:ring-2 focus:ring-ring focus:ring-offset-2`
+- **Active**: `active:scale-95`
+- **Disabled**: `disabled:opacity-50 disabled:cursor-not-allowed`
+
+### Loading States
+
+```typescript
+// ✅ Loading spinner
+<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+
+// ✅ Skeleton loading
+<div className="animate-pulse bg-muted rounded h-4 w-full" />
+```
+
+## 🔧 Utility Classes
+
+### Spacing
+
+- **Padding**: `p-{size}` (p-2, p-4, p-6, p-8)
+- **Margin**: `m-{size}` (m-2, m-4, m-6, m-8)
+- **Gap**: `gap-{size}` (gap-2, gap-4, gap-6, gap-8)
+
+### Typography
+
+- **Font Size**: `text-{size}` (text-xs, text-sm, text-base, text-lg, text-xl)
+- **Font Weight**: `font-{weight}` (font-normal, font-medium, font-semibold, font-bold)
+- **Text Color**: `text-{color}` (text-primary, text-muted-foreground, text-destructive)
+
+### Layout
+
+- **Flex**: `flex flex-col`, `flex flex-row`, `flex items-center`, `flex justify-between`
+- **Grid**: `grid grid-cols-{n}`, `grid-cols-1 md:grid-cols-2`
+- **Position**: `relative`, `absolute`, `fixed`, `sticky`
+
+## 🚫 Anti-Patterns
+
+### ❌ Hardcoded Values
+
+```typescript
+// Don't do this
+className="text-red-500 bg-blue-100"
+const icon = <Heart className="h-4 w-4 text-red-500" />
+const colors = { warrior: 'text-red-600' }
+```
+
+### ❌ Inline Styles
+
+```typescript
+// Don't do this
+style={{ color: '#ff0000', backgroundColor: '#f0f0f0' }}
+```
+
+### ❌ Complex Conditional Styling
+
+```typescript
+// Don't do this
+className={`text-${isPositive ? 'green' : 'red'}-600`}
+
+// Do this instead
+className={isPositive ? 'text-green-600' : 'text-red-600'}
+```
+
+## ✅ Best Practices
+
+### 1. **Use Configuration Functions**
+
+```typescript
+// ✅ Correct
+import { getBirthsignGroupStyle } from '../config/birthsignConfig'
+const style = getBirthsignGroupStyle(group)
+
+// ❌ Incorrect
+const style = group === 'Warrior' ? 'bg-red-100' : 'bg-blue-100'
+```
+
+### 2. **Consistent Naming**
+
+```typescript
+// ✅ Consistent naming
+className = 'bg-primary text-primary-foreground'
+className = 'border border-input'
+className = 'hover:bg-accent'
+
+// ❌ Inconsistent naming
+className = 'bg-blue-500 text-white'
+className = 'border border-gray-300'
+className = 'hover:bg-gray-100'
+```
+
+### 3. **Theme-Aware Colors**
+
+```typescript
+// ✅ Theme-aware
+className = 'bg-background text-foreground'
+className = 'border-border'
+
+// ❌ Theme-specific
+className = 'bg-white text-black'
+className = 'border-gray-200'
+```
+
+## 🔄 Migration Guide
+
+### From Hardcoded to Configuration
+
+```typescript
+// Before (hardcoded)
+const effectIcons = {
+  health: <Heart className="h-4 w-4 text-red-500" />
+}
+
+// After (configuration)
+import { getEffectIcon } from '@/shared/config/icons'
+const config = getEffectIcon('health')
+return <config.icon className={`h-4 w-4 ${config.color}`} />
+```
+
+### From Inline Styles to Classes
+
+```typescript
+// Before (inline styles)
+<div style={{ backgroundColor: '#f0f0f0', padding: '16px' }}>
+
+// After (utility classes)
+<div className="bg-muted p-4">
+```
+
+## 📚 Resources
+
+- **Configuration Files**: `src/shared/config/`
+- **Generic Components**: `src/shared/components/generic/`
+- **Theme Variables**: `src/globals.css`
+- **Tailwind Config**: `tailwind.config.ts`
+
+## 🎯 Success Metrics
+
+- [ ] All components use configuration system
+- [ ] No hardcoded colors or icons
+- [ ] Consistent theme integration
+- [ ] Responsive design patterns
+- [ ] Accessible color contrasts
+- [ ] Performance-optimized styling
+      description:
+      globs:
+      alwaysApply: false
+
 ---

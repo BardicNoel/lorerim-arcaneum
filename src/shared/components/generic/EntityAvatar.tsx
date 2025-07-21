@@ -1,5 +1,6 @@
 import React from 'react'
 import { cn } from '@/lib/utils'
+import { getAvatarFileName } from '@/shared/config/avatars'
 
 /**
  * Entity type definitions for avatar mapping
@@ -27,36 +28,6 @@ interface EntityAvatarProps {
   className?: string
 }
 
-// Avatar file mapping for different entity types
-const entityAvatarMaps: Record<EntityType, Record<string, string>> = {
-  race: {
-    Altmer: 'altmer.png',
-    Argonian: 'argonian.png',
-    Bosmer: 'bosmer.png',
-    Breton: 'breton.png',
-    Dunmer: 'dunmer.png',
-    Imperial: 'imperial.png',
-    Khajiit: 'khajit.png',
-    Nord: 'nord.png',
-    Orsimer: 'orismer.png',
-    Redguard: 'redguard.png',
-  },
-  religion: {
-    // Add religion avatars as they become available
-  },
-  trait: {
-    // Add trait avatars as they become available
-  },
-  destiny: {
-    // Add destiny avatars as they become available
-  },
-  birthsign: {
-    Apprentice: 'apprentice.svg',
-    // Add more birthsign avatars as they become available
-    // Current birthsigns: Warrior, Lady, Lord, Steed, Mage, Apprentice, Atronach, Ritual, Blessed Fire, Dead Horde, Thief, Lover, Shadow, Moonshadow, Tower, Serpent, Serpent's Curse
-  },
-}
-
 // Size classes for consistent sizing
 const sizeClasses: Record<AvatarSize, string> = {
   sm: 'w-8 h-8',
@@ -79,8 +50,7 @@ export function EntityAvatar({
   size = 'md',
   className,
 }: EntityAvatarProps) {
-  const avatarMap = entityAvatarMaps[entityType]
-  const avatarFileName = avatarMap[entityName]
+  const avatarFileName = getAvatarFileName(entityType, entityName)
   const [imageError, setImageError] = React.useState(false)
 
   // Fallback to first letter avatar if no image or error

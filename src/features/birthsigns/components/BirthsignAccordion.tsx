@@ -11,25 +11,19 @@ import type { PlayerCreationItem } from '@/shared/components/playerCreation/type
 import { Badge } from '@/shared/ui/ui/badge'
 import { H3, H4 } from '@/shared/ui/ui/typography'
 import {
-  Activity,
-  BookOpen,
   Circle,
-  Droplets,
-  Eye,
-  Flame,
-  Hand,
-  Heart,
-  Zap as Lightning,
-  Shield,
   Star,
-  Sword,
-  Target,
-  Zap,
+  Zap as Lightning,
 } from 'lucide-react'
 import React from 'react'
 import type { Birthsign } from '../types'
 import { getUserFriendlyStat, parseDescription } from '../utils'
 import { BirthsignAvatar, BirthsignFormattedText } from './'
+import {
+  getBirthsignGroupStyle,
+  getBirthsignEffectIcon,
+  getBirthsignEffectTypeColor,
+} from '../config/birthsignConfig'
 
 /**
  * Function to format seconds to a readable time format
@@ -58,44 +52,7 @@ interface BirthsignAccordionProps {
   showEffects?: boolean
 }
 
-// Enhanced icon mapping for birthsign effects
-const effectIcons: Record<string, React.ReactNode> = {
-  health: <Heart className="h-4 w-4 text-red-500" />,
-  magicka: <Zap className="h-4 w-4 text-blue-500" />,
-  stamina: <Activity className="h-4 w-4 text-green-500" />,
-  weapon_damage: <Sword className="h-4 w-4 text-orange-500" />,
-  armor_penetration: <Target className="h-4 w-4 text-purple-500" />,
-  unarmed_damage: <Hand className="h-4 w-4 text-yellow-500" />,
-  movement_speed: <Circle className="h-4 w-4 text-cyan-500" />,
-  sprint_speed: <Circle className="h-4 w-4 text-cyan-500" />,
-  carry_weight: <Shield className="h-4 w-4 text-gray-500" />,
-  spell_strength: <BookOpen className="h-4 w-4 text-indigo-500" />,
-  magicka_regeneration: <Zap className="h-4 w-4 text-blue-400" />,
-  lockpicking_durability: <Eye className="h-4 w-4 text-green-400" />,
-  lockpicking_expertise: <Eye className="h-4 w-4 text-green-400" />,
-  pickpocketing_success: <Hand className="h-4 w-4 text-green-400" />,
-  stealth_detection: <Eye className="h-4 w-4 text-purple-400" />,
-  speech: <BookOpen className="h-4 w-4 text-yellow-400" />,
-  shout_cooldown: <Flame className="h-4 w-4 text-red-400" />,
-  price_modification: <Circle className="h-4 w-4 text-gold-400" />,
-  damage_reflection: <Shield className="h-4 w-4 text-red-400" />,
-  poison_resistance: <Droplets className="h-4 w-4 text-green-400" />,
-  fire_resistance: <Flame className="h-4 w-4 text-orange-400" />,
-  enchanting_strength: <BookOpen className="h-4 w-4 text-purple-400" />,
-  power: <Lightning className="h-4 w-4 text-yellow-500" />,
-}
 
-
-
-// Birthsign group styling - matching religion type styling pattern
-const birthsignGroupStyles: Record<string, string> = {
-  Warrior: 'bg-red-100 text-red-800 border-red-200 hover:bg-red-200',
-  Mage: 'bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-200',
-  Thief: 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200',
-  Serpent:
-    'bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-200',
-  Other: 'bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-200',
-}
 
 const sizeClasses = {
   sm: 'text-xs px-2 py-0.5',
@@ -117,11 +74,8 @@ export function BirthsignAccordion({
   if (!originalBirthsign) return null
 
   const getEffectIcon = (effectType: string) => {
-    return (
-      effectIcons[effectType.toLowerCase()] || (
-        <Star className="h-4 w-4 text-muted-foreground" />
-      )
-    )
+    const config = getBirthsignEffectIcon(effectType)
+    return <config.icon className={`h-4 w-4 ${config.color}`} />
   }
 
   const getEffectIconByType = (type: 'positive' | 'negative' | 'neutral') => {
@@ -172,8 +126,7 @@ export function BirthsignAccordion({
             <Badge
               variant="outline"
               className={cn(
-                birthsignGroupStyles[originalBirthsign.group] ||
-                  'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200',
+                `${getBirthsignGroupStyle(originalBirthsign.group).background} ${getBirthsignGroupStyle(originalBirthsign.group).text} ${getBirthsignGroupStyle(originalBirthsign.group).border} ${getBirthsignGroupStyle(originalBirthsign.group).hover}`,
                 sizeClasses.sm,
                 'font-medium transition-colors'
               )}
