@@ -240,6 +240,74 @@ export function useCharacterBuild() {
   const canAddBonusTrait = () =>
     (build?.traits?.bonus?.length ?? 0) < (build?.traitLimits?.bonus ?? 1)
 
+  // Get trait type (regular or bonus)
+  const getTraitType = (traitId: string): 'regular' | 'bonus' | null => {
+    if (build?.traits?.regular?.includes(traitId)) return 'regular'
+    if (build?.traits?.bonus?.includes(traitId)) return 'bonus'
+    return null
+  }
+
+  // Check if all trait slots are full
+  const isAllTraitsFull = () => {
+    const regularCount = build?.traits?.regular?.length ?? 0
+    const bonusCount = build?.traits?.bonus?.length ?? 0
+    const regularLimit = build?.traitLimits?.regular ?? 2
+    const bonusLimit = build?.traitLimits?.bonus ?? 1
+
+    return regularCount >= regularLimit && bonusCount >= bonusLimit
+  }
+
+  // Add trait to specific slot type
+  const addTraitToSlot = (traitId: string, slotType: 'regular' | 'bonus') => {
+    if (slotType === 'regular') {
+      const { regular = [] } = build?.traits ?? { regular: [] }
+      const { regular: regularLimit = 2 } = build?.traitLimits ?? { regular: 2 }
+
+      if (regular.length < regularLimit) {
+        // Remove from bonus if it was there
+        const { bonus = [] } = build?.traits ?? { bonus: [] }
+        const newBonusTraits = bonus.filter(id => id !== traitId)
+
+        updateBuild({
+          traits: {
+            regular: [...regular, traitId],
+            bonus: newBonusTraits,
+          },
+        })
+      }
+    } else {
+      const { bonus = [] } = build?.traits ?? { bonus: [] }
+      const { bonus: bonusLimit = 1 } = build?.traitLimits ?? { bonus: 1 }
+
+      if (bonus.length < bonusLimit) {
+        // Remove from regular if it was there
+        const { regular = [] } = build?.traits ?? { regular: [] }
+        const newRegularTraits = regular.filter(id => id !== traitId)
+
+        updateBuild({
+          traits: {
+            regular: newRegularTraits,
+            bonus: [...bonus, traitId],
+          },
+        })
+      }
+    }
+  }
+
+  // Check if a specific slot is available
+  const isSlotAvailable = (
+    slotType: 'regular' | 'bonus',
+    slotIndex: number = 0
+  ) => {
+    if (slotType === 'regular') {
+      const regularCount = build?.traits?.regular?.length ?? 0
+      return regularCount <= slotIndex
+    } else {
+      const bonusCount = build?.traits?.bonus?.length ?? 0
+      return bonusCount <= slotIndex
+    }
+  }
+
   return {
     // Current build state
     build,
@@ -294,5 +362,9 @@ export function useCharacterBuild() {
     getBonusTraitCount,
     canAddRegularTrait,
     canAddBonusTrait,
+    getTraitType,
+    isAllTraitsFull,
+    addTraitToSlot,
+    isSlotAvailable,
   }
 }

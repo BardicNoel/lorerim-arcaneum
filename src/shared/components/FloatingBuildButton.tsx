@@ -153,28 +153,28 @@ export const FloatingBuildButton = () => {
                       {totalTraitLimit})
                     </h3>
                     <div className="space-y-2">
-                      {/* Regular Traits */}
+                      {/* Starting Traits */}
                       {build.traits.regular.map(traitId => (
                         <div
                           key={`regular-${traitId}`}
-                          className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                          className="flex items-center gap-2 text-xs"
                         >
-                          <span className="font-medium">{traitId}</span>
-                          <Badge variant="secondary" className="bg-blue-500">
-                            Regular
-                          </Badge>
+                          <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                          <span className="text-muted-foreground">
+                            Starting
+                          </span>
                         </div>
                       ))}
-                      {/* Extra Unlock Traits */}
+                      {/* Late Game Traits */}
                       {build.traits.bonus.map(traitId => (
                         <div
                           key={`bonus-${traitId}`}
-                          className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                          className="flex items-center gap-2 text-xs"
                         >
-                          <span className="font-medium">{traitId}</span>
-                          <Badge variant="secondary" className="bg-gray-400">
-                            Extra Unlock
-                          </Badge>
+                          <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                          <span className="text-muted-foreground">
+                            Late Game
+                          </span>
                         </div>
                       ))}
                     </div>

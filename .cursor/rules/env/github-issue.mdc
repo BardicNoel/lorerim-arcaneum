@@ -14,7 +14,7 @@ Cursor agents must connect to GitHub to pull issue data for a repository. Agents
 
 ## 🔒 Configuration
 
-- Read `GITHUB_TOKEN`, `GITHUB_OWNER`, and `GITHUB_REPO` from the environment.
+- Read `GITHUB_TOKEN` from the environment.
 - Do not store or hardcode issue numbers in `.env`.
 
 Example `.env` configuration:
@@ -22,7 +22,7 @@ Example `.env` configuration:
 ```bash
 GITHUB_OWNER=BardicNoel
 GITHUB_REPO=lorerim-arcaneum
-GITHUB_TOKEN=<read from variable>
+GITHUB_TOKEN=<POWERSHELL_ENV VARIABLE WITH SAME NAME>
 ```
 
 ---

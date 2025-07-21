@@ -46,7 +46,7 @@ export function TraitCard({ item }: TraitCardProps) {
         // Toggle off primary trait
         removeTrait(item.id)
       } else if (canAddRegularTrait()) {
-        // Add regular trait (this will automatically remove any existing trait)
+        // Add starting trait (this will automatically remove any existing trait)
         removeTrait(item.id) // Clear any existing trait first
         addRegularTrait(item.id)
       }
@@ -55,7 +55,7 @@ export function TraitCard({ item }: TraitCardProps) {
         // Toggle off secondary trait
         removeTrait(item.id)
       } else if (canAddBonusTrait()) {
-        // Add bonus trait (this will automatically remove any existing trait)
+        // Add late game trait (this will automatically remove any existing trait)
         removeTrait(item.id) // Clear any existing trait first
         addBonusTrait(item.id)
       }
