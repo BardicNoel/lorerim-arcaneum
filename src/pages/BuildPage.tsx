@@ -1,23 +1,28 @@
 import { RaceSelectionCard } from '@/features/races/components'
 import { TraitSelectionCard } from '@/features/traits/components'
-import { FloatingBuildButton } from '@/shared/components/FloatingBuildButton'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Input } from '@/shared/ui/ui/input'
 import { Label } from '@/shared/ui/ui/label'
 import { AlertTriangle, Info, RotateCcw, Share2 } from 'lucide-react'
-import { useState } from 'react'
+import BuildPageDestinyCard from '@/features/destiny/components/BuildPageDestinyCard'
+import {  useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/ui/tabs'
 import { Button } from '@/shared/ui/ui/button'
 
+import React from 'react'
+
 export function BuildPage() {
-  const { build, setBuildName, setBuildNotes, updateBuild, resetBuild } =
+  const { build, setBuildName, setBuildNotes, updateBuild, resetBuild, setDestinyPath } =
     useCharacterBuild()
 
   const [regularLimit, setRegularLimit] = useState(build.traitLimits.regular)
   const [bonusLimit, setBonusLimit] = useState(build.traitLimits.bonus)
   const [showConfirm, setShowConfirm] = useState(false)
   const [copied, setCopied] = useState(false)
+
+  const navigate = useNavigate()
 
   const handleRegularLimitChange = (value: string) => {
     const numValue = parseInt(value) || 0
@@ -144,6 +149,9 @@ export function BuildPage() {
             {/* Trait Selection and Display */}
             <TraitSelectionCard />
           </div>
+
+          {/* Destiny Section */}
+          <BuildPageDestinyCard navigate={navigate} />
 
           {/* Build Summary */}
           <Card>

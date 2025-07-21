@@ -12,6 +12,7 @@ interface UseDestinyPathProps {
   plannedNodes: PlannedNode[]
   onNodePlan: (nodeId: string) => void
   onNodeUnplan: (nodeId: string) => void
+  initialPath?: DestinyNode[] // Optional initial path for hydration
 }
 
 export function useDestinyPath({
@@ -19,8 +20,9 @@ export function useDestinyPath({
   plannedNodes,
   onNodePlan,
   onNodeUnplan,
+  initialPath = [],
 }: UseDestinyPathProps) {
-  const [selectedPath, setSelectedPath] = useState<DestinyNode[]>([])
+  const [selectedPath, setSelectedPath] = useState<DestinyNode[]>(initialPath)
 
   // Find root nodes (nodes with no prerequisites)
   const rootNodes = useMemo(() => {

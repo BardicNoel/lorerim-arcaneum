@@ -25,12 +25,6 @@ export function DestinyNodeHoverCard({
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <h4 className="font-medium text-lg">{node.name}</h4>
-            <Badge
-              variant={isPlanned ? 'default' : 'outline'}
-              className="text-xs"
-            >
-              {isPlanned ? 'Planned' : 'Not Planned'}
-            </Badge>
           </div>
           <p className="text-sm text-muted-foreground">{node.description}</p>
 

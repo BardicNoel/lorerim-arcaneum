@@ -46,3 +46,42 @@ export function DestinyPathBreadcrumbs({
     </div>
   )
 }
+
+// Pure, stateless breadcrumb trail for reuse
+export function DestinyBreadcrumbTrail({
+  path,
+  onNodeClick,
+  showChevrons = true,
+  BreadcrumbHover,
+}: {
+  path: DestinyNode[]
+  onNodeClick?: (index: number) => void
+  showChevrons?: boolean
+  BreadcrumbHover?: (node: DestinyNode, badge: React.ReactNode) => React.ReactNode
+}) {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      {path.map((node, index) => {
+        const badge = (
+          <Badge
+            variant={index === path.length - 1 ? 'default' : 'secondary'}
+            className="cursor-pointer hover:bg-primary/80"
+            onClick={onNodeClick ? () => onNodeClick(index) : undefined}
+          >
+            {node.name}
+          </Badge>
+        )
+        return (
+          <React.Fragment key={node.id}>
+            <div className="flex items-center gap-2">
+              {BreadcrumbHover ? BreadcrumbHover(node, badge) : badge}
+              {showChevrons && index < path.length - 1 && (
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              )}
+            </div>
+          </React.Fragment>
+        )
+      })}
+    </div>
+  )
+}

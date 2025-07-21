@@ -192,6 +192,12 @@ export function useCharacterBuild() {
     updateBuild({ notes })
   }
 
+  // Destiny path management
+  const getDestinyPath = () => build?.destinyPath ?? []
+  const setDestinyPath = (path: string[]) => {
+    updateBuild({ destinyPath: path })
+  }
+
   // Clear all selections
   const clearBuild = () => {
     updateBuild({
@@ -207,6 +213,7 @@ export function useCharacterBuild() {
         regular: [],
         bonus: [],
       },
+      destinyPath: [],
     })
   }
 
@@ -346,6 +353,10 @@ export function useCharacterBuild() {
     // Build metadata
     setBuildName,
     setBuildNotes,
+
+    // Destiny path
+    getDestinyPath,
+    setDestinyPath,
 
     // Build management
     updateBuild,
