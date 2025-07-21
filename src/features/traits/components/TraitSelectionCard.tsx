@@ -1,7 +1,7 @@
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import { SelectionCardShell } from '@/shared/components/ui'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useTraits } from '../hooks/useTraits'
@@ -55,21 +55,13 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
   )
 
   return (
-    <Card className={className}>
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">Traits</CardTitle>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleNavigateToTraitPage}
-            className="text-sm whitespace-nowrap cursor-pointer"
-          >
-            View all traits →
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <SelectionCardShell
+      title="Traits"
+      navigateTo="traits"
+      onNavigate={handleNavigateToTraitPage}
+      className={className}
+    >
+      <div className="space-y-6">
         {/* Starting Traits */}
         <div className="space-y-4">
           <h4 className="text-md font-medium text-foreground">
@@ -213,7 +205,7 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
             )}
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </SelectionCardShell>
   )
 }
