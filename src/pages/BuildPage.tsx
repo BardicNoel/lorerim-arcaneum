@@ -1,31 +1,17 @@
 import { RaceSelectionCard } from '@/features/races/components'
 import { TraitSelectionCard } from '@/features/traits/components'
-import { FloatingBuildButton } from '@/shared/components/FloatingBuildButton'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Input } from '@/shared/ui/ui/input'
 import { Label } from '@/shared/ui/ui/label'
 import { AlertTriangle, Info, RotateCcw, Share2 } from 'lucide-react'
-import { DestinyDetailPanel } from '@/features/destiny/components/DestinyDetailPanel'
-import { useEffect, useState } from 'react'
+import BuildPageDestinyCard from '@/features/destiny/components/BuildPageDestinyCard'
+import {  useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/ui/tabs'
 import { Button } from '@/shared/ui/ui/button'
-import type { DestinyNode } from '@/features/destiny/types'
-import { DestinyPathList } from '@/features/destiny/components/DestinyPathList'
-import { YourDestinyPathCard } from '@/features/destiny/components/YourDestinyPathCard'
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/shared/ui/ui/accordion'
-import { PredictivePathsSection } from '@/features/destiny/components/PredictivePathsSection'
-import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
-import { useDestinyPath } from '@/features/destiny/hooks/useDestinyPath'
-import type { PlannedNode } from '@/features/destiny/types'
-import type { SelectedTag } from '@/shared/components/playerCreation/types'
+
 import React from 'react'
-import { DestinyBreadcrumbTrail } from '@/features/destiny/components/DestinyPathBreadcrumbs'
-import { DestinyNodeHoverCard } from '@/features/destiny/components/DestinyNodeHoverCard'
-import { DestinyPerkList } from '@/features/destiny/components/DestinyPathList'
-import { DestinyPossiblePathsList } from '@/features/destiny/components/PredictivePathsSection'
-import { ScrollArea } from '@/shared/ui/ui/scroll-area'
 
 export function BuildPage() {
   const { build, setBuildName, setBuildNotes, updateBuild, resetBuild, setDestinyPath } =
@@ -36,45 +22,7 @@ export function BuildPage() {
   const [showConfirm, setShowConfirm] = useState(false)
   const [copied, setCopied] = useState(false)
 
-  // Destiny data state
-  const [destinyNodes, setDestinyNodes] = useState<DestinyNode[]>([])
-  const [destinyLoading, setDestinyLoading] = useState(true)
-  const [destinyError, setDestinyError] = useState<string | null>(null)
-
   const navigate = useNavigate()
-
-  useEffect(() => {
-    async function fetchDestinyData() {
-      try {
-        setDestinyLoading(true)
-        const res = await fetch(`${import.meta.env.BASE_URL}data/subclasses.json`)
-        if (!res.ok) throw new Error('Failed to fetch destiny data')
-        const data = await res.json()
-        setDestinyNodes(data.map((node, index) => ({
-          id: node.globalFormId || `destiny-${index}`,
-          name: node.name,
-          description: node.description,
-          tags: [],
-          prerequisites: node.prerequisites || [],
-          nextBranches: [],
-          levelRequirement: undefined,
-          lore: undefined,
-          globalFormId: node.globalFormId,
-        })))
-      } catch (err) {
-        setDestinyError('Failed to load destiny data')
-      } finally {
-        setDestinyLoading(false)
-      }
-    }
-    fetchDestinyData()
-  }, [])
-
-  // Map build.destinyPath to DestinyNode objects
-  const selectedDestinyPath: DestinyNode[] = build.destinyPath
-    .map((id: string) => destinyNodes.find((n: DestinyNode) => n.id === id))
-    .filter((n): n is DestinyNode => !!n)
-  const finalDestinyNode: DestinyNode | undefined = selectedDestinyPath[selectedDestinyPath.length - 1]
 
   const handleRegularLimitChange = (value: string) => {
     const numValue = parseInt(value) || 0
@@ -203,15 +151,7 @@ export function BuildPage() {
           </div>
 
           {/* Destiny Section */}
-          <DestinySelectionCard
-            selectedPath={selectedDestinyPath}
-            destinyNodes={destinyNodes}
-            buildDestinyPath={build.destinyPath}
-            setDestinyPath={setDestinyPath}
-            loading={destinyLoading}
-            error={destinyError}
-            navigate={navigate}
-          />
+          <BuildPageDestinyCard navigate={navigate} />
 
           {/* Build Summary */}
           <Card>
@@ -319,130 +259,5 @@ export function BuildPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
-}
-
-function DestinySelectionCard({
-  selectedPath,
-  destinyNodes,
-  buildDestinyPath,
-  setDestinyPath,
-  loading,
-  error,
-  navigate,
-}: {
-  selectedPath: DestinyNode[]
-  destinyNodes: DestinyNode[]
-  buildDestinyPath: string[]
-  setDestinyPath: (path: string[]) => void
-  loading: boolean
-  error: string | null
-  navigate: (to: string) => void
-}) {
-  return (
-    <Card className="mb-6">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between mb-3">
-          <CardTitle className="text-lg">Destiny</CardTitle>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => navigate('/destiny')}
-            className="text-sm whitespace-nowrap cursor-pointer"
-          >
-            Edit Destiny Path
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {loading ? (
-          <div className="text-muted-foreground">Loading destiny data...</div>
-        ) : error ? (
-          <div className="text-destructive">{error}</div>
-        ) : (
-          <>
-            <div className="space-y-4">
-              <div>
-                <DestinyBreadcrumbTrail
-                  path={selectedPath}
-                  BreadcrumbHover={(node, badge) => (
-                    <DestinyNodeHoverCard node={node} isPlanned={false}>{badge}</DestinyNodeHoverCard>
-                  )}
-                />
-              </div>
-              <DestinyPerkList path={selectedPath} />
-              <Accordion type="single" collapsible className="mt-4">
-                <AccordionItem value="paths">
-                  <AccordionTrigger>Show Possible Paths</AccordionTrigger>
-                  <AccordionContent>
-                    <BuildPageDestinyPathsPlanner
-                      destinyNodes={destinyNodes}
-                      buildDestinyPath={buildDestinyPath}
-                      updateBuildDestinyPath={setDestinyPath}
-                    />
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </div>
-          </>
-        )}
-      </CardContent>
-    </Card>
-  )
-}
-
-function BuildPageDestinyPathsPlanner({ destinyNodes, buildDestinyPath, updateBuildDestinyPath }: {
-  destinyNodes: DestinyNode[]
-  buildDestinyPath: string[]
-  updateBuildDestinyPath: (path: string[]) => void
-}) {
-  // Map buildDestinyPath to DestinyNode[]
-  const initialPath = buildDestinyPath
-    .map(id => destinyNodes.find(n => n.id === id))
-    .filter((n): n is DestinyNode => !!n)
-  // No planned nodes for build page
-  const plannedNodes: PlannedNode[] = []
-  // Destiny path state
-  const {
-    selectedPath,
-    predictivePaths,
-    isNodePlanned,
-    getCurrentNodeName,
-    backtrack,
-    handleBreadcrumbClick,
-    startPath,
-    startNewPath,
-  } = useDestinyPath({
-    nodes: destinyNodes,
-    plannedNodes,
-    onNodePlan: () => {},
-    onNodeUnplan: () => {},
-    initialPath,
-  })
-  // Tag filter state
-  const {
-    filters,
-    handleTagSelect,
-    handleTagRemove,
-  } = usePlayerCreationFilters()
-  // Sync selectedPath to build state
-  React.useEffect(() => {
-    const next = selectedPath.map(n => n.id)
-    if (
-      buildDestinyPath.length !== next.length ||
-      buildDestinyPath.some((id, i) => id !== next[i])
-    ) {
-      updateBuildDestinyPath(next)
-    }
-  }, [selectedPath, buildDestinyPath, updateBuildDestinyPath])
-  return (
-    <ScrollArea className="h-[calc(60vh-300px)]">
-      <DestinyPossiblePathsList
-        possiblePaths={predictivePaths}
-        selectedPath={selectedPath}
-        isPlanned={isNodePlanned}
-        onBreadcrumbClick={handleBreadcrumbClick}
-      />
-    </ScrollArea>
   )
 }

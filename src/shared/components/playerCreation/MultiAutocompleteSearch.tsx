@@ -18,7 +18,7 @@ export function MultiAutocompleteSearch({
       {categories.map(category => (
         <div
           key={category.id}
-          className="flex-shrink-0 min-w-[200px] max-w-[300px]"
+          className="flex-1 min-w-[180px]"
         >
           <AutocompleteSearch
             categories={[category]}

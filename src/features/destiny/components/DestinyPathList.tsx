@@ -23,7 +23,7 @@ export function DestinyPerkList({
         ) : (
           <div
             key={node.id}
-            className="flex items-center p-2 border rounded cursor-pointer"
+            className={`flex items-center p-2 border rounded ${onNodeClick ? 'cursor-pointer' : ''}`}
             onClick={onNodeClick ? () => onNodeClick(node, index) : undefined}
           >
             <div className="flex-1 min-w-0">

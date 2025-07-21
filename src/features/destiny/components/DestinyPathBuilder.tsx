@@ -5,6 +5,7 @@ import { PredictivePathsSection } from './PredictivePathsSection'
 import { PathCompleteCard } from './PathCompleteCard'
 import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import { usePossibleDestinyPaths } from '../hooks/usePossibleDestinyPaths'
 import type { DestinyNode, PlannedNode } from '../types'
 import type { SelectedTag } from '@/shared/components/playerCreation/types'
 
@@ -35,7 +36,6 @@ export function DestinyPathBuilder({
     selectedPath,
     rootNodes,
     currentOptions,
-    predictivePaths,
     isNodePlanned,
     getCurrentNodeName,
     backtrack,
@@ -71,6 +71,22 @@ export function DestinyPathBuilder({
     onFiltersChange: () => {}, // No-op since we're not using the full filter system
     onSearch: () => {}, // No-op since we're not using the search system
   })
+
+  // Use the last node in the current selectedPath as the start node for possible paths
+  const lastNode = selectedPath.length > 0 ? selectedPath[selectedPath.length - 1] : undefined;
+  const possiblePaths = usePossibleDestinyPaths(nodes, lastNode);
+
+  // Pure function to check if a node is terminal (no children)
+  function isTerminalNode(node: DestinyNode) {
+    return nodes.every(n => !n.prerequisites.includes(node.name));
+  }
+
+  // Map to PredictivePath format
+  const predictivePaths = possiblePaths.map(path => ({
+    path,
+    isComplete: path.length > 0 && isTerminalNode(path[path.length - 1]),
+    endNode: path[path.length - 1],
+  }));
 
   return (
     <div className="space-y-6">
