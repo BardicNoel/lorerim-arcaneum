@@ -6,6 +6,9 @@ import type {
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
 import { AccordionGrid } from '@/shared/components/ui'
+import { ErrorBoundary } from '@/shared/components/generic'
+import { useDataFetching } from '@/shared/hooks/useDataFetching'
+import { errorReporting } from '@/shared/services/errorReporting'
 import {
   Accordion,
   AccordionContent,
@@ -34,6 +37,7 @@ import { useMemo } from 'react'
 import {
   BirthsignAccordion,
   CustomMultiAutocompleteSearch,
+  BirthsignErrorFallback,
 } from '../components'
 import { useFuzzySearch, useBirthsignData, useBirthsignFilters, useDisplayControls } from '../hooks'
 import type { Birthsign } from '../types'
@@ -307,25 +311,26 @@ export function AccordionBirthsignsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-destructive mb-4">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
-          >
-            Retry
-          </button>
-        </div>
-      </div>
+      <BirthsignErrorFallback
+        error={new Error(error)}
+        retry={refetch}
+        title="Failed to load birthsigns"
+        message="There was a problem loading the birthsign data. Please try again."
+      />
     )
   }
 
   return (
-    <PlayerCreationLayout
-      title="Birth Signs"
-      description="Choose your character's birthsign to gain unique abilities and bonuses based on the celestial constellations."
+    <ErrorBoundary
+      fallback={<BirthsignErrorFallback />}
+      onError={(error, errorInfo) => {
+        errorReporting.reportError(error, errorInfo)
+      }}
     >
+      <PlayerCreationLayout
+        title="Birth Signs"
+        description="Choose your character's birthsign to gain unique abilities and bonuses based on the celestial constellations."
+      >
       {/* Custom MultiAutocompleteSearch with FuzzySearchBox for keywords */}
       <div className="flex items-center gap-4 mb-4">
         <div className="flex-1">
@@ -602,6 +607,7 @@ export function AccordionBirthsignsPage() {
           </p>
         </div>
       )}
-    </PlayerCreationLayout>
+      </PlayerCreationLayout>
+    </ErrorBoundary>
   )
 }

@@ -9,6 +9,7 @@ export {
 export { EntityAvatar } from './EntityAvatar'
 export { CategoryBadge } from './CategoryBadge'
 export { FormattedText } from './FormattedText'
+export { ErrorBoundary } from './ErrorBoundary'
 
 // Re-export types for convenience
 export type { EntityType, AvatarSize } from './EntityAvatar'
