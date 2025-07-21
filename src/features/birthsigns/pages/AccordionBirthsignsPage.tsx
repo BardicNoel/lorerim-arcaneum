@@ -35,7 +35,7 @@ import {
   BirthsignAccordion,
   CustomMultiAutocompleteSearch,
 } from '../components'
-import { useFuzzySearch } from '../hooks'
+import { useFuzzySearch, useBirthsignData, useBirthsignFilters, useDisplayControls } from '../hooks'
 import type { Birthsign } from '../types'
 import {
   getAllGroups,
@@ -47,268 +47,43 @@ type SortOption = 'alphabetical' | 'group' | 'power-count'
 type ViewMode = 'list' | 'grid'
 
 export function AccordionBirthsignsPage() {
-  // Load birthsign data from public/data/birthsigns.json at runtime
-  const [birthsigns, setBirthsigns] = useState<Birthsign[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [expandedBirthsigns, setExpandedBirthsigns] = useState<Set<string>>(
-    new Set()
-  )
-  const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
-  const [viewMode, setViewMode] = useState<ViewMode>('grid')
-
-  // Data visibility controls
-  const [showStats, setShowStats] = useState(true)
-  const [showPowers, setShowPowers] = useState(true)
-  const [showSkills, setShowSkills] = useState(true)
-  const [showEffects, setShowEffects] = useState(true)
-
-  useEffect(() => {
-    async function fetchBirthsigns() {
-      try {
-        setLoading(true)
-        const res = await fetch(
-          `${import.meta.env.BASE_URL}data/birthsigns.json`
-        )
-        if (!res.ok) throw new Error('Failed to fetch birthsign data')
-        const data = await res.json()
-        setBirthsigns(data)
-      } catch (err) {
-        setError('Failed to load birthsign data')
-        console.error('Error loading birthsigns:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchBirthsigns()
-  }, [])
-
-  // Convert birthsigns to PlayerCreationItem format for consolidated view
-  const birthsignItems: PlayerCreationItem[] = useMemo(() => {
-    return birthsigns.map(transformBirthsignToPlayerCreationItem)
-  }, [birthsigns])
-
-  // Generate enhanced search categories for autocomplete
-  const generateSearchCategories = (): SearchCategory[] => {
-    const groups = getAllGroups(birthsigns)
-    const stats = getAllStats(birthsigns)
-
-    return [
-      {
-        id: 'fuzzy-search',
-        name: 'Fuzzy Search',
-        placeholder: 'Search by name, description, or abilities...',
-        options: [], // Fuzzy search doesn't need predefined options
-      },
-      {
-        id: 'groups',
-        name: 'Birthsign Groups',
-        placeholder: 'Search by birthsign group...',
-        options: groups.map(group => ({
-          id: `group-${group}`,
-          label: group,
-          value: group,
-          category: 'Birthsign Groups',
-          description: `Birthsigns from ${group} group`,
-        })),
-      },
-      {
-        id: 'stats',
-        name: 'Stats & Skills',
-        placeholder: 'Search by stats and skills...',
-        options: stats.map(stat => ({
-          id: `stat-${stat}`,
-          label: stat.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-          value: stat,
-          category: 'Stats & Skills',
-          description: `Birthsigns that affect ${stat}`,
-        })),
-      },
-    ]
-  }
-
-  const searchCategories = generateSearchCategories()
-
-  // --- Custom tag/filter state for fuzzy search ---
-  const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
-
-  // Add a tag (from autocomplete or custom input)
-  const handleTagSelect = (optionOrTag: SearchOption | string) => {
-    let tag: SelectedTag
-    if (typeof optionOrTag === 'string') {
-      tag = {
-        id: `custom-${optionOrTag}`,
-        label: optionOrTag,
-        value: optionOrTag,
-        category: 'Fuzzy Search',
-      }
-    } else {
-      tag = {
-        id: `${optionOrTag.category}-${optionOrTag.id}`,
-        label: optionOrTag.label,
-        value: optionOrTag.value,
-        category: optionOrTag.category,
-      }
-    }
-    // Prevent duplicate tags
-    if (
-      !selectedTags.some(
-        t => t.value === tag.value && t.category === tag.category
-      )
-    ) {
-      setSelectedTags(prev => [...prev, tag])
-    }
-  }
-
-  // Remove a tag
-  const handleTagRemove = (tagId: string) => {
-    setSelectedTags(prev => prev.filter(tag => tag.id !== tagId))
-  }
-
-  // Apply all filters to birthsigns
-  const filteredBirthsigns = birthsigns.filter(birthsign => {
-    // If no tags are selected, show all birthsigns
-    if (selectedTags.length === 0) return true
-
-    // Check each selected tag
-    return selectedTags.every(tag => {
-      switch (tag.category) {
-        case 'Fuzzy Search':
-          // For fuzzy search, we'll handle this separately
-          return true
-
-        case 'Birthsign Groups':
-          // Filter by birthsign group
-          return birthsign.group === tag.value
-
-        case 'Stats & Skills':
-          // Filter by stats and skills
-          const allStats = [
-            ...birthsign.stat_modifications.map(stat => stat.stat),
-            ...birthsign.skill_bonuses.map(skill => skill.stat),
-          ]
-          return allStats.some(stat => stat === tag.value)
-
-        default:
-          return true
-      }
-    })
-  })
-
-  // Apply fuzzy search to the filtered birthsigns
-  const fuzzySearchQuery = selectedTags
-    .filter(tag => tag.category === 'Fuzzy Search')
-    .map(tag => tag.value)
-    .join(' ')
-
-  const { filteredBirthsigns: fuzzyFilteredBirthsigns } = useFuzzySearch(
+  // Data loading
+  const { birthsigns, loading, error, refetch } = useBirthsignData()
+  // Filters and UI state (now pass birthsigns to the hook)
+  const {
+    selectedTags,
+    sortBy,
+    viewMode,
+    expandedBirthsigns,
+    addTag,
+    removeTag,
+    setSort,
+    setViewMode,
+    toggleExpanded,
+    expandAll,
+    collapseAll,
+    searchCategories,
+    fuzzySearchQuery,
     filteredBirthsigns,
-    fuzzySearchQuery
-  )
-
-  // Convert to PlayerCreationItem format
-  const displayItems: PlayerCreationItem[] = fuzzyFilteredBirthsigns.map(
-    transformBirthsignToPlayerCreationItem
-  )
-
-  // Sort the display items
-  const sortedDisplayItems = [...displayItems].sort((a, b) => {
-    switch (sortBy) {
-      case 'alphabetical':
-        return a.name.localeCompare(b.name)
-      case 'group':
-        // Define priority order for birthsign groups
-        const getGroupPriority = (group: string | undefined) => {
-          switch (group) {
-            case 'Warrior':
-              return 1
-            case 'Mage':
-              return 2
-            case 'Thief':
-              return 3
-            case 'Serpent':
-              return 4
-            case 'Other':
-              return 5
-            default:
-              return 6
-          }
-        }
-
-        const aPriority = getGroupPriority(a.category)
-        const bPriority = getGroupPriority(b.category)
-
-        // First sort by priority, then alphabetically within each category
-        if (aPriority !== bPriority) return aPriority - bPriority
-        return a.name.localeCompare(b.name)
-      case 'power-count':
-        // Sort by number of powers (descending), then alphabetically
-        const aPowerCount =
-          a.effects?.filter(effect => effect.target === 'power').length || 0
-        const bPowerCount =
-          b.effects?.filter(effect => effect.target === 'power').length || 0
-        if (aPowerCount !== bPowerCount) return bPowerCount - aPowerCount
-        return a.name.localeCompare(b.name)
-      default:
-        return 0
-    }
-  })
-
-  // Handle accordion expansion
-  const handleBirthsignToggle = (birthsignId: string) => {
-    const newExpanded = new Set(expandedBirthsigns)
-
-    if (viewMode === 'grid') {
-      // In grid mode, expand/collapse all items in the same row
-      const columns = 3 // Match the AccordionGrid columns prop
-      const itemIndex = sortedDisplayItems.findIndex(
-        item => item.id === birthsignId
-      )
-      const rowIndex = Math.floor(itemIndex / columns)
-      const rowStartIndex = rowIndex * columns
-      const rowEndIndex = Math.min(
-        rowStartIndex + columns,
-        sortedDisplayItems.length
-      )
-
-      // Check if any item in the row is currently expanded
-      const isRowExpanded = sortedDisplayItems
-        .slice(rowStartIndex, rowEndIndex)
-        .some(item => newExpanded.has(item.id))
-
-      if (isRowExpanded) {
-        // Collapse all items in the row
-        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
-          newExpanded.delete(item.id)
-        })
-      } else {
-        // Expand all items in the row
-        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
-          newExpanded.add(item.id)
-        })
-      }
-    } else {
-      // In list mode, toggle individual items
-      if (newExpanded.has(birthsignId)) {
-        newExpanded.delete(birthsignId)
-      } else {
-        newExpanded.add(birthsignId)
-      }
-    }
-
-    setExpandedBirthsigns(newExpanded)
-  }
-
-  // Handle expand all accordions
-  const handleExpandAll = () => {
-    const allBirthsignIds = sortedDisplayItems.map(item => item.id)
-    setExpandedBirthsigns(new Set(allBirthsignIds))
-  }
-
-  // Handle collapse all accordions
-  const handleCollapseAll = () => {
-    setExpandedBirthsigns(new Set())
-  }
+    displayItems,
+    sortedDisplayItems,
+  } = useBirthsignFilters(birthsigns)
+  // Display controls
+  const {
+    showStats,
+    showPowers,
+    showSkills,
+    showEffects,
+    toggleStats,
+    togglePowers,
+    toggleSkills,
+    toggleEffects,
+    toggleAll,
+    setStats,
+    setPowers,
+    setSkills,
+    setEffects,
+  } = useDisplayControls()
 
   // Check if all accordions are expanded
   const allExpanded =
@@ -357,8 +132,48 @@ export function AccordionBirthsignsPage() {
         <div className="flex-1">
           <CustomMultiAutocompleteSearch
             categories={searchCategories}
-            onSelect={handleTagSelect}
-            onCustomSearch={handleTagSelect}
+            onSelect={(optionOrTag: string | SearchOption) => {
+              let tag: SelectedTag
+              if (typeof optionOrTag === 'string') {
+                tag = {
+                  id: `custom-${optionOrTag}`,
+                  label: optionOrTag,
+                  value: optionOrTag,
+                  category: 'Fuzzy Search',
+                }
+              } else {
+                tag = {
+                  id: `${optionOrTag.category}-${optionOrTag.id}`,
+                  label: optionOrTag.label,
+                  value: optionOrTag.value,
+                  category: optionOrTag.category,
+                }
+              }
+              if (!selectedTags.some(t => t.value === tag.value && t.category === tag.category)) {
+                addTag(tag)
+              }
+            }}
+            onCustomSearch={(optionOrTag: string | SearchOption) => {
+              let tag: SelectedTag
+              if (typeof optionOrTag === 'string') {
+                tag = {
+                  id: `custom-${optionOrTag}`,
+                  label: optionOrTag,
+                  value: optionOrTag,
+                  category: 'Fuzzy Search',
+                }
+              } else {
+                tag = {
+                  id: `${optionOrTag.category}-${optionOrTag.id}`,
+                  label: optionOrTag.label,
+                  value: optionOrTag.value,
+                  category: optionOrTag.category,
+                }
+              }
+              if (!selectedTags.some(t => t.value === tag.value && t.category === tag.category)) {
+                addTag(tag)
+              }
+            }}
           />
         </div>
 
@@ -379,13 +194,13 @@ export function AccordionBirthsignsPage() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setSortBy('alphabetical')}>
+            <DropdownMenuItem onClick={() => setSort('alphabetical')}>
               Alphabetical
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setSortBy('group')}>
+            <DropdownMenuItem onClick={() => setSort('group')}>
               Birthsign Group
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setSortBy('power-count')}>
+            <DropdownMenuItem onClick={() => setSort('power-count')}>
               Power Count
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -417,7 +232,7 @@ export function AccordionBirthsignsPage() {
         <Button
           variant="outline"
           size="sm"
-          onClick={allExpanded ? handleCollapseAll : handleExpandAll}
+          onClick={allExpanded ? collapseAll : (e) => { expandAll(sortedDisplayItems.map(item => item.id)) }}
           className="flex items-center justify-center"
           title={
             allExpanded ? 'Collapse all accordions' : 'Expand all accordions'
@@ -437,7 +252,7 @@ export function AccordionBirthsignsPage() {
           <div className="flex flex-wrap gap-2 items-center">
             {/* Clear All Button */}
             <button
-              onClick={() => setSelectedTags([])}
+              onClick={() => selectedTags.forEach(tag => removeTag(tag.id))}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors duration-200 border border-border/50 hover:border-border cursor-pointer group"
               title="Clear all filters"
             >
@@ -450,7 +265,7 @@ export function AccordionBirthsignsPage() {
               <span
                 key={tag.id}
                 className="inline-flex items-center px-3 py-1.5 rounded-full bg-skyrim-gold/20 border border-skyrim-gold/30 text-sm font-medium text-skyrim-gold hover:bg-skyrim-gold/30 transition-colors duration-200 cursor-pointer group"
-                onClick={() => handleTagRemove(tag.id)}
+                onClick={() => removeTag(tag.id)}
                 title="Click to remove"
               >
                 {tag.label}
@@ -479,12 +294,7 @@ export function AccordionBirthsignsPage() {
                     checked={
                       showStats && showPowers && showSkills && showEffects
                     }
-                    onCheckedChange={checked => {
-                      setShowStats(checked)
-                      setShowPowers(checked)
-                      setShowSkills(checked)
-                      setShowEffects(checked)
-                    }}
+                    onCheckedChange={toggleAll}
                   />
                   <span className="text-sm font-medium">Toggle All</span>
                 </div>
@@ -494,7 +304,7 @@ export function AccordionBirthsignsPage() {
                   {/* Stats Card */}
                   <div
                     className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => setShowStats(!showStats)}
+                    onClick={toggleStats}
                   >
                     <div className="space-y-0.5">
                       <Label className="text-base font-medium">Stats</Label>
@@ -504,14 +314,15 @@ export function AccordionBirthsignsPage() {
                     </div>
                     <Switch
                       checked={showStats}
-                      onCheckedChange={setShowStats}
+                      onCheckedChange={setStats}
+                      onClick={e => e.stopPropagation()}
                     />
                   </div>
 
                   {/* Powers Card */}
                   <div
                     className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => setShowPowers(!showPowers)}
+                    onClick={togglePowers}
                   >
                     <div className="space-y-0.5">
                       <Label className="text-base font-medium">Powers</Label>
@@ -521,14 +332,15 @@ export function AccordionBirthsignsPage() {
                     </div>
                     <Switch
                       checked={showPowers}
-                      onCheckedChange={setShowPowers}
+                      onCheckedChange={setPowers}
+                      onClick={e => e.stopPropagation()}
                     />
                   </div>
 
                   {/* Skills Card */}
                   <div
                     className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => setShowSkills(!showSkills)}
+                    onClick={toggleSkills}
                   >
                     <div className="space-y-0.5">
                       <Label className="text-base font-medium">Skills</Label>
@@ -538,14 +350,15 @@ export function AccordionBirthsignsPage() {
                     </div>
                     <Switch
                       checked={showSkills}
-                      onCheckedChange={setShowSkills}
+                      onCheckedChange={setSkills}
+                      onClick={e => e.stopPropagation()}
                     />
                   </div>
 
                   {/* Effects Card */}
                   <div
                     className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1 min-h-[80px] cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => setShowEffects(!showEffects)}
+                    onClick={toggleEffects}
                   >
                     <div className="space-y-0.5">
                       <Label className="text-base font-medium">Effects</Label>
@@ -555,7 +368,8 @@ export function AccordionBirthsignsPage() {
                     </div>
                     <Switch
                       checked={showEffects}
-                      onCheckedChange={setShowEffects}
+                      onCheckedChange={setEffects}
+                      onClick={e => e.stopPropagation()}
                     />
                   </div>
                 </div>
@@ -583,7 +397,7 @@ export function AccordionBirthsignsPage() {
                 item={item}
                 originalBirthsign={originalBirthsign}
                 isExpanded={isExpanded}
-                onToggle={() => handleBirthsignToggle(item.id)}
+                onToggle={() => toggleExpanded(item.id)}
                 className="w-full"
                 showStats={showStats}
                 showPowers={showPowers}
@@ -611,7 +425,7 @@ export function AccordionBirthsignsPage() {
                 item={item}
                 originalBirthsign={originalBirthsign}
                 isExpanded={isExpanded}
-                onToggle={() => handleBirthsignToggle(item.id)}
+                onToggle={() => toggleExpanded(item.id)}
                 className="w-full"
                 showStats={showStats}
                 showPowers={showPowers}
