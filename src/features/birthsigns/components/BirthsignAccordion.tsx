@@ -30,165 +30,13 @@ import React from 'react'
 import type { Birthsign } from '../types'
 import { getUserFriendlyStat, parseDescription } from '../utils'
 import { BirthsignAvatar } from './BirthsignAvatar'
-
-/**
- * Component to format any description with highlighted values in angle brackets, numeric stat increases, and bold attributes/skills
- */
-function FormattedText({
-  text,
-  className = 'text-sm text-muted-foreground',
-}: {
-  text: string
-  className?: string
-}) {
-  if (!text) return null
-
-  // Parse the description to replace placeholders
-  const parsedText = parseDescription(text)
-
-  // Define attributes and skills that should be bolded
-  const attributesAndSkills = [
-    // Core attributes
-    'health',
-    'magicka',
-    'stamina',
-    // Attribute variations
-    'health regeneration',
-    'magicka regeneration',
-    'stamina regeneration',
-    // Skills
-    'one-handed',
-    'two-handed',
-    'archery',
-    'block',
-    'heavy armor',
-    'light armor',
-    'smithing',
-    'alchemy',
-    'enchanting',
-    'restoration',
-    'destruction',
-    'alteration',
-    'illusion',
-    'conjuration',
-    'mysticism',
-    'speech',
-    'lockpicking',
-    'sneak',
-    'pickpocket',
-    'lockpicking',
-    'pickpocketing',
-    'stealth',
-    'acrobatics',
-    // Skill variations
-    'one handed',
-    'two handed',
-    'heavy armor',
-    'light armor',
-    // Combat stats
-    'weapon damage',
-    'armor rating',
-    'armor penetration',
-    'unarmed damage',
-    'movement speed',
-    'sprint speed',
-    'carry weight',
-    'spell strength',
-    'shout cooldown',
-    'price modification',
-    'damage reflection',
-    // Resistances
-    'poison resistance',
-    'fire resistance',
-    'frost resistance',
-    'shock resistance',
-    'magic resistance',
-    'disease resistance',
-    // Special effects
-    'lockpicking durability',
-    'lockpicking expertise',
-    'pickpocketing success',
-    'stealth detection',
-    'enchanting strength',
-  ]
-
-  // Create a regex pattern for attributes and skills (case insensitive)
-  const attributesPattern = new RegExp(
-    `\\b(${attributesAndSkills.join('|')})\\b`,
-    'gi'
-  )
-
-  // First, split by angle bracket patterns and highlight those values
-  const parts = parsedText.split(/(<[^>]+>)/g)
-
-  // Then, for each part that's not an angle bracket value, process attributes and numeric values
-  const processedParts = parts.map((part, index) => {
-    if (part.startsWith('<') && part.endsWith('>')) {
-      // This is an angle bracket value - remove the brackets and style it
-      const value = part.slice(1, -1)
-      return (
-        <span
-          key={`bracket-${index}`}
-          className="font-bold italic text-skyrim-gold"
-        >
-          {value}
-        </span>
-      )
-    } else {
-      // This is regular text - first bold attributes and skills, then highlight numeric values
-      let processedPart = part
-
-      // Replace attributes and skills with bold versions
-      processedPart = processedPart.replace(attributesPattern, match => {
-        return `<bold>${match}</bold>`
-      })
-
-      // Split by the bold markers and numeric patterns
-      const subParts = processedPart.split(
-        /(<bold>.*?<\/bold>|\+?\d+(?:\.\d+)?%?)/g
-      )
-
-      return subParts.map((subPart, subIndex) => {
-        if (subPart.startsWith('<bold>') && subPart.endsWith('</bold>')) {
-          // This is a bold attribute/skill - remove markers and style it
-          const attribute = subPart.slice(6, -7) // Remove <bold> and </bold>
-          return (
-            <span
-              key={`attribute-${index}-${subIndex}`}
-              className="font-semibold text-primary"
-            >
-              {attribute}
-            </span>
-          )
-        } else if (/^[+-]?\d+(?:\.\d+)?%?$/.test(subPart)) {
-          // This is a numeric value - determine if it's positive or negative
-          const numericValue = parseFloat(subPart)
-          const isPositive = subPart.startsWith('+') || numericValue > 0
-          const isNegative = subPart.startsWith('-') || numericValue < 0
-
-          let colorClass = 'text-skyrim-gold' // Default for neutral values
-          if (isPositive) {
-            colorClass = 'text-green-600'
-          } else if (isNegative) {
-            colorClass = 'text-red-600'
-          }
-
-          return (
-            <span
-              key={`numeric-${index}-${subIndex}`}
-              className={`font-bold ${colorClass}`}
-            >
-              {subPart}
-            </span>
-          )
-        }
-        return subPart
-      })
-    }
-  })
-
-  return <div className={className}>{processedParts}</div>
-}
+import { BirthsignFormattedText } from './BirthsignFormattedText'
+import {
+  getBirthsignGroupStyle,
+  getBirthsignGroupColor,
+  getBirthsignEffectIcon,
+  getBirthsignEffectTypeColor,
+} from '../config/birthsignConfig'
 
 /**
  * Function to format seconds to a readable time format
@@ -331,7 +179,7 @@ export function BirthsignAccordion({
             <Badge
               variant="outline"
               className={cn(
-                birthsignGroupStyles[originalBirthsign.group] ||
+                getBirthsignGroupStyle(originalBirthsign.group) ||
                   'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200',
                 sizeClasses.sm,
                 'font-medium transition-colors'
@@ -372,7 +220,7 @@ export function BirthsignAccordion({
       {/* Collapsed Content */}
       <AccordionCollapsedContentSlot>
         <div className="space-y-3">
-          <FormattedText
+          <BirthsignFormattedText
             text={parsedDescription}
             className="text-base text-muted-foreground"
           />
@@ -444,7 +292,7 @@ export function BirthsignAccordion({
                         </Badge>
                       )}
                     </div>
-                    <FormattedText
+                    <BirthsignFormattedText
                       text={power.description}
                       className="text-sm text-muted-foreground"
                     />

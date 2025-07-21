@@ -8,6 +8,7 @@ export {
 } from './GenericAccordionCard'
 export { EntityAvatar } from './EntityAvatar'
 export { CategoryBadge } from './CategoryBadge'
+export { FormattedText } from './FormattedText'
 
 // Re-export types for convenience
 export type { EntityType, AvatarSize } from './EntityAvatar'
