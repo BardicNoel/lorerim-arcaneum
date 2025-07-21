@@ -50,15 +50,15 @@ export function TraitSelectionControl({
     if (isInBuild) {
       return `This trait is currently in your build as a ${traitType} trait`
     } else if (isAllTraitsFull()) {
-      return 'Maximum traits reached (2 regular + 1 extra unlock)'
+      return 'Maximum traits reached (2 starting + 1 late game)'
     } else {
-      return `Add this trait to your character build (${regularCount}/2 regular, ${bonusCount}/1 extra unlock)`
+      return `Add this trait to your character build (${regularCount}/2 starting, ${bonusCount}/1 late game)`
     }
   }
 
   const getStatusText = () => {
     if (isInBuild) {
-      return traitType === 'regular' ? 'Regular Trait' : 'Extra Unlock Trait'
+      return traitType === 'regular' ? 'Starting Trait' : 'Late Game Trait'
     } else if (isAllTraitsFull()) {
       return 'Max Reached'
     } else {
@@ -112,7 +112,7 @@ export function TraitSelectionControl({
           </Badge>
         </div>
         <div className="text-xs text-muted-foreground">
-          {regularCount}/2 regular, {bonusCount}/1 extra unlock
+          {regularCount}/2 starting, {bonusCount}/1 late game
         </div>
       </div>
       <Switch

@@ -1,61 +1,42 @@
-import {
-  EntitySelectionCard,
-  type EntityOption,
-} from '@/shared/components/playerCreation'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
-import { ExternalLink, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useTraits } from '../hooks/useTraits'
+import type { Trait } from '../types'
+import { TraitAutocomplete } from './'
 
 interface TraitSelectionCardProps {
   className?: string
 }
 
-// Mock trait data - in real implementation, this would come from a traits hook
-const mockTraits: EntityOption[] = [
-  {
-    id: 'trait_1',
-    name: 'Acoustic Arcanist',
-    description: 'Your magic flows through melody and vibration.',
-    category: 'Magic',
-    tags: ['magic', 'spells'],
-  },
-  {
-    id: 'trait_2',
-    name: 'Adrenaline Rush',
-    description: 'You possess a natural flight response.',
-    category: 'Combat',
-    tags: ['combat', 'survival'],
-  },
-  {
-    id: 'trait_3',
-    name: 'Angler',
-    description: 'Your bond with the sea grants unique benefits.',
-    category: 'Survival',
-    tags: ['fishing', 'water'],
-  },
-]
-
 export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
+  const { allTraits } = useTraits()
   const {
     build,
-    addTrait,
+    addTraitToSlot,
     removeTrait,
     getRegularTraitLimit,
     getBonusTraitLimit,
   } = useCharacterBuild()
   const navigate = useNavigate()
 
-  // Get selected traits
-  const selectedTraitIds = [...build.traits.regular, ...build.traits.bonus]
-  const selectedTraits = mockTraits.filter(trait =>
-    selectedTraitIds.includes(trait.id)
-  )
+  const regularLimit = getRegularTraitLimit()
+  const bonusLimit = getBonusTraitLimit()
 
-  const handleTraitSelect = (traitId: string) => {
-    addTrait(traitId)
+  // Get selected traits
+  const selectedRegularTraits = build.traits.regular
+    .map(id => allTraits.find(trait => trait.edid === id))
+    .filter(Boolean) as Trait[]
+
+  const selectedBonusTraits = build.traits.bonus
+    .map(id => allTraits.find(trait => trait.edid === id))
+    .filter(Boolean) as Trait[]
+
+  const handleTraitSelect = (trait: Trait, slotType: 'regular' | 'bonus') => {
+    addTraitToSlot(trait.edid, slotType)
   }
 
   const handleTraitRemove = (traitId: string) => {
@@ -66,149 +47,172 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
     navigate('/traits')
   }
 
-  const handleClearAllTraits = () => {
-    selectedTraitIds.forEach(traitId => removeTrait(traitId))
-  }
-
-  const renderTraitDisplay = (entity: EntityOption) => (
-    <div className="flex items-center gap-3">
-      <div className="flex-1">
-        <div className="font-medium">{entity.name}</div>
-        {entity.category && (
-          <div className="text-xs text-muted-foreground">{entity.category}</div>
-        )}
-      </div>
-      <Badge variant="outline" className="text-xs">
-        Trait
-      </Badge>
-    </div>
+  // Filter out already selected traits from autocomplete options
+  const availableTraits = allTraits.filter(
+    trait =>
+      !build.traits.regular.includes(trait.edid) &&
+      !build.traits.bonus.includes(trait.edid)
   )
 
-  const regularLimit = getRegularTraitLimit()
-  const bonusLimit = getBonusTraitLimit()
-  const maxSelections = regularLimit + bonusLimit
-
-  // If no traits are selected, show the selector
-  if (selectedTraits.length === 0) {
-    return (
-      <EntitySelectionCard
-        title="Traits"
-        description={`Choose up to ${regularLimit} regular and ${bonusLimit} bonus traits`}
-        selectedEntities={[]}
-        availableEntities={mockTraits}
-        onEntitySelect={handleTraitSelect}
-        onEntityRemove={handleTraitRemove}
-        onNavigateToPage={handleNavigateToTraitPage}
-        selectionType="multi"
-        maxSelections={maxSelections}
-        placeholder="Select traits..."
-        className={className}
-        renderEntityDisplay={renderTraitDisplay}
-      />
-    )
-  }
-
-  // If traits are selected, show the summary with clear button
   return (
     <Card className={className}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">Traits</CardTitle>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleNavigateToTraitPage}
-              className="text-xs"
-            >
-              <ExternalLink className="h-3 w-3 mr-1" />
-              View All
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleClearAllTraits}
-              className="text-xs"
-            >
-              <X className="h-3 w-3 mr-1" />
-              Clear All
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleNavigateToTraitPage}
+            className="text-sm whitespace-nowrap cursor-pointer"
+          >
+            View all traits →
+          </Button>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Trait Count Summary */}
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">
-            {selectedTraits.length} of {maxSelections} traits selected
-          </span>
-          <div className="flex gap-2 text-xs">
-            <Badge variant="secondary">
-              {build.traits.regular.length} Regular
-            </Badge>
-            <Badge variant="secondary">{build.traits.bonus.length} Bonus</Badge>
-          </div>
-        </div>
+      <CardContent className="space-y-6">
+        {/* Starting Traits */}
+        <div className="space-y-4">
+          <h4 className="text-md font-medium text-foreground">
+            Starting Traits
+          </h4>
 
-        {/* Selected Traits List */}
-        <div className="space-y-3">
-          {selectedTraits.map((trait, index) => (
-            <div key={trait.id} className="border rounded-lg p-3">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h4 className="font-medium">{trait.name}</h4>
-                    {trait.category && (
-                      <Badge variant="secondary" className="text-xs">
-                        {trait.category}
-                      </Badge>
-                    )}
+          {/* Starting Trait Slot 1 */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="text-xs">
+                Slot 1
+              </Badge>
+              {selectedRegularTraits[0] && (
+                <Badge variant="default" className="text-xs">
+                  Starting
+                </Badge>
+              )}
+            </div>
+
+            {selectedRegularTraits[0] ? (
+              <div className="flex items-start gap-3 p-3 border rounded-lg bg-yellow-50/50 border-yellow-500 shadow-yellow-500/20">
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-sm">
+                    {selectedRegularTraits[0].name}
                   </div>
-                  <p className="text-sm text-muted-foreground mb-2">
-                    {trait.description}
-                  </p>
-
-                  {/* Show trait type badge */}
-                  <Badge
-                    variant={
-                      build.traits.regular.includes(trait.id)
-                        ? 'default'
-                        : 'outline'
-                    }
-                    className="text-xs"
-                  >
-                    {build.traits.regular.includes(trait.id)
-                      ? 'Regular'
-                      : 'Bonus'}
-                  </Badge>
+                  <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                    {selectedRegularTraits[0].description}
+                  </div>
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => handleTraitRemove(trait.id)}
-                  className="h-8 w-8 p-0"
+                  onClick={() =>
+                    handleTraitRemove(selectedRegularTraits[0].edid)
+                  }
+                  className="h-6 w-6 p-0 hover:bg-red-100 hover:text-red-600 flex-shrink-0"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-3 w-3" />
                 </Button>
               </div>
+            ) : (
+              <TraitAutocomplete
+                traits={availableTraits}
+                onSelect={trait => handleTraitSelect(trait, 'regular')}
+                placeholder="Select starting trait..."
+                className="w-full"
+              />
+            )}
+          </div>
+
+          {/* Starting Trait Slot 2 */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="text-xs">
+                Slot 2
+              </Badge>
+              {selectedRegularTraits[1] && (
+                <Badge variant="default" className="text-xs">
+                  Starting
+                </Badge>
+              )}
             </div>
-          ))}
+
+            {selectedRegularTraits[1] ? (
+              <div className="flex items-start gap-3 p-3 border rounded-lg bg-yellow-50/50 border-yellow-500 shadow-yellow-500/20">
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-sm">
+                    {selectedRegularTraits[1].name}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                    {selectedRegularTraits[1].description}
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() =>
+                    handleTraitRemove(selectedRegularTraits[1].edid)
+                  }
+                  className="h-6 w-6 p-0 hover:bg-red-100 hover:text-red-600 flex-shrink-0"
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </div>
+            ) : (
+              <TraitAutocomplete
+                traits={availableTraits}
+                onSelect={trait => handleTraitSelect(trait, 'regular')}
+                placeholder="Select starting trait..."
+                className="w-full"
+              />
+            )}
+          </div>
         </div>
 
-        {/* Add More Button */}
-        {selectedTraits.length < maxSelections && (
-          <Button
-            variant="outline"
-            onClick={() => {
-              // This would ideally open the selector again
-              // For now, we'll navigate to the traits page
-              handleNavigateToTraitPage()
-            }}
-            className="w-full"
-          >
-            Add More Traits
-          </Button>
-        )}
+        {/* Late Game Traits */}
+        <div className="space-y-4">
+          <h4 className="text-md font-medium text-foreground">
+            Late Game Traits
+          </h4>
+
+          {/* Late Game Trait Slot */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="text-xs">
+                Slot 1
+              </Badge>
+              {selectedBonusTraits[0] && (
+                <Badge variant="secondary" className="text-xs">
+                  Late Game
+                </Badge>
+              )}
+            </div>
+
+            {selectedBonusTraits[0] ? (
+              <div className="flex items-start gap-3 p-3 border rounded-lg bg-gray-50/50 border-gray-400 shadow-gray-400/20">
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-sm">
+                    {selectedBonusTraits[0].name}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                    {selectedBonusTraits[0].description}
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleTraitRemove(selectedBonusTraits[0].edid)}
+                  className="h-6 w-6 p-0 hover:bg-red-100 hover:text-red-600 flex-shrink-0"
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </div>
+            ) : (
+              <TraitAutocomplete
+                traits={availableTraits}
+                onSelect={trait => handleTraitSelect(trait, 'bonus')}
+                placeholder="Select late game trait..."
+                className="w-full"
+              />
+            )}
+          </div>
+        </div>
       </CardContent>
     </Card>
   )

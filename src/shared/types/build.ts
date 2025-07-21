@@ -19,7 +19,6 @@ export interface BuildState {
   }
   equipment: string[] // Array of EDIDs
   userProgress: {
-    gameCompleted: boolean // Whether user has completed the game
     unlocks: string[] // Array of unlock IDs
   }
 }
@@ -45,7 +44,6 @@ export const DEFAULT_BUILD: BuildState = {
   },
   equipment: [],
   userProgress: {
-    gameCompleted: false,
     unlocks: [],
   },
 }

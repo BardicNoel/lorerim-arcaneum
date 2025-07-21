@@ -2,11 +2,9 @@ import { RaceSelectionCard } from '@/features/races/components'
 import { TraitSelectionCard } from '@/features/traits/components'
 import { FloatingBuildButton } from '@/shared/components/FloatingBuildButton'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
-import { Badge } from '@/shared/ui/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Input } from '@/shared/ui/ui/input'
 import { Label } from '@/shared/ui/ui/label'
-import { Switch } from '@/shared/ui/ui/switch'
 import { AlertTriangle, Info } from 'lucide-react'
 import { useState } from 'react'
 
@@ -82,38 +80,7 @@ export function BuildPage() {
       </Card>
 
       {/* Game Progress */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Game Progress</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <Label htmlFor="game-completed">Game Completed</Label>
-              <p className="text-sm text-muted-foreground">
-                Unlocks late game trait slot
-              </p>
-            </div>
-            <Switch
-              id="game-completed"
-              checked={build.userProgress.gameCompleted}
-              onCheckedChange={checked =>
-                updateBuild({
-                  userProgress: {
-                    ...build.userProgress,
-                    gameCompleted: checked,
-                  },
-                })
-              }
-            />
-          </div>
-          {build.userProgress.gameCompleted && (
-            <Badge variant="secondary" className="w-fit">
-              Late game traits unlocked
-            </Badge>
-          )}
-        </CardContent>
-      </Card>
+      {/* Removed Game Completed switch and related logic */}
 
       {/* Trait Limits Configuration */}
       <Card>
@@ -128,7 +95,7 @@ export function BuildPage() {
             <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400 mt-0.5 flex-shrink-0" />
             <div className="text-sm">
               <strong>
-                Default configuration is 2 regular + 1 extra unlock traits.
+                Default configuration is 2 starting + 1 late game traits.
               </strong>
               Increasing these limits requires corresponding MCM (Mod
               Configuration Menu) changes in-game. Make sure your MCM settings
@@ -138,7 +105,7 @@ export function BuildPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="regular-limit">Regular Traits Limit</Label>
+              <Label htmlFor="regular-limit">Starting Traits Limit</Label>
               <Input
                 id="regular-limit"
                 type="number"
@@ -153,7 +120,7 @@ export function BuildPage() {
               </p>
             </div>
             <div>
-              <Label htmlFor="bonus-limit">Extra Unlock Traits Limit</Label>
+              <Label htmlFor="bonus-limit">Late Game Traits Limit</Label>
               <Input
                 id="bonus-limit"
                 type="number"
@@ -165,8 +132,6 @@ export function BuildPage() {
               />
               <p className="text-xs text-muted-foreground mt-1">
                 Currently selected: {build.traits.bonus.length}
-                {!build.userProgress.gameCompleted &&
-                  ' (requires game completion)'}
               </p>
             </div>
           </div>
@@ -175,8 +140,8 @@ export function BuildPage() {
             <div className="flex items-start gap-2 p-4 rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
               <Info className="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
               <div className="text-sm">
-                <strong>Custom limits detected:</strong> {regularLimit} regular
-                + {bonusLimit} extra unlock traits. Remember to update your MCM
+                <strong>Custom limits detected:</strong> {regularLimit} starting
+                + {bonusLimit} late game traits. Remember to update your MCM
                 settings accordingly.
               </div>
             </div>
@@ -212,8 +177,8 @@ export function BuildPage() {
             <div>
               <span className="font-medium">Traits:</span>
               <div className="text-muted-foreground">
-                {build.traits.regular.length}/{regularLimit} regular,{' '}
-                {build.traits.bonus.length}/{bonusLimit} extra unlock
+                {build.traits.regular.length}/{regularLimit} starting,{' '}
+                {build.traits.bonus.length}/{bonusLimit} late game
               </div>
             </div>
           </div>
