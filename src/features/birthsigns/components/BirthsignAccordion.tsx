@@ -63,6 +63,7 @@ interface BirthsignAccordionProps {
   showPowers?: boolean
   showSkills?: boolean
   showEffects?: boolean
+  showAddToBuild?: boolean
 }
 
 // Enhanced icon mapping for birthsign effects
@@ -120,6 +121,7 @@ export function BirthsignAccordion({
   showPowers = true,
   showSkills = true,
   showEffects = true,
+  showAddToBuild = true,
 }: BirthsignAccordionProps) {
   if (!originalBirthsign) return null
 
@@ -154,13 +156,15 @@ export function BirthsignAccordion({
       className={className}
     >
       {/* Left Controls */}
-      <AccordionLeftControls>
-        <AddToBuildSwitchSimple
-          itemId={item.id}
-          itemType="stone"
-          itemName={item.name}
-        />
-      </AccordionLeftControls>
+      {showAddToBuild && (
+        <AccordionLeftControls>
+          <AddToBuildSwitchSimple
+            itemId={item.id}
+            itemType="stone"
+            itemName={item.name}
+          />
+        </AccordionLeftControls>
+      )}
 
       {/* Header Content */}
       <AccordionHeader>
@@ -230,6 +234,16 @@ export function BirthsignAccordion({
       {/* Expanded Content */}
       <AccordionExpandedContentSlot>
         <div className="space-y-6">
+          {/* Description Section */}
+          <div>
+            <h5 className="text-lg font-medium text-foreground mb-3">
+              Description
+            </h5>
+            <BirthsignFormattedText
+              text={parsedDescription}
+              className="text-base text-muted-foreground"
+            />
+          </div>
           {/* Stats Section */}
           {showStats && originalBirthsign.stat_modifications.length > 0 && (
             <div>

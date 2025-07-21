@@ -1,5 +1,6 @@
 import { RaceSelectionCard } from '@/features/races/components'
 import { TraitSelectionCard } from '@/features/traits/components'
+import { BirthsignSelectionCard } from '@/features/birthsigns'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Input } from '@/shared/ui/ui/input'
@@ -146,6 +147,8 @@ export function BuildPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             {/* Race Selection and Display */}
             <RaceSelectionCard />
+            {/* Birth Sign Selection and Display */}
+            <BirthsignSelectionCard />
             {/* Trait Selection and Display */}
             <TraitSelectionCard />
           </div>
