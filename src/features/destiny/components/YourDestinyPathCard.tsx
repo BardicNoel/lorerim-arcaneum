@@ -2,8 +2,9 @@ import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Button } from '@/shared/ui/ui/button'
 import { MapPin } from 'lucide-react'
-import { DestinyPathBreadcrumbs } from './DestinyPathBreadcrumbs'
-import { DestinyPathList } from './DestinyPathList'
+import { DestinyBreadcrumbTrail } from './DestinyPathBreadcrumbs'
+import { DestinyNodeHoverCard } from './DestinyNodeHoverCard'
+import { DestinyPerkList } from './DestinyPathList'
 import type { DestinyNode } from '../types'
 
 interface YourDestinyPathCardProps {
@@ -42,15 +43,16 @@ export function YourDestinyPathCard({
         ) : (
           <div className="space-y-4">
             {/* Breadcrumbs */}
-            <DestinyPathBreadcrumbs
+            <DestinyBreadcrumbTrail
               path={selectedPath}
-              selectedPathLength={selectedPath.length}
-              isPlanned={isPlanned}
-              onBreadcrumbClick={onBacktrack}
+              onNodeClick={onBacktrack}
+              BreadcrumbHover={(node, badge) => (
+                <DestinyNodeHoverCard node={node} isPlanned={isPlanned(node.id)}>{badge}</DestinyNodeHoverCard>
+              )}
             />
 
             {/* Selected Path List */}
-            <DestinyPathList path={selectedPath} />
+            <DestinyPerkList path={selectedPath} />
           </div>
         )}
       </CardContent>

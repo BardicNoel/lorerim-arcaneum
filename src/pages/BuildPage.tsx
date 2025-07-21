@@ -23,6 +23,9 @@ import type { SelectedTag } from '@/shared/components/playerCreation/types'
 import React from 'react'
 import { DestinyBreadcrumbTrail } from '@/features/destiny/components/DestinyPathBreadcrumbs'
 import { DestinyNodeHoverCard } from '@/features/destiny/components/DestinyNodeHoverCard'
+import { DestinyPerkList } from '@/features/destiny/components/DestinyPathList'
+import { DestinyPossiblePathsList } from '@/features/destiny/components/PredictivePathsSection'
+import { ScrollArea } from '@/shared/ui/ui/scroll-area'
 
 export function BuildPage() {
   const { build, setBuildName, setBuildNotes, updateBuild, resetBuild, setDestinyPath } =
@@ -367,7 +370,7 @@ function DestinySelectionCard({
                   )}
                 />
               </div>
-              <DestinyPathList path={selectedPath} />
+              <DestinyPerkList path={selectedPath} />
               <Accordion type="single" collapsible className="mt-4">
                 <AccordionItem value="paths">
                   <AccordionTrigger>Show Possible Paths</AccordionTrigger>
@@ -433,16 +436,13 @@ function BuildPageDestinyPathsPlanner({ destinyNodes, buildDestinyPath, updateBu
     }
   }, [selectedPath, buildDestinyPath, updateBuildDestinyPath])
   return (
-    <PredictivePathsSection
-      predictivePaths={predictivePaths}
-      selectedPath={selectedPath}
-      isPlanned={isNodePlanned}
-      onBreadcrumbClick={handleBreadcrumbClick}
-      getCurrentNodeName={getCurrentNodeName}
-      selectedTags={filters.selectedTags as SelectedTag[]}
-      onTagSelect={handleTagSelect}
-      onTagRemove={handleTagRemove}
-      hideFilters={true}
-    />
+    <ScrollArea className="h-[calc(60vh-300px)]">
+      <DestinyPossiblePathsList
+        possiblePaths={predictivePaths}
+        selectedPath={selectedPath}
+        isPlanned={isNodePlanned}
+        onBreadcrumbClick={handleBreadcrumbClick}
+      />
+    </ScrollArea>
   )
 }
