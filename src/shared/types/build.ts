@@ -21,6 +21,7 @@ export interface BuildState {
   userProgress: {
     unlocks: string[] // Array of unlock IDs
   }
+  destinyPath: string[] // Ordered array of DestinyNode ids or names, from root to leaf
 }
 
 export const DEFAULT_BUILD: BuildState = {
@@ -46,4 +47,5 @@ export const DEFAULT_BUILD: BuildState = {
   userProgress: {
     unlocks: [],
   },
+  destinyPath: [], // No destiny path selected by default
 }

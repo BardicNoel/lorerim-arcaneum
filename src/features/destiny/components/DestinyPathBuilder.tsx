@@ -4,6 +4,7 @@ import { YourDestinyPathCard } from './YourDestinyPathCard'
 import { PredictivePathsSection } from './PredictivePathsSection'
 import { PathCompleteCard } from './PathCompleteCard'
 import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import type { DestinyNode, PlannedNode } from '../types'
 import type { SelectedTag } from '@/shared/components/playerCreation/types'
 
@@ -20,6 +21,16 @@ export function DestinyPathBuilder({
   onNodePlan,
   onNodeUnplan,
 }: DestinyPathBuilderProps) {
+  const { getDestinyPath, setDestinyPath } = useCharacterBuild()
+  // Hydrate from build state
+  const destinyPathIds = getDestinyPath()
+  const initialPath = React.useMemo(() => {
+    // Map ids to DestinyNode objects, filter out missing
+    return destinyPathIds
+      .map(id => nodes.find(n => n.id === id))
+      .filter((n): n is DestinyNode => !!n)
+  }, [destinyPathIds, nodes])
+
   const {
     selectedPath,
     rootNodes,
@@ -36,7 +47,20 @@ export function DestinyPathBuilder({
     plannedNodes,
     onNodePlan,
     onNodeUnplan,
+    initialPath,
   })
+
+  // Persist selectedPath to build state
+  React.useEffect(() => {
+    const current = getDestinyPath()
+    const next = selectedPath.map(n => n.id)
+    if (
+      current.length !== next.length ||
+      current.some((id, i) => id !== next[i])
+    ) {
+      setDestinyPath(next)
+    }
+  }, [selectedPath, getDestinyPath, setDestinyPath])
 
   // Use the player creation filters hook for tag management
   const {

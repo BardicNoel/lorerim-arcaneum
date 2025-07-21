@@ -23,6 +23,7 @@ interface PredictivePathsSectionProps {
   selectedTags: SelectedTag[]
   onTagSelect: (tag: SelectedTag) => void
   onTagRemove: (tagId: string) => void
+  hideFilters?: boolean // New prop
 }
 
 export function PredictivePathsSection({
@@ -34,6 +35,7 @@ export function PredictivePathsSection({
   selectedTags,
   onTagSelect,
   onTagRemove,
+  hideFilters = false,
 }: PredictivePathsSectionProps) {
   // Filter paths based on selected tags
   const filteredPaths = useMemo(() => {
@@ -68,12 +70,14 @@ export function PredictivePathsSection({
   return (
     <div className="space-y-4">
       {/* Search Filters */}
-      <DestinyPathSearch
-        predictivePaths={predictivePaths}
-        selectedTags={selectedTags}
-        onTagSelect={onTagSelect}
-        onTagRemove={onTagRemove}
-      />
+      {!hideFilters && (
+        <DestinyPathSearch
+          predictivePaths={predictivePaths}
+          selectedTags={selectedTags}
+          onTagSelect={onTagSelect}
+          onTagRemove={onTagRemove}
+        />
+      )}
 
       {/* Paths Display */}
       <Card className="h-[calc(60vh-300px)] overflow-hidden">

@@ -12,6 +12,7 @@ interface YourDestinyPathCardProps {
   isPlanned: (nodeId: string) => boolean
   onBacktrack: (index: number) => void
   onStartPath: (node: DestinyNode) => void
+  action?: React.ReactNode // Optional action area
 }
 
 export function YourDestinyPathCard({
@@ -20,10 +21,11 @@ export function YourDestinyPathCard({
   isPlanned,
   onBacktrack,
   onStartPath,
+  action,
 }: YourDestinyPathCardProps) {
   return (
     <Card>
-      <CardHeader>
+      <CardHeader action={action}>
         <CardTitle className="flex items-center gap-2">
           <MapPin className="w-5 h-5" />
           Your Destiny Path
