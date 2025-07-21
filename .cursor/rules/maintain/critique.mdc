@@ -1,0 +1,86 @@
+# Cursor Prompt: Modular Critical Analysis of React/Vite/Tailwind Product
+
+## 🎯 Objective
+
+Create a modular prompt for Cursor agents to critically analyze a React/Vite/Tailwind product feature. The prompt references ancillary rules (e.g., state management, routing, styling) to support context-specific analysis. This allows consistent critical evaluation while adapting to different architectural expectations.
+
+---
+
+## 📝 Prompt Template
+
+"""
+You are analyzing a React/Vite/Tailwind codebase. A feature will be provided as context.
+
+In addition to this prime prompt, consult the following ancillary rules for expectations:
+
+- **State Management Rule** (defines acceptable state handling patterns) @state-management.mdc
+- **Routing Rule** (defines routing best practices)
+- **Styling Rule** (defines Tailwind usage guidelines)
+
+For the given feature, produce a **detailed critical analysis report**. The report must:
+
+### 📋 Enumerate Components and Code Parts
+
+1. List all React components, hooks, utilities, and Tailwind structures involved.
+2. For each part, briefly describe its role in the feature.
+
+### 🔎 Inspect for Issues
+
+For each part, inspect for:
+
+- **Anti-patterns:** Identify patterns such as prop drilling, overuse of context, tightly coupled logic/UI, or improper React hooks usage.
+- **Non-conformance to Ancillary Rules:** Highlight any deviations from the state management, routing, or styling expectations.
+- **Unused Code:** Flag unused imports, dead code, or redundant props.
+- **Generalization Opportunities:** Suggest components or utilities that could be abstracted into shared/generic modules.
+- **Performance Concerns:** Spot potential issues like unnecessary re-renders, large component trees, unoptimized Tailwind classes, or blocking synchronous code.
+
+### ✅ Suggested Units of Work
+
+For each finding, propose clear, actionable tasks to improve the codebase. Each unit of work should include:
+
+- A concise title.
+- A description of the change.
+- Priority level (High/Medium/Low).
+
+---
+
+## 📌 Example Output Structure
+
+### 📝 Critical Analysis Report: `FeatureX`
+
+#### 1️⃣ Component: `FeatureXCard`
+
+- **Role:** Renders a summary view for FeatureX.
+- **Anti-patterns:** Uses `useEffect` without a dependency array, violating State Management Rule.
+- **Unused Code:** `import { SomeHelper }` is unused.
+- **Generalization:** The card layout could be abstracted into `SharedCard` for reuse.
+- **Performance:** Inline large JSON parsing in render.
+
+**💡 Suggested Work:**
+
+- **Refactor `useEffect` to comply with State Management Rule** (High)
+- **Remove unused import** (Low)
+- **Create `SharedCard` component** (Medium)
+
+#### 2️⃣ Component: `FeatureXList`
+
+- **Role:** Displays a list of FeatureX items using a mapped array.
+- **Anti-patterns:** Inline mapping with complex JSX logic.
+- **Generalization:** Consider extracting list item rendering to `FeatureXListItem`.
+- **Performance:** No key prop specified in `.map()` iteration.
+
+**💡 Suggested Work:**
+
+- **Extract `FeatureXListItem` for better readability and reuse** (Medium)
+- **Add key props to list rendering** (High)
+
+---
+
+## 🚦 Agent Checklist
+
+- [ ] Enumerate all relevant parts of the feature.
+- [ ] Check against ancillary rules for state management, routing, and styling.
+- [ ] Inspect for anti-patterns, unused code, generalization opportunities, and performance issues.
+- [ ] Produce a detailed report with clear, actionable units of work.
+- [ ] Assign priority levels to each unit of work.
+      """
