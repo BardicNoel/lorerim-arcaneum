@@ -1,14 +1,27 @@
-// Core generic components
-export {
+// Generic Components
+export { EntityAvatar } from './EntityAvatar'
+export { FormattedText } from './FormattedText'
+export { 
   GenericAccordionCard,
   AccordionLeftControls,
   AccordionHeader,
   AccordionCollapsedContentSlot,
   AccordionExpandedContentSlot,
 } from './GenericAccordionCard'
-export { EntityAvatar } from './EntityAvatar'
 export { CategoryBadge } from './CategoryBadge'
-export { FormattedText } from './FormattedText'
+
+// New Generic Components
+export { 
+  GenericConfigCard, 
+  ConfigInput, 
+  ConfigAlert 
+} from './ConfigCard'
+export { GenericConfirmDialog } from './ConfirmDialog'
+export { GenericShareButton } from './ShareButton'
+export { 
+  GenericSummaryCard, 
+  createBuildSummaryItems 
+} from './SummaryCard'
 
 // Re-export types for convenience
 export type { EntityType, AvatarSize } from './EntityAvatar'
