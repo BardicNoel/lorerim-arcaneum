@@ -31,6 +31,12 @@ import type { Birthsign } from '../types'
 import { getUserFriendlyStat, parseDescription } from '../utils'
 import { BirthsignAvatar } from './BirthsignAvatar'
 import { BirthsignFormattedText } from './BirthsignFormattedText'
+import {
+  getBirthsignGroupStyle,
+  getBirthsignGroupColor,
+  getBirthsignEffectIcon,
+  getBirthsignEffectTypeColor,
+} from '../config/birthsignConfig'
 
 /**
  * Function to format seconds to a readable time format
@@ -173,7 +179,7 @@ export function BirthsignAccordion({
             <Badge
               variant="outline"
               className={cn(
-                birthsignGroupStyles[originalBirthsign.group] ||
+                getBirthsignGroupStyle(originalBirthsign.group) ||
                   'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200',
                 sizeClasses.sm,
                 'font-medium transition-colors'
