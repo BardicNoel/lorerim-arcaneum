@@ -96,6 +96,46 @@ export function useCharacterBuild() {
     )
   }
 
+  // Add these two functions:
+  const hasRegularTrait = (traitId: string) =>
+    build.traits.regular.includes(traitId)
+  const hasBonusTrait = (traitId: string) =>
+    build.traits.bonus.includes(traitId)
+
+  // Add trait to regular or bonus slot
+  const addRegularTrait = (traitId: string) => {
+    if (
+      !hasRegularTrait(traitId) &&
+      build.traits.regular.length < build.traitLimits.regular
+    ) {
+      updateBuild({
+        traits: {
+          ...build.traits,
+          regular: [...build.traits.regular, traitId],
+          bonus: build.traits.bonus.filter(t => t !== traitId), // Remove from bonus if present
+        },
+      })
+    }
+  }
+  const addBonusTrait = (traitId: string) => {
+    if (
+      !hasBonusTrait(traitId) &&
+      build.traits.bonus.length < build.traitLimits.bonus
+    ) {
+      updateBuild({
+        traits: {
+          ...build.traits,
+          bonus: [...build.traits.bonus, traitId],
+          regular: build.traits.regular.filter(t => t !== traitId), // Remove from regular if present
+        },
+      })
+    }
+  }
+  const canAddRegularTrait = () =>
+    build.traits.regular.length < build.traitLimits.regular
+  const canAddBonusTrait = () =>
+    build.traits.bonus.length < build.traitLimits.bonus
+
   // Race management
   const setRace = (raceId: string | null) => {
     updateBuild({ race: raceId })
@@ -174,6 +214,12 @@ export function useCharacterBuild() {
     addTrait,
     removeTrait,
     hasTrait,
+    hasRegularTrait,
+    hasBonusTrait,
+    addRegularTrait,
+    addBonusTrait,
+    canAddRegularTrait,
+    canAddBonusTrait,
 
     // Race and birthsign
     setRace,
