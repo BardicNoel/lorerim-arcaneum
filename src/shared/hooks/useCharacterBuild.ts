@@ -9,18 +9,23 @@ export function useCharacterBuild() {
   const resetBuild = useCharacterStore(state => state.resetBuild)
 
   // Helper functions
-  const hasMajorSkill = (skillId: string) => majorSkills.includes(skillId)
-  const hasMinorSkill = (skillId: string) => minorSkills.includes(skillId)
+  const hasMajorSkill = (skillId: string) =>
+    majorSkills?.includes(skillId) ?? false
+  const hasMinorSkill = (skillId: string) =>
+    minorSkills?.includes(skillId) ?? false
 
   // Skill management functions
   const addMajorSkill = (skillId: string) => {
-    if (!hasMajorSkill(skillId) && majorSkills.length < 3) {
+    const currentMajorSkills = majorSkills ?? []
+    const currentMinorSkills = minorSkills ?? []
+
+    if (!hasMajorSkill(skillId) && currentMajorSkills.length < 3) {
       // Remove from minor skills first (mutual exclusion)
-      const newMinorSkills = minorSkills.filter(id => id !== skillId)
+      const newMinorSkills = currentMinorSkills.filter(id => id !== skillId)
 
       updateBuild({
         skills: {
-          major: [...majorSkills, skillId],
+          major: [...currentMajorSkills, skillId],
           minor: newMinorSkills,
         },
       })
@@ -28,34 +33,41 @@ export function useCharacterBuild() {
   }
 
   const removeMajorSkill = (skillId: string) => {
-    const newMajorSkills = majorSkills.filter(id => id !== skillId)
+    const currentMajorSkills = majorSkills ?? []
+    const currentMinorSkills = minorSkills ?? []
+    const newMajorSkills = currentMajorSkills.filter(id => id !== skillId)
     updateBuild({
       skills: {
         major: newMajorSkills,
-        minor: minorSkills,
+        minor: currentMinorSkills,
       },
     })
   }
 
   const addMinorSkill = (skillId: string) => {
-    if (!hasMinorSkill(skillId) && minorSkills.length < 3) {
+    const currentMajorSkills = majorSkills ?? []
+    const currentMinorSkills = minorSkills ?? []
+
+    if (!hasMinorSkill(skillId) && currentMinorSkills.length < 3) {
       // Remove from major skills first (mutual exclusion)
-      const newMajorSkills = majorSkills.filter(id => id !== skillId)
+      const newMajorSkills = currentMajorSkills.filter(id => id !== skillId)
 
       updateBuild({
         skills: {
           major: newMajorSkills,
-          minor: [...minorSkills, skillId],
+          minor: [...currentMinorSkills, skillId],
         },
       })
     }
   }
 
   const removeMinorSkill = (skillId: string) => {
-    const newMinorSkills = minorSkills.filter(id => id !== skillId)
+    const currentMajorSkills = majorSkills ?? []
+    const currentMinorSkills = minorSkills ?? []
+    const newMinorSkills = currentMinorSkills.filter(id => id !== skillId)
     updateBuild({
       skills: {
-        major: majorSkills,
+        major: currentMajorSkills,
         minor: newMinorSkills,
       },
     })
@@ -63,47 +75,54 @@ export function useCharacterBuild() {
 
   // Trait management functions
   const addTrait = (traitId: string) => {
-    const { regular, bonus } = build.traits
-    const { regular: regularLimit, bonus: bonusLimit } = build.traitLimits
+    const { regular = [], bonus = [] } = build?.traits ?? {
+      regular: [],
+      bonus: [],
+    }
+    const { regular: regularLimit = 2, bonus: bonusLimit = 1 } =
+      build?.traitLimits ?? { regular: 2, bonus: 1 }
 
     // If we have space in regular traits, add there first
     if (regular.length < regularLimit) {
       updateBuild({
-        traits: { ...build.traits, regular: [...regular, traitId] },
+        traits: { ...build?.traits, regular: [...regular, traitId] },
       })
     } else if (bonus.length < bonusLimit) {
       // If regular is full, add to bonus
       updateBuild({
-        traits: { ...build.traits, bonus: [...bonus, traitId] },
+        traits: { ...build?.traits, bonus: [...bonus, traitId] },
       })
     }
     // If both are full, don't add (this should be prevented by UI)
   }
 
   const addRegularTrait = (traitId: string) => {
-    const { regular } = build.traits
-    const { regular: regularLimit } = build.traitLimits
+    const { regular = [] } = build?.traits ?? { regular: [] }
+    const { regular: regularLimit = 2 } = build?.traitLimits ?? { regular: 2 }
 
     if (regular.length < regularLimit) {
       updateBuild({
-        traits: { ...build.traits, regular: [...regular, traitId] },
+        traits: { ...build?.traits, regular: [...regular, traitId] },
       })
     }
   }
 
   const addBonusTrait = (traitId: string) => {
-    const { bonus } = build.traits
-    const { bonus: bonusLimit } = build.traitLimits
+    const { bonus = [] } = build?.traits ?? { bonus: [] }
+    const { bonus: bonusLimit = 1 } = build?.traitLimits ?? { bonus: 1 }
 
     if (bonus.length < bonusLimit) {
       updateBuild({
-        traits: { ...build.traits, bonus: [...bonus, traitId] },
+        traits: { ...build?.traits, bonus: [...bonus, traitId] },
       })
     }
   }
 
   const removeTrait = (traitId: string) => {
-    const { regular, bonus } = build.traits
+    const { regular = [], bonus = [] } = build?.traits ?? {
+      regular: [],
+      bonus: [],
+    }
     updateBuild({
       traits: {
         regular: regular.filter(t => t !== traitId),
@@ -114,17 +133,17 @@ export function useCharacterBuild() {
 
   const hasTrait = (traitId: string) => {
     return (
-      build.traits.regular.includes(traitId) ||
-      build.traits.bonus.includes(traitId)
+      (build?.traits?.regular?.includes(traitId) ?? false) ||
+      (build?.traits?.bonus?.includes(traitId) ?? false)
     )
   }
 
   const hasRegularTrait = (traitId: string) => {
-    return build.traits.regular.includes(traitId)
+    return build?.traits?.regular?.includes(traitId) ?? false
   }
 
   const hasBonusTrait = (traitId: string) => {
-    return build.traits.bonus.includes(traitId)
+    return build?.traits?.bonus?.includes(traitId) ?? false
   }
 
   // Race management
@@ -149,16 +168,18 @@ export function useCharacterBuild() {
 
   // Equipment management
   const addEquipment = (equipmentId: string) => {
-    if (!build.equipment.includes(equipmentId)) {
+    const equipment = build?.equipment ?? []
+    if (!equipment.includes(equipmentId)) {
       updateBuild({
-        equipment: [...build.equipment, equipmentId],
+        equipment: [...equipment, equipmentId],
       })
     }
   }
 
   const removeEquipment = (equipmentId: string) => {
+    const equipment = build?.equipment ?? []
     updateBuild({
-      equipment: build.equipment.filter(id => id !== equipmentId),
+      equipment: equipment.filter(id => id !== equipmentId),
     })
   }
 
@@ -192,30 +213,32 @@ export function useCharacterBuild() {
   // Build summary for display
   const getSummary = () => {
     return {
-      name: build.name || 'Unnamed Character',
-      race: build.race || 'Not selected',
-      stone: build.stone || 'Not selected',
-      religion: build.religion || 'Not selected',
-      traitCount: build.traits.regular.length + build.traits.bonus.length,
-      majorSkillCount: build.skills.major.length,
-      minorSkillCount: build.skills.minor.length,
-      equipmentCount: build.equipment.length,
+      name: build?.name || 'Unnamed Character',
+      race: build?.race || 'Not selected',
+      stone: build?.stone || 'Not selected',
+      religion: build?.religion || 'Not selected',
+      traitCount:
+        (build?.traits?.regular?.length ?? 0) +
+        (build?.traits?.bonus?.length ?? 0),
+      majorSkillCount: build?.skills?.major?.length ?? 0,
+      minorSkillCount: build?.skills?.minor?.length ?? 0,
+      equipmentCount: build?.equipment?.length ?? 0,
     }
   }
 
   // Trait limit getters
-  const getRegularTraitLimit = () => build.traitLimits.regular
-  const getBonusTraitLimit = () => build.traitLimits.bonus
+  const getRegularTraitLimit = () => build?.traitLimits?.regular ?? 2
+  const getBonusTraitLimit = () => build?.traitLimits?.bonus ?? 1
 
   // Trait count getters
-  const getRegularTraitCount = () => build.traits.regular.length
-  const getBonusTraitCount = () => build.traits.bonus.length
+  const getRegularTraitCount = () => build?.traits?.regular?.length ?? 0
+  const getBonusTraitCount = () => build?.traits?.bonus?.length ?? 0
 
   // Trait availability checkers
   const canAddRegularTrait = () =>
-    build.traits.regular.length < build.traitLimits.regular
+    (build?.traits?.regular?.length ?? 0) < (build?.traitLimits?.regular ?? 2)
   const canAddBonusTrait = () =>
-    build.traits.bonus.length < build.traitLimits.bonus
+    (build?.traits?.bonus?.length ?? 0) < (build?.traitLimits?.bonus ?? 1)
 
   return {
     // Current build state
