@@ -73,7 +73,7 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
         {/* Starting Traits */}
         <div className="space-y-4">
           <h4 className="text-md font-medium text-foreground">
-            Starting Traits
+            Starting
           </h4>
 
           {/* Starting Trait Slot 1 */}
@@ -168,7 +168,7 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
         {/* Late Game Traits */}
         <div className="space-y-4">
           <h4 className="text-md font-medium text-foreground">
-            Late Game Traits
+            Late Game
           </h4>
 
           {/* Late Game Trait Slot */}

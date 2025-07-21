@@ -6,6 +6,7 @@ import { useRaces } from '../hooks/useRaces'
 import type { Race } from '../types'
 import { transformRaceToPlayerCreationItem } from '../utils/dataTransform'
 import { RaceAccordion, RaceAutocomplete } from './'
+import { Card, CardHeader, CardContent, CardTitle } from '@/shared/ui/ui/card'
 
 interface RaceSelectionCardProps {
   className?: string
@@ -41,46 +42,23 @@ export function RaceSelectionCard({ className }: RaceSelectionCardProps) {
   // If no race is selected, show the autocomplete
   if (!selectedRace) {
     return (
-      <div className={`space-y-4 ${className}`}>
-        <div>
-          <h3 className="text-lg font-semibold text-foreground mb-2">Race</h3>
+      <Card className={className}>
+        <CardHeader className="pb-3">
+          <div>
+            <CardTitle className="text-lg">Race</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground mb-4">
             Choose your character's race
           </p>
-        </div>
-
-        <RaceAutocomplete
-          races={allRaces}
-          onSelect={handleRaceSelect}
-          placeholder="Search for a race..."
-          className="w-full"
-        />
-
-        <div className="flex justify-end">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleNavigateToRacePage}
-            className="text-sm whitespace-nowrap cursor-pointer"
-          >
-            View all races →
-          </Button>
-        </div>
-      </div>
-    )
-  }
-
-  // If race is selected, show the race card with integrated autocomplete
-  const raceItem = transformRaceToPlayerCreationItem(selectedRace)
-
-  return (
-    <div className={`space-y-4 ${className}`}>
-      {/* Race Card with Integrated Autocomplete Header */}
-      <div className="border border-border rounded-lg bg-card">
-        {/* Header with Title and Controls */}
-        <div className="p-4 border-b border-border bg-muted/30">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-lg font-semibold">Race</h3>
+          <RaceAutocomplete
+            races={allRaces}
+            onSelect={handleRaceSelect}
+            placeholder="Search for a race..."
+            className="w-full"
+          />
+          <div className="flex justify-end">
             <Button
               variant="outline"
               size="sm"
@@ -90,15 +68,36 @@ export function RaceSelectionCard({ className }: RaceSelectionCardProps) {
               View all races →
             </Button>
           </div>
-          <RaceAutocomplete
-            races={allRaces}
-            onSelect={handleRaceSelect}
-            placeholder={`Race: Select a race (${selectedRace.name})`}
-            className="w-full"
-          />
-        </div>
+        </CardContent>
+      </Card>
+    )
+  }
 
-        {/* Race Details Accordion */}
+  // If race is selected, show the race card with integrated autocomplete
+  const raceItem = transformRaceToPlayerCreationItem(selectedRace)
+
+  return (
+    <Card className={className}>
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between mb-3">
+          <CardTitle className="text-lg">Race</CardTitle>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleNavigateToRacePage}
+            className="text-sm whitespace-nowrap cursor-pointer"
+          >
+            View all races →
+          </Button>
+        </div>
+        <RaceAutocomplete
+          races={allRaces}
+          onSelect={handleRaceSelect}
+          placeholder={`Race: Select a race (${selectedRace.name})`}
+          className="w-full"
+        />
+      </CardHeader>
+      <CardContent className="space-y-4">
         <RaceAccordion
           item={raceItem}
           originalRace={selectedRace}
@@ -107,7 +106,7 @@ export function RaceSelectionCard({ className }: RaceSelectionCardProps) {
           showToggle={false}
           className="border-0 shadow-none"
         />
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   )
 }
