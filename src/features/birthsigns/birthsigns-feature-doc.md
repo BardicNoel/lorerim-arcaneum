@@ -9,15 +9,16 @@ All features in the Lorerim Arcaneum project must follow this standardized docum
 ## 🎯 Feature Overview
 
 ### Purpose
-The Birthsigns feature provides a comprehensive interface for browsing and selecting character birthsigns in the Lorerim Arcaneum application. It leverages a shared player creation framework to deliver a consistent, searchable, and filterable experience for birthsign selection, enabling players to explore celestial constellations and their associated magical effects, abilities, and character bonuses.
+The Birthsigns feature provides a comprehensive interface for browsing and selecting character birthsigns in the Lorerim Arcaneum application. It delivers a searchable, filterable, and accordion-based experience for birthsign selection, enabling players to explore celestial constellations and their associated magical effects, abilities, and character bonuses through an intuitive accordion interface.
 
 ### Core Functionality
-- **Birthsign Browsing**: Display all available birthsigns in grid/list view modes with visual constellation indicators
+- **Birthsign Browsing**: Display all available birthsigns in accordion grid/list view modes with visual constellation indicators
 - **Advanced Search**: Multi-category autocomplete search by constellation types, effect categories, and tags
 - **Detailed Information**: Comprehensive birthsign details including abilities, effects, requirements, and lore
 - **Filtering**: Tag-based filtering system for constellation types, effect categories, and tags
 - **Responsive Design**: Mobile-friendly interface with adaptive layouts
 - **Markdown Support**: Rich text rendering with support for bold formatting, lists, and emphasis
+- **Display Controls**: Toggle visibility of stats, powers, skills, and effects sections
 
 ### Data Structure
 Birthsigns are defined with the following structure:
@@ -63,31 +64,44 @@ interface BirthsignEffect {
 
 ### Component Tree
 ```
-UnifiedBirthsignsPage
-├── PlayerCreationPage (shared)
+AccordionBirthsignsPage
+├── PlayerCreationLayout (shared)
 │   ├── Header (title + description)
 │   ├── Search & Filters
-│   │   ├── MultiAutocompleteSearch
-│   │   │   └── AutocompleteSearch (multiple instances)
+│   │   ├── CustomMultiAutocompleteSearch
+│   │   │   ├── FuzzySearchBox
+│   │   │   └── AutocompleteSearch
 │   │   ├── SelectedTags
 │   │   └── ViewModeToggle (grid/list)
-│   ├── ItemGrid
-│   │   └── BirthsignCard (custom render)
-│   └── DetailPanel
-│       └── BirthsignDetailPanel (custom render)
+│   ├── Display Controls
+│   │   └── Data Visibility Toggles
+│   └── Content Area
+│       └── AccordionGrid/List
+│           └── BirthsignAccordion
 └── Loading/Error States
 ```
 
 ### Component Responsibilities
 
-#### **UnifiedBirthsignsPage** (`pages/UnifiedBirthsignsPage.tsx`)
+#### **AccordionBirthsignsPage** (`pages/AccordionBirthsignsPage.tsx`)
 - **Purpose**: Primary orchestrator and data manager for birthsign selection
 - **Key Functions**:
   - Data fetching from `public/data/birthsigns.json`
-  - Data transformation from `Birthsign` to `PlayerCreationItem` format
+  - State management for filters, sorting, and view modes
   - Search category generation for autocomplete (Constellations, Effect Types, Tags)
-  - Custom render function provision for birthsign-specific components
+  - Display control management (stats, powers, skills, effects visibility)
   - Error handling and loading states
+  - Accordion expansion state management
+
+#### **BirthsignAccordion** (`components/BirthsignAccordion.tsx`)
+- **Purpose**: Individual birthsign accordion item with expandable content
+- **Features**:
+  - Visual constellation indicators with icons and color coding
+  - Expandable sections for stats, powers, skills, and effects
+  - Formatted text rendering with syntax highlighting
+  - Selection state management
+  - Responsive design with hover effects
+  - Display control integration (show/hide sections)
 
 #### **BirthsignCard** (`components/BirthsignCard.tsx`)
 - **Purpose**: Compact birthsign representation in grid/list views
@@ -101,9 +115,10 @@ UnifiedBirthsignsPage
 #### **BirthsignDetailPanel** (`components/BirthsignDetailPanel.tsx`)
 - **Purpose**: Comprehensive birthsign information display with tabbed interface
 - **Features**:
-  - **Abilities Tab**: Active and passive abilities with effect details
-  - **Lore Tab**: Constellation lore and background information
-  - **Requirements Tab**: Level requirements and prerequisites
+  - **Overview Tab**: General description and game information
+  - **Stats Tab**: Stat modifications and skill bonuses
+  - **Powers Tab**: Special abilities and spells
+  - **Effects Tab**: Conditional and mastery effects
   - Effect details with magnitude and duration visualization
   - Markdown rendering for descriptions
   - Tag categorization and display
@@ -116,35 +131,46 @@ UnifiedBirthsignsPage
 
 ```mermaid
 graph TD
-    A[birthsigns.json] --> B[UnifiedBirthsignsPage]
-    B --> C[usePlayerCreation Hook]
-    C --> D[PlayerCreationPage]
-    D --> E[BirthsignCard/BirthsignDetailPanel]
-    
-    F[User Search] --> G[MultiAutocompleteSearch]
-    G --> H[Filter Logic]
-    H --> I[Filtered Results]
-    I --> E
+    A[birthsigns.json] --> B[AccordionBirthsignsPage]
+    B --> C[useBirthsignData Hook]
+    C --> D[useBirthsignFilters Hook]
+    D --> E[Filtered Results]
+    E --> F[BirthsignAccordion/BirthsignCard]
+
+    G[User Search] --> H[CustomMultiAutocompleteSearch]
+    H --> I[FuzzySearchBox]
+    I --> J[Filter Logic]
+    J --> K[Filtered Results]
+    K --> F
 ```
 
 ### State Management
 
-The feature uses a combination of local state and shared hooks:
+The feature uses a combination of custom hooks for state management:
 
-1. **Local State** (`UnifiedBirthsignsPage`):
+1. **useBirthsignData** (`hooks/useBirthsignData.ts`):
    - `birthsigns`: Raw birthsign data from JSON
    - `loading`: Data fetching state
    - `error`: Error handling state
+   - `refetch`: Function to reload data
 
-2. **Shared State** (`usePlayerCreation`):
-   - `selectedItem`: Currently selected birthsign
+2. **useBirthsignFilters** (`hooks/useBirthsignFilters.ts`):
+   - `selectedTags`: Active search and filter tags
+   - `sortBy`: Current sorting option
    - `viewMode`: Grid or list view preference
-   - `currentFilters`: Active search and filter state
-   - `filteredItems`: Computed filtered results
+   - `expandedBirthsigns`: Set of expanded accordion items
+   - `filteredBirthsigns`: Computed filtered results
+   - `displayItems`: Items to display based on filters
+
+3. **useDisplayControls** (`hooks/useDisplayControls.ts`):
+   - `showStats`: Stats section visibility
+   - `showPowers`: Powers section visibility
+   - `showSkills`: Skills section visibility
+   - `showEffects`: Effects section visibility
 
 ### Data Transformation
 
-The feature transforms birthsign data between two formats:
+The feature transforms birthsign data for display and filtering:
 
 **Source Format** (`Birthsign`):
 ```typescript
@@ -159,15 +185,16 @@ The feature transforms birthsign data between two formats:
 }
 ```
 
-**Target Format** (`PlayerCreationItem`):
+**Display Format** (Processed for UI):
 ```typescript
 {
   id: "warrior",
   name: "The Warrior",
+  constellation: "Warrior",
   description: "The Warrior grants increased combat abilities...",
   tags: ["Combat", "Strength"],
-  effects: [...],
-  category: "Warrior"
+  searchCategories: ["Warrior", "Combat", "Strength"],
+  formattedText: "Enhanced combat abilities with +10 to weapon skills"
 }
 ```
 
@@ -181,9 +208,10 @@ The feature transforms birthsign data between two formats:
 #### Filter Logic
 ```typescript
 // Multi-layered filtering
-1. Text Search: name, description, ability names
+1. Text Search: name, description, ability names using fuzzy search
 2. Constellation Filter: Warrior/Mage/Thief/Serpent categorization
 3. Tag Filter: Tag-based filtering with effect types and requirements
+4. Display Controls: Show/hide specific content sections
 ```
 
 ---
@@ -192,8 +220,8 @@ The feature transforms birthsign data between two formats:
 
 ### Visual Hierarchy
 1. **Primary**: Birthsign name and constellation
-2. **Secondary**: Tabbed interface (Abilities vs Lore vs Requirements)
-3. **Tertiary**: Detailed content within each tab
+2. **Secondary**: Accordion sections (Stats, Powers, Skills, Effects)
+3. **Tertiary**: Detailed content within each section
 
 ### Icon System
 - **Constellation Icons**: Color-coded by constellation type
@@ -203,10 +231,12 @@ The feature transforms birthsign data between two formats:
   - 🐍 Serpent (purple)
   - ⭐ Other constellations (gold)
 
-- **Tab Icons**: Visual indicators for content types
-  - ⚡ Abilities tab (blue dot) - Active and passive abilities
-  - 📖 Lore tab (yellow dot) - Constellation lore
-  - 🔒 Requirements tab (gray dot) - Prerequisites and requirements
+- **Section Icons**: Visual indicators for content types
+  - 📊 Stats section (blue) - Stat modifications
+  - ⚡ Powers section (yellow) - Special abilities
+  - 🎯 Skills section (green) - Skill bonuses
+  - 🔮 Effects section (purple) - Conditional effects
+
 - **Effect Icons**: Color-coded by effect type
   - ⚔️ Combat abilities (red)
   - 🔮 Magic abilities (blue)
@@ -214,15 +244,16 @@ The feature transforms birthsign data between two formats:
   - ⚡ Utility abilities (purple)
 
 ### Responsive Design
-- **Desktop**: 3-column grid with sidebar detail panel
-- **Tablet**: 2-column grid with bottom detail panel
-- **Mobile**: Single column with modal detail panel
+- **Desktop**: 3-column grid with expandable accordions
+- **Tablet**: 2-column grid with optimized accordion layout
+- **Mobile**: Single column with full-width accordions
 
 ### Interaction Patterns
 - **Hover Effects**: Subtle scaling and shadow changes
 - **Selection States**: Ring borders and visual indicators
 - **Loading States**: Skeleton screens and spinners
 - **Error States**: Clear messaging with retry options
+- **Accordion Expansion**: Smooth animations and state persistence
 
 ---
 
@@ -230,34 +261,40 @@ The feature transforms birthsign data between two formats:
 
 ### Shared Framework Components
 
-The birthsigns feature leverages the same comprehensive shared framework as races and religions:
+The birthsigns feature leverages shared components for consistency:
 
-#### **PlayerCreationPage**
+#### **PlayerCreationLayout**
 - Generic layout for categorized item selection
 - Built-in search, filtering, and view mode management
-- Customizable render functions for item cards and detail panels
+- Responsive design patterns
 
-#### **MultiAutocompleteSearch**
+#### **CustomMultiAutocompleteSearch**
 - Multi-category search interface
 - Tag-based filtering system
 - Keyboard navigation support
 
-#### **ItemGrid**
+#### **AccordionGrid**
 - Responsive grid/list view switching
 - Selection state management
 - Empty state handling
 
 ### Birthsign-Specific Components
 
-#### **BirthsignCard**
+#### **BirthsignAccordion**
 - **Reusability**: Can be adapted for other entity types
 - **Customization**: Icon mapping and color schemes
 - **Accessibility**: ARIA labels and keyboard navigation
+- **Display Controls**: Integration with visibility toggles
 
 #### **BirthsignDetailPanel**
 - **Extensibility**: Modular ability, lore, and requirement sections
 - **Data Visualization**: Effect icons and color coding
 - **Information Architecture**: Hierarchical content organization
+
+#### **BirthsignFormattedText**
+- **Text Formatting**: Syntax highlighting for numbers and keywords
+- **Reusability**: Generic text formatting utility
+- **Performance**: Memoized formatting results
 
 ---
 
@@ -267,16 +304,19 @@ The birthsigns feature leverages the same comprehensive shared framework as race
 - **Runtime Fetching**: Birthsigns loaded from JSON at component mount
 - **Error Boundaries**: Graceful fallbacks for network issues
 - **Loading States**: User feedback during data fetching
+- **Caching**: Memoized filtered results and formatted text
 
 ### Rendering Optimization
 - **Memoization**: Filtered results cached with `useMemo`
 - **Virtual Scrolling**: Large lists handled efficiently
 - **Lazy Loading**: Images and heavy content loaded on demand
+- **Component Splitting**: Heavy components split for better performance
 
 ### Search Performance
 - **Debounced Input**: Search queries optimized for performance
 - **Indexed Filtering**: Pre-computed search indices
 - **Cached Results**: Filtered results memoized
+- **Fuzzy Search**: Efficient string matching with Fuse.js
 
 ---
 
@@ -286,16 +326,20 @@ The birthsigns feature leverages the same comprehensive shared framework as race
 - Component rendering and props validation
 - Data transformation logic
 - Filter and search functionality
+- Custom hooks (useBirthsignData, useBirthsignFilters, useDisplayControls)
+- Configuration functions (birthsignConfig)
 
 ### Integration Tests
 - End-to-end birthsign selection flow
 - Search and filter interactions
 - Responsive design breakpoints
+- Accordion expansion and collapse
 
 ### Accessibility Tests
 - Screen reader compatibility
 - Keyboard navigation
 - Color contrast compliance
+- ARIA label validation
 
 ---
 
@@ -314,6 +358,8 @@ The birthsigns feature leverages the same comprehensive shared framework as race
 2. **Real-time Updates**: WebSocket integration for live data
 3. **Analytics**: User behavior tracking for optimization
 4. **Internationalization**: Multi-language support
+5. **Performance**: Virtual scrolling for large datasets
+6. **Testing**: Comprehensive test coverage expansion
 
 ---
 
@@ -323,6 +369,7 @@ The birthsigns feature leverages the same comprehensive shared framework as race
 - [UI Component Library](../shared/ui/README.md)
 - [Technical Specifications](../../../docs/technical-spec.md)
 - [Design System](../../../docs/ui-styling.md)
+- [Birthsign Avatar System](./birthsign-avatar-system.md)
 
 ---
 
