@@ -90,7 +90,7 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
             </div>
 
             {selectedRegularTraits[0] ? (
-              <div className="flex items-start gap-3 p-3 border rounded-lg bg-muted/30">
+              <div className="flex items-start gap-3 p-3 border rounded-lg bg-yellow-50/50 border-yellow-500 shadow-yellow-500/20">
                 <div className="flex-1 min-w-0">
                   <div className="font-medium text-sm">
                     {selectedRegularTraits[0].name}
@@ -134,7 +134,7 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
             </div>
 
             {selectedRegularTraits[1] ? (
-              <div className="flex items-start gap-3 p-3 border rounded-lg bg-muted/30">
+              <div className="flex items-start gap-3 p-3 border rounded-lg bg-yellow-50/50 border-yellow-500 shadow-yellow-500/20">
                 <div className="flex-1 min-w-0">
                   <div className="font-medium text-sm">
                     {selectedRegularTraits[1].name}
@@ -185,7 +185,7 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
             </div>
 
             {selectedBonusTraits[0] ? (
-              <div className="flex items-start gap-3 p-3 border rounded-lg bg-muted/30">
+              <div className="flex items-start gap-3 p-3 border rounded-lg bg-gray-50/50 border-gray-400 shadow-gray-400/20">
                 <div className="flex-1 min-w-0">
                   <div className="font-medium text-sm">
                     {selectedBonusTraits[0].name}
