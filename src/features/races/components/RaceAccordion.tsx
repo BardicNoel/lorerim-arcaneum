@@ -20,6 +20,7 @@ interface RaceAccordionProps {
   isExpanded?: boolean
   onToggle?: () => void
   className?: string
+  showToggle?: boolean
 }
 
 export function RaceAccordion({
@@ -28,6 +29,7 @@ export function RaceAccordion({
   isExpanded = false,
   onToggle,
   className,
+  showToggle = true,
 }: RaceAccordionProps) {
   return (
     <GenericAccordionCard
@@ -36,13 +38,15 @@ export function RaceAccordion({
       className={className}
     >
       {/* Left Controls */}
-      <AccordionLeftControls>
-        <AddToBuildSwitchSimple
-          itemId={originalRace?.edid || item.id}
-          itemType="race"
-          itemName={item.name}
-        />
-      </AccordionLeftControls>
+      {showToggle && (
+        <AccordionLeftControls>
+          <AddToBuildSwitchSimple
+            itemId={originalRace?.edid || item.id}
+            itemType="race"
+            itemName={item.name}
+          />
+        </AccordionLeftControls>
+      )}
 
       {/* Header Content */}
       <AccordionHeader>

@@ -182,7 +182,7 @@ export function FuzzySearchBox({
       {isOpen && (
         <div
           className="absolute top-full left-0 right-0 mt-1 dropdown-enhanced rounded-lg max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/30"
-          style={{ zIndex: Z_INDEX.AUTOCOMPLETE }}
+          style={{ zIndex: Z_INDEX.AUTOCOMPLETE + 10 }}
         >
           {/* Category Selection - only show if multiple categories and no category selected */}
           {showCategorySelection && (

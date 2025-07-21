@@ -51,11 +51,6 @@ export function AccordionRacesPage() {
     fetchRaces()
   }, [])
 
-  // Convert races to PlayerCreationItem format using new transformation
-  const playerCreationItems: PlayerCreationItem[] = races.map(race =>
-    transformRaceToPlayerCreationItem(race)
-  )
-
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
     const allKeywords = [
