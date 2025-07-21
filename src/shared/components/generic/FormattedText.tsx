@@ -1,0 +1,33 @@
+import React, { useMemo } from 'react'
+import { parseFormattedText, type TextFormattingOptions } from '@/shared/utils/textFormatting'
+
+interface FormattedTextProps {
+  text: string
+  options?: TextFormattingOptions
+  className?: string
+  as?: React.ElementType
+}
+
+export function FormattedText({
+  text,
+  options,
+  className = 'text-sm text-muted-foreground',
+  as: Component = 'div',
+}: FormattedTextProps) {
+  const segments = useMemo(() => {
+    if (!text) return []
+    return parseFormattedText(text, options)
+  }, [text, options])
+
+  if (!text) return null
+
+  return (
+    <Component className={className}>
+      {segments.map((segment) => (
+        <span key={segment.key} className={segment.className}>
+          {segment.text}
+        </span>
+      ))}
+    </Component>
+  )
+} 
