@@ -1,13 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Search, Plus, ChevronDown, X } from 'lucide-react'
-import { Button } from '@/shared/ui/ui/button'
-import { Input } from '@/shared/ui/ui/input'
 import { Z_INDEX } from '@/lib/constants'
 import type {
   SearchCategory,
   SearchOption,
-  SelectedTag,
 } from '@/shared/components/playerCreation/types'
+import { Button } from '@/shared/ui/ui/button'
+import { Input } from '@/shared/ui/ui/input'
+import { ChevronDown, Plus, Search } from 'lucide-react'
+import React, { useEffect, useRef, useState } from 'react'
 
 interface FuzzySearchBoxProps {
   categories: SearchCategory[]
@@ -182,7 +181,7 @@ export function FuzzySearchBox({
       {/* Dropdown */}
       {isOpen && (
         <div
-          className="absolute top-full left-0 right-0 mt-1 dropdown-enhanced rounded-lg max-h-96 overflow-y-auto"
+          className="absolute top-full left-0 right-0 mt-1 dropdown-enhanced rounded-lg max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/30"
           style={{ zIndex: Z_INDEX.AUTOCOMPLETE }}
         >
           {/* Category Selection - only show if multiple categories and no category selected */}
@@ -195,7 +194,7 @@ export function FuzzySearchBox({
                 <button
                   key={category.id}
                   onClick={() => handleCategorySelect(category)}
-                  className="w-full text-left px-2 py-2 hover:bg-muted rounded text-sm flex items-center justify-between"
+                  className="w-full text-left px-2 py-2 hover:bg-muted/60 hover:shadow-sm active:bg-muted/80 active:scale-[0.98] rounded text-sm flex items-center justify-between transition-all duration-200 cursor-pointer"
                 >
                   <span>{category.name}</span>
                   <ChevronDown className="h-4 w-4" />
@@ -209,7 +208,7 @@ export function FuzzySearchBox({
             <div className="p-2 border-b border-border">
               <button
                 onClick={handleCustomSearch}
-                className="w-full text-left px-2 py-2 hover:bg-muted rounded text-sm flex items-center gap-2"
+                className="w-full text-left px-2 py-2 hover:bg-muted/60 hover:shadow-sm active:bg-muted/80 active:scale-[0.98] rounded text-sm flex items-center gap-2 transition-all duration-200 cursor-pointer"
               >
                 <Plus className="h-4 w-4 text-primary" />
                 <span className="font-medium">Search for "{searchQuery}"</span>
@@ -231,10 +230,10 @@ export function FuzzySearchBox({
                 <button
                   key={option.id}
                   onClick={() => handleOptionSelect(option)}
-                  className={`w-full text-left px-2 py-2 rounded text-sm ${
+                  className={`w-full text-left px-2 py-2 rounded text-sm transition-all duration-200 cursor-pointer ${
                     index === activeIndex
-                      ? 'bg-primary text-primary-foreground'
-                      : 'hover:bg-muted'
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'hover:bg-muted/60 hover:shadow-sm active:bg-muted/80 active:scale-[0.98]'
                   }`}
                 >
                   <div className="font-medium">{option.label}</div>

@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Search, ChevronDown, X } from 'lucide-react'
+import { Z_INDEX } from '@/lib/constants'
 import { Button } from '@/shared/ui/ui/button'
 import { Input } from '@/shared/ui/ui/input'
-import { Z_INDEX } from '@/lib/constants'
+import { ChevronDown, Search } from 'lucide-react'
+import React, { useEffect, useRef, useState } from 'react'
 import type { SearchCategory, SearchOption } from './types'
 
 interface AutocompleteSearchProps {
@@ -143,7 +143,7 @@ export function AutocompleteSearch({
       {/* Dropdown */}
       {isOpen && (
         <div
-          className="absolute top-full left-0 right-0 mt-1 dropdown-enhanced rounded-lg max-h-96 overflow-y-auto"
+          className="absolute top-full left-0 right-0 mt-1 dropdown-enhanced rounded-lg max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/30"
           style={{ zIndex: Z_INDEX.AUTOCOMPLETE }}
         >
           {/* Category Selection - only show if multiple categories and no category selected */}
@@ -156,7 +156,7 @@ export function AutocompleteSearch({
                 <button
                   key={category.id}
                   onClick={() => handleCategorySelect(category)}
-                  className="w-full text-left px-2 py-2 hover:bg-muted rounded text-sm flex items-center justify-between"
+                  className="w-full text-left px-2 py-2 hover:bg-muted/60 hover:shadow-sm active:bg-muted/80 active:scale-[0.98] rounded text-sm flex items-center justify-between transition-all duration-200 cursor-pointer"
                 >
                   <span>{category.name}</span>
                   <ChevronDown className="h-4 w-4" />
@@ -176,10 +176,10 @@ export function AutocompleteSearch({
                 <button
                   key={option.id}
                   onClick={() => handleOptionSelect(option)}
-                  className={`w-full text-left px-2 py-2 rounded text-sm ${
+                  className={`w-full text-left px-2 py-2 rounded text-sm transition-all duration-200 cursor-pointer ${
                     index === activeIndex
-                      ? 'bg-primary text-primary-foreground'
-                      : 'hover:bg-muted'
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'hover:bg-muted/60 hover:shadow-sm active:bg-muted/80 active:scale-[0.98]'
                   }`}
                 >
                   <div className="font-medium">{option.label}</div>

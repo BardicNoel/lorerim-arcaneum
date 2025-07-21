@@ -1,14 +1,10 @@
-import {
-  EntitySelectionCard,
-  type EntityOption,
-} from '@/shared/components/playerCreation'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useRaces } from '../hooks/useRaces'
+import type { Race } from '../types'
 import { transformRaceToPlayerCreationItem } from '../utils/dataTransform'
-import { RaceAccordion } from './RaceAccordion'
-import { RaceAvatar } from './RaceAvatar'
+import { RaceAccordion, RaceAutocomplete } from './'
 
 interface RaceSelectionCardProps {
   className?: string
@@ -20,22 +16,13 @@ export function RaceSelectionCard({ className }: RaceSelectionCardProps) {
   const navigate = useNavigate()
   const [isExpanded, setIsExpanded] = useState(true)
 
-  // Convert races to EntityOption format
-  const availableRaces: EntityOption[] = allRaces.map(race => ({
-    id: race.edid,
-    name: race.name,
-    description: race.description,
-    category: race.category,
-    tags: race.keywords.map(k => k.edid),
-  }))
-
   // Find the selected race
   const selectedRace = build.race
     ? allRaces.find(race => race.edid === build.race)
     : null
 
-  const handleRaceSelect = (raceId: string) => {
-    setRace(raceId)
+  const handleRaceSelect = (race: Race) => {
+    setRace(race.edid)
   }
 
   const handleRaceRemove = () => {
@@ -50,34 +37,33 @@ export function RaceSelectionCard({ className }: RaceSelectionCardProps) {
     setIsExpanded(!isExpanded)
   }
 
-  const renderRaceDisplay = (entity: EntityOption) => (
-    <div className="flex items-center gap-3">
-      <RaceAvatar raceName={entity.name} size="sm" />
-      <div className="flex-1">
-        <div className="font-medium">{entity.name}</div>
-        {entity.category && (
-          <div className="text-xs text-muted-foreground">{entity.category}</div>
-        )}
-      </div>
-    </div>
-  )
-
-  // If no race is selected, show the selector
+  // If no race is selected, show the autocomplete
   if (!selectedRace) {
     return (
-      <EntitySelectionCard
-        title="Race"
-        description="Choose your character's race"
-        selectedEntities={[]}
-        availableEntities={availableRaces}
-        onEntitySelect={handleRaceSelect}
-        onEntityRemove={handleRaceRemove}
-        onNavigateToPage={handleNavigateToRacePage}
-        selectionType="single"
-        placeholder="Select a race..."
-        className={className}
-        renderEntityDisplay={renderRaceDisplay}
-      />
+      <div className={`space-y-4 ${className}`}>
+        <div>
+          <h3 className="text-lg font-semibold text-foreground mb-2">Race</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Choose your character's race
+          </p>
+        </div>
+
+        <RaceAutocomplete
+          races={allRaces}
+          onSelect={handleRaceSelect}
+          placeholder="Search for a race..."
+          className="w-full"
+        />
+
+        <div className="flex justify-end">
+          <button
+            onClick={handleNavigateToRacePage}
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            View all races →
+          </button>
+        </div>
+      </div>
     )
   }
 

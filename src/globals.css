@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* ===== MODERN 2020+ DESIGN SYSTEM ===== */
 
@@ -61,22 +61,35 @@
   --ring: 43 35% 45%;
 }
 
-
 /* ===== BASE STYLES ===== */
 @layer base {
   * {
     border-color: hsl(var(--border));
   }
-  
+
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
-    font-feature-settings: "rlig" 1, "calt" 1;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+    font-family:
+      'Inter',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      'Roboto',
+      'Oxygen',
+      'Ubuntu',
+      'Cantarell',
+      'Fira Sans',
+      'Droid Sans',
+      'Helvetica Neue',
+      sans-serif;
     font-size: 16px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
@@ -86,37 +99,42 @@
   }
 
   /* ===== MODERN TYPOGRAPHY ===== */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-weight: bold;
     letter-spacing: -0.015em;
     line-height: 1.2;
   }
-  
+
   h1 {
     font-size: 2.25rem;
     font-weight: 800;
   }
-  
+
   h2 {
     font-size: 1.875rem;
     font-weight: 700;
   }
-  
+
   h3 {
     font-size: 1.5rem;
     font-weight: 700;
   }
-  
+
   h4 {
     font-size: 1.25rem;
     font-weight: 600;
   }
-  
+
   h5 {
     font-size: 1.125rem;
     font-weight: 600;
   }
-  
+
   h6 {
     font-size: 1rem;
     font-weight: 600;
@@ -126,22 +144,24 @@
     font-size: 1.125rem;
     line-height: 1.75;
   }
-  
+
   /* ===== MODERN LINK STYLES ===== */
   a {
     color: hsl(var(--primary));
     transition: color 200ms ease-in-out;
     text-decoration: none;
   }
-  
+
   a:hover {
     color: hsl(var(--primary) / 0.8);
   }
-  
+
   /* ===== FOCUS STYLES ===== */
   :focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px hsl(var(--ring)), 0 0 0 4px hsl(var(--background));
+    box-shadow:
+      0 0 0 2px hsl(var(--ring)),
+      0 0 0 4px hsl(var(--background));
   }
 }
 
@@ -168,7 +188,9 @@
     opacity: 0.5;
   }
   .btn:focus-visible {
-    box-shadow: 0 0 0 2px hsl(var(--ring)), 0 0 0 4px hsl(var(--background));
+    box-shadow:
+      0 0 0 2px hsl(var(--ring)),
+      0 0 0 4px hsl(var(--background));
   }
   .btn::before {
     content: '';
@@ -177,7 +199,12 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
     transition: left 0.5s;
   }
   .btn:hover::before {
@@ -296,7 +323,9 @@
   }
   .input:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px hsl(var(--ring)), 0 0 0 4px hsl(var(--background));
+    box-shadow:
+      0 0 0 2px hsl(var(--ring)),
+      0 0 0 4px hsl(var(--background));
   }
   .input:focus {
     border-color: hsl(var(--primary));
@@ -360,14 +389,18 @@
   .dropdown-enhanced {
     background-color: hsl(var(--popover));
     border: 2px solid hsl(var(--border));
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow:
+      0 10px 25px -5px rgba(0, 0, 0, 0.1),
+      0 10px 10px -5px rgba(0, 0, 0, 0.04);
     backdrop-filter: blur(12px);
   }
 
   .dark .dropdown-enhanced {
     background-color: hsl(var(--popover));
     border: 2px solid hsl(var(--border));
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    box-shadow:
+      0 10px 25px -5px rgba(0, 0, 0, 0.3),
+      0 10px 10px -5px rgba(0, 0, 0, 0.2);
   }
   /* ===== SUBTLE ANIMATIONS ===== */
   .fade-in {
@@ -418,8 +451,8 @@
   .text-balance {
     text-wrap: balance;
   }
-  
-    .text-pretty {
+
+  .text-pretty {
     text-wrap: pretty;
   }
 
@@ -434,9 +467,44 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Custom scrollbar styles */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground) / 0.2);
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
+  }
+
+  .scrollbar-thin:hover::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground) / 0.3);
+  }
+
+  .scrollbar-thumb-muted-foreground\/20::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground) / 0.2);
+  }
+
+  .scrollbar-thumb-muted-foreground\/30::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground) / 0.3);
+  }
+
+  .scrollbar-track-transparent::-webkit-scrollbar-track {
+    background: transparent;
   }
 }
 
@@ -445,7 +513,19 @@
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Roboto',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -457,4 +537,4 @@ body {
   padding: 1rem;
   border-radius: 0.5rem;
   margin: 1rem;
-} 
+}
