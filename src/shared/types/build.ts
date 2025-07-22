@@ -17,6 +17,10 @@ export interface BuildState {
     major: string[] // Array of EDIDs
     minor: string[] // Array of EDIDs
   }
+  perks: {
+    selected: Record<string, string[]> // skillId -> array of perk EDIDs
+    ranks: Record<string, number> // perkId -> current rank
+  }
   equipment: string[] // Array of EDIDs
   userProgress: {
     unlocks: string[] // Array of unlock IDs
@@ -42,6 +46,10 @@ export const DEFAULT_BUILD: BuildState = {
   skills: {
     major: [],
     minor: [],
+  },
+  perks: {
+    selected: {},
+    ranks: {},
   },
   equipment: [],
   userProgress: {

@@ -31,13 +31,7 @@ const navSections = [
       { to: '/build/perks', label: 'Skills and Perks' },
     ],
   },
-  {
-    label: 'Progression',
-    items: [
-      { to: '/destiny', label: 'Destiny ' },
-      { to: '/perks', label: 'Skills and Perks' },
-    ],
-  },
+
   {
     label: 'Gear',
     items: [
