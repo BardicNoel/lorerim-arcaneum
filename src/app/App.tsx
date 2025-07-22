@@ -15,24 +15,27 @@ import { useState } from 'react'
 import { HashRouter, useNavigate } from 'react-router-dom'
 import { AppRouter } from './router'
 import { SiteHeader } from './SiteHeader'
+import React from 'react'
+import { SidebarMenuSubButton } from '@/shared/ui/sidebar/SidebarMenuSubButton'
 
 const navSections = [
   {
-    label: 'Character Creation',
+    label: 'Character Build',
     items: [
       { to: '/build', label: 'Build' },
-      { to: '/build/race', label: 'Races' },
+      { to: '/build/race', label: 'Race' },
       { to: '/build/birth-signs', label: 'Birth Signs' },
       { to: '/build/traits', label: 'Traits' },
-      { to: '/skills', label: 'Skill Selection' },
       { to: '/build/religions', label: 'Religion' },
+      { to: '/build/destiny', label: 'Destiny' },
+      { to: '/build/perks', label: 'Skills and Perks' },
     ],
   },
   {
     label: 'Progression',
     items: [
-      { to: '/build/destiny', label: 'Destiny ' },
-      { to: '/build/perks', label: 'Perks' },
+      { to: '/destiny', label: 'Destiny ' },
+      { to: '/perks', label: 'Skills and Perks' },
     ],
   },
   {
