@@ -1,3 +1,6 @@
 export { SkillAccordion } from './SkillAccordion'
 export { SkillCard } from './SkillCard'
 export type { SkillLevel } from './SkillCard'
+export { SkillsGrid } from './SkillsGrid'
+export { UnifiedSkillCard } from './UnifiedSkillCard'
+export { PerkTreeView } from './PerkTreeView'

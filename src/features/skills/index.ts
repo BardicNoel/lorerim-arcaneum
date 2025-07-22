@@ -1,5 +1,6 @@
 export * from './components'
 export * from './hooks'
 export { SkillsPage } from './pages/SkillsPage'
+export { UnifiedSkillsPage } from './pages/UnifiedSkillsPage'
 export * from './types'
 export * from './utils'

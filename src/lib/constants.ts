@@ -19,6 +19,7 @@ export const Z_INDEX = {
   AUTOCOMPLETE: 120,
   TOOLTIP: 150,
   MODAL: 200,
+  DRAWER: 202,
 
   // Navigation and headers
   HEADER: 50,
