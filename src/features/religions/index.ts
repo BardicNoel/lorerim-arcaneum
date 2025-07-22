@@ -1,5 +1,5 @@
 export { AccordionReligionsPage } from './pages/AccordionReligionsPage'
-export { ReligionAccordion } from './components/ReligionAccordion'
+export { ReligionAccordion, ReligionSelectionCard, DeityAutocomplete } from './components'
 export type {
   Religion,
   ReligionPantheon,
@@ -7,3 +7,8 @@ export type {
   ReligionSpell,
   ReligionTenet,
 } from './types'
+export type {
+  ReligionSelection,
+  ReligionSelectionState,
+  DeityOption,
+} from './types/selection'

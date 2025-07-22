@@ -161,7 +161,7 @@ export function useCharacterBuild() {
     updateBuild({ stone: stoneId })
   }
 
-  // Religion management
+  // Religion management - Simplified
   const setReligion = (religionId: string | null) => {
     updateBuild({ religion: religionId })
   }
@@ -205,6 +205,7 @@ export function useCharacterBuild() {
       notes: '',
       race: null,
       stone: null,
+      religion: null,
       skills: {
         major: [],
         minor: [],
@@ -344,6 +345,8 @@ export function useCharacterBuild() {
     setRace,
     setBirthsign,
     setStone,
+    
+    // Religion management - Simplified
     setReligion,
 
     // Equipment management

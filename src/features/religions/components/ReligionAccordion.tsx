@@ -276,6 +276,8 @@ interface ReligionAccordionProps {
   showTenets?: boolean
   showBoons?: boolean
   showFavoredRaces?: boolean
+  disableHover?: boolean
+  showToggle?: boolean
 }
 
 // Enhanced icon mapping for religion effects
@@ -746,6 +748,8 @@ export function ReligionAccordion({
   showTenets = true,
   showBoons = true,
   showFavoredRaces = true,
+  disableHover,
+  showToggle,
 }: ReligionAccordionProps) {
   const getEffectIconByType = (type: 'positive' | 'negative' | 'neutral') => {
     switch (type) {
@@ -765,9 +769,11 @@ export function ReligionAccordion({
   }
 
   return (
-    <AccordionCard expanded={isExpanded} onToggle={onToggle} className={className}>
+    <AccordionCard expanded={isExpanded} onToggle={onToggle} className={className} disableHover={disableHover}>
       <AccordionCard.Header>
-        <AddToBuildSwitchSimple itemId={item.id} itemType="religion" itemName={item.name} />
+        {showToggle && (
+          <AddToBuildSwitchSimple itemId={item.id} itemType="religion" itemName={item.name} />
+        )}
         <div className="flex-1">
           <H3 className="text-primary font-semibold">{item.name}</H3>
         </div>

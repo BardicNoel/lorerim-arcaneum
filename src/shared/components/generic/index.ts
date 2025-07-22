@@ -1,15 +1,10 @@
-// Generic Components
+export { AccordionCard } from './AccordionCard'
+export { CategoryBadge } from './CategoryBadge'
+export { GenericConfigCard, ConfigInput, ConfigAlert } from './ConfigCard'
+export { GenericConfirmDialog } from './ConfirmDialog'
 export { EntityAvatar } from './EntityAvatar'
 export { FormattedText } from './FormattedText'
 export { GenericAccordionCard } from './GenericAccordionCard'
-export { CategoryBadge } from './CategoryBadge'
-
-// New Generic Components
-export { GenericConfigCard, ConfigInput, ConfigAlert } from './ConfigCard'
-export { GenericConfirmDialog } from './ConfirmDialog'
+export { GenericAutocomplete, type AutocompleteOption } from './GenericAutocomplete'
 export { GenericShareButton } from './ShareButton'
 export { GenericSummaryCard, createBuildSummaryItems } from './SummaryCard'
-
-// Re-export types for convenience
-export type { EntityType, AvatarSize } from './EntityAvatar'
-export type { BadgeSize } from './CategoryBadge'
