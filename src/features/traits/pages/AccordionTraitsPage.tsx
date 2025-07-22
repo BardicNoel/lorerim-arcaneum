@@ -1,4 +1,4 @@
-import { PlayerCreationLayout } from '@/shared/components/playerCreation'
+import { BuildPageShell } from '@/shared/components/playerCreation'
 import type {
   PlayerCreationItem,
   SearchCategory,
@@ -236,7 +236,7 @@ export function AccordionTraitsPage() {
   }
 
   return (
-    <PlayerCreationLayout
+    <BuildPageShell
       title="Traits"
       description="Choose your character's traits. Each trait provides unique abilities, bonuses, and sometimes drawbacks that will define your character's strengths and playstyle."
     >
@@ -359,6 +359,6 @@ export function AccordionTraitsPage() {
           </p>
         </div>
       )}
-    </PlayerCreationLayout>
+    </BuildPageShell>
   )
 }

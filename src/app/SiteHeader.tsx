@@ -1,7 +1,6 @@
-import React from 'react'
-import { Menu } from 'lucide-react'
 import { Z_INDEX } from '@/lib/constants'
 import { ThemeToggle } from '@/shared/ui/ThemeToggle'
+import { Menu } from 'lucide-react'
 
 interface SiteHeaderProps {
   sidebarCollapsed: boolean
@@ -14,8 +13,12 @@ export function SiteHeader({
 }: SiteHeaderProps) {
   return (
     <header
-      className="sticky top-0 w-full h-12 flex items-center bg-background border-b border-skyrim-gold/20 px-2 shadow-sm"
-      style={{ zIndex: Z_INDEX.NAVIGATION }}
+      className="sticky top-0 w-full h-12 flex items-center bg-background border-b border-skyrim-gold/20 px-2 shadow-sm backdrop-blur-sm"
+      style={{
+        zIndex: Z_INDEX.HEADER,
+        backgroundColor: 'hsl(var(--background))',
+        backgroundImage: 'none',
+      }}
     >
       <button
         onClick={onToggleSidebar}

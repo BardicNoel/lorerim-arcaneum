@@ -1,4 +1,4 @@
-import { PlayerCreationLayout } from '@/shared/components/playerCreation'
+import { BuildPageShell } from '@/shared/components/playerCreation'
 import type {
   PlayerCreationItem,
   SearchCategory,
@@ -392,7 +392,7 @@ export function AccordionReligionsPage() {
   }
 
   return (
-    <PlayerCreationLayout
+    <BuildPageShell
       title="Religions"
       description="Choose your character's religion. Each deity offers unique blessings, tenets, and powers that will guide your spiritual journey through Tamriel."
     >
@@ -620,6 +620,6 @@ export function AccordionReligionsPage() {
           </p>
         </div>
       )}
-    </PlayerCreationLayout>
+    </BuildPageShell>
   )
 }

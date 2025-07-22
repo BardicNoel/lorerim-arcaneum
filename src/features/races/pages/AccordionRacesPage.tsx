@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { PlayerCreationLayout } from '@/shared/components/playerCreation'
+import { BuildPageShell } from '@/shared/components/playerCreation'
 import type {
   PlayerCreationItem,
   SearchCategory,
@@ -259,7 +259,7 @@ export function AccordionRacesPage() {
   }
 
   return (
-    <PlayerCreationLayout
+    <BuildPageShell
       title="Races"
       description="Choose your character's race. Each race has unique abilities, starting attributes, and racial traits that will shape your journey through Tamriel."
     >
@@ -403,6 +403,6 @@ export function AccordionRacesPage() {
           </p>
         </div>
       )}
-    </PlayerCreationLayout>
+    </BuildPageShell>
   )
 }
