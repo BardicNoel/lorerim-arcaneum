@@ -1,8 +1,6 @@
 export { BirthsignCard } from './BirthsignCard'
 export { BirthsignDetailPanel } from './BirthsignDetailPanel'
 export { BirthsignAccordion } from './BirthsignAccordion'
-export { CustomMultiAutocompleteSearch } from './CustomMultiAutocompleteSearch'
-export { FuzzySearchBox } from './FuzzySearchBox'
 export { BirthsignAvatar } from './BirthsignAvatar'
 export { BirthsignAutocomplete } from './BirthsignAutocomplete'
 export { BirthsignSelectionCard } from './BirthsignSelectionCard'

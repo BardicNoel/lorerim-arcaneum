@@ -13,15 +13,16 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/ui/dropdown-menu'
 import { ChevronDown, Grid3X3, List, X } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
-import { CustomMultiAutocompleteSearch, TraitCard } from '../components'
+import { useEffect, useState } from 'react'
+import { TraitCard } from '../components'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import { useFuzzySearch } from '../hooks'
 import type { Trait } from '../types'
 import {
   getAllCategories,
   getAllTags,
-  transformTraitToPlayerCreationItem,
 } from '../utils'
+import { traitToPlayerCreationItem } from '@/shared/utils'
 
 type SortOption = 'alphabetical' | 'category' | 'effect-count'
 type ViewMode = 'list' | 'grid'
@@ -52,10 +53,7 @@ export function AccordionTraitsPage() {
     fetchTraits()
   }, [])
 
-  // Convert traits to PlayerCreationItem format for consolidated view
-  const traitItems: PlayerCreationItem[] = useMemo(() => {
-    return traits.map(transformTraitToPlayerCreationItem)
-  }, [traits])
+
 
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
@@ -169,9 +167,7 @@ export function AccordionTraitsPage() {
   )
 
   // Convert to PlayerCreationItem format
-  const displayItems: PlayerCreationItem[] = fuzzyFilteredTraits.map(
-    transformTraitToPlayerCreationItem
-  )
+  const displayItems: PlayerCreationItem[] = fuzzyFilteredTraits.map(traitToPlayerCreationItem)
 
   // Sort the display items
   const sortedDisplayItems = [...displayItems].sort((a, b) => {
@@ -338,13 +334,13 @@ export function AccordionTraitsPage() {
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
           {sortedDisplayItems.map(item => (
-            <TraitCard key={item.id} item={item} isSelected={false} />
+            <TraitCard key={item.id} item={item} />
           ))}
         </div>
       ) : (
         <div className="flex flex-col gap-4 w-full mt-6">
           {sortedDisplayItems.map(item => (
-            <TraitCard key={item.id} item={item} isSelected={false} />
+            <TraitCard key={item.id} item={item} />
           ))}
         </div>
       )}

@@ -1,3 +1,4 @@
+// Shared FuzzySearchBox component for all features (migrated from features/religions/components/FuzzySearchBox.tsx)
 import React, { useState, useRef, useEffect } from 'react'
 import { Search, Plus, ChevronDown, X } from 'lucide-react'
 import { Button } from '@/shared/ui/ui/button'
@@ -6,8 +7,7 @@ import { Z_INDEX } from '@/lib/constants'
 import type {
   SearchCategory,
   SearchOption,
-  SelectedTag,
-} from '@/shared/components/playerCreation/types'
+} from './types'
 
 interface FuzzySearchBoxProps {
   categories: SearchCategory[]
@@ -251,4 +251,4 @@ export function FuzzySearchBox({
       )}
     </div>
   )
-}
+} 

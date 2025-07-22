@@ -28,10 +28,11 @@ import {
   X,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { CustomMultiAutocompleteSearch } from '../components/CustomMultiAutocompleteSearch'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import { ReligionAccordion } from '../components/ReligionAccordion'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { Religion, ReligionPantheon } from '../types'
+import { religionToPlayerCreationItem } from '@/shared/utils'
 
 type SortOption = 'alphabetical' | 'divine-type'
 type ViewMode = 'list' | 'grid'
@@ -82,34 +83,7 @@ export function AccordionReligionsPage() {
   }, [])
 
   // Convert religions to PlayerCreationItem format for consolidated view
-  const religionItems: PlayerCreationItem[] = religions.map(religion => ({
-    id: `religion-${religion.name.toLowerCase().replace(/\s+/g, '-')}`,
-    name: religion.name,
-    description: religion.tenet?.description || '',
-    tags: religion.favoredRaces || [],
-    summary: religion.tenet?.description || '',
-    effects: [
-      // Include tenet effects
-      ...(religion.tenet?.effects?.map(effect => ({
-        type: 'positive' as const,
-        name: effect.effectName,
-        description: effect.effectDescription,
-        value: effect.magnitude,
-        target: effect.targetAttribute || '',
-      })) || []),
-      // Include blessing effects if available
-      ...(religion.blessing?.effects?.map(effect => ({
-        type: 'positive' as const,
-        name: effect.effectName,
-        description: effect.effectDescription,
-        value: effect.magnitude,
-        target: effect.targetAttribute || '',
-      })) || []),
-    ],
-    associatedItems: [],
-    imageUrl: undefined,
-    category: religion.type,
-  }))
+  const religionItems: PlayerCreationItem[] = religions.map(religionToPlayerCreationItem)
 
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
@@ -226,36 +200,7 @@ export function AccordionReligionsPage() {
   )
 
   // Convert to PlayerCreationItem format
-  const displayItems: PlayerCreationItem[] = fuzzyFilteredReligions.map(
-    (religion: Religion) => ({
-      id: `religion-${religion.name.toLowerCase().replace(/\s+/g, '-')}`,
-      name: religion.name,
-      description: religion.tenet?.description || '',
-      tags: religion.favoredRaces || [],
-      summary: religion.tenet?.description || '',
-      effects: [
-        // Include tenet effects
-        ...(religion.tenet?.effects?.map((effect: any) => ({
-          type: 'positive' as const,
-          name: effect.effectName,
-          description: effect.effectDescription,
-          value: effect.magnitude,
-          target: effect.targetAttribute || '',
-        })) || []),
-        // Include blessing effects if available
-        ...(religion.blessing?.effects?.map((effect: any) => ({
-          type: 'positive' as const,
-          name: effect.effectName,
-          description: effect.effectDescription,
-          value: effect.magnitude,
-          target: effect.targetAttribute || '',
-        })) || []),
-      ],
-      associatedItems: [],
-      imageUrl: undefined,
-      category: religion.type,
-    })
-  )
+  const displayItems: PlayerCreationItem[] = fuzzyFilteredReligions.map(religionToPlayerCreationItem)
 
   // Sort the display items
   const sortedDisplayItems = [...displayItems].sort((a, b) => {

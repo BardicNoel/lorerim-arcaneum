@@ -28,10 +28,8 @@ import {
   Settings,
   X,
 } from 'lucide-react'
-import {
-  BirthsignAccordion,
-  CustomMultiAutocompleteSearch,
-} from '../components'
+import { BirthsignAccordion, BirthsignCard, BirthsignDetailPanel } from '../components'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import {
   useBirthsignData,
   useBirthsignFilters,

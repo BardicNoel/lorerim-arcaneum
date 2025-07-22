@@ -12,11 +12,11 @@ import { Button } from '@/shared/ui/ui/button'
 import { ArrowLeft, Grid3X3, List, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CustomMultiAutocompleteSearch } from '../components/CustomMultiAutocompleteSearch'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import { RaceAccordion } from '../components/RaceAccordion'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { Race } from '../types'
-import { transformRaceToPlayerCreationItem } from '../utils/dataTransform'
+import { raceToPlayerCreationItem } from '@/shared/utils'
 
 type ViewMode = 'list' | 'grid'
 
@@ -187,9 +187,7 @@ export function AccordionRacesPage() {
   )
 
   // Convert to PlayerCreationItem format
-  const displayItems: PlayerCreationItem[] = fuzzyFilteredRaces.map(race =>
-    transformRaceToPlayerCreationItem(race)
-  )
+  const displayItems: PlayerCreationItem[] = fuzzyFilteredRaces.map(raceToPlayerCreationItem)
 
   // Handle accordion expansion
   const handleRaceToggle = (raceId: string) => {
