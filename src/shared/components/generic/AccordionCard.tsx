@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 /**
- * Compound AccordionCard component with slottable Header, Summary, and Details.
+ * Compound AccordionCard component with slottable Header, Summary, Footer, and Details.
  * Each slot has healthy default styling, but allows className override.
  *
  * Usage:
  * <AccordionCard>
  *   <AccordionCard.Header>...</AccordionCard.Header>
  *   <AccordionCard.Summary>...</AccordionCard.Summary>
+ *   <AccordionCard.Footer>...</AccordionCard.Footer>
  *   <AccordionCard.Details>...</AccordionCard.Details>
  * </AccordionCard>
  *
@@ -16,11 +17,12 @@ import { cn } from '@/lib/utils';
  */
 export function AccordionCard({ children, className, expanded, onToggle }: { children: React.ReactNode; className?: string; expanded?: boolean; onToggle?: () => void }) {
   // Find slots by type
-  let header, summary, details;
+  let header, summary, footer, details;
   React.Children.forEach(children, child => {
     if (!React.isValidElement(child)) return;
     if (child.type === AccordionCard.Header) header = child;
     if (child.type === AccordionCard.Summary) summary = child;
+    if (child.type === AccordionCard.Footer) footer = child;
     if (child.type === AccordionCard.Details) details = child;
   });
   // Expansion state (controlled or uncontrolled)
@@ -28,17 +30,22 @@ export function AccordionCard({ children, className, expanded, onToggle }: { chi
   const isExpanded = expanded !== undefined ? expanded : internalExpanded;
   const handleToggle = onToggle || (() => setInternalExpanded(e => !e));
   return (
-    <div className={cn('rounded-lg border bg-background shadow-sm', className)}>
+    <div className={cn('rounded-lg border bg-background shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] flex flex-col', className)}>
       {/* Header (always visible, toggles expansion) */}
       {header &&
         React.cloneElement(header, {
           onClick: handleToggle,
           expanded: isExpanded,
         })}
-      {/* Summary (always visible) */}
-      {summary}
-      {/* Details (only if expanded) */}
-      {isExpanded && details}
+      {/* Main content area (takes available space) */}
+      <div className="flex-1">
+        {/* Summary (always visible) */}
+        {summary}
+        {/* Details (only if expanded) */}
+        {isExpanded && details}
+      </div>
+      {/* Footer (always at bottom) */}
+      {footer}
     </div>
   );
 }
@@ -62,6 +69,9 @@ AccordionCard.Header = function Header({ children, className, onClick, expanded 
 };
 AccordionCard.Summary = function Summary({ children, className }: { children: React.ReactNode; className?: string }) {
   return <div className={cn('px-4 py-2 space-y-3', className)}>{children}</div>;
+};
+AccordionCard.Footer = function Footer({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <div className={cn('px-4 py-2', className)}>{children}</div>;
 };
 AccordionCard.Details = function Details({ children, className }: { children: React.ReactNode; className?: string }) {
   return <div className={cn('px-4 py-4 space-y-4 bg-background', className)}>{children}</div>;

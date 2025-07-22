@@ -14,7 +14,7 @@ import {
 } from '@/shared/ui/ui/dropdown-menu'
 import { ChevronDown, Grid3X3, List, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { TraitCard } from '../components'
+import { TraitAccordion } from '../components/TraitAccordion'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import { useFuzzySearch } from '../hooks'
 import type { Trait } from '../types'
@@ -34,6 +34,7 @@ export function AccordionTraitsPage() {
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
+  const [expandedTraits, setExpandedTraits] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     async function fetchTraits() {
@@ -53,7 +54,8 @@ export function AccordionTraitsPage() {
     fetchTraits()
   }, [])
 
-
+  // Convert traits to PlayerCreationItem format using the proper transformation
+  const traitItems: (PlayerCreationItem & { originalTrait: Trait })[] = traits.map(traitToPlayerCreationItem)
 
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
@@ -142,7 +144,7 @@ export function AccordionTraitsPage() {
           return true
 
         case 'Categories':
-          // Filter by trait category
+          // Filter by category
           return trait.category === tag.value
 
         case 'Tags':
@@ -167,7 +169,10 @@ export function AccordionTraitsPage() {
   )
 
   // Convert to PlayerCreationItem format
-  const displayItems: PlayerCreationItem[] = fuzzyFilteredTraits.map(traitToPlayerCreationItem)
+  const displayItems: (PlayerCreationItem & { originalTrait: Trait })[] = fuzzyFilteredTraits.map(traitToPlayerCreationItem)
+
+  // Get all valid trait IDs for cleanup
+  const allValidTraitIds = traits.map(trait => trait.edid)
 
   // Sort the display items
   const sortedDisplayItems = [...displayItems].sort((a, b) => {
@@ -175,34 +180,87 @@ export function AccordionTraitsPage() {
       case 'alphabetical':
         return a.name.localeCompare(b.name)
       case 'category':
+        // Define priority order for categories
         const getCategoryPriority = (category: string | undefined) => {
-          const priorities: Record<string, number> = {
-            combat: 1,
-            magic: 2,
-            survival: 3,
-            social: 4,
-            crafting: 5,
-            other: 6,
+          switch (category) {
+            case 'Combat':
+              return 1
+            case 'Magic':
+              return 2
+            case 'Stealth':
+              return 3
+            case 'Social':
+              return 4
+            case 'Survival':
+              return 5
+            default:
+              return 6
           }
-          return priorities[category || 'other'] || 6
         }
-        const categoryA = getCategoryPriority(a.category)
-        const categoryB = getCategoryPriority(b.category)
-        if (categoryA !== categoryB) {
-          return categoryA - categoryB
-        }
+
+        const aPriority = getCategoryPriority(a.category)
+        const bPriority = getCategoryPriority(b.category)
+
+        // First sort by priority, then alphabetically within each category
+        if (aPriority !== bPriority) return aPriority - bPriority
         return a.name.localeCompare(b.name)
+
       case 'effect-count':
-        const effectCountA = a.effects?.length || 0
-        const effectCountB = b.effects?.length || 0
-        if (effectCountA !== effectCountB) {
-          return effectCountB - effectCountA // Descending order
-        }
+        // Sort by number of effects (descending)
+        const aEffectCount = a.effects?.length || 0
+        const bEffectCount = b.effects?.length || 0
+        if (aEffectCount !== bEffectCount) return bEffectCount - aEffectCount
         return a.name.localeCompare(b.name)
+
       default:
         return 0
     }
   })
+
+  // Handle accordion expansion
+  const handleTraitToggle = (traitId: string) => {
+    const newExpanded = new Set(expandedTraits)
+
+    if (viewMode === 'grid') {
+      // In grid mode, expand/collapse all items in the same row
+      const columns = 3 // Match the grid columns
+      const itemIndex = sortedDisplayItems.findIndex(
+        item => item.id === traitId
+      )
+      const rowIndex = Math.floor(itemIndex / columns)
+      const rowStartIndex = rowIndex * columns
+      const rowEndIndex = Math.min(
+        rowStartIndex + columns,
+        sortedDisplayItems.length
+      )
+
+      // Check if any item in the row is currently expanded
+      const isRowExpanded = sortedDisplayItems
+        .slice(rowStartIndex, rowEndIndex)
+        .some(item => newExpanded.has(item.id))
+
+      if (isRowExpanded) {
+        // Collapse all items in the row
+        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
+          newExpanded.delete(item.id)
+        })
+      } else {
+        // Expand all items in the row
+        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
+          newExpanded.add(item.id)
+        })
+      }
+    } else {
+      // In list mode, toggle individual items
+      if (newExpanded.has(traitId)) {
+        newExpanded.delete(traitId)
+      } else {
+        newExpanded.add(traitId)
+      }
+    }
+
+    setExpandedTraits(newExpanded)
+  }
 
   if (loading) {
     return (
@@ -234,7 +292,7 @@ export function AccordionTraitsPage() {
   return (
     <BuildPageShell
       title="Traits"
-      description="Choose your character's traits. Each trait provides unique abilities, bonuses, and sometimes drawbacks that will define your character's strengths and playstyle."
+      description="Choose your character's traits. Traits provide unique abilities and modifiers that will shape your character's capabilities throughout their journey."
     >
       {/* Custom MultiAutocompleteSearch with FuzzySearchBox for keywords */}
       <div className="flex items-center gap-4 mb-4">
@@ -258,8 +316,8 @@ export function AccordionTraitsPage() {
               {sortBy === 'alphabetical'
                 ? 'A-Z'
                 : sortBy === 'category'
-                  ? 'Type'
-                  : 'Count'}
+                ? 'Category'
+                : 'Count'}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -333,15 +391,35 @@ export function AccordionTraitsPage() {
       {/* Trait Grid/List */}
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
-          {sortedDisplayItems.map(item => (
-            <TraitCard key={item.id} item={item} />
-          ))}
+          {sortedDisplayItems.map(item => {
+            const isExpanded = expandedTraits.has(item.id)
+            return (
+              <TraitAccordion
+                key={item.id}
+                item={item}
+                isExpanded={isExpanded}
+                onToggle={() => handleTraitToggle(item.id)}
+                className="w-full"
+                allTraitIds={allValidTraitIds}
+              />
+            )
+          })}
         </div>
       ) : (
         <div className="flex flex-col gap-4 w-full mt-6">
-          {sortedDisplayItems.map(item => (
-            <TraitCard key={item.id} item={item} />
-          ))}
+          {sortedDisplayItems.map(item => {
+            const isExpanded = expandedTraits.has(item.id)
+            return (
+              <TraitAccordion
+                key={item.id}
+                item={item}
+                isExpanded={isExpanded}
+                onToggle={() => handleTraitToggle(item.id)}
+                className="w-full"
+                allTraitIds={allValidTraitIds}
+              />
+            )
+          })}
         </div>
       )}
 

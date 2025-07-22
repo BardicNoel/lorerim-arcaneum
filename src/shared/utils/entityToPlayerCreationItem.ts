@@ -74,11 +74,12 @@ export function raceToPlayerCreationItem(race: Race): PlayerCreationItem {
 
 /**
  * Maps a Trait entity to a PlayerCreationItem for use in shared player creation UIs.
- * Includes effects and tags.
+ * Returns all core PlayerCreationItem fields, but also spreads in all domain-specific fields from the original Trait for extensibility.
  */
-export function traitToPlayerCreationItem(trait: Trait): PlayerCreationItem {
+export function traitToPlayerCreationItem(trait: Trait): PlayerCreationItem & { originalTrait: Trait } {
   return {
-    id: `trait-${trait.name.toLowerCase().replace(/\s+/g, '-')}`,
+    ...trait, // Spread domain-specific fields first
+    id: trait.edid, // Use edid for character build compatibility
     name: trait.name,
     description: trait.description,
     tags: trait.tags || [],
@@ -94,6 +95,7 @@ export function traitToPlayerCreationItem(trait: Trait): PlayerCreationItem {
     associatedItems: [],
     imageUrl: undefined,
     category: trait.category,
+    originalTrait: trait, // Include original trait for extensibility
   }
 }
 
