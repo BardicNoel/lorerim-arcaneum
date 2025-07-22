@@ -1,7 +1,5 @@
-import { PlayerCreationLayout } from '@/shared/components/playerCreation'
+import { BuildPageShell } from '@/shared/components/playerCreation'
 import type {
-  PlayerCreationItem,
-  SearchCategory,
   SearchOption,
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
@@ -30,18 +28,15 @@ import {
   Settings,
   X,
 } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
 import {
   BirthsignAccordion,
   CustomMultiAutocompleteSearch,
 } from '../components'
-import { useFuzzySearch, useBirthsignData, useBirthsignFilters, useDisplayControls } from '../hooks'
-import type { Birthsign } from '../types'
 import {
-  getAllGroups,
-  getAllStats,
-  transformBirthsignToPlayerCreationItem,
-} from '../utils'
+  useBirthsignData,
+  useBirthsignFilters,
+  useDisplayControls,
+} from '../hooks'
 
 type SortOption = 'alphabetical' | 'group' | 'power-count'
 type ViewMode = 'list' | 'grid'
@@ -123,7 +118,7 @@ export function AccordionBirthsignsPage() {
   }
 
   return (
-    <PlayerCreationLayout
+    <BuildPageShell
       title="Birth Signs"
       description="Choose your character's birthsign to gain unique abilities and bonuses based on the celestial constellations."
     >
@@ -149,7 +144,11 @@ export function AccordionBirthsignsPage() {
                   category: optionOrTag.category,
                 }
               }
-              if (!selectedTags.some(t => t.value === tag.value && t.category === tag.category)) {
+              if (
+                !selectedTags.some(
+                  t => t.value === tag.value && t.category === tag.category
+                )
+              ) {
                 addTag(tag)
               }
             }}
@@ -170,7 +169,11 @@ export function AccordionBirthsignsPage() {
                   category: optionOrTag.category,
                 }
               }
-              if (!selectedTags.some(t => t.value === tag.value && t.category === tag.category)) {
+              if (
+                !selectedTags.some(
+                  t => t.value === tag.value && t.category === tag.category
+                )
+              ) {
                 addTag(tag)
               }
             }}
@@ -232,7 +235,13 @@ export function AccordionBirthsignsPage() {
         <Button
           variant="outline"
           size="sm"
-          onClick={allExpanded ? collapseAll : (e) => { expandAll(sortedDisplayItems.map(item => item.id)) }}
+          onClick={
+            allExpanded
+              ? collapseAll
+              : e => {
+                  expandAll(sortedDisplayItems.map(item => item.id))
+                }
+          }
           className="flex items-center justify-center"
           title={
             allExpanded ? 'Collapse all accordions' : 'Expand all accordions'
@@ -447,6 +456,6 @@ export function AccordionBirthsignsPage() {
           </p>
         </div>
       )}
-    </PlayerCreationLayout>
+    </BuildPageShell>
   )
 }

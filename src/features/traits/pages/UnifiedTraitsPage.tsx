@@ -1,22 +1,21 @@
-import React, { useState, useEffect } from 'react'
 import {
-  PlayerCreationLayout,
+  BuildPageShell,
+  ItemGrid,
   PlayerCreationContent,
-  PlayerCreationItemsSection,
   PlayerCreationDetailSection,
   PlayerCreationEmptyDetail,
   PlayerCreationFilters,
-  ItemGrid,
+  PlayerCreationItemsSection,
 } from '@/shared/components/playerCreation'
-import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
-import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
-import { TraitCard } from '../components/TraitCard'
-import { TraitDetailPanel } from '../components/TraitDetailPanel'
 import type {
   PlayerCreationItem,
   SearchCategory,
-  SelectedTag,
 } from '@/shared/components/playerCreation/types'
+import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
+import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
+import { useEffect, useState } from 'react'
+import { TraitCard } from '../components/TraitCard'
+import { TraitDetailPanel } from '../components/TraitDetailPanel'
 import type { Trait } from '../types'
 import { transformTraitToPlayerCreationItem } from '../utils/dataTransform'
 
@@ -156,7 +155,7 @@ export function UnifiedTraitsPage() {
   }
 
   return (
-    <PlayerCreationLayout
+    <BuildPageShell
       title="Traits"
       description="Choose your character's traits. Each trait provides unique abilities, bonuses, and sometimes drawbacks that will define your character's strengths and playstyle."
     >
@@ -188,6 +187,6 @@ export function UnifiedTraitsPage() {
           )}
         </PlayerCreationDetailSection>
       </PlayerCreationContent>
-    </PlayerCreationLayout>
+    </BuildPageShell>
   )
 }
