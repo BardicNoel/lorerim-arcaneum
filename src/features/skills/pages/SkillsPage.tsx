@@ -1,6 +1,6 @@
 import { CustomMultiAutocompleteSearch } from '@/features/skills/components/CustomMultiAutocompleteSearch'
 import type { Skill } from '@/features/skills/types'
-import { PlayerCreationLayout } from '@/shared/components/playerCreation'
+import { BuildPageShell } from '@/shared/components/playerCreation'
 import type {
   SearchCategory,
   SearchOption,
@@ -247,7 +247,7 @@ export function SkillsPage() {
   }
 
   return (
-    <PlayerCreationLayout
+    <BuildPageShell
       title="Skills"
       description="Choose your character's skills. Select up to 3 Major and 3 Minor skills to define your character's expertise and abilities."
     >
@@ -422,6 +422,6 @@ export function SkillsPage() {
           </div>
         )}
       </div>
-    </PlayerCreationLayout>
+    </BuildPageShell>
   )
 }

@@ -1,8 +1,2 @@
-export { PlayerCreationLayout } from './PlayerCreationLayout'
-export {
-  PlayerCreationContent,
-  PlayerCreationItemsSection,
-  PlayerCreationDetailSection,
-  PlayerCreationEmptyDetail,
-} from './PlayerCreationContent'
+export { PlayerCreationContent } from './PlayerCreationContent'
 export { PlayerCreationFilters } from './PlayerCreationFilters'

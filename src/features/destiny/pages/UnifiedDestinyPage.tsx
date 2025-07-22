@@ -1,28 +1,20 @@
-import React, { useState, useEffect } from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
-import { Button } from '@/shared/ui/ui/button'
 import {
-  PlayerCreationLayout,
-  PlayerCreationContent,
-  PlayerCreationItemsSection,
-  PlayerCreationDetailSection,
-  PlayerCreationEmptyDetail,
+  BuildPageShell,
   PlayerCreationFilters,
-  ItemGrid,
 } from '@/shared/components/playerCreation'
-import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
-import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
-import { DestinyCard } from '../components/DestinyCard'
-import { DestinyDetailPanel } from '../components/DestinyDetailPanel'
-import { DestinyPathBuilder } from '../components/DestinyPathBuilder'
 import type {
   PlayerCreationItem,
   SearchCategory,
-  SelectedTag,
 } from '@/shared/components/playerCreation/types'
-import type { DestinyNode, PlannedNode } from '../types'
-import { Card } from '@/shared/ui/ui/card'
+import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
+import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
+import { useEffect, useState } from 'react'
 import { DestinyAccordionList } from '../components/DestinyAccordionList'
+import { DestinyCard } from '../components/DestinyCard'
+import { DestinyDetailPanel } from '../components/DestinyDetailPanel'
+import { DestinyPathBuilder } from '../components/DestinyPathBuilder'
+import type { DestinyNode, PlannedNode } from '../types'
 
 export function UnifiedDestinyPage() {
   // Load destiny data from public/data/subclasses.json at runtime
@@ -240,10 +232,9 @@ export function UnifiedDestinyPage() {
   }
 
   return (
-    <PlayerCreationLayout
+    <BuildPageShell
       title="Destiny"
       description="Plan your character's destiny through the perk tree. Each node represents a powerful ability or enhancement that will shape your journey."
-      className="max-w-none"
     >
       <div className="mb-6">
         <Tabs defaultValue="path" className="w-full">
@@ -277,6 +268,6 @@ export function UnifiedDestinyPage() {
           </TabsContent>
         </Tabs>
       </div>
-    </PlayerCreationLayout>
+    </BuildPageShell>
   )
 }

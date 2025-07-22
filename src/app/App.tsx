@@ -20,19 +20,19 @@ const navSections = [
   {
     label: 'Character Creation',
     items: [
-      { to: '/build', label: 'Character Builder' },
-      { to: '/race', label: 'Races' },
-      { to: '/birth-signs', label: 'Birth Signs' },
-      { to: '/traits', label: 'Traits' },
+      { to: '/build', label: 'Build' },
+      { to: '/build/race', label: 'Races' },
+      { to: '/build/birth-signs', label: 'Birth Signs' },
+      { to: '/build/traits', label: 'Traits' },
       { to: '/skills', label: 'Skill Selection' },
-      { to: '/religions', label: 'Religion' },
+      { to: '/build/religions', label: 'Religion' },
     ],
   },
   {
     label: 'Progression',
     items: [
-      { to: '/destiny', label: 'Destiny ' },
-      { to: '/perks', label: 'Perks' },
+      { to: '/build/destiny', label: 'Destiny ' },
+      { to: '/build/perks', label: 'Perks' },
     ],
   },
   {
@@ -166,7 +166,7 @@ function AppContent() {
         >
           <AppSidebar collapsed={sidebarCollapsed} />
         </div>
-        <main className={`flex-1 p-8 transition-all duration-300 ease-in-out`}>
+        <main className={`flex-1  transition-all duration-300 ease-in-out`}>
           <AppRouter />
         </main>
       </div>

@@ -1,27 +1,25 @@
+import { BirthsignSelectionCard } from '@/features/birthsigns'
+import BuildPageDestinyCard from '@/features/destiny/components/BuildPageDestinyCard'
 import { RaceSelectionCard } from '@/features/races/components'
 import { TraitSelectionCard } from '@/features/traits/components'
-import { BirthsignSelectionCard } from '@/features/birthsigns'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/ui/tabs'
-import BuildPageDestinyCard from '@/features/destiny/components/BuildPageDestinyCard'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 // Import extracted components
-import { 
-  TraitLimitConfigCard,
+import {
+  BasicInfoCard,
+  BuildControls,
   BuildResetConfirmDialog,
   BuildSummaryCard,
-  BasicInfoCard,
-  BuildControls
+  TraitLimitConfigCard,
 } from '@/features/build/components'
 import { useTraitLimits } from '@/features/build/hooks'
-
-import React from 'react'
+import { BuildPageShell } from '@/shared/components/playerCreation'
 
 export function BuildPage() {
-  const { build, setBuildName, setBuildNotes, resetBuild, setDestinyPath } =
-    useCharacterBuild()
+  const { build, setBuildName, setBuildNotes, resetBuild } = useCharacterBuild()
 
   const [showConfirm, setShowConfirm] = useState(false)
   const traitLimits = useTraitLimits()
@@ -29,12 +27,10 @@ export function BuildPage() {
   const navigate = useNavigate()
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-3xl font-bold">Character Builder</h1>
-      </div>
+    <BuildPageShell title="Character Builder">
       {/* Build Controls Area */}
       <BuildControls onReset={() => setShowConfirm(true)} />
+
       {/* Confirmation Dialog */}
       <BuildResetConfirmDialog
         open={showConfirm}
@@ -86,6 +82,6 @@ export function BuildPage() {
           />
         </TabsContent>
       </Tabs>
-    </div>
+    </BuildPageShell>
   )
 }

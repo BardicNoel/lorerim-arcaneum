@@ -1,4 +1,4 @@
-import { PlayerCreationLayout } from '@/shared/components/playerCreation'
+import { BuildPageShell } from '@/shared/components/playerCreation'
 import type {
   PlayerCreationItem,
   SearchCategory,
@@ -320,7 +320,7 @@ export function AccordionSkillsPage() {
   }
 
   return (
-    <PlayerCreationLayout
+    <BuildPageShell
       title="Skills"
       description="Master the various skills of Skyrim to enhance your character's abilities and unlock new gameplay options."
     >
@@ -576,6 +576,6 @@ export function AccordionSkillsPage() {
           </p>
         </div>
       )}
-    </PlayerCreationLayout>
+    </BuildPageShell>
   )
 }
