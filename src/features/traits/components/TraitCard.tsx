@@ -1,10 +1,11 @@
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
-import {
-  SelectionCard,
-  type SelectionOption,
-} from '@/shared/components/ui/SelectionCard'
+import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
+import { Badge } from '@/shared/ui/ui/badge'
+import { Button } from '@/shared/ui/ui/button'
+import { cn } from '@/lib/utils'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
-import { parseDescription } from '../utils/dataTransform'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
+import { Zap } from 'lucide-react'
 
 interface TraitCardProps {
   item: PlayerCreationItem
@@ -34,90 +35,94 @@ export function TraitCard({ item }: TraitCardProps) {
   const regularLimit = getRegularTraitLimit()
   const bonusLimit = getBonusTraitLimit()
 
-  // Parse and clean the description
-  const cleanedDescription = parseDescription(item.description)
-
-  const handleTraitLevelChange = (value: string | undefined) => {
-    if (!value) {
-      // Clear the trait
+  const handleTraitSelect = (type: 'primary' | 'secondary') => {
+    if (traitLevel === type) {
+      // Toggle off if already selected
       removeTrait(item.id)
-    } else if (value === 'primary') {
-      if (traitLevel === 'primary') {
-        // Toggle off primary trait
-        removeTrait(item.id)
-      } else if (canAddRegularTrait()) {
-        // Add starting trait (this will automatically remove any existing trait)
-        removeTrait(item.id) // Clear any existing trait first
+    } else {
+      // Remove any existing trait first
+      removeTrait(item.id)
+      
+      if (type === 'primary' && canAddRegularTrait()) {
         addRegularTrait(item.id)
-      }
-    } else if (value === 'secondary') {
-      if (traitLevel === 'secondary') {
-        // Toggle off secondary trait
-        removeTrait(item.id)
-      } else if (canAddBonusTrait()) {
-        // Add late game trait (this will automatically remove any existing trait)
-        removeTrait(item.id) // Clear any existing trait first
+      } else if (type === 'secondary' && canAddBonusTrait()) {
         addBonusTrait(item.id)
       }
     }
   }
 
-  const isRegularLimitReached =
-    !canAddRegularTrait() && traitLevel !== 'primary'
+  const isRegularLimitReached = !canAddRegularTrait() && traitLevel !== 'primary'
   const isBonusLimitReached = !canAddBonusTrait() && traitLevel !== 'secondary'
 
-  // Define selection options
-  const options: SelectionOption[] = [
-    {
-      value: 'primary',
-      label: '+ Regular',
-      color: {
-        selected: 'skyrim-gold',
-        hover: 'skyrim-gold/10',
-        border: 'skyrim-gold',
-      },
-      disabled: isRegularLimitReached,
-      tooltip: isRegularLimitReached
-        ? `Maximum ${regularLimit} regular traits reached`
-        : undefined,
-    },
-    {
-      value: 'secondary',
-      label: '+ Extra Unlock',
-      color: {
-        selected: 'skyrim-gold',
-        hover: 'skyrim-gold/10',
-        border: 'skyrim-gold',
-      },
-      disabled: isBonusLimitReached,
-      tooltip: isBonusLimitReached
-        ? `Maximum ${bonusLimit} extra unlock traits reached`
-        : undefined,
-    },
-  ]
-
   // Define card theming based on selection state
-  const getCardTheming = (selectedValue: string | undefined) => {
-    if (selectedValue === 'primary') {
+  const getCardTheming = () => {
+    if (traitLevel === 'primary') {
       return 'border-yellow-500 bg-yellow-50/50 shadow-yellow-500/20'
     }
-    if (selectedValue === 'secondary') {
+    if (traitLevel === 'secondary') {
       return 'border-gray-400 bg-gray-50/50 shadow-gray-400/20'
     }
     return ''
   }
 
   return (
-    <SelectionCard
-      title={item.name}
-      description={cleanedDescription}
-      options={options}
-      selectedValue={traitLevel}
-      onValueChange={handleTraitLevelChange}
-      minWidth="min-w-[320px]"
-      cardClassName={getCardTheming}
-      showCardTheming={true}
-      mutuallyExclusive={true}
-    />
+    <Card
+      className={cn(
+        'cursor-pointer transition-all duration-200 hover:shadow-md min-w-[320px]',
+        getCardTheming(),
+        'hover:scale-[1.02]'
+      )}
+    >
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-skyrim-gold/20 flex items-center justify-center">
+              <Zap className="h-4 w-4 text-skyrim-gold" />
+            </div>
+            <h3 className="font-semibold text-lg">{item.name}</h3>
+          </div>
+
+        </div>
+      </CardHeader>
+
+      <CardContent className="pt-0 flex flex-col h-full">
+        <div className="flex-1">
+          <FormattedText
+            text={item.description}
+            className="text-base text-muted-foreground line-clamp-3"
+          />
+        </div>
+
+        {/* Selection Controls - Pushed to bottom */}
+        <div className="mt-auto pt-4">
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant={traitLevel === 'primary' ? 'default' : 'outline'}
+              disabled={isRegularLimitReached}
+              className={cn(
+                'flex-1 text-xs',
+                traitLevel === 'primary' && 'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90'
+              )}
+              onClick={() => handleTraitSelect('primary')}
+            >
+              {traitLevel === 'primary' ? '- Regular' : '+ Regular'}
+            </Button>
+            <Button
+              size="sm"
+              variant={traitLevel === 'secondary' ? 'default' : 'outline'}
+              disabled={isBonusLimitReached}
+              className={cn(
+                'flex-1 text-xs',
+                traitLevel === 'secondary' && 'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90'
+              )}
+              onClick={() => handleTraitSelect('secondary')}
+            >
+              {traitLevel === 'secondary' ? '- Extra Unlock' : '+ Extra Unlock'}
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   )
 }

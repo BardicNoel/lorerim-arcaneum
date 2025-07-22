@@ -2,6 +2,7 @@ import type { PlayerCreationItem } from '@/shared/components/playerCreation/type
 import { Badge } from '@/shared/ui/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import type { Trait } from '../types'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 
 interface TraitDetailPanelProps {
   item: PlayerCreationItem
@@ -51,9 +52,10 @@ export function TraitDetailPanel({ item }: TraitDetailPanelProps) {
           <CardTitle className="text-lg">Description</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground leading-relaxed">
-            {item.description}
-          </p>
+          <FormattedText
+            text={item.description}
+            className="text-base text-muted-foreground leading-relaxed"
+          />
         </CardContent>
       </Card>
 

@@ -5,100 +5,25 @@ import {
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Badge } from '@/shared/ui/ui/badge'
 import { useNavigate } from 'react-router-dom'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
+import { useTraits } from '../hooks/useTraits'
 
 interface TraitDisplayCardProps {
   className?: string
 }
 
-// Mock trait data - in real implementation, this would come from a traits hook
-const mockTraits: Record<string, EntityDetail> = {
-  trait_1: {
-    id: 'trait_1',
-    name: 'Acoustic Arcanist',
-    description:
-      'Your magic flows through melody and vibration. After playing an instrument at an inn, your sonic spells become 20% more powerful.',
-    category: 'Magic',
-    tags: ['magic', 'spells'],
-    effects: [
-      {
-        name: 'Sonic Spell Power',
-        description:
-          'Sonic spells become 20% more powerful after playing an instrument',
-        type: 'positive',
-      },
-      {
-        name: 'Follower Cost',
-        description: 'Hiring followers becomes more expensive',
-        type: 'negative',
-      },
-      {
-        name: 'Physical Weakness',
-        description: 'Physical attacks are 15% weaker',
-        type: 'negative',
-      },
-    ],
-  },
-  trait_2: {
-    id: 'trait_2',
-    name: 'Adrenaline Rush',
-    description:
-      'You possess a natural flight response. When at less than 20% health, you move 20% faster and regenerate 1 stamina per second.',
-    category: 'Combat',
-    tags: ['combat', 'survival'],
-    effects: [
-      {
-        name: 'Speed Boost',
-        description: 'Move 20% faster when below 20% health',
-        type: 'positive',
-      },
-      {
-        name: 'Stamina Regeneration',
-        description: 'Regenerate 1 stamina per second when below 20% health',
-        type: 'positive',
-      },
-      {
-        name: 'Damage Reduction',
-        description: 'Deal 30% less damage when below 20% health',
-        type: 'negative',
-      },
-    ],
-  },
-  trait_3: {
-    id: 'trait_3',
-    name: 'Angler',
-    description:
-      'Your bond with the sea grants unique benefits. Mudcrabs and slaughterfish become friendly toward you.',
-    category: 'Survival',
-    tags: ['fishing', 'water'],
-    effects: [
-      {
-        name: 'Aquatic Friendship',
-        description: 'Mudcrabs and slaughterfish become friendly',
-        type: 'positive',
-      },
-      {
-        name: 'Fishing Bonus',
-        description: 'Fishing yields more valuable items',
-        type: 'positive',
-      },
-      {
-        name: 'Shock Vulnerability',
-        description: '10% more vulnerable to shock damage',
-        type: 'negative',
-      },
-    ],
-  },
-}
+// Remove mock data - we'll use real trait data from the hook
 
 export function TraitDisplayCard({ className }: TraitDisplayCardProps) {
   const { build } = useCharacterBuild()
   const navigate = useNavigate()
+  const { traits } = useTraits()
 
   // Get selected traits
   const selectedTraitIds = [...build.traits.regular, ...build.traits.bonus]
   const selectedTraits = selectedTraitIds
-    .map(id => mockTraits[id])
-    .filter(Boolean)
+    .map(id => traits.find(trait => trait.edid === id))
+    .filter((trait): trait is NonNullable<typeof trait> => trait !== undefined)
 
   const handleNavigateToTraitPage = () => {
     navigate('/traits')
@@ -131,7 +56,7 @@ export function TraitDisplayCard({ className }: TraitDisplayCardProps) {
 
       <div className="space-y-3">
         {selectedTraits.map((trait, index) => (
-          <div key={trait.id} className="border rounded-lg p-3">
+          <div key={trait.edid} className="border rounded-lg p-3">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
@@ -142,9 +67,10 @@ export function TraitDisplayCard({ className }: TraitDisplayCardProps) {
                     </Badge>
                   )}
                 </div>
-                <p className="text-sm text-muted-foreground mb-2">
-                  {trait.description}
-                </p>
+                <FormattedText
+                  text={trait.description || ''}
+                  className="text-base text-muted-foreground mb-2"
+                />
 
                 {/* Show first few effects */}
                 {trait.effects &&
@@ -152,14 +78,12 @@ export function TraitDisplayCard({ className }: TraitDisplayCardProps) {
                     <div
                       key={effectIndex}
                       className={`text-xs p-1 rounded mb-1 ${
-                        effect.type === 'positive'
-                          ? 'bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300'
-                          : effect.type === 'negative'
-                            ? 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300'
-                            : 'bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300'
+                        effect.flags.includes('Detrimental')
+                          ? 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300'
+                          : 'bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300'
                       }`}
                     >
-                      {effect.name}
+                      {effect.type}
                     </div>
                   ))}
 

@@ -12,6 +12,7 @@ import { Badge } from '@/shared/ui/ui/badge'
 import { H3, P } from '@/shared/ui/ui/typography'
 import { Heart, Shield, Star, Zap } from 'lucide-react'
 import type { Trait } from '../types'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 
 interface TraitAccordionProps {
   item: PlayerCreationItem
@@ -89,9 +90,10 @@ export function TraitAccordion({
       {/* Collapsed Content */}
       <AccordionCollapsedContentSlot>
         <div className="flex items-center justify-between">
-          <P className="text-sm text-muted-foreground line-clamp-2">
-            {item.description}
-          </P>
+          <FormattedText
+            text={item.description}
+            className="text-base text-muted-foreground line-clamp-2"
+          />
           <div className="flex items-center gap-2 ml-4">
             {item.tags &&
               item.tags.slice(0, 2).map(tag => (
@@ -114,7 +116,10 @@ export function TraitAccordion({
           {/* Description */}
           <div>
             <h4 className="text-sm font-medium mb-2">Description</h4>
-            <P className="text-sm text-muted-foreground">{item.description}</P>
+            <FormattedText
+              text={item.description}
+              className="text-base text-muted-foreground"
+            />
           </div>
 
           {/* Effects */}

@@ -5,6 +5,7 @@ import { Input } from '@/shared/ui/ui/input'
 import { ChevronDown, Search, X } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
 import type { Trait } from '../types'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 
 interface TraitAutocompleteProps {
   traits: Trait[]
@@ -172,9 +173,10 @@ export function TraitAutocomplete({
                           </div>
                         )}
                       </div>
-                      <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                        {trait.description}
-                      </div>
+                      <FormattedText
+                        text={trait.description}
+                        className="text-sm text-muted-foreground mt-1 line-clamp-2"
+                      />
                     </div>
                   </div>
                 </button>
