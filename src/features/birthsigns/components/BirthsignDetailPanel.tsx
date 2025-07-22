@@ -14,8 +14,6 @@ interface BirthsignDetailPanelProps {
   item: PlayerCreationItem
 }
 
-
-
 const effectTypeColors: Record<string, string> = {
   bonus: 'bg-green-100 text-green-800 border-green-200',
   penalty: 'bg-red-100 text-red-800 border-red-200',

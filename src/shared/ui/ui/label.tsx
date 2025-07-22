@@ -11,20 +11,18 @@ const labelVariants = cva(
 )
 
 // Add explicit props interface
-interface CustomLabelProps extends React.ComponentPropsWithoutRef<typeof RadixLabel>, VariantProps<typeof labelVariants> {
-  children?: React.ReactNode;
-  className?: string;
+interface CustomLabelProps
+  extends React.ComponentPropsWithoutRef<typeof RadixLabel>,
+    VariantProps<typeof labelVariants> {
+  children?: React.ReactNode
+  className?: string
 }
 
 const Label = React.forwardRef<
   React.ElementRef<typeof RadixLabel>,
   CustomLabelProps
 >(({ className, children, ...props }, ref) => (
-  <RadixLabel
-    ref={ref}
-    className={cn(labelVariants(), className)}
-    {...props}
-  >
+  <RadixLabel ref={ref} className={cn(labelVariants(), className)} {...props}>
     {children}
   </RadixLabel>
 ))

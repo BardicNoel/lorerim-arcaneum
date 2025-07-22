@@ -2,10 +2,10 @@ import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Badge } from '@/shared/ui/ui/badge'
 import { cn } from '@/lib/utils'
-import { 
-  getSummaryCardColor, 
+import {
+  getSummaryCardColor,
   getSummaryCardIcon,
-  buildSpacing 
+  buildSpacing,
 } from '@/shared/config/buildConfig'
 import { User, Star, Heart, Tag } from 'lucide-react'
 
@@ -67,17 +67,16 @@ export function GenericSummaryCard({
             <div key={index} className={cn(buildSpacing.item, item.className)}>
               <div className="flex items-center gap-2 mb-1">
                 {item.icon || getIcon(item.type)}
-                <span className={cn(
-                  'font-medium text-sm',
-                  getSummaryCardColor('primary')
-                )}>
+                <span
+                  className={cn(
+                    'font-medium text-sm',
+                    getSummaryCardColor('primary')
+                  )}
+                >
                   {item.label}:
                 </span>
               </div>
-              <div className={cn(
-                'text-sm',
-                getSummaryCardColor('secondary')
-              )}>
+              <div className={cn('text-sm', getSummaryCardColor('secondary'))}>
                 {item.value || 'Not selected'}
               </div>
             </div>
@@ -124,4 +123,4 @@ export function createBuildSummaryItems(build: {
       type: 'traits',
     },
   ]
-} 
+}

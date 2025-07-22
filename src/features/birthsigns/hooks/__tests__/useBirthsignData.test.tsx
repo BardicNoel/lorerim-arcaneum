@@ -4,12 +4,34 @@ import { useBirthsignData } from '../useBirthsignData'
 import React from 'react'
 
 const mockBirthsigns = [
-  { name: 'The Warrior', group: 'Warrior', description: '', powers: [], edid: 'warrior', formid: '0001', stat_modifications: [], skill_bonuses: [], conditional_effects: [], mastery_effects: [] },
-  { name: 'The Mage', group: 'Mage', description: '', powers: [], edid: 'mage', formid: '0002', stat_modifications: [], skill_bonuses: [], conditional_effects: [], mastery_effects: [] },
+  {
+    name: 'The Warrior',
+    group: 'Warrior',
+    description: '',
+    powers: [],
+    edid: 'warrior',
+    formid: '0001',
+    stat_modifications: [],
+    skill_bonuses: [],
+    conditional_effects: [],
+    mastery_effects: [],
+  },
+  {
+    name: 'The Mage',
+    group: 'Mage',
+    description: '',
+    powers: [],
+    edid: 'mage',
+    formid: '0002',
+    stat_modifications: [],
+    skill_bonuses: [],
+    conditional_effects: [],
+    mastery_effects: [],
+  },
 ]
 
 function setupHook() {
-  let hookResult: any = {}
+  const hookResult: any = {}
   function TestComponent() {
     Object.assign(hookResult, useBirthsignData())
     return null
@@ -31,7 +53,15 @@ describe('useBirthsignData', () => {
   })
 
   it('should fetch and populate birthsigns', async () => {
-    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(mockBirthsigns) })))
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockBirthsigns),
+        })
+      )
+    )
     const result = setupHook()
     await waitFor(() => {
       expect(result.loading).toBe(false)
@@ -41,8 +71,11 @@ describe('useBirthsignData', () => {
   })
 
   it('should handle fetch error', async () => {
-    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: false })))
-    let hookResult: any = {}
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve({ ok: false }))
+    )
+    const hookResult: any = {}
     function TestComponent() {
       Object.assign(hookResult, useBirthsignData())
       return null
@@ -56,7 +89,15 @@ describe('useBirthsignData', () => {
   })
 
   it('should refetch data when refetch is called', async () => {
-    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(mockBirthsigns) })))
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockBirthsigns),
+        })
+      )
+    )
     const result = setupHook()
     await waitFor(() => expect(result.loading).toBe(false))
     const originalCount = result.birthsigns.length
@@ -64,4 +105,4 @@ describe('useBirthsignData', () => {
     await waitFor(() => expect(result.loading).toBe(false))
     expect(result.birthsigns.length).toBe(originalCount)
   })
-}) 
+})

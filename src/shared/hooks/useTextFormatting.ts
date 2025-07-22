@@ -1,5 +1,8 @@
 import { useMemo } from 'react'
-import { parseFormattedText, type TextFormattingOptions } from '@/shared/utils/textFormatting'
+import {
+  parseFormattedText,
+  type TextFormattingOptions,
+} from '@/shared/utils/textFormatting'
 
 export function useTextFormatting(
   text: string,
@@ -9,4 +12,4 @@ export function useTextFormatting(
     if (!text) return []
     return parseFormattedText(text, options)
   }, [text, options])
-} 
+}

@@ -61,4 +61,4 @@ describe('birthsignConfig', () => {
     // @ts-expect-error: testing fallback
     expect(getBirthsignEffectTypeColor('unknown')).toContain('skyrim-gold')
   })
-}) 
+})

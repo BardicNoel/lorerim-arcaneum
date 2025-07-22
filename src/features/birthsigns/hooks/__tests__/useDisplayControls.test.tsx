@@ -4,7 +4,7 @@ import { useDisplayControls } from '../useDisplayControls'
 import React from 'react'
 
 function setupHook() {
-  let hookResult: any = {}
+  const hookResult: any = {}
   function TestComponent() {
     Object.assign(hookResult, useDisplayControls())
     return null
@@ -59,4 +59,4 @@ describe('useDisplayControls', () => {
     expect(result.showSkills).toBe(true)
     expect(result.showEffects).toBe(true)
   })
-}) 
+})

@@ -15,10 +15,10 @@ interface ConfirmDialogProps {
 
 /**
  * Confirm Dialog Component
- * 
+ *
  * Feature-specific wrapper around GenericConfirmDialog that provides
  * consistent confirmation dialogs throughout the application.
- * 
+ *
  * This follows the birthsigns pattern of feature-specific wrappers
  * around generic components for better separation of concerns.
  */
@@ -50,7 +50,7 @@ export function ConfirmDialog({
 
 /**
  * Build Reset Confirmation Dialog
- * 
+ *
  * Specialized confirmation dialog for resetting character builds.
  * This demonstrates how to create domain-specific dialog variants.
  */
@@ -75,4 +75,4 @@ export function BuildResetConfirmDialog({
       onCancel={onCancel}
     />
   )
-} 
+}

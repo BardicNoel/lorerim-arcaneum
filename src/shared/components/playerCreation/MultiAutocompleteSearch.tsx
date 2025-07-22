@@ -16,10 +16,7 @@ export function MultiAutocompleteSearch({
   return (
     <div className={`flex flex-wrap gap-4 justify-start ${className}`}>
       {categories.map(category => (
-        <div
-          key={category.id}
-          className="flex-1 min-w-[180px]"
-        >
+        <div key={category.id} className="flex-1 min-w-[180px]">
           <AutocompleteSearch
             categories={[category]}
             onSelect={onSelect}

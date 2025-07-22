@@ -4,12 +4,12 @@ import { Input } from '@/shared/ui/ui/input'
 import { Label } from '@/shared/ui/ui/label'
 import { Badge } from '@/shared/ui/ui/badge'
 import { cn } from '@/lib/utils'
-import { 
-  getTraitLimitColor, 
-  getTraitLimitIcon, 
-  getBackgroundColor, 
+import {
+  getTraitLimitColor,
+  getTraitLimitIcon,
+  getBackgroundColor,
   getBorderColor,
-  buildSpacing 
+  buildSpacing,
 } from '@/shared/config/buildConfig'
 import { AlertTriangle, Info, Circle, Star } from 'lucide-react'
 
@@ -53,7 +53,9 @@ export function GenericConfigCard({
     if (icon) return icon
     switch (variant) {
       case 'warning':
-        return <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+        return (
+          <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+        )
       case 'info':
         return <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
       default:
@@ -72,9 +74,7 @@ export function GenericConfigCard({
           <p className="text-sm text-muted-foreground">{description}</p>
         )}
       </CardHeader>
-      <CardContent className={cn(buildSpacing.section)}>
-        {children}
-      </CardContent>
+      <CardContent className={cn(buildSpacing.section)}>{children}</CardContent>
     </Card>
   )
 }
@@ -119,7 +119,7 @@ export function ConfigInput({
         min={min}
         max={max}
         value={value}
-        onChange={(e) => onChange(parseInt(e.target.value) || 0)}
+        onChange={e => onChange(parseInt(e.target.value) || 0)}
         className="mt-1"
       />
       {currentCount !== undefined && (
@@ -141,11 +141,15 @@ export function ConfigAlert({
   const getIcon = () => {
     switch (type) {
       case 'warning':
-        return <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+        return (
+          <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+        )
       case 'info':
         return <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
       case 'error':
-        return <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
+        return (
+          <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
+        )
       case 'success':
         return <Info className="h-4 w-4 text-green-600 dark:text-green-400" />
       default:
@@ -154,12 +158,14 @@ export function ConfigAlert({
   }
 
   return (
-    <div className={cn(
-      'flex items-start gap-2 p-4 rounded-lg border',
-      getBackgroundColor(type),
-      getBorderColor(type),
-      className
-    )}>
+    <div
+      className={cn(
+        'flex items-start gap-2 p-4 rounded-lg border',
+        getBackgroundColor(type),
+        getBorderColor(type),
+        className
+      )}
+    >
       {getIcon()}
       <div className="text-sm">
         <strong>{title}</strong>
@@ -167,4 +173,4 @@ export function ConfigAlert({
       </div>
     </div>
   )
-} 
+}

@@ -29,14 +29,20 @@ const customPatterns = [
 describe('FormattedText', () => {
   it('renders bracket segments with correct class', () => {
     render(
-      <FormattedText text="You gain <10> health." options={{ customPatterns }} />
+      <FormattedText
+        text="You gain <10> health."
+        options={{ customPatterns }}
+      />
     )
     expect(screen.getByText('10').className).toContain('bracket')
   })
 
   it('renders attribute segments with correct class', () => {
     render(
-      <FormattedText text="Increase your health and magicka." options={{ customPatterns }} />
+      <FormattedText
+        text="Increase your health and magicka."
+        options={{ customPatterns }}
+      />
     )
     const healthEls = screen.getAllByText(/health/i)
     const magickaEls = screen.getAllByText(/magicka/i)
@@ -64,4 +70,4 @@ describe('FormattedText', () => {
     )
     expect(screen.getByText('0').className).toContain('neutral')
   })
-}) 
+})

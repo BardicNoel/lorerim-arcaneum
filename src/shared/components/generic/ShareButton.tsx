@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Button } from '@/shared/ui/ui/button'
 import { cn } from '@/lib/utils'
-import { 
-  getShareButtonColor, 
-  getShareButtonIcon 
+import {
+  getShareButtonColor,
+  getShareButtonIcon,
 } from '@/shared/config/buildConfig'
 import { Share2, Check, Link } from 'lucide-react'
 
@@ -81,4 +81,4 @@ export function GenericShareButton({
       </Button>
     </div>
   )
-} 
+}

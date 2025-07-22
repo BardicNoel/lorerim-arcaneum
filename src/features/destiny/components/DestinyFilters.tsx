@@ -27,7 +27,7 @@ export function DestinyFilters({
   selectedTags,
   onTagSelect,
   onTagRemove,
-  className = "",
+  className = '',
 }: DestinyFiltersProps) {
   // Generate search categories for path filtering
   const searchCategories = useMemo((): SearchCategory[] => {
@@ -160,4 +160,4 @@ export function DestinyFilters({
       />
     </div>
   )
-} 
+}

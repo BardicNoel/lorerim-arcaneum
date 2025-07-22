@@ -1,60 +1,68 @@
-import React, { useState, useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/ui/card";
-import { Button } from "@/shared/ui/ui/button";
-import { Badge } from "@/shared/ui/ui/badge";
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/shared/ui/ui/resizable";
-import { AutocompleteSearch } from "@/shared/components/playerCreation/AutocompleteSearch";
-import type { SearchCategory, SearchOption } from "@/shared/components/playerCreation/types";
-import { usePerks, usePerkPlan } from "../hooks/usePerks";
-import { PerkTreeCanvasII } from "../components/PerkTreeCanvasII";
+import React, { useState, useMemo } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
+import { Button } from '@/shared/ui/ui/button'
+import { Badge } from '@/shared/ui/ui/badge'
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from '@/shared/ui/ui/resizable'
+import { AutocompleteSearch } from '@/shared/components/playerCreation/AutocompleteSearch'
+import type {
+  SearchCategory,
+  SearchOption,
+} from '@/shared/components/playerCreation/types'
+import { usePerks, usePerkPlan } from '../hooks/usePerks'
+import { PerkTreeCanvasII } from '../components/PerkTreeCanvasII'
 
 export function UnifiedPerksPage() {
-  const { perkTrees, loading, error } = usePerks();
-  const [selectedTreeId, setSelectedTreeId] = useState<string | null>(null);
+  const { perkTrees, loading, error } = usePerks()
+  const [selectedTreeId, setSelectedTreeId] = useState<string | null>(null)
 
   // Get the selected tree
-  const selectedTree = perkTrees.find(tree => tree.treeId === selectedTreeId);
+  const selectedTree = perkTrees.find(tree => tree.treeId === selectedTreeId)
 
   // Use perk plan for the selected tree - always pass a value to avoid hook count issues
-  const { perkPlan, togglePerk, updatePerkRank, clearSkill, clearAll } = usePerkPlan(selectedTree || undefined);
+  const { perkPlan, togglePerk, updatePerkRank, clearSkill, clearAll } =
+    usePerkPlan(selectedTree || undefined)
 
   // Get selected perks for the current tree
-  const selectedPerks = selectedTree 
+  const selectedPerks = selectedTree
     ? perkPlan.selectedPerks[selectedTree.treeName] || []
-    : [];
+    : []
 
   // Create search categories for the autocomplete
   const searchCategories = useMemo((): SearchCategory[] => {
     const skillsCategory: SearchCategory = {
-      id: "skills",
-      name: "Skills",
-      placeholder: "Search skills...",
-      options: perkTrees.map((tree) => {
-        const skillPerks = perkPlan.selectedPerks[tree.treeName] || [];
+      id: 'skills',
+      name: 'Skills',
+      placeholder: 'Search skills...',
+      options: perkTrees.map(tree => {
+        const skillPerks = perkPlan.selectedPerks[tree.treeName] || []
         return {
           id: tree.treeId,
           label: tree.treeName,
           value: tree.treeId,
-          category: "skills",
-          description: `${skillPerks.length} perks selected • ${tree.treeDescription}`
-        };
-      })
-    };
-    
-    return [skillsCategory];
-  }, [perkTrees, perkPlan.selectedPerks]);
+          category: 'skills',
+          description: `${skillPerks.length} perks selected • ${tree.treeDescription}`,
+        }
+      }),
+    }
+
+    return [skillsCategory]
+  }, [perkTrees, perkPlan.selectedPerks])
 
   // Handle skill selection
   const handleSkillSelect = (option: SearchOption) => {
-    setSelectedTreeId(option.value);
-  };
+    setSelectedTreeId(option.value)
+  }
 
   // Auto-select first tree if none selected
   React.useEffect(() => {
     if (!selectedTreeId && perkTrees.length > 0) {
-      setSelectedTreeId(perkTrees[0].treeId);
+      setSelectedTreeId(perkTrees[0].treeId)
     }
-  }, [selectedTreeId, perkTrees]);
+  }, [selectedTreeId, perkTrees])
 
   if (loading) {
     return (
@@ -64,7 +72,7 @@ export function UnifiedPerksPage() {
           <p className="text-muted-foreground">Loading perk trees...</p>
         </div>
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -72,7 +80,7 @@ export function UnifiedPerksPage() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <p className="text-destructive mb-4">{error}</p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
           >
@@ -80,7 +88,7 @@ export function UnifiedPerksPage() {
           </button>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -109,7 +117,7 @@ export function UnifiedPerksPage() {
           <Card className="h-full">
             <CardHeader>
               <CardTitle>
-                {selectedTree ? selectedTree.treeName : "Select a Skill"}
+                {selectedTree ? selectedTree.treeName : 'Select a Skill'}
               </CardTitle>
             </CardHeader>
             <CardContent className="h-full p-0">
@@ -137,7 +145,7 @@ export function UnifiedPerksPage() {
               <span className="font-medium">Total Perks:</span>
               <span className="text-lg font-bold">{perkPlan.totalPerks}</span>
             </div>
-            
+
             {selectedTree && (
               <div className="flex justify-between items-center p-3 bg-muted/20 rounded-lg">
                 <div>
@@ -146,16 +154,12 @@ export function UnifiedPerksPage() {
                     {selectedPerks.length} perks selected
                   </div>
                 </div>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={clearSkill}
-                >
+                <Button size="sm" variant="outline" onClick={clearSkill}>
                   Clear
                 </Button>
               </div>
             )}
-            
+
             <div className="flex justify-center items-center">
               <Button
                 size="sm"
@@ -170,5 +174,5 @@ export function UnifiedPerksPage() {
         </CardContent>
       </Card>
     </div>
-  );
-} 
+  )
+}

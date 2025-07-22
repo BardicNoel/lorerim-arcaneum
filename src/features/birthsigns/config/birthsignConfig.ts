@@ -72,4 +72,4 @@ export function getBirthsignEffectTypeColor(
     default:
       return effectTypeColors.neutral
   }
-} 
+}

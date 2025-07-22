@@ -13,7 +13,7 @@ interface BasicInfoCardProps {
 
 /**
  * Basic Information Card Component
- * 
+ *
  * Handles character name and notes input for the build page.
  * This follows the birthsigns pattern of feature-specific components
  * that delegate to shared UI components.
@@ -56,4 +56,4 @@ export function BasicInfoCard({
       </CardContent>
     </Card>
   )
-} 
+}

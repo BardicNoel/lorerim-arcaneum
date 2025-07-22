@@ -44,7 +44,7 @@ const mockBirthsigns = [
 ]
 
 function setupHook(birthsigns = mockBirthsigns) {
-  let hookResult: any = {}
+  const hookResult: any = {}
   function TestComponent() {
     Object.assign(hookResult, useBirthsignFilters(birthsigns))
     return null
@@ -65,7 +65,12 @@ describe('useBirthsignFilters', () => {
 
   it('should add and remove tags', () => {
     const result = setupHook()
-    const tag = { id: 'group-Warrior', label: 'Warrior', value: 'Warrior', category: 'Birthsign Groups' }
+    const tag = {
+      id: 'group-Warrior',
+      label: 'Warrior',
+      value: 'Warrior',
+      category: 'Birthsign Groups',
+    }
     act(() => result.addTag(tag))
     expect(result.selectedTags).toContainEqual(tag)
     act(() => result.removeTag(tag.id))
@@ -74,10 +79,17 @@ describe('useBirthsignFilters', () => {
 
   it('should not add duplicate tags', () => {
     const result = setupHook()
-    const tag = { id: 'group-Warrior', label: 'Warrior', value: 'Warrior', category: 'Birthsign Groups' }
+    const tag = {
+      id: 'group-Warrior',
+      label: 'Warrior',
+      value: 'Warrior',
+      category: 'Birthsign Groups',
+    }
     act(() => result.addTag(tag))
     act(() => result.addTag(tag))
-    expect(result.selectedTags.filter((t: any) => t.id === tag.id).length).toBe(1)
+    expect(result.selectedTags.filter((t: any) => t.id === tag.id).length).toBe(
+      1
+    )
   })
 
   it('should set sort and view mode', () => {
@@ -103,12 +115,25 @@ describe('useBirthsignFilters', () => {
   it('should filter and sort display items', () => {
     const result = setupHook()
     // Add a tag to filter by group
-    const tag = { id: 'group-Warrior', label: 'Warrior', value: 'Warrior', category: 'Birthsign Groups' }
+    const tag = {
+      id: 'group-Warrior',
+      label: 'Warrior',
+      value: 'Warrior',
+      category: 'Birthsign Groups',
+    }
     act(() => result.addTag(tag))
-    expect(result.sortedDisplayItems.every((item: any) => item.category === 'Warrior')).toBe(true)
+    expect(
+      result.sortedDisplayItems.every(
+        (item: any) => item.category === 'Warrior'
+      )
+    ).toBe(true)
     // Change sort to power-count
     act(() => result.setSort('power-count'))
     // Should still only show Warrior group, but sorted by power count
-    expect(result.sortedDisplayItems.every((item: any) => item.category === 'Warrior')).toBe(true)
+    expect(
+      result.sortedDisplayItems.every(
+        (item: any) => item.category === 'Warrior'
+      )
+    ).toBe(true)
   })
-}) 
+})

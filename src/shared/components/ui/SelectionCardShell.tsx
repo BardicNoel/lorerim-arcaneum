@@ -36,9 +36,7 @@ export function SelectionCardShell({
           )}
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {children}
-      </CardContent>
+      <CardContent className="space-y-4">{children}</CardContent>
     </Card>
   )
-} 
+}
