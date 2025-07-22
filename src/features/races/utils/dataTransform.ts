@@ -141,31 +141,7 @@ export function extractKeywordsFromRace(race: Race): string[] {
 /**
  * Transform race data to PlayerCreationItem format
  */
-export function transformRaceToPlayerCreationItem(
-  race: Race
-): PlayerCreationItem {
-  const effects = race.racialSpells.map(spell => ({
-    name: spell.name,
-    type: extractEffectType(spell.name, spell.description),
-    description: spell.description,
-    value: extractValueFromDescription(spell.description),
-    target: extractTargetFromDescription(spell.description),
-  }))
 
-  const tags = extractKeywordsFromRace(race)
-
-  return {
-    id: race.edid.toLowerCase().replace('race', ''),
-    name: race.name,
-    description: race.description,
-    tags,
-    summary: race.description,
-    effects,
-    associatedItems: [],
-    imageUrl: undefined,
-    category: race.category,
-  }
-}
 
 /**
  * Transform race data to TransformedRace format for internal use

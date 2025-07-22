@@ -19,6 +19,8 @@ export { PinButton } from './PinButton'
 export { PlayerCreationPage } from './PlayerCreationPage'
 export { SearchBar } from './SearchBar'
 export { SelectedTags } from './SelectedTags'
+export { FuzzySearchBox } from './FuzzySearchBox'
+export { CustomMultiAutocompleteSearch } from './CustomMultiAutocompleteSearch'
 
 // Layout components
 export {

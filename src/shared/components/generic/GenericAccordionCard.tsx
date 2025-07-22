@@ -1,152 +1,96 @@
-import React from 'react'
-import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
-import { Button } from '@/shared/ui/ui/button'
-import { ChevronDown, ChevronRight } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import React from 'react';
+import { cn } from '@/lib/utils';
 
 /**
- * Generic accordion card component that uses slot-based children.
- * Similar to Dialog pattern - children are slotted into specific areas.
+ * GenericAccordionCard: A fully slottable accordion/card shell for entity display.
+ *
+ * Props:
+ * - isExpanded: whether the card is expanded
+ * - onToggle: function to toggle expansion
+ * - className: additional classes
+ * - leftControls: slot for left-side controls (e.g., toggle switch)
+ * - header: slot for the card header (name, avatar, tags, etc.)
+ * - collapsedContent: slot for summary/preview content
+ * - expandedContent: slot for full details (shown when expanded)
+ * - actionArea: slot for custom actions (e.g., skill actions)
+ * - children: fallback for custom layouts (if provided, overrides all slots)
  */
-interface GenericAccordionCardProps {
-  children: React.ReactNode
-  isExpanded: boolean
-  onToggle: () => void
-  className?: string
-}
+export type GenericAccordionCardProps = {
+  isExpanded: boolean;
+  onToggle: () => void;
+  className?: string;
+  leftControls?: React.ReactNode;
+  header?: React.ReactNode;
+  collapsedContent?: React.ReactNode;
+  expandedContent?: React.ReactNode;
+  actionArea?: React.ReactNode;
+  children?: React.ReactNode;
+};
 
 export function GenericAccordionCard({
-  children,
   isExpanded,
   onToggle,
   className,
+  leftControls,
+  header,
+  collapsedContent,
+  expandedContent,
+  actionArea,
+  children,
 }: GenericAccordionCardProps) {
-  // Extract slot components from children
-  const leftControls = React.Children.toArray(children).find(
-    child => React.isValidElement(child) && child.type === AccordionLeftControls
-  )
-
-  const header = React.Children.toArray(children).find(
-    child => React.isValidElement(child) && child.type === AccordionHeader
-  )
-
-  const collapsedContent = React.Children.toArray(children).find(
-    child =>
-      React.isValidElement(child) &&
-      child.type === AccordionCollapsedContentSlot
-  )
-
-  const expandedContent = React.Children.toArray(children).find(
-    child =>
-      React.isValidElement(child) && child.type === AccordionExpandedContentSlot
-  )
+  // If children is provided, render it directly (full custom layout)
+  if (children) {
+    return (
+      <div className={cn('rounded-lg border bg-background shadow-sm transition-all', className)}>
+        {children}
+      </div>
+    );
+  }
 
   return (
-    <Card
+    <div
       className={cn(
-        'bg-card border rounded-lg shadow-sm transition-all duration-200 w-full',
+        'rounded-lg border bg-background shadow-sm transition-all group',
+        isExpanded ? 'ring-2 ring-skyrim-gold/60' : '',
         className
       )}
     >
-      {/* Header - Always visible */}
-      <CardHeader className="pb-3 cursor-pointer" onClick={onToggle}>
-        <div className="flex items-center justify-between">
-          {/* Left side: Controls + Header */}
-          <div className="flex items-center gap-3 flex-1">
-            {leftControls}
-            {header}
+      <div className="flex items-start">
+        {leftControls && <div className="mr-2 flex-shrink-0">{leftControls}</div>}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between gap-2">
+            {header && <div className="flex-1 min-w-0">{header}</div>}
+            <button
+              type="button"
+              onClick={onToggle}
+              aria-expanded={isExpanded}
+              className="ml-2 p-1 rounded hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-skyrim-gold"
+              tabIndex={0}
+            >
+              <span className="sr-only">{isExpanded ? 'Collapse' : 'Expand'}</span>
+              <svg
+                className={cn('h-4 w-4 transition-transform', isExpanded ? 'rotate-90' : '')}
+                viewBox="0 0 20 20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                aria-hidden="true"
+              >
+                <path d="M6 8l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
           </div>
-
-          {/* Right side: Expand/collapse button */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0"
-            onClick={e => {
-              e.stopPropagation()
-              onToggle()
-            }}
-          >
-            {isExpanded ? (
-              <ChevronDown className="h-4 w-4" />
-            ) : (
-              <ChevronRight className="h-4 w-4" />
-            )}
-          </Button>
         </div>
-      </CardHeader>
-
-      {/* Collapsed content - Quick preview */}
-      {!isExpanded && collapsedContent && (
-        <CardContent className="pt-0 pb-3">{collapsedContent}</CardContent>
+        {actionArea && <div className="ml-2 flex-shrink-0">{actionArea}</div>}
+      </div>
+      {/* Collapsed content always shown */}
+      {collapsedContent && (
+        <div className="mt-2">{collapsedContent}</div>
       )}
-
-      {/* Expanded content - Detailed view */}
+      {/* Expanded content only shown if expanded */}
       {isExpanded && expandedContent && (
-        <CardContent className="pt-0 space-y-6">{expandedContent}</CardContent>
+        <div className="mt-4">{expandedContent}</div>
       )}
-    </Card>
-  )
-}
-
-/**
- * Slot component for left controls (switches, etc.)
- */
-interface AccordionLeftControlsProps {
-  children: React.ReactNode
-  className?: string
-}
-
-export function AccordionLeftControls({
-  children,
-  className,
-}: AccordionLeftControlsProps) {
-  return (
-    <div className={cn('flex flex-col items-center gap-2 mr-4', className)}>
-      {children}
     </div>
-  )
-}
-
-/**
- * Slot component for header content
- */
-interface AccordionHeaderProps {
-  children: React.ReactNode
-  className?: string
-}
-
-export function AccordionHeader({ children, className }: AccordionHeaderProps) {
-  return (
-    <div className={cn('flex items-center gap-3 flex-1', className)}>
-      {children}
-    </div>
-  )
-}
-
-/**
- * Slot components that can be used as children
- */
-interface AccordionCollapsedContentSlotProps {
-  children: React.ReactNode
-  className?: string
-}
-
-export function AccordionCollapsedContentSlot({
-  children,
-  className,
-}: AccordionCollapsedContentSlotProps) {
-  return <div className={className}>{children}</div>
-}
-
-interface AccordionExpandedContentSlotProps {
-  children: React.ReactNode
-  className?: string
-}
-
-export function AccordionExpandedContentSlot({
-  children,
-  className,
-}: AccordionExpandedContentSlotProps) {
-  return <div className={className}>{children}</div>
+  );
 }

@@ -1,13 +1,7 @@
 // Generic Components
 export { EntityAvatar } from './EntityAvatar'
 export { FormattedText } from './FormattedText'
-export {
-  GenericAccordionCard,
-  AccordionLeftControls,
-  AccordionHeader,
-  AccordionCollapsedContentSlot,
-  AccordionExpandedContentSlot,
-} from './GenericAccordionCard'
+export { GenericAccordionCard } from './GenericAccordionCard'
 export { CategoryBadge } from './CategoryBadge'
 
 // New Generic Components

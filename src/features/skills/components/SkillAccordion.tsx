@@ -1,11 +1,5 @@
 import { cn } from '@/lib/utils'
-import {
-  AccordionCollapsedContentSlot,
-  AccordionExpandedContentSlot,
-  AccordionHeader,
-  AccordionLeftControls,
-  GenericAccordionCard,
-} from '@/shared/components/generic'
+import { GenericAccordionCard } from '@/shared/components/generic'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
@@ -105,121 +99,114 @@ export function SkillAccordion({
       className={className}
     >
       {/* Left Controls */}
-      <AccordionLeftControls>
+      <div className="flex items-center gap-3">
         <AddToBuildSwitchSimple
           itemId={item.id}
           itemType="skill"
           itemName={item.name}
         />
-      </AccordionLeftControls>
+      </div>
 
       {/* Header Content */}
-      <AccordionHeader>
-        {/* Left side: Icon + Name + Abbreviation */}
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">{categoryIcon}</span>
-          <div className="flex items-center gap-2">
-            <H3 className="text-primary font-semibold">{item.name}</H3>
-            {originalSkill?.abbreviation && (
-              <Badge variant="secondary" className="text-xs font-mono">
-                {originalSkill.abbreviation}
-              </Badge>
-            )}
-          </div>
-        </div>
-
-        {/* Right side: Category */}
-        <div className="flex items-center gap-3 ml-auto">
-          {/* Category tag */}
-          {item.category && (
-            <Badge
-              variant="outline"
-              className={cn(
-                categoryStyle,
-                sizeClasses.sm,
-                'font-medium transition-colors'
-              )}
-            >
-              {item.category}
+      <div className="flex items-center gap-3">
+        <span className="text-2xl">{categoryIcon}</span>
+        <div className="flex items-center gap-2">
+          <H3 className="text-primary font-semibold">{item.name}</H3>
+          {originalSkill?.abbreviation && (
+            <Badge variant="secondary" className="text-xs font-mono">
+              {originalSkill.abbreviation}
             </Badge>
           )}
         </div>
-      </AccordionHeader>
+      </div>
+
+      {/* Right side: Category */}
+      <div className="flex items-center gap-3 ml-auto">
+        {/* Category tag */}
+        {item.category && (
+          <Badge
+            variant="outline"
+            className={cn(
+              categoryStyle,
+              sizeClasses.sm,
+              'font-medium transition-colors'
+            )}
+          >
+            {item.category}
+          </Badge>
+        )}
+      </div>
 
       {/* Collapsed Content */}
-      <AccordionCollapsedContentSlot>
-        <div className="space-y-3">
-          {/* Description */}
-          <div className="line-clamp-2">
-            <P className="text-sm text-muted-foreground">{item.description}</P>
-          </div>
+      <div className="space-y-3">
+        {/* Description */}
+        <div className="line-clamp-2">
+          <P className="text-sm text-muted-foreground">{item.description}</P>
         </div>
-      </AccordionCollapsedContentSlot>
+      </div>
 
       {/* Expanded Content */}
-      <AccordionExpandedContentSlot>
-        <div className="space-y-4">
-          {/* Scaling Section */}
-          {showScaling && originalSkill?.scaling && (
+      <div className="space-y-4">
+        {/* Scaling Section */}
+        {showScaling && originalSkill?.scaling && (
+          <div className="space-y-2">
+            <H5 className="text-sm font-semibold text-foreground flex items-center gap-2">
+              {getEffectIcon('scaling')}
+              Scaling
+            </H5>
+            <div className="pl-6">
+              <P className="text-sm text-muted-foreground">
+                {originalSkill.scaling}
+              </P>
+            </div>
+          </div>
+        )}
+
+        {/* Key Abilities Section */}
+        {showAbilities &&
+          originalSkill?.keyAbilities &&
+          originalSkill.keyAbilities.length > 0 && (
             <div className="space-y-2">
               <H5 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                {getEffectIcon('scaling')}
-                Scaling
+                {getEffectIcon('ability')}
+                Key Abilities
               </H5>
-              <div className="pl-6">
-                <P className="text-sm text-muted-foreground">
-                  {originalSkill.scaling}
-                </P>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {originalSkill.keyAbilities.map((ability, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Circle className="h-4 w-4 text-blue-500" />
+                      <span className="font-medium text-sm">{ability}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
 
-          {/* Key Abilities Section */}
-          {showAbilities &&
-            originalSkill?.keyAbilities &&
-            originalSkill.keyAbilities.length > 0 && (
-              <div className="space-y-2">
-                <H5 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                  {getEffectIcon('ability')}
-                  Key Abilities
-                </H5>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {originalSkill.keyAbilities.map((ability, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Circle className="h-4 w-4 text-blue-500" />
-                        <span className="font-medium text-sm">{ability}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+        {/* Meta Tags Section */}
+        {showTags &&
+          originalSkill?.metaTags &&
+          originalSkill.metaTags.length > 0 && (
+            <div className="space-y-2">
+              <H5 className="text-sm font-semibold text-foreground">Tags</H5>
+              <div className="flex flex-wrap gap-1.5">
+                {originalSkill.metaTags.map((tag, index) => (
+                  <Badge
+                    key={index}
+                    variant="secondary"
+                    className="text-xs bg-muted/50 text-muted-foreground hover:bg-muted"
+                  >
+                    {tag}
+                  </Badge>
+                ))}
               </div>
-            )}
-
-          {/* Meta Tags Section */}
-          {showTags &&
-            originalSkill?.metaTags &&
-            originalSkill.metaTags.length > 0 && (
-              <div className="space-y-2">
-                <H5 className="text-sm font-semibold text-foreground">Tags</H5>
-                <div className="flex flex-wrap gap-1.5">
-                  {originalSkill.metaTags.map((tag, index) => (
-                    <Badge
-                      key={index}
-                      variant="secondary"
-                      className="text-xs bg-muted/50 text-muted-foreground hover:bg-muted"
-                    >
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
-        </div>
-      </AccordionExpandedContentSlot>
+            </div>
+          )}
+      </div>
     </GenericAccordionCard>
   )
 }

@@ -1,4 +1,4 @@
-import { CustomMultiAutocompleteSearch } from '@/features/skills/components/CustomMultiAutocompleteSearch'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import type { Skill } from '@/features/skills/types'
 import { BuildPageShell } from '@/shared/components/playerCreation'
 import type {

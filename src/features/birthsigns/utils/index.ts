@@ -1,5 +1,4 @@
 export {
-  transformBirthsignToPlayerCreationItem,
   getAllGroups,
   getAllStats,
   getAllPowers,

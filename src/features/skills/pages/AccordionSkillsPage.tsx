@@ -31,7 +31,8 @@ import {
   X,
 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
-import { CustomMultiAutocompleteSearch, SkillAccordion } from '../components'
+import { SkillAccordion } from '../components'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import { useFuzzySearch } from '../hooks'
 import type { Skill } from '../types'
 import {

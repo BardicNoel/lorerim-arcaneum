@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react'
 import { TraitCard } from '../components/TraitCard'
 import { TraitDetailPanel } from '../components/TraitDetailPanel'
 import type { Trait } from '../types'
-import { transformTraitToPlayerCreationItem } from '../utils/dataTransform'
+import { traitToPlayerCreationItem } from '@/shared/utils'
 
 export function UnifiedTraitsPage() {
   // Load trait data from public/data/traits.json at runtime
@@ -44,9 +44,7 @@ export function UnifiedTraitsPage() {
   }, [])
 
   // Convert traits to PlayerCreationItem format using the proper transformation
-  const playerCreationItems: PlayerCreationItem[] = traits.map(
-    transformTraitToPlayerCreationItem
-  )
+  const playerCreationItems: PlayerCreationItem[] = traits.map(traitToPlayerCreationItem)
 
   // Generate search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {

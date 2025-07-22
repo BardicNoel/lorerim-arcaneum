@@ -1,10 +1,10 @@
-import React from 'react'
-import { AutocompleteSearch } from '@/shared/components/playerCreation/AutocompleteSearch'
+// Shared CustomMultiAutocompleteSearch component for all features (migrated from features/religions/components/CustomMultiAutocompleteSearch.tsx)
+import { AutocompleteSearch } from './AutocompleteSearch'
 import { FuzzySearchBox } from './FuzzySearchBox'
 import type {
   SearchCategory,
   SearchOption,
-} from '@/shared/components/playerCreation/types'
+} from './types'
 
 interface CustomMultiAutocompleteSearchProps {
   categories: SearchCategory[]
@@ -19,9 +19,9 @@ export function CustomMultiAutocompleteSearch({
   onCustomSearch,
   className = '',
 }: CustomMultiAutocompleteSearchProps) {
-  // Separate fuzzy search category from other categories
-  const fuzzySearchCategory = categories.find(cat => cat.id === 'keywords')
-  const otherCategories = categories.filter(cat => cat.id !== 'keywords')
+  // Support both 'fuzzy-search' and 'keywords' as fuzzy search category ids for backward compatibility
+  const fuzzySearchCategory = categories.find(cat => cat.id === 'fuzzy-search' || cat.id === 'keywords')
+  const otherCategories = categories.filter(cat => cat.id !== 'fuzzy-search' && cat.id !== 'keywords')
 
   return (
     <div className={`flex flex-wrap gap-4 justify-start ${className}`}>
@@ -54,4 +54,4 @@ export function CustomMultiAutocompleteSearch({
       ))}
     </div>
   )
-}
+} 

@@ -2,38 +2,6 @@ import type { PlayerCreationItem } from '@/shared/components/playerCreation/type
 import type { Trait } from '../types'
 
 /**
- * Transform trait data to PlayerCreationItem format
- */
-export function transformTraitToPlayerCreationItem(
-  trait: Trait
-): PlayerCreationItem {
-  // Extract effects from trait data
-  const effects = trait.effects.map(effect => ({
-    type: effect.flags.includes('Detrimental')
-      ? ('negative' as const)
-      : ('positive' as const),
-    name: effect.type,
-    description: effect.condition || '',
-    value: effect.value,
-    target: effect.type,
-  }))
-
-  // Generate tags from the trait data
-  const tags = [trait.category, ...trait.tags].filter(
-    (tag, index, arr) => arr.indexOf(tag) === index
-  ) // Remove duplicates
-
-  return {
-    id: trait.edid,
-    name: trait.name,
-    description: parseDescription(trait.description),
-    tags,
-    effects,
-    category: trait.category,
-  }
-}
-
-/**
  * Extract all unique categories from traits
  */
 export function getAllCategories(traits: Trait[]): string[] {

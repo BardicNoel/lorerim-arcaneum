@@ -9,9 +9,9 @@ import type { Birthsign } from '../types'
 import {
   getAllGroups,
   getAllStats,
-  transformBirthsignToPlayerCreationItem,
 } from '../utils'
 import { useFuzzySearch } from '../hooks'
+import { birthsignToPlayerCreationItem } from '@/shared/utils'
 
 type SortOption = 'alphabetical' | 'group' | 'power-count'
 type ViewMode = 'list' | 'grid'
@@ -164,7 +164,7 @@ export function useBirthsignFilters(birthsigns: Birthsign[]) {
 
   // Convert to PlayerCreationItem format
   const displayItems: PlayerCreationItem[] = useMemo(
-    () => fuzzyFilteredBirthsigns.map(transformBirthsignToPlayerCreationItem),
+    () => fuzzyFilteredBirthsigns.map(birthsignToPlayerCreationItem),
     [fuzzyFilteredBirthsigns]
   )
 

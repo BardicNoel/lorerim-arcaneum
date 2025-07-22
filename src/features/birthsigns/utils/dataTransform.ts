@@ -1,55 +1,7 @@
 import type { Birthsign, TransformedBirthsign } from '../types'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 
-/**
- * Transform birthsign data to PlayerCreationItem format
- */
-export function transformBirthsignToPlayerCreationItem(
-  birthsign: Birthsign
-): PlayerCreationItem {
-  // Extract effects from various sources
-  const effects = [
-    ...birthsign.stat_modifications.map(stat => ({
-      type:
-        stat.type === 'bonus' ? ('positive' as const) : ('negative' as const),
-      name: `${stat.stat} ${stat.type === 'bonus' ? '+' : '-'}${stat.value}${stat.value_type === 'percentage' ? '%' : ''}`,
-      description: `${stat.stat} ${stat.type === 'bonus' ? 'increased' : 'decreased'} by ${stat.value}${stat.value_type === 'percentage' ? '%' : ''}`,
-      value: stat.value,
-      target: stat.stat,
-    })),
-    ...birthsign.skill_bonuses.map(skill => ({
-      type: 'positive' as const,
-      name: `${skill.stat} +${skill.value}${skill.value_type === 'percentage' ? '%' : ''}`,
-      description: `${skill.stat} skill increased by ${skill.value}${skill.value_type === 'percentage' ? '%' : ''}`,
-      value: skill.value,
-      target: skill.stat,
-    })),
-    ...birthsign.powers.map(power => ({
-      type: 'positive' as const,
-      name: power.name,
-      description: power.description,
-      value: power.magnitude || 0,
-      target: 'power',
-    })),
-  ]
 
-  // Generate tags from the birthsign data
-  const tags = [
-    birthsign.group,
-    ...birthsign.stat_modifications.map(stat => stat.stat),
-    ...birthsign.skill_bonuses.map(skill => skill.stat),
-    ...birthsign.powers.map(power => power.name),
-  ].filter((tag, index, arr) => arr.indexOf(tag) === index) // Remove duplicates
-
-  return {
-    id: birthsign.name.toLowerCase().replace(/\s+/g, '-'),
-    name: birthsign.name,
-    description: birthsign.description,
-    tags,
-    effects,
-    category: birthsign.group,
-  }
-}
 
 /**
  * Extract all unique groups from birthsigns

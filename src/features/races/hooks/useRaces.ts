@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react'
 import Fuse from 'fuse.js'
 import type { Race, RaceFilters } from '../types'
 import {
-  transformRaceToPlayerCreationItem,
   getAllKeywords,
   getAllSkills,
   getAllRacialAbilities,
@@ -26,7 +25,7 @@ export function useRaces() {
 
   // Transform and validate the new race data
   const races = useMemo(() => {
-    const rawData = (raceData as { races: Race[] }).races
+    const rawData = raceData.races
 
     // Validate the data structure
     if (!validateRaceData({ races: rawData })) {
