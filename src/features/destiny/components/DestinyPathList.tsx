@@ -45,4 +45,4 @@ export function DestinyPerkList({
 }
 
 // Backward compatibility
-export const DestinyPathList = DestinyPerkList;
+export const DestinyPathList = DestinyPerkList

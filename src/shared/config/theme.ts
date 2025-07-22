@@ -54,4 +54,4 @@ export const groupColors: GroupColors = {
   Thief: 'text-green-600',
   Serpent: 'text-purple-600',
   Other: 'text-yellow-500',
-} 
+}

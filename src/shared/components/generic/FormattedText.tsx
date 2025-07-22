@@ -1,5 +1,8 @@
 import { useMemo, type ElementType } from 'react'
-import { parseFormattedText, type TextFormattingOptions } from '../../utils/textFormatting'
+import {
+  parseFormattedText,
+  type TextFormattingOptions,
+} from '../../utils/textFormatting'
 import { getGameTextFormattingOptions } from '../../utils/gameTextFormatting'
 
 interface FormattedTextProps {
@@ -25,17 +28,17 @@ export function FormattedText({
 
   // Check if className contains line-clamp
   const hasLineClamp = className.includes('line-clamp')
-  
+
   if (hasLineClamp) {
     // For line-clamp, we need to handle it differently since spans break line-clamp
     // Extract line-clamp classes and apply them to the container
     const lineClampClasses = className.match(/line-clamp-\d+/g) || []
     const otherClasses = className.replace(/line-clamp-\d+/g, '').trim()
-    
+
     return (
       <Component className={otherClasses}>
         <div className={`${lineClampClasses.join(' ')} overflow-hidden`}>
-          {segments.map((segment) => (
+          {segments.map(segment => (
             <span key={segment.key} className={segment.className}>
               {segment.text}
             </span>
@@ -47,11 +50,11 @@ export function FormattedText({
 
   return (
     <Component className={className}>
-      {segments.map((segment) => (
+      {segments.map(segment => (
         <span key={segment.key} className={segment.className}>
           {segment.text}
         </span>
       ))}
     </Component>
   )
-} 
+}

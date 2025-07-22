@@ -1,2 +1,2 @@
 // Build Feature Hooks
-export { useTraitLimits } from './useTraitLimits' 
+export { useTraitLimits } from './useTraitLimits'

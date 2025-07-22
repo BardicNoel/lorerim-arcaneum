@@ -18,11 +18,19 @@ function Card({ className, ...props }: React.ComponentProps<'div'>) {
 interface CardHeaderProps extends React.ComponentProps<'div'> {
   action?: React.ReactNode
 }
-function CardHeader({ className, action, children, ...props }: CardHeaderProps) {
+function CardHeader({
+  className,
+  action,
+  children,
+  ...props
+}: CardHeaderProps) {
   return (
     <div
       data-slot="card-header"
-      className={cn('flex flex-row items-start justify-between space-y-0', className)}
+      className={cn(
+        'flex flex-row items-start justify-between space-y-0',
+        className
+      )}
       {...props}
     >
       <div className="flex-1 flex flex-col space-y-3">{children}</div>

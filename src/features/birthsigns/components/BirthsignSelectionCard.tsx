@@ -11,7 +11,9 @@ interface BirthsignSelectionCardProps {
   className?: string
 }
 
-export function BirthsignSelectionCard({ className }: BirthsignSelectionCardProps) {
+export function BirthsignSelectionCard({
+  className,
+}: BirthsignSelectionCardProps) {
   const { birthsigns, loading, error } = useBirthsignData()
   const { build, setStone } = useCharacterBuild()
   const navigate = useNavigate()
@@ -61,7 +63,8 @@ export function BirthsignSelectionCard({ className }: BirthsignSelectionCardProp
   }
 
   // If birthsign is selected, show the birthsign card with integrated autocomplete
-  const birthsignItem = transformBirthsignToPlayerCreationItem(selectedBirthsign)
+  const birthsignItem =
+    transformBirthsignToPlayerCreationItem(selectedBirthsign)
 
   return (
     <SelectionCardShell
@@ -86,4 +89,4 @@ export function BirthsignSelectionCard({ className }: BirthsignSelectionCardProp
       />
     </SelectionCardShell>
   )
-} 
+}

@@ -44,4 +44,4 @@ export function addAvatarMapping(
     entityAvatarMaps[entityType] = {}
   }
   entityAvatarMaps[entityType][entityName] = fileName
-} 
+}

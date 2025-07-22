@@ -42,7 +42,7 @@ export function TraitCard({ item }: TraitCardProps) {
     } else {
       // Remove any existing trait first
       removeTrait(item.id)
-      
+
       if (type === 'primary' && canAddRegularTrait()) {
         addRegularTrait(item.id)
       } else if (type === 'secondary' && canAddBonusTrait()) {
@@ -51,7 +51,8 @@ export function TraitCard({ item }: TraitCardProps) {
     }
   }
 
-  const isRegularLimitReached = !canAddRegularTrait() && traitLevel !== 'primary'
+  const isRegularLimitReached =
+    !canAddRegularTrait() && traitLevel !== 'primary'
   const isBonusLimitReached = !canAddBonusTrait() && traitLevel !== 'secondary'
 
   // Define card theming based on selection state
@@ -81,7 +82,6 @@ export function TraitCard({ item }: TraitCardProps) {
             </div>
             <h3 className="font-semibold text-lg">{item.name}</h3>
           </div>
-
         </div>
       </CardHeader>
 
@@ -102,7 +102,8 @@ export function TraitCard({ item }: TraitCardProps) {
               disabled={isRegularLimitReached}
               className={cn(
                 'flex-1 text-xs',
-                traitLevel === 'primary' && 'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90'
+                traitLevel === 'primary' &&
+                  'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90'
               )}
               onClick={() => handleTraitSelect('primary')}
             >
@@ -114,7 +115,8 @@ export function TraitCard({ item }: TraitCardProps) {
               disabled={isBonusLimitReached}
               className={cn(
                 'flex-1 text-xs',
-                traitLevel === 'secondary' && 'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90'
+                traitLevel === 'secondary' &&
+                  'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90'
               )}
               onClick={() => handleTraitSelect('secondary')}
             >

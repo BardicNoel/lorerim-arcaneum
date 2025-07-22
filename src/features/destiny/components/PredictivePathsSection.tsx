@@ -141,7 +141,7 @@ export function DestinyPossiblePathsList({
                         nodeIndex < selectedPath.length
                           ? 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600'
                           : predictivePath.isComplete &&
-                            nodeIndex === predictivePath.path.length - 1
+                              nodeIndex === predictivePath.path.length - 1
                             ? 'bg-red-800 text-red-100 border-red-700'
                             : ''
                       }`}
@@ -167,7 +167,8 @@ export function DestinyPossiblePathsList({
             )}
             {predictivePath.path.length > selectedPath.length && (
               <span>
-                • {predictivePath.path.length - selectedPath.length} more choices
+                • {predictivePath.path.length - selectedPath.length} more
+                choices
               </span>
             )}
           </div>

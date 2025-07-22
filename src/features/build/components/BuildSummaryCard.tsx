@@ -1,7 +1,7 @@
 import React from 'react'
-import { 
-  GenericSummaryCard, 
-  createBuildSummaryItems 
+import {
+  GenericSummaryCard,
+  createBuildSummaryItems,
 } from '@/shared/components/generic/SummaryCard'
 
 interface BuildSummaryCardProps {
@@ -25,10 +25,10 @@ interface BuildSummaryCardProps {
 
 /**
  * Build Summary Card Component
- * 
+ *
  * Feature-specific wrapper around GenericSummaryCard that displays
  * character build summary information.
- * 
+ *
  * This follows the birthsigns pattern of feature-specific wrappers
  * around generic components for better separation of concerns.
  */
@@ -52,7 +52,7 @@ export function BuildSummaryCard({
 
 /**
  * Compact Build Summary Card
- * 
+ *
  * Specialized summary card for compact display in sidebars
  * or smaller spaces.
  */
@@ -71,4 +71,4 @@ export function CompactBuildSummaryCard({
       className={className}
     />
   )
-} 
+}

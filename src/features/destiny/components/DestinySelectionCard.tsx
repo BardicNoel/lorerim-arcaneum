@@ -1,37 +1,37 @@
-import React from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/shared/ui/ui/card';
-import { Button } from '@/shared/ui/ui/button';
-import { DestinyBreadcrumbTrail } from './DestinyPathBreadcrumbs';
-import { DestinyNodeHoverCard } from './DestinyNodeHoverCard';
-import { DestinyPerkList } from './DestinyPathList';
-import { DestinyPossiblePathsList } from './PredictivePathsSection';
-import { ScrollArea } from '@/shared/ui/ui/scroll-area';
-import { DestinyFilters } from './DestinyFilters';
-import type { DestinyNode } from '../types';
-import type { SelectedTag } from '@/shared/components/playerCreation/types';
-import { RotateCcw } from 'lucide-react';
+import React from 'react'
+import { Card, CardHeader, CardTitle, CardContent } from '@/shared/ui/ui/card'
+import { Button } from '@/shared/ui/ui/button'
+import { DestinyBreadcrumbTrail } from './DestinyPathBreadcrumbs'
+import { DestinyNodeHoverCard } from './DestinyNodeHoverCard'
+import { DestinyPerkList } from './DestinyPathList'
+import { DestinyPossiblePathsList } from './PredictivePathsSection'
+import { ScrollArea } from '@/shared/ui/ui/scroll-area'
+import { DestinyFilters } from './DestinyFilters'
+import type { DestinyNode } from '../types'
+import type { SelectedTag } from '@/shared/components/playerCreation/types'
+import { RotateCcw } from 'lucide-react'
 
 interface PredictivePath {
-  path: DestinyNode[];
-  isComplete: boolean;
-  endNode: DestinyNode;
+  path: DestinyNode[]
+  isComplete: boolean
+  endNode: DestinyNode
 }
 
 interface DestinySelectionCardProps {
-  selectedPath: DestinyNode[];
-  destinyNodes: DestinyNode[];
-  buildDestinyPath: string[];
-  setDestinyPath: (path: string[]) => void;
-  loading: boolean;
-  error: string | null;
-  navigate: (to: string) => void;
-  predictivePaths: PredictivePath[];
-  onBuildPathSelect: (path: DestinyNode[], clickedIndex: number) => void;
-  isNodePlanned: (nodeId: string) => boolean;
-  onBreadcrumbClick: (index: number) => void;
-  selectedTags: SelectedTag[];
-  onTagSelect: (tag: SelectedTag) => void;
-  onTagRemove: (tagId: string) => void;
+  selectedPath: DestinyNode[]
+  destinyNodes: DestinyNode[]
+  buildDestinyPath: string[]
+  setDestinyPath: (path: string[]) => void
+  loading: boolean
+  error: string | null
+  navigate: (to: string) => void
+  predictivePaths: PredictivePath[]
+  onBuildPathSelect: (path: DestinyNode[], clickedIndex: number) => void
+  isNodePlanned: (nodeId: string) => boolean
+  onBreadcrumbClick: (index: number) => void
+  selectedTags: SelectedTag[]
+  onTagSelect: (tag: SelectedTag) => void
+  onTagRemove: (tagId: string) => void
 }
 
 export function DestinySelectionCard({
@@ -52,11 +52,14 @@ export function DestinySelectionCard({
   // Compute the build path as DestinyNode[]
   const buildPath = buildDestinyPath
     .map(id => destinyNodes.find(n => n.id === id))
-    .filter((n: DestinyNode | undefined): n is DestinyNode => !!n);
+    .filter((n: DestinyNode | undefined): n is DestinyNode => !!n)
 
   // Determine if the last node is terminal
-  const lastNode = buildPath.length > 0 ? buildPath[buildPath.length - 1] : undefined;
-  const isTerminal = lastNode ? destinyNodes.every(n => !n.prerequisites.includes(lastNode.name)) : false;
+  const lastNode =
+    buildPath.length > 0 ? buildPath[buildPath.length - 1] : undefined
+  const isTerminal = lastNode
+    ? destinyNodes.every(n => !n.prerequisites.includes(lastNode.name))
+    : false
 
   // Filter paths based on selected tags
   const filteredPredictivePaths = React.useMemo(() => {
@@ -110,7 +113,9 @@ export function DestinySelectionCard({
           <>
             {buildPath.length === 0 ? (
               <>
-                <div className="text-muted-foreground font-medium mb-2">Select a node to start building your destiny:</div>
+                <div className="text-muted-foreground font-medium mb-2">
+                  Select a node to start building your destiny:
+                </div>
                 <ScrollArea className="min-h-[120px] max-h-96 overflow-y-auto pr-2">
                   <DestinyPossiblePathsList
                     possiblePaths={filteredPredictivePaths}
@@ -135,7 +140,9 @@ export function DestinySelectionCard({
                   <DestinyBreadcrumbTrail
                     path={buildPath}
                     BreadcrumbHover={(node, badge) => (
-                      <DestinyNodeHoverCard node={node} isPlanned={false}>{badge}</DestinyNodeHoverCard>
+                      <DestinyNodeHoverCard node={node} isPlanned={false}>
+                        {badge}
+                      </DestinyNodeHoverCard>
                     )}
                     onNodeClick={onBreadcrumbClick}
                   />
@@ -169,5 +176,5 @@ export function DestinySelectionCard({
         )}
       </CardContent>
     </Card>
-  );
-} 
+  )
+}

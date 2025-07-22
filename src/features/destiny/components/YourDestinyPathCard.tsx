@@ -47,7 +47,12 @@ export function YourDestinyPathCard({
               path={selectedPath}
               onNodeClick={onBacktrack}
               BreadcrumbHover={(node, badge) => (
-                <DestinyNodeHoverCard node={node} isPlanned={isPlanned(node.id)}>{badge}</DestinyNodeHoverCard>
+                <DestinyNodeHoverCard
+                  node={node}
+                  isPlanned={isPlanned(node.id)}
+                >
+                  {badge}
+                </DestinyNodeHoverCard>
               )}
             />
 

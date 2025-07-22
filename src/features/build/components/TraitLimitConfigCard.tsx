@@ -1,8 +1,8 @@
 import React from 'react'
-import { 
-  GenericConfigCard, 
-  ConfigInput, 
-  ConfigAlert 
+import {
+  GenericConfigCard,
+  ConfigInput,
+  ConfigAlert,
 } from '@/shared/components/generic/ConfigCard'
 import { Info } from 'lucide-react'
 
@@ -18,10 +18,10 @@ interface TraitLimitConfigCardProps {
 
 /**
  * Trait Limit Configuration Card
- * 
+ *
  * Feature-specific wrapper around GenericConfigCard that handles
  * trait limit configuration for character builds.
- * 
+ *
  * This follows the birthsigns pattern of feature-specific wrappers
  * around generic components for better separation of concerns.
  */
@@ -82,4 +82,4 @@ export function TraitLimitConfigCard({
       )}
     </GenericConfigCard>
   )
-} 
+}

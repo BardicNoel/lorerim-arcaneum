@@ -1,7 +1,16 @@
 import { useReducer, useCallback, useMemo } from 'react'
-import type { SelectedTag, SearchOption, SearchCategory, PlayerCreationItem } from '@/shared/components/playerCreation/types'
+import type {
+  SelectedTag,
+  SearchOption,
+  SearchCategory,
+  PlayerCreationItem,
+} from '@/shared/components/playerCreation/types'
 import type { Birthsign } from '../types'
-import { getAllGroups, getAllStats, transformBirthsignToPlayerCreationItem } from '../utils'
+import {
+  getAllGroups,
+  getAllStats,
+  transformBirthsignToPlayerCreationItem,
+} from '../utils'
 import { useFuzzySearch } from '../hooks'
 
 type SortOption = 'alphabetical' | 'group' | 'power-count'
@@ -33,12 +42,23 @@ const initialState: FilterState = {
 function filterReducer(state: FilterState, action: FilterAction): FilterState {
   switch (action.type) {
     case 'ADD_TAG':
-      if (state.selectedTags.some(t => t.value === action.payload.value && t.category === action.payload.category)) {
+      if (
+        state.selectedTags.some(
+          t =>
+            t.value === action.payload.value &&
+            t.category === action.payload.category
+        )
+      ) {
         return state
       }
       return { ...state, selectedTags: [...state.selectedTags, action.payload] }
     case 'REMOVE_TAG':
-      return { ...state, selectedTags: state.selectedTags.filter(tag => tag.id !== action.payload) }
+      return {
+        ...state,
+        selectedTags: state.selectedTags.filter(
+          tag => tag.id !== action.payload
+        ),
+      }
     case 'SET_SORT':
       return { ...state, sortBy: action.payload }
     case 'SET_VIEW_MODE':
@@ -127,17 +147,24 @@ export function useBirthsignFilters(birthsigns: Birthsign[]) {
   }, [birthsigns, state.selectedTags])
 
   // Fuzzy search query
-  const fuzzySearchQuery = useMemo(() =>
-    state.selectedTags.filter(tag => tag.category === 'Fuzzy Search').map(tag => tag.value).join(' '),
+  const fuzzySearchQuery = useMemo(
+    () =>
+      state.selectedTags
+        .filter(tag => tag.category === 'Fuzzy Search')
+        .map(tag => tag.value)
+        .join(' '),
     [state.selectedTags]
   )
 
   // Fuzzy search
-  const { filteredBirthsigns: fuzzyFilteredBirthsigns } = useFuzzySearch(filteredBirthsigns, fuzzySearchQuery)
+  const { filteredBirthsigns: fuzzyFilteredBirthsigns } = useFuzzySearch(
+    filteredBirthsigns,
+    fuzzySearchQuery
+  )
 
   // Convert to PlayerCreationItem format
-  const displayItems: PlayerCreationItem[] = useMemo(() =>
-    fuzzyFilteredBirthsigns.map(transformBirthsignToPlayerCreationItem),
+  const displayItems: PlayerCreationItem[] = useMemo(
+    () => fuzzyFilteredBirthsigns.map(transformBirthsignToPlayerCreationItem),
     [fuzzyFilteredBirthsigns]
   )
 
@@ -150,12 +177,18 @@ export function useBirthsignFilters(birthsigns: Birthsign[]) {
         case 'group': {
           const getGroupPriority = (group: string | undefined) => {
             switch (group) {
-              case 'Warrior': return 1
-              case 'Mage': return 2
-              case 'Thief': return 3
-              case 'Serpent': return 4
-              case 'Other': return 5
-              default: return 6
+              case 'Warrior':
+                return 1
+              case 'Mage':
+                return 2
+              case 'Thief':
+                return 3
+              case 'Serpent':
+                return 4
+              case 'Other':
+                return 5
+              default:
+                return 6
             }
           }
           const aPriority = getGroupPriority(a.category)
@@ -164,8 +197,10 @@ export function useBirthsignFilters(birthsigns: Birthsign[]) {
           return a.name.localeCompare(b.name)
         }
         case 'power-count': {
-          const aPowerCount = a.effects?.filter(effect => effect.target === 'power').length || 0
-          const bPowerCount = b.effects?.filter(effect => effect.target === 'power').length || 0
+          const aPowerCount =
+            a.effects?.filter(effect => effect.target === 'power').length || 0
+          const bPowerCount =
+            b.effects?.filter(effect => effect.target === 'power').length || 0
           if (aPowerCount !== bPowerCount) return bPowerCount - aPowerCount
           return a.name.localeCompare(b.name)
         }
@@ -219,4 +254,4 @@ export function useBirthsignFilters(birthsigns: Birthsign[]) {
     displayItems,
     sortedDisplayItems,
   }
-} 
+}

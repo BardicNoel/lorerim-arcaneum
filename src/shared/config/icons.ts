@@ -55,4 +55,4 @@ export function getEffectIcon(effectType: string): EffectIconConfig {
       color: 'text-muted-foreground',
     }
   )
-} 
+}

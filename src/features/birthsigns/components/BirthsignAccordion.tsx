@@ -93,8 +93,6 @@ const effectIcons: Record<string, React.ReactNode> = {
   power: <Lightning className="h-4 w-4 text-yellow-500" />,
 }
 
-
-
 // Birthsign group styling - matching religion type styling pattern
 const birthsignGroupStyles: Record<string, string> = {
   Warrior: 'bg-red-100 text-red-800 border-red-200 hover:bg-red-200',

@@ -1,5 +1,9 @@
 import { useMemo } from 'react'
-import { themeColors, effectTypeColors, groupColors } from '@/shared/config/theme'
+import {
+  themeColors,
+  effectTypeColors,
+  groupColors,
+} from '@/shared/config/theme'
 
 export function useThemeConfig() {
   return useMemo(
@@ -10,4 +14,4 @@ export function useThemeConfig() {
     }),
     []
   )
-} 
+}

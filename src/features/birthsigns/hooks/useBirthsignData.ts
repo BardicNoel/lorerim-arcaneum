@@ -26,7 +26,12 @@ function birthsignDataReducer(
     case 'FETCH_START':
       return { ...state, loading: true, error: null }
     case 'FETCH_SUCCESS':
-      return { ...state, loading: false, birthsigns: action.payload, error: null }
+      return {
+        ...state,
+        loading: false,
+        birthsigns: action.payload,
+        error: null,
+      }
     case 'FETCH_ERROR':
       return { ...state, loading: false, error: action.payload }
     default:
@@ -57,4 +62,4 @@ export function useBirthsignData() {
   }, [fetchBirthsigns])
 
   return { ...state, refetch: fetchBirthsigns }
-} 
+}

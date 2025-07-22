@@ -25,7 +25,10 @@ const initialState: DisplayState = {
   showEffects: true,
 }
 
-function displayReducer(state: DisplayState, action: DisplayAction): DisplayState {
+function displayReducer(
+  state: DisplayState,
+  action: DisplayAction
+): DisplayState {
   switch (action.type) {
     case 'TOGGLE_STATS':
       return { ...state, showStats: !state.showStats }
@@ -106,4 +109,4 @@ export function useDisplayControls() {
     setSkills,
     setEffects,
   }
-} 
+}

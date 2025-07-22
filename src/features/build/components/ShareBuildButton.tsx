@@ -12,10 +12,10 @@ interface ShareBuildButtonProps {
 
 /**
  * Share Build Button Component
- * 
+ *
  * Feature-specific wrapper around GenericShareButton that handles
  * sharing character build links.
- * 
+ *
  * This follows the birthsigns pattern of feature-specific wrappers
  * around generic components for better separation of concerns.
  */
@@ -41,7 +41,7 @@ export function ShareBuildButton({
 
 /**
  * Build Link Share Button
- * 
+ *
  * Specialized share button that automatically gets the current
  * build link from the window location.
  */
@@ -61,4 +61,4 @@ export function BuildLinkShareButton({
       className={className}
     />
   )
-} 
+}

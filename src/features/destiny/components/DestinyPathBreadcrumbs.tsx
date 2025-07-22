@@ -57,7 +57,10 @@ export function DestinyBreadcrumbTrail({
   path: DestinyNode[]
   onNodeClick?: (index: number) => void
   showChevrons?: boolean
-  BreadcrumbHover?: (node: DestinyNode, badge: React.ReactNode) => React.ReactNode
+  BreadcrumbHover?: (
+    node: DestinyNode,
+    badge: React.ReactNode
+  ) => React.ReactNode
 }) {
   return (
     <div className="flex flex-wrap items-center gap-2">

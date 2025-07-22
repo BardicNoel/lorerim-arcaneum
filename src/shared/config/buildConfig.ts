@@ -1,6 +1,6 @@
 /**
  * Shared Configuration System for Build Components
- * 
+ *
  * This follows the birthsigns pattern of centralized theme configuration
  * with functions that return theme values for consistency and maintainability.
  */
@@ -88,11 +88,15 @@ export const buildSizes = {
 }
 
 // Configuration functions (following birthsigns pattern)
-export function getTraitLimitColor(type: 'regular' | 'bonus' | 'warning' | 'error') {
+export function getTraitLimitColor(
+  type: 'regular' | 'bonus' | 'warning' | 'error'
+) {
   return buildColors.traitLimit[type]
 }
 
-export function getConfirmDialogColor(type: 'destructive' | 'safe' | 'warning' | 'info') {
+export function getConfirmDialogColor(
+  type: 'destructive' | 'safe' | 'warning' | 'info'
+) {
   return buildColors.confirmDialog[type]
 }
 
@@ -104,7 +108,9 @@ export function getSummaryCardColor(type: 'primary' | 'secondary' | 'accent') {
   return buildColors.summaryCard[type]
 }
 
-export function getBackgroundColor(type: 'warning' | 'info' | 'error' | 'success') {
+export function getBackgroundColor(
+  type: 'warning' | 'info' | 'error' | 'success'
+) {
   return buildColors.backgrounds[type]
 }
 
@@ -112,11 +118,15 @@ export function getBorderColor(type: 'warning' | 'info' | 'error' | 'success') {
   return buildColors.borders[type]
 }
 
-export function getTraitLimitIcon(type: 'regular' | 'bonus' | 'warning' | 'info') {
+export function getTraitLimitIcon(
+  type: 'regular' | 'bonus' | 'warning' | 'info'
+) {
   return buildIcons.traitLimit[type]
 }
 
-export function getConfirmDialogIcon(type: 'warning' | 'info' | 'error' | 'success') {
+export function getConfirmDialogIcon(
+  type: 'warning' | 'info' | 'error' | 'success'
+) {
   return buildIcons.confirmDialog[type]
 }
 
@@ -124,6 +134,8 @@ export function getShareButtonIcon(type: 'share' | 'copied' | 'link') {
   return buildIcons.shareButton[type]
 }
 
-export function getSummaryCardIcon(type: 'race' | 'birthsign' | 'religion' | 'traits') {
+export function getSummaryCardIcon(
+  type: 'race' | 'birthsign' | 'religion' | 'traits'
+) {
   return buildIcons.summaryCard[type]
-} 
+}

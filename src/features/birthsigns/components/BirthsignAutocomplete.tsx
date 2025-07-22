@@ -150,7 +150,9 @@ export function BirthsignAutocomplete({
                   <div className="flex items-center gap-3">
                     <BirthsignAvatar birthsignName={birthsign.name} size="sm" />
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium truncate">{birthsign.name}</div>
+                      <div className="font-medium truncate">
+                        {birthsign.name}
+                      </div>
                       <div className="flex items-center gap-4 mt-1">
                         <div className="text-xs text-muted-foreground truncate">
                           {birthsign.group}
@@ -176,4 +178,4 @@ export function BirthsignAutocomplete({
       )}
     </div>
   )
-} 
+}

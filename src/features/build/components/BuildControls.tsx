@@ -10,15 +10,12 @@ interface BuildControlsProps {
 
 /**
  * Build Controls Component
- * 
+ *
  * Handles the build control buttons (reset and share).
  * This follows the birthsigns pattern of feature-specific components
  * that delegate to shared UI components.
  */
-export function BuildControls({
-  onReset,
-  className,
-}: BuildControlsProps) {
+export function BuildControls({ onReset, className }: BuildControlsProps) {
   return (
     <div className={`flex flex-wrap gap-2 mb-6 ${className || ''}`}>
       <Button
@@ -33,4 +30,4 @@ export function BuildControls({
       <BuildLinkShareButton />
     </div>
   )
-} 
+}

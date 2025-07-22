@@ -31,11 +31,16 @@ export function parseFormattedText(
   if (options.customPatterns && options.customPatterns.length > 0) {
     options.customPatterns.forEach((patternObj, i) => {
       const newSegments: FormattedTextSegment[] = []
-      segments.forEach((segment) => {
+      segments.forEach(segment => {
         if (!segment.className) {
           let lastIndex = 0
           let match: RegExpExecArray | null
-          const regex = new RegExp(patternObj.pattern, patternObj.pattern.flags.includes('g') ? patternObj.pattern.flags : patternObj.pattern.flags + 'g')
+          const regex = new RegExp(
+            patternObj.pattern,
+            patternObj.pattern.flags.includes('g')
+              ? patternObj.pattern.flags
+              : patternObj.pattern.flags + 'g'
+          )
           regex.lastIndex = 0
           let keyIndex = 0
           while ((match = regex.exec(segment.text)) !== null) {
@@ -49,7 +54,10 @@ export function parseFormattedText(
             if (patternObj.transform) {
               matchedText = patternObj.transform(matchedText)
             }
-            let className = typeof patternObj.className === 'function' ? patternObj.className(matchedText) : patternObj.className
+            const className =
+              typeof patternObj.className === 'function'
+                ? patternObj.className(matchedText)
+                : patternObj.className
             newSegments.push({
               text: matchedText,
               className,
@@ -71,7 +79,10 @@ export function parseFormattedText(
     })
   }
   // Assign unique keys if not already
-  segments = segments.map((seg, idx) => ({ ...seg, key: seg.key || String(idx) }))
+  segments = segments.map((seg, idx) => ({
+    ...seg,
+    key: seg.key || String(idx),
+  }))
   memoCache.set(cacheKey, segments)
   return segments
-} 
+}
