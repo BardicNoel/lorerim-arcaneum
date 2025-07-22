@@ -13,6 +13,7 @@ interface RaceAccordionProps {
   showToggle?: boolean
   isExpanded?: boolean
   onToggle?: () => void
+  disableHover?: boolean
 }
 
 export function RaceAccordion({
@@ -21,10 +22,11 @@ export function RaceAccordion({
   showToggle = true,
   isExpanded = false,
   onToggle,
+  disableHover = false,
 }: RaceAccordionProps) {
   const originalRace = item.originalRace
   return (
-    <AccordionCard className={className} expanded={isExpanded} onToggle={onToggle}>
+    <AccordionCard className={className} expanded={isExpanded} onToggle={onToggle} disableHover={disableHover}>
       <AccordionCard.Header>
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-3">

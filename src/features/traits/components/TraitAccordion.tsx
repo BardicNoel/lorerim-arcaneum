@@ -17,6 +17,7 @@ interface TraitAccordionProps {
   className?: string
   showToggle?: boolean
   allTraitIds?: string[] // Add this prop to pass all valid trait IDs
+  disableHover?: boolean
 }
 
 export function TraitAccordion({
@@ -25,6 +26,7 @@ export function TraitAccordion({
   onToggle,
   className,
   allTraitIds,
+  disableHover = false,
 }: TraitAccordionProps) {
   const originalTrait = item.originalTrait
   const {
@@ -94,7 +96,7 @@ export function TraitAccordion({
   }, [allTraitIds, build?.traits, removeTrait])
 
   return (
-    <AccordionCard expanded={isExpanded} onToggle={onToggle} className={cn(className, getCardTheming())}>
+    <AccordionCard expanded={isExpanded} onToggle={onToggle} className={cn(className, getCardTheming())} disableHover={disableHover}>
       <AccordionCard.Header>
         <div className="flex items-center gap-2">
           <Zap className="h-4 w-4 text-black" />

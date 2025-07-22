@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useRaces } from '../hooks/useRaces'
 import type { Race } from '../types'
-import { transformRaceToPlayerCreationItem } from '../utils/dataTransform'
+import { raceToPlayerCreationItem } from '@/shared/utils'
 import { RaceAccordion, RaceAutocomplete } from './'
 
 interface RaceSelectionCardProps {
@@ -61,7 +61,7 @@ export function RaceSelectionCard({ className }: RaceSelectionCardProps) {
   }
 
   // If race is selected, show the race card with integrated autocomplete
-  const raceItem = transformRaceToPlayerCreationItem(selectedRace)
+  const raceItem = raceToPlayerCreationItem(selectedRace)
 
   return (
     <SelectionCardShell
@@ -78,11 +78,11 @@ export function RaceSelectionCard({ className }: RaceSelectionCardProps) {
       />
       <RaceAccordion
         item={raceItem}
-        originalRace={selectedRace}
         isExpanded={isExpanded}
         onToggle={handleToggleExpanded}
         showToggle={false}
         className="border-0 shadow-none"
+        disableHover={true}
       />
     </SelectionCardShell>
   )

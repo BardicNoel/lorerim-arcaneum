@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useBirthsignData } from '../hooks/useBirthsignData'
 import type { Birthsign } from '../types'
-import { transformBirthsignToPlayerCreationItem } from '../utils/dataTransform'
+import { birthsignToPlayerCreationItem } from '@/shared/utils'
 import { BirthsignAccordion, BirthsignAutocomplete } from './'
 
 interface BirthsignSelectionCardProps {
@@ -63,8 +63,7 @@ export function BirthsignSelectionCard({
   }
 
   // If birthsign is selected, show the birthsign card with integrated autocomplete
-  const birthsignItem =
-    transformBirthsignToPlayerCreationItem(selectedBirthsign)
+  const birthsignItem = birthsignToPlayerCreationItem(selectedBirthsign)
 
   return (
     <SelectionCardShell
@@ -81,11 +80,11 @@ export function BirthsignSelectionCard({
       />
       <BirthsignAccordion
         item={birthsignItem}
-        originalBirthsign={selectedBirthsign}
         isExpanded={isExpanded}
         onToggle={handleToggleExpanded}
         className="border-0 shadow-none"
         showAddToBuild={false}
+        disableHover={true}
       />
     </SelectionCardShell>
   )

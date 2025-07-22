@@ -43,9 +43,10 @@ export function religionToPlayerCreationItem(religion: Religion): PlayerCreation
  * Maps a Race entity to a PlayerCreationItem for use in shared player creation UIs.
  * Includes skill bonuses, racial spells, and category as tags.
  */
-export function raceToPlayerCreationItem(race: Race): PlayerCreationItem {
+export function raceToPlayerCreationItem(race: Race): PlayerCreationItem & { originalRace: Race } {
   return {
-    id: `race-${race.name.toLowerCase().replace(/\s+/g, '-')}`,
+    ...race, // Spread domain-specific fields first
+    id: race.edid, // Use edid for character build compatibility
     name: race.name,
     description: race.description,
     tags: [race.category, ...(Array.isArray(race.flags) ? race.flags : [])],
@@ -69,6 +70,7 @@ export function raceToPlayerCreationItem(race: Race): PlayerCreationItem {
     associatedItems: [],
     imageUrl: undefined,
     category: race.category,
+    originalRace: race, // Include original race for extensibility
   }
 }
 
@@ -103,7 +105,7 @@ export function traitToPlayerCreationItem(trait: Trait): PlayerCreationItem & { 
  * Maps a Birthsign entity to a PlayerCreationItem for use in shared player creation UIs.
  * Returns all core PlayerCreationItem fields, but also spreads in all domain-specific fields from the original Birthsign for extensibility.
  */
-export function birthsignToPlayerCreationItem(birthsign: Birthsign): PlayerCreationItem & Birthsign {
+export function birthsignToPlayerCreationItem(birthsign: Birthsign): PlayerCreationItem & { originalBirthsign: Birthsign } {
   // Core effects (stat_modifications, skill_bonuses, powers)
   const effects = [
     // Stat modifications
@@ -158,7 +160,7 @@ export function birthsignToPlayerCreationItem(birthsign: Birthsign): PlayerCreat
 
   return {
     ...birthsign, // Spread domain-specific fields first
-    id: birthsign.name.toLowerCase().replace(/\s+/g, '-'),
+    id: birthsign.edid, // Use edid for character build compatibility
     name: birthsign.name,
     description: birthsign.description,
     tags,
@@ -167,5 +169,6 @@ export function birthsignToPlayerCreationItem(birthsign: Birthsign): PlayerCreat
     associatedItems: [],
     imageUrl: undefined,
     category: birthsign.group,
+    originalBirthsign: birthsign, // Include original birthsign for extensibility
   }
 } 

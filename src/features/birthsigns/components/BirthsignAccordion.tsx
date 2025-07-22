@@ -17,6 +17,7 @@ interface BirthsignAccordionProps {
   showAddToBuild?: boolean
   isExpanded?: boolean
   onToggle?: () => void
+  disableHover?: boolean
 }
 
 export function BirthsignAccordion({
@@ -25,12 +26,13 @@ export function BirthsignAccordion({
   showAddToBuild = true,
   isExpanded = false,
   onToggle,
+  disableHover = false,
 }: BirthsignAccordionProps) {
   const originalBirthsign = item.originalBirthsign
   if (!originalBirthsign) return null
 
   return (
-    <AccordionCard className={className} expanded={isExpanded} onToggle={onToggle}>
+    <AccordionCard className={className} expanded={isExpanded} onToggle={onToggle} disableHover={disableHover}>
       <AccordionCard.Header>
         {showAddToBuild && (
           <AddToBuildSwitchSimple

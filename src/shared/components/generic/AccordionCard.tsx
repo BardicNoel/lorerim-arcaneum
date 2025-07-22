@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils';
  *
  * Supports controlled (expanded/onToggle) or uncontrolled expansion.
  */
-export function AccordionCard({ children, className, expanded, onToggle }: { children: React.ReactNode; className?: string; expanded?: boolean; onToggle?: () => void }) {
+export function AccordionCard({ children, className, expanded, onToggle, disableHover = false }: { children: React.ReactNode; className?: string; expanded?: boolean; onToggle?: () => void; disableHover?: boolean }) {
   // Find slots by type
   let header, summary, footer, details;
   React.Children.forEach(children, child => {
@@ -29,8 +29,11 @@ export function AccordionCard({ children, className, expanded, onToggle }: { chi
   const [internalExpanded, setInternalExpanded] = useState(false);
   const isExpanded = expanded !== undefined ? expanded : internalExpanded;
   const handleToggle = onToggle || (() => setInternalExpanded(e => !e));
+  
+  const hoverClasses = disableHover ? '' : 'hover:shadow-md hover:scale-[1.02]';
+  
   return (
-    <div className={cn('rounded-lg border bg-background shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] flex flex-col', className)}>
+    <div className={cn('rounded-lg border bg-background shadow-sm transition-all duration-200 flex flex-col', hoverClasses, className)}>
       {/* Header (always visible, toggles expansion) */}
       {header &&
         React.cloneElement(header, {
