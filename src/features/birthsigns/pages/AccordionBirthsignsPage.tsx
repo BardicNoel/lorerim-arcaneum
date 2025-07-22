@@ -35,6 +35,7 @@ import {
   useBirthsignFilters,
   useDisplayControls,
 } from '../hooks'
+import { useState } from 'react'
 
 type SortOption = 'alphabetical' | 'group' | 'power-count'
 type ViewMode = 'list' | 'grid'
@@ -47,20 +48,18 @@ export function AccordionBirthsignsPage() {
     selectedTags,
     sortBy,
     viewMode,
-    expandedBirthsigns,
     addTag,
     removeTag,
     setSort,
     setViewMode,
-    toggleExpanded,
-    expandAll,
-    collapseAll,
     searchCategories,
     fuzzySearchQuery,
     filteredBirthsigns,
     displayItems,
     sortedDisplayItems,
   } = useBirthsignFilters(birthsigns)
+  // Local state for expanded accordions (row-based expansion)
+  const [expandedBirthsigns, setExpandedBirthsigns] = useState<Set<string>>(new Set())
   // Display controls
   const {
     showStats,
@@ -87,6 +86,32 @@ export function AccordionBirthsignsPage() {
   const anyExpanded = sortedDisplayItems.some(item =>
     expandedBirthsigns.has(item.id)
   )
+
+  // Handle accordion expansion (row-based for grid view)
+  const handleBirthsignToggle = (birthsignId: string) => {
+    const newExpanded = new Set(expandedBirthsigns)
+    const columns = 3 // Match the AccordionGrid columns prop
+    const itemIndex = sortedDisplayItems.findIndex(item => item.id === birthsignId)
+    const rowIndex = Math.floor(itemIndex / columns)
+    const rowStartIndex = rowIndex * columns
+    const rowEndIndex = Math.min(rowStartIndex + columns, sortedDisplayItems.length)
+    // Check if any item in the row is currently expanded
+    const isRowExpanded = sortedDisplayItems
+      .slice(rowStartIndex, rowEndIndex)
+      .some(item => newExpanded.has(item.id))
+    if (isRowExpanded) {
+      // Collapse all items in the row
+      sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
+        newExpanded.delete(item.id)
+      })
+    } else {
+      // Expand all items in the row
+      sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
+        newExpanded.add(item.id)
+      })
+    }
+    setExpandedBirthsigns(newExpanded)
+  }
 
   if (loading) {
     return (
@@ -235,9 +260,11 @@ export function AccordionBirthsignsPage() {
           size="sm"
           onClick={
             allExpanded
-              ? collapseAll
-              : e => {
-                  expandAll(sortedDisplayItems.map(item => item.id))
+              ? () => {
+                  setExpandedBirthsigns(new Set())
+                }
+              : () => {
+                  setExpandedBirthsigns(new Set(sortedDisplayItems.map(item => item.id)))
                 }
           }
           className="flex items-center justify-center"
@@ -396,20 +423,15 @@ export function AccordionBirthsignsPage() {
                 birthsignName
               )
             })
+            if (!originalBirthsign) return null;
             const isExpanded = expandedBirthsigns.has(item.id)
-
             return (
               <BirthsignAccordion
                 key={item.id}
-                item={item}
-                originalBirthsign={originalBirthsign}
+                item={{ ...item, originalBirthsign }}
                 isExpanded={isExpanded}
-                onToggle={() => toggleExpanded(item.id)}
+                onToggle={() => handleBirthsignToggle(item.id)}
                 className="w-full"
-                showStats={showStats}
-                showPowers={showPowers}
-                showSkills={showSkills}
-                showEffects={showEffects}
               />
             )
           })}
@@ -424,20 +446,16 @@ export function AccordionBirthsignsPage() {
                 birthsignName
               )
             })
+            if (!originalBirthsign) return null;
             const isExpanded = expandedBirthsigns.has(item.id)
 
             return (
               <BirthsignAccordion
                 key={item.id}
-                item={item}
-                originalBirthsign={originalBirthsign}
+                item={{ ...item, originalBirthsign }}
                 isExpanded={isExpanded}
-                onToggle={() => toggleExpanded(item.id)}
+                onToggle={() => handleBirthsignToggle(item.id)}
                 className="w-full"
-                showStats={showStats}
-                showPowers={showPowers}
-                showSkills={showSkills}
-                showEffects={showEffects}
               />
             )
           })}
