@@ -26,29 +26,31 @@ export function RaceAccordion({
   return (
     <AccordionCard className={className} expanded={isExpanded} onToggle={onToggle}>
       <AccordionCard.Header>
-        {showToggle && (
-          <AddToBuildSwitchSimple
-            itemId={originalRace?.edid || item.id}
-            itemType="race"
-            itemName={item.name}
-          />
-        )}
-        <div className="flex items-center gap-3">
-          <RaceAvatar raceName={item.name} size="md" />
-          <H3 className="text-primary font-semibold">{item.name}</H3>
-        </div>
-        <div className="flex items-center gap-3 ml-auto">
-          {item.category && (
-            <Badge
-              variant="outline"
-              className={cn(
-                'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
-                'text-xs font-medium transition-colors'
-              )}
-            >
-              {item.category}
-            </Badge>
-          )}
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center gap-3">
+            {showToggle && (
+              <AddToBuildSwitchSimple
+                itemId={originalRace?.edid || item.id}
+                itemType="race"
+                itemName={item.name}
+              />
+            )}
+            <RaceAvatar raceName={item.name} size="md" />
+            <H3 className="text-primary font-semibold">{item.name}</H3>
+          </div>
+          <div className="flex items-center gap-3">
+            {item.category && (
+              <Badge
+                variant="outline"
+                className={cn(
+                  'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
+                  'text-xs font-medium transition-colors'
+                )}
+              >
+                {item.category}
+              </Badge>
+            )}
+          </div>
         </div>
       </AccordionCard.Header>
       <AccordionCard.Summary>
