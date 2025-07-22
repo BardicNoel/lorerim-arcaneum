@@ -26,7 +26,7 @@ export function transformTraitToPlayerCreationItem(
   return {
     id: trait.edid,
     name: trait.name,
-    description: trait.description,
+    description: parseDescription(trait.description),
     tags,
     effects,
     category: trait.category,
@@ -100,16 +100,10 @@ export function getUserFriendlyEffectType(effectType: string): string {
 }
 
 /**
- * Parse description placeholders like ***50*** and replace with actual values
- * Also removes markdown bold formatting since we're doing our own styling
+ * Parse description placeholders like <50> and replace with actual values
+ * Preserves ***text*** formatting for the FormattedText component
  */
 export function parseDescription(description: string): string {
-  // Remove markdown bold formatting (***text***)
-  let cleaned = description.replace(/\*\*\*(.*?)\*\*\*/g, '$1')
-
-  // Remove any remaining markdown formatting
-  cleaned = cleaned.replace(/\*\*(.*?)\*\*/g, '$1') // **bold**
-  cleaned = cleaned.replace(/\*(.*?)\*/g, '$1') // *italic*
-
-  return cleaned
+  // Only replace angle bracket placeholders, preserve ***text*** formatting
+  return description.replace(/<(\d+)>/g, '$1')
 }

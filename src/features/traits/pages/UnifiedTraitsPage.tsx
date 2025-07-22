@@ -18,6 +18,7 @@ import type {
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
 import type { Trait } from '../types'
+import { transformTraitToPlayerCreationItem } from '../utils/dataTransform'
 
 export function UnifiedTraitsPage() {
   // Load trait data from public/data/traits.json at runtime
@@ -43,24 +44,8 @@ export function UnifiedTraitsPage() {
     fetchTraits()
   }, [])
 
-  // Convert traits to PlayerCreationItem format
-  const playerCreationItems: PlayerCreationItem[] = traits.map(trait => ({
-    id: trait.edid,
-    name: trait.name,
-    description: trait.description,
-    tags: trait.tags,
-    summary: trait.description,
-    effects: trait.effects.map(effect => ({
-      type: effect.flags.includes('Detrimental') ? 'negative' : 'positive',
-      name: effect.type,
-      description: effect.condition || '',
-      value: effect.value,
-      target: '',
-    })),
-    associatedItems: [],
-    imageUrl: undefined,
-    category: trait.category,
-  }))
+  // Convert traits to PlayerCreationItem format using the proper transformation
+  const playerCreationItems: PlayerCreationItem[] = traits.map(transformTraitToPlayerCreationItem)
 
   // Generate search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
@@ -136,7 +121,7 @@ export function UnifiedTraitsPage() {
   })
 
   const renderTraitCard = (item: PlayerCreationItem, isSelected: boolean) => (
-    <TraitCard item={item} isSelected={isSelected} />
+    <TraitCard item={item} />
   )
 
   const renderTraitDetailPanel = (item: PlayerCreationItem) => (

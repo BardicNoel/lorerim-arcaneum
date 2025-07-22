@@ -30,7 +30,7 @@ import React from 'react'
 import type { Birthsign } from '../types'
 import { getUserFriendlyStat, parseDescription } from '../utils'
 import { BirthsignAvatar } from './BirthsignAvatar'
-import { BirthsignFormattedText } from './BirthsignFormattedText'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import {
   getBirthsignGroupStyle,
   getBirthsignGroupColor,
@@ -224,7 +224,7 @@ export function BirthsignAccordion({
       {/* Collapsed Content */}
       <AccordionCollapsedContentSlot>
         <div className="space-y-3">
-          <BirthsignFormattedText
+          <FormattedText
             text={parsedDescription}
             className="text-base text-muted-foreground"
           />
@@ -239,7 +239,7 @@ export function BirthsignAccordion({
             <h5 className="text-lg font-medium text-foreground mb-3">
               Description
             </h5>
-            <BirthsignFormattedText
+            <FormattedText
               text={parsedDescription}
               className="text-base text-muted-foreground"
             />
@@ -306,7 +306,7 @@ export function BirthsignAccordion({
                         </Badge>
                       )}
                     </div>
-                    <BirthsignFormattedText
+                    <FormattedText
                       text={power.description}
                       className="text-sm text-muted-foreground"
                     />

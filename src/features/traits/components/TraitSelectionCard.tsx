@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTraits } from '../hooks/useTraits'
 import type { Trait } from '../types'
 import { TraitAutocomplete } from './'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 
 interface TraitSelectionCardProps {
   className?: string
@@ -87,9 +88,10 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
                   <div className="font-medium text-sm">
                     {selectedRegularTraits[0].name}
                   </div>
-                  <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                    {selectedRegularTraits[0].description}
-                  </div>
+                  <FormattedText
+                    text={selectedRegularTraits[0].description}
+                    className="text-sm text-muted-foreground mt-1 line-clamp-2"
+                  />
                 </div>
                 <Button
                   variant="ghost"
@@ -131,9 +133,10 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
                   <div className="font-medium text-sm">
                     {selectedRegularTraits[1].name}
                   </div>
-                  <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                    {selectedRegularTraits[1].description}
-                  </div>
+                  <FormattedText
+                    text={selectedRegularTraits[1].description}
+                    className="text-sm text-muted-foreground mt-1 line-clamp-2"
+                  />
                 </div>
                 <Button
                   variant="ghost"
@@ -182,9 +185,10 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
                   <div className="font-medium text-sm">
                     {selectedBonusTraits[0].name}
                   </div>
-                  <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                    {selectedBonusTraits[0].description}
-                  </div>
+                  <FormattedText
+                    text={selectedBonusTraits[0].description}
+                    className="text-sm text-muted-foreground mt-1 line-clamp-2"
+                  />
                 </div>
                 <Button
                   variant="ghost"
