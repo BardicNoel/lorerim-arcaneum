@@ -186,8 +186,11 @@ export function AccordionRacesPage() {
     fuzzySearchQuery
   )
 
-  // Convert to PlayerCreationItem format
-  const displayItems: PlayerCreationItem[] = fuzzyFilteredRaces.map(raceToPlayerCreationItem)
+  // Convert to PlayerCreationItem format, but include originalRace for details
+  const displayItems = fuzzyFilteredRaces.map(race => {
+    const item = raceToPlayerCreationItem(race)
+    return { ...item, originalRace: race }
+  })
 
   // Handle accordion expansion
   const handleRaceToggle = (raceId: string) => {
@@ -342,17 +345,13 @@ export function AccordionRacesPage() {
       {viewMode === 'grid' ? (
         <AccordionGrid columns={3} gap="md" className="w-full">
           {displayItems.map(item => {
-            const originalRace = races.find(
-              race => race.edid.toLowerCase().replace('race', '') === item.id
-            )
             const isExpanded = expandedRaces.has(item.id)
-            const isSelected = build.race === originalRace?.edid
+            const isSelected = build.race === item.originalRace?.edid
 
             return (
               <RaceAccordion
                 key={item.id}
                 item={item}
-                originalRace={originalRace}
                 isExpanded={isExpanded}
                 onToggle={() => handleRaceToggle(item.id)}
                 className={cn(
@@ -367,17 +366,13 @@ export function AccordionRacesPage() {
       ) : (
         <div className="flex flex-col gap-4 w-full">
           {displayItems.map(item => {
-            const originalRace = races.find(
-              race => race.edid.toLowerCase().replace('race', '') === item.id
-            )
             const isExpanded = expandedRaces.has(item.id)
-            const isSelected = build.race === originalRace?.edid
+            const isSelected = build.race === item.originalRace?.edid
 
             return (
               <RaceAccordion
                 key={item.id}
                 item={item}
-                originalRace={originalRace}
                 isExpanded={isExpanded}
                 onToggle={() => handleRaceToggle(item.id)}
                 className={cn(

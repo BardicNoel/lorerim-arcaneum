@@ -1,64 +1,43 @@
 import { cn } from '@/lib/utils'
-import {
-  AccordionCollapsedContentSlot,
-  AccordionExpandedContentSlot,
-  AccordionHeader,
-  AccordionLeftControls,
-  GenericAccordionCard,
-} from '@/shared/components/generic'
+import { AccordionCard } from '@/shared/components/generic/AccordionCard'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
 import { H3, P } from '@/shared/ui/ui/typography'
-import { Star } from 'lucide-react'
-import type { Race } from '../types'
 import { RaceAvatar } from './RaceAvatar'
+import type { Race } from '../types'
 
 interface RaceAccordionProps {
-  item: PlayerCreationItem
-  originalRace?: Race
-  isExpanded?: boolean
-  onToggle?: () => void
+  item: PlayerCreationItem & { originalRace: Race }
   className?: string
   showToggle?: boolean
+  isExpanded?: boolean
+  onToggle?: () => void
 }
 
 export function RaceAccordion({
   item,
-  originalRace,
-  isExpanded = false,
-  onToggle,
   className,
   showToggle = true,
+  isExpanded = false,
+  onToggle,
 }: RaceAccordionProps) {
+  const originalRace = item.originalRace
   return (
-    <GenericAccordionCard
-      isExpanded={isExpanded}
-      onToggle={onToggle || (() => {})}
-      className={className}
-    >
-      {/* Left Controls */}
-      {showToggle && (
-        <AccordionLeftControls>
+    <AccordionCard className={className} expanded={isExpanded} onToggle={onToggle}>
+      <AccordionCard.Header>
+        {showToggle && (
           <AddToBuildSwitchSimple
             itemId={originalRace?.edid || item.id}
             itemType="race"
             itemName={item.name}
           />
-        </AccordionLeftControls>
-      )}
-
-      {/* Header Content */}
-      <AccordionHeader>
-        {/* Left side: Avatar + Name */}
+        )}
         <div className="flex items-center gap-3">
           <RaceAvatar raceName={item.name} size="md" />
           <H3 className="text-primary font-semibold">{item.name}</H3>
         </div>
-
-        {/* Right side: Classification + Effects */}
         <div className="flex items-center gap-3 ml-auto">
-          {/* Race type tag */}
           {item.category && (
             <Badge
               variant="outline"
@@ -70,112 +49,88 @@ export function RaceAccordion({
               {item.category}
             </Badge>
           )}
-
-          {/* Quick effects preview */}
-          {item.effects && item.effects.length > 0 && (
-            <div className="hidden md:flex items-center gap-2 text-xs text-muted-foreground">
-              <div className="flex items-center gap-1">
-                <Star className="h-3 w-3 text-yellow-500" />
-                <span>{item.effects.length} effects</span>
-              </div>
-            </div>
-          )}
         </div>
-      </AccordionHeader>
-
-      {/* Collapsed Content */}
-      <AccordionCollapsedContentSlot>
-        <div className="space-y-3">
-          {/* Description */}
-          <div className="line-clamp-2">
-            <P className="text-sm text-muted-foreground">
-              {item.summary || item.description}
-            </P>
-          </div>
-
-          {/* Quick effects */}
-          <div className="flex flex-wrap gap-2">
-            {item.effects?.slice(0, 2).map((effect, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-1 px-2 py-1 bg-muted/50 rounded text-xs"
-                title={effect.description}
-              >
-                <Star className="h-3 w-3 text-yellow-500" />
-                <span className="font-medium">{effect.name}</span>
-              </div>
-            ))}
-          </div>
+      </AccordionCard.Header>
+      <AccordionCard.Summary>
+        <div className="line-clamp-2">
+          <P className="text-sm text-muted-foreground">
+            {item.summary || item.description}
+          </P>
         </div>
-      </AccordionCollapsedContentSlot>
-
-      {/* Expanded Content */}
-      <AccordionExpandedContentSlot>
-        <div className="space-y-4">
-          {/* Description */}
+      </AccordionCard.Summary>
+      <AccordionCard.Details>
+        {/* Full Description */}
+        <div>
+          <P className="text-sm text-muted-foreground leading-relaxed">
+            {item.description}
+          </P>
+        </div>
+        {/* Starting Attributes */}
+        {originalRace?.startingStats && (
           <div>
-            <P className="text-sm text-muted-foreground leading-relaxed">
-              {item.description}
-            </P>
+            <h5 className="text-lg font-medium text-foreground mb-3">
+              Starting Attributes
+            </h5>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {Object.entries(originalRace.startingStats).map(([stat, value]) => (
+                <div
+                  key={stat}
+                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
+                >
+                  <span className="font-medium capitalize">{stat}</span>
+                  <span className="font-bold text-green-600">{value}</span>
+                </div>
+              ))}
+            </div>
           </div>
-
-          {/* Race Stats */}
-          {originalRace?.startingStats && (
-            <div>
-              <h5 className="text-lg font-medium text-foreground mb-3">
-                Starting Stats
-              </h5>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {Object.entries(originalRace.startingStats).map(
-                  ([stat, value]) => (
-                    <div
-                      key={stat}
-                      className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Star className="h-4 w-4 text-skyrim-gold" />
-                        <span className="font-medium capitalize">{stat}</span>
-                      </div>
-                      <span className="font-bold text-green-600">+{value}</span>
-                    </div>
-                  )
-                )}
-              </div>
+        )}
+        {/* Starting Skills */}
+        {originalRace?.skillBonuses && originalRace.skillBonuses.length > 0 && (
+          <div>
+            <h5 className="text-lg font-medium text-foreground mb-3">
+              Starting Skills
+            </h5>
+            <div className="space-y-2">
+              {originalRace.skillBonuses.map((bonus, index) => (
+                <div
+                  key={index}
+                  className="p-2 rounded bg-muted border text-sm flex items-center justify-between"
+                >
+                  <span className="font-medium">
+                    {bonus.skill} +{bonus.bonus}
+                  </span>
+                  <Badge variant="secondary" className="text-xs">
+                    Starting Bonus
+                  </Badge>
+                </div>
+              ))}
             </div>
-          )}
-
-          {/* Effects */}
-          {item.effects && item.effects.length > 0 && (
-            <div>
-              <h5 className="text-lg font-medium text-foreground mb-3">
-                Effects
-              </h5>
-              <div className="space-y-3">
-                {item.effects.map((effect, index) => (
-                  <div
-                    key={index}
-                    className="p-3 bg-muted/50 rounded-lg border border-border"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="flex items-center gap-2">
-                        <Star className="h-4 w-4 text-yellow-500" />
-                      </div>
-                      <div className="flex-1">
-                        <P className="font-medium text-sm mb-1">
-                          {effect.name}
-                        </P>
-                        <P className="text-sm text-muted-foreground">
-                          {effect.description}
-                        </P>
-                      </div>
-                    </div>
+          </div>
+        )}
+        {/* Quirks (Racial Abilities) */}
+        {originalRace?.racialSpells && originalRace.racialSpells.length > 0 && (
+          <div>
+            <h5 className="text-lg font-medium text-foreground mb-3">
+              Quirks
+            </h5>
+            <div className="space-y-2">
+              {originalRace.racialSpells.map((spell, index) => (
+                <div
+                  key={index}
+                  className="p-3 bg-muted/50 rounded-lg border border-border"
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    <svg className="h-4 w-4 text-yellow-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 17.75L18.2 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.44 4.73L5.8 21z" /></svg>
+                    <span className="font-medium text-sm">{spell.name}</span>
                   </div>
-                ))}
-              </div>
+                  <div className="border-t border-border my-2" />
+                  <div className="text-sm text-muted-foreground">{spell.description}</div>
+                </div>
+              ))}
             </div>
-          )}
-        </div>
-      </AccordionExpandedContentSlot>
-    </GenericAccordionCard>
+          </div>
+        )}
+      </AccordionCard.Details>
+    </AccordionCard>
   )
 }

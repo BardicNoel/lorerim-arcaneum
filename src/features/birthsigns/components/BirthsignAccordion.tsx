@@ -1,11 +1,5 @@
 import { cn } from '@/lib/utils'
-import {
-  AccordionCollapsedContentSlot,
-  AccordionExpandedContentSlot,
-  AccordionHeader,
-  AccordionLeftControls,
-  GenericAccordionCard,
-} from '@/shared/components/generic'
+import { GenericAccordionCard } from '@/shared/components/generic'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
@@ -155,254 +149,247 @@ export function BirthsignAccordion({
     >
       {/* Left Controls */}
       {showAddToBuild && (
-        <AccordionLeftControls>
+        <div className="flex items-center gap-3">
           <AddToBuildSwitchSimple
             itemId={item.id}
             itemType="stone"
             itemName={item.name}
           />
-        </AccordionLeftControls>
+        </div>
       )}
 
       {/* Header Content */}
-      <AccordionHeader>
-        {/* Left side: Icon + Name */}
-        <div className="flex items-center gap-3">
-          <BirthsignAvatar birthsignName={originalBirthsign.name} size="md" />
-          <H3 className="text-primary font-semibold">
-            {originalBirthsign.name}
-          </H3>
-        </div>
+      <div className="flex items-center gap-3">
+        <BirthsignAvatar birthsignName={originalBirthsign.name} size="md" />
+        <H3 className="text-primary font-semibold">
+          {originalBirthsign.name}
+        </H3>
+      </div>
 
-        {/* Right side: Classification + Effects */}
-        <div className="flex items-center gap-3 ml-auto">
-          {/* Birthsign group tag */}
-          {originalBirthsign.group && (
-            <Badge
-              variant="outline"
-              className={cn(
-                getBirthsignGroupStyle(originalBirthsign.group) ||
-                  'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200',
-                sizeClasses.sm,
-                'font-medium transition-colors'
-              )}
-            >
-              {originalBirthsign.group}
-            </Badge>
-          )}
+      {/* Right side: Classification + Effects */}
+      <div className="flex items-center gap-3 ml-auto">
+        {/* Birthsign group tag */}
+        {originalBirthsign.group && (
+          <Badge
+            variant="outline"
+            className={cn(
+              getBirthsignGroupStyle(originalBirthsign.group) ||
+                'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200',
+              sizeClasses.sm,
+              'font-medium transition-colors'
+            )}
+          >
+            {originalBirthsign.group}
+          </Badge>
+        )}
 
-          {/* Powers count badge */}
-          {originalBirthsign.powers.length > 0 && (
-            <Badge
-              variant="outline"
-              className={cn(
-                'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
-                sizeClasses.sm,
-                'font-medium transition-colors'
-              )}
-            >
-              <Lightning className="h-3 w-3 mr-1" />
-              {originalBirthsign.powers.length} power
-              {originalBirthsign.powers.length !== 1 ? 's' : ''}
-            </Badge>
-          )}
+        {/* Powers count badge */}
+        {originalBirthsign.powers.length > 0 && (
+          <Badge
+            variant="outline"
+            className={cn(
+              'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
+              sizeClasses.sm,
+              'font-medium transition-colors'
+            )}
+          >
+            <Lightning className="h-3 w-3 mr-1" />
+            {originalBirthsign.powers.length} power
+            {originalBirthsign.powers.length !== 1 ? 's' : ''}
+          </Badge>
+        )}
 
-          {/* Quick effects preview */}
-          {item.effects && item.effects.length > 0 && (
-            <div className="hidden md:flex items-center gap-2 text-xs text-muted-foreground">
-              <div className="flex items-center gap-1">
-                <Star className="h-3 w-3 text-yellow-500" />
-                <span>{item.effects.length} effects</span>
-              </div>
+        {/* Quick effects preview */}
+        {item.effects && item.effects.length > 0 && (
+          <div className="hidden md:flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <Star className="h-3 w-3 text-yellow-500" />
+              <span>{item.effects.length} effects</span>
             </div>
-          )}
-        </div>
-      </AccordionHeader>
+          </div>
+        )}
+      </div>
 
       {/* Collapsed Content */}
-      <AccordionCollapsedContentSlot>
-        <div className="space-y-3">
+      <div className="space-y-3">
+        <FormattedText
+          text={parsedDescription}
+          className="text-base text-muted-foreground"
+        />
+      </div>
+
+      {/* Expanded Content */}
+      <div className="space-y-6">
+        {/* Description Section */}
+        <div>
+          <h5 className="text-lg font-medium text-foreground mb-3">
+            Description
+          </h5>
           <FormattedText
             text={parsedDescription}
             className="text-base text-muted-foreground"
           />
         </div>
-      </AccordionCollapsedContentSlot>
-
-      {/* Expanded Content */}
-      <AccordionExpandedContentSlot>
-        <div className="space-y-6">
-          {/* Description Section */}
+        {/* Stats Section */}
+        {showStats && originalBirthsign.stat_modifications.length > 0 && (
           <div>
             <h5 className="text-lg font-medium text-foreground mb-3">
-              Description
+              Stat Modifications
             </h5>
-            <FormattedText
-              text={parsedDescription}
-              className="text-base text-muted-foreground"
-            />
-          </div>
-          {/* Stats Section */}
-          {showStats && originalBirthsign.stat_modifications.length > 0 && (
-            <div>
-              <h5 className="text-lg font-medium text-foreground mb-3">
-                Stat Modifications
-              </h5>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {originalBirthsign.stat_modifications.map((stat, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
-                  >
-                    <div className="flex items-center gap-2">
-                      {getEffectIcon(stat.stat)}
-                      <span className="font-medium">
-                        {getUserFriendlyStat(stat.stat)}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={cn(
-                          'font-bold',
-                          stat.type === 'bonus'
-                            ? 'text-green-600'
-                            : 'text-red-600'
-                        )}
-                      >
-                        {stat.type === 'bonus'
-                          ? (stat.value >= 0 ? '+' : '') +
-                            stat.value +
-                            (stat.value_type === 'percentage' ? '%' : '')
-                          : (stat.value < 0 ? '' : '-') +
-                            stat.value +
-                            (stat.value_type === 'percentage' ? '%' : '')}
-                      </span>
-                    </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {originalBirthsign.stat_modifications.map((stat, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
+                >
+                  <div className="flex items-center gap-2">
+                    {getEffectIcon(stat.stat)}
+                    <span className="font-medium">
+                      {getUserFriendlyStat(stat.stat)}
+                    </span>
                   </div>
-                ))}
-              </div>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={cn(
+                        'font-bold',
+                        stat.type === 'bonus'
+                          ? 'text-green-600'
+                          : 'text-red-600'
+                      )}
+                    >
+                      {stat.type === 'bonus'
+                        ? (stat.value >= 0 ? '+' : '') +
+                          stat.value +
+                          (stat.value_type === 'percentage' ? '%' : '')
+                        : (stat.value < 0 ? '' : '-') +
+                          stat.value +
+                          (stat.value_type === 'percentage' ? '%' : '')}
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Powers Section */}
-          {showPowers && originalBirthsign.powers.length > 0 && (
+        {/* Powers Section */}
+        {showPowers && originalBirthsign.powers.length > 0 && (
+          <div>
+            <h5 className="text-lg font-medium text-foreground mb-3">
+              Powers
+            </h5>
+            <div className="space-y-3">
+              {originalBirthsign.powers.map((power, index) => (
+                <div
+                  key={index}
+                  className="p-4 rounded-lg border bg-muted/30"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <H4 className="text-sm font-semibold">{power.name}</H4>
+                    {power.magnitude && (
+                      <Badge variant="outline" className="text-xs">
+                        Magnitude: {power.magnitude}
+                      </Badge>
+                    )}
+                  </div>
+                  <FormattedText
+                    text={power.description}
+                    className="text-sm text-muted-foreground"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Skills Section */}
+        {showSkills && originalBirthsign.skill_bonuses.length > 0 && (
+          <div>
+            <h5 className="text-lg font-medium text-foreground mb-3">
+              Skill Bonuses
+            </h5>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {originalBirthsign.skill_bonuses.map((skill, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
+                >
+                  <div className="flex items-center gap-2">
+                    {getEffectIcon(skill.stat)}
+                    <span className="font-medium">
+                      {getUserFriendlyStat(skill.stat)}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-green-600">
+                      +{skill.value}
+                      {skill.value_type === 'percentage' ? '%' : ''}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Effects Section */}
+        {showEffects &&
+          (originalBirthsign.conditional_effects?.length > 0 ||
+            originalBirthsign.mastery_effects?.length > 0) && (
             <div>
               <h5 className="text-lg font-medium text-foreground mb-3">
-                Powers
+                Special Effects
               </h5>
               <div className="space-y-3">
-                {originalBirthsign.powers.map((power, index) => (
-                  <div
-                    key={index}
-                    className="p-4 rounded-lg border bg-muted/30"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <H4 className="text-sm font-semibold">{power.name}</H4>
-                      {power.magnitude && (
-                        <Badge variant="outline" className="text-xs">
-                          Magnitude: {power.magnitude}
-                        </Badge>
-                      )}
-                    </div>
-                    <FormattedText
-                      text={power.description}
-                      className="text-sm text-muted-foreground"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Skills Section */}
-          {showSkills && originalBirthsign.skill_bonuses.length > 0 && (
-            <div>
-              <h5 className="text-lg font-medium text-foreground mb-3">
-                Skill Bonuses
-              </h5>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {originalBirthsign.skill_bonuses.map((skill, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
-                  >
-                    <div className="flex items-center gap-2">
-                      {getEffectIcon(skill.stat)}
-                      <span className="font-medium">
-                        {getUserFriendlyStat(skill.stat)}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-green-600">
-                        +{skill.value}
-                        {skill.value_type === 'percentage' ? '%' : ''}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Effects Section */}
-          {showEffects &&
-            (originalBirthsign.conditional_effects?.length > 0 ||
-              originalBirthsign.mastery_effects?.length > 0) && (
-              <div>
-                <h5 className="text-lg font-medium text-foreground mb-3">
-                  Special Effects
-                </h5>
-                <div className="space-y-3">
-                  {/* Conditional Effects */}
-                  {originalBirthsign.conditional_effects?.map(
-                    (effect, index) => (
-                      <div
-                        key={`conditional-${index}`}
-                        className="p-3 rounded-lg border bg-muted/30"
-                      >
-                        <div className="flex items-center gap-2 mb-1">
-                          <Circle className="h-4 w-4 text-blue-500" />
-                          <span className="font-medium text-sm">
-                            Conditional Effect
-                          </span>
-                        </div>
-                        <div className="space-y-1">
-                          <div className="text-sm font-medium">
-                            {effect.stat}
-                          </div>
-                          <div className="text-sm text-muted-foreground">
-                            {effect.description}
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  )}
-
-                  {/* Mastery Effects */}
-                  {originalBirthsign.mastery_effects?.map((effect, index) => (
+                {/* Conditional Effects */}
+                {originalBirthsign.conditional_effects?.map(
+                  (effect, index) => (
                     <div
-                      key={`mastery-${index}`}
+                      key={`conditional-${index}`}
                       className="p-3 rounded-lg border bg-muted/30"
                     >
                       <div className="flex items-center gap-2 mb-1">
-                        <Star className="h-4 w-4 text-yellow-500" />
+                        <Circle className="h-4 w-4 text-blue-500" />
                         <span className="font-medium text-sm">
-                          Mastery Effect
+                          Conditional Effect
                         </span>
                       </div>
                       <div className="space-y-1">
-                        <div className="text-sm font-medium">{effect.stat}</div>
+                        <div className="text-sm font-medium">
+                          {effect.stat}
+                        </div>
                         <div className="text-sm text-muted-foreground">
                           {effect.description}
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  )
+                )}
+
+                {/* Mastery Effects */}
+                {originalBirthsign.mastery_effects?.map((effect, index) => (
+                  <div
+                    key={`mastery-${index}`}
+                    className="p-3 rounded-lg border bg-muted/30"
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <Star className="h-4 w-4 text-yellow-500" />
+                      <span className="font-medium text-sm">
+                        Mastery Effect
+                      </span>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="text-sm font-medium">{effect.stat}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {effect.description}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            )}
-        </div>
-      </AccordionExpandedContentSlot>
+            </div>
+          )}
+      </div>
     </GenericAccordionCard>
   )
 }
