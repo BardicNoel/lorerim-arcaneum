@@ -2,6 +2,7 @@ import { BirthsignSelectionCard } from '@/features/birthsigns'
 import BuildPageDestinyCard from '@/features/destiny/components/BuildPageDestinyCard'
 import { RaceSelectionCard } from '@/features/races/components'
 import { ReligionSelectionCard } from '@/features/religions/components'
+import { SkillSelectionCard } from '@/features/skills'
 import { TraitSelectionCard } from '@/features/traits/components'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
@@ -65,6 +66,11 @@ export function BuildPage() {
             <TraitSelectionCard />
             {/* Religion Selection and Display */}
             <ReligionSelectionCard />
+          </div>
+
+          {/* Skill Selection and Display - Double Wide */}
+          <div className="mb-6">
+            <SkillSelectionCard />
           </div>
 
           {/* Destiny Section */}

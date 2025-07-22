@@ -48,7 +48,7 @@ export function useCharacterBuild() {
     const currentMajorSkills = majorSkills ?? []
     const currentMinorSkills = minorSkills ?? []
 
-    if (!hasMinorSkill(skillId) && currentMinorSkills.length < 3) {
+    if (!hasMinorSkill(skillId) && currentMinorSkills.length < 6) {
       // Remove from major skills first (mutual exclusion)
       const newMajorSkills = currentMajorSkills.filter(id => id !== skillId)
 
