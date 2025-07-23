@@ -14,6 +14,10 @@ import HomePage from '@/pages/HomePage'
 import NotFoundPage from '@/pages/NotFoundPage'
 import { Route, Routes } from 'react-router-dom'
 
+// Temporary MVA test pages
+import { DestinyNodesPage } from '@/features/destiny/pages/DestinyNodesPage'
+import { DestinyPathBuilderPage } from '@/features/destiny/pages/DestinyPathBuilderPage'
+
 export const AppRouter = () => {
   return (
     <Routes>
@@ -42,6 +46,10 @@ export const AppRouter = () => {
       <Route path="/perks" element={<UnifiedSkillsPage />} />
       <Route path="/equipment" element={<EquipmentPage />} />
       <Route path="/crafting" element={<CraftingPage />} />
+
+      {/* Temporary MVA Test Routes */}
+      <Route path="/mva-test" element={<DestinyNodesPage />} />
+      <Route path="/mva-path-builder" element={<DestinyPathBuilderPage />} />
 
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

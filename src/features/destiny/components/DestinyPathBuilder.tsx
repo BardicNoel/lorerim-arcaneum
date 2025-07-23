@@ -1,13 +1,13 @@
-import React, { useState, useMemo } from 'react'
-import { useDestinyPath } from '../hooks/useDestinyPath'
+import React from 'react'
 import { YourDestinyPathCard } from './YourDestinyPathCard'
 import { PredictivePathsSection } from './PredictivePathsSection'
 import { PathCompleteCard } from './PathCompleteCard'
 import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
-import { usePossibleDestinyPaths } from '../hooks/usePossibleDestinyPaths'
+import { useDestinyPossiblePaths } from '../hooks/useDestinyPossiblePaths'
+import { useDestinyPathSetter } from '../hooks/useDestinyPathSetter'
 import type { DestinyNode, PlannedNode } from '../types'
-import type { SelectedTag } from '@/shared/components/playerCreation/types'
+
 
 interface DestinyPathBuilderProps {
   nodes: DestinyNode[]
@@ -18,49 +18,18 @@ interface DestinyPathBuilderProps {
 
 export function DestinyPathBuilder({
   nodes,
-  plannedNodes,
-  onNodePlan,
-  onNodeUnplan,
+
 }: DestinyPathBuilderProps) {
-  const { getDestinyPath, setDestinyPath } = useCharacterBuild()
-  // Hydrate from build state
+  const { getDestinyPath } = useCharacterBuild()
   const destinyPathIds = getDestinyPath()
-  const initialPath = React.useMemo(() => {
-    // Map ids to DestinyNode objects, filter out missing
+  const selectedPath = React.useMemo(() => {
     return destinyPathIds
       .map(id => nodes.find(n => n.id === id))
       .filter((n): n is DestinyNode => !!n)
   }, [destinyPathIds, nodes])
 
-  const {
-    selectedPath,
-    rootNodes,
-    currentOptions,
-    isNodePlanned,
-    getCurrentNodeName,
-    backtrack,
-    handleBreadcrumbClick,
-    startPath,
-    startNewPath,
-  } = useDestinyPath({
-    nodes,
-    plannedNodes,
-    onNodePlan,
-    onNodeUnplan,
-    initialPath,
-  })
-
-  // Persist selectedPath to build state
-  React.useEffect(() => {
-    const current = getDestinyPath()
-    const next = selectedPath.map(n => n.id)
-    if (
-      current.length !== next.length ||
-      current.some((id, i) => id !== next[i])
-    ) {
-      setDestinyPath(next)
-    }
-  }, [selectedPath, getDestinyPath, setDestinyPath])
+  // Use standardized setter for all path updates
+  const setDestinyPathToNode = useDestinyPathSetter()
 
   // Use the player creation filters hook for tag management
   const {
@@ -75,7 +44,7 @@ export function DestinyPathBuilder({
   // Use the last node in the current selectedPath as the start node for possible paths
   const lastNode =
     selectedPath.length > 0 ? selectedPath[selectedPath.length - 1] : undefined
-  const possiblePaths = usePossibleDestinyPaths(nodes, lastNode)
+  const possiblePaths = useDestinyPossiblePaths(nodes)
 
   // Pure function to check if a node is terminal (no children)
   function isTerminalNode(node: DestinyNode) {
@@ -94,19 +63,21 @@ export function DestinyPathBuilder({
       {/* Your Destiny Path */}
       <YourDestinyPathCard
         selectedPath={selectedPath}
-        rootNodes={rootNodes}
-        isPlanned={isNodePlanned}
-        onBacktrack={backtrack}
-        onStartPath={startPath}
+        rootNodes={nodes.filter(node => node.prerequisites.length === 0)}
+        isPlanned={id => selectedPath.some(n => n.id === id)}
+        onBacktrack={index => setDestinyPathToNode(selectedPath, index)}
+        onStartPath={node => setDestinyPathToNode([node], 0)}
       />
 
       {/* Predictive Paths */}
       <PredictivePathsSection
         predictivePaths={predictivePaths}
         selectedPath={selectedPath}
-        isPlanned={isNodePlanned}
-        onBreadcrumbClick={handleBreadcrumbClick}
-        getCurrentNodeName={getCurrentNodeName}
+        isPlanned={id => selectedPath.some(n => n.id === id)}
+        onBreadcrumbClick={setDestinyPathToNode}
+        getCurrentNodeName={() =>
+          selectedPath.length === 0 ? 'Destiny' : selectedPath[selectedPath.length - 1].name
+        }
         selectedTags={selectedTags}
         onTagSelect={handleTagSelect}
         onTagRemove={handleTagRemove}
@@ -115,8 +86,8 @@ export function DestinyPathBuilder({
       {/* Path Complete */}
       <PathCompleteCard
         selectedPath={selectedPath}
-        currentOptions={currentOptions}
-        onStartNewPath={startNewPath}
+        currentOptions={[]}
+        onStartNewPath={() => setDestinyPathToNode([], -1)}
       />
     </div>
   )

@@ -15,6 +15,8 @@ import { DestinyCard } from '../components/DestinyCard'
 import { DestinyDetailPanel } from '../components/DestinyDetailPanel'
 import { DestinyPathBuilder } from '../components/DestinyPathBuilder'
 import type { DestinyNode, PlannedNode } from '../types'
+import { useDestinyPossiblePaths } from '../hooks/useDestinyPossiblePaths'
+import { useDestinyPathSetter } from '../hooks/useDestinyPathSetter'
 
 export function UnifiedDestinyPage() {
   // Load destiny data from public/data/subclasses.json at runtime
@@ -81,6 +83,10 @@ export function UnifiedDestinyPage() {
     }
     fetchDestinyData()
   }, [])
+
+  // Use standardized hooks for destiny path logic
+  const possiblePaths = useDestinyPossiblePaths(destinyNodes)
+  const setDestinyPathToNode = useDestinyPathSetter()
 
   // Convert destiny nodes to PlayerCreationItem format
   const playerCreationItems: PlayerCreationItem[] = destinyNodes.map(node => ({
