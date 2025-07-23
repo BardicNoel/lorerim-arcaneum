@@ -9,7 +9,7 @@ interface DestinyNodePillProps {
   variant?: 'default' | 'outline' | 'secondary'
   size?: 'sm' | 'md' | 'lg'
   showHoverCard?: boolean
-  onClick?: () => void
+  onClick?: (e?: React.MouseEvent) => void
   className?: string
 }
 
@@ -31,7 +31,12 @@ export function DestinyNodePill({
   const pillContent = (
     <Badge
       variant={variant}
-      className={`${sizeClasses[size]} ${onClick ? 'cursor-pointer hover:bg-muted/50' : ''} ${className}`}
+      className={`
+        ${sizeClasses[size]} 
+        ${onClick ? 'cursor-pointer hover:bg-muted/50' : ''} 
+        ${className}
+        rounded-full
+      `}
       onClick={onClick}
     >
       {node.name}

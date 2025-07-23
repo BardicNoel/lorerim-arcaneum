@@ -7,5 +7,6 @@ export * from './DestinyPathListItem'
 export * from './DestinyNodeHoverCard'
 export * from './DestinyBreadcrumbTrail'
 export * from './DestinyNodePill'
+export * from './DestinyPossiblePathItem'
 // TODO: Uncomment as atomic component files are created
 // export * from './DestinyPerkList' 

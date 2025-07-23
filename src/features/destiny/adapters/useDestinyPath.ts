@@ -59,15 +59,19 @@ export function useDestinyPath(options: UseDestinyPathOptions = {}): UseDestinyP
       return rootNodes
     }
     
-    const lastNode = currentPath[currentPath.length - 1]
-    return nodes.filter(node => 
-      node.prerequisites.includes(lastNode.name)
-    )
+    // Return nodes where ANY prerequisite is met by the current path
+    return nodes.filter(node => {
+      if (node.prerequisites.length === 0) return false // Skip root nodes
+      return node.prerequisites.some(prereq => 
+        currentPath.some(pathNode => pathNode.name === prereq)
+      )
+    })
   }, [currentPath, nodes, rootNodes])
 
   // Next possible nodes from current position
   const nextPossibleNodes = useMemo(() => {
     if (!currentNode) return rootNodes
+    // Return nodes where the current node is one of the prerequisites
     return nodes.filter(node => 
       node.prerequisites.includes(currentNode.name)
     )
@@ -89,17 +93,18 @@ export function useDestinyPath(options: UseDestinyPathOptions = {}): UseDestinyP
 
     const errors: string[] = []
     
-    // Check if each node's prerequisites are met
+    // Check if each node's prerequisites are met (ANY prerequisite is sufficient)
     for (let i = 1; i < currentPath.length; i++) {
       const node = currentPath[i]
       const previousNodes = currentPath.slice(0, i)
       
-      const unmetPrerequisites = node.prerequisites.filter(prereq =>
-        !previousNodes.some(prevNode => prevNode.name === prereq)
+      // Check if ANY prerequisite is met (OR logic instead of AND)
+      const hasMetPrerequisite = node.prerequisites.some(prereq =>
+        previousNodes.some(prevNode => prevNode.name === prereq)
       )
       
-      if (unmetPrerequisites.length > 0) {
-        errors.push(`${node.name} requires: ${unmetPrerequisites.join(', ')}`)
+      if (!hasMetPrerequisite && node.prerequisites.length > 0) {
+        errors.push(`${node.name} requires one of: ${node.prerequisites.join(', ')}`)
       }
     }
 
@@ -111,10 +116,14 @@ export function useDestinyPath(options: UseDestinyPathOptions = {}): UseDestinyP
 
   // Add node to path
   const addNodeToPath = useCallback((node: DestinyNode): boolean => {
-    // Check if node can be added (prerequisites met)
+    // Check if node can be added (ANY prerequisite met)
     if (currentPath.length > 0) {
       const lastNode = currentPath[currentPath.length - 1]
-      if (!node.prerequisites.includes(lastNode.name)) {
+      // Check if ANY prerequisite is met (OR logic)
+      const hasMetPrerequisite = node.prerequisites.some(prereq => 
+        currentPath.some(pathNode => pathNode.name === prereq)
+      )
+      if (!hasMetPrerequisite && node.prerequisites.length > 0) {
         return false
       }
     } else {

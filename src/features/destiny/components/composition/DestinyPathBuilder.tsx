@@ -2,12 +2,13 @@ import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Button } from '@/shared/ui/ui/button'
 import { Badge } from '@/shared/ui/ui/badge'
+import { ScrollArea } from '@/shared/ui/ui/scroll-area'
 import { DestinyBreadcrumbTrail } from '../atomic/DestinyBreadcrumbTrail'
-import { DestinyNodeCard } from './DestinyNodeCard'
-import { DestinyNodeHoverCard } from '../atomic/DestinyNodeHoverCard'
+import { DestinyPossiblePathsList } from './DestinyPossiblePathsList'
 import { useDestinyPath } from '../../adapters/useDestinyPath'
+import { useDestinyPossiblePaths } from '../../adapters/useDestinyPossiblePaths'
 import { useDestinyNodes } from '../../adapters/useDestinyNodes'
-import { ArrowLeft, Plus, RotateCcw, CheckCircle, AlertCircle } from 'lucide-react'
+import { RotateCcw, CheckCircle, AlertCircle } from 'lucide-react'
 import type { DestinyNode } from '../../types'
 
 interface DestinyPathBuilderProps {
@@ -29,24 +30,49 @@ export function DestinyPathBuilder({
     pathErrors,
     addNodeToPath,
     removeNodeFromPath,
+    setPath,
     clearPath,
     goToPathIndex,
     isPathComplete,
     getPathSummary,
   } = useDestinyPath()
 
+  // Get possible paths from current position
+  const { possiblePaths } = useDestinyPossiblePaths({
+    fromNode: currentNode || undefined,
+  })
+
+  // Get all nodes for breadcrumb trail
   const { nodes } = useDestinyNodes()
 
-  // Handle adding node to path
-  const handleAddNode = (node: DestinyNode) => {
-    const success = addNodeToPath(node)
-    if (success) {
-      onPathChange?.(currentPath)
-      
-      // Check if path is complete
-      if (isPathComplete) {
-        onPathComplete?.(currentPath)
+  // Handle path selection
+  const handlePathClick = (path: DestinyNode[], clickedIndex: number) => {
+    let newPath: DestinyNode[]
+    
+    if (currentPath.length === 0) {
+      // No current path - user is starting fresh
+      // Set the path up to the clicked index
+      newPath = path.slice(0, clickedIndex + 1)
+    } else {
+      // Has current path - user is extending from current position
+      if (clickedIndex === 0) {
+        // User clicked on the first node (current node) - no change needed
+        return
       }
+      
+      // Get the nodes to add (skip the first node since it's the current node)
+      const nodesToAdd = path.slice(1, clickedIndex + 1)
+      newPath = [...currentPath, ...nodesToAdd]
+    }
+    
+    // Set the entire path at once (bypasses individual node validation)
+    setPath(newPath)
+    
+    onPathChange?.(newPath)
+    
+    // Check if path is complete
+    if (isPathComplete) {
+      onPathComplete?.(newPath)
     }
   }
 
@@ -158,16 +184,6 @@ export function DestinyPathBuilder({
                       {node.description}
                     </p>
                   </div>
-                  {index < currentPath.length - 1 && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeNodeFromPath(index)}
-                      className="text-muted-foreground hover:text-destructive"
-                    >
-                      <ArrowLeft className="w-4 h-4" />
-                    </Button>
-                  )}
                 </div>
               ))}
             </div>
@@ -175,57 +191,38 @@ export function DestinyPathBuilder({
         </Card>
       )}
 
-      {/* Available Nodes */}
+      {/* Possible Paths */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">
-            {currentPath.length === 0 ? 'Choose Your Starting Point' : 'Available Next Steps'}
+            {currentPath.length === 0 ? 'Choose Your Starting Point' : 'Possible Paths'}
           </CardTitle>
           <p className="text-sm text-muted-foreground">
             {currentPath.length === 0
               ? 'Select a root destiny node to begin your path'
-              : `Choose from ${availableNodes.length} available nodes to continue your path`
+              : possiblePaths.length === 0
+                ? 'You have reached the end of this destiny path'
+                : `Explore ${possiblePaths.length} possible paths from your current position`
             }
           </p>
         </CardHeader>
-        <CardContent>
-          {availableNodes.length === 0 ? (
+        <CardContent className="h-[600px] p-0">
+          {possiblePaths.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <CheckCircle className="w-12 h-12 mx-auto mb-4 opacity-50" />
               <p className="text-lg font-medium">Path Complete!</p>
               <p className="text-sm">You've reached the end of this destiny path.</p>
             </div>
           ) : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {availableNodes.map((node) => (
-                <DestinyNodeHoverCard
-                  key={node.id}
-                  node={node}
-                  allNodes={nodes}
-                >
-                  <div>
-                    <DestinyNodeCard
-                      node={node}
-                      variant="detailed"
-                      showPrerequisites={true}
-                      showNextNodes={true}
-                      allNodes={nodes}
-                      className="cursor-pointer"
-                    />
-                    <div className="mt-2">
-                      <Button
-                        onClick={() => handleAddNode(node)}
-                        size="sm"
-                        className="w-full"
-                      >
-                        <Plus className="w-4 h-4 mr-2" />
-                        Add to Path
-                      </Button>
-                    </div>
-                  </div>
-                </DestinyNodeHoverCard>
-              ))}
-            </div>
+            <ScrollArea className="h-full">
+              <div className="p-6">
+                <DestinyPossiblePathsList
+                  possiblePaths={possiblePaths}
+                  selectedPathLength={currentPath.length}
+                  onPathClick={handlePathClick}
+                />
+              </div>
+            </ScrollArea>
           )}
         </CardContent>
       </Card>
