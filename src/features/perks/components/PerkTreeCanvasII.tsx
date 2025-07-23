@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect, useRef } from 'react'
+import React, { useCallback, useMemo, useEffect } from 'react'
 import ReactFlow, {
   Controls,
   Background,
@@ -18,6 +18,34 @@ import 'reactflow/dist/style.css'
 import { PerkNode } from './PerkNode'
 import type { PerkTree, PerkNode as PerkNodeType, PerkNodeData } from '../types'
 import { validatePerkTreeSafe } from '../utils'
+
+// Create stable nodeTypes outside component to prevent recreation
+const createStableNodeTypes = () => {
+  let currentCallbacks = {
+    onTogglePerk: undefined as ((perkId: string) => void) | undefined,
+    onRankChange: undefined as ((perkId: string, newRank: number) => void) | undefined,
+  }
+
+  const nodeTypes: NodeTypes = {
+    perkNode: (props: any) => (
+      <PerkNode
+        {...props}
+        onTogglePerk={currentCallbacks.onTogglePerk}
+        onRankChange={currentCallbacks.onRankChange}
+      />
+    ),
+  }
+
+  return {
+    nodeTypes,
+    updateCallbacks: (callbacks: typeof currentCallbacks) => {
+      currentCallbacks = callbacks
+    }
+  }
+}
+
+// Create a single instance that will be reused
+const stableNodeTypesInstance = createStableNodeTypes()
 
 interface PerkTreeCanvasIIProps {
   tree: PerkTree | undefined
@@ -1546,26 +1574,7 @@ function convertToPerkRecords(tree: PerkTree): PerkRecord[] {
 }
 
 // Create a wrapper component that receives callbacks
-const createPerkNodeComponent = (
-  onTogglePerk?: (perkId: string) => void,
-  onRankChange?: (perkId: string, newRank: number) => void
-) => {
-  return (props: any) => (
-    <PerkNode
-      {...props}
-      onTogglePerk={onTogglePerk}
-      onRankChange={onRankChange}
-    />
-  )
-}
 
-// Memoized node types to prevent React Flow warnings
-const createNodeTypes = (
-  onTogglePerk?: (perkId: string) => void,
-  onRankChange?: (perkId: string, newRank: number) => void
-): NodeTypes => ({
-  perkNode: createPerkNodeComponent(onTogglePerk, onRankChange),
-})
 
 export function PerkTreeCanvasII({
   tree,
@@ -1577,11 +1586,17 @@ export function PerkTreeCanvasII({
   const [reactFlowInstance, setReactFlowInstance] =
     React.useState<ReactFlowInstance | null>(null)
 
+  // Update the stable nodeTypes callbacks when they change
+  useEffect(() => {
+    stableNodeTypesInstance.updateCallbacks({
+      onTogglePerk,
+      onRankChange,
+    })
+  }, [onTogglePerk, onRankChange])
+
   // Node dragging for debugging
   const onNodeDragStop = React.useCallback((event: any, node: Node) => {
-    console.log(
-      `🔧 Node ${node.id} moved to: (${node.position.x.toFixed(0)}, ${node.position.y.toFixed(0)})`
-    )
+    // Node drag handler for future debugging if needed
   }, [])
 
   // Validate tree data
@@ -1597,11 +1612,8 @@ export function PerkTreeCanvasII({
     return validation.data
   }, [tree])
 
-  // Create node types with callbacks
-  const nodeTypes: NodeTypes = useMemo(
-    () => createNodeTypes(onTogglePerk, onRankChange),
-    [onTogglePerk, onRankChange]
-  )
+  // Use the stable nodeTypes instance that never changes
+  const { nodeTypes } = stableNodeTypesInstance
 
   // Layout configuration
   const layoutConfig: LayoutConfig = useMemo(
@@ -1744,6 +1756,15 @@ export function PerkTreeCanvasII({
     [setEdges]
   )
 
+  // Event handlers to prevent drag propagation to drawer
+  const handleMouseDown = useCallback((event: React.MouseEvent) => {
+    event.stopPropagation()
+  }, [])
+
+  const handleTouchStart = useCallback((event: React.TouchEvent) => {
+    event.stopPropagation()
+  }, [])
+
   if (!validatedTree) {
     return (
       <div className="flex-1 flex items-center justify-center bg-muted/20 rounded-lg">
@@ -1760,6 +1781,8 @@ export function PerkTreeCanvasII({
     <div
       className="w-full h-full bg-background rounded-lg border"
       style={{ zIndex: 1 }}
+      onMouseDown={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
     >
       {/* Algorithm version indicator */}
       <div className="absolute top-2 right-2 z-10">
@@ -1768,31 +1791,37 @@ export function PerkTreeCanvasII({
         </div>
       </div>
 
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        onInit={setReactFlowInstance}
-        nodeTypes={nodeTypes}
-        nodesDraggable={false}
-        nodesFocusable={false}
-        selectNodesOnDrag={false}
-        nodesConnectable={false}
-        elementsSelectable={true}
-        fitView
-        fitViewOptions={{
-          padding: 0.2,
-          includeHiddenNodes: false,
-          minZoom: 0.2,
-          maxZoom: 1.5,
-        }}
-        minZoom={0.1}
-        maxZoom={2}
-        defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
-        onNodeDragStop={onNodeDragStop}
-      >
+              <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          onInit={setReactFlowInstance}
+          nodeTypes={nodeTypes}
+          nodesDraggable={false}
+          nodesFocusable={false}
+          selectNodesOnDrag={false}
+          nodesConnectable={false}
+          elementsSelectable={true}
+          fitView
+          fitViewOptions={{
+            padding: 0.2,
+            includeHiddenNodes: false,
+            minZoom: 0.2,
+            maxZoom: 1.5,
+          }}
+          minZoom={0.1}
+          maxZoom={2}
+          defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
+          onNodeDragStop={onNodeDragStop}
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
+          panOnDrag={true}
+          panOnScroll={false}
+          preventScrolling={true}
+
+        >
         <Background />
         <Controls />
       </ReactFlow>

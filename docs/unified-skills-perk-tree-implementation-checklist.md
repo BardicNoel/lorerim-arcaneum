@@ -107,6 +107,11 @@ src/features/skills/
   - [x] Reset button clears all perks for selected skill
   - [x] Drawer slides up from bottom with 85vh height
   - [x] Skill selector autocomplete for quick switching
+  - [x] Selected perks styled in perk tree (Skyrim gold)
+  - [x] Skill cards show X/Y perks (selected/total)
+  - [x] Perks saved to global build state
+  - [x] Fixed drag capturing issue (disabled drawer drag, close button only)
+  - [x] Click outside drawer to close (overlay dismiss)
 
 ### 3.4 Component Exports
 - [x] **File:** `src/features/skills/components/index.ts`
@@ -241,6 +246,7 @@ src/features/skills/
 - [x] **Perks State:** ✅ Global persistence (added to build state)
 - [x] **URL State:** ✅ Selected skill as separate URL parameter (not part of build)
 - [x] **Legacy Support:** ✅ No legacy concerns (dev mode only)
+- [x] **Multi-Rank Perks:** ✅ Simple click-to-cycle behavior (0 → 1 → 2 → 3 → 0)
 
 ### Dependencies
 - [ ] **Existing:** `useCharacterBuild` for skills management

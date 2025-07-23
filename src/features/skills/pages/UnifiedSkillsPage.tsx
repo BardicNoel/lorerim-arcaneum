@@ -130,13 +130,8 @@ export function UnifiedSkillsPage() {
       <div className="space-y-8">
         {/* Skills Grid Section */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">Skills</h2>
-            <p className="text-sm text-muted-foreground">
-              {skills.length} skills available
-            </p>
-          </div>
-          
+
+        
           <SkillsGrid
             skills={skills}
             onSkillSelect={handleSkillSelect}

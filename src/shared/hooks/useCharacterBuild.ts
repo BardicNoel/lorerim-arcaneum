@@ -198,6 +198,87 @@ export function useCharacterBuild() {
     updateBuild({ destinyPath: path })
   }
 
+  // Perk management functions
+  const addPerk = (skillId: string, perkId: string) => {
+    const currentPerks = build?.perks?.selected ?? {}
+    const skillPerks = currentPerks[skillId] ?? []
+    
+    if (!skillPerks.includes(perkId)) {
+      updateBuild({
+        perks: {
+          ...build?.perks,
+          selected: {
+            ...currentPerks,
+            [skillId]: [...skillPerks, perkId],
+          },
+        },
+      })
+    }
+  }
+
+  const removePerk = (skillId: string, perkId: string) => {
+    const currentPerks = build?.perks?.selected ?? {}
+    const skillPerks = currentPerks[skillId] ?? []
+    
+    const newSkillPerks = skillPerks.filter(id => id !== perkId)
+    
+    updateBuild({
+      perks: {
+        ...build?.perks,
+        selected: {
+          ...currentPerks,
+          [skillId]: newSkillPerks,
+        },
+      },
+    })
+  }
+
+  const setPerkRank = (perkId: string, rank: number) => {
+    const currentRanks = build?.perks?.ranks ?? {}
+    
+    updateBuild({
+      perks: {
+        ...build?.perks,
+        ranks: {
+          ...currentRanks,
+          [perkId]: rank,
+        },
+      },
+    })
+  }
+
+  const clearSkillPerks = (skillId: string) => {
+    const currentPerks = build?.perks?.selected ?? {}
+    const currentRanks = build?.perks?.ranks ?? {}
+    
+    // Remove all perks for this skill
+    const { [skillId]: removedPerks, ...remainingPerks } = currentPerks
+    
+    // Remove ranks for removed perks
+    const newRanks = { ...currentRanks }
+    if (removedPerks) {
+      removedPerks.forEach(perkId => {
+        delete newRanks[perkId]
+      })
+    }
+    
+    updateBuild({
+      perks: {
+        ...build?.perks,
+        selected: remainingPerks,
+        ranks: newRanks,
+      },
+    })
+  }
+
+  const getSkillPerks = (skillId: string) => {
+    return build?.perks?.selected?.[skillId] ?? []
+  }
+
+  const getPerkRank = (perkId: string) => {
+    return build?.perks?.ranks?.[perkId] ?? 0
+  }
+
   // Clear all selections
   const clearBuild = () => {
     updateBuild({
@@ -330,6 +411,14 @@ export function useCharacterBuild() {
     removeMajorSkill,
     addMinorSkill,
     removeMinorSkill,
+
+    // Perk management
+    addPerk,
+    removePerk,
+    setPerkRank,
+    clearSkillPerks,
+    getSkillPerks,
+    getPerkRank,
 
     // Trait management
     addTrait,

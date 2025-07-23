@@ -1,4 +1,3 @@
-import React from 'react'
 import { UnifiedSkillCard } from './UnifiedSkillCard'
 import type { SkillWithPerks } from '../hooks/useUnifiedSkills'
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Button } from '@/shared/ui/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import {
@@ -12,8 +12,10 @@ import {
 import { AutocompleteSearch } from '@/shared/components/playerCreation/AutocompleteSearch'
 import { RotateCcw, X } from 'lucide-react'
 import { PerkTreeCanvasII } from '@/features/perks/components/PerkTreeCanvasII'
-import { usePerkPlan } from '@/features/perks/hooks/usePerks'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Z_INDEX } from '@/lib/constants'
+import { DrawerPortal, DrawerOverlay } from '@/shared/ui/ui/drawer'
+import * as DrawerPrimitive from 'vaul'
 import type { PerkTree } from '@/features/perks/types'
 import type { SkillWithPerks } from '../hooks/useUnifiedSkills'
 import type { SearchCategory, SearchOption } from '@/shared/components/playerCreation/types'
@@ -39,17 +41,50 @@ export function PerkTreeView({
   open,
   onOpenChange,
 }: PerkTreeViewProps) {
-  // Use perk plan for the selected tree
-  const { perkPlan, togglePerk, updatePerkRank, clearSkill } = usePerkPlan(perkTree)
+  // Use global build state for perks
+  const { 
+    addPerk, 
+    removePerk, 
+    setPerkRank, 
+    clearSkillPerks, 
+    getSkillPerks, 
+    getPerkRank 
+  } = useCharacterBuild()
 
-  // Get selected perks for the current tree
-  const selectedPerks = perkTree
-    ? perkPlan.selectedPerks[perkTree.treeName] || []
-    : []
+  // Get selected perks for the current skill from global state
+  const selectedPerks = selectedSkill ? getSkillPerks(selectedSkill) : []
+
+  // Convert selected perk IDs to PerkNode objects for the canvas
+  const selectedPerkNodes = useMemo(() => {
+    if (!perkTree) return []
+    
+    return perkTree.perks.filter(perk => 
+      selectedPerks.includes(perk.edid)
+    ).map(perk => ({
+      ...perk,
+      selected: true,
+      currentRank: getPerkRank(perk.edid),
+    }))
+  }, [perkTree, selectedPerks, getPerkRank])
+
+  const handleTogglePerk = useCallback((perkId: string) => {
+    if (!selectedSkill || !perkTree) return
+
+    const isSelected = selectedPerks.includes(perkId)
+    if (isSelected) {
+      removePerk(selectedSkill, perkId)
+    } else {
+      addPerk(selectedSkill, perkId)
+    }
+  }, [selectedSkill, perkTree, selectedPerks, removePerk, addPerk])
+
+  const handleRankChange = useCallback((perkId: string, newRank: number) => {
+    setPerkRank(perkId, newRank)
+  }, [setPerkRank])
 
   const handleReset = () => {
-    if (perkTree) {
-      clearSkill()
+    if (selectedSkill) {
+      clearSkillPerks(selectedSkill)
     }
     onReset()
   }
@@ -69,7 +104,7 @@ export function PerkTreeView({
         label: skill.name,
         value: skill.edid,
         category: 'Skills',
-        description: `${skill.perksCount} perks available`,
+        description: `${skill.selectedPerks}/${skill.totalPerks} perks selected`,
       })),
     },
   ]
@@ -83,14 +118,22 @@ export function PerkTreeView({
   }
 
   return (
-    <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent 
-        className="h-[85vh] bg-card border-t shadow-lg !bg-card" 
-        style={{ 
-          backgroundColor: 'hsl(var(--card))',
-          zIndex: Z_INDEX.DRAWER
-        }}
-      >
+    <Drawer 
+      open={open} 
+      onOpenChange={onOpenChange}
+      shouldScaleBackground={false}
+      dismissible={true}
+    >
+      <DrawerPortal>
+        <DrawerOverlay />
+        <DrawerPrimitive.Content
+          className="fixed inset-x-0 bottom-0 z-50 mt-24 flex flex-col rounded-t-[10px] border bg-background h-[85vh] bg-card border-t shadow-lg !bg-card"
+          data-vaul-no-drag
+          style={{ 
+            backgroundColor: 'hsl(var(--card))',
+            zIndex: Z_INDEX.DRAWER
+          }}
+        >
         <DrawerHeader className="border-b">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -130,14 +173,20 @@ export function PerkTreeView({
           </div>
         </DrawerHeader>
         
-        <div className="flex-1 overflow-hidden">
-          <div className="h-full w-full">
-            <PerkTreeCanvasII
-              tree={perkTree}
-              onTogglePerk={togglePerk}
-              onRankChange={updatePerkRank}
-              selectedPerks={selectedPerks}
-            />
+        <div className="flex-1 overflow-hidden" style={{ height: '400px' }}>
+          <div className="h-full w-full bg-muted/20 rounded">
+            {perkTree ? (
+              <PerkTreeCanvasII
+                tree={perkTree}
+                onTogglePerk={handleTogglePerk}
+                onRankChange={handleRankChange}
+                selectedPerks={selectedPerkNodes}
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full">
+                <p className="text-muted-foreground">Loading perk tree...</p>
+              </div>
+            )}
           </div>
         </div>
         
@@ -151,7 +200,8 @@ export function PerkTreeView({
             </Button>
           </div>
         </DrawerFooter>
-      </DrawerContent>
+        </DrawerPrimitive.Content>
+      </DrawerPortal>
     </Drawer>
   )
 } 

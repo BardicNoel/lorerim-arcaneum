@@ -53,9 +53,9 @@ export function UnifiedSkillCard({
       
       <CardContent className="pt-0 space-y-3">
         {/* Perks Count */}
-        {skill.perksCount > 0 && (
+        {skill.totalPerks > 0 && (
           <div className="text-sm text-muted-foreground">
-            ⭐ {skill.perksCount} Perks
+            ⭐ {skill.selectedPerks}/{skill.totalPerks} Perks
           </div>
         )}
         

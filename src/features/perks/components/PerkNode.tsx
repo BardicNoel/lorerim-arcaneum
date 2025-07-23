@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Handle, Position } from 'reactflow'
 import {
   HoverCard,
@@ -19,12 +19,13 @@ interface PerkNodeProps {
   onRankChange?: (perkId: string, newRank: number) => void
 }
 
-export function PerkNode({
+const PerkNodeComponent: React.FC<PerkNodeProps> = ({
   data,
   selected,
   onTogglePerk,
   onRankChange,
-}: PerkNodeProps) {
+}) => {
+  
   // For multi-rank perks, consider them selected if rank > 0
   // For single-rank perks, use the boolean selected state
   const totalRanks = data.totalRanks
@@ -49,13 +50,18 @@ export function PerkNode({
     e.preventDefault()
     e.stopPropagation()
 
-    // If the perk isn't selected yet, use togglePerk to select it with rank 1
+    // If the perk isn't selected yet, select it with rank 1
     if (!isSelected) {
       const perkName = data.name
+      const perkId = data.edid
       console.log(`Selecting multi-rank perk: ${perkName} with rank 1`)
+      
+      // Add the perk and set initial rank to 1
       if (onTogglePerk) {
-        const perkId = data.edid
         onTogglePerk(perkId)
+      }
+      if (onRankChange) {
+        onRankChange(perkId, 1)
       }
       return
     }
@@ -162,3 +168,4 @@ export function PerkNode({
     </HoverCard>
   )
 }
+export const PerkNode = memo(PerkNodeComponent)
