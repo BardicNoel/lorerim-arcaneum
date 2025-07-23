@@ -11,7 +11,7 @@ import {
 } from '@/shared/ui/ui/drawer'
 import { AutocompleteSearch } from '@/shared/components/playerCreation/AutocompleteSearch'
 import { RotateCcw, X } from 'lucide-react'
-import { PerkTreeCanvasII } from '@/features/perks/components/PerkTreeCanvasII'
+import { PerkTreeCanvasII } from '@/features/perks/components/PerkTreeCanvas/PerkTreeCanvasII'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Z_INDEX } from '@/lib/constants'
 import { DrawerPortal, DrawerOverlay } from '@/shared/ui/ui/drawer'

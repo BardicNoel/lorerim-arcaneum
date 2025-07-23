@@ -13,7 +13,7 @@ import type {
   SearchOption,
 } from '@/shared/components/playerCreation/types'
 import { usePerks, usePerkPlan } from '../hooks/usePerks'
-import { PerkTreeCanvasII } from '../components/PerkTreeCanvasII'
+import { PerkTreeCanvasII } from '../components/PerkTreeCanvas/PerkTreeCanvasII'
 
 export function UnifiedPerksPage() {
   const { perkTrees, loading, error } = usePerks()

@@ -15,9 +15,9 @@ import type {
   ReactFlowInstance,
 } from 'reactflow'
 import 'reactflow/dist/style.css'
-import { PerkNode } from './PerkNode'
-import type { PerkTree, PerkNode as PerkNodeType, PerkNodeData } from '../types'
-import { validatePerkTreeSafe } from '../utils'
+import { PerkNode } from '../PerkNode'
+import type { PerkTree, PerkNode as PerkNodeType, PerkNodeData } from '../../types'
+import { validatePerkTreeSafe } from '../../utils'
 
 interface PerkTreeCanvasProps {
   tree: PerkTree | undefined

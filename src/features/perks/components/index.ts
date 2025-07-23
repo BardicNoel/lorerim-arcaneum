@@ -1,3 +1,3 @@
-export { PerkTreeCanvas } from './PerkTreeCanvas'
-export { PerkTreeCanvasII } from './PerkTreeCanvasII'
+export { PerkTreeCanvas } from './PerkTreeCanvas/PerkTreeCanvas'
+export { PerkTreeCanvasII } from './PerkTreeCanvas/PerkTreeCanvasII'
 export { PerkNode } from './PerkNode'
