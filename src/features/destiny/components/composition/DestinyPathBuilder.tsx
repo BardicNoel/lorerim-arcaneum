@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Button } from '@/shared/ui/ui/button'
 import { Badge } from '@/shared/ui/ui/badge'
 import { ScrollArea } from '@/shared/ui/ui/scroll-area'
-import { DestinyBreadcrumbTrail } from '../atomic/DestinyBreadcrumbTrail'
+import { DestinyBreadcrumbTrail, DestinySelectedPathList } from '../atomic'
 import { DestinyPossiblePathsList } from './DestinyPossiblePathsList'
 import { useDestinyPath } from '../../adapters/useDestinyPath'
 import { useDestinyPossiblePaths } from '../../adapters/useDestinyPossiblePaths'
@@ -15,12 +15,14 @@ interface DestinyPathBuilderProps {
   onPathChange?: (path: DestinyNode[]) => void
   onPathComplete?: (path: DestinyNode[]) => void
   className?: string
+  compact?: boolean
 }
 
 export function DestinyPathBuilder({
   onPathChange,
   onPathComplete,
   className = '',
+  compact = false,
 }: DestinyPathBuilderProps) {
   const {
     currentPath,
@@ -90,6 +92,64 @@ export function DestinyPathBuilder({
 
   const pathSummary = getPathSummary()
 
+  // Compact mode for build page
+  if (compact) {
+    return (
+      <div className={`space-y-4 ${className}`}>
+        {/* Selected Path List */}
+        <DestinySelectedPathList path={currentPath} />
+        
+        {/* Clear Path Button */}
+        {currentPath.length > 0 && (
+          <div className="flex justify-end">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleClearPath}
+              className="text-xs"
+            >
+              <RotateCcw className="w-3 h-3 mr-1" />
+              Clear Path
+            </Button>
+          </div>
+        )}
+
+        {/* Possible Remaining Paths */}
+        {possiblePaths.length > 0 && (
+          <div className="space-y-2">
+            <h4 className="text-sm font-medium text-muted-foreground">Possible Remaining Paths</h4>
+            <ScrollArea className="h-[200px]">
+              <div className="p-4">
+                <DestinyPossiblePathsList
+                  possiblePaths={possiblePaths}
+                  selectedPathLength={currentPath.length}
+                  onPathClick={handlePathClick}
+                  variant="compact"
+                />
+              </div>
+            </ScrollArea>
+          </div>
+        )}
+
+        {/* Path Validation Errors - Compact */}
+        {!isValidPath && pathErrors.length > 0 && (
+          <div className="p-2 bg-destructive/10 border border-destructive/20 rounded text-xs text-destructive">
+            <div className="flex items-center gap-1 mb-1">
+              <AlertCircle className="w-3 h-3" />
+              <span className="font-medium">Path Errors:</span>
+            </div>
+            <ul className="space-y-0.5">
+              {pathErrors.map((error, index) => (
+                <li key={index}>• {error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  // Full mode for dedicated destiny page
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Path Header */}
