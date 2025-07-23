@@ -9,87 +9,35 @@ import type {
 import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
 import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
-import { useEffect, useState } from 'react'
 import { DestinyAccordionList } from '../components/DestinyAccordionList'
 import { DestinyCard } from '../components/DestinyCard'
 import { DestinyDetailPanel } from '../components/DestinyDetailPanel'
-import { DestinyPathBuilder } from '../components/DestinyPathBuilder'
+import { DestinyPathBuilder } from '../components/composition/DestinyPathBuilder'
 import type { DestinyNode, PlannedNode } from '../types'
-import { useDestinyPossiblePaths } from '../hooks/useDestinyPossiblePaths'
-import { useDestinyPathSetter } from '../hooks/useDestinyPathSetter'
+import { useDestinyNodes } from '../adapters/useDestinyNodes'
+import { useDestinyPath } from '../adapters/useDestinyPath'
+import { useDestinyPossiblePaths } from '../adapters/useDestinyPossiblePaths'
 
 export function UnifiedDestinyPage() {
-  // Load destiny data from public/data/subclasses.json at runtime
-  const [destinyNodes, setDestinyNodes] = useState<DestinyNode[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [plannedNodes, setPlannedNodes] = useState<PlannedNode[]>([])
+  // Use MVA adapters for data and state management
+  const { nodes, isLoading, error } = useDestinyNodes()
+  const {
+    currentPath,
+    isValidPath,
+    pathErrors,
+    setPath,
+    clearPath,
+  } = useDestinyPath({
+    validatePath: true,
+  })
 
-  useEffect(() => {
-    async function fetchDestinyData() {
-      try {
-        setLoading(true)
-        const res = await fetch(
-          `${import.meta.env.BASE_URL}data/subclasses.json`
-        )
-        if (!res.ok) throw new Error('Failed to fetch destiny data')
-        const data = await res.json()
+  // Get possible paths from current position
+  const { possiblePaths } = useDestinyPossiblePaths({
+    fromNode: currentPath.length > 0 ? currentPath[currentPath.length - 1] : undefined,
+  })
 
-        // Transform the data to match our DestinyNode interface
-        const transformedNodes: DestinyNode[] = data.map(
-          (node: any, index: number) => ({
-            id: node.globalFormId || `destiny-${index}`,
-            name: node.name,
-            description: node.description,
-            tags: [], // We'll need to add tags based on the content
-            prerequisites: node.prerequisites || [],
-            nextBranches: [], // We'll need to derive this from prerequisites
-            levelRequirement: undefined, // Not in current data
-            lore: undefined, // Not in current data
-            globalFormId: node.globalFormId,
-          })
-        )
-
-        // Note: nextBranches are now calculated dynamically in the tree view
-        // based on the graph structure, so we don't need to pre-calculate them
-
-        // Add some basic tags based on content
-        transformedNodes.forEach(node => {
-          const tags = []
-          if (node.description.toLowerCase().includes('magicka'))
-            tags.push('Magic')
-          if (node.description.toLowerCase().includes('health'))
-            tags.push('Defensive')
-          if (node.description.toLowerCase().includes('stamina'))
-            tags.push('Utility')
-          if (node.description.toLowerCase().includes('damage'))
-            tags.push('Offensive')
-          if (node.description.toLowerCase().includes('armor'))
-            tags.push('Defensive')
-          if (node.description.toLowerCase().includes('spell'))
-            tags.push('Magic')
-          if (node.description.toLowerCase().includes('weapon'))
-            tags.push('Combat')
-          node.tags = tags
-        })
-
-        setDestinyNodes(transformedNodes)
-      } catch (err) {
-        setError('Failed to load destiny data')
-        console.error('Error loading destiny data:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchDestinyData()
-  }, [])
-
-  // Use standardized hooks for destiny path logic
-  const possiblePaths = useDestinyPossiblePaths(destinyNodes)
-  const setDestinyPathToNode = useDestinyPathSetter()
-
-  // Convert destiny nodes to PlayerCreationItem format
-  const playerCreationItems: PlayerCreationItem[] = destinyNodes.map(node => ({
+  // Convert destiny nodes to PlayerCreationItem format for reference view
+  const playerCreationItems: PlayerCreationItem[] = nodes.map(node => ({
     id: node.id,
     name: node.name,
     description: node.description,
@@ -103,9 +51,9 @@ export function UnifiedDestinyPage() {
 
   // Generate search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
-    const tags = [...new Set(destinyNodes.flatMap(node => node.tags))]
+    const tags = [...new Set(nodes.flatMap(node => node.tags))]
     const prerequisites = [
-      ...new Set(destinyNodes.flatMap(node => node.prerequisites)),
+      ...new Set(nodes.flatMap(node => node.prerequisites)),
     ]
 
     return [
@@ -162,40 +110,28 @@ export function UnifiedDestinyPage() {
     onSearch: handleSearch,
   })
 
-  // Handle planning nodes
-  const handlePlanNode = (nodeId: string) => {
-    const node = destinyNodes.find(n => n.id === nodeId)
-    if (!node) return
-
-    setPlannedNodes(prev => {
-      const isPlanned = prev.some(p => p.id === nodeId)
-      if (isPlanned) {
-        return prev.filter(p => p.id !== nodeId)
-      } else {
-        return [
-          ...prev,
-          {
-            id: nodeId,
-            name: node.name,
-            description: node.description,
-            levelRequirement: node.levelRequirement,
-          },
-        ]
-      }
-    })
+  // Handle path changes
+  const handlePathChange = (path: DestinyNode[]) => {
+    setPath(path)
   }
 
-  // Handle unplanning nodes
-  const handleUnplanNode = (nodeId: string) => {
-    setPlannedNodes(prev => prev.filter(p => p.id !== nodeId))
+  // Handle path completion
+  const handlePathComplete = (path: DestinyNode[]) => {
+    setPath(path)
+  }
+
+  // Handle planning nodes (for advanced features)
+  const handlePlanNode = (nodeId: string) => {
+    // This could be expanded for advanced planning features
+    console.log('Planning node:', nodeId)
   }
 
   const renderDestinyCard = (item: PlayerCreationItem, isSelected: boolean) => (
     <DestinyCard
       item={item}
       isSelected={isSelected}
-      originalNode={destinyNodes.find(node => node.id === item.id)}
-      allNodes={destinyNodes}
+      originalNode={nodes.find(node => node.id === item.id)}
+      allNodes={nodes}
       viewMode={viewMode}
     />
   )
@@ -203,14 +139,14 @@ export function UnifiedDestinyPage() {
   const renderDestinyDetailPanel = (item: PlayerCreationItem) => (
     <DestinyDetailPanel
       item={item}
-      originalNode={destinyNodes.find(node => node.id === item.id)}
+      originalNode={nodes.find(node => node.id === item.id)}
       onPlanNode={handlePlanNode}
-      isPlanned={plannedNodes.some(p => p.id === item.id)}
-      allNodes={destinyNodes}
+      isPlanned={false} // Could be expanded for planning features
+      allNodes={nodes}
     />
   )
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -259,17 +195,15 @@ export function UnifiedDestinyPage() {
             <div className="w-full">
               <DestinyAccordionList
                 items={filteredItems}
-                allNodes={destinyNodes}
+                allNodes={nodes}
               />
             </div>
           </TabsContent>
 
           <TabsContent value="path" className="space-y-4">
             <DestinyPathBuilder
-              nodes={destinyNodes}
-              plannedNodes={plannedNodes}
-              onNodePlan={handlePlanNode}
-              onNodeUnplan={handleUnplanNode}
+              onPathChange={handlePathChange}
+              onPathComplete={handlePathComplete}
             />
           </TabsContent>
         </Tabs>
