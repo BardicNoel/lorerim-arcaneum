@@ -1,11 +1,9 @@
 // Components
-export * from './components'
-export { DestinyCard } from './components/DestinyCard'
-export { DestinyDetailPanel } from './components/DestinyDetailPanel'
-export { DestinyTreeView } from './components/DestinyTreeView'
+export * from './components/composition'
+export * from './components/atomic'
 
-// Hooks
-export * from './hooks'
+// Views
+export * from './views'
 
 // Pages
 export { UnifiedDestinyPage } from './pages/UnifiedDestinyPage'

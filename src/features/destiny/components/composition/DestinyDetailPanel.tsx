@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
-import type { DestinyNode } from '../types'
+import type { DestinyNode } from '../../types'
 
 interface DestinyDetailPanelProps {
   item: PlayerCreationItem
