@@ -1,5 +1,2 @@
-export { SkillsPageView } from './SkillsPageView'
-export { SkillCardMVA } from './SkillCardMVA'
-export { SkillPerkTreeDrawer } from './SkillPerkTreeDrawer'
-export { PerkTreeViewMVA } from './PerkTreeViewMVA'
-export { default as UnifiedSkillsView } from './UnifiedSkillsView'
+export { SkillsPageView } from "./SkillsPageView";
+export { SkillPerkTreeDrawer } from "./SkillPerkTreeDrawer";
