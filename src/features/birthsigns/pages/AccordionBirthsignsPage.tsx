@@ -1,4 +1,5 @@
 import { BuildPageShell } from '@/shared/components/playerCreation'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import type {
   SearchOption,
   SelectedTag,
@@ -28,18 +29,13 @@ import {
   Settings,
   X,
 } from 'lucide-react'
-import {
-  BirthsignAccordion,
-  BirthsignCard,
-  BirthsignDetailPanel,
-} from '../components'
-import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
+import { useState } from 'react'
+import { BirthsignAccordion } from '../components'
 import {
   useBirthsignData,
   useBirthsignFilters,
   useDisplayControls,
 } from '../hooks'
-import { useState } from 'react'
 
 type SortOption = 'alphabetical' | 'group' | 'power-count'
 type ViewMode = 'list' | 'grid'
@@ -429,13 +425,9 @@ export function AccordionBirthsignsPage() {
       {viewMode === 'grid' ? (
         <AccordionGrid columns={3} gap="md" className="w-full mt-6">
           {sortedDisplayItems.map(item => {
-            const originalBirthsign = birthsigns.find(birthsign => {
-              const birthsignName = item.id
-              return (
-                birthsign.name.toLowerCase().replace(/\s+/g, '-') ===
-                birthsignName
-              )
-            })
+            const originalBirthsign = birthsigns.find(
+              birthsign => birthsign.edid === item.id
+            )
             if (!originalBirthsign) return null
             const isExpanded = expandedBirthsigns.has(item.id)
             return (
@@ -452,13 +444,9 @@ export function AccordionBirthsignsPage() {
       ) : (
         <div className="flex flex-col gap-4 w-full mt-6">
           {sortedDisplayItems.map(item => {
-            const originalBirthsign = birthsigns.find(birthsign => {
-              const birthsignName = item.id
-              return (
-                birthsign.name.toLowerCase().replace(/\s+/g, '-') ===
-                birthsignName
-              )
-            })
+            const originalBirthsign = birthsigns.find(
+              birthsign => birthsign.edid === item.id
+            )
             if (!originalBirthsign) return null
             const isExpanded = expandedBirthsigns.has(item.id)
 
