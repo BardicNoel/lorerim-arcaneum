@@ -137,4 +137,6 @@ describe('SkillItem', () => {
 
     expect(screen.queryByText('0/0')).not.toBeInTheDocument()
   })
+
+
 }) 

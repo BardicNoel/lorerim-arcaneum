@@ -1,4 +1,5 @@
 import { useCharacterStore } from '@/shared/stores/characterStore'
+import { calculateAllSkillLevels } from '@/features/skills/utils/skillLevels'
 
 export function useCharacterBuild() {
   // Specific selectors for better reactivity
@@ -217,9 +218,16 @@ export function useCharacterBuild() {
           [skillId]: [...skillPerks, perkId],
         },
       }
+      
+      // Calculate new skill levels based on updated perks
+      const newSkillLevels = calculateAllSkillLevels(newPerks)
+      
       console.log('addPerk - updating build with new perks:', newPerks)
+      console.log('addPerk - calculated skill levels:', newSkillLevels)
+      
       updateBuild({
         perks: newPerks,
+        skillLevels: newSkillLevels,
       })
     } else {
       console.log('addPerk - perk already selected, skipping')
@@ -232,14 +240,20 @@ export function useCharacterBuild() {
     
     const newSkillPerks = skillPerks.filter(id => id !== perkId)
     
-    updateBuild({
-      perks: {
-        ...build?.perks,
-        selected: {
-          ...currentPerks,
-          [skillId]: newSkillPerks,
-        },
+    const newPerks = {
+      ...build?.perks,
+      selected: {
+        ...currentPerks,
+        [skillId]: newSkillPerks,
       },
+    }
+    
+    // Calculate new skill levels based on updated perks
+    const newSkillLevels = calculateAllSkillLevels(newPerks)
+    
+    updateBuild({
+      perks: newPerks,
+      skillLevels: newSkillLevels,
     })
   }
 
@@ -247,16 +261,23 @@ export function useCharacterBuild() {
     console.log('setPerkRank called:', { perkId, rank })
     const currentRanks = build?.perks?.ranks ?? {}
     
-    const newRanks = {
+    const newPerks = {
       ...build?.perks,
       ranks: {
         ...currentRanks,
         [perkId]: rank,
       },
     }
-    console.log('setPerkRank - updating build with new ranks:', newRanks)
+    
+    // Calculate new skill levels based on updated perks
+    const newSkillLevels = calculateAllSkillLevels(newPerks)
+    
+    console.log('setPerkRank - updating build with new ranks:', newPerks)
+    console.log('setPerkRank - calculated skill levels:', newSkillLevels)
+    
     updateBuild({
-      perks: newRanks,
+      perks: newPerks,
+      skillLevels: newSkillLevels,
     })
   }
 
@@ -275,12 +296,18 @@ export function useCharacterBuild() {
       })
     }
     
+    const newPerks = {
+      ...build?.perks,
+      selected: remainingPerks,
+      ranks: newRanks,
+    }
+    
+    // Calculate new skill levels based on updated perks
+    const newSkillLevels = calculateAllSkillLevels(newPerks)
+    
     updateBuild({
-      perks: {
-        ...build?.perks,
-        selected: remainingPerks,
-        ranks: newRanks,
-      },
+      perks: newPerks,
+      skillLevels: newSkillLevels,
     })
   }
 
@@ -290,6 +317,10 @@ export function useCharacterBuild() {
 
   const getPerkRank = (perkId: string) => {
     return build?.perks?.ranks?.[perkId] ?? 0
+  }
+
+  const getSkillLevel = (skillId: string) => {
+    return build?.skillLevels?.[skillId] ?? 0
   }
 
   // Clear all selections
@@ -308,6 +339,11 @@ export function useCharacterBuild() {
         regular: [],
         bonus: [],
       },
+      perks: {
+        selected: {},
+        ranks: {},
+      },
+      skillLevels: {},
       destinyPath: [],
     })
   }
@@ -433,6 +469,7 @@ export function useCharacterBuild() {
     clearSkillPerks,
     getSkillPerks,
     getPerkRank,
+    getSkillLevel,
 
     // Trait management
     addTrait,

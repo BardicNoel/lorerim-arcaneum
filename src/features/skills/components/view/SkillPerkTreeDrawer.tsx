@@ -143,8 +143,13 @@ export function SkillPerkTreeDrawer({
                   <DrawerTitle className="text-xl">
                     {skillName || perkTree.treeName}
                   </DrawerTitle>
-                  <DrawerDescription>
-                    {selectedPerks.length} perks selected
+                  <DrawerDescription className="flex items-center gap-2">
+                    <span>{selectedPerks.length} perks selected</span>
+                    {skills.find(s => s.edid === selectedSkill)?.level && (
+                      <span className="text-blue-600 font-medium">
+                        • Min: Level {skills.find(s => s.edid === selectedSkill)?.level}
+                      </span>
+                    )}
                   </DrawerDescription>
                 </div>
               </div>

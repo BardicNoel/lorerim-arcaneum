@@ -10,6 +10,7 @@ interface Skill {
   category: string
   assignmentType: 'major' | 'minor' | 'none'
   perkCount: string
+  level?: number
   canAssignMajor: boolean
   canAssignMinor: boolean
 }
@@ -43,6 +44,7 @@ export function SkillGrid({
           category={skill.category}
           assignmentType={skill.assignmentType}
           perkCount={skill.perkCount}
+          level={skill.level}
           canAssignMajor={skill.canAssignMajor}
           canAssignMinor={skill.canAssignMinor}
           onSelect={() => onSkillSelect(skill.id)}
