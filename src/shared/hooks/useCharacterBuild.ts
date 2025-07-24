@@ -16,6 +16,7 @@ export function useCharacterBuild() {
 
   // Skill management functions
   const addMajorSkill = (skillId: string) => {
+    console.log('addMajorSkill called:', { skillId })
     const currentMajorSkills = majorSkills ?? []
     const currentMinorSkills = minorSkills ?? []
 
@@ -23,12 +24,16 @@ export function useCharacterBuild() {
       // Remove from minor skills first (mutual exclusion)
       const newMinorSkills = currentMinorSkills.filter(id => id !== skillId)
 
+      const newSkills = {
+        major: [...currentMajorSkills, skillId],
+        minor: newMinorSkills,
+      }
+      console.log('addMajorSkill - updating build with new skills:', newSkills)
       updateBuild({
-        skills: {
-          major: [...currentMajorSkills, skillId],
-          minor: newMinorSkills,
-        },
+        skills: newSkills,
       })
+    } else {
+      console.log('addMajorSkill - skill already major or limit reached, skipping')
     }
   }
 
@@ -200,19 +205,24 @@ export function useCharacterBuild() {
 
   // Perk management functions
   const addPerk = (skillId: string, perkId: string) => {
+    console.log('addPerk called:', { skillId, perkId })
     const currentPerks = build?.perks?.selected ?? {}
     const skillPerks = currentPerks[skillId] ?? []
     
     if (!skillPerks.includes(perkId)) {
-      updateBuild({
-        perks: {
-          ...build?.perks,
-          selected: {
-            ...currentPerks,
-            [skillId]: [...skillPerks, perkId],
-          },
+      const newPerks = {
+        ...build?.perks,
+        selected: {
+          ...currentPerks,
+          [skillId]: [...skillPerks, perkId],
         },
+      }
+      console.log('addPerk - updating build with new perks:', newPerks)
+      updateBuild({
+        perks: newPerks,
       })
+    } else {
+      console.log('addPerk - perk already selected, skipping')
     }
   }
 
@@ -234,16 +244,19 @@ export function useCharacterBuild() {
   }
 
   const setPerkRank = (perkId: string, rank: number) => {
+    console.log('setPerkRank called:', { perkId, rank })
     const currentRanks = build?.perks?.ranks ?? {}
     
-    updateBuild({
-      perks: {
-        ...build?.perks,
-        ranks: {
-          ...currentRanks,
-          [perkId]: rank,
-        },
+    const newRanks = {
+      ...build?.perks,
+      ranks: {
+        ...currentRanks,
+        [perkId]: rank,
       },
+    }
+    console.log('setPerkRank - updating build with new ranks:', newRanks)
+    updateBuild({
+      perks: newRanks,
     })
   }
 
