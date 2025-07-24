@@ -2,7 +2,7 @@ import { BuildPageShell } from '@/shared/components/playerCreation'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { PerkTreeView } from '../PerkTreeView'
+import { PerkTreeView } from './PerkTreeView'
 import { SkillGrid } from '../composition/SkillGrid'
 import { useUnifiedSkills } from '../../hooks/useUnifiedSkills'
 
@@ -163,4 +163,4 @@ function UnifiedSkillsView() {
   )
 }
 
-export default UnifiedSkillsView; 
+export { UnifiedSkillsView }; 

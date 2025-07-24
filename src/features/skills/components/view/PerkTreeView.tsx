@@ -1,5 +1,5 @@
-import { PerkTreeCanvasII } from '@/features/skills/components/view/PerkTreeCanvasII'
-import type { PerkTree } from '@/features/skills/types'
+import { PerkTreeCanvasII } from './PerkTreeCanvasII'
+import type { PerkTree } from '../../types'
 import { Z_INDEX } from '@/lib/constants'
 import { AutocompleteSearch } from '@/shared/components/playerCreation/AutocompleteSearch'
 import type {
@@ -20,7 +20,7 @@ import {
 import { RotateCcw, X } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
 import * as DrawerPrimitive from 'vaul'
-import type { SkillWithPerks } from '../hooks/useUnifiedSkills'
+import type { SkillWithPerks } from '../../hooks/useUnifiedSkills'
 
 export interface PerkTreeViewProps {
   selectedSkill: string | null
@@ -101,112 +101,98 @@ export function PerkTreeView({
     onOpenChange(false)
   }
 
-  // Create search categories for skills
-  const searchCategories: SearchCategory[] = [
-    {
-      id: 'skills',
-      name: 'Skills',
-      placeholder: 'Search skills...',
-      options: skills.map(skill => ({
-        id: skill.edid,
-        label: skill.name,
-        value: skill.edid,
-        category: 'Skills',
-        description: `${skill.selectedPerks}/${skill.totalPerks} perks selected`,
-      })),
-    },
-  ]
+  // Convert skills to search options for the autocomplete
+  const skillSearchOptions: SearchOption[] = useMemo(() => {
+    return skills.map(skill => ({
+      id: skill.edid,
+      label: skill.name,
+      description: skill.description,
+      category: skill.category as SearchCategory,
+      metadata: {
+        originalSkill: skill,
+      },
+    }))
+  }, [skills])
 
   const handleSkillSelect = (option: SearchOption) => {
-    onSkillSelect(option.value)
-  }
-
-  if (!selectedSkill || !perkTree) {
-    return null
+    onSkillSelect(option.id)
   }
 
   return (
-    <Drawer
-      open={open}
-      onOpenChange={onOpenChange}
-      shouldScaleBackground={false}
-      dismissible={true}
-    >
+    <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerPortal>
-        <DrawerOverlay />
+        <DrawerOverlay className="fixed inset-0 bg-black/40" />
         <DrawerPrimitive.Content
-          className="fixed inset-x-0 bottom-0 z-50 mt-24 flex flex-col rounded-t-[10px] border bg-background h-[85vh] bg-card border-t shadow-lg !bg-card"
-          data-vaul-no-drag
-          style={{
-            backgroundColor: 'hsl(var(--card))',
-            zIndex: Z_INDEX.DRAWER,
-          }}
+          className="bg-background flex flex-col fixed bottom-0 left-0 right-0 h-[96%] rounded-t-[10px] border-t"
+          style={{ zIndex: Z_INDEX.DRAWER }}
         >
-          <DrawerHeader className="border-b">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-64">
-                  <AutocompleteSearch
-                    categories={searchCategories}
-                    onSelect={handleSkillSelect}
-                    placeholder="Search skills..."
-                  />
-                </div>
-                <div>
-                  <DrawerTitle className="text-xl">
-                    {skillName || perkTree.treeName}
+          <div className="flex-1 overflow-hidden">
+            {/* Header */}
+            <DrawerHeader className="border-b">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <DrawerTitle className="text-lg font-semibold">
+                    {skillName ? `${skillName} Perk Tree` : 'Perk Tree'}
                   </DrawerTitle>
                   <DrawerDescription>
-                    {selectedPerks.length} perks selected
+                    Select perks to add to your character build
                   </DrawerDescription>
                 </div>
-              </div>
-              <div className="flex items-center gap-2">
                 <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleReset}
-                  className="flex items-center gap-2"
-                >
-                  <RotateCcw className="h-4 w-4" />
-                  Reset Perks
-                </Button>
-                <Button
-                  variant="outline"
+                  variant="ghost"
                   size="sm"
                   onClick={handleClose}
-                  className="flex items-center gap-2"
+                  className="h-8 w-8 p-0"
                 >
                   <X className="h-4 w-4" />
                 </Button>
               </div>
-            </div>
-          </DrawerHeader>
 
-          <div className="flex-1 overflow-hidden" style={{ height: '400px' }}>
-            <div className="h-full w-full bg-muted/20 rounded">
+              {/* Skill Selection */}
+              <div className="mt-4">
+                <AutocompleteSearch
+                  options={skillSearchOptions}
+                  onSelect={handleSkillSelect}
+                  placeholder="Search skills..."
+                  selectedOption={
+                    skillSearchOptions.find(opt => opt.id === selectedSkill) ||
+                    null
+                  }
+                />
+              </div>
+            </DrawerHeader>
+
+            {/* Content */}
+            <div className="flex-1 overflow-hidden">
               {perkTree ? (
                 <PerkTreeCanvasII
-                  tree={perkTree}
+                  perkTree={perkTree}
+                  selectedPerkNodes={selectedPerkNodes}
                   onTogglePerk={handleTogglePerk}
                   onRankChange={handleRankChange}
-                  selectedPerks={selectedPerkNodes}
                 />
               ) : (
-                <div className="flex items-center justify-center h-full">
-                  <p className="text-muted-foreground">Loading perk tree...</p>
+                <div className="flex items-center justify-center h-full text-muted-foreground">
+                  Select a skill to view its perk tree
                 </div>
               )}
             </div>
           </div>
 
+          {/* Footer */}
           <DrawerFooter className="border-t">
-            <div className="flex justify-between items-center">
-              <p className="text-sm text-muted-foreground">
-                Click on perk nodes to select/deselect them
-              </p>
-              <Button variant="outline" onClick={handleClose}>
-                Close
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                onClick={handleReset}
+                className="flex-1"
+                disabled={!selectedSkill || selectedPerks.length === 0}
+              >
+                <RotateCcw className="h-4 w-4 mr-2" />
+                Reset Perks
+              </Button>
+              <Button onClick={handleClose} className="flex-1">
+                Done
               </Button>
             </div>
           </DrawerFooter>
@@ -214,4 +200,4 @@ export function PerkTreeView({
       </DrawerPortal>
     </Drawer>
   )
-}
+} 

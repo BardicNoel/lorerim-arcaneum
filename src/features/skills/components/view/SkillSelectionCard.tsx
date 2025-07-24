@@ -4,9 +4,9 @@ import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { useUnifiedSkills } from '../hooks/useUnifiedSkills'
-import type { Skill } from '../types'
-import { SkillAutocomplete } from './SkillAutocomplete'
+import { useUnifiedSkills } from '../../hooks/useUnifiedSkills'
+import type { Skill } from '../../types'
+import { SkillAutocomplete } from '../composition/SkillAutocomplete'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 
 interface SkillSelectionCardProps {
@@ -98,30 +98,20 @@ export function SkillSelectionCard({ className }: SkillSelectionCardProps) {
                   className="flex items-start gap-3 p-3 border rounded-lg bg-yellow-50/50 border-yellow-500 shadow-yellow-500/20"
                 >
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="font-medium text-sm">{skill.name}</div>
-                      <Badge
-                        variant="default"
-                        className="text-xs bg-yellow-500 text-yellow-900"
-                      >
-                        Major
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        {skill.category}
-                      </Badge>
-                    </div>
-                    <FormattedText
-                      text={skill.description}
-                      className="text-sm text-muted-foreground line-clamp-2"
-                    />
+                    <h5 className="font-medium text-sm text-foreground">
+                      {skill.name}
+                    </h5>
+                    <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
+                      {skill.description}
+                    </p>
                   </div>
                   <Button
-                    variant="ghost"
                     size="sm"
+                    variant="ghost"
                     onClick={() => handleMajorSkillRemove(skill.edid)}
-                    className="h-6 w-6 p-0 hover:bg-red-100 hover:text-red-600 flex-shrink-0"
+                    className="text-yellow-600 hover:text-yellow-700 hover:bg-yellow-100"
                   >
-                    <X className="h-3 w-3" />
+                    <X className="h-4 w-4" />
                   </Button>
                 </div>
               ))}
@@ -156,33 +146,23 @@ export function SkillSelectionCard({ className }: SkillSelectionCardProps) {
               {selectedMinorSkills.map((skill, index) => (
                 <div
                   key={skill.edid}
-                  className="flex items-start gap-3 p-3 border rounded-lg bg-gray-100/50 border-gray-400 shadow-gray-400/20"
+                  className="flex items-start gap-3 p-3 border rounded-lg bg-gray-50/50 border-gray-300 shadow-gray-300/20"
                 >
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="font-medium text-sm">{skill.name}</div>
-                      <Badge
-                        variant="secondary"
-                        className="text-xs bg-gray-400 text-gray-900"
-                      >
-                        Minor
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        {skill.category}
-                      </Badge>
-                    </div>
-                    <FormattedText
-                      text={skill.description}
-                      className="text-sm text-muted-foreground line-clamp-2"
-                    />
+                    <h5 className="font-medium text-sm text-foreground">
+                      {skill.name}
+                    </h5>
+                    <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
+                      {skill.description}
+                    </p>
                   </div>
                   <Button
-                    variant="ghost"
                     size="sm"
+                    variant="ghost"
                     onClick={() => handleMinorSkillRemove(skill.edid)}
-                    className="h-6 w-6 p-0 hover:bg-red-100 hover:text-red-600 flex-shrink-0"
+                    className="text-gray-600 hover:text-gray-700 hover:bg-gray-100"
                   >
-                    <X className="h-3 w-3" />
+                    <X className="h-4 w-4" />
                   </Button>
                 </div>
               ))}
@@ -192,4 +172,4 @@ export function SkillSelectionCard({ className }: SkillSelectionCardProps) {
       </div>
     </SelectionCardShell>
   )
-}
+} 

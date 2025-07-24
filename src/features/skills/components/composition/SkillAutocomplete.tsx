@@ -5,7 +5,7 @@ import {
   type AutocompleteOption,
 } from '@/shared/components/generic'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
-import type { Skill } from '../types'
+import type { Skill } from '../../types'
 
 interface SkillAutocompleteProps {
   skills: Skill[]
@@ -90,4 +90,4 @@ export function SkillAutocomplete({
       emptyMessage="No skills found"
     />
   )
-}
+} 

@@ -1,5 +1,5 @@
 import { UnifiedSkillCard } from './UnifiedSkillCard'
-import type { SkillWithPerks } from '../hooks/useUnifiedSkills'
+import type { SkillWithPerks } from '../../hooks/useUnifiedSkills'
 
 export interface SkillsGridProps {
   skills: SkillWithPerks[]
@@ -27,4 +27,4 @@ export function SkillsGrid({
       ))}
     </div>
   )
-}
+} 

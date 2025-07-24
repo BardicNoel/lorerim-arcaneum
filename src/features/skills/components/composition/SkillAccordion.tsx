@@ -21,7 +21,7 @@ import {
   Zap,
 } from 'lucide-react'
 import React from 'react'
-import type { Skill } from '../types'
+import type { Skill } from '../../types'
 
 // Enhanced icon mapping for skill effects
 const effectIcons: Record<string, React.ReactNode> = {
@@ -98,115 +98,81 @@ export function SkillAccordion({
       onToggle={onToggle || (() => {})}
       className={className}
     >
-      {/* Left Controls */}
-      <div className="flex items-center gap-3">
-        <AddToBuildSwitchSimple
-          itemId={item.id}
-          itemType="skill"
-          itemName={item.name}
-        />
-      </div>
-
       {/* Header Content */}
-      <div className="flex items-center gap-3">
-        <span className="text-2xl">{categoryIcon}</span>
-        <div className="flex items-center gap-2">
-          <H3 className="text-primary font-semibold">{item.name}</H3>
-          {originalSkill?.abbreviation && (
-            <Badge variant="secondary" className="text-xs font-mono">
-              {originalSkill.abbreviation}
-            </Badge>
-          )}
-        </div>
-      </div>
-
-      {/* Right side: Category */}
-      <div className="flex items-center gap-3 ml-auto">
-        {/* Category tag */}
-        {item.category && (
-          <Badge
-            variant="outline"
-            className={cn(
-              categoryStyle,
-              sizeClasses.sm,
-              'font-medium transition-colors'
-            )}
-          >
-            {item.category}
-          </Badge>
-        )}
-      </div>
-
-      {/* Collapsed Content */}
-      <div className="space-y-3">
-        {/* Description */}
-        <div className="line-clamp-2">
-          <P className="text-sm text-muted-foreground">{item.description}</P>
+      <div className="flex items-start gap-3">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-lg">{categoryIcon}</span>
+            <H3 className="text-base font-semibold">{item.name}</H3>
+            <AddToBuildSwitchSimple item={item} />
+          </div>
+          <P className="text-sm text-muted-foreground line-clamp-2">
+            {item.description}
+          </P>
         </div>
       </div>
 
       {/* Expanded Content */}
-      <div className="space-y-4">
-        {/* Scaling Section */}
+      <div className="space-y-4 mt-4">
+        {/* Category Badge */}
+        <div className="flex items-center gap-2">
+          <Badge
+            variant="outline"
+            className={cn(categoryStyle, sizeClasses.sm)}
+          >
+            {item.category}
+          </Badge>
+        </div>
+
+        {/* Scaling Information */}
         {showScaling && originalSkill?.scaling && (
           <div className="space-y-2">
-            <H5 className="text-sm font-semibold text-foreground flex items-center gap-2">
+            <H5 className="text-sm font-medium flex items-center gap-2">
               {getEffectIcon('scaling')}
               Scaling
             </H5>
-            <div className="pl-6">
-              <P className="text-sm text-muted-foreground">
-                {originalSkill.scaling}
-              </P>
-            </div>
+            <P className="text-sm text-muted-foreground">
+              {originalSkill.scaling}
+            </P>
           </div>
         )}
 
-        {/* Key Abilities Section */}
-        {showAbilities &&
-          originalSkill?.keyAbilities &&
-          originalSkill.keyAbilities.length > 0 && (
-            <div className="space-y-2">
-              <H5 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                {getEffectIcon('ability')}
-                Key Abilities
-              </H5>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {originalSkill.keyAbilities.map((ability, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
-                  >
-                    <div className="flex items-center gap-2">
-                      <Circle className="h-4 w-4 text-blue-500" />
-                      <span className="font-medium text-sm">{ability}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+        {/* Key Abilities */}
+        {showAbilities && originalSkill?.keyAbilities && originalSkill.keyAbilities.length > 0 && (
+          <div className="space-y-2">
+            <H5 className="text-sm font-medium flex items-center gap-2">
+              {getEffectIcon('ability')}
+              Key Abilities
+            </H5>
+            <ul className="space-y-1">
+              {originalSkill.keyAbilities.map((ability, index) => (
+                <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <span className="text-skyrim-gold mt-1">•</span>
+                  <span>{ability}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-        {/* Meta Tags Section */}
-        {showTags &&
-          originalSkill?.metaTags &&
-          originalSkill.metaTags.length > 0 && (
-            <div className="space-y-2">
-              <H5 className="text-sm font-semibold text-foreground">Tags</H5>
-              <div className="flex flex-wrap gap-1.5">
-                {originalSkill.metaTags.map((tag, index) => (
-                  <Badge
-                    key={index}
-                    variant="secondary"
-                    className="text-xs bg-muted/50 text-muted-foreground hover:bg-muted"
-                  >
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
+        {/* Meta Tags */}
+        {showTags && originalSkill?.metaTags && originalSkill.metaTags.length > 0 && (
+          <div className="space-y-2">
+            <H5 className="text-sm font-medium">Tags</H5>
+            <div className="flex flex-wrap gap-1">
+              {originalSkill.metaTags.map((tag, index) => (
+                <Badge
+                  key={index}
+                  variant="secondary"
+                  className="text-xs px-2 py-0.5"
+                >
+                  {tag}
+                </Badge>
+              ))}
             </div>
-          )}
+          </div>
+        )}
       </div>
     </GenericAccordionCard>
   )
-}
+} 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
-import type { SkillWithPerks } from '../hooks/useUnifiedSkills'
+import type { SkillWithPerks } from '../../hooks/useUnifiedSkills'
 
 export interface UnifiedSkillCardProps {
   skill: SkillWithPerks
@@ -90,4 +90,4 @@ export function UnifiedSkillCard({
       </CardContent>
     </Card>
   )
-}
+} 
