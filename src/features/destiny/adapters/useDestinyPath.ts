@@ -11,28 +11,28 @@ interface UseDestinyPathReturn {
   // Current path state
   currentPath: DestinyNode[]
   currentNode: DestinyNode | null
-  
+
   // Available options
   availableNodes: DestinyNode[]
   rootNodes: DestinyNode[]
-  
+
   // Path validation
   isValidPath: boolean
   pathErrors: string[]
-  
+
   // Actions
   addNodeToPath: (node: DestinyNode) => boolean
   removeNodeFromPath: (index: number) => void
   setPath: (path: DestinyNode[]) => void
   clearPath: () => void
   goToPathIndex: (index: number) => void
-  
+
   // Computed
   pathLength: number
   isPathComplete: boolean
   nextPossibleNodes: DestinyNode[]
   prerequisiteNodes: DestinyNode[]
-  
+
   // Path analysis
   getPathSummary: () => {
     startNode: DestinyNode | null
@@ -42,9 +42,11 @@ interface UseDestinyPathReturn {
   }
 }
 
-export function useDestinyPath(options: UseDestinyPathOptions = {}): UseDestinyPathReturn {
+export function useDestinyPath(
+  options: UseDestinyPathOptions = {}
+): UseDestinyPathReturn {
   const { initialPath = [], validatePath = true } = options
-  
+
   const [currentPath, setCurrentPath] = useState<DestinyNode[]>(initialPath)
   const { nodes, rootNodes } = useDestinyNodes()
 
@@ -58,11 +60,11 @@ export function useDestinyPath(options: UseDestinyPathOptions = {}): UseDestinyP
     if (currentPath.length === 0) {
       return rootNodes
     }
-    
+
     // Return nodes where ANY prerequisite is met by the current path
     return nodes.filter(node => {
       if (node.prerequisites.length === 0) return false // Skip root nodes
-      return node.prerequisites.some(prereq => 
+      return node.prerequisites.some(prereq =>
         currentPath.some(pathNode => pathNode.name === prereq)
       )
     })
@@ -72,17 +74,13 @@ export function useDestinyPath(options: UseDestinyPathOptions = {}): UseDestinyP
   const nextPossibleNodes = useMemo(() => {
     if (!currentNode) return rootNodes
     // Return nodes where the current node is one of the prerequisites
-    return nodes.filter(node => 
-      node.prerequisites.includes(currentNode.name)
-    )
+    return nodes.filter(node => node.prerequisites.includes(currentNode.name))
   }, [currentNode, nodes, rootNodes])
 
   // Prerequisite nodes for current node
   const prerequisiteNodes = useMemo(() => {
     if (!currentNode) return []
-    return nodes.filter(node => 
-      currentNode.prerequisites.includes(node.name)
-    )
+    return nodes.filter(node => currentNode.prerequisites.includes(node.name))
   }, [currentNode, nodes])
 
   // Path validation
@@ -92,50 +90,55 @@ export function useDestinyPath(options: UseDestinyPathOptions = {}): UseDestinyP
     }
 
     const errors: string[] = []
-    
+
     // Check if each node's prerequisites are met (ANY prerequisite is sufficient)
     for (let i = 1; i < currentPath.length; i++) {
       const node = currentPath[i]
       const previousNodes = currentPath.slice(0, i)
-      
+
       // Check if ANY prerequisite is met (OR logic instead of AND)
       const hasMetPrerequisite = node.prerequisites.some(prereq =>
         previousNodes.some(prevNode => prevNode.name === prereq)
       )
-      
+
       if (!hasMetPrerequisite && node.prerequisites.length > 0) {
-        errors.push(`${node.name} requires one of: ${node.prerequisites.join(', ')}`)
+        errors.push(
+          `${node.name} requires one of: ${node.prerequisites.join(', ')}`
+        )
       }
     }
 
     return {
       isValidPath: errors.length === 0,
-      pathErrors: errors
+      pathErrors: errors,
     }
   }, [currentPath, validatePath])
 
   // Add node to path
-  const addNodeToPath = useCallback((node: DestinyNode): boolean => {
-    // Check if node can be added (ANY prerequisite met)
-    if (currentPath.length > 0) {
-      const lastNode = currentPath[currentPath.length - 1]
-      // Check if ANY prerequisite is met (OR logic)
-      const hasMetPrerequisite = node.prerequisites.some(prereq => 
-        currentPath.some(pathNode => pathNode.name === prereq)
-      )
-      if (!hasMetPrerequisite && node.prerequisites.length > 0) {
-        return false
+  const addNodeToPath = useCallback(
+    (node: DestinyNode): boolean => {
+      // Check if node can be added (ANY prerequisite met)
+      if (currentPath.length > 0) {
+        const lastNode = currentPath[currentPath.length - 1]
+        // Check if ANY prerequisite is met (OR logic)
+        const hasMetPrerequisite = node.prerequisites.some(prereq =>
+          currentPath.some(pathNode => pathNode.name === prereq)
+        )
+        if (!hasMetPrerequisite && node.prerequisites.length > 0) {
+          return false
+        }
+      } else {
+        // First node must be a root node
+        if (node.prerequisites.length > 0) {
+          return false
+        }
       }
-    } else {
-      // First node must be a root node
-      if (node.prerequisites.length > 0) {
-        return false
-      }
-    }
 
-    setCurrentPath(prev => [...prev, node])
-    return true
-  }, [currentPath])
+      setCurrentPath(prev => [...prev, node])
+      return true
+    },
+    [currentPath]
+  )
 
   // Remove node from path (and all subsequent nodes)
   const removeNodeFromPath = useCallback((index: number) => {
@@ -163,7 +166,7 @@ export function useDestinyPath(options: UseDestinyPathOptions = {}): UseDestinyP
       startNode: currentPath[0] || null,
       endNode: currentPath[currentPath.length - 1] || null,
       totalNodes: currentPath.length,
-      pathString: currentPath.map(node => node.name).join(' → ')
+      pathString: currentPath.map(node => node.name).join(' → '),
     }
   }, [currentPath])
 
@@ -171,29 +174,29 @@ export function useDestinyPath(options: UseDestinyPathOptions = {}): UseDestinyP
     // Current path state
     currentPath,
     currentNode,
-    
+
     // Available options
     availableNodes,
     rootNodes,
-    
+
     // Path validation
     isValidPath,
     pathErrors,
-    
+
     // Actions
     addNodeToPath,
     removeNodeFromPath,
     setPath,
     clearPath,
     goToPathIndex,
-    
+
     // Computed
     pathLength: currentPath.length,
     isPathComplete: nextPossibleNodes.length === 0,
     nextPossibleNodes,
     prerequisiteNodes,
-    
+
     // Path analysis
     getPathSummary,
   }
-} 
+}

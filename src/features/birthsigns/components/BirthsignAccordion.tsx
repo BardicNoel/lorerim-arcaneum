@@ -32,7 +32,12 @@ export function BirthsignAccordion({
   if (!originalBirthsign) return null
 
   return (
-    <AccordionCard className={className} expanded={isExpanded} onToggle={onToggle} disableHover={disableHover}>
+    <AccordionCard
+      className={className}
+      expanded={isExpanded}
+      onToggle={onToggle}
+      disableHover={disableHover}
+    >
       <AccordionCard.Header>
         {showAddToBuild && (
           <AddToBuildSwitchSimple
@@ -68,7 +73,9 @@ export function BirthsignAccordion({
         {/* Stat Modifications */}
         {originalBirthsign.stat_modifications.length > 0 && (
           <div>
-            <h5 className="text-lg font-medium text-foreground mb-3">Stat Modifications</h5>
+            <h5 className="text-lg font-medium text-foreground mb-3">
+              Stat Modifications
+            </h5>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {originalBirthsign.stat_modifications.map((stat, index) => (
                 <div
@@ -76,8 +83,15 @@ export function BirthsignAccordion({
                   className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
                 >
                   <span className="font-medium capitalize">{stat.stat}</span>
-                  <span className={cn('font-bold', stat.type === 'bonus' ? 'text-green-600' : 'text-red-600')}>
-                    {stat.type === 'bonus' ? '+' : '-'}{stat.value}{stat.value_type === 'percentage' ? '%' : ''}
+                  <span
+                    className={cn(
+                      'font-bold',
+                      stat.type === 'bonus' ? 'text-green-600' : 'text-red-600'
+                    )}
+                  >
+                    {stat.type === 'bonus' ? '+' : '-'}
+                    {stat.value}
+                    {stat.value_type === 'percentage' ? '%' : ''}
                   </span>
                 </div>
               ))}
@@ -99,7 +113,9 @@ export function BirthsignAccordion({
                     <span className="font-medium text-sm">{power.name}</span>
                   </div>
                   <div className="border-t border-border my-2" />
-                  <div className="text-sm text-muted-foreground">{power.description}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {power.description}
+                  </div>
                 </div>
               ))}
             </div>
@@ -108,7 +124,9 @@ export function BirthsignAccordion({
         {/* Skill Bonuses */}
         {originalBirthsign.skill_bonuses.length > 0 && (
           <div>
-            <h5 className="text-lg font-medium text-foreground mb-3">Skill Bonuses</h5>
+            <h5 className="text-lg font-medium text-foreground mb-3">
+              Skill Bonuses
+            </h5>
             <div className="space-y-2">
               {originalBirthsign.skill_bonuses.map((bonus, index) => (
                 <div
@@ -127,9 +145,12 @@ export function BirthsignAccordion({
           </div>
         )}
         {/* Special Effects (Conditional/Mastery) */}
-        {(originalBirthsign.conditional_effects?.length > 0 || originalBirthsign.mastery_effects?.length > 0) && (
+        {(originalBirthsign.conditional_effects?.length > 0 ||
+          originalBirthsign.mastery_effects?.length > 0) && (
           <div>
-            <h5 className="text-lg font-medium text-foreground mb-3">Special Effects</h5>
+            <h5 className="text-lg font-medium text-foreground mb-3">
+              Special Effects
+            </h5>
             <div className="space-y-3">
               {originalBirthsign.conditional_effects?.map((effect, index) => (
                 <div
@@ -137,11 +158,15 @@ export function BirthsignAccordion({
                   className="p-3 rounded-lg border bg-muted/30"
                 >
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-medium text-sm">Conditional Effect</span>
+                    <span className="font-medium text-sm">
+                      Conditional Effect
+                    </span>
                   </div>
                   <div className="border-t border-border my-2" />
                   <div className="text-sm font-medium">{effect.stat}</div>
-                  <div className="text-sm text-muted-foreground">{effect.description}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {effect.description}
+                  </div>
                 </div>
               ))}
               {originalBirthsign.mastery_effects?.map((effect, index) => (
@@ -155,7 +180,9 @@ export function BirthsignAccordion({
                   </div>
                   <div className="border-t border-border my-2" />
                   <div className="text-sm font-medium">{effect.stat}</div>
-                  <div className="text-sm text-muted-foreground">{effect.description}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {effect.description}
+                  </div>
                 </div>
               ))}
             </div>

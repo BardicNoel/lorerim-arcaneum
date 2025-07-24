@@ -16,7 +16,10 @@ import { usePerkPlan } from '@/features/perks/hooks/usePerks'
 import { Z_INDEX } from '@/lib/constants'
 import type { PerkTree } from '@/features/perks/types'
 import type { SkillWithPerks } from '../hooks/useUnifiedSkills'
-import type { SearchCategory, SearchOption } from '@/shared/components/playerCreation/types'
+import type {
+  SearchCategory,
+  SearchOption,
+} from '@/shared/components/playerCreation/types'
 
 export interface PerkTreeViewProps {
   selectedSkill: string | null
@@ -40,7 +43,8 @@ export function PerkTreeView({
   onOpenChange,
 }: PerkTreeViewProps) {
   // Use perk plan for the selected tree
-  const { perkPlan, togglePerk, updatePerkRank, clearSkill } = usePerkPlan(perkTree)
+  const { perkPlan, togglePerk, updatePerkRank, clearSkill } =
+    usePerkPlan(perkTree)
 
   // Get selected perks for the current tree
   const selectedPerks = perkTree
@@ -84,11 +88,11 @@ export function PerkTreeView({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent 
-        className="h-[85vh] bg-card border-t shadow-lg !bg-card" 
-        style={{ 
+      <DrawerContent
+        className="h-[85vh] bg-card border-t shadow-lg !bg-card"
+        style={{
           backgroundColor: 'hsl(var(--card))',
-          zIndex: Z_INDEX.DRAWER
+          zIndex: Z_INDEX.DRAWER,
         }}
       >
         <DrawerHeader className="border-b">
@@ -102,7 +106,9 @@ export function PerkTreeView({
                 />
               </div>
               <div>
-                <DrawerTitle className="text-xl">{skillName || perkTree.treeName}</DrawerTitle>
+                <DrawerTitle className="text-xl">
+                  {skillName || perkTree.treeName}
+                </DrawerTitle>
                 <DrawerDescription>
                   {selectedPerks.length} perks selected
                 </DrawerDescription>
@@ -129,7 +135,7 @@ export function PerkTreeView({
             </div>
           </div>
         </DrawerHeader>
-        
+
         <div className="flex-1 overflow-hidden">
           <div className="h-full w-full">
             <PerkTreeCanvasII
@@ -140,7 +146,7 @@ export function PerkTreeView({
             />
           </div>
         </div>
-        
+
         <DrawerFooter className="border-t">
           <div className="flex justify-between items-center">
             <p className="text-sm text-muted-foreground">
@@ -154,4 +160,4 @@ export function PerkTreeView({
       </DrawerContent>
     </Drawer>
   )
-} 
+}

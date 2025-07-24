@@ -1,8 +1,11 @@
-import { useState, useMemo, useCallback } from 'react'
-import { useDestinyNodes } from './useDestinyNodes'
-import { useDestinyPath } from './useDestinyPath'
+import type {
+  SearchCategory,
+  SearchOption,
+} from '@/shared/components/playerCreation/types'
+import { useCallback, useMemo, useState } from 'react'
 import type { DestinyNode } from '../types'
-import type { SearchCategory, SearchOption, SelectedTag } from '@/shared/components/playerCreation/types'
+import { useDestinyNodes } from './useDestinyNodes'
+import { useDestinyPossiblePaths } from './useDestinyPossiblePaths'
 
 export type FilterType = 'build-path' | 'reference'
 
@@ -23,25 +26,33 @@ interface UseDestinyFiltersReturn {
   // Filter state
   selectedFilters: DestinyFilter[]
   searchCategories: SearchCategory[]
-  
+
   // Actions
   addFilter: (filter: DestinyFilter) => void
   removeFilter: (filterId: string) => void
   clearFilters: () => void
-  
+
   // Filtered data
   filteredPaths: DestinyNode[][]
   availableNodes: DestinyNode[]
-  
+
   // Helper functions
   getFilterOptions: () => SearchOption[]
   isNodeAvailable: (node: DestinyNode) => boolean
 }
 
-export function useDestinyFilters(options: UseDestinyFiltersOptions): UseDestinyFiltersReturn {
+export function useDestinyFilters(
+  options: UseDestinyFiltersOptions
+): UseDestinyFiltersReturn {
   const { filterType, currentPath = [] } = options
   const { nodes, rootNodes } = useDestinyNodes()
   const [selectedFilters, setSelectedFilters] = useState<DestinyFilter[]>([])
+
+  // Get possible paths from current position for filtering
+  const { possiblePaths } = useDestinyPossiblePaths({
+    fromNode:
+      currentPath.length > 0 ? currentPath[currentPath.length - 1] : undefined,
+  })
 
   // Get available nodes for build path filters (nodes that can be reached from current path)
   const availableNodes = useMemo(() => {
@@ -50,7 +61,7 @@ export function useDestinyFilters(options: UseDestinyFiltersOptions): UseDestiny
     }
 
     if (currentPath.length === 0) {
-      return rootNodes
+      return nodes
     }
 
     // Return nodes that can be reached from the current path
@@ -80,36 +91,70 @@ export function useDestinyFilters(options: UseDestinyFiltersOptions): UseDestiny
   // Generate search categories based on filter type
   const searchCategories = useMemo((): SearchCategory[] => {
     if (filterType === 'build-path') {
+      // Get nodes that are actually reachable in the possible paths
+      const reachableInPaths = new Set<string>()
+      const terminalInPaths = new Set<string>()
+
+      possiblePaths.forEach(p => {
+        p.path.forEach(node => {
+          reachableInPaths.add(node.name)
+        })
+        // Mark the end node as a terminal
+        if (p.path.length > 0) {
+          terminalInPaths.add(p.path[p.path.length - 1].name)
+        }
+      })
+
+      // Filter nodes to only those that appear in possible paths
+      const reachableNodes = nodes.filter(node =>
+        reachableInPaths.has(node.name)
+      )
+      const terminalNodes = nodes.filter(node => terminalInPaths.has(node.name))
+
       return [
         {
           id: 'includes-node',
           name: 'Includes Node',
           placeholder: 'Filter paths that include this node...',
-          options: availableNodes.map(node => ({
-            id: `includes-${node.id}`,
-            label: node.name,
-            value: node.name,
-            category: 'Includes Node',
-            description: `Paths that include ${node.name}`,
-          })),
+          options: reachableNodes.map(node => {
+            const matchingPaths = possiblePaths.filter(p =>
+              p.path.some(pathNode => pathNode.name === node.name)
+            ).length
+            return {
+              id: `includes-${node.id}`,
+              label: node.name,
+              value: node.name,
+              category: 'Includes Node',
+              description: `${matchingPaths} path${matchingPaths !== 1 ? 's' : ''} include ${node.name}`,
+            }
+          }),
         },
         {
           id: 'ends-with-node',
           name: 'Ends With Node',
           placeholder: 'Filter paths that end with this node...',
-          options: availableNodes.map(node => ({
-            id: `ends-${node.id}`,
-            label: node.name,
-            value: node.name,
-            category: 'Ends With Node',
-            description: `Paths that end with ${node.name}`,
-          })),
+          options: terminalNodes.map(node => {
+            const matchingPaths = possiblePaths.filter(
+              p =>
+                p.path.length > 0 &&
+                p.path[p.path.length - 1].name === node.name
+            ).length
+            return {
+              id: `ends-${node.id}`,
+              label: node.name,
+              value: node.name,
+              category: 'Ends With Node',
+              description: `${matchingPaths} path${matchingPaths !== 1 ? 's' : ''} end with ${node.name}`,
+            }
+          }),
         },
       ]
     } else {
       // Reference page filters
       const tags = [...new Set(nodes.flatMap(node => node.tags))]
-      const prerequisites = [...new Set(nodes.flatMap(node => node.prerequisites))]
+      const prerequisites = [
+        ...new Set(nodes.flatMap(node => node.prerequisites)),
+      ]
 
       return [
         {
@@ -138,13 +183,15 @@ export function useDestinyFilters(options: UseDestinyFiltersOptions): UseDestiny
         },
       ]
     }
-  }, [filterType, availableNodes, nodes])
+  }, [filterType, availableNodes, nodes, possiblePaths])
 
   // Add a filter
   const addFilter = useCallback((filter: DestinyFilter) => {
     setSelectedFilters(prev => {
       // Prevent duplicate filters
-      const exists = prev.some(f => f.type === filter.type && f.nodeName === filter.nodeName)
+      const exists = prev.some(
+        f => f.type === filter.type && f.nodeName === filter.nodeName
+      )
       if (exists) return prev
       return [...prev, filter]
     })
@@ -166,16 +213,44 @@ export function useDestinyFilters(options: UseDestinyFiltersOptions): UseDestiny
   }, [searchCategories])
 
   // Check if a node is available for filtering
-  const isNodeAvailable = useCallback((node: DestinyNode): boolean => {
-    return availableNodes.some(n => n.id === node.id)
-  }, [availableNodes])
+  const isNodeAvailable = useCallback(
+    (node: DestinyNode): boolean => {
+      return availableNodes.some(n => n.id === node.id)
+    },
+    [availableNodes]
+  )
 
   // Filter paths based on selected filters
   const filteredPaths = useMemo(() => {
-    // This would be implemented based on the path generation logic
-    // For now, return empty array - this will be implemented when we have path generation
-    return []
-  }, [selectedFilters, currentPath])
+    if (filterType !== 'build-path' || selectedFilters.length === 0) {
+      // Return all possible paths if no filters or not build-path type
+      return possiblePaths.map(p => p.path)
+    }
+
+    // Apply filters to possible paths
+    return possiblePaths
+      .map(p => p.path)
+      .filter(path => {
+        // Check if path matches all selected filters
+        return selectedFilters.every(filter => {
+          switch (filter.type) {
+            case 'includes-node':
+              // Path must include the specified node
+              return path.some(node => node.name === filter.nodeName)
+
+            case 'ends-with-node':
+              // Path must end with the specified node
+              return (
+                path.length > 0 &&
+                path[path.length - 1].name === filter.nodeName
+              )
+
+            default:
+              return true // Ignore other filter types for build path
+          }
+        })
+      })
+  }, [filterType, selectedFilters, possiblePaths])
 
   return {
     selectedFilters,
@@ -188,4 +263,4 @@ export function useDestinyFilters(options: UseDestinyFiltersOptions): UseDestiny
     getFilterOptions,
     isNodeAvailable,
   }
-} 
+}

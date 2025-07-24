@@ -56,7 +56,7 @@ const BuildPageDestinyCard: React.FC<BuildPageDestinyCardProps> = ({
   // Handle path selection
   const handlePathClick = (path: DestinyNode[], clickedIndex: number) => {
     let newPath: DestinyNode[]
-    
+
     if (pathState.length === 0) {
       // No current path - user is starting fresh
       newPath = path.slice(0, clickedIndex + 1)
@@ -66,12 +66,12 @@ const BuildPageDestinyCard: React.FC<BuildPageDestinyCardProps> = ({
         // User clicked on the first node (current node) - no change needed
         return
       }
-      
+
       // Get the nodes to add (skip the first node since it's the current node)
       const nodesToAdd = path.slice(1, clickedIndex + 1)
       newPath = [...pathState, ...nodesToAdd]
     }
-    
+
     // Set the entire path at once
     setPathNodes(newPath)
     handlePathChange(newPath)
@@ -115,7 +115,9 @@ const BuildPageDestinyCard: React.FC<BuildPageDestinyCardProps> = ({
           <div className="space-y-4">
             {/* Breadcrumb Trail */}
             <div>
-              <h4 className="text-sm font-medium text-muted-foreground mb-2">Selected Path</h4>
+              <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                Selected Path
+              </h4>
               <DestinyBreadcrumbTrail
                 path={pathState}
                 allNodes={nodes}
@@ -143,10 +145,7 @@ const BuildPageDestinyCard: React.FC<BuildPageDestinyCardProps> = ({
                 </div>
                 <div className="space-y-2">
                   {pathState.map((node, index) => (
-                    <div
-                      key={node.id}
-                      className="p-3 bg-muted/50 rounded-lg"
-                    >
+                    <div key={node.id} className="p-3 bg-muted/50 rounded-lg">
                       <div className="flex items-start gap-3">
                         <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-medium flex-shrink-0">
                           {index + 1}
@@ -172,7 +171,9 @@ const BuildPageDestinyCard: React.FC<BuildPageDestinyCardProps> = ({
             {possiblePaths.length > 0 && (
               <div className="space-y-2">
                 <h4 className="text-sm font-medium text-muted-foreground">
-                  {pathState.length === 0 ? 'Choose Your Starting Point' : 'Continue Your Path'}
+                  {pathState.length === 0
+                    ? 'Choose Your Starting Point'
+                    : 'Continue Your Path'}
                 </h4>
                 <ScrollArea className="h-[200px]">
                   <div className="p-2">

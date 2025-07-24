@@ -29,9 +29,7 @@ export function DestinyPossiblePathsList({
   if (possiblePaths.length === 0) {
     return (
       <div className={`text-center py-8 ${className}`}>
-        <p className="text-muted-foreground">
-          No possible paths available.
-        </p>
+        <p className="text-muted-foreground">No possible paths available.</p>
         <p className="text-sm text-muted-foreground mt-2">
           You may have reached the end of available destiny paths.
         </p>
@@ -55,4 +53,4 @@ export function DestinyPossiblePathsList({
       ))}
     </div>
   )
-} 
+}

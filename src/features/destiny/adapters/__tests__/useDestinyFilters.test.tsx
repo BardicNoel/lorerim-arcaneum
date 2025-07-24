@@ -50,44 +50,52 @@ vi.mock('../useDestinyPath', () => ({
 
 describe('useDestinyFilters', () => {
   it('should initialize with empty filters', () => {
-    const { result } = renderHook(() => useDestinyFilters({ filterType: 'build-path' }))
+    const { result } = renderHook(() =>
+      useDestinyFilters({ filterType: 'build-path' })
+    )
 
     expect(result.current.selectedFilters).toEqual([])
     expect(result.current.searchCategories).toHaveLength(2) // Includes Node and Ends With Node
   })
 
   it('should generate correct search categories for build-path filters', () => {
-    const { result } = renderHook(() => useDestinyFilters({ filterType: 'build-path' }))
+    const { result } = renderHook(() =>
+      useDestinyFilters({ filterType: 'build-path' })
+    )
 
     const categories = result.current.searchCategories
     expect(categories).toHaveLength(2)
-    
+
     const includesCategory = categories.find(cat => cat.id === 'includes-node')
     expect(includesCategory).toBeDefined()
     expect(includesCategory?.name).toBe('Includes Node')
-    
+
     const endsCategory = categories.find(cat => cat.id === 'ends-with-node')
     expect(endsCategory).toBeDefined()
     expect(endsCategory?.name).toBe('Ends With Node')
   })
 
   it('should generate correct search categories for reference filters', () => {
-    const { result } = renderHook(() => useDestinyFilters({ filterType: 'reference' }))
+    const { result } = renderHook(() =>
+      useDestinyFilters({ filterType: 'reference' })
+    )
 
     const categories = result.current.searchCategories
     expect(categories).toHaveLength(2)
-    
+
     const tagsCategory = categories.find(cat => cat.id === 'tags')
     expect(tagsCategory).toBeDefined()
     expect(tagsCategory?.name).toBe('Tags')
-    
+
     const prereqCategory = categories.find(cat => cat.id === 'prerequisites')
     expect(prereqCategory).toBeDefined()
     expect(prereqCategory?.name).toBe('Prerequisites')
   })
 
   it('should add filters correctly', () => {
-    const { result } = renderHook(() => useDestinyFilters({ filterType: 'build-path' }))
+    const { result } = renderHook(() =>
+      useDestinyFilters({ filterType: 'build-path' })
+    )
 
     const filter = {
       id: 'test-filter',
@@ -106,7 +114,9 @@ describe('useDestinyFilters', () => {
   })
 
   it('should remove filters correctly', () => {
-    const { result } = renderHook(() => useDestinyFilters({ filterType: 'build-path' }))
+    const { result } = renderHook(() =>
+      useDestinyFilters({ filterType: 'build-path' })
+    )
 
     const filter = {
       id: 'test-filter',
@@ -130,7 +140,9 @@ describe('useDestinyFilters', () => {
   })
 
   it('should clear all filters', () => {
-    const { result } = renderHook(() => useDestinyFilters({ filterType: 'build-path' }))
+    const { result } = renderHook(() =>
+      useDestinyFilters({ filterType: 'build-path' })
+    )
 
     const filter1 = {
       id: 'test-filter-1',
@@ -163,7 +175,9 @@ describe('useDestinyFilters', () => {
   })
 
   it('should prevent duplicate filters', () => {
-    const { result } = renderHook(() => useDestinyFilters({ filterType: 'build-path' }))
+    const { result } = renderHook(() =>
+      useDestinyFilters({ filterType: 'build-path' })
+    )
 
     const filter = {
       id: 'test-filter',
@@ -180,4 +194,4 @@ describe('useDestinyFilters', () => {
 
     expect(result.current.selectedFilters).toHaveLength(1) // Should only have one
   })
-}) 
+})

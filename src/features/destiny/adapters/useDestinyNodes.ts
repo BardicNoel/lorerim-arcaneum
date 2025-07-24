@@ -16,35 +16,37 @@ interface UseDestinyNodesReturn {
   nodes: DestinyNode[]
   rootNodes: DestinyNode[]
   filteredNodes: DestinyNode[]
-  
+
   // State
   isLoading: boolean
   error: string | null
-  
+
   // Computed
   categories: string[]
   tags: string[]
-  
+
   // Actions
   refresh: () => void
   getNodeById: (id: string) => DestinyNode | undefined
   getNodeByName: (name: string) => DestinyNode | undefined
   getNextNodes: (nodeName: string) => DestinyNode[]
   getPrerequisiteNodes: (nodeName: string) => DestinyNode[]
-  
+
   // Filtering
   filterByCategory: (category: string) => DestinyNode[]
   filterByTag: (tag: string) => DestinyNode[]
   searchNodes: (term: string) => DestinyNode[]
 }
 
-export function useDestinyNodes(options: UseDestinyNodesOptions = {}): UseDestinyNodesReturn {
+export function useDestinyNodes(
+  options: UseDestinyNodesOptions = {}
+): UseDestinyNodesReturn {
   const {
     includePrerequisites = false,
     includeNextNodes = false,
     filterByTags = [],
     searchTerm = '',
-    sortBy = 'name'
+    sortBy = 'name',
   } = options
 
   const [nodes, setNodes] = useState<DestinyNode[]>([])
@@ -58,11 +60,13 @@ export function useDestinyNodes(options: UseDestinyNodesOptions = {}): UseDestin
       try {
         setIsLoading(true)
         setError(null)
-        
+
         const loadedNodes = await dataProvider.loadNodes()
         setNodes(loadedNodes)
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load destiny nodes')
+        setError(
+          err instanceof Error ? err.message : 'Failed to load destiny nodes'
+        )
       } finally {
         setIsLoading(false)
       }
@@ -148,11 +152,13 @@ export function useDestinyNodes(options: UseDestinyNodesOptions = {}): UseDestin
     try {
       setIsLoading(true)
       setError(null)
-      
+
       const loadedNodes = await dataProvider.loadNodes()
       setNodes(loadedNodes)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to refresh destiny nodes')
+      setError(
+        err instanceof Error ? err.message : 'Failed to refresh destiny nodes'
+      )
     } finally {
       setIsLoading(false)
     }
@@ -163,25 +169,25 @@ export function useDestinyNodes(options: UseDestinyNodesOptions = {}): UseDestin
     nodes,
     rootNodes,
     filteredNodes,
-    
+
     // State
     isLoading,
     error,
-    
+
     // Computed
     categories,
     tags,
-    
+
     // Actions
     refresh,
     getNodeById,
     getNodeByName,
     getNextNodes,
     getPrerequisiteNodes,
-    
+
     // Filtering
     filterByCategory,
     filterByTag,
     searchNodes,
   }
-} 
+}

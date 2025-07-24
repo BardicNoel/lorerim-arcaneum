@@ -5,6 +5,9 @@ export { GenericConfirmDialog } from './ConfirmDialog'
 export { EntityAvatar } from './EntityAvatar'
 export { FormattedText } from './FormattedText'
 export { GenericAccordionCard } from './GenericAccordionCard'
-export { GenericAutocomplete, type AutocompleteOption } from './GenericAutocomplete'
+export {
+  GenericAutocomplete,
+  type AutocompleteOption,
+} from './GenericAutocomplete'
 export { GenericShareButton } from './ShareButton'
 export { GenericSummaryCard, createBuildSummaryItems } from './SummaryCard'

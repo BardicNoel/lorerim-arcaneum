@@ -1,7 +1,11 @@
 import React from 'react'
 import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
 import { Badge } from '@/shared/ui/ui/badge'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/shared/ui/ui/hover-card'
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/shared/ui/ui/hover-card'
 import { DestinyNode } from './DestinyNode'
 import type { DestinyNode as DestinyNodeType } from '../../types'
 
@@ -34,9 +38,7 @@ export function DestinyNodeHoverCard({
 
   return (
     <HoverCard>
-      <HoverCardTrigger asChild>
-        {children}
-      </HoverCardTrigger>
+      <HoverCardTrigger asChild>{children}</HoverCardTrigger>
       <HoverCardContent className={`w-80 p-0 ${className}`}>
         <Card className="border-0 shadow-none">
           <CardHeader className="pb-2">
@@ -60,9 +62,7 @@ export function DestinyNodeHoverCard({
 
           <CardContent className="pt-0 space-y-3">
             {/* Description */}
-            <p className="text-sm text-muted-foreground">
-              {node.description}
-            </p>
+            <p className="text-sm text-muted-foreground">{node.description}</p>
 
             {/* Prerequisites */}
             {showPrerequisites && node.prerequisites.length > 0 && (
@@ -71,7 +71,7 @@ export function DestinyNodeHoverCard({
                   Prerequisites:
                 </p>
                 <div className="flex flex-wrap gap-1">
-                  {getPrerequisiteNodes(node.name).map((prereq) => (
+                  {getPrerequisiteNodes(node.name).map(prereq => (
                     <Badge
                       key={prereq.id}
                       variant="outline"
@@ -81,17 +81,19 @@ export function DestinyNodeHoverCard({
                     </Badge>
                   ))}
                   {/* Show missing prerequisites */}
-                  {node.prerequisites.filter(prereqName => 
-                    !allNodes.some(n => n.name === prereqName)
-                  ).map((prereqName, index) => (
-                    <Badge
-                      key={`missing-${index}`}
-                      variant="outline"
-                      className="text-xs bg-gray-50 text-gray-500 border-gray-200"
-                    >
-                      {prereqName}
-                    </Badge>
-                  ))}
+                  {node.prerequisites
+                    .filter(
+                      prereqName => !allNodes.some(n => n.name === prereqName)
+                    )
+                    .map((prereqName, index) => (
+                      <Badge
+                        key={`missing-${index}`}
+                        variant="outline"
+                        className="text-xs bg-gray-50 text-gray-500 border-gray-200"
+                      >
+                        {prereqName}
+                      </Badge>
+                    ))}
                 </div>
               </div>
             )}
@@ -103,7 +105,7 @@ export function DestinyNodeHoverCard({
                   Leads to:
                 </p>
                 <div className="flex flex-wrap gap-1">
-                  {getNextNodes(node.name).map((nextNode) => (
+                  {getNextNodes(node.name).map(nextNode => (
                     <Badge
                       key={nextNode.id}
                       variant="outline"
@@ -140,13 +142,11 @@ export function DestinyNodeHoverCard({
             {/* Additional Info */}
             <div className="text-xs text-muted-foreground pt-2 border-t">
               <p>ID: {node.id}</p>
-              {node.globalFormId && (
-                <p>Form ID: {node.globalFormId}</p>
-              )}
+              {node.globalFormId && <p>Form ID: {node.globalFormId}</p>}
             </div>
           </CardContent>
         </Card>
       </HoverCardContent>
     </HoverCard>
   )
-} 
+}

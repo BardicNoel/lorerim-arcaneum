@@ -28,7 +28,7 @@ export class DestinyDataProvider {
 
       const res = await fetch(`${import.meta.env.BASE_URL}data/subclasses.json`)
       if (!res.ok) throw new Error('Failed to fetch destiny data')
-      
+
       const rawData: RawDestinyNode[] = await res.json()
 
       // Transform the data to match our DestinyNode interface
@@ -126,4 +126,4 @@ export class DestinyDataProvider {
       node.tags = tags
     })
   }
-} 
+}

@@ -126,9 +126,7 @@ export function DestinyNode({
   // Default variant
   return (
     <div className={`space-y-1 ${className}`}>
-      <h3 className="font-medium text-foreground text-base">
-        {node.name}
-      </h3>
+      <h3 className="font-medium text-foreground text-base">{node.name}</h3>
       <p className="text-sm text-muted-foreground line-clamp-2">
         {node.description}
       </p>
@@ -148,4 +146,4 @@ export function DestinyNode({
       )}
     </div>
   )
-} 
+}

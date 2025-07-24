@@ -1,7 +1,10 @@
 import React, { useMemo } from 'react'
 import { Badge } from '@/shared/ui/ui/badge'
 import { cn } from '@/lib/utils'
-import { GenericAutocomplete, type AutocompleteOption } from '@/shared/components/generic'
+import {
+  GenericAutocomplete,
+  type AutocompleteOption,
+} from '@/shared/components/generic'
 import { RaceAvatar } from './RaceAvatar'
 import type { Race } from '../types'
 
@@ -39,7 +42,7 @@ export function RaceAutocomplete({
       ),
       metadata: {
         originalRace: race,
-      }
+      },
     }))
   }, [races])
 

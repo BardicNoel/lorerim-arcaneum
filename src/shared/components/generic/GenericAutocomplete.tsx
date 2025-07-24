@@ -23,7 +23,10 @@ interface GenericAutocompleteProps {
   disabled?: boolean
   searchQuery?: string
   onSearchQueryChange?: (query: string) => void
-  renderOption?: (option: AutocompleteOption, isActive: boolean) => React.ReactNode
+  renderOption?: (
+    option: AutocompleteOption,
+    isActive: boolean
+  ) => React.ReactNode
   emptyMessage?: string
   maxHeight?: string
   showClearButton?: boolean
@@ -118,7 +121,10 @@ export function GenericAutocomplete({
   }
 
   // Default option renderer
-  const defaultRenderOption = (option: AutocompleteOption, isActive: boolean) => (
+  const defaultRenderOption = (
+    option: AutocompleteOption,
+    isActive: boolean
+  ) => (
     <div className="flex items-center gap-3">
       {option.icon && <div className="flex-shrink-0">{option.icon}</div>}
       <div className="flex-1 min-w-0">
@@ -170,7 +176,10 @@ export function GenericAutocomplete({
             disabled={disabled}
           >
             <ChevronDown
-              className={cn('h-4 w-4 transition-transform', isOpen && 'rotate-180')}
+              className={cn(
+                'h-4 w-4 transition-transform',
+                isOpen && 'rotate-180'
+              )}
             />
           </Button>
         )}
@@ -203,7 +212,9 @@ export function GenericAutocomplete({
                   )}
                   disabled={disabled}
                 >
-                  {renderOption ? renderOption(option, index === activeIndex) : defaultRenderOption(option, index === activeIndex)}
+                  {renderOption
+                    ? renderOption(option, index === activeIndex)
+                    : defaultRenderOption(option, index === activeIndex)}
                 </button>
               ))
             )}
@@ -212,4 +223,4 @@ export function GenericAutocomplete({
       )}
     </div>
   )
-} 
+}

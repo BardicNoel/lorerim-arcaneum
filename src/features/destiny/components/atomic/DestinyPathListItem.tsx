@@ -112,9 +112,10 @@ export function DestinyPathListItem({
           <span className="font-medium">Start:</span> {path[0]?.name}
         </p>
         <p>
-          <span className="font-medium">End:</span> {path[path.length - 1]?.name}
+          <span className="font-medium">End:</span>{' '}
+          {path[path.length - 1]?.name}
         </p>
       </div>
     </div>
   )
-} 
+}

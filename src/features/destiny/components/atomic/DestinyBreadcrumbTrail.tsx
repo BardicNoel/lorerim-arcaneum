@@ -22,7 +22,9 @@ export function DestinyBreadcrumbTrail({
   if (path.length === 0) {
     return (
       <div className={`flex items-center gap-2 ${className}`}>
-        <span className="text-sm text-muted-foreground">No destiny path selected</span>
+        <span className="text-sm text-muted-foreground">
+          No destiny path selected
+        </span>
       </div>
     )
   }
@@ -39,7 +41,9 @@ export function DestinyBreadcrumbTrail({
             variant={index === path.length - 1 ? 'default' : 'outline'}
             size={size}
             showHoverCard={true}
-            onClick={onBreadcrumbClick ? () => onBreadcrumbClick(index) : undefined}
+            onClick={
+              onBreadcrumbClick ? () => onBreadcrumbClick(index) : undefined
+            }
           />
           {index < path.length - 1 && (
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
@@ -48,4 +52,4 @@ export function DestinyBreadcrumbTrail({
       ))}
     </div>
   )
-} 
+}

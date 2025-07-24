@@ -37,21 +37,21 @@ export function DestinyPossiblePathItem({
         <div className="flex flex-wrap items-center gap-1">
           {path.map((node, nodeIndex) => (
             <React.Fragment key={node.id}>
-                                            <DestinyNodePill
-                 node={node}
-                 allNodes={allNodes}
-                 variant="outline"
-                 size={size}
-                 showHoverCard={true}
-                 onClick={(e?: React.MouseEvent) => {
-                   e?.stopPropagation()
-                   onPathClick(path, nodeIndex)
-                 }}
-                 className={`
+              <DestinyNodePill
+                node={node}
+                allNodes={allNodes}
+                variant="outline"
+                size={size}
+                showHoverCard={true}
+                onClick={(e?: React.MouseEvent) => {
+                  e?.stopPropagation()
+                  onPathClick(path, nodeIndex)
+                }}
+                className={`
                    ${nodeIndex === 0 && selectedPathLength === 0 ? 'cursor-pointer' : ''}
                    ${isComplete && nodeIndex === path.length - 1 ? 'bg-yellow-600 text-yellow-50 border-yellow-700' : ''}
                  `}
-               />
+              />
               {nodeIndex < path.length - 1 && (
                 <ChevronRight className="w-3 h-3 text-muted-foreground" />
               )}
@@ -63,15 +63,11 @@ export function DestinyPossiblePathItem({
       {/* Path Summary */}
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <span>Length: {path.length} steps</span>
-        {isComplete && (
-          <span>• Ends at: {endNode.name}</span>
-        )}
+        {isComplete && <span>• Ends at: {endNode.name}</span>}
         {path.length > selectedPathLength && (
-          <span>
-            • {path.length - selectedPathLength} more choices
-          </span>
+          <span>• {path.length - selectedPathLength} more choices</span>
         )}
       </div>
     </div>
   )
-} 
+}

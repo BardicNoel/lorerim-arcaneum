@@ -1,15 +1,16 @@
-import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
-import { Button } from '@/shared/ui/ui/button'
 import { Badge } from '@/shared/ui/ui/badge'
+import { Button } from '@/shared/ui/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { ScrollArea } from '@/shared/ui/ui/scroll-area'
-import { DestinyBreadcrumbTrail, DestinySelectedPathList } from '../atomic'
-import { DestinyPossiblePathsList } from './DestinyPossiblePathsList'
+import { AlertCircle, CheckCircle, RotateCcw, SearchX } from 'lucide-react'
+import { useDestinyFilters } from '../../adapters/useDestinyFilters'
+import { useDestinyNodes } from '../../adapters/useDestinyNodes'
 import { useDestinyPath } from '../../adapters/useDestinyPath'
 import { useDestinyPossiblePaths } from '../../adapters/useDestinyPossiblePaths'
-import { useDestinyNodes } from '../../adapters/useDestinyNodes'
-import { RotateCcw, CheckCircle, AlertCircle } from 'lucide-react'
 import type { DestinyNode } from '../../types'
+import { DestinyBreadcrumbTrail, DestinySelectedPathList } from '../atomic'
+import { DestinyFilters } from './DestinyFilters'
+import { DestinyPossiblePathsList } from './DestinyPossiblePathsList'
 
 interface DestinyPathBuilderProps {
   onPathChange?: (path: DestinyNode[]) => void
@@ -47,10 +48,68 @@ export function DestinyPathBuilder({
   // Get all nodes for breadcrumb trail
   const { nodes } = useDestinyNodes()
 
+  // Use destiny filters for build path
+  const buildPathFilters = useDestinyFilters({
+    filterType: 'build-path',
+    currentPath,
+  })
+
+  // Use filtered paths from destiny filters
+  const displayPaths =
+    buildPathFilters.selectedFilters.length > 0
+      ? buildPathFilters.filteredPaths
+      : possiblePaths.map(p => p.path)
+
+  // Handle destiny filter selection
+  const handleDestinyFilterSelect = (option: any) => {
+    if (typeof option === 'string') {
+      // Custom search - not implemented for destiny filters yet
+      return
+    }
+
+    // Create destiny filter from selected option
+    let destinyFilterType:
+      | 'includes-node'
+      | 'ends-with-node'
+      | 'tags'
+      | 'prerequisites'
+    let nodeId: string
+
+    if (option.category === 'Includes Node') {
+      destinyFilterType = 'includes-node'
+      nodeId = option.id.replace(/^includes-/, '')
+    } else if (option.category === 'Ends With Node') {
+      destinyFilterType = 'ends-with-node'
+      nodeId = option.id.replace(/^ends-/, '')
+    } else {
+      return // Unknown category
+    }
+
+    const filter = {
+      id: option.id,
+      type: destinyFilterType,
+      nodeName: option.value,
+      nodeId: nodeId,
+      label: option.label,
+    }
+
+    buildPathFilters.addFilter(filter)
+  }
+
+  // Handle destiny filter removal
+  const handleDestinyFilterRemove = (filterId: string) => {
+    buildPathFilters.removeFilter(filterId)
+  }
+
+  // Handle destiny filter clear
+  const handleDestinyFilterClear = () => {
+    buildPathFilters.clearFilters()
+  }
+
   // Handle path selection
   const handlePathClick = (path: DestinyNode[], clickedIndex: number) => {
     let newPath: DestinyNode[]
-    
+
     if (currentPath.length === 0) {
       // No current path - user is starting fresh
       // Set the path up to the clicked index
@@ -61,17 +120,17 @@ export function DestinyPathBuilder({
         // User clicked on the first node (current node) - no change needed
         return
       }
-      
+
       // Get the nodes to add (skip the first node since it's the current node)
       const nodesToAdd = path.slice(1, clickedIndex + 1)
       newPath = [...currentPath, ...nodesToAdd]
     }
-    
+
     // Set the entire path at once (bypasses individual node validation)
     setPath(newPath)
-    
+
     onPathChange?.(newPath)
-    
+
     // Check if path is complete
     if (isPathComplete) {
       onPathComplete?.(newPath)
@@ -98,7 +157,7 @@ export function DestinyPathBuilder({
       <div className={`space-y-4 ${className}`}>
         {/* Selected Path List */}
         <DestinySelectedPathList path={currentPath} />
-        
+
         {/* Clear Path Button */}
         {currentPath.length > 0 && (
           <div className="flex justify-end">
@@ -115,13 +174,19 @@ export function DestinyPathBuilder({
         )}
 
         {/* Possible Remaining Paths */}
-        {possiblePaths.length > 0 && (
+        {displayPaths.length > 0 && (
           <div className="space-y-2">
-            <h4 className="text-sm font-medium text-muted-foreground">Possible Remaining Paths</h4>
+            <h4 className="text-sm font-medium text-muted-foreground">
+              Possible Remaining Paths
+            </h4>
             <ScrollArea className="h-[200px]">
               <div className="p-4">
                 <DestinyPossiblePathsList
-                  possiblePaths={possiblePaths}
+                  possiblePaths={displayPaths.map(path => ({
+                    path,
+                    isComplete: false,
+                    endNode: path[path.length - 1],
+                  }))}
                   selectedPathLength={currentPath.length}
                   onPathClick={handlePathClick}
                   variant="compact"
@@ -255,29 +320,61 @@ export function DestinyPathBuilder({
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">
-            {currentPath.length === 0 ? 'Choose Your Starting Point' : 'Possible Paths'}
+            {currentPath.length === 0
+              ? 'Choose Your Starting Point'
+              : 'Possible Paths'}
           </CardTitle>
           <p className="text-sm text-muted-foreground">
             {currentPath.length === 0
               ? 'Select a root destiny node to begin your path'
-              : possiblePaths.length === 0
-                ? 'You have reached the end of this destiny path'
-                : `Explore ${possiblePaths.length} possible paths from your current position`
-            }
+              : displayPaths.length === 0
+                ? buildPathFilters.selectedFilters.length > 0
+                  ? 'No paths match your current filters'
+                  : 'You have reached the end of this destiny path'
+                : buildPathFilters.selectedFilters.length > 0
+                  ? `Showing ${displayPaths.length} filtered paths from your current position`
+                  : `Explore ${displayPaths.length} possible paths from your current position`}
           </p>
         </CardHeader>
         <CardContent className="h-[600px] p-0">
-          {possiblePaths.length === 0 ? (
+          {/* Filters positioned right over possible paths - always visible */}
+          <div className="p-6 pb-6">
+            <DestinyFilters
+              searchCategories={buildPathFilters.searchCategories}
+              selectedFilters={buildPathFilters.selectedFilters}
+              onFilterSelect={handleDestinyFilterSelect}
+              onFilterRemove={handleDestinyFilterRemove}
+              onClearFilters={handleDestinyFilterClear}
+            />
+          </div>
+
+          {displayPaths.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
-              <CheckCircle className="w-12 h-12 mx-auto mb-4 opacity-50" />
-              <p className="text-lg font-medium">Path Complete!</p>
-              <p className="text-sm">You've reached the end of this destiny path.</p>
+              {buildPathFilters.selectedFilters.length > 0 ? (
+                <SearchX className="w-12 h-12 mx-auto mb-4 opacity-50" />
+              ) : (
+                <CheckCircle className="w-12 h-12 mx-auto mb-4 opacity-50" />
+              )}
+              <p className="text-lg font-medium">
+                {buildPathFilters.selectedFilters.length > 0
+                  ? 'No paths match your filters'
+                  : 'Path Complete!'}
+              </p>
+              <p className="text-sm">
+                {buildPathFilters.selectedFilters.length > 0
+                  ? 'Try adjusting your filters to see more paths.'
+                  : "You've reached the end of this destiny path."}
+              </p>
             </div>
           ) : (
-            <ScrollArea className="h-full">
-              <div className="p-6">
+            <ScrollArea className="h-[calc(600px-200px)]">
+              <div className="p-6 pt-4">
                 <DestinyPossiblePathsList
-                  possiblePaths={possiblePaths}
+                  possiblePaths={displayPaths.map(path => ({
+                    path,
+                    isComplete: false,
+                    endNode: path[path.length - 1],
+                  }))}
                   selectedPathLength={currentPath.length}
                   onPathClick={handlePathClick}
                 />
@@ -288,4 +385,4 @@ export function DestinyPathBuilder({
       </Card>
     </div>
   )
-} 
+}

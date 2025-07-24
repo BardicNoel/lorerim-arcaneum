@@ -33,27 +33,33 @@ export function DestinyListItem({
           showTags={true}
           className="flex-1 min-w-0"
         />
-        
+
         {/* Mobile: Show key info in a more compact way */}
         <div className="flex sm:hidden gap-2 text-base text-muted-foreground">
           {node.prerequisites.length > 0 && (
             <span>Prereq: {node.prerequisites.length}</span>
           )}
-          {showNextNodes && allNodes.some(n => n.prerequisites.includes(node.name)) && (
-            <span>Next: {allNodes.filter(n => n.prerequisites.includes(node.name)).length}</span>
-          )}
-          {showNextNodes && !allNodes.some(n => n.prerequisites.includes(node.name)) && (
-            <span>Terminal</span>
-          )}
+          {showNextNodes &&
+            allNodes.some(n => n.prerequisites.includes(node.name)) && (
+              <span>
+                Next:{' '}
+                {
+                  allNodes.filter(n => n.prerequisites.includes(node.name))
+                    .length
+                }
+              </span>
+            )}
+          {showNextNodes &&
+            !allNodes.some(n => n.prerequisites.includes(node.name)) && (
+              <span>Terminal</span>
+            )}
         </div>
       </div>
     )
   }
 
   return (
-    <Card
-      className={`${baseClasses} ${className}`}
-    >
+    <Card className={`${baseClasses} ${className}`}>
       <CardContent className="p-4">
         <DestinyNode
           node={node}
@@ -66,4 +72,4 @@ export function DestinyListItem({
       </CardContent>
     </Card>
   )
-} 
+}

@@ -14,9 +14,13 @@ export function DestinySelectedPathList({
   if (path.length === 0) {
     return (
       <div className={`space-y-2 ${className}`}>
-        <h4 className="text-sm font-medium text-muted-foreground">Selected Path</h4>
+        <h4 className="text-sm font-medium text-muted-foreground">
+          Selected Path
+        </h4>
         <div className="p-3 bg-muted/50 rounded-lg text-center">
-          <span className="text-sm text-muted-foreground">No destiny path selected</span>
+          <span className="text-sm text-muted-foreground">
+            No destiny path selected
+          </span>
         </div>
       </div>
     )
@@ -46,9 +50,13 @@ export function DestinySelectedPathList({
                 )}
               </div>
             </div>
-            <Badge 
-              variant="secondary" 
-              className={index === path.length - 1 ? "bg-yellow-600 text-yellow-50" : "bg-blue-500"}
+            <Badge
+              variant="secondary"
+              className={
+                index === path.length - 1
+                  ? 'bg-yellow-600 text-yellow-50'
+                  : 'bg-blue-500'
+              }
             >
               {index === path.length - 1 ? 'Current' : 'Selected'}
             </Badge>
@@ -57,4 +65,4 @@ export function DestinySelectedPathList({
       </div>
     </div>
   )
-} 
+}

@@ -1,6 +1,9 @@
 import React, { useMemo } from 'react'
 import { Badge } from '@/shared/ui/ui/badge'
-import { GenericAutocomplete, type AutocompleteOption } from '@/shared/components/generic'
+import {
+  GenericAutocomplete,
+  type AutocompleteOption,
+} from '@/shared/components/generic'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import type { Trait } from '../types'
 
@@ -34,7 +37,7 @@ export function TraitAutocomplete({
       metadata: {
         originalTrait: trait,
         effectsCount: trait.effects.length,
-      }
+      },
     }))
   }, [traits])
 
@@ -52,12 +55,13 @@ export function TraitAutocomplete({
         <div className="font-medium truncate">{option.label}</div>
         <div className="flex items-center gap-2 mt-1">
           {option.badge && <div className="flex-shrink-0">{option.badge}</div>}
-          {option.metadata?.effectsCount && option.metadata.effectsCount > 0 && (
-            <div className="text-xs text-muted-foreground">
-              {option.metadata.effectsCount} effect
-              {option.metadata.effectsCount !== 1 ? 's' : ''}
-            </div>
-          )}
+          {option.metadata?.effectsCount &&
+            option.metadata.effectsCount > 0 && (
+              <div className="text-xs text-muted-foreground">
+                {option.metadata.effectsCount} effect
+                {option.metadata.effectsCount !== 1 ? 's' : ''}
+              </div>
+            )}
         </div>
         {option.description && (
           <FormattedText

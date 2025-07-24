@@ -45,14 +45,11 @@ export function DestinyNodePill({
 
   if (showHoverCard) {
     return (
-      <DestinyNodeHoverCard
-        node={node}
-        allNodes={allNodes}
-      >
+      <DestinyNodeHoverCard node={node} allNodes={allNodes}>
         {pillContent}
       </DestinyNodeHoverCard>
     )
   }
 
   return pillContent
-} 
+}

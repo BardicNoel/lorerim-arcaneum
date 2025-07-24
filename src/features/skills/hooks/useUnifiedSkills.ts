@@ -15,12 +15,8 @@ export function useUnifiedSkills() {
   const [error, setError] = useState<string | null>(null)
 
   // Get skills management from character build
-  const {
-    majorSkills,
-    minorSkills,
-    hasMajorSkill,
-    hasMinorSkill,
-  } = useCharacterBuild()
+  const { majorSkills, minorSkills, hasMajorSkill, hasMinorSkill } =
+    useCharacterBuild()
 
   // Get perks data for counting
   const { perkTrees } = usePerks()
@@ -53,7 +49,7 @@ export function useUnifiedSkills() {
   const skillsWithPerks: SkillWithPerks[] = skillsData.map(skill => {
     // Find the perk tree for this skill
     const perkTree = perkTrees.find(tree => tree.treeId === skill.edid)
-    
+
     // Count total perks available for this skill
     const perksCount = perkTree ? perkTree.perks.length : 0
 
@@ -71,4 +67,4 @@ export function useUnifiedSkills() {
     error,
     perkTrees,
   }
-} 
+}

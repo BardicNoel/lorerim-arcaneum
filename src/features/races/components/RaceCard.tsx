@@ -213,9 +213,7 @@ export function RaceCard({
         {/* Combat Stats */}
         {originalRace?.combat && (
           <div>
-            <h5 className="text-lg font-medium text-foreground mb-3">
-              Combat
-            </h5>
+            <h5 className="text-lg font-medium text-foreground mb-3">Combat</h5>
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="text-center p-2 bg-muted rounded">
                 <div className="font-medium">Unarmed Damage</div>
@@ -234,57 +232,55 @@ export function RaceCard({
         )}
 
         {/* Racial Spells */}
-        {originalRace?.racialSpells &&
-          originalRace.racialSpells.length > 0 && (
-            <div>
-              <h5 className="text-lg font-medium text-foreground mb-3">
-                Racial Abilities
-              </h5>
-              <div className="space-y-2">
-                {originalRace.racialSpells.map((spell, index) => (
-                  <div
-                    key={index}
-                    className="p-2 rounded bg-green-50 border border-green-200 dark:bg-green-950 dark:border-green-800 text-sm"
-                  >
-                    <div className="font-medium">{spell.name}</div>
-                    <div className="text-muted-foreground">
-                      {spell.description}
-                    </div>
+        {originalRace?.racialSpells && originalRace.racialSpells.length > 0 && (
+          <div>
+            <h5 className="text-lg font-medium text-foreground mb-3">
+              Racial Abilities
+            </h5>
+            <div className="space-y-2">
+              {originalRace.racialSpells.map((spell, index) => (
+                <div
+                  key={index}
+                  className="p-2 rounded bg-green-50 border border-green-200 dark:bg-green-950 dark:border-green-800 text-sm"
+                >
+                  <div className="font-medium">{spell.name}</div>
+                  <div className="text-muted-foreground">
+                    {spell.description}
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
+        )}
 
         {/* Skill Bonuses */}
-        {originalRace?.skillBonuses &&
-          originalRace.skillBonuses.length > 0 && (
-            <div>
-              <h5 className="text-lg font-medium text-foreground mb-3">
-                Skill Bonuses
-              </h5>
-              <div className="space-y-2">
-                {originalRace.skillBonuses.map((bonus, index) => (
-                  <div
-                    key={index}
-                    className="p-2 rounded bg-muted border text-sm"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-medium">
-                        {bonus.skill} +{bonus.bonus}
-                      </span>
-                      <Badge variant="secondary" className="text-xs">
-                        Starting Bonus
-                      </Badge>
-                    </div>
-                    <div className="text-muted-foreground">
-                      Starting bonus to {bonus.skill}
-                    </div>
+        {originalRace?.skillBonuses && originalRace.skillBonuses.length > 0 && (
+          <div>
+            <h5 className="text-lg font-medium text-foreground mb-3">
+              Skill Bonuses
+            </h5>
+            <div className="space-y-2">
+              {originalRace.skillBonuses.map((bonus, index) => (
+                <div
+                  key={index}
+                  className="p-2 rounded bg-muted border text-sm"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">
+                      {bonus.skill} +{bonus.bonus}
+                    </span>
+                    <Badge variant="secondary" className="text-xs">
+                      Starting Bonus
+                    </Badge>
                   </div>
-                ))}
-              </div>
+                  <div className="text-muted-foreground">
+                    Starting bonus to {bonus.skill}
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
+        )}
       </div>
     </GenericAccordionCard>
   )

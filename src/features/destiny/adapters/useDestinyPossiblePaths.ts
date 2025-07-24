@@ -44,10 +44,7 @@ export function useDestinyPossiblePaths(
     }
 
     // Recursive function to build all possible paths
-    const buildPaths = (
-      currentPath: DestinyNode[],
-      depth: number = 0
-    ) => {
+    const buildPaths = (currentPath: DestinyNode[], depth: number = 0) => {
       if (depth >= maxDepth) {
         return
       }
@@ -67,8 +64,9 @@ export function useDestinyPossiblePaths(
 
       // Continue building paths for each next node
       nextNodes.forEach(nextNode => {
-        const pathKey = currentPath.map(n => n.id).join('->') + '->' + nextNode.id
-        
+        const pathKey =
+          currentPath.map(n => n.id).join('->') + '->' + nextNode.id
+
         if (!visited.has(pathKey)) {
           visited.add(pathKey)
           buildPaths([...currentPath, nextNode], depth + 1)
@@ -101,4 +99,4 @@ export function useDestinyPossiblePaths(
     isLoading,
     error,
   }
-} 
+}

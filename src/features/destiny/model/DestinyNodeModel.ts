@@ -83,7 +83,7 @@ export class DestinyNodeModel {
    * Check if a node is a leaf node (no other nodes depend on it)
    */
   static isLeafNode(node: DestinyNode, allNodes: DestinyNode[]): boolean {
-    return !allNodes.some(otherNode => 
+    return !allNodes.some(otherNode =>
       otherNode.prerequisites.includes(node.name)
     )
   }
@@ -98,8 +98,11 @@ export class DestinyNodeModel {
   /**
    * Get nodes that have a specific node as a prerequisite
    */
-  static getNextNodes(node: DestinyNode, allNodes: DestinyNode[]): DestinyNode[] {
-    return allNodes.filter(otherNode => 
+  static getNextNodes(
+    node: DestinyNode,
+    allNodes: DestinyNode[]
+  ): DestinyNode[] {
+    return allNodes.filter(otherNode =>
       otherNode.prerequisites.includes(node.name)
     )
   }
@@ -107,8 +110,11 @@ export class DestinyNodeModel {
   /**
    * Get nodes that are prerequisites for a specific node
    */
-  static getPrerequisiteNodes(node: DestinyNode, allNodes: DestinyNode[]): DestinyNode[] {
-    return allNodes.filter(otherNode => 
+  static getPrerequisiteNodes(
+    node: DestinyNode,
+    allNodes: DestinyNode[]
+  ): DestinyNode[] {
+    return allNodes.filter(otherNode =>
       node.prerequisites.includes(otherNode.name)
     )
   }
@@ -118,10 +124,11 @@ export class DestinyNodeModel {
    */
   static search(nodes: DestinyNode[], query: string): DestinyNode[] {
     const lowerQuery = query.toLowerCase()
-    return nodes.filter(node => 
-      node.name.toLowerCase().includes(lowerQuery) ||
-      node.description.toLowerCase().includes(lowerQuery) ||
-      node.tags.some(tag => tag.toLowerCase().includes(lowerQuery))
+    return nodes.filter(
+      node =>
+        node.name.toLowerCase().includes(lowerQuery) ||
+        node.description.toLowerCase().includes(lowerQuery) ||
+        node.tags.some(tag => tag.toLowerCase().includes(lowerQuery))
     )
   }
 
@@ -136,7 +143,9 @@ export class DestinyNodeModel {
    * Sort nodes by number of prerequisites (ascending)
    */
   static sortByPrerequisites(nodes: DestinyNode[]): DestinyNode[] {
-    return [...nodes].sort((a, b) => a.prerequisites.length - b.prerequisites.length)
+    return [...nodes].sort(
+      (a, b) => a.prerequisites.length - b.prerequisites.length
+    )
   }
 
   /**
@@ -154,4 +163,4 @@ export class DestinyNodeModel {
     const allPrerequisites = nodes.flatMap(node => node.prerequisites)
     return [...new Set(allPrerequisites)].sort()
   }
-} 
+}

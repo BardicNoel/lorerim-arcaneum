@@ -1,8 +1,6 @@
 import type { Birthsign, TransformedBirthsign } from '../types'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 
-
-
 /**
  * Extract all unique groups from birthsigns
  */
