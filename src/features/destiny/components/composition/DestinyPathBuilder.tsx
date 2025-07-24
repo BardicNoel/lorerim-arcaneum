@@ -1,3 +1,4 @@
+import type { SearchOption } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
@@ -8,7 +9,8 @@ import { useDestinyNodes } from '../../adapters/useDestinyNodes'
 import { useDestinyPath } from '../../adapters/useDestinyPath'
 import { useDestinyPossiblePaths } from '../../adapters/useDestinyPossiblePaths'
 import type { DestinyNode } from '../../types'
-import { DestinyBreadcrumbTrail, DestinySelectedPathList } from '../atomic'
+import { DestinyBreadcrumbTrail } from '../atomic/DestinyBreadcrumbTrail'
+import { DestinySelectedPathList } from '../atomic/DestinySelectedPathList'
 import { DestinyFilters } from './DestinyFilters'
 import { DestinyPossiblePathsList } from './DestinyPossiblePathsList'
 
@@ -61,7 +63,7 @@ export function DestinyPathBuilder({
       : possiblePaths.map(p => p.path)
 
   // Handle destiny filter selection
-  const handleDestinyFilterSelect = (option: any) => {
+  const handleDestinyFilterSelect = (option: string | SearchOption) => {
     if (typeof option === 'string') {
       // Custom search - not implemented for destiny filters yet
       return

@@ -1,5 +1,8 @@
 import { BuildPageShell } from '@/shared/components/playerCreation'
-import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
+import type {
+  PlayerCreationItem,
+  SearchOption,
+} from '@/shared/components/playerCreation/types'
 import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
 import { useMemo } from 'react'
@@ -84,7 +87,7 @@ export function UnifiedDestinyPage() {
   const viewMode = 'list'
 
   // Handle destiny filter selection for reference page
-  const handleDestinyFilterSelect = (option: any) => {
+  const handleDestinyFilterSelect = (option: string | SearchOption) => {
     if (typeof option === 'string') {
       // Custom search - not implemented for destiny filters yet
       return
@@ -137,8 +140,8 @@ export function UnifiedDestinyPage() {
 
   // Handle planning nodes (for advanced features)
   const handlePlanNode = (nodeId: string) => {
+    // TODO: Implement advanced planning features
     // This could be expanded for advanced planning features
-    console.log('Planning node:', nodeId)
   }
 
   const renderDestinyCard = (item: PlayerCreationItem, isSelected: boolean) => (

@@ -10,22 +10,3 @@ export interface DestinyNode {
   lore?: string
   globalFormId?: string
 }
-
-export interface DestinyFilters {
-  search: string
-  type: string
-  tags: string[]
-  levelRequirement?: number
-}
-
-export interface PlannedNode {
-  id: string
-  name: string
-  description: string
-  levelRequirement?: number
-}
-
-export interface DestinyTreeData {
-  nodes: DestinyNode[]
-  plannedNodes: PlannedNode[]
-}

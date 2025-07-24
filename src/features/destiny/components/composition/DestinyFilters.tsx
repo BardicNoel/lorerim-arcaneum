@@ -1,10 +1,13 @@
 import { AutocompleteSearch } from '@/shared/components/playerCreation/AutocompleteSearch'
-import type { SearchOption } from '@/shared/components/playerCreation/types'
+import type {
+  SearchCategory,
+  SearchOption,
+} from '@/shared/components/playerCreation/types'
 import { X } from 'lucide-react'
 import type { DestinyFilter } from '../../adapters/useDestinyFilters'
 
 interface DestinyFiltersProps {
-  searchCategories: any[]
+  searchCategories: SearchCategory[]
   selectedFilters: DestinyFilter[]
   onFilterSelect: (option: SearchOption | string) => void
   onFilterRemove: (filterId: string) => void
