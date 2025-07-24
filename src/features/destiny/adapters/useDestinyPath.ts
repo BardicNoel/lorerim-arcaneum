@@ -1,6 +1,6 @@
-import { useState, useMemo, useCallback } from 'react'
-import { useDestinyNodes } from './useDestinyNodes'
+import { useCallback, useMemo, useState } from 'react'
 import type { DestinyNode } from '../types'
+import { useDestinyNodes } from './useDestinyNodes'
 
 interface UseDestinyPathOptions {
   initialPath?: DestinyNode[]
@@ -64,8 +64,8 @@ export function useDestinyPath(
     // Return nodes where ANY prerequisite is met by the current path
     return nodes.filter(node => {
       if (node.prerequisites.length === 0) return false // Skip root nodes
-      return node.prerequisites.some(prereq =>
-        currentPath.some(pathNode => pathNode.name === prereq)
+      return node.prerequisites.some(prereqEdid =>
+        currentPath.some(pathNode => pathNode.edid === prereqEdid)
       )
     })
   }, [currentPath, nodes, rootNodes])
@@ -74,13 +74,13 @@ export function useDestinyPath(
   const nextPossibleNodes = useMemo(() => {
     if (!currentNode) return rootNodes
     // Return nodes where the current node is one of the prerequisites
-    return nodes.filter(node => node.prerequisites.includes(currentNode.name))
+    return nodes.filter(node => node.prerequisites.includes(currentNode.edid))
   }, [currentNode, nodes, rootNodes])
 
   // Prerequisite nodes for current node
   const prerequisiteNodes = useMemo(() => {
     if (!currentNode) return []
-    return nodes.filter(node => currentNode.prerequisites.includes(node.name))
+    return nodes.filter(node => currentNode.prerequisites.includes(node.edid))
   }, [currentNode, nodes])
 
   // Path validation
@@ -97,8 +97,8 @@ export function useDestinyPath(
       const previousNodes = currentPath.slice(0, i)
 
       // Check if ANY prerequisite is met (OR logic instead of AND)
-      const hasMetPrerequisite = node.prerequisites.some(prereq =>
-        previousNodes.some(prevNode => prevNode.name === prereq)
+      const hasMetPrerequisite = node.prerequisites.some(prereqEdid =>
+        previousNodes.some(prevNode => prevNode.edid === prereqEdid)
       )
 
       if (!hasMetPrerequisite && node.prerequisites.length > 0) {
@@ -121,8 +121,8 @@ export function useDestinyPath(
       if (currentPath.length > 0) {
         const lastNode = currentPath[currentPath.length - 1]
         // Check if ANY prerequisite is met (OR logic)
-        const hasMetPrerequisite = node.prerequisites.some(prereq =>
-          currentPath.some(pathNode => pathNode.name === prereq)
+        const hasMetPrerequisite = node.prerequisites.some(prereqEdid =>
+          currentPath.some(pathNode => pathNode.edid === prereqEdid)
         )
         if (!hasMetPrerequisite && node.prerequisites.length > 0) {
           return false

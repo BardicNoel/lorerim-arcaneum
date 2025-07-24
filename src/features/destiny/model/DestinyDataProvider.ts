@@ -3,9 +3,10 @@ import type { DestinyNode } from '../types'
 // Raw data structure from JSON
 interface RawDestinyNode {
   globalFormId?: string
+  edid: string // <-- Add edid from JSON
   name: string
   description: string
-  prerequisites?: string[]
+  prerequisites?: string[] // These are EDIDs now
 }
 
 export class DestinyDataProvider {
@@ -34,11 +35,12 @@ export class DestinyDataProvider {
       // Transform the data to match our DestinyNode interface
       const transformedNodes: DestinyNode[] = rawData.map(
         (node: RawDestinyNode, index: number) => ({
-          id: node.globalFormId || `destiny-${index}`,
+          id: node.globalFormId || node.edid || `destiny-${index}`,
+          edid: node.edid, // <-- Set edid
           name: node.name,
           description: node.description,
           tags: [], // Will be enriched below
-          prerequisites: node.prerequisites || [],
+          prerequisites: node.prerequisites || [], // Already EDIDs
           nextBranches: [], // Calculated dynamically in tree view
           levelRequirement: undefined, // Not in current data
           lore: undefined, // Not in current data

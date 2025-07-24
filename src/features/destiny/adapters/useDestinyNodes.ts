@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { DestinyDataProvider } from '../model/DestinyDataProvider'
 import { DestinyNodeModel } from '../model/DestinyNodeModel'
 import type { DestinyNode } from '../types'
@@ -28,9 +28,10 @@ interface UseDestinyNodesReturn {
   // Actions
   refresh: () => void
   getNodeById: (id: string) => DestinyNode | undefined
-  getNodeByName: (name: string) => DestinyNode | undefined
-  getNextNodes: (nodeName: string) => DestinyNode[]
-  getPrerequisiteNodes: (nodeName: string) => DestinyNode[]
+  getNodeByName: (name: string) => DestinyNode | undefined // Deprecated
+  getNodeByEdid: (edid: string) => DestinyNode | undefined
+  getNextNodes: (nodeEdid: string) => DestinyNode[]
+  getPrerequisiteNodes: (nodeEdid: string) => DestinyNode[]
 
   // Filtering
   filterByCategory: (category: string) => DestinyNode[]
@@ -119,18 +120,23 @@ export function useDestinyNodes(
     return nodes.find(node => node.id === id)
   }
 
+  const getNodeByEdid = (edid: string): DestinyNode | undefined => {
+    return nodes.find(node => node.edid === edid)
+  }
+
+  // Deprecated: getNodeByName (for compatibility, but should migrate to edid)
   const getNodeByName = (name: string): DestinyNode | undefined => {
     return nodes.find(node => node.name === name)
   }
 
-  const getNextNodes = (nodeName: string): DestinyNode[] => {
-    const node = getNodeByName(nodeName)
+  const getNextNodes = (nodeEdid: string): DestinyNode[] => {
+    const node = getNodeByEdid(nodeEdid)
     if (!node) return []
     return DestinyNodeModel.getNextNodes(node, nodes)
   }
 
-  const getPrerequisiteNodes = (nodeName: string): DestinyNode[] => {
-    const node = getNodeByName(nodeName)
+  const getPrerequisiteNodes = (nodeEdid: string): DestinyNode[] => {
+    const node = getNodeByEdid(nodeEdid)
     if (!node) return []
     return DestinyNodeModel.getPrerequisiteNodes(node, nodes)
   }
@@ -181,7 +187,8 @@ export function useDestinyNodes(
     // Actions
     refresh,
     getNodeById,
-    getNodeByName,
+    getNodeByName, // Deprecated
+    getNodeByEdid,
     getNextNodes,
     getPrerequisiteNodes,
 

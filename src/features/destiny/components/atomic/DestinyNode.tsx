@@ -1,4 +1,3 @@
-import React from 'react'
 import { Badge } from '@/shared/ui/ui/badge'
 import type { DestinyNode } from '../../types'
 
@@ -22,11 +21,19 @@ export function DestinyNode({
   className = '',
 }: DestinyNodeProps) {
   // Helper to get next nodes (only if needed)
-  const getNextNodes = (nodeName: string) => {
+  const getNextNodes = (nodeEdid: string) => {
     if (!showNextNodes) return []
     return allNodes
-      .filter(n => n.prerequisites.includes(nodeName))
+      .filter(n => n.prerequisites.includes(nodeEdid))
       .map(n => n.name)
+  }
+
+  // Helper to get prerequisite node names
+  const getPrerequisiteNames = (prereqEdids: string[]) => {
+    return prereqEdids.map(edid => {
+      const found = allNodes.find(n => n.edid === edid)
+      return found ? found.name : edid
+    })
   }
 
   if (variant === 'compact') {
@@ -66,7 +73,7 @@ export function DestinyNode({
               Prerequisites:
             </p>
             <div className="flex flex-wrap gap-1">
-              {node.prerequisites.map((prereq, index) => (
+              {getPrerequisiteNames(node.prerequisites).map((prereq, index) => (
                 <Badge
                   key={index}
                   variant="outline"
@@ -86,7 +93,7 @@ export function DestinyNode({
               Leads to:
             </p>
             <div className="flex flex-wrap gap-1">
-              {getNextNodes(node.name).map((nextNode, index) => (
+              {getNextNodes(node.edid).map((nextNode, index) => (
                 <Badge
                   key={index}
                   variant="outline"
@@ -95,7 +102,7 @@ export function DestinyNode({
                   {nextNode}
                 </Badge>
               ))}
-              {getNextNodes(node.name).length === 0 && (
+              {getNextNodes(node.edid).length === 0 && (
                 <span className="text-xs text-muted-foreground">
                   No further progression
                 </span>
