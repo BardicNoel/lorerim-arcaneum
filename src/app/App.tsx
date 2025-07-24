@@ -27,7 +27,6 @@ const navSections = [
       { to: '/build/religions', label: 'Religion' },
       { to: '/build/destiny', label: 'Destiny' },
       { to: '/build/perks', label: 'Skills and Perks' },
-      { to: '/skills-mva', label: 'Skills MVA Demo' },
     ],
   },
 
