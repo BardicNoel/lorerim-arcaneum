@@ -23,14 +23,15 @@ export function religionToDeityOption(religion: Religion): DeityOption {
  * Transform a Religion into a BlessingOption for blessing selection
  */
 export function religionToBlessingOption(religion: Religion): BlessingOption {
-  const blessingEffects = religion.blessing?.effects
-    ?.filter(effect => effect.effectType !== '1' && effect.effectType !== '3')
-    .map(effect => ({
-      name: effect.effectName,
-      description: effect.effectDescription,
-      magnitude: effect.magnitude,
-      duration: effect.duration,
-    })) || []
+  const blessingEffects =
+    religion.blessing?.effects
+      ?.filter(effect => effect.effectType !== '1' && effect.effectType !== '3')
+      .map(effect => ({
+        name: effect.effectName,
+        description: effect.effectDescription,
+        magnitude: effect.magnitude,
+        duration: effect.duration,
+      })) || []
 
   return {
     id: religion.name.toLowerCase().replace(/\s+/g, '-'),
@@ -55,17 +56,22 @@ export function getDeityOptions(religions: Religion[]): DeityOption[] {
  */
 export function getBlessingOptions(religions: Religion[]): BlessingOption[] {
   return religions
-    .filter(religion => religion.blessing?.effects?.some(effect => 
-      effect.effectType !== '1' && effect.effectType !== '3'
-    ))
+    .filter(religion =>
+      religion.blessing?.effects?.some(
+        effect => effect.effectType !== '1' && effect.effectType !== '3'
+      )
+    )
     .map(religionToBlessingOption)
 }
 
 /**
  * Find a religion by ID
  */
-export function findReligionById(religions: Religion[], id: string): Religion | undefined {
-  return religions.find(religion => 
-    religion.name.toLowerCase().replace(/\s+/g, '-') === id
+export function findReligionById(
+  religions: Religion[],
+  id: string
+): Religion | undefined {
+  return religions.find(
+    religion => religion.name.toLowerCase().replace(/\s+/g, '-') === id
   )
-} 
+}

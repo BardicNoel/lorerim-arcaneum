@@ -3,7 +3,10 @@ import { Badge } from '@/shared/ui/ui/badge'
 import { cn } from '@/lib/utils'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import { getDeityOptions } from '../utils/religionFilters'
-import { GenericAutocomplete, type AutocompleteOption } from '@/shared/components/generic'
+import {
+  GenericAutocomplete,
+  type AutocompleteOption,
+} from '@/shared/components/generic'
 import { Star } from 'lucide-react'
 import type { Religion } from '../types'
 
@@ -20,7 +23,7 @@ export function DeityAutocomplete({
   religions,
   selectedDeityId,
   onDeitySelect,
-  placeholder = "Search for a deity to follow...",
+  placeholder = 'Search for a deity to follow...',
   className,
   disabled = false,
 }: DeityAutocompleteProps) {
@@ -35,14 +38,14 @@ export function DeityAutocomplete({
 
   const getDeityTypeBadge = (type: string) => {
     const typeStyles = {
-      'Divine': 'bg-blue-100 text-blue-800 border-blue-200',
+      Divine: 'bg-blue-100 text-blue-800 border-blue-200',
       'Daedric Prince': 'bg-red-100 text-red-800 border-red-200',
-      'Tribunal': 'bg-purple-100 text-purple-800 border-purple-200',
-      'Ancestor': 'bg-green-100 text-green-800 border-green-200',
+      Tribunal: 'bg-purple-100 text-purple-800 border-purple-200',
+      Ancestor: 'bg-green-100 text-green-800 border-green-200',
       'Nordic Deity': 'bg-orange-100 text-orange-800 border-orange-200',
       'Yokudan Deity': 'bg-yellow-100 text-yellow-800 border-yellow-200',
       'Khajiiti Deity': 'bg-indigo-100 text-indigo-800 border-indigo-200',
-      'Deity': 'bg-gray-100 text-gray-800 border-gray-200',
+      Deity: 'bg-gray-100 text-gray-800 border-gray-200',
     }
 
     return (
@@ -69,7 +72,7 @@ export function DeityAutocomplete({
       metadata: {
         originalReligion: deity.originalReligion,
         favoredRaces: deity.favoredRaces,
-      }
+      },
     }))
   }, [filteredDeityOptions])
 
@@ -90,14 +93,15 @@ export function DeityAutocomplete({
             {option.description}
           </p>
         )}
-        {option.metadata?.favoredRaces && option.metadata.favoredRaces.length > 0 && (
-          <div className="flex items-center gap-1">
-            <Star className="h-3 w-3 text-skyrim-gold" />
-            <span className="text-xs text-muted-foreground">
-              Favors: {option.metadata.favoredRaces.join(', ')}
-            </span>
-          </div>
-        )}
+        {option.metadata?.favoredRaces &&
+          option.metadata.favoredRaces.length > 0 && (
+            <div className="flex items-center gap-1">
+              <Star className="h-3 w-3 text-skyrim-gold" />
+              <span className="text-xs text-muted-foreground">
+                Favors: {option.metadata.favoredRaces.join(', ')}
+              </span>
+            </div>
+          )}
       </div>
     </div>
   )
@@ -113,4 +117,4 @@ export function DeityAutocomplete({
       emptyMessage="No deity found."
     />
   )
-} 
+}

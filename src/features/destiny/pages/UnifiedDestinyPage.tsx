@@ -1,195 +1,155 @@
-import {
-  BuildPageShell,
-  PlayerCreationFilters,
-} from '@/shared/components/playerCreation'
+import { BuildPageShell } from '@/shared/components/playerCreation'
 import type {
   PlayerCreationItem,
-  SearchCategory,
+  SearchOption,
 } from '@/shared/components/playerCreation/types'
 import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
-import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
-import { useEffect, useState } from 'react'
-import { DestinyAccordionList } from '../components/DestinyAccordionList'
-import { DestinyCard } from '../components/DestinyCard'
-import { DestinyDetailPanel } from '../components/DestinyDetailPanel'
-import { DestinyPathBuilder } from '../components/DestinyPathBuilder'
-import type { DestinyNode, PlannedNode } from '../types'
+import { useMemo } from 'react'
+import {
+  useDestinyFilters,
+  type DestinyFilter,
+} from '../adapters/useDestinyFilters'
+import { useDestinyNodes } from '../adapters/useDestinyNodes'
+import { useDestinyPath } from '../adapters/useDestinyPath'
+import { useDestinyPossiblePaths } from '../adapters/useDestinyPossiblePaths'
+import { DestinyAccordionList } from '../components/composition/DestinyAccordionList'
+import { DestinyCard } from '../components/composition/DestinyCard'
+import { DestinyDetailPanel } from '../components/composition/DestinyDetailPanel'
+import { DestinyFilters } from '../components/composition/DestinyFilters'
+import { DestinyPathBuilder } from '../components/composition/DestinyPathBuilder'
+import type { DestinyNode } from '../types'
 
 export function UnifiedDestinyPage() {
-  // Load destiny data from public/data/subclasses.json at runtime
-  const [destinyNodes, setDestinyNodes] = useState<DestinyNode[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [plannedNodes, setPlannedNodes] = useState<PlannedNode[]>([])
+  // Use MVA adapters for data and state management
+  const { nodes, isLoading, error } = useDestinyNodes()
+  const { currentPath, isValidPath, pathErrors, setPath, clearPath } =
+    useDestinyPath({
+      validatePath: true,
+    })
 
-  useEffect(() => {
-    async function fetchDestinyData() {
-      try {
-        setLoading(true)
-        const res = await fetch(
-          `${import.meta.env.BASE_URL}data/subclasses.json`
-        )
-        if (!res.ok) throw new Error('Failed to fetch destiny data')
-        const data = await res.json()
+  // Get possible paths from current position
+  const { possiblePaths } = useDestinyPossiblePaths({
+    fromNode:
+      currentPath.length > 0 ? currentPath[currentPath.length - 1] : undefined,
+  })
 
-        // Transform the data to match our DestinyNode interface
-        const transformedNodes: DestinyNode[] = data.map(
-          (node: any, index: number) => ({
-            id: node.globalFormId || `destiny-${index}`,
-            name: node.name,
-            description: node.description,
-            tags: [], // We'll need to add tags based on the content
-            prerequisites: node.prerequisites || [],
-            nextBranches: [], // We'll need to derive this from prerequisites
-            levelRequirement: undefined, // Not in current data
-            lore: undefined, // Not in current data
-            globalFormId: node.globalFormId,
-          })
-        )
+  // Use destiny filters for reference page
+  const referenceFilters = useDestinyFilters({
+    filterType: 'reference',
+  })
 
-        // Note: nextBranches are now calculated dynamically in the tree view
-        // based on the graph structure, so we don't need to pre-calculate them
-
-        // Add some basic tags based on content
-        transformedNodes.forEach(node => {
-          const tags = []
-          if (node.description.toLowerCase().includes('magicka'))
-            tags.push('Magic')
-          if (node.description.toLowerCase().includes('health'))
-            tags.push('Defensive')
-          if (node.description.toLowerCase().includes('stamina'))
-            tags.push('Utility')
-          if (node.description.toLowerCase().includes('damage'))
-            tags.push('Offensive')
-          if (node.description.toLowerCase().includes('armor'))
-            tags.push('Defensive')
-          if (node.description.toLowerCase().includes('spell'))
-            tags.push('Magic')
-          if (node.description.toLowerCase().includes('weapon'))
-            tags.push('Combat')
-          node.tags = tags
-        })
-
-        setDestinyNodes(transformedNodes)
-      } catch (err) {
-        setError('Failed to load destiny data')
-        console.error('Error loading destiny data:', err)
-      } finally {
-        setLoading(false)
-      }
+  // Filter nodes for reference page based on destiny filters
+  const filteredNodes = useMemo(() => {
+    if (referenceFilters.selectedFilters.length === 0) {
+      return nodes
     }
-    fetchDestinyData()
-  }, [])
 
-  // Convert destiny nodes to PlayerCreationItem format
-  const playerCreationItems: PlayerCreationItem[] = destinyNodes.map(node => ({
-    id: node.id,
-    name: node.name,
-    description: node.description,
-    tags: node.tags,
-    summary: node.description,
-    effects: [],
-    associatedItems: [],
-    imageUrl: undefined,
-    category: undefined,
-  }))
+    return nodes.filter(node => {
+      return referenceFilters.selectedFilters.every(filter => {
+        switch (filter.type) {
+          case 'tags':
+            // Node must have the specified tag
+            return node.tags.includes(filter.nodeName)
 
-  // Generate search categories for autocomplete
-  const generateSearchCategories = (): SearchCategory[] => {
-    const tags = [...new Set(destinyNodes.flatMap(node => node.tags))]
-    const prerequisites = [
-      ...new Set(destinyNodes.flatMap(node => node.prerequisites)),
-    ]
+          case 'prerequisites':
+            // Node must require the specified prerequisite
+            return node.prerequisites.includes(filter.nodeName)
 
-    return [
-      {
-        id: 'tags',
-        name: 'Tags',
-        placeholder: 'Search by tag...',
-        options: tags.map(tag => ({
-          id: `tag-${tag}`,
-          label: tag,
-          value: tag,
-          category: 'Tags',
-          description: `Destiny nodes with ${tag} tag`,
-        })),
-      },
-      {
-        id: 'prerequisites',
-        name: 'Prerequisites',
-        placeholder: 'Search by prerequisite...',
-        options: prerequisites.map(prereq => ({
-          id: `prereq-${prereq}`,
-          label: prereq,
-          value: prereq,
-          category: 'Prerequisites',
-          description: `Destiny nodes requiring ${prereq}`,
-        })),
-      },
-    ]
-  }
+          default:
+            return true
+        }
+      })
+    })
+  }, [nodes, referenceFilters.selectedFilters])
 
-  const searchCategories = generateSearchCategories()
+  // Convert filtered nodes to PlayerCreationItem format for reference view
+  const filteredPlayerCreationItems: PlayerCreationItem[] = filteredNodes.map(
+    node => ({
+      id: node.id,
+      name: node.name,
+      description: node.description,
+      tags: node.tags,
+      summary: node.description,
+      effects: [],
+      associatedItems: [],
+      imageUrl: undefined,
+      category: undefined,
+    })
+  )
 
-  const {
-    selectedItem,
-    viewMode: defaultViewMode,
-    filteredItems,
-    currentFilters,
-    handleItemSelect,
-    handleFiltersChange,
-    handleSearch,
-    handleViewModeChange,
-  } = usePlayerCreation({
-    items: playerCreationItems,
+  const { viewMode: defaultViewMode } = usePlayerCreation({
+    items: filteredPlayerCreationItems,
     filters: [],
   })
 
   // Override view mode to default to list for destiny reference
   const viewMode = 'list'
 
-  // Use the new filters hook
-  const { handleTagSelect, handleTagRemove } = usePlayerCreationFilters({
-    initialFilters: currentFilters,
-    onFiltersChange: handleFiltersChange,
-    onSearch: handleSearch,
-  })
+  // Handle destiny filter selection for reference page
+  const handleDestinyFilterSelect = (option: string | SearchOption) => {
+    if (typeof option === 'string') {
+      // Custom search - not implemented for destiny filters yet
+      return
+    }
 
-  // Handle planning nodes
-  const handlePlanNode = (nodeId: string) => {
-    const node = destinyNodes.find(n => n.id === nodeId)
-    if (!node) return
+    // Create destiny filter from selected option
+    let destinyFilterType: 'tags' | 'prerequisites'
+    let nodeId: string
 
-    setPlannedNodes(prev => {
-      const isPlanned = prev.some(p => p.id === nodeId)
-      if (isPlanned) {
-        return prev.filter(p => p.id !== nodeId)
-      } else {
-        return [
-          ...prev,
-          {
-            id: nodeId,
-            name: node.name,
-            description: node.description,
-            levelRequirement: node.levelRequirement,
-          },
-        ]
-      }
-    })
+    if (option.category === 'Tags') {
+      destinyFilterType = 'tags'
+      nodeId = option.id.replace(/^tag-/, '')
+    } else if (option.category === 'Prerequisites') {
+      destinyFilterType = 'prerequisites'
+      nodeId = option.id.replace(/^prereq-/, '')
+    } else {
+      return // Unknown category
+    }
+
+    const filter: DestinyFilter = {
+      id: option.id,
+      type: destinyFilterType,
+      nodeName: option.value,
+      nodeId: nodeId,
+      label: option.label,
+    }
+
+    referenceFilters.addFilter(filter)
   }
 
-  // Handle unplanning nodes
-  const handleUnplanNode = (nodeId: string) => {
-    setPlannedNodes(prev => prev.filter(p => p.id !== nodeId))
+  // Handle destiny filter removal for reference page
+  const handleDestinyFilterRemove = (filterId: string) => {
+    referenceFilters.removeFilter(filterId)
+  }
+
+  // Handle destiny filter clear for reference page
+  const handleDestinyFilterClear = () => {
+    referenceFilters.clearFilters()
+  }
+
+  // Handle path changes
+  const handlePathChange = (path: DestinyNode[]) => {
+    setPath(path)
+  }
+
+  // Handle path completion
+  const handlePathComplete = (path: DestinyNode[]) => {
+    setPath(path)
+  }
+
+  // Handle planning nodes (for advanced features)
+  const handlePlanNode = (nodeId: string) => {
+    // TODO: Implement advanced planning features
+    // This could be expanded for advanced planning features
   }
 
   const renderDestinyCard = (item: PlayerCreationItem, isSelected: boolean) => (
     <DestinyCard
       item={item}
       isSelected={isSelected}
-      originalNode={destinyNodes.find(node => node.id === item.id)}
-      allNodes={destinyNodes}
+      originalNode={nodes.find(node => node.id === item.id)}
+      allNodes={nodes}
       viewMode={viewMode}
     />
   )
@@ -197,14 +157,14 @@ export function UnifiedDestinyPage() {
   const renderDestinyDetailPanel = (item: PlayerCreationItem) => (
     <DestinyDetailPanel
       item={item}
-      originalNode={destinyNodes.find(node => node.id === item.id)}
+      originalNode={nodes.find(node => node.id === item.id)}
       onPlanNode={handlePlanNode}
-      isPlanned={plannedNodes.some(p => p.id === item.id)}
-      allNodes={destinyNodes}
+      isPlanned={false} // Could be expanded for planning features
+      allNodes={nodes}
     />
   )
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -244,26 +204,25 @@ export function UnifiedDestinyPage() {
           </TabsList>
 
           <TabsContent value="reference" className="space-y-4">
-            <PlayerCreationFilters
-              searchCategories={searchCategories}
-              selectedTags={currentFilters.selectedTags}
-              onTagSelect={handleTagSelect}
-              onTagRemove={handleTagRemove}
+            <DestinyFilters
+              searchCategories={referenceFilters.searchCategories}
+              selectedFilters={referenceFilters.selectedFilters}
+              onFilterSelect={handleDestinyFilterSelect}
+              onFilterRemove={handleDestinyFilterRemove}
+              onClearFilters={handleDestinyFilterClear}
             />
             <div className="w-full">
               <DestinyAccordionList
-                items={filteredItems}
-                allNodes={destinyNodes}
+                items={filteredPlayerCreationItems}
+                allNodes={nodes}
               />
             </div>
           </TabsContent>
 
           <TabsContent value="path" className="space-y-4">
             <DestinyPathBuilder
-              nodes={destinyNodes}
-              plannedNodes={plannedNodes}
-              onNodePlan={handlePlanNode}
-              onNodeUnplan={handleUnplanNode}
+              onPathChange={handlePathChange}
+              onPathComplete={handlePathComplete}
             />
           </TabsContent>
         </Tabs>

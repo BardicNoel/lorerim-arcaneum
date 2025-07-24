@@ -21,7 +21,7 @@ export function BlessingAutocomplete({
   religions,
   selectedBlessingId,
   onBlessingSelect,
-  placeholder = "Search for a blessing source...",
+  placeholder = 'Search for a blessing source...',
   className,
   disabled = false,
 }: BlessingAutocompleteProps) {
@@ -32,7 +32,10 @@ export function BlessingAutocomplete({
   const inputRef = useRef<HTMLInputElement>(null)
 
   // Get blessing options
-  const blessingOptions = useMemo(() => getBlessingOptions(religions), [religions])
+  const blessingOptions = useMemo(
+    () => getBlessingOptions(religions),
+    [religions]
+  )
 
   // Use fuzzy search
   const { filteredReligions } = useFuzzySearch(religions, searchQuery)
@@ -86,7 +89,9 @@ export function BlessingAutocomplete({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault()
-      setActiveIndex(prev => Math.min(prev + 1, filteredBlessingOptions.length - 1))
+      setActiveIndex(prev =>
+        Math.min(prev + 1, filteredBlessingOptions.length - 1)
+      )
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
       setActiveIndex(prev => Math.max(prev - 1, -1))
@@ -112,14 +117,14 @@ export function BlessingAutocomplete({
 
   const getDeityTypeBadge = (type: string) => {
     const typeStyles = {
-      'Divine': 'bg-blue-100 text-blue-800 border-blue-200',
+      Divine: 'bg-blue-100 text-blue-800 border-blue-200',
       'Daedric Prince': 'bg-red-100 text-red-800 border-red-200',
-      'Tribunal': 'bg-purple-100 text-purple-800 border-purple-200',
-      'Ancestor': 'bg-green-100 text-green-800 border-green-200',
+      Tribunal: 'bg-purple-100 text-purple-800 border-purple-200',
+      Ancestor: 'bg-green-100 text-green-800 border-green-200',
       'Nordic Deity': 'bg-orange-100 text-orange-800 border-orange-200',
       'Yokudan Deity': 'bg-yellow-100 text-yellow-800 border-yellow-200',
       'Khajiiti Deity': 'bg-indigo-100 text-indigo-800 border-indigo-200',
-      'Deity': 'bg-gray-100 text-gray-800 border-gray-200',
+      Deity: 'bg-gray-100 text-gray-800 border-gray-200',
     }
 
     return (
@@ -139,7 +144,7 @@ export function BlessingAutocomplete({
     if (durationSeconds === 0) return 'Permanent'
     const hours = Math.floor(durationSeconds / 3600)
     const minutes = Math.floor((durationSeconds % 3600) / 60)
-    
+
     if (hours > 0) {
       return `${hours}h${minutes > 0 ? ` ${minutes}m` : ''}`
     }
@@ -155,7 +160,7 @@ export function BlessingAutocomplete({
           type="text"
           placeholder={placeholder}
           value={searchQuery}
-          onChange={(e) => handleInputChange(e.target.value)}
+          onChange={e => handleInputChange(e.target.value)}
           onFocus={handleInputFocus}
           onKeyDown={handleKeyDown}
           disabled={disabled}
@@ -177,7 +182,12 @@ export function BlessingAutocomplete({
           onClick={() => setIsOpen(!isOpen)}
           className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
         >
-          <ChevronDown className={cn('h-3 w-3 transition-transform', isOpen && 'rotate-180')} />
+          <ChevronDown
+            className={cn(
+              'h-3 w-3 transition-transform',
+              isOpen && 'rotate-180'
+            )}
+          />
         </Button>
       </div>
 
@@ -209,18 +219,27 @@ export function BlessingAutocomplete({
                   )}
                   {blessing.effects.length > 0 && (
                     <div className="space-y-1">
-                      {blessing.effects.slice(0, 2).map((effect, effectIndex) => (
-                        <div key={effectIndex} className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Zap className="h-3 w-3 text-skyrim-gold" />
-                          <span className="font-medium">{effect.name}</span>
-                          {effect.magnitude > 0 && (
-                            <span className="text-xs">+{effect.magnitude}</span>
-                          )}
-                          {effect.duration > 0 && (
-                            <span className="text-xs">({formatDuration(effect.duration)})</span>
-                          )}
-                        </div>
-                      ))}
+                      {blessing.effects
+                        .slice(0, 2)
+                        .map((effect, effectIndex) => (
+                          <div
+                            key={effectIndex}
+                            className="flex items-center gap-2 text-sm text-muted-foreground"
+                          >
+                            <Zap className="h-3 w-3 text-skyrim-gold" />
+                            <span className="font-medium">{effect.name}</span>
+                            {effect.magnitude > 0 && (
+                              <span className="text-xs">
+                                +{effect.magnitude}
+                              </span>
+                            )}
+                            {effect.duration > 0 && (
+                              <span className="text-xs">
+                                ({formatDuration(effect.duration)})
+                              </span>
+                            )}
+                          </div>
+                        ))}
                       {blessing.effects.length > 2 && (
                         <span className="text-xs text-muted-foreground">
                           +{blessing.effects.length - 2} more effects
@@ -236,4 +255,4 @@ export function BlessingAutocomplete({
       )}
     </div>
   )
-} 
+}

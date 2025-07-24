@@ -18,10 +18,7 @@ import { TraitAccordion } from '../components/TraitAccordion'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import { useFuzzySearch } from '../hooks'
 import type { Trait } from '../types'
-import {
-  getAllCategories,
-  getAllTags,
-} from '../utils'
+import { getAllCategories, getAllTags } from '../utils'
 import { traitToPlayerCreationItem } from '@/shared/utils'
 
 type SortOption = 'alphabetical' | 'category' | 'effect-count'
@@ -55,7 +52,8 @@ export function AccordionTraitsPage() {
   }, [])
 
   // Convert traits to PlayerCreationItem format using the proper transformation
-  const traitItems: (PlayerCreationItem & { originalTrait: Trait })[] = traits.map(traitToPlayerCreationItem)
+  const traitItems: (PlayerCreationItem & { originalTrait: Trait })[] =
+    traits.map(traitToPlayerCreationItem)
 
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
@@ -169,7 +167,8 @@ export function AccordionTraitsPage() {
   )
 
   // Convert to PlayerCreationItem format
-  const displayItems: (PlayerCreationItem & { originalTrait: Trait })[] = fuzzyFilteredTraits.map(traitToPlayerCreationItem)
+  const displayItems: (PlayerCreationItem & { originalTrait: Trait })[] =
+    fuzzyFilteredTraits.map(traitToPlayerCreationItem)
 
   // Get all valid trait IDs for cleanup
   const allValidTraitIds = traits.map(trait => trait.edid)
@@ -316,8 +315,8 @@ export function AccordionTraitsPage() {
               {sortBy === 'alphabetical'
                 ? 'A-Z'
                 : sortBy === 'category'
-                ? 'Category'
-                : 'Count'}
+                  ? 'Category'
+                  : 'Count'}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

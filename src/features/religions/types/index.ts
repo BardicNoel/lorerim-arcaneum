@@ -12,4 +12,4 @@ export type {
   ReligionSelectionState,
   DeityOption,
   BlessingOption,
-} from './selection' 
+} from './selection'

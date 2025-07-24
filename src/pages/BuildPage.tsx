@@ -1,5 +1,5 @@
 import { BirthsignSelectionCard } from '@/features/birthsigns'
-import BuildPageDestinyCard from '@/features/destiny/components/BuildPageDestinyCard'
+import BuildPageDestinyCard from '@/features/destiny/views/BuildPageDestinyCard'
 import { RaceSelectionCard } from '@/features/races/components'
 import { ReligionSelectionCard } from '@/features/religions/components'
 import { SkillSelectionCard } from '@/features/skills'

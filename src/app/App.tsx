@@ -15,8 +15,6 @@ import { useState } from 'react'
 import { HashRouter, useNavigate } from 'react-router-dom'
 import { AppRouter } from './router'
 import { SiteHeader } from './SiteHeader'
-import React from 'react'
-import { SidebarMenuSubButton } from '@/shared/ui/sidebar/SidebarMenuSubButton'
 
 const navSections = [
   {

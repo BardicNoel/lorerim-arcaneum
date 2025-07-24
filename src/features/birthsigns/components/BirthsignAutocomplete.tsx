@@ -1,7 +1,10 @@
 import React, { useMemo } from 'react'
 import { Badge } from '@/shared/ui/ui/badge'
 import { cn } from '@/lib/utils'
-import { GenericAutocomplete, type AutocompleteOption } from '@/shared/components/generic'
+import {
+  GenericAutocomplete,
+  type AutocompleteOption,
+} from '@/shared/components/generic'
 import { BirthsignAvatar } from './BirthsignAvatar'
 import type { Birthsign } from '../types'
 
@@ -39,19 +42,24 @@ export function BirthsignAutocomplete({
       ),
       metadata: {
         originalBirthsign: birthsign,
-      }
+      },
     }))
   }, [birthsigns])
 
   const handleBirthsignSelect = (option: AutocompleteOption) => {
-    const selectedBirthsign = birthsigns.find(birthsign => birthsign.edid === option.id)
+    const selectedBirthsign = birthsigns.find(
+      birthsign => birthsign.edid === option.id
+    )
     if (selectedBirthsign) {
       onSelect(selectedBirthsign)
     }
   }
 
   // Custom renderer for birthsign options
-  const renderBirthsignOption = (option: AutocompleteOption, isActive: boolean) => (
+  const renderBirthsignOption = (
+    option: AutocompleteOption,
+    isActive: boolean
+  ) => (
     <div className="flex items-center gap-3">
       {option.icon && <div className="flex-shrink-0">{option.icon}</div>}
       <div className="flex-1 min-w-0">

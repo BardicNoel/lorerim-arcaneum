@@ -15,7 +15,7 @@ export function useReligionData() {
         )
         if (!res.ok) throw new Error('Failed to fetch religion data')
         const data = await res.json()
-        
+
         // Flatten the pantheon structure to get all religions
         const allReligions: Religion[] = data.flatMap(
           (pantheon: ReligionPantheon) =>
@@ -40,4 +40,4 @@ export function useReligionData() {
     loading,
     error,
   }
-} 
+}

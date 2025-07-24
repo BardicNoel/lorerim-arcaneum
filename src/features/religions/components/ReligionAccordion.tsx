@@ -769,10 +769,19 @@ export function ReligionAccordion({
   }
 
   return (
-    <AccordionCard expanded={isExpanded} onToggle={onToggle} className={className} disableHover={disableHover}>
+    <AccordionCard
+      expanded={isExpanded}
+      onToggle={onToggle}
+      className={className}
+      disableHover={disableHover}
+    >
       <AccordionCard.Header>
         {showToggle && (
-          <AddToBuildSwitchSimple itemId={item.id} itemType="religion" itemName={item.name} />
+          <AddToBuildSwitchSimple
+            itemId={item.id}
+            itemType="religion"
+            itemName={item.name}
+          />
         )}
         <div className="flex-1">
           <H3 className="text-primary font-semibold">{item.name}</H3>
@@ -790,28 +799,34 @@ export function ReligionAccordion({
             {item.category}
           </Badge>
         )}
-        {showFavoredRaces && originalReligion && Array.isArray(originalReligion.favoredRaces) && originalReligion.favoredRaces.length > 0 && (
-          <div className="flex items-center gap-1">
-            {originalReligion.favoredRaces.map((race, index) => (
-              <Badge
-                key={index}
-                variant="outline"
-                className={cn(
-                  'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
-                  sizeClasses.sm,
-                  'font-medium transition-colors'
-                )}
-              >
-                <Star className="h-3 w-3 mr-1" />
-                Favors {race}
-              </Badge>
-            ))}
-          </div>
-        )}
+        {showFavoredRaces &&
+          originalReligion &&
+          Array.isArray(originalReligion.favoredRaces) &&
+          originalReligion.favoredRaces.length > 0 && (
+            <div className="flex items-center gap-1">
+              {originalReligion.favoredRaces.map((race, index) => (
+                <Badge
+                  key={index}
+                  variant="outline"
+                  className={cn(
+                    'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
+                    sizeClasses.sm,
+                    'font-medium transition-colors'
+                  )}
+                >
+                  <Star className="h-3 w-3 mr-1" />
+                  Favors {race}
+                </Badge>
+              ))}
+            </div>
+          )}
       </AccordionCard.Header>
       <AccordionCard.Summary>
         <div className="line-clamp-2">
-          <FormattedText text={item.summary || item.description} className="text-sm text-muted-foreground" />
+          <FormattedText
+            text={item.summary || item.description}
+            className="text-sm text-muted-foreground"
+          />
         </div>
         <div className="flex flex-wrap gap-2">
           {item.effects?.slice(0, 2).map((effect, index) => (
@@ -824,179 +839,285 @@ export function ReligionAccordion({
               <span className="font-medium">{effect.name}</span>
             </div>
           ))}
-          {showFavoredRaces && originalReligion?.favoredRaces?.slice(0, 2).map((race, index) => (
-            <div
-              key={`race-${index}`}
-              className="flex items-center gap-1 px-2 py-1 bg-muted/50 rounded text-xs"
-            >
-              <Star className="h-3 w-3 text-skyrim-gold" />
-              <span className="font-medium">{race}</span>
-            </div>
-          ))}
+          {showFavoredRaces &&
+            originalReligion?.favoredRaces?.slice(0, 2).map((race, index) => (
+              <div
+                key={`race-${index}`}
+                className="flex items-center gap-1 px-2 py-1 bg-muted/50 rounded text-xs"
+              >
+                <Star className="h-3 w-3 text-skyrim-gold" />
+                <span className="font-medium">{race}</span>
+              </div>
+            ))}
         </div>
       </AccordionCard.Summary>
       <AccordionCard.Details>
         {/* Description */}
         {item.description && (
           <div>
-            <FormattedText text={item.description} className="text-sm text-muted-foreground leading-relaxed" />
+            <FormattedText
+              text={item.description}
+              className="text-sm text-muted-foreground leading-relaxed"
+            />
           </div>
         )}
         {/* Favored Races */}
-        {showFavoredRaces && Array.isArray(originalReligion?.favoredRaces) && originalReligion.favoredRaces.length > 0 && (
-          <div>
-            <h5 className="text-lg font-medium text-foreground mb-3">Favored Races</h5>
-            <div className="flex flex-wrap gap-2">
-              {originalReligion.favoredRaces.map((race, index) => (
-                <div key={index} className="flex items-center gap-2 px-3 py-2 bg-muted/50 rounded-lg border border-border">
-                  <Star className="h-4 w-4 text-skyrim-gold" />
-                  <span className="text-sm font-medium">{race}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-        {/* Worship Restrictions */}
-        {Array.isArray(originalReligion?.worshipRestrictions) && originalReligion.worshipRestrictions.length > 0 && (
-          <div>
-            <h5 className="text-lg font-medium text-foreground mb-3">Worship Restrictions</h5>
-            <div className="space-y-2">
-              {originalReligion.worshipRestrictions.map((restriction, index) => (
-                <div key={index} className="p-3 bg-muted/30 rounded-lg border border-border">
-                  <div className="flex items-start gap-2">
-                    <Minus className="h-4 w-4 text-red-500 mt-0.5" />
-                    <FormattedText text={restriction} className="text-sm text-muted-foreground" />
+        {showFavoredRaces &&
+          Array.isArray(originalReligion?.favoredRaces) &&
+          originalReligion.favoredRaces.length > 0 && (
+            <div>
+              <h5 className="text-lg font-medium text-foreground mb-3">
+                Favored Races
+              </h5>
+              <div className="flex flex-wrap gap-2">
+                {originalReligion.favoredRaces.map((race, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 px-3 py-2 bg-muted/50 rounded-lg border border-border"
+                  >
+                    <Star className="h-4 w-4 text-skyrim-gold" />
+                    <span className="text-sm font-medium">{race}</span>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-        {/* Blessing Details */}
-        {showBlessings && Array.isArray(originalReligion?.blessing?.effects) && originalReligion.blessing.effects.length > 0 && (
-          <div>
-            <h5 className="text-lg font-medium text-foreground mb-3">Blessing of {item.name}</h5>
-            <div className="space-y-3">
-              {originalReligion.blessing.effects
-                .filter(effect => effect.effectType !== '1' && effect.effectType !== '3')
-                .map((effect, index) => {
-                  const { hasMagnitude, hasDuration } = hasPlaceholders(effect.effectDescription)
-                  return (
-                    <div key={index} className="p-3 bg-muted/50 rounded-lg border border-border">
-                      <div className="flex items-start gap-3">
-                        <div className="flex items-center gap-2">
-                          {getEffectIconByType('positive')}
-                          {effect.effectType && getEffectIcon(effect.effectType)}
-                        </div>
-                        <div className="flex-1">
-                          <P className="font-medium text-sm mb-1">{effect.effectName}</P>
-                          <FormattedBlessingDescription description={effect.effectDescription} magnitude={effect.magnitude} duration={effect.duration} area={effect.area} />
-                          {hasDuration && effect.duration > 0 && (
-                            <P className="text-xs text-muted-foreground mt-1">Lasts for {formatDuration(effect.duration)}.</P>
-                          )}
-                          <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
-                            {effect.area > 0 && <span>Area: {effect.area}</span>}
-                          </div>
-                        </div>
+          )}
+        {/* Worship Restrictions */}
+        {Array.isArray(originalReligion?.worshipRestrictions) &&
+          originalReligion.worshipRestrictions.length > 0 && (
+            <div>
+              <h5 className="text-lg font-medium text-foreground mb-3">
+                Worship Restrictions
+              </h5>
+              <div className="space-y-2">
+                {originalReligion.worshipRestrictions.map(
+                  (restriction, index) => (
+                    <div
+                      key={index}
+                      className="p-3 bg-muted/30 rounded-lg border border-border"
+                    >
+                      <div className="flex items-start gap-2">
+                        <Minus className="h-4 w-4 text-red-500 mt-0.5" />
+                        <FormattedText
+                          text={restriction}
+                          className="text-sm text-muted-foreground"
+                        />
                       </div>
                     </div>
                   )
-                })}
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        {/* Blessing Details */}
+        {showBlessings &&
+          Array.isArray(originalReligion?.blessing?.effects) &&
+          originalReligion.blessing.effects.length > 0 && (
+            <div>
+              <h5 className="text-lg font-medium text-foreground mb-3">
+                Blessing of {item.name}
+              </h5>
+              <div className="space-y-3">
+                {originalReligion.blessing.effects
+                  .filter(
+                    effect =>
+                      effect.effectType !== '1' && effect.effectType !== '3'
+                  )
+                  .map((effect, index) => {
+                    const { hasMagnitude, hasDuration } = hasPlaceholders(
+                      effect.effectDescription
+                    )
+                    return (
+                      <div
+                        key={index}
+                        className="p-3 bg-muted/50 rounded-lg border border-border"
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="flex items-center gap-2">
+                            {getEffectIconByType('positive')}
+                            {effect.effectType &&
+                              getEffectIcon(effect.effectType)}
+                          </div>
+                          <div className="flex-1">
+                            <P className="font-medium text-sm mb-1">
+                              {effect.effectName}
+                            </P>
+                            <FormattedBlessingDescription
+                              description={effect.effectDescription}
+                              magnitude={effect.magnitude}
+                              duration={effect.duration}
+                              area={effect.area}
+                            />
+                            {hasDuration && effect.duration > 0 && (
+                              <P className="text-xs text-muted-foreground mt-1">
+                                Lasts for {formatDuration(effect.duration)}.
+                              </P>
+                            )}
+                            <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
+                              {effect.area > 0 && (
+                                <span>Area: {effect.area}</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+              </div>
+            </div>
+          )}
         {/* Tenet Effects */}
-        {showTenets && Array.isArray(originalReligion?.tenet?.effects) && originalReligion.tenet.effects.length > 0 && (
-          <div>
-            <h5 className="text-lg font-medium text-foreground mb-3">Tenets of {item.name}</h5>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {originalReligion.tenet.effects.map((effect, index) => {
-                const tenetSentences = effect.effectDescription.split('.').filter(sentence => sentence.trim().length > 0)
-                return tenetSentences.map((tenet, tenetIndex) => (
-                  <div key={`${index}-${tenetIndex}`} className="flex items-start gap-2 p-3 bg-muted/50 rounded-lg border border-border">
-                    <div className="flex items-center gap-2">
-                      {getEffectIconByType('positive')}
-                      {effect.targetAttribute && getEffectIcon(effect.targetAttribute)}
+        {showTenets &&
+          Array.isArray(originalReligion?.tenet?.effects) &&
+          originalReligion.tenet.effects.length > 0 && (
+            <div>
+              <h5 className="text-lg font-medium text-foreground mb-3">
+                Tenets of {item.name}
+              </h5>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {originalReligion.tenet.effects.map((effect, index) => {
+                  const tenetSentences = effect.effectDescription
+                    .split('.')
+                    .filter(sentence => sentence.trim().length > 0)
+                  return tenetSentences.map((tenet, tenetIndex) => (
+                    <div
+                      key={`${index}-${tenetIndex}`}
+                      className="flex items-start gap-2 p-3 bg-muted/50 rounded-lg border border-border"
+                    >
+                      <div className="flex items-center gap-2">
+                        {getEffectIconByType('positive')}
+                        {effect.targetAttribute &&
+                          getEffectIcon(effect.targetAttribute)}
+                      </div>
+                      <div className="flex-1">
+                        <FormattedDescription
+                          description={tenet.trim() + '.'}
+                        />
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <FormattedDescription description={tenet.trim() + '.'} />
-                    </div>
-                  </div>
-                ))
-              })}
+                  ))
+                })}
+              </div>
             </div>
-          </div>
-        )}
+          )}
         {/* Boons Section - Follower and Devotee Powers */}
-        {showBoons && ((Array.isArray(originalReligion?.boon1?.effects) && originalReligion.boon1.effects.length > 0) || (Array.isArray(originalReligion?.boon2?.effects) && originalReligion.boon2.effects.length > 0)) && (
-          <div>
-            <h5 className="text-lg font-medium text-foreground mb-3">Boons of {item.name}</h5>
-            <div className="space-y-4">
-              {/* Follower Power (Boon 1) */}
-              {Array.isArray(originalReligion?.boon1?.effects) && originalReligion.boon1.effects.length > 0 && (
-                <div>
-                  <h6 className="text-md font-medium text-foreground mb-2">Follower Boon</h6>
-                  <div className="space-y-3">
-                    {originalReligion.boon1.effects.map((effect, index) => {
-                      const { hasMagnitude, hasDuration } = hasPlaceholders(effect.effectDescription)
-                      return (
-                        <div key={index} className="p-3 bg-muted/50 rounded-lg border border-border">
-                          <div className="flex items-start gap-3">
-                            <div className="flex items-center gap-2">
-                              {getEffectIconByType('positive')}
-                              {effect.effectType && getEffectIcon(effect.effectType)}
-                            </div>
-                            <div className="flex-1">
-                              <P className="font-medium text-sm mb-1">{effect.effectName}</P>
-                              <FormattedBlessingDescription description={effect.effectDescription} magnitude={effect.magnitude} duration={effect.duration} area={effect.area} />
-                              {hasDuration && effect.duration > 0 && (
-                                <P className="text-xs text-muted-foreground mt-1">Lasts for {formatDuration(effect.duration)}.</P>
-                              )}
-                              <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
-                                {effect.area > 0 && <span>Area: {effect.area}</span>}
+        {showBoons &&
+          ((Array.isArray(originalReligion?.boon1?.effects) &&
+            originalReligion.boon1.effects.length > 0) ||
+            (Array.isArray(originalReligion?.boon2?.effects) &&
+              originalReligion.boon2.effects.length > 0)) && (
+            <div>
+              <h5 className="text-lg font-medium text-foreground mb-3">
+                Boons of {item.name}
+              </h5>
+              <div className="space-y-4">
+                {/* Follower Power (Boon 1) */}
+                {Array.isArray(originalReligion?.boon1?.effects) &&
+                  originalReligion.boon1.effects.length > 0 && (
+                    <div>
+                      <h6 className="text-md font-medium text-foreground mb-2">
+                        Follower Boon
+                      </h6>
+                      <div className="space-y-3">
+                        {originalReligion.boon1.effects.map((effect, index) => {
+                          const { hasMagnitude, hasDuration } = hasPlaceholders(
+                            effect.effectDescription
+                          )
+                          return (
+                            <div
+                              key={index}
+                              className="p-3 bg-muted/50 rounded-lg border border-border"
+                            >
+                              <div className="flex items-start gap-3">
+                                <div className="flex items-center gap-2">
+                                  {getEffectIconByType('positive')}
+                                  {effect.effectType &&
+                                    getEffectIcon(effect.effectType)}
+                                </div>
+                                <div className="flex-1">
+                                  <P className="font-medium text-sm mb-1">
+                                    {effect.effectName}
+                                  </P>
+                                  <FormattedBlessingDescription
+                                    description={effect.effectDescription}
+                                    magnitude={effect.magnitude}
+                                    duration={effect.duration}
+                                    area={effect.area}
+                                  />
+                                  {hasDuration && effect.duration > 0 && (
+                                    <P className="text-xs text-muted-foreground mt-1">
+                                      Lasts for{' '}
+                                      {formatDuration(effect.duration)}.
+                                    </P>
+                                  )}
+                                  <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
+                                    {effect.area > 0 && (
+                                      <span>Area: {effect.area}</span>
+                                    )}
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              )}
-              {/* Devotee Power (Boon 2) */}
-              {Array.isArray(originalReligion?.boon2?.effects) && originalReligion.boon2.effects.length > 0 && (
-                <div>
-                  <h6 className="text-md font-medium text-foreground mb-2">Devotee Boon</h6>
-                  <div className="space-y-3">
-                    {originalReligion.boon2.effects.map((effect, index) => {
-                      const { hasMagnitude, hasDuration } = hasPlaceholders(effect.effectDescription)
-                      return (
-                        <div key={index} className="p-3 bg-muted/50 rounded-lg border border-border">
-                          <div className="flex items-start gap-3">
-                            <div className="flex items-center gap-2">
-                              {getEffectIconByType('positive')}
-                              {effect.effectType && getEffectIcon(effect.effectType)}
-                            </div>
-                            <div className="flex-1">
-                              <P className="font-medium text-sm mb-1">{effect.effectName}</P>
-                              <FormattedBlessingDescription description={effect.effectDescription} magnitude={effect.magnitude} duration={effect.duration} area={effect.area} />
-                              {hasDuration && effect.duration > 0 && (
-                                <P className="text-xs text-muted-foreground mt-1">Lasts for {formatDuration(effect.duration)}.</P>
-                              )}
-                              <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
-                                {effect.area > 0 && <span>Area: {effect.area}</span>}
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )}
+                {/* Devotee Power (Boon 2) */}
+                {Array.isArray(originalReligion?.boon2?.effects) &&
+                  originalReligion.boon2.effects.length > 0 && (
+                    <div>
+                      <h6 className="text-md font-medium text-foreground mb-2">
+                        Devotee Boon
+                      </h6>
+                      <div className="space-y-3">
+                        {originalReligion.boon2.effects.map((effect, index) => {
+                          const { hasMagnitude, hasDuration } = hasPlaceholders(
+                            effect.effectDescription
+                          )
+                          return (
+                            <div
+                              key={index}
+                              className="p-3 bg-muted/50 rounded-lg border border-border"
+                            >
+                              <div className="flex items-start gap-3">
+                                <div className="flex items-center gap-2">
+                                  {getEffectIconByType('positive')}
+                                  {effect.effectType &&
+                                    getEffectIcon(effect.effectType)}
+                                </div>
+                                <div className="flex-1">
+                                  <P className="font-medium text-sm mb-1">
+                                    {effect.effectName}
+                                  </P>
+                                  <FormattedBlessingDescription
+                                    description={effect.effectDescription}
+                                    magnitude={effect.magnitude}
+                                    duration={effect.duration}
+                                    area={effect.area}
+                                  />
+                                  {hasDuration && effect.duration > 0 && (
+                                    <P className="text-xs text-muted-foreground mt-1">
+                                      Lasts for{' '}
+                                      {formatDuration(effect.duration)}.
+                                    </P>
+                                  )}
+                                  <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
+                                    {effect.area > 0 && (
+                                      <span>Area: {effect.area}</span>
+                                    )}
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              )}
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </AccordionCard.Details>
     </AccordionCard>
   )
