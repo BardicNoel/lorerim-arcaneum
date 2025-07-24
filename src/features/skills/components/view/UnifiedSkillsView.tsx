@@ -4,94 +4,57 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { PerkTreeView } from './PerkTreeView'
 import { SkillGrid } from '../composition/SkillGrid'
-import { useUnifiedSkills } from '../../hooks/useUnifiedSkills'
+import { useSkillsDetail } from '../../adapters'
 
 function UnifiedSkillsView() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const [selectedSkill, setSelectedSkill] = useState<string | null>(null)
-  const [drawerOpen, setDrawerOpen] = useState(false)
 
   // Get skills data and perk trees
-  const { skills, loading, error, perkTrees } = useUnifiedSkills()
-
-  // Get skills management from character build
-  const { addMajorSkill, removeMajorSkill, addMinorSkill, removeMinorSkill } =
-    useCharacterBuild()
+  const { 
+    skills, 
+    loading, 
+    error, 
+    selectedSkillId,
+    selectedSkill,
+    drawerOpen,
+    handleSkillSelect,
+    handleAssignMajor,
+    handleAssignMinor,
+    handleRemoveAssignment,
+    handleDrawerOpenChange,
+    handleResetPerks,
+    selectedPerkTree
+  } = useSkillsDetail()
 
   // Sync selected skill with URL
   useEffect(() => {
     const skillFromUrl = searchParams.get('skill')
-    setSelectedSkill(skillFromUrl)
-    // Open drawer if skill is selected from URL
-    if (skillFromUrl) {
-      setDrawerOpen(true)
+    if (skillFromUrl && skillFromUrl !== selectedSkillId) {
+      handleSkillSelect(skillFromUrl)
     }
-  }, [searchParams])
+  }, [searchParams, selectedSkillId, handleSkillSelect])
 
   // Update URL when selected skill changes
   useEffect(() => {
-    if (selectedSkill) {
-      searchParams.set('skill', selectedSkill)
+    if (selectedSkillId) {
+      searchParams.set('skill', selectedSkillId)
     } else {
       searchParams.delete('skill')
     }
     setSearchParams(searchParams, { replace: true })
-  }, [selectedSkill, searchParams, setSearchParams])
-
-  // Handle skill selection
-  const handleSkillSelect = (skillId: string) => {
-    setSelectedSkill(skillId)
-    setDrawerOpen(true)
-  }
-
-  // Handle skill assignment
-  const handleAssignMajor = (skillId: string) => {
-    addMajorSkill(skillId)
-  }
-  const handleAssignMinor = (skillId: string) => {
-    addMinorSkill(skillId)
-  }
-  const handleRemoveAssignment = (skillId: string) => {
-    removeMajorSkill(skillId)
-    removeMinorSkill(skillId)
-  }
+  }, [selectedSkillId, searchParams, setSearchParams])
 
   // Map skills to SkillGrid format
   const gridSkills = skills.map(skill => ({
-    id: skill.edid,
+    id: skill.id,
     name: skill.name,
     description: skill.description,
     category: skill.category,
     assignmentType: skill.isMajor ? 'major' as const : skill.isMinor ? 'minor' as const : 'none' as const,
-    perkCount: `${skill.selectedPerks}/${skill.totalPerks}`,
-    canAssignMajor: !skill.isMajor,
-    canAssignMinor: !skill.isMinor,
+    perkCount: `${skill.selectedPerksCount}/${skill.totalPerks}`,
+    canAssignMajor: skill.canAssignMajor,
+    canAssignMinor: skill.canAssignMinor,
   }))
-
-  // Handle back to skills grid
-  const handleBackToSkills = () => {
-    setSelectedSkill(null)
-    setDrawerOpen(false)
-  }
-
-  // Handle drawer open change
-  const handleDrawerOpenChange = (open: boolean) => {
-    setDrawerOpen(open)
-    if (!open) {
-      // Clear selected skill when drawer closes
-      setSelectedSkill(null)
-    }
-  }
-
-  // Handle reset perks
-  const handleResetPerks = () => {
-    // The PerkTreeView component handles the actual reset
-    console.log('Reset perks for skill:', selectedSkill)
-  }
-
-  // Get the selected perk tree
-  const selectedPerkTree = perkTrees.find(tree => tree.treeId === selectedSkill)
-  const selectedSkillData = skills.find(skill => skill.edid === selectedSkill)
 
   if (loading) {
     return (
@@ -149,8 +112,8 @@ function UnifiedSkillsView() {
 
         {/* Perk Tree View Section */}
         <PerkTreeView
-          selectedSkill={selectedSkill}
-          skillName={selectedSkillData?.name}
+          selectedSkill={selectedSkillId}
+          skillName={selectedSkill?.name}
           perkTree={selectedPerkTree}
           skills={skills}
           onSkillSelect={handleSkillSelect}

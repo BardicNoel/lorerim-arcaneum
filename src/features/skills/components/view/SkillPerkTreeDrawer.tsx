@@ -19,7 +19,7 @@ import {
 import { RotateCcw, X } from 'lucide-react'
 import React from 'react'
 import * as DrawerPrimitive from 'vaul'
-import type { SkillWithPerks } from '../../hooks/useUnifiedSkills'
+import type { DetailSkill } from '../../adapters'
 import type { PerkTree } from '../../types'
 
 export interface SkillPerkTreeDrawerProps {
@@ -28,7 +28,7 @@ export interface SkillPerkTreeDrawerProps {
   selectedSkill: string | null
   skillName?: string
   perkTree?: PerkTree
-  skills: SkillWithPerks[]
+  skills: DetailSkill[]
   onSkillSelect: (skillId: string) => void
   onReset: () => void
 }

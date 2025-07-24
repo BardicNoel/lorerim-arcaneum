@@ -4,8 +4,8 @@ import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { useUnifiedSkills } from '../../hooks/useUnifiedSkills'
-import type { Skill } from '../../types'
+import { useSkillsQuickSelector } from '../../adapters'
+import type { QuickSelectorSkill } from '../../adapters'
 import { SkillAutocomplete } from '../composition/SkillAutocomplete'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 
@@ -14,51 +14,20 @@ interface SkillSelectionCardProps {
 }
 
 export function SkillSelectionCard({ className }: SkillSelectionCardProps) {
-  const { skills } = useUnifiedSkills()
-  const {
-    build,
-    addMajorSkill,
-    addMinorSkill,
-    removeMajorSkill,
-    removeMinorSkill,
-  } = useCharacterBuild()
+  const { 
+    selectedMajorSkills, 
+    selectedMinorSkills, 
+    availableSkills,
+    handleMajorSkillSelect,
+    handleMinorSkillSelect,
+    handleMajorSkillRemove,
+    handleMinorSkillRemove
+  } = useSkillsQuickSelector()
   const navigate = useNavigate()
-
-  // Get selected skills
-  const selectedMajorSkills = build.skills.major
-    .map(id => skills.find(skill => skill.edid === id))
-    .filter(Boolean) as Skill[]
-
-  const selectedMinorSkills = build.skills.minor
-    .map(id => skills.find(skill => skill.edid === id))
-    .filter(Boolean) as Skill[]
-
-  const handleMajorSkillSelect = (skill: Skill) => {
-    addMajorSkill(skill.edid)
-  }
-
-  const handleMinorSkillSelect = (skill: Skill) => {
-    addMinorSkill(skill.edid)
-  }
-
-  const handleMajorSkillRemove = (skillId: string) => {
-    removeMajorSkill(skillId)
-  }
-
-  const handleMinorSkillRemove = (skillId: string) => {
-    removeMinorSkill(skillId)
-  }
 
   const handleNavigateToSkillPage = () => {
     navigate('/skills')
   }
-
-  // Filter out already selected skills from autocomplete options
-  const availableSkills = skills.filter(
-    skill =>
-      !build.skills.major.includes(skill.edid) &&
-      !build.skills.minor.includes(skill.edid)
-  )
 
   return (
     <SelectionCardShell
@@ -92,7 +61,7 @@ export function SkillSelectionCard({ className }: SkillSelectionCardProps) {
           {/* Major Skills List */}
           {selectedMajorSkills.length > 0 && (
             <div className="space-y-2">
-              {selectedMajorSkills.map((skill, index) => (
+              {selectedMajorSkills.map((skill) => (
                 <div
                   key={skill.edid}
                   className="flex items-start gap-3 p-3 border rounded-lg bg-yellow-50/50 border-yellow-500 shadow-yellow-500/20"
@@ -143,7 +112,7 @@ export function SkillSelectionCard({ className }: SkillSelectionCardProps) {
           {/* Minor Skills List */}
           {selectedMinorSkills.length > 0 && (
             <div className="space-y-2">
-              {selectedMinorSkills.map((skill, index) => (
+              {selectedMinorSkills.map((skill) => (
                 <div
                   key={skill.edid}
                   className="flex items-start gap-3 p-3 border rounded-lg bg-gray-50/50 border-gray-300 shadow-gray-300/20"
