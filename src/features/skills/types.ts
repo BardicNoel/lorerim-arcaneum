@@ -38,3 +38,22 @@ export interface SkillSearchResult {
   matchType: 'name' | 'description' | 'ability' | 'tag'
   matchScore: number
 }
+
+// Unified skill interface for MVA architecture
+export interface UnifiedSkill {
+  // Basic skill properties
+  id: string
+  name: string
+  category: string
+  description: string
+  keyAbilities: string[]
+  metaTags: string[]
+  assignmentType: 'major' | 'minor' | 'none'
+  canAssignMajor: boolean
+  canAssignMinor: boolean
+  level: number
+  totalPerks: number
+  selectedPerksCount: number
+  selectedPerks: Array<{ currentRank: number }>
+  isSelected: boolean
+}

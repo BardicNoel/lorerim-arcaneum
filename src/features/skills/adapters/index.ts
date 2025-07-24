@@ -1,35 +1,9 @@
-// Export all adapters for easy importing
-
-// Skill adapter
-export { SkillAdapter } from './skillAdapter'
-export type { 
-  UISkill, 
-  UISkillAssignment, 
-  UISkillSummary 
-} from './skillAdapter'
-
-// Perk adapter
-export { PerkAdapter } from './perkAdapter'
-export type { 
-  UIPerk, 
-  UIPerkTree, 
-  UIPerkSelection, 
-  UIPerkRankUpdate 
-} from './perkAdapter'
-
-// Unified adapter
-export { UnifiedAdapter } from './unifiedAdapter'
-export type { 
-  UnifiedSkill, 
-  UnifiedBuildState, 
-  UnifiedSearchResult 
-} from './unifiedAdapter'
-
-// Hook-based adapters (MVA realignment)
-export { useSkillData } from './useSkillData'
-export { useSkillState } from './useSkillState'
-export { useSkillFilters } from './useSkillFilters'
+// Export hook-based adapters (MVA realignment)
+export { usePerkData } from './usePerkData'
 export { useSkillComputed } from './useSkillComputed'
+export { useSkillData } from './useSkillData'
+export { useSkillFilters } from './useSkillFilters'
+export { useSkillState } from './useSkillState'
 
-// Perk-related adapters
-export { usePerkData } from './usePerkData' 
+// Export types for external use
+export type { UnifiedSkill } from '../types'
