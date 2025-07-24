@@ -1,10 +1,10 @@
 import React from 'react'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
-import type { SkillWithPerks } from '../hooks/useUnifiedSkills'
+import type { DetailSkill } from '../../adapters'
 
 export interface UnifiedSkillCardProps {
-  skill: SkillWithPerks
+  skill: DetailSkill
   onSkillSelect: () => void
   onAssignmentChange: (type: 'major' | 'minor' | 'none') => void
 }
@@ -55,7 +55,7 @@ export function UnifiedSkillCard({
         {/* Perks Count */}
         {skill.totalPerks > 0 && (
           <div className="text-sm text-muted-foreground">
-            ⭐ {skill.selectedPerks}/{skill.totalPerks} Perks
+            ⭐ {skill.selectedPerksCount}/{skill.totalPerks} Perks
           </div>
         )}
 
@@ -90,4 +90,4 @@ export function UnifiedSkillCard({
       </CardContent>
     </Card>
   )
-}
+} 

@@ -1,8 +1,8 @@
 import { UnifiedSkillCard } from './UnifiedSkillCard'
-import type { SkillWithPerks } from '../hooks/useUnifiedSkills'
+import type { DetailSkill } from '../../adapters'
 
 export interface SkillsGridProps {
-  skills: SkillWithPerks[]
+  skills: DetailSkill[]
   onSkillSelect: (skillId: string) => void
   onAssignmentChange: (
     skillId: string,
@@ -27,4 +27,4 @@ export function SkillsGrid({
       ))}
     </div>
   )
-}
+} 

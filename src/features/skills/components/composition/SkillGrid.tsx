@@ -46,9 +46,8 @@ export function SkillGrid({
           canAssignMajor={skill.canAssignMajor}
           canAssignMinor={skill.canAssignMinor}
           onSelect={() => onSkillSelect(skill.id)}
-          onAssignMajor={() => onAssignMajor(skill.id)}
-          onAssignMinor={() => onAssignMinor(skill.id)}
-          onRemoveAssignment={() => onRemoveAssignment(skill.id)}
+          onMajorClick={e => { e.preventDefault(); onAssignMajor(skill.id); }}
+          onMinorClick={e => { e.preventDefault(); onAssignMinor(skill.id); }}
           className={selectedSkillId === skill.id ? "ring-2 ring-primary bg-primary/5" : ""}
         />
       ))}

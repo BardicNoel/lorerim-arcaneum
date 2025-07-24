@@ -5,7 +5,6 @@ import type {
   SearchCategory,
   SearchOption,
 } from '@/shared/components/playerCreation/types'
-import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Button } from '@/shared/ui/ui/button'
 import {
   Drawer,
@@ -19,7 +18,8 @@ import {
 import { RotateCcw, X } from 'lucide-react'
 import React from 'react'
 import * as DrawerPrimitive from 'vaul'
-import type { SkillWithPerks } from '../../hooks/useUnifiedSkills'
+import type { DetailSkill } from '../../adapters'
+import { usePerkData } from '../../adapters'
 import type { PerkTree } from '../../types'
 
 export interface SkillPerkTreeDrawerProps {
@@ -28,7 +28,7 @@ export interface SkillPerkTreeDrawerProps {
   selectedSkill: string | null
   skillName?: string
   perkTree?: PerkTree
-  skills: SkillWithPerks[]
+  skills: DetailSkill[]
   onSkillSelect: (skillId: string) => void
   onReset: () => void
 }
@@ -43,18 +43,13 @@ export function SkillPerkTreeDrawer({
   onSkillSelect,
   onReset,
 }: SkillPerkTreeDrawerProps) {
-  // Use global build state for perks
+  // Use perk data adapter
   const {
-    addPerk,
-    removePerk,
-    setPerkRank,
-    clearSkillPerks,
-    getSkillPerks,
-    getPerkRank,
-  } = useCharacterBuild()
-
-  // Get selected perks for the current skill from global state
-  const selectedPerks = selectedSkill ? getSkillPerks(selectedSkill) : []
+    selectedPerks,
+    handlePerkSelect,
+    handlePerkRankChange,
+    handleResetPerks,
+  } = usePerkData(selectedSkill)
 
   // Convert selected perk IDs to PerkNode objects for the canvas
   const selectedPerkNodes = React.useMemo(() => {
@@ -65,35 +60,26 @@ export function SkillPerkTreeDrawer({
       .map(perk => ({
         ...perk,
         selected: true,
-        currentRank: getPerkRank(perk.edid),
+        currentRank: 1, // Default rank, could be enhanced to track actual ranks
       }))
-  }, [perkTree, selectedPerks, getPerkRank])
+  }, [perkTree, selectedPerks])
 
   const handleTogglePerk = React.useCallback(
     (perkId: string) => {
-      if (!selectedSkill || !perkTree) return
-
-      const isSelected = selectedPerks.includes(perkId)
-      if (isSelected) {
-        removePerk(selectedSkill, perkId)
-      } else {
-        addPerk(selectedSkill, perkId)
-      }
+      handlePerkSelect(perkId)
     },
-    [selectedSkill, perkTree, selectedPerks, removePerk, addPerk]
+    [handlePerkSelect]
   )
 
   const handleRankChange = React.useCallback(
     (perkId: string, newRank: number) => {
-      setPerkRank(perkId, newRank)
+      handlePerkRankChange(perkId, newRank)
     },
-    [setPerkRank]
+    [handlePerkRankChange]
   )
 
   const handleReset = () => {
-    if (selectedSkill) {
-      clearSkillPerks(selectedSkill)
-    }
+    handleResetPerks()
     onReset()
   }
 
