@@ -1,1 +1,1 @@
-export {PerkTreeCanvasII} from './PerkTreeCanvasII'
+export { PerkTreeCanvas } from './PerkTreeCanvas'

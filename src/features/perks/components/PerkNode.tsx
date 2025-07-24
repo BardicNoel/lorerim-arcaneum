@@ -5,6 +5,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/shared/ui/ui/hover-card'
+import { Z_INDEX } from '@/lib/constants'
 import type { PerkNode as PerkNodeType } from '../types'
 
 interface PerkNodeProps {
@@ -32,50 +33,16 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
   const isSelected =
     totalRanks > 1 ? (data.currentRank || 0) > 0 : data.selected || selected
 
-  const handleToggle = (e: React.MouseEvent) => {
+  const handleCycleRank = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    const perkId = data.edid
-    const perkName = data.name
-    console.log(
-      `Toggling perk: ${perkName} (${perkId}), currently selected: ${isSelected}, current rank: ${data.currentRank}`
-    )
-
-    if (onTogglePerk) {
-      onTogglePerk(perkId)
-    }
-  }
-
-  const handleRankCycle = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-
-    // If the perk isn't selected yet, select it with rank 1
-    if (!isSelected) {
-      const perkName = data.name
-      const perkId = data.edid
-      console.log(`Selecting multi-rank perk: ${perkName} with rank 1`)
-      
-      // Add the perk and set initial rank to 1
-      if (onTogglePerk) {
-        onTogglePerk(perkId)
-      }
-      if (onRankChange) {
-        onRankChange(perkId, 1)
-      }
-      return
-    }
-
-    // If already selected, cycle through ranks
-    if (!onRankChange) return
-
     const currentRank = data.currentRank || 0
-    const nextRank = (currentRank + 1) % (totalRanks + 1) // 0 -> 1 -> 2 -> 3 -> 0
-
-    const perkName = data.name
-    console.log(`Cycling rank for ${perkName}: ${currentRank} -> ${nextRank}`)
-    const perkId = data.edid
-    onRankChange(perkId, nextRank)
+    const maxRank = data.totalRanks || 1
+    // Cycle: 0 (unselected) -> 1 -> ... -> maxRank -> 0
+    const nextRank = currentRank >= maxRank ? 0 : currentRank + 1
+    if (onRankChange) {
+      onRankChange(data.edid, nextRank)
+    }
   }
 
   const getNodeStyle = () => {
@@ -129,7 +96,7 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
       <HoverCardTrigger asChild>
         <div
           style={getNodeStyle()}
-          onClick={totalRanks > 1 ? handleRankCycle : handleToggle}
+          onClick={handleCycleRank}
           onMouseDown={e => e.stopPropagation()}
         >
           {/* Only show target handle if this node is not a root (has prerequisites) */}
@@ -151,7 +118,7 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
 
       <HoverCardContent
         className="w-80 bg-background border border-border shadow-lg"
-        style={{ zIndex: 1000 }}
+        style={{ zIndex: Z_INDEX.TOOLTIP }}
       >
         <div className="space-y-2">
           <h4 className="font-semibold text-sm">{data.name}</h4>

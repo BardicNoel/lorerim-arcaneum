@@ -18,6 +18,7 @@ import 'reactflow/dist/style.css'
 import { PerkNode } from '../PerkNode'
 import type { PerkTree, PerkNode as PerkNodeType, PerkNodeData } from '../../types'
 import { validatePerkTreeSafe } from '../../utils'
+import { Z_INDEX } from '@/lib/constants'
 
 interface PerkTreeCanvasProps {
   tree: PerkTree | undefined
@@ -681,7 +682,7 @@ export function PerkTreeCanvas({
   return (
     <div
       className="w-full h-full bg-background rounded-lg border"
-      style={{ zIndex: 1 }}
+      style={{ zIndex: Z_INDEX.CONTENT }}
     >
       <ReactFlow
         nodes={nodes}
@@ -706,8 +707,14 @@ export function PerkTreeCanvas({
         minZoom={0.1}
         maxZoom={2}
         defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
+        style={{ backgroundColor: 'hsl(var(--background))' }}
       >
-        <Background />
+        <Background 
+          color="hsl(var(--muted-foreground))"
+          gap={20}
+          size={1}
+          style={{ backgroundColor: 'hsl(var(--background))' }}
+        />
         <Controls />
       </ReactFlow>
     </div>

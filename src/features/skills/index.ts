@@ -1,6 +1,11 @@
-export * from './components'
-export * from './hooks'
+// Export main entry point
 export { SkillsPage } from './pages/SkillsPage'
-export { UnifiedSkillsPage } from './pages/UnifiedSkillsPage'
-export * from './types'
-export * from './utils'
+
+// Export components for reuse
+export * from './components'
+
+// Export adapters for testing
+export * from './adapters'
+
+// Export models for testing
+export * from './model'

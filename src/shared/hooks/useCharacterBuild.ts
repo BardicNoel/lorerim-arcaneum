@@ -468,3 +468,27 @@ export function useCharacterBuild() {
     isSlotAvailable,
   }
 }
+
+/**
+ * usePerkNodeCycle
+ * Returns a callback to cycle a perk node's rank in the character build.
+ * @param skillId - The skill tree id this perk belongs to
+ * @param perkId - The perk's id
+ * @param maxRank - The maximum rank for this perk
+ */
+export function usePerkNodeCycle(skillId: string, perkId: string, maxRank: number) {
+  const { getPerkRank, addPerk, setPerkRank, removePerk } = useCharacterBuild();
+
+  return () => {
+    const currentRank = getPerkRank(perkId) || 0;
+    if (currentRank === 0) {
+      addPerk(skillId, perkId);
+      setPerkRank(perkId, 1);
+    } else if (currentRank > 0 && currentRank < maxRank) {
+      setPerkRank(perkId, currentRank + 1);
+    } else if (currentRank === maxRank) {
+      removePerk(skillId, perkId);
+      setPerkRank(perkId, 0);
+    }
+  };
+}
