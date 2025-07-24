@@ -9,6 +9,7 @@ export interface DetailSkill extends UnifiedSkill {
   isMinor: boolean
   canAssignMajor: boolean
   canAssignMinor: boolean
+  level?: number // Add minimum skill level
 }
 
 // Adapter for skill detail/perk tree views

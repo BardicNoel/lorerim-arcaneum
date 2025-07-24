@@ -2,6 +2,7 @@ import React from 'react'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import type { DetailSkill } from '../../adapters'
+import { SkillLevelBadge } from '../atomic/SkillLevelBadge'
 
 export interface UnifiedSkillCardProps {
   skill: DetailSkill
@@ -52,12 +53,20 @@ export function UnifiedSkillCard({
       </CardHeader>
 
       <CardContent className="pt-0 space-y-3">
-        {/* Perks Count */}
-        {skill.totalPerks > 0 && (
-          <div className="text-sm text-muted-foreground">
-            ⭐ {skill.selectedPerksCount}/{skill.totalPerks} Perks
-          </div>
-        )}
+        {/* Skill Level and Perks Count */}
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
+          {/* Skill Level Badge */}
+          {skill.level > 0 && (
+            <SkillLevelBadge level={skill.level} />
+          )}
+          
+          {/* Perks Count */}
+          {skill.totalPerks > 0 && (
+            <div className="flex items-center gap-1">
+              <span>⭐ {skill.selectedPerksCount}/{skill.totalPerks} Perks</span>
+            </div>
+          )}
+        </div>
 
         {/* Assignment Badges */}
         <div className="flex gap-2">

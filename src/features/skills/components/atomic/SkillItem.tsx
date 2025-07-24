@@ -5,6 +5,7 @@ import {
   SkillCategoryBadge,
   SkillPerkCountBadge,
 } from './index'
+import { SkillLevelBadge } from './SkillLevelBadge'
 
 // Pure presentational component for individual skill display
 interface SkillItemProps {
@@ -13,6 +14,7 @@ interface SkillItemProps {
   category: string
   assignmentType: 'major' | 'minor' | 'none'
   perkCount: string
+  level?: number
   onSelect: () => void
   onMajorClick: (e: React.MouseEvent) => void
   onMinorClick: (e: React.MouseEvent) => void
@@ -27,6 +29,7 @@ export function SkillItem({
   category,
   assignmentType,
   perkCount,
+  level,
   onSelect,
   onMajorClick,
   onMinorClick,
@@ -62,6 +65,7 @@ export function SkillItem({
       <div className="flex gap-2 flex-wrap mb-4">
         <SkillCategoryBadge category={category} />
         <SkillPerkCountBadge count={perkCount} />
+        {typeof level === 'number' && level > 0 && <SkillLevelBadge level={level} />}
       </div>
 
       {/* Assignment Controls */}

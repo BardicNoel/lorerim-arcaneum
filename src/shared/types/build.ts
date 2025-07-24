@@ -21,6 +21,7 @@ export interface BuildState {
     selected: Record<string, string[]> // skillId -> array of perk EDIDs
     ranks: Record<string, number> // perkId -> current rank
   }
+  skillLevels: Record<string, number> // skillId -> minimum required level based on selected perks
   equipment: string[] // Array of EDIDs
   userProgress: {
     unlocks: string[] // Array of unlock IDs
@@ -51,6 +52,7 @@ export const DEFAULT_BUILD: BuildState = {
     selected: {},
     ranks: {},
   },
+  skillLevels: {},
   equipment: [],
   userProgress: {
     unlocks: [],

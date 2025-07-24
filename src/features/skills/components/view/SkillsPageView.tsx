@@ -72,6 +72,7 @@ export function SkillsPageView({
     metaTags: [], // Default value since SkillsPageSkill doesn't have this
     totalPerks: skill.totalPerks,
     selectedPerks: skill.selectedPerksCount,
+    level: skill.level, // Add minimum skill level
     isMajor: skill.assignmentType === 'major',
     isMinor: skill.assignmentType === 'minor',
   }))

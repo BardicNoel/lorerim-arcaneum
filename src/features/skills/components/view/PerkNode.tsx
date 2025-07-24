@@ -6,7 +6,7 @@ import {
   HoverCardTrigger,
 } from '@/shared/ui/ui/hover-card'
 import { Z_INDEX } from '@/lib/constants'
-import type { PerkNode as PerkNodeType } from '../types'
+import type { PerkNode as PerkNodeType } from '../../types'
 
 interface PerkNodeProps {
   data: PerkNodeType & {
@@ -136,6 +136,12 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
         <div className="space-y-2">
           <h4 className="font-semibold text-sm">{data.name}</h4>
           <div className="text-sm text-muted-foreground">{description}</div>
+          {/* Minimum skill level requirement */}
+          {typeof data.ranks[0]?.prerequisites?.skillLevel?.level === 'number' && data.ranks[0].prerequisites.skillLevel.level > 0 && (
+            <div className="text-xs text-blue-700 font-medium pt-1">
+              Min. Level: {data.ranks[0].prerequisites.skillLevel.level}
+            </div>
+          )}
           {totalRanks > 1 && (
             <div className="text-xs text-muted-foreground pt-2 border-t">
               <strong>Ranks:</strong> {data.currentRank || 0}/{totalRanks}
