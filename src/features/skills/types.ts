@@ -38,3 +38,110 @@ export interface SkillSearchResult {
   matchType: 'name' | 'description' | 'ability' | 'tag'
   matchScore: number
 }
+
+// Unified skill interface for MVA architecture
+export interface UnifiedSkill {
+  // Basic skill properties
+  id: string
+  name: string
+  category: string
+  description: string
+  keyAbilities: string[]
+  metaTags: string[]
+  assignmentType: 'major' | 'minor' | 'none'
+  canAssignMajor: boolean
+  canAssignMinor: boolean
+  level: number
+  totalPerks: number
+  selectedPerksCount: number
+  selectedPerks: Array<{ currentRank: number }>
+  isSelected: boolean
+}
+
+// Perk-related types (consolidated from perks feature)
+export interface PrerequisiteItem {
+  type: string
+  id: string
+}
+
+export interface SkillLevelPrerequisite {
+  skill: string
+  level: number
+}
+
+export interface Prerequisites {
+  skillLevel?: SkillLevelPrerequisite
+  items?: PrerequisiteItem[]
+}
+
+export interface Description {
+  base: string
+  subtext: string
+}
+
+export interface Rank {
+  rank: number
+  edid: string
+  name: string
+  description: Description
+  prerequisites: Prerequisites
+}
+
+export interface Position {
+  x: number
+  y: number
+  horizontal: number
+  vertical: number
+}
+
+export interface Connections {
+  parents: string[]
+  children: string[]
+}
+
+export interface PerkNode {
+  edid: string
+  name: string
+  ranks: Rank[]
+  totalRanks: number
+  connections: Connections
+  isRoot: boolean
+  position: Position
+}
+
+export interface PerkTree {
+  treeId: string
+  treeName: string
+  treeDescription: string
+  category: string
+  perks: PerkNode[]
+}
+
+// Extended PerkNode type for component usage
+export interface PerkNodeWithUI extends PerkNode {
+  selected?: boolean
+  currentRank?: number
+  hasChildren?: boolean
+}
+
+// Extended PerkNode type for React Flow data
+export interface PerkNodeData extends PerkNode {
+  selected?: boolean
+  currentRank?: number
+  hasChildren?: boolean
+}
+
+export interface PerkPlan {
+  selectedPerks: Record<string, PerkNode[]>
+  minLevels: Record<string, number>
+  totalPerks: number
+}
+
+export interface SkillWithPerks {
+  id: string
+  name: string
+  icon: string
+  description: string
+  selectedPerks: number
+  minLevel: number
+}

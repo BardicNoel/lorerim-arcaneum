@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
-import { usePerks } from '@/features/perks/hooks/usePerks'
+import { useEffect, useState } from 'react'
 import type { Skill } from '../types'
+import { usePerks } from './usePerks'
 
 export interface SkillWithPerks extends Skill {
-  perksCount: number
+  totalPerks: number
+  selectedPerks: number
   isMajor: boolean
   isMinor: boolean
 }
@@ -15,11 +16,26 @@ export function useUnifiedSkills() {
   const [error, setError] = useState<string | null>(null)
 
   // Get skills management from character build
-  const { majorSkills, minorSkills, hasMajorSkill, hasMinorSkill } =
+  const { majorSkills, minorSkills, hasMajorSkill, hasMinorSkill, build } =
     useCharacterBuild()
 
   // Get perks data for counting
   const { perkTrees } = usePerks()
+
+  // Create a map of selected perks per skill from build state
+  const selectedPerksMap = new Map<string, number>()
+
+  // Count selected perks from build state (including ranks)
+  if (build.perks?.selected && build.perks?.ranks) {
+    Object.entries(build.perks.selected).forEach(([skillId, perkIds]) => {
+      let totalRanks = 0
+      perkIds.forEach(perkId => {
+        const rank = build.perks.ranks[perkId] || 0
+        totalRanks += rank
+      })
+      selectedPerksMap.set(skillId, totalRanks)
+    })
+  }
 
   // Load skills data from JSON file
   useEffect(() => {
@@ -51,11 +67,15 @@ export function useUnifiedSkills() {
     const perkTree = perkTrees.find(tree => tree.treeId === skill.edid)
 
     // Count total perks available for this skill
-    const perksCount = perkTree ? perkTree.perks.length : 0
+    const totalPerks = perkTree ? perkTree.perks.length : 0
+
+    // Count selected perks for this skill from build state
+    const selectedPerks = selectedPerksMap.get(skill.edid) || 0
 
     return {
       ...skill,
-      perksCount,
+      totalPerks,
+      selectedPerks,
       isMajor: hasMajorSkill(skill.edid),
       isMinor: hasMinorSkill(skill.edid),
     }

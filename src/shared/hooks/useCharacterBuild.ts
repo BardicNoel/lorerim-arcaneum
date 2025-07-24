@@ -198,6 +198,87 @@ export function useCharacterBuild() {
     updateBuild({ destinyPath: path })
   }
 
+  // Perk management functions
+  const addPerk = (skillId: string, perkId: string) => {
+    const currentPerks = build?.perks?.selected ?? {}
+    const skillPerks = currentPerks[skillId] ?? []
+    
+    if (!skillPerks.includes(perkId)) {
+      updateBuild({
+        perks: {
+          ...build?.perks,
+          selected: {
+            ...currentPerks,
+            [skillId]: [...skillPerks, perkId],
+          },
+        },
+      })
+    }
+  }
+
+  const removePerk = (skillId: string, perkId: string) => {
+    const currentPerks = build?.perks?.selected ?? {}
+    const skillPerks = currentPerks[skillId] ?? []
+    
+    const newSkillPerks = skillPerks.filter(id => id !== perkId)
+    
+    updateBuild({
+      perks: {
+        ...build?.perks,
+        selected: {
+          ...currentPerks,
+          [skillId]: newSkillPerks,
+        },
+      },
+    })
+  }
+
+  const setPerkRank = (perkId: string, rank: number) => {
+    const currentRanks = build?.perks?.ranks ?? {}
+    
+    updateBuild({
+      perks: {
+        ...build?.perks,
+        ranks: {
+          ...currentRanks,
+          [perkId]: rank,
+        },
+      },
+    })
+  }
+
+  const clearSkillPerks = (skillId: string) => {
+    const currentPerks = build?.perks?.selected ?? {}
+    const currentRanks = build?.perks?.ranks ?? {}
+    
+    // Remove all perks for this skill
+    const { [skillId]: removedPerks, ...remainingPerks } = currentPerks
+    
+    // Remove ranks for removed perks
+    const newRanks = { ...currentRanks }
+    if (removedPerks) {
+      removedPerks.forEach(perkId => {
+        delete newRanks[perkId]
+      })
+    }
+    
+    updateBuild({
+      perks: {
+        ...build?.perks,
+        selected: remainingPerks,
+        ranks: newRanks,
+      },
+    })
+  }
+
+  const getSkillPerks = (skillId: string) => {
+    return build?.perks?.selected?.[skillId] ?? []
+  }
+
+  const getPerkRank = (perkId: string) => {
+    return build?.perks?.ranks?.[perkId] ?? 0
+  }
+
   // Clear all selections
   const clearBuild = () => {
     updateBuild({
@@ -332,6 +413,14 @@ export function useCharacterBuild() {
     addMinorSkill,
     removeMinorSkill,
 
+    // Perk management
+    addPerk,
+    removePerk,
+    setPerkRank,
+    clearSkillPerks,
+    getSkillPerks,
+    getPerkRank,
+
     // Trait management
     addTrait,
     addRegularTrait,
@@ -381,4 +470,28 @@ export function useCharacterBuild() {
     addTraitToSlot,
     isSlotAvailable,
   }
+}
+
+/**
+ * usePerkNodeCycle
+ * Returns a callback to cycle a perk node's rank in the character build.
+ * @param skillId - The skill tree id this perk belongs to
+ * @param perkId - The perk's id
+ * @param maxRank - The maximum rank for this perk
+ */
+export function usePerkNodeCycle(skillId: string, perkId: string, maxRank: number) {
+  const { getPerkRank, addPerk, setPerkRank, removePerk } = useCharacterBuild();
+
+  return () => {
+    const currentRank = getPerkRank(perkId) || 0;
+    if (currentRank === 0) {
+      addPerk(skillId, perkId);
+      setPerkRank(perkId, 1);
+    } else if (currentRank > 0 && currentRank < maxRank) {
+      setPerkRank(perkId, currentRank + 1);
+    } else if (currentRank === maxRank) {
+      removePerk(skillId, perkId);
+      setPerkRank(perkId, 0);
+    }
+  };
 }

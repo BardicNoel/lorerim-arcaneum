@@ -1,5 +1,4 @@
 import { PerkTreeCanvasII } from '@/features/skills/components/view/PerkTreeCanvasII'
-import type { PerkTree } from '@/features/skills/types'
 import { Z_INDEX } from '@/lib/constants'
 import { AutocompleteSearch } from '@/shared/components/playerCreation/AutocompleteSearch'
 import type {
@@ -18,31 +17,32 @@ import {
   DrawerTitle,
 } from '@/shared/ui/ui/drawer'
 import { RotateCcw, X } from 'lucide-react'
-import { useCallback, useMemo } from 'react'
+import React from 'react'
 import * as DrawerPrimitive from 'vaul'
-import type { SkillWithPerks } from '../hooks/useUnifiedSkills'
+import type { SkillWithPerks } from '../../hooks/useUnifiedSkills'
+import type { PerkTree } from '../../types'
 
-export interface PerkTreeViewProps {
+export interface SkillPerkTreeDrawerProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
   selectedSkill: string | null
   skillName?: string
   perkTree?: PerkTree
   skills: SkillWithPerks[]
   onSkillSelect: (skillId: string) => void
   onReset: () => void
-  open: boolean
-  onOpenChange: (open: boolean) => void
 }
 
-export function PerkTreeView({
+export function SkillPerkTreeDrawer({
+  open,
+  onOpenChange,
   selectedSkill,
   skillName,
   perkTree,
   skills,
   onSkillSelect,
   onReset,
-  open,
-  onOpenChange,
-}: PerkTreeViewProps) {
+}: SkillPerkTreeDrawerProps) {
   // Use global build state for perks
   const {
     addPerk,
@@ -57,7 +57,7 @@ export function PerkTreeView({
   const selectedPerks = selectedSkill ? getSkillPerks(selectedSkill) : []
 
   // Convert selected perk IDs to PerkNode objects for the canvas
-  const selectedPerkNodes = useMemo(() => {
+  const selectedPerkNodes = React.useMemo(() => {
     if (!perkTree) return []
 
     return perkTree.perks
@@ -69,7 +69,7 @@ export function PerkTreeView({
       }))
   }, [perkTree, selectedPerks, getPerkRank])
 
-  const handleTogglePerk = useCallback(
+  const handleTogglePerk = React.useCallback(
     (perkId: string) => {
       if (!selectedSkill || !perkTree) return
 
@@ -83,7 +83,7 @@ export function PerkTreeView({
     [selectedSkill, perkTree, selectedPerks, removePerk, addPerk]
   )
 
-  const handleRankChange = useCallback(
+  const handleRankChange = React.useCallback(
     (perkId: string, newRank: number) => {
       setPerkRank(perkId, newRank)
     },
