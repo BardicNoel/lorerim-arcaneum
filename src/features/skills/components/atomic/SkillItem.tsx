@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils'
 import { Button } from '@/shared/ui/ui/button'
-import React from 'react'
 import {
   SkillAssignmentBadge,
   SkillCategoryBadge,
@@ -15,9 +14,8 @@ interface SkillItemProps {
   assignmentType: 'major' | 'minor' | 'none'
   perkCount: string
   onSelect: () => void
-  onAssignMajor: () => void
-  onAssignMinor: () => void
-  onRemoveAssignment: () => void
+  onMajorClick: (e: React.MouseEvent) => void
+  onMinorClick: (e: React.MouseEvent) => void
   canAssignMajor: boolean
   canAssignMinor: boolean
   className?: string
@@ -30,54 +28,20 @@ export function SkillItem({
   assignmentType,
   perkCount,
   onSelect,
-  onAssignMajor,
-  onAssignMinor,
-  onRemoveAssignment,
+  onMajorClick,
+  onMinorClick,
   canAssignMajor,
   canAssignMinor,
   className,
 }: SkillItemProps) {
-  const handleCardClick = (e: React.MouseEvent) => {
-    // Don't trigger card selection if clicking on assignment buttons
-    if ((e.target as HTMLElement).closest('[data-assignment-control]')) {
-      return
-    }
-    // console.log('SkillItem clicked:', name) // Debug logging
-    onSelect()
-  }
-
+  // Prevent bubbling to card click when clicking assignment buttons
   const handleMajorClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    console.log(
-      'Major button clicked for skill:',
-      name,
-      'Current assignment:',
-      assignmentType
-    )
-    if (assignmentType === 'major') {
-      console.log('Removing major assignment')
-      onRemoveAssignment()
-    } else {
-      console.log('Assigning as major')
-      onAssignMajor()
-    }
+    onMajorClick(e)
   }
-
   const handleMinorClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    console.log(
-      'Minor button clicked for skill:',
-      name,
-      'Current assignment:',
-      assignmentType
-    )
-    if (assignmentType === 'minor') {
-      console.log('Removing minor assignment')
-      onRemoveAssignment()
-    } else {
-      console.log('Assigning as minor')
-      onAssignMinor()
-    }
+    onMinorClick(e)
   }
 
   return (
@@ -86,7 +50,7 @@ export function SkillItem({
         'p-4 border rounded-lg hover:bg-muted/50 transition-colors',
         className
       )}
-      onClick={handleCardClick}
+      onClick={onSelect}
     >
       <div className="flex justify-between items-start mb-2">
         <h3 className="font-semibold text-lg cursor-pointer">{name}</h3>

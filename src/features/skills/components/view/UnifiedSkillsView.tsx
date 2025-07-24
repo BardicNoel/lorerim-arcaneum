@@ -2,10 +2,11 @@ import { BuildPageShell } from '@/shared/components/playerCreation'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { PerkTreeView, SkillsGrid } from '../components'
-import { useUnifiedSkills } from '../hooks/useUnifiedSkills'
+import { PerkTreeView } from '../PerkTreeView'
+import { SkillGrid } from '../composition/SkillGrid'
+import { useUnifiedSkills } from '../../hooks/useUnifiedSkills'
 
-export function UnifiedSkillsPage() {
+function UnifiedSkillsView() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -43,21 +44,29 @@ export function UnifiedSkillsPage() {
     setDrawerOpen(true)
   }
 
-  // Handle skill assignment changes
-  const handleAssignmentChange = (
-    skillId: string,
-    type: 'major' | 'minor' | 'none'
-  ) => {
-    if (type === 'major') {
-      addMajorSkill(skillId)
-    } else if (type === 'minor') {
-      addMinorSkill(skillId)
-    } else {
-      // Remove from both major and minor
-      removeMajorSkill(skillId)
-      removeMinorSkill(skillId)
-    }
+  // Handle skill assignment
+  const handleAssignMajor = (skillId: string) => {
+    addMajorSkill(skillId)
   }
+  const handleAssignMinor = (skillId: string) => {
+    addMinorSkill(skillId)
+  }
+  const handleRemoveAssignment = (skillId: string) => {
+    removeMajorSkill(skillId)
+    removeMinorSkill(skillId)
+  }
+
+  // Map skills to SkillGrid format
+  const gridSkills = skills.map(skill => ({
+    id: skill.edid,
+    name: skill.name,
+    description: skill.description,
+    category: skill.category,
+    assignmentType: skill.isMajor ? 'major' as const : skill.isMinor ? 'minor' as const : 'none' as const,
+    perkCount: `${skill.selectedPerks}/${skill.totalPerks}`,
+    canAssignMajor: !skill.isMajor,
+    canAssignMinor: !skill.isMinor,
+  }))
 
   // Handle back to skills grid
   const handleBackToSkills = () => {
@@ -129,10 +138,12 @@ export function UnifiedSkillsPage() {
       <div className="space-y-8">
         {/* Skills Grid Section */}
         <div className="space-y-4">
-          <SkillsGrid
-            skills={skills}
+          <SkillGrid
+            skills={gridSkills}
             onSkillSelect={handleSkillSelect}
-            onAssignmentChange={handleAssignmentChange}
+            onAssignMajor={handleAssignMajor}
+            onAssignMinor={handleAssignMinor}
+            onRemoveAssignment={handleRemoveAssignment}
           />
         </div>
 
@@ -151,3 +162,5 @@ export function UnifiedSkillsPage() {
     </BuildPageShell>
   )
 }
+
+export default UnifiedSkillsView; 
