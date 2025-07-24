@@ -13,10 +13,12 @@ import { DestinyAccordionList } from '../components/composition/DestinyAccordion
 import { DestinyCard } from '../components/composition/DestinyCard'
 import { DestinyDetailPanel } from '../components/composition/DestinyDetailPanel'
 import { DestinyPathBuilder } from '../components/composition/DestinyPathBuilder'
+import { DestinyFilters } from '../components/composition/DestinyFilters'
 import type { DestinyNode, PlannedNode } from '../types'
 import { useDestinyNodes } from '../adapters/useDestinyNodes'
 import { useDestinyPath } from '../adapters/useDestinyPath'
 import { useDestinyPossiblePaths } from '../adapters/useDestinyPossiblePaths'
+import { useDestinyFilters, type DestinyFilter } from '../adapters/useDestinyFilters'
 
 export function UnifiedDestinyPage() {
   // Use MVA adapters for data and state management
@@ -49,7 +51,18 @@ export function UnifiedDestinyPage() {
     category: undefined,
   }))
 
-  // Generate search categories for autocomplete
+  // Use destiny filters for build path
+  const buildPathFilters = useDestinyFilters({
+    filterType: 'build-path',
+    currentPath,
+  })
+
+  // Use destiny filters for reference page
+  const referenceFilters = useDestinyFilters({
+    filterType: 'reference',
+  })
+
+  // Generate search categories for autocomplete (legacy - will be replaced by filters)
   const generateSearchCategories = (): SearchCategory[] => {
     const tags = [...new Set(nodes.flatMap(node => node.tags))]
     const prerequisites = [
@@ -109,6 +122,58 @@ export function UnifiedDestinyPage() {
     onFiltersChange: handleFiltersChange,
     onSearch: handleSearch,
   })
+
+  // Handle destiny filter selection
+  const handleDestinyFilterSelect = (option: any, filterType: 'build-path' | 'reference') => {
+    const filters = filterType === 'build-path' ? buildPathFilters : referenceFilters
+    
+    if (typeof option === 'string') {
+      // Custom search - not implemented for destiny filters yet
+      return
+    }
+
+    // Create destiny filter from selected option
+    let destinyFilterType: 'includes-node' | 'ends-with-node' | 'tags' | 'prerequisites'
+    let nodeId: string
+
+    if (option.category === 'Includes Node') {
+      destinyFilterType = 'includes-node'
+      nodeId = option.id.replace(/^includes-/, '')
+    } else if (option.category === 'Ends With Node') {
+      destinyFilterType = 'ends-with-node'
+      nodeId = option.id.replace(/^ends-/, '')
+    } else if (option.category === 'Tags') {
+      destinyFilterType = 'tags'
+      nodeId = option.id.replace(/^tag-/, '')
+    } else if (option.category === 'Prerequisites') {
+      destinyFilterType = 'prerequisites'
+      nodeId = option.id.replace(/^prereq-/, '')
+    } else {
+      return // Unknown category
+    }
+
+    const filter: DestinyFilter = {
+      id: option.id,
+      type: destinyFilterType,
+      nodeName: option.value,
+      nodeId: nodeId,
+      label: option.label,
+    }
+
+    filters.addFilter(filter)
+  }
+
+  // Handle destiny filter removal
+  const handleDestinyFilterRemove = (filterId: string, filterType: 'build-path' | 'reference') => {
+    const filters = filterType === 'build-path' ? buildPathFilters : referenceFilters
+    filters.removeFilter(filterId)
+  }
+
+  // Handle destiny filter clear
+  const handleDestinyFilterClear = (filterType: 'build-path' | 'reference') => {
+    const filters = filterType === 'build-path' ? buildPathFilters : referenceFilters
+    filters.clearFilters()
+  }
 
   // Handle path changes
   const handlePathChange = (path: DestinyNode[]) => {
@@ -186,11 +251,12 @@ export function UnifiedDestinyPage() {
           </TabsList>
 
           <TabsContent value="reference" className="space-y-4">
-            <PlayerCreationFilters
-              searchCategories={searchCategories}
-              selectedTags={currentFilters.selectedTags}
-              onTagSelect={handleTagSelect}
-              onTagRemove={handleTagRemove}
+            <DestinyFilters
+              searchCategories={referenceFilters.searchCategories}
+              selectedFilters={referenceFilters.selectedFilters}
+              onFilterSelect={(option) => handleDestinyFilterSelect(option, 'reference')}
+              onFilterRemove={(filterId) => handleDestinyFilterRemove(filterId, 'reference')}
+              onClearFilters={() => handleDestinyFilterClear('reference')}
             />
             <div className="w-full">
               <DestinyAccordionList
@@ -201,6 +267,13 @@ export function UnifiedDestinyPage() {
           </TabsContent>
 
           <TabsContent value="path" className="space-y-4">
+            <DestinyFilters
+              searchCategories={buildPathFilters.searchCategories}
+              selectedFilters={buildPathFilters.selectedFilters}
+              onFilterSelect={(option) => handleDestinyFilterSelect(option, 'build-path')}
+              onFilterRemove={(filterId) => handleDestinyFilterRemove(filterId, 'build-path')}
+              onClearFilters={() => handleDestinyFilterClear('build-path')}
+            />
             <DestinyPathBuilder
               onPathChange={handlePathChange}
               onPathComplete={handlePathComplete}
