@@ -1,6 +1,5 @@
 import { AccordionBirthsignsPage } from '@/features/birthsigns/pages/AccordionBirthsignsPage'
 import { UnifiedDestinyPage } from '@/features/destiny'
-import { UnifiedPerksPage } from '@/features/perks'
 import { AccordionRacesPage } from '@/features/races/pages/AccordionRacesPage'
 import { AccordionReligionsPage } from '@/features/religions/pages/AccordionReligionsPage'
 import { SkillsPage } from '@/features/skills'
@@ -30,16 +29,7 @@ export const AppRouter = () => {
         <Route path="perks" element={<SkillsPage />} />
       </Route>
 
-      {/* Legacy routes for backward compatibility */}
-      <Route path="/race" element={<AccordionRacesPage />} />
-      <Route path="/destiny" element={<UnifiedDestinyPage />} />
-      <Route path="/perks" element={<UnifiedPerksPage />} />
-      <Route path="/birth-signs" element={<AccordionBirthsignsPage />} />
-      <Route path="/traits" element={<AccordionTraitsPage />} />
-      <Route path="/religions" element={<AccordionReligionsPage />} />
-
       {/* Other pages */}
-      <Route path="/perks" element={<SkillsPage />} />
       <Route path="/skills-mva" element={<SkillsPage />} />
       <Route path="/equipment" element={<EquipmentPage />} />
       <Route path="/crafting" element={<CraftingPage />} />
