@@ -6,10 +6,7 @@ import type {
   PlayerCreationItem,
 } from '@/shared/components/playerCreation/types'
 import type { Birthsign } from '../types'
-import {
-  getAllGroups,
-  getAllStats,
-} from '../utils'
+import { getAllGroups, getAllStats } from '../utils'
 import { useFuzzySearch } from '../hooks'
 import { birthsignToPlayerCreationItem } from '@/shared/utils'
 

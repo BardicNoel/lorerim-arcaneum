@@ -36,4 +36,4 @@ export interface BlessingOption {
     duration: number
   }>
   originalReligion: Religion
-} 
+}

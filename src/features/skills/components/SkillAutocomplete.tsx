@@ -1,6 +1,9 @@
 import React, { useMemo } from 'react'
 import { Badge } from '@/shared/ui/ui/badge'
-import { GenericAutocomplete, type AutocompleteOption } from '@/shared/components/generic'
+import {
+  GenericAutocomplete,
+  type AutocompleteOption,
+} from '@/shared/components/generic'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import type { Skill } from '../types'
 
@@ -35,7 +38,7 @@ export function SkillAutocomplete({
         originalSkill: skill,
         keyAbilitiesCount: skill.keyAbilities?.length || 0,
         scaling: skill.scaling,
-      }
+      },
     }))
   }, [skills])
 
@@ -53,12 +56,13 @@ export function SkillAutocomplete({
         <div className="font-medium truncate">{option.label}</div>
         <div className="flex items-center gap-2 mt-1">
           {option.badge && <div className="flex-shrink-0">{option.badge}</div>}
-          {option.metadata?.keyAbilitiesCount && option.metadata.keyAbilitiesCount > 0 && (
-            <div className="text-xs text-muted-foreground">
-              {option.metadata.keyAbilitiesCount} ability
-              {option.metadata.keyAbilitiesCount !== 1 ? 's' : ''}
-            </div>
-          )}
+          {option.metadata?.keyAbilitiesCount &&
+            option.metadata.keyAbilitiesCount > 0 && (
+              <div className="text-xs text-muted-foreground">
+                {option.metadata.keyAbilitiesCount} ability
+                {option.metadata.keyAbilitiesCount !== 1 ? 's' : ''}
+              </div>
+            )}
         </div>
         {option.description && (
           <FormattedText
@@ -86,4 +90,4 @@ export function SkillAutocomplete({
       emptyMessage="No skills found"
     />
   )
-} 
+}

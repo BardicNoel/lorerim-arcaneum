@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
 import { Badge } from '@/shared/ui/ui/badge'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
-import type { DestinyNode } from '../types'
+import type { DestinyNode } from '../../types'
 
 interface DestinyCardProps {
   item: PlayerCreationItem

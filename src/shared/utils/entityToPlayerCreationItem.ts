@@ -8,7 +8,9 @@ import type { Birthsign } from '@/features/birthsigns/types'
  * Maps a Religion entity to a PlayerCreationItem for use in shared player creation UIs.
  * Includes tenet and blessing effects, favored races as tags, and type as category.
  */
-export function religionToPlayerCreationItem(religion: Religion): PlayerCreationItem {
+export function religionToPlayerCreationItem(
+  religion: Religion
+): PlayerCreationItem {
   return {
     id: `religion-${religion.name.toLowerCase().replace(/\s+/g, '-')}`,
     name: religion.name,
@@ -43,7 +45,9 @@ export function religionToPlayerCreationItem(religion: Religion): PlayerCreation
  * Maps a Race entity to a PlayerCreationItem for use in shared player creation UIs.
  * Includes skill bonuses, racial spells, and category as tags.
  */
-export function raceToPlayerCreationItem(race: Race): PlayerCreationItem & { originalRace: Race } {
+export function raceToPlayerCreationItem(
+  race: Race
+): PlayerCreationItem & { originalRace: Race } {
   return {
     ...race, // Spread domain-specific fields first
     id: race.edid, // Use edid for character build compatibility
@@ -78,7 +82,9 @@ export function raceToPlayerCreationItem(race: Race): PlayerCreationItem & { ori
  * Maps a Trait entity to a PlayerCreationItem for use in shared player creation UIs.
  * Returns all core PlayerCreationItem fields, but also spreads in all domain-specific fields from the original Trait for extensibility.
  */
-export function traitToPlayerCreationItem(trait: Trait): PlayerCreationItem & { originalTrait: Trait } {
+export function traitToPlayerCreationItem(
+  trait: Trait
+): PlayerCreationItem & { originalTrait: Trait } {
   return {
     ...trait, // Spread domain-specific fields first
     id: trait.edid, // Use edid for character build compatibility
@@ -90,7 +96,9 @@ export function traitToPlayerCreationItem(trait: Trait): PlayerCreationItem & { 
       ...(trait.effects?.map(effect => ({
         type: 'positive' as const, // Could be improved if effect.type is more granular
         name: effect.type,
-        description: effect.condition ? `${effect.type} (${effect.condition})` : effect.type,
+        description: effect.condition
+          ? `${effect.type} (${effect.condition})`
+          : effect.type,
         value: effect.value,
       })) || []),
     ],
@@ -105,12 +113,15 @@ export function traitToPlayerCreationItem(trait: Trait): PlayerCreationItem & { 
  * Maps a Birthsign entity to a PlayerCreationItem for use in shared player creation UIs.
  * Returns all core PlayerCreationItem fields, but also spreads in all domain-specific fields from the original Birthsign for extensibility.
  */
-export function birthsignToPlayerCreationItem(birthsign: Birthsign): PlayerCreationItem & { originalBirthsign: Birthsign } {
+export function birthsignToPlayerCreationItem(
+  birthsign: Birthsign
+): PlayerCreationItem & { originalBirthsign: Birthsign } {
   // Core effects (stat_modifications, skill_bonuses, powers)
   const effects = [
     // Stat modifications
     ...(birthsign.stat_modifications?.map(stat => ({
-      type: stat.type === 'bonus' ? 'positive' as const : 'negative' as const,
+      type:
+        stat.type === 'bonus' ? ('positive' as const) : ('negative' as const),
       name: `${stat.stat} ${stat.type === 'bonus' ? '+' : '-'}${stat.value}${stat.value_type === 'percentage' ? '%' : ''}`,
       description: `${stat.stat} ${stat.type === 'bonus' ? 'increased' : 'decreased'} by ${stat.value}${stat.value_type === 'percentage' ? '%' : ''}`,
       value: stat.value,
@@ -171,4 +182,4 @@ export function birthsignToPlayerCreationItem(birthsign: Birthsign): PlayerCreat
     category: birthsign.group,
     originalBirthsign: birthsign, // Include original birthsign for extensibility
   }
-} 
+}

@@ -13,14 +13,16 @@ interface ReligionSelectionCardProps {
   className?: string
 }
 
-export function ReligionSelectionCard({ className }: ReligionSelectionCardProps) {
+export function ReligionSelectionCard({
+  className,
+}: ReligionSelectionCardProps) {
   const { religions, loading, error } = useReligionData()
   const { build, setReligion } = useCharacterBuild()
   const navigate = useNavigate()
   const [isExpanded, setIsExpanded] = useState(true)
 
   // Find selected deity
-  const selectedDeity = build.religion 
+  const selectedDeity = build.religion
     ? findReligionById(religions, build.religion)
     : null
 
@@ -40,7 +42,9 @@ export function ReligionSelectionCard({ className }: ReligionSelectionCardProps)
         onNavigate={handleNavigateToReligionPage}
         className={className}
       >
-        <div className="text-sm text-muted-foreground">Loading religions...</div>
+        <div className="text-sm text-muted-foreground">
+          Loading religions...
+        </div>
       </SelectionCardShell>
     )
   }
@@ -53,7 +57,9 @@ export function ReligionSelectionCard({ className }: ReligionSelectionCardProps)
         onNavigate={handleNavigateToReligionPage}
         className={className}
       >
-        <div className="text-sm text-destructive">Error loading religions: {error}</div>
+        <div className="text-sm text-destructive">
+          Error loading religions: {error}
+        </div>
       </SelectionCardShell>
     )
   }
@@ -113,4 +119,4 @@ export function ReligionSelectionCard({ className }: ReligionSelectionCardProps)
       />
     </SelectionCardShell>
   )
-} 
+}

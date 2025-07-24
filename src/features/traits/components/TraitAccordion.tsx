@@ -69,7 +69,8 @@ export function TraitAccordion({
     }
   }
 
-  const isRegularLimitReached = !canAddRegularTrait() && traitLevel !== 'primary'
+  const isRegularLimitReached =
+    !canAddRegularTrait() && traitLevel !== 'primary'
   const isBonusLimitReached = !canAddBonusTrait() && traitLevel !== 'secondary'
 
   // Define card theming based on selection state
@@ -89,14 +90,21 @@ export function TraitAccordion({
       const regularTraits = build?.traits?.regular || []
       const bonusTraits = build?.traits?.bonus || []
       const currentTraitIds = [...regularTraits, ...bonusTraits]
-      
-      const traitsToRemove = currentTraitIds.filter((id: string) => !allTraitIds.includes(id))
+
+      const traitsToRemove = currentTraitIds.filter(
+        (id: string) => !allTraitIds.includes(id)
+      )
       traitsToRemove.forEach((id: string) => removeTrait(id))
     }
   }, [allTraitIds, build?.traits, removeTrait])
 
   return (
-    <AccordionCard expanded={isExpanded} onToggle={onToggle} className={cn(className, getCardTheming())} disableHover={disableHover}>
+    <AccordionCard
+      expanded={isExpanded}
+      onToggle={onToggle}
+      className={cn(className, getCardTheming())}
+      disableHover={disableHover}
+    >
       <AccordionCard.Header>
         <div className="flex items-center gap-2">
           <Zap className="h-4 w-4 text-black" />
@@ -104,16 +112,15 @@ export function TraitAccordion({
         </div>
       </AccordionCard.Header>
       <AccordionCard.Summary>
-          <FormattedText
-            text={item.description}
-            className={cn(
-              "text-base text-muted-foreground",
-              isExpanded ? "" : "line-clamp-2"
-            )}
-          />
-        </AccordionCard.Summary>
+        <FormattedText
+          text={item.description}
+          className={cn(
+            'text-base text-muted-foreground',
+            isExpanded ? '' : 'line-clamp-2'
+          )}
+        />
+      </AccordionCard.Summary>
       <AccordionCard.Footer>
-        
         {/* Trait Selection Controls */}
         <div className="flex gap-2">
           <Button
@@ -122,9 +129,10 @@ export function TraitAccordion({
             disabled={isRegularLimitReached}
             className={cn(
               'flex-1 text-xs',
-              traitLevel === 'primary' && 'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90'
+              traitLevel === 'primary' &&
+                'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90'
             )}
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation()
               handleTraitSelect('primary')
             }}
@@ -137,9 +145,10 @@ export function TraitAccordion({
             disabled={isBonusLimitReached}
             className={cn(
               'flex-1 text-xs',
-              traitLevel === 'secondary' && 'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90'
+              traitLevel === 'secondary' &&
+                'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90'
             )}
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation()
               handleTraitSelect('secondary')
             }}
@@ -147,9 +156,7 @@ export function TraitAccordion({
             {traitLevel === 'secondary' ? 'Remove Trait' : 'Late Game Trait'}
           </Button>
         </div>
-        
       </AccordionCard.Footer>
-     
     </AccordionCard>
   )
 }

@@ -345,7 +345,7 @@ export function useCharacterBuild() {
     setRace,
     setBirthsign,
     setStone,
-    
+
     // Religion management - Simplified
     setReligion,
 

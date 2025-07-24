@@ -14,4 +14,4 @@ alwaysApply: true
 
 # NEVER
 
-Start dev server without asking me.
+- Start dev server without asking me.

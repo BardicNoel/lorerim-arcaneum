@@ -8,7 +8,7 @@ import {
 import { ScrollArea } from '@/shared/ui/ui/scroll-area'
 import { Badge } from '@/shared/ui/ui/badge'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
-import type { DestinyNode } from '../types'
+import type { DestinyNode } from '../../types'
 
 interface DestinyAccordionListProps {
   items: PlayerCreationItem[]

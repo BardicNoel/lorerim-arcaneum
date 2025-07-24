@@ -100,7 +100,10 @@ export function SkillSelectionCard({ className }: SkillSelectionCardProps) {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="font-medium text-sm">{skill.name}</div>
-                      <Badge variant="default" className="text-xs bg-yellow-500 text-yellow-900">
+                      <Badge
+                        variant="default"
+                        className="text-xs bg-yellow-500 text-yellow-900"
+                      >
                         Major
                       </Badge>
                       <Badge variant="outline" className="text-xs">
@@ -158,7 +161,10 @@ export function SkillSelectionCard({ className }: SkillSelectionCardProps) {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="font-medium text-sm">{skill.name}</div>
-                      <Badge variant="secondary" className="text-xs bg-gray-400 text-gray-900">
+                      <Badge
+                        variant="secondary"
+                        className="text-xs bg-gray-400 text-gray-900"
+                      >
                         Minor
                       </Badge>
                       <Badge variant="outline" className="text-xs">
@@ -186,4 +192,4 @@ export function SkillSelectionCard({ className }: SkillSelectionCardProps) {
       </div>
     </SelectionCardShell>
   )
-} 
+}

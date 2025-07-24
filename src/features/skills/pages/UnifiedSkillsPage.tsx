@@ -9,17 +9,13 @@ export function UnifiedSkillsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
-  
+
   // Get skills data and perk trees
   const { skills, loading, error, perkTrees } = useUnifiedSkills()
-  
+
   // Get skills management from character build
-  const {
-    addMajorSkill,
-    removeMajorSkill,
-    addMinorSkill,
-    removeMinorSkill,
-  } = useCharacterBuild()
+  const { addMajorSkill, removeMajorSkill, addMinorSkill, removeMinorSkill } =
+    useCharacterBuild()
 
   // Sync selected skill with URL
   useEffect(() => {
@@ -48,7 +44,10 @@ export function UnifiedSkillsPage() {
   }
 
   // Handle skill assignment changes
-  const handleAssignmentChange = (skillId: string, type: 'major' | 'minor' | 'none') => {
+  const handleAssignmentChange = (
+    skillId: string,
+    type: 'major' | 'minor' | 'none'
+  ) => {
     if (type === 'major') {
       addMajorSkill(skillId)
     } else if (type === 'minor') {
@@ -136,7 +135,7 @@ export function UnifiedSkillsPage() {
               {skills.length} skills available
             </p>
           </div>
-          
+
           <SkillsGrid
             skills={skills}
             onSkillSelect={handleSkillSelect}
@@ -158,4 +157,4 @@ export function UnifiedSkillsPage() {
       </div>
     </BuildPageShell>
   )
-} 
+}

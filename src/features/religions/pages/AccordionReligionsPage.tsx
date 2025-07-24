@@ -83,7 +83,9 @@ export function AccordionReligionsPage() {
   }, [])
 
   // Convert religions to PlayerCreationItem format for consolidated view
-  const religionItems: PlayerCreationItem[] = religions.map(religionToPlayerCreationItem)
+  const religionItems: PlayerCreationItem[] = religions.map(
+    religionToPlayerCreationItem
+  )
 
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
@@ -200,7 +202,9 @@ export function AccordionReligionsPage() {
   )
 
   // Convert to PlayerCreationItem format
-  const displayItems: PlayerCreationItem[] = fuzzyFilteredReligions.map(religionToPlayerCreationItem)
+  const displayItems: PlayerCreationItem[] = fuzzyFilteredReligions.map(
+    religionToPlayerCreationItem
+  )
 
   // Sort the display items
   const sortedDisplayItems = [...displayItems].sort((a, b) => {

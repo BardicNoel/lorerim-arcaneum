@@ -44,7 +44,9 @@ export function UnifiedTraitsPage() {
   }, [])
 
   // Convert traits to PlayerCreationItem format using the proper transformation
-  const playerCreationItems: PlayerCreationItem[] = traits.map(traitToPlayerCreationItem)
+  const playerCreationItems: PlayerCreationItem[] = traits.map(
+    traitToPlayerCreationItem
+  )
 
   // Generate search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {

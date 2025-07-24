@@ -142,7 +142,6 @@ export function extractKeywordsFromRace(race: Race): string[] {
  * Transform race data to PlayerCreationItem format
  */
 
-
 /**
  * Transform race data to TransformedRace format for internal use
  */

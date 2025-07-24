@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { cn } from '@/lib/utils';
+import React, { useState } from 'react'
+import { cn } from '@/lib/utils'
 
 /**
  * Compound AccordionCard component with slottable Header, Summary, Footer, and Details.
@@ -15,25 +15,43 @@ import { cn } from '@/lib/utils';
  *
  * Supports controlled (expanded/onToggle) or uncontrolled expansion.
  */
-export function AccordionCard({ children, className, expanded, onToggle, disableHover = false }: { children: React.ReactNode; className?: string; expanded?: boolean; onToggle?: () => void; disableHover?: boolean }) {
+export function AccordionCard({
+  children,
+  className,
+  expanded,
+  onToggle,
+  disableHover = false,
+}: {
+  children: React.ReactNode
+  className?: string
+  expanded?: boolean
+  onToggle?: () => void
+  disableHover?: boolean
+}) {
   // Find slots by type
-  let header, summary, footer, details;
+  let header, summary, footer, details
   React.Children.forEach(children, child => {
-    if (!React.isValidElement(child)) return;
-    if (child.type === AccordionCard.Header) header = child;
-    if (child.type === AccordionCard.Summary) summary = child;
-    if (child.type === AccordionCard.Footer) footer = child;
-    if (child.type === AccordionCard.Details) details = child;
-  });
+    if (!React.isValidElement(child)) return
+    if (child.type === AccordionCard.Header) header = child
+    if (child.type === AccordionCard.Summary) summary = child
+    if (child.type === AccordionCard.Footer) footer = child
+    if (child.type === AccordionCard.Details) details = child
+  })
   // Expansion state (controlled or uncontrolled)
-  const [internalExpanded, setInternalExpanded] = useState(false);
-  const isExpanded = expanded !== undefined ? expanded : internalExpanded;
-  const handleToggle = onToggle || (() => setInternalExpanded(e => !e));
-  
-  const hoverClasses = disableHover ? '' : 'hover:shadow-md hover:scale-[1.02]';
-  
+  const [internalExpanded, setInternalExpanded] = useState(false)
+  const isExpanded = expanded !== undefined ? expanded : internalExpanded
+  const handleToggle = onToggle || (() => setInternalExpanded(e => !e))
+
+  const hoverClasses = disableHover ? '' : 'hover:shadow-md hover:scale-[1.02]'
+
   return (
-    <div className={cn('rounded-lg border bg-background shadow-sm transition-all duration-200 flex flex-col', hoverClasses, className)}>
+    <div
+      className={cn(
+        'rounded-lg border bg-background shadow-sm transition-all duration-200 flex flex-col',
+        hoverClasses,
+        className
+      )}
+    >
       {/* Header (always visible, toggles expansion) */}
       {header &&
         React.cloneElement(header, {
@@ -50,32 +68,79 @@ export function AccordionCard({ children, className, expanded, onToggle, disable
       {/* Footer (always at bottom) */}
       {footer}
     </div>
-  );
+  )
 }
-AccordionCard.Header = function Header({ children, className, onClick, expanded }: { children: React.ReactNode; className?: string; onClick?: () => void; expanded?: boolean }) {
+AccordionCard.Header = function Header({
+  children,
+  className,
+  onClick,
+  expanded,
+}: {
+  children: React.ReactNode
+  className?: string
+  onClick?: () => void
+  expanded?: boolean
+}) {
   return (
     <div
-      className={cn('flex items-center gap-3 px-4 py-2 bg-muted/30 cursor-pointer select-none', className)}
+      className={cn(
+        'flex items-center gap-3 px-4 py-2 bg-muted/30 cursor-pointer select-none',
+        className
+      )}
       onClick={onClick}
       tabIndex={0}
       role="button"
       aria-expanded={expanded}
     >
       {children}
-      <span className={cn('ml-auto transition-transform', expanded ? 'rotate-90' : '')}>
-        <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+      <span
+        className={cn(
+          'ml-auto transition-transform',
+          expanded ? 'rotate-90' : ''
+        )}
+      >
+        <svg
+          className="h-4 w-4"
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          aria-hidden="true"
+        >
           <path d="M6 8l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </span>
     </div>
-  );
-};
-AccordionCard.Summary = function Summary({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn('px-4 py-2 space-y-3', className)}>{children}</div>;
-};
-AccordionCard.Footer = function Footer({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn('px-4 py-2', className)}>{children}</div>;
-};
-AccordionCard.Details = function Details({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn('px-4 py-4 space-y-4 bg-background', className)}>{children}</div>;
-}; 
+  )
+}
+AccordionCard.Summary = function Summary({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return <div className={cn('px-4 py-2 space-y-3', className)}>{children}</div>
+}
+AccordionCard.Footer = function Footer({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return <div className={cn('px-4 py-2', className)}>{children}</div>
+}
+AccordionCard.Details = function Details({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return (
+    <div className={cn('px-4 py-4 space-y-4 bg-background', className)}>
+      {children}
+    </div>
+  )
+}

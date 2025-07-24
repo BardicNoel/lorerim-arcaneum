@@ -4,10 +4,7 @@ import { Search, Plus, ChevronDown, X } from 'lucide-react'
 import { Button } from '@/shared/ui/ui/button'
 import { Input } from '@/shared/ui/ui/input'
 import { Z_INDEX } from '@/lib/constants'
-import type {
-  SearchCategory,
-  SearchOption,
-} from './types'
+import type { SearchCategory, SearchOption } from './types'
 
 interface FuzzySearchBoxProps {
   categories: SearchCategory[]
@@ -251,4 +248,4 @@ export function FuzzySearchBox({
       )}
     </div>
   )
-} 
+}

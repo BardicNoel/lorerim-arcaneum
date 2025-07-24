@@ -26,7 +26,12 @@ export function RaceAccordion({
 }: RaceAccordionProps) {
   const originalRace = item.originalRace
   return (
-    <AccordionCard className={className} expanded={isExpanded} onToggle={onToggle} disableHover={disableHover}>
+    <AccordionCard
+      className={className}
+      expanded={isExpanded}
+      onToggle={onToggle}
+      disableHover={disableHover}
+    >
       <AccordionCard.Header>
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-3">
@@ -76,15 +81,17 @@ export function RaceAccordion({
               Starting Attributes
             </h5>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {Object.entries(originalRace.startingStats).map(([stat, value]) => (
-                <div
-                  key={stat}
-                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
-                >
-                  <span className="font-medium capitalize">{stat}</span>
-                  <span className="font-bold text-green-600">{value}</span>
-                </div>
-              ))}
+              {Object.entries(originalRace.startingStats).map(
+                ([stat, value]) => (
+                  <div
+                    key={stat}
+                    className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
+                  >
+                    <span className="font-medium capitalize">{stat}</span>
+                    <span className="font-bold text-green-600">{value}</span>
+                  </div>
+                )
+              )}
             </div>
           </div>
         )}
@@ -114,9 +121,7 @@ export function RaceAccordion({
         {/* Quirks (Racial Abilities) */}
         {originalRace?.racialSpells && originalRace.racialSpells.length > 0 && (
           <div>
-            <h5 className="text-lg font-medium text-foreground mb-3">
-              Quirks
-            </h5>
+            <h5 className="text-lg font-medium text-foreground mb-3">Quirks</h5>
             <div className="space-y-2">
               {originalRace.racialSpells.map((spell, index) => (
                 <div
@@ -124,11 +129,25 @@ export function RaceAccordion({
                   className="p-3 bg-muted/50 rounded-lg border border-border"
                 >
                   <div className="flex items-center gap-2 mb-1">
-                    <svg className="h-4 w-4 text-yellow-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 17.75L18.2 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.44 4.73L5.8 21z" /></svg>
+                    <svg
+                      className="h-4 w-4 text-yellow-500"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 17.75L18.2 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.44 4.73L5.8 21z"
+                      />
+                    </svg>
                     <span className="font-medium text-sm">{spell.name}</span>
                   </div>
                   <div className="border-t border-border my-2" />
-                  <div className="text-sm text-muted-foreground">{spell.description}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {spell.description}
+                  </div>
                 </div>
               ))}
             </div>

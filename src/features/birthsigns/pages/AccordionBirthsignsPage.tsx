@@ -28,7 +28,11 @@ import {
   Settings,
   X,
 } from 'lucide-react'
-import { BirthsignAccordion, BirthsignCard, BirthsignDetailPanel } from '../components'
+import {
+  BirthsignAccordion,
+  BirthsignCard,
+  BirthsignDetailPanel,
+} from '../components'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import {
   useBirthsignData,
@@ -59,7 +63,9 @@ export function AccordionBirthsignsPage() {
     sortedDisplayItems,
   } = useBirthsignFilters(birthsigns)
   // Local state for expanded accordions (row-based expansion)
-  const [expandedBirthsigns, setExpandedBirthsigns] = useState<Set<string>>(new Set())
+  const [expandedBirthsigns, setExpandedBirthsigns] = useState<Set<string>>(
+    new Set()
+  )
   // Display controls
   const {
     showStats,
@@ -91,10 +97,15 @@ export function AccordionBirthsignsPage() {
   const handleBirthsignToggle = (birthsignId: string) => {
     const newExpanded = new Set(expandedBirthsigns)
     const columns = 3 // Match the AccordionGrid columns prop
-    const itemIndex = sortedDisplayItems.findIndex(item => item.id === birthsignId)
+    const itemIndex = sortedDisplayItems.findIndex(
+      item => item.id === birthsignId
+    )
     const rowIndex = Math.floor(itemIndex / columns)
     const rowStartIndex = rowIndex * columns
-    const rowEndIndex = Math.min(rowStartIndex + columns, sortedDisplayItems.length)
+    const rowEndIndex = Math.min(
+      rowStartIndex + columns,
+      sortedDisplayItems.length
+    )
     // Check if any item in the row is currently expanded
     const isRowExpanded = sortedDisplayItems
       .slice(rowStartIndex, rowEndIndex)
@@ -264,7 +275,9 @@ export function AccordionBirthsignsPage() {
                   setExpandedBirthsigns(new Set())
                 }
               : () => {
-                  setExpandedBirthsigns(new Set(sortedDisplayItems.map(item => item.id)))
+                  setExpandedBirthsigns(
+                    new Set(sortedDisplayItems.map(item => item.id))
+                  )
                 }
           }
           className="flex items-center justify-center"
@@ -423,7 +436,7 @@ export function AccordionBirthsignsPage() {
                 birthsignName
               )
             })
-            if (!originalBirthsign) return null;
+            if (!originalBirthsign) return null
             const isExpanded = expandedBirthsigns.has(item.id)
             return (
               <BirthsignAccordion
@@ -446,7 +459,7 @@ export function AccordionBirthsignsPage() {
                 birthsignName
               )
             })
-            if (!originalBirthsign) return null;
+            if (!originalBirthsign) return null
             const isExpanded = expandedBirthsigns.has(item.id)
 
             return (
