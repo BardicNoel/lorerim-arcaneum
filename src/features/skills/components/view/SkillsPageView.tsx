@@ -2,7 +2,7 @@ import { Badge } from '@/shared/ui/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Separator } from '@/shared/ui/ui/separator'
 import { useState } from 'react'
-import type { UnifiedSkill } from '../../adapters'
+import type { SkillsPageSkill, SkillSummary } from '../../adapters'
 import { usePerkData } from '../../adapters'
 import { ErrorView, LoadingView } from '../atomic'
 import { SkillFilters, SkillGrid, SkillSearch } from '../composition'
@@ -10,7 +10,7 @@ import { SkillPerkTreeDrawer } from './SkillPerkTreeDrawer'
 
 // High-level view component that consumes adapters
 interface SkillsPageViewProps {
-  skills: UnifiedSkill[]
+  skills: SkillsPageSkill[]
   loading: boolean
   error: string | null
   searchQuery: string
@@ -23,15 +23,7 @@ interface SkillsPageViewProps {
   onAssignMajor: (skillId: string) => void
   onAssignMinor: (skillId: string) => void
   onRemoveAssignment: (skillId: string) => void
-  skillSummary: {
-    majorCount: number
-    minorCount: number
-    majorLimit: number
-    minorLimit: number
-    totalSkills: number
-    totalPerks: number
-    totalPerkRanks: number
-  }
+  skillSummary: SkillSummary
 }
 
 export function SkillsPageView({
@@ -69,27 +61,15 @@ export function SkillsPageView({
     return <ErrorView error={error} />
   }
 
-  // Transform skills to the format expected by SkillGrid
-  const gridSkills = skills.map(skill => ({
-    id: skill.id,
-    name: skill.name,
-    description: skill.description,
-    category: skill.category,
-    assignmentType: skill.assignmentType,
-    perkCount: `${skill.selectedPerksCount}/${skill.totalPerks}`,
-    canAssignMajor: skill.canAssignMajor,
-    canAssignMinor: skill.canAssignMinor,
-  }))
-
   // Transform skills to the format expected by SkillPerkTreeDrawer
   const drawerSkills = skills.map(skill => ({
     edid: skill.id,
     name: skill.name,
     category: skill.category,
     description: skill.description,
-    scaling: '', // Default value since UnifiedSkill doesn't have this
-    keyAbilities: [], // Default value since UnifiedSkill doesn't have this
-    metaTags: [], // Default value since UnifiedSkill doesn't have this
+    scaling: '', // Default value since SkillsPageSkill doesn't have this
+    keyAbilities: [], // Default value since SkillsPageSkill doesn't have this
+    metaTags: [], // Default value since SkillsPageSkill doesn't have this
     totalPerks: skill.totalPerks,
     selectedPerks: skill.selectedPerksCount,
     isMajor: skill.assignmentType === 'major',
@@ -174,7 +154,7 @@ export function SkillsPageView({
         </div>
 
         <SkillGrid
-          skills={gridSkills}
+          skills={skills}
           onSkillSelect={skillId => {
             console.log('Skill selected:', skillId) // Debug log
             onSkillSelect(skillId)
