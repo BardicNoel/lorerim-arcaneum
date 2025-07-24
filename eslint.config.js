@@ -58,25 +58,41 @@ export default tseslint.config([
       'react/no-unescaped-entities': 'warn',
       'react/no-unknown-property': 'error',
 
-      // TypeScript relaxed rules
+      // TypeScript rules - more aggressive
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-unused-vars': [
-        'warn',
-        { argsIgnorePattern: '^_' },
+        'error', // Changed from 'warn' to 'error' for more aggressive fixing
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+        },
       ],
       '@typescript-eslint/no-non-null-assertion': 'warn',
+      '@typescript-eslint/no-var-requires': 'error',
 
       // Prettier integration
       'prettier/prettier': 'error',
 
-      // General rules
+      // General rules - more aggressive auto-fixing
       'no-console': 'warn',
       'no-debugger': 'error',
       'no-unused-vars': 'off', // Use TypeScript version instead
-      'prefer-const': 'warn',
+      'prefer-const': 'error', // Changed from 'warn' to 'error' for auto-fixing
       'no-var': 'error',
+      'no-unreachable': 'error', // Auto-fixable
+      'no-duplicate-imports': 'error', // Auto-fixable
+      'no-useless-rename': 'error', // Auto-fixable
+      'object-shorthand': 'error', // Auto-fixable
+      'prefer-template': 'error', // Auto-fixable
+      'prefer-arrow-callback': 'error', // Auto-fixable
+      'no-empty': 'error', // Auto-fixable
+      'no-extra-semi': 'error', // Auto-fixable
+      'no-irregular-whitespace': 'error', // Auto-fixable
+      'no-mixed-spaces-and-tabs': 'error', // Auto-fixable
     },
   },
 ])
