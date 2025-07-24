@@ -4,7 +4,7 @@ export interface BuildState {
   notes: string // RP flavor text
   race: string | null // EDID
   stone: string | null // EDID
-  religion: string | null // EDID
+  religion: string | null // EDID of followed deity
   traits: {
     regular: string[] // Array of EDIDs
     bonus: string[] // Array of EDIDs (requires game completion)

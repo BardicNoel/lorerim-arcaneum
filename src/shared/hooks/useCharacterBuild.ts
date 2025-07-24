@@ -48,7 +48,7 @@ export function useCharacterBuild() {
     const currentMajorSkills = majorSkills ?? []
     const currentMinorSkills = minorSkills ?? []
 
-    if (!hasMinorSkill(skillId) && currentMinorSkills.length < 3) {
+    if (!hasMinorSkill(skillId) && currentMinorSkills.length < 6) {
       // Remove from major skills first (mutual exclusion)
       const newMajorSkills = currentMajorSkills.filter(id => id !== skillId)
 
@@ -161,7 +161,7 @@ export function useCharacterBuild() {
     updateBuild({ stone: stoneId })
   }
 
-  // Religion management
+  // Religion management - Simplified
   const setReligion = (religionId: string | null) => {
     updateBuild({ religion: religionId })
   }
@@ -286,6 +286,7 @@ export function useCharacterBuild() {
       notes: '',
       race: null,
       stone: null,
+      religion: null,
       skills: {
         major: [],
         minor: [],
@@ -433,6 +434,8 @@ export function useCharacterBuild() {
     setRace,
     setBirthsign,
     setStone,
+    
+    // Religion management - Simplified
     setReligion,
 
     // Equipment management
