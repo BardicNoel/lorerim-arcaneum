@@ -1,18 +1,11 @@
-import { useCallback } from 'react'
-import {
-  useSkillComputed,
-  useSkillData,
-  useSkillFilters,
-  useSkillState,
-} from '../adapters'
+import { useCallback, useMemo } from 'react'
+import { useSkillData, useSkillFilters, useSkillState } from '../adapters'
 import { SkillsPageView } from '../components/view/SkillsPageView'
 
 // Simplified entry point that composes adapters and views
 export function SkillsPage() {
   // Use adapters for data and state management
   const { skills, loading, error, refreshSkills } = useSkillData()
-  const { selectedSkillId, setSelectedSkillId, assignSkill, unassignSkill } =
-    useSkillState()
   const {
     searchQuery,
     setSearchQuery,
@@ -22,43 +15,90 @@ export function SkillsPage() {
     categories,
     clearFilters,
   } = useSkillFilters(skills)
-  const { skillSummary, skillsWithAssignment } =
-    useSkillComputed(filteredSkills)
+
+  // Get assignment state
+  const {
+    assignSkill,
+    unassignSkill,
+    selectedSkillId,
+    setSelectedSkillId,
+    majorSkills,
+    minorSkills,
+  } = useSkillState()
+
+  // Combine skills data with assignment state
+  const skillsWithAssignment = useMemo(() => {
+    return filteredSkills.map(skill => ({
+      ...skill,
+      assignmentType: majorSkills.includes(skill.id)
+        ? ('major' as const)
+        : minorSkills.includes(skill.id)
+          ? ('minor' as const)
+          : ('none' as const),
+      canAssignMajor: majorSkills.length < 3,
+      canAssignMinor: minorSkills.length < 6,
+    }))
+  }, [filteredSkills, majorSkills, minorSkills])
+
+  const skillSummary = useMemo(() => {
+    return {
+      majorCount: majorSkills.length,
+      minorCount: minorSkills.length,
+      majorLimit: 3,
+      minorLimit: 6,
+      canAssignMajor: majorSkills.length < 3,
+      canAssignMinor: minorSkills.length < 6,
+      totalSkills: filteredSkills.length,
+      totalPerks: filteredSkills.reduce(
+        (sum, skill) => sum + skill.selectedPerksCount,
+        0
+      ),
+      totalPerkRanks: filteredSkills.reduce(
+        (sum, skill) =>
+          sum +
+          skill.selectedPerks.reduce(
+            (perkSum, perk) => perkSum + perk.currentRank,
+            0
+          ),
+        0
+      ),
+    }
+  }, [filteredSkills, majorSkills, minorSkills])
 
   // Handle skill assignment
   const handleAssignMajor = useCallback(
     (skillId: string) => {
+      console.log('handleAssignMajor called with skillId:', skillId)
       const result = assignSkill(skillId, 'major')
+      console.log('assignSkill result:', result)
       if (!result.valid) {
         alert(`Cannot assign skill as major: ${result.reason}`)
-      } else {
-        // Refresh skills to get updated state
-        refreshSkills()
       }
+      // No need to refresh - state is updated locally
     },
-    [assignSkill, refreshSkills]
+    [assignSkill]
   )
 
   const handleAssignMinor = useCallback(
     (skillId: string) => {
+      console.log('handleAssignMinor called with skillId:', skillId)
       const result = assignSkill(skillId, 'minor')
+      console.log('assignSkill result:', result)
       if (!result.valid) {
         alert(`Cannot assign skill as minor: ${result.reason}`)
-      } else {
-        // Refresh skills to get updated state
-        refreshSkills()
       }
+      // No need to refresh - state is updated locally
     },
-    [assignSkill, refreshSkills]
+    [assignSkill]
   )
 
   const handleRemoveAssignment = useCallback(
     (skillId: string) => {
+      console.log('handleRemoveAssignment called with skillId:', skillId)
       unassignSkill(skillId)
-      // Refresh skills to get updated state
-      refreshSkills()
+      // No need to refresh - state is updated locally
     },
-    [unassignSkill, refreshSkills]
+    [unassignSkill]
   )
 
   // Handle skill selection

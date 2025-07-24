@@ -68,7 +68,7 @@ export function useSkillState() {
     assignSkill,
     unassignSkill,
     getSelectedSkill,
-    getMajorSkills,
-    getMinorSkills,
+    majorSkills,
+    minorSkills,
   }
 }
