@@ -1,20 +1,20 @@
-import { useState, useEffect, useMemo } from 'react'
-import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import type { PerkTree } from '@/features/perks/types'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import { useEffect, useMemo, useState } from 'react'
 
 // Adapter for perk data loading and management
 export function usePerkData(skillId: string | null) {
   const [perkTrees, setPerkTrees] = useState<PerkTree[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  
-  const { 
-    getSkillPerks, 
-    getPerkRank, 
-    addPerk, 
-    removePerk, 
-    setPerkRank, 
-    clearSkillPerks 
+
+  const {
+    getSkillPerks,
+    getPerkRank,
+    addPerk,
+    removePerk,
+    setPerkRank,
+    clearSkillPerks,
   } = useCharacterBuild()
 
   // Load perk trees data
@@ -23,19 +23,23 @@ export function usePerkData(skillId: string | null) {
       try {
         setLoading(true)
         setError(null)
-        
-        const res = await fetch(`${import.meta.env.BASE_URL}data/perk-trees.json`)
+
+        const res = await fetch(
+          `${import.meta.env.BASE_URL}data/perk-trees.json`
+        )
         if (!res.ok) throw new Error('Failed to fetch perk trees data')
         const data = await res.json()
         // The data is an array directly, not wrapped in perkTrees property
         setPerkTrees(Array.isArray(data) ? data : [])
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load perk trees')
+        setError(
+          err instanceof Error ? err.message : 'Failed to load perk trees'
+        )
       } finally {
         setLoading(false)
       }
     }
-    
+
     loadPerkTrees()
   }, [])
 
@@ -55,7 +59,7 @@ export function usePerkData(skillId: string | null) {
   // Get perk ranks for the current skill
   const perkRanks = useMemo(() => {
     if (!skillId || !selectedPerkTree) return {}
-    
+
     const ranks: Record<string, number> = {}
     selectedPerkTree.perks.forEach(perk => {
       ranks[perk.edid] = getPerkRank(perk.edid)
@@ -66,34 +70,34 @@ export function usePerkData(skillId: string | null) {
   // Calculate available perks (perks that can be selected)
   const availablePerks = useMemo(() => {
     if (!selectedPerkTree) return []
-    
+
     const available: string[] = []
-    
+
     selectedPerkTree.perks.forEach(perk => {
       // Root perks are always available
       if (perk.isRoot) {
         available.push(perk.edid)
         return
       }
-      
+
       // Check if parent perks are selected (prerequisites)
       const parentPerks = perk.connections.parents || []
-      const prerequisitesMet = parentPerks.every(parentId => 
+      const prerequisitesMet = parentPerks.every(parentId =>
         selectedPerks.includes(parentId)
       )
-      
+
       if (prerequisitesMet) {
         available.push(perk.edid)
       }
     })
-    
+
     return available
   }, [selectedPerkTree, selectedPerks])
 
   // Perk management functions
   const handlePerkSelect = (perkId: string) => {
     if (!skillId) return
-    
+
     const isSelected = selectedPerks.includes(perkId)
     if (isSelected) {
       removePerk(skillId, perkId)
@@ -119,14 +123,14 @@ export function usePerkData(skillId: string | null) {
     selectedPerks,
     perkRanks,
     availablePerks,
-    
+
     // State
     loading,
     error,
-    
+
     // Actions
     handlePerkSelect,
     handlePerkRankChange,
     handleResetPerks,
   }
-} 
+}

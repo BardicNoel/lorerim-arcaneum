@@ -1,7 +1,10 @@
-import React from 'react'
+import type {
+  PerkNode as PerkNodeType,
+  PerkTree,
+} from '@/features/skills/types'
 import { cn } from '@/lib/utils'
-import { PerkTreeCanvas } from '@/features/perks/components/PerkTreeCanvas'
-import type { PerkTree, PerkNode as PerkNodeType } from '@/features/perks/types'
+import React from 'react'
+import { PerkTreeCanvas } from '../view/PerkTreeCanvas'
 
 // Component that uses the existing PerkTreeCanvas for proper perk tree visualization
 interface PerkTreeGridProps {
@@ -26,12 +29,12 @@ export function PerkTreeGrid({
   // Transform selected perk IDs to PerkNode objects for the canvas
   const selectedPerkNodes: PerkNodeType[] = React.useMemo(() => {
     if (!perkTree) return []
-    
+
     return selectedPerks
       .map(perkId => {
         const perk = perkTree.perks.find(p => p.edid === perkId)
         if (!perk) return null
-        
+
         // Return the original perk node - the canvas will handle currentRank separately
         return perk
       })
@@ -50,14 +53,19 @@ export function PerkTreeGrid({
 
   if (!perkTree) {
     return (
-      <div className={cn("flex items-center justify-center p-8 text-muted-foreground", className)}>
+      <div
+        className={cn(
+          'flex items-center justify-center p-8 text-muted-foreground',
+          className
+        )}
+      >
         <p>No perk tree available for this skill.</p>
       </div>
     )
   }
 
   return (
-    <div className={cn("w-full h-full min-h-[400px] bg-background", className)}>
+    <div className={cn('w-full h-full min-h-[400px] bg-background', className)}>
       <PerkTreeCanvas
         tree={perkTree}
         onTogglePerk={handleTogglePerk}
@@ -66,4 +74,4 @@ export function PerkTreeGrid({
       />
     </div>
   )
-} 
+}

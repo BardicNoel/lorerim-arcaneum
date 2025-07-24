@@ -1,5 +1,4 @@
-import { PerkTreeCanvasII } from '@/features/perks/components/PerkTreeCanvas/PerkTreeCanvasII'
-import type { PerkTree } from '@/features/perks/types'
+import { PerkTreeCanvasII } from '@/features/skills/components/view/PerkTreeCanvasII'
 import { Z_INDEX } from '@/lib/constants'
 import { AutocompleteSearch } from '@/shared/components/playerCreation/AutocompleteSearch'
 import type {
@@ -21,6 +20,7 @@ import { RotateCcw, X } from 'lucide-react'
 import React from 'react'
 import * as DrawerPrimitive from 'vaul'
 import type { SkillWithPerks } from '../../hooks/useUnifiedSkills'
+import type { PerkTree } from '../../types'
 
 export interface SkillPerkTreeDrawerProps {
   open: boolean

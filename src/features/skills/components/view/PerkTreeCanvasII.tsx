@@ -20,7 +20,7 @@ import type {
   PerkTree,
 } from '../../types'
 import { validatePerkTreeSafe } from '../../utils'
-import { PerkNode } from '../PerkNode'
+import { PerkNode } from './PerkNode'
 import type { LayoutConfig } from './PerkTreeLayoutTypes'
 import { convertToPerkRecords, layoutPerkTree } from './perkTreeLayout'
 

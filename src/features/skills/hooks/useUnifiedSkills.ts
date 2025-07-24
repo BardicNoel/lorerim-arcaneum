@@ -1,9 +1,7 @@
-import { useState, useEffect } from 'react'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
-import { usePerks } from '@/features/perks/hooks/usePerks'
-import { usePerkPlan } from '@/features/perks/hooks/usePerks'
+import { useEffect, useState } from 'react'
 import type { Skill } from '../types'
-import type { PerkTree } from '@/features/perks/types'
+import { usePerks } from './usePerks'
 
 export interface SkillWithPerks extends Skill {
   totalPerks: number
@@ -18,20 +16,15 @@ export function useUnifiedSkills() {
   const [error, setError] = useState<string | null>(null)
 
   // Get skills management from character build
-  const {
-    majorSkills,
-    minorSkills,
-    hasMajorSkill,
-    hasMinorSkill,
-    build,
-  } = useCharacterBuild()
+  const { majorSkills, minorSkills, hasMajorSkill, hasMinorSkill, build } =
+    useCharacterBuild()
 
   // Get perks data for counting
   const { perkTrees } = usePerks()
 
   // Create a map of selected perks per skill from build state
   const selectedPerksMap = new Map<string, number>()
-  
+
   // Count selected perks from build state (including ranks)
   if (build.perks?.selected && build.perks?.ranks) {
     Object.entries(build.perks.selected).forEach(([skillId, perkIds]) => {
@@ -72,7 +65,7 @@ export function useUnifiedSkills() {
   const skillsWithPerks: SkillWithPerks[] = skillsData.map(skill => {
     // Find the perk tree for this skill
     const perkTree = perkTrees.find(tree => tree.treeId === skill.edid)
-    
+
     // Count total perks available for this skill
     const totalPerks = perkTree ? perkTree.perks.length : 0
 
@@ -94,4 +87,4 @@ export function useUnifiedSkills() {
     error,
     perkTrees,
   }
-} 
+}
