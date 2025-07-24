@@ -1,416 +1,467 @@
 [
   {
     "name": "Destiny",
+    "edid": "DAR_Perk01Destiny",
     "description": "Increases carry weight by 25.",
     "prerequisites": [],
-    "globalFormId": "0xFE260808"
+    "globalFormId": "0xFE25F808"
   },
   {
     "name": "Focus",
+    "edid": "DAR_Perk02Focus",
     "description": "Your Magicka Regeneration is increased by 50%.",
     "prerequisites": [
-      "Destiny"
+      "DAR_Perk01Destiny"
     ],
-    "globalFormId": "0xFE26080A"
+    "globalFormId": "0xFE25F80A"
   },
   {
     "name": "Constitution",
+    "edid": "DAR_Perk03Constitution",
     "description": "Your Health Regeneration is increased by 50%.",
     "prerequisites": [
-      "Destiny"
+      "DAR_Perk01Destiny"
     ],
-    "globalFormId": "0xFE26080B"
+    "globalFormId": "0xFE25F80B"
   },
   {
     "name": "Endurance",
+    "edid": "DAR_Perk04Endurance",
     "description": "Your Stamina Regeneration is increased by 50%.",
     "prerequisites": [
-      "Destiny"
+      "DAR_Perk01Destiny"
     ],
-    "globalFormId": "0xFE26080C"
+    "globalFormId": "0xFE25F80C"
   },
   {
     "name": "Mage",
+    "edid": "DAR_Perk05Mage",
     "description": "Your spells and enchantments cost 5% less Magicka.",
     "prerequisites": [
-      "Focus"
+      "DAR_Perk02Focus"
     ],
-    "globalFormId": "0xFE26080D"
+    "globalFormId": "0xFE25F80D"
   },
   {
     "name": "Warrior",
+    "edid": "DAR_Perk06Warrior",
     "description": "You deal 5% more weapon damage.",
     "prerequisites": [
-      "Constitution"
+      "DAR_Perk03Constitution"
     ],
-    "globalFormId": "0xFE26080E"
+    "globalFormId": "0xFE25F80E"
   },
   {
     "name": "Thief",
+    "edid": "DAR_Perk07Thief",
     "description": "You are 10% harder to detect.",
     "prerequisites": [
-      "Endurance"
+      "DAR_Perk04Endurance"
     ],
-    "globalFormId": "0xFE26080F"
+    "globalFormId": "0xFE25F80F"
   },
   {
     "name": "Fortification",
+    "edid": "DAR_Perk08Fortification",
     "description": "Your Health, Magicka and Stamina are increased by 10 each.",
     "prerequisites": [
-      "Mage"
+      "DAR_Perk05Mage"
     ],
-    "globalFormId": "0xFE260810"
+    "globalFormId": "0xFE25F810"
   },
   {
     "name": "Magicka Surge",
+    "edid": "DAR_Perk09MagickaSurge",
     "description": "Your Magicka Regeneration is increased by 400% when your Magicka falls below 25%.",
     "prerequisites": [
-      "Mage"
+      "DAR_Perk05Mage"
     ],
-    "globalFormId": "0xFE260811"
+    "globalFormId": "0xFE25F811"
   },
   {
     "name": "Magic Shell",
+    "edid": "DAR_Perk10MagicShell",
     "description": "Your magic resistance is increased by 10%.",
     "prerequisites": [
-      "Mage",
-      "Warrior"
+      "DAR_Perk05Mage",
+      "DAR_Perk06Warrior"
     ],
-    "globalFormId": "0xFE260812"
+    "globalFormId": "0xFE25F812"
   },
   {
     "name": "Iron Skin",
+    "edid": "DAR_Perk11IronSkin",
     "description": "Every 10 seconds, taking damage increases your Armor Rating by 150 for 6 seconds.",
     "prerequisites": [
-      "Warrior"
+      "DAR_Perk06Warrior"
     ],
-    "globalFormId": "0xFE260813"
+    "globalFormId": "0xFE25F813"
   },
   {
     "name": "Battle Spirit",
+    "edid": "DAR_Perk12BattleSpirit",
     "description": "Power attacks increase your attack damage by 10% for 6 seconds.",
     "prerequisites": [
-      "Warrior",
-      "Thief"
+      "DAR_Perk06Warrior",
+      "DAR_Perk07Thief"
     ],
-    "globalFormId": "0xFE260814"
+    "globalFormId": "0xFE25F814"
   },
   {
     "name": "Adrenaline",
+    "edid": "DAR_Perk13Adrenaline",
     "description": "Your Stamina Regeneration is increased by 200% when your Stamina falls below 25%.",
     "prerequisites": [
-      "Thief"
+      "DAR_Perk07Thief"
     ],
-    "globalFormId": "0xFE260815"
+    "globalFormId": "0xFE25F815"
   },
   {
     "name": "Swiftness",
+    "edid": "DAR_Perk14Swiftness",
     "description": "Every 10 seconds, taking damage increases your movement speed by 20% for 6 seconds.",
     "prerequisites": [
-      "Thief"
+      "DAR_Perk07Thief"
     ],
-    "globalFormId": "0xFE260816"
+    "globalFormId": "0xFE25F816"
   },
   {
     "name": "Agent",
+    "edid": "DAR_Perk15Agent",
     "description": "Enemy attacks against you slows them by 25% for 5 seconds.",
     "prerequisites": [
-      "Fortification"
+      "DAR_Perk08Fortification"
     ],
-    "globalFormId": "0xFE260817"
+    "globalFormId": "0xFE25F817"
   },
   {
     "name": "Sorcerer",
+    "edid": "DAR_Perk16Sorcerer",
     "description": "You take 10% less damage while casting spells.",
     "prerequisites": [
-      "Magicka Surge"
+      "DAR_Perk09MagickaSurge"
     ],
-    "globalFormId": "0xFE260818"
+    "globalFormId": "0xFE25F818"
   },
   {
     "name": "Spellsword",
+    "edid": "DAR_Perk17Spellsword",
     "description": "You restore 15 magicka per weapon attack.",
     "prerequisites": [
-      "Magic Shell"
+      "DAR_Perk10MagicShell"
     ],
-    "globalFormId": "0xFE260819"
+    "globalFormId": "0xFE25F819"
   },
   {
     "name": "Knight",
+    "edid": "DAR_Perk18Knight",
     "description": "You take 10% less damage while power attacking, drawing a bow, or blocking.",
     "prerequisites": [
-      "Iron Skin"
+      "DAR_Perk11IronSkin"
     ],
-    "globalFormId": "0xFE26081A"
+    "globalFormId": "0xFE25F81A"
   },
   {
-    "name": "Stamina Surge",
+    "name": "Endurance",
+    "edid": "DAR_Perk19Acrobat",
     "description": "You regenerate stamina 100% faster.",
     "prerequisites": [
-      "Battle Spirit"
+      "DAR_Perk12BattleSpirit"
     ],
-    "globalFormId": "0xFE26081B"
+    "globalFormId": "0xFE25F81B"
   },
   {
     "name": "Scout",
+    "edid": "DAR_Perk20Scout",
     "description": "Your bows, crossbows and throwing knives do 10% more damage.",
     "prerequisites": [
-      "Adrenaline"
+      "DAR_Perk13Adrenaline"
     ],
-    "globalFormId": "0xFE26081C"
+    "globalFormId": "0xFE25F81C"
   },
   {
     "name": "Spellblade",
+    "edid": "DAR_Perk21Spellblade",
     "description": "Attacks with weapons have a 30% chance to interupt casting enemies.",
     "prerequisites": [
-      "Swiftness"
+      "DAR_Perk14Swiftness"
     ],
-    "globalFormId": "0xFE26081D"
+    "globalFormId": "0xFE25F81D"
   },
   {
     "name": "Leadership",
+    "edid": "DAR_Perk22Leadership",
     "description": "Nearby allies move 15% faster during combat.",
     "prerequisites": [
-      "Agent"
+      "DAR_Perk15Agent"
     ],
-    "globalFormId": "0xFE26081E"
+    "globalFormId": "0xFE25F81E"
   },
   {
     "name": "Hard Skin",
+    "edid": "DAR_Perk23HardSkin",
     "description": "Your Armor Rating is increased by 100.",
     "prerequisites": [
-      "Agent"
+      "DAR_Perk15Agent"
     ],
-    "globalFormId": "0xFE26081F"
+    "globalFormId": "0xFE25F81F"
   },
   {
     "name": "Healing Presence",
+    "edid": "DAR_Perk24HealingPresence",
     "description": "You heal yourself and nearby allies for 10 Health every 10 seconds.",
     "prerequisites": [
-      "Agent",
-      "Sorcerer"
+      "DAR_Perk15Agent",
+      "DAR_Perk16Sorcerer"
     ],
-    "globalFormId": "0xFE260820"
+    "globalFormId": "0xFE25F820"
   },
   {
     "name": "Absorbtion",
+    "edid": "DAR_Perk25Absorbtion",
     "description": "You have a 10% chance to absorb the Magicka from incoming spells.",
     "prerequisites": [
-      "Sorcerer"
+      "DAR_Perk16Sorcerer"
     ],
-    "globalFormId": "0xFE260821"
+    "globalFormId": "0xFE25F821"
   },
   {
     "name": "Conjuring Presence",
+    "edid": "DAR_Perk26ConjuringPresence",
     "description": "Nearby summoned or reanimated allies have 50 increased Health, 50 increased Armor Rating and reflect 15% physical damage.",
     "prerequisites": [
-      "Sorcerer",
-      "Spellsword"
+      "DAR_Perk16Sorcerer",
+      "DAR_Perk17Spellsword"
     ],
-    "globalFormId": "0xFE260822"
+    "globalFormId": "0xFE25F822"
   },
   {
     "name": "Corrosive Weapon",
+    "edid": "DAR_Perk27CorrosiveWeapon",
     "description": "Power attacks reduces enemies magic resistance by 15% and Armor Rating by 75 for 10 seconds.",
     "prerequisites": [
-      "Spellsword"
+      "DAR_Perk17Spellsword"
     ],
-    "globalFormId": "0xFE260823"
+    "globalFormId": "0xFE25F823"
   },
   {
     "name": "Leeching Spikes",
+    "edid": "DAR_Perk28LeechingSpikes",
     "description": "You absorb 15 Health over 5 seconds from enemies attacking you once every 10 seconds for each enemy. While below 25% Health, absorbed Health is doubled.",
     "prerequisites": [
-      "Spellsword",
-      "Knight"
+      "DAR_Perk17Spellsword",
+      "DAR_Perk18Knight"
     ],
-    "globalFormId": "0xFE260824"
+    "globalFormId": "0xFE25F824"
   },
   {
     "name": "Unyielding",
+    "edid": "DAR_Perk29Deflection",
     "description": "While blocking, your health, stamina and magicka regeneration are increased by 25%.",
     "prerequisites": [
-      "Knight"
+      "DAR_Perk18Knight"
     ],
-    "globalFormId": "0xFE260825"
+    "globalFormId": "0xFE25F825"
   },
   {
     "name": "Overwhelming Presence",
+    "edid": "DAR_Perk30OverwhelmingPresence",
     "description": "Close enemies have 100 reduced Armor Rating.",
     "prerequisites": [
-      "Knight",
-      "Stamina Surge"
+      "DAR_Perk18Knight",
+      "DAR_Perk19Acrobat"
     ],
-    "globalFormId": "0xFE260826"
+    "globalFormId": "0xFE25F826"
   },
   {
     "name": "Smash",
+    "edid": "DAR_Perk31Smash",
     "description": "Power attacks deal 10% more damage.",
     "prerequisites": [
-      "Endurance"
+      "DAR_Perk19Acrobat"
     ],
-    "globalFormId": "0xFE260827"
+    "globalFormId": "0xFE25F827"
   },
   {
     "name": "Trickster",
+    "edid": "DAR_Perk32Trickster",
     "description": "You have a 10% chance to evade enemy weapon attacks.",
     "prerequisites": [
-      "Stamina Surge",
-      "Scout"
+      "DAR_Perk19Acrobat",
+      "DAR_Perk20Scout"
     ],
-    "globalFormId": "0xFE260828"
+    "globalFormId": "0xFE25F828"
   },
   {
     "name": "Swift Shadow",
+    "edid": "DAR_Perk33SwiftShadow",
     "description": "You move 20% faster while sneaking.",
     "prerequisites": [
-      "Scout"
+      "DAR_Perk20Scout"
     ],
-    "globalFormId": "0xFE260829"
+    "globalFormId": "0xFE25F829"
   },
   {
     "name": "Viper's Blade",
+    "edid": "DAR_Perk34VipersBlade",
     "description": "Power attacks reduces enemies poison resistance by 50% for 10 seconds.",
     "prerequisites": [
-      "Scout",
-      "Spellblade"
+      "DAR_Perk20Scout",
+      "DAR_Perk21Spellblade"
     ],
-    "globalFormId": "0xFE26082A"
+    "globalFormId": "0xFE25F82A"
   },
   {
     "name": "Evasion",
+    "edid": "DAR_Perk35Evasion",
     "description": "You have a 15% chance to evade spells.",
     "prerequisites": [
-      "Spellblade"
+      "DAR_Perk21Spellblade"
     ],
-    "globalFormId": "0xFE26082B"
+    "globalFormId": "0xFE25F82B"
   },
   {
     "name": "Silent Blade",
+    "edid": "DAR_Perk36SilentBlade",
     "description": "Your attacks deal 25 damage to Magicka.",
     "prerequisites": [
-      "Spellblade"
+      "DAR_Perk21Spellblade"
     ],
-    "globalFormId": "0xFE260846"
+    "globalFormId": "0xFE25F846"
   },
   {
     "name": "Bard",
+    "edid": "DAR_Perk37Bard",
     "description": "Nearby allies deal 15% more physical damage and have 15% magic resistance during combat.",
     "prerequisites": [
-      "Leadership"
+      "DAR_Perk22Leadership"
     ],
-    "globalFormId": "0xFE260847"
+    "globalFormId": "0xFE25F847"
   },
   {
     "name": "Shaman",
+    "edid": "DAR_Perk38Shaman",
     "description": "You deal 20% more damage against impaired enemies.",
     "prerequisites": [
-      "Hard Skin"
+      "DAR_Perk23HardSkin"
     ],
-    "globalFormId": "0xFE260848"
+    "globalFormId": "0xFE25F848"
   },
   {
     "name": "Templar",
+    "edid": "DAR_Perk39Templar",
     "description": "Every 90 seconds, falling below 10% Health, you are immune to any damage for 6 seconds and heal yourself afterwards for 100 Health.",
     "prerequisites": [
-      "Healing Presence"
+      "DAR_Perk24HealingPresence"
     ],
-    "globalFormId": "0xFE260849"
+    "globalFormId": "0xFE25F849"
   },
   {
     "name": "Archmage",
+    "edid": "DAR_Perk40Archmage",
     "description": "Your Spells are 15% stronger or last 30% longer.",
     "prerequisites": [
-      "Absorbtion"
+      "DAR_Perk25Absorbtion"
     ],
-    "globalFormId": "0xFE26084A"
+    "globalFormId": "0xFE25F84A"
   },
   {
     "name": "Summoner",
+    "edid": "DAR_Perk41Summoner",
     "description": "You can summon or reanimate one additional minion.",
     "prerequisites": [
-      "Conjuring Presence"
+      "DAR_Perk26ConjuringPresence"
     ],
-    "globalFormId": "0xFE26084B"
+    "globalFormId": "0xFE25F84B"
   },
   {
     "name": "Battlemage",
+    "edid": "DAR_Perk42Battlemage",
     "description": "Power attacks cost 25% less stamina if you have a spell in your left hand. Spell & enchantments cost 10% less if you have a weapon in your right hand.",
     "prerequisites": [
-      "Corrosive Weapon"
+      "DAR_Perk27CorrosiveWeapon"
     ],
-    "globalFormId": "0xFE26084C"
+    "globalFormId": "0xFE25F84C"
   },
   {
     "name": "Blood Knight",
+    "edid": "DAR_Perk43BloodKnight",
     "description": "While above 50% Health you deal 10% more weapon damage and while below 50% Health, you take 25% less magic damage.",
     "prerequisites": [
-      "Leeching Spikes"
+      "DAR_Perk28LeechingSpikes"
     ],
-    "globalFormId": "0xFE26084D"
+    "globalFormId": "0xFE25F84D"
   },
   {
     "name": "General",
+    "edid": "DAR_Perk44General",
     "description": "Your weapon damage and Armor Rating is increased by 10%.",
     "prerequisites": [
-      "Unyielding"
+      "DAR_Perk29Deflection"
     ],
-    "globalFormId": "0xFE26084E"
+    "globalFormId": "0xFE25F84E"
   },
   {
     "name": "Monk",
+    "edid": "DAR_Perk45Monk",
     "description": "Your attacks deal 50 bleeding damage over 5 seconds.",
     "prerequisites": [
-      "Overwhelming Presence"
+      "DAR_Perk30OverwhelmingPresence"
     ],
-    "globalFormId": "0xFE26084F"
+    "globalFormId": "0xFE25F84F"
   },
   {
     "name": "Berserker",
+    "edid": "DAR_Perk46Berserker",
     "description": "You take 25% less damage while power attacking and power attack stamina usage is reduced by 25%.",
     "prerequisites": [
-      "Smash"
+      "DAR_Perk31Smash"
     ],
-    "globalFormId": "0xFE260850"
+    "globalFormId": "0xFE25F850"
   },
   {
     "name": "Saboteur",
+    "edid": "DAR_Perk47Saboteur",
     "description": "Your attacks have a 15% chance to stagger enemies. You deal 20% more damage against staggered enemies.",
     "prerequisites": [
-      "Trickster"
+      "DAR_Perk32Trickster"
     ],
-    "globalFormId": "0xFE260851"
+    "globalFormId": "0xFE25F851"
   },
   {
     "name": "Assassin",
+    "edid": "DAR_Perk48Assassin",
     "description": "Every 10 seconds, your next sneak attack deals 100% more damage.",
     "prerequisites": [
-      "Swift Shadow"
+      "DAR_Perk33SwiftShadow"
     ],
-    "globalFormId": "0xFE260852"
+    "globalFormId": "0xFE25F852"
   },
   {
     "name": "Rogue",
+    "edid": "DAR_Perk49Rogue",
     "description": "Your attacks deal 50 poison damage over 10 seconds.",
     "prerequisites": [
-      "Viper's Blade"
+      "DAR_Perk34VipersBlade"
     ],
-    "globalFormId": "0xFE260853"
+    "globalFormId": "0xFE25F853"
   },
   {
     "name": "Stalker",
+    "edid": "DAR_Perk50Stalker",
     "description": "Your attacks slows enemies by 50% for 3 seconds.",
     "prerequisites": [
-      "Evasion"
+      "DAR_Perk35Evasion"
     ],
-    "globalFormId": "0xFE260854"
+    "globalFormId": "0xFE25F854"
   },
   {
     "name": "Nightblade",
+    "edid": "DAR_Perk51Nightblade",
     "description": "Against enemies that are out of Magicka, your attacks deal 20% more damage and have a 30% chance to dispel magic.",
     "prerequisites": [
-      "Silent Blade"
+      "DAR_Perk36SilentBlade"
     ],
-    "globalFormId": "0xFE260855"
+    "globalFormId": "0xFE25F855"
   }
 ]

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { useDestinyNodes } from './useDestinyNodes'
 import type { DestinyNode } from '../types'
+import { useDestinyNodes } from './useDestinyNodes'
 
 interface PredictivePath {
   path: DestinyNode[]
@@ -34,13 +34,13 @@ export function useDestinyPossiblePaths(
     const visited = new Set<string>()
 
     // Helper function to get next nodes for a given node
-    const getNextNodes = (nodeName: string): DestinyNode[] => {
-      return nodes.filter(node => node.prerequisites.includes(nodeName))
+    const getNextNodes = (nodeEdid: string): DestinyNode[] => {
+      return nodes.filter(node => node.prerequisites.includes(nodeEdid))
     }
 
     // Helper function to check if a node is terminal (no children)
     const isTerminalNode = (node: DestinyNode): boolean => {
-      return !nodes.some(n => n.prerequisites.includes(node.name))
+      return !nodes.some(n => n.prerequisites.includes(node.edid))
     }
 
     // Recursive function to build all possible paths
@@ -50,7 +50,7 @@ export function useDestinyPossiblePaths(
       }
 
       const lastNode = currentPath[currentPath.length - 1]
-      const nextNodes = getNextNodes(lastNode.name)
+      const nextNodes = getNextNodes(lastNode.edid)
 
       if (nextNodes.length === 0) {
         // End of path - add to results
@@ -77,7 +77,7 @@ export function useDestinyPossiblePaths(
     // Start building paths
     if (fromNode) {
       // Check if the fromNode is terminal (no children)
-      const nextNodes = getNextNodes(fromNode.name)
+      const nextNodes = getNextNodes(fromNode.edid)
       if (nextNodes.length === 0) {
         // Terminal node - no possible paths
         return []

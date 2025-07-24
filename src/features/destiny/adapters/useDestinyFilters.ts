@@ -68,24 +68,24 @@ export function useDestinyFilters(
     const reachableNodes = new Set<string>()
     const visited = new Set<string>()
 
-    const findReachableNodes = (nodeName: string) => {
-      if (visited.has(nodeName)) return
-      visited.add(nodeName)
-      reachableNodes.add(nodeName)
+    const findReachableNodes = (nodeEdid: string) => {
+      if (visited.has(nodeEdid)) return
+      visited.add(nodeEdid)
+      reachableNodes.add(nodeEdid)
 
       // Find all nodes that have this node as a prerequisite
       nodes.forEach(node => {
-        if (node.prerequisites.includes(nodeName)) {
-          findReachableNodes(node.name)
+        if (node.prerequisites.includes(nodeEdid)) {
+          findReachableNodes(node.edid)
         }
       })
     }
 
     // Start from the last node in current path
     const lastNode = currentPath[currentPath.length - 1]
-    findReachableNodes(lastNode.name)
+    findReachableNodes(lastNode.edid)
 
-    return nodes.filter(node => reachableNodes.has(node.name))
+    return nodes.filter(node => reachableNodes.has(node.edid))
   }, [filterType, currentPath, nodes, rootNodes])
 
   // Generate search categories based on filter type
@@ -97,19 +97,19 @@ export function useDestinyFilters(
 
       possiblePaths.forEach(p => {
         p.path.forEach(node => {
-          reachableInPaths.add(node.name)
+          reachableInPaths.add(node.edid)
         })
         // Mark the end node as a terminal
         if (p.path.length > 0) {
-          terminalInPaths.add(p.path[p.path.length - 1].name)
+          terminalInPaths.add(p.path[p.path.length - 1].edid)
         }
       })
 
       // Filter nodes to only those that appear in possible paths
       const reachableNodes = nodes.filter(node =>
-        reachableInPaths.has(node.name)
+        reachableInPaths.has(node.edid)
       )
-      const terminalNodes = nodes.filter(node => terminalInPaths.has(node.name))
+      const terminalNodes = nodes.filter(node => terminalInPaths.has(node.edid))
 
       return [
         {
@@ -118,12 +118,12 @@ export function useDestinyFilters(
           placeholder: 'Filter paths that include this node...',
           options: reachableNodes.map(node => {
             const matchingPaths = possiblePaths.filter(p =>
-              p.path.some(pathNode => pathNode.name === node.name)
+              p.path.some(pathNode => pathNode.edid === node.edid)
             ).length
             return {
               id: `includes-${node.id}`,
               label: node.name,
-              value: node.name,
+              value: node.edid,
               category: 'Includes Node',
               description: `${matchingPaths} path${matchingPaths !== 1 ? 's' : ''} include ${node.name}`,
             }
@@ -137,12 +137,12 @@ export function useDestinyFilters(
             const matchingPaths = possiblePaths.filter(
               p =>
                 p.path.length > 0 &&
-                p.path[p.path.length - 1].name === node.name
+                p.path[p.path.length - 1].edid === node.edid
             ).length
             return {
               id: `ends-${node.id}`,
               label: node.name,
-              value: node.name,
+              value: node.edid,
               category: 'Ends With Node',
               description: `${matchingPaths} path${matchingPaths !== 1 ? 's' : ''} end with ${node.name}`,
             }
@@ -173,13 +173,16 @@ export function useDestinyFilters(
           id: 'prerequisites',
           name: 'Prerequisites',
           placeholder: 'Filter by prerequisite...',
-          options: prerequisites.map(prereq => ({
-            id: `prereq-${prereq}`,
-            label: prereq,
-            value: prereq,
-            category: 'Prerequisites',
-            description: `Nodes requiring ${prereq}`,
-          })),
+          options: prerequisites.map(prereqEdid => {
+            const prereqNode = nodes.find(n => n.edid === prereqEdid)
+            return {
+              id: `prereq-${prereqEdid}`,
+              label: prereqNode ? prereqNode.name : prereqEdid,
+              value: prereqEdid,
+              category: 'Prerequisites',
+              description: `Nodes requiring ${prereqNode ? prereqNode.name : prereqEdid}`,
+            }
+          }),
         },
       ]
     }
@@ -235,14 +238,18 @@ export function useDestinyFilters(
         return selectedFilters.every(filter => {
           switch (filter.type) {
             case 'includes-node':
-              // Path must include the specified node
-              return path.some(node => node.name === filter.nodeName)
+              // Path must include the specified node (by edid)
+              return path.some(
+                node =>
+                  node.edid === filter.nodeName || node.edid === filter.nodeId
+              )
 
             case 'ends-with-node':
-              // Path must end with the specified node
+              // Path must end with the specified node (by edid)
               return (
                 path.length > 0 &&
-                path[path.length - 1].name === filter.nodeName
+                (path[path.length - 1].edid === filter.nodeName ||
+                  path[path.length - 1].edid === filter.nodeId)
               )
 
             default:

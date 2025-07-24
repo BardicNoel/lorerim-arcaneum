@@ -84,7 +84,7 @@ export class DestinyNodeModel {
    */
   static isLeafNode(node: DestinyNode, allNodes: DestinyNode[]): boolean {
     return !allNodes.some(otherNode =>
-      otherNode.prerequisites.includes(node.name)
+      otherNode.prerequisites.includes(node.edid)
     )
   }
 
@@ -103,7 +103,7 @@ export class DestinyNodeModel {
     allNodes: DestinyNode[]
   ): DestinyNode[] {
     return allNodes.filter(otherNode =>
-      otherNode.prerequisites.includes(node.name)
+      otherNode.prerequisites.includes(node.edid)
     )
   }
 
@@ -115,7 +115,7 @@ export class DestinyNodeModel {
     allNodes: DestinyNode[]
   ): DestinyNode[] {
     return allNodes.filter(otherNode =>
-      node.prerequisites.includes(otherNode.name)
+      node.prerequisites.includes(otherNode.edid)
     )
   }
 
