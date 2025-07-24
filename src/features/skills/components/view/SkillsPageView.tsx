@@ -1,20 +1,12 @@
-import React, { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
-import { Button } from '@/shared/ui/ui/button'
 import { Badge } from '@/shared/ui/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Separator } from '@/shared/ui/ui/separator'
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from '@/shared/ui/ui/drawer'
-import { LoadingView, ErrorView } from '../atomic'
-import { SkillGrid, SkillSearch, SkillFilters } from '../composition'
-import { PerkTreeViewMVA } from './PerkTreeViewMVA'
+import { useState } from 'react'
 import type { UnifiedSkill } from '../../adapters'
+import { usePerkData } from '../../adapters'
+import { ErrorView, LoadingView } from '../atomic'
+import { SkillFilters, SkillGrid, SkillSearch } from '../composition'
+import { SkillPerkTreeDrawer } from './SkillPerkTreeDrawer'
 
 // High-level view component that consumes adapters
 interface SkillsPageViewProps {
@@ -61,10 +53,18 @@ export function SkillsPageView({
   // Local state for perk tree drawer
   const [perkTreeOpen, setPerkTreeOpen] = useState(false)
 
+  // Use perk data adapter for the selected skill
+  const {
+    selectedPerkTree,
+    loading: perkLoading,
+    error: perkError,
+    handleResetPerks,
+  } = usePerkData(selectedSkillId)
+
   if (loading) {
     return <LoadingView />
   }
-  
+
   if (error) {
     return <ErrorView error={error} />
   }
@@ -80,7 +80,22 @@ export function SkillsPageView({
     canAssignMajor: skill.canAssignMajor,
     canAssignMinor: skill.canAssignMinor,
   }))
-  
+
+  // Transform skills to the format expected by SkillPerkTreeDrawer
+  const drawerSkills = skills.map(skill => ({
+    edid: skill.id,
+    name: skill.name,
+    category: skill.category,
+    description: skill.description,
+    scaling: '', // Default value since UnifiedSkill doesn't have this
+    keyAbilities: [], // Default value since UnifiedSkill doesn't have this
+    metaTags: [], // Default value since UnifiedSkill doesn't have this
+    totalPerks: skill.totalPerks,
+    selectedPerks: skill.selectedPerksCount,
+    isMajor: skill.assignmentType === 'major',
+    isMinor: skill.assignmentType === 'minor',
+  }))
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       {/* Page Header */}
@@ -90,21 +105,21 @@ export function SkillsPageView({
           Manage your character's skills and perk selections
         </p>
       </div>
-      
+
       {/* Build Summary Card */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span>Build Summary</span>
             <div className="flex gap-2">
-              <Badge 
-                variant="outline" 
+              <Badge
+                variant="outline"
                 className="bg-yellow-50 text-yellow-800 border-yellow-300"
               >
                 {skillSummary.majorCount}/{skillSummary.majorLimit} Major
               </Badge>
-              <Badge 
-                variant="outline" 
+              <Badge
+                variant="outline"
                 className="bg-gray-50 text-gray-800 border-gray-300"
               >
                 {skillSummary.minorCount}/{skillSummary.minorLimit} Minor
@@ -135,23 +150,20 @@ export function SkillsPageView({
           </div>
         </CardContent>
       </Card>
-      
+
       {/* Search and Filters */}
       <div className="space-y-4">
-        <SkillSearch 
-          query={searchQuery} 
-          onQueryChange={onSearchChange} 
-        />
-        
+        <SkillSearch query={searchQuery} onQueryChange={onSearchChange} />
+
         <SkillFilters
           categories={categories}
           selectedCategory={selectedCategory}
           onCategorySelect={onCategorySelect}
         />
       </div>
-      
+
       <Separator />
-      
+
       {/* Skills Grid */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
@@ -160,10 +172,11 @@ export function SkillsPageView({
             {skills.length} skills found
           </p>
         </div>
-        
+
         <SkillGrid
           skills={gridSkills}
-          onSkillSelect={(skillId) => {
+          onSkillSelect={skillId => {
+            console.log('Skill selected:', skillId) // Debug log
             onSkillSelect(skillId)
             setPerkTreeOpen(true)
           }}
@@ -173,35 +186,32 @@ export function SkillsPageView({
           selectedSkillId={selectedSkillId || undefined}
         />
       </div>
-      
+
+      {/* Debug info */}
+      {selectedSkillId && (
+        <div className="text-xs text-muted-foreground">
+          Debug: Selected skill: {selectedSkillId}, Perk tree:{' '}
+          {selectedPerkTree ? 'Found' : 'Not found'}, Drawer open:{' '}
+          {perkTreeOpen ? 'Yes' : 'No'}
+        </div>
+      )}
+
       {/* Perk Tree Drawer */}
-      <Drawer open={perkTreeOpen} onOpenChange={setPerkTreeOpen}>
-        <DrawerContent className="max-h-[90vh] bg-background border-0 shadow-2xl">
-          <DrawerHeader className="bg-background border-b">
-            <DrawerTitle>
-              {selectedSkillId && skills.find(s => s.id === selectedSkillId)?.name
-                ? `${skills.find(s => s.id === selectedSkillId)?.name} Perk Tree`
-                : 'Perk Tree'
-              }
-            </DrawerTitle>
-            <DrawerDescription>
-              Select and manage perks for this skill
-            </DrawerDescription>
-          </DrawerHeader>
-          
-          <div className="flex-1 overflow-auto bg-background min-h-[400px]">
-            {selectedSkillId && (
-              <PerkTreeViewMVA
-                skillId={selectedSkillId}
-                skillName={skills.find(s => s.id === selectedSkillId)?.name || 'Unknown Skill'}
-                skillCategory={skills.find(s => s.id === selectedSkillId)?.category || 'Unknown'}
-                onClose={() => setPerkTreeOpen(false)}
-              />
-            )}
-          </div>
-        </DrawerContent>
-      </Drawer>
-      
+      <SkillPerkTreeDrawer
+        open={perkTreeOpen}
+        onOpenChange={setPerkTreeOpen}
+        selectedSkill={selectedSkillId}
+        skillName={
+          selectedSkillId
+            ? skills.find(s => s.id === selectedSkillId)?.name
+            : undefined
+        }
+        perkTree={selectedPerkTree || undefined}
+        skills={drawerSkills}
+        onSkillSelect={onSkillSelect}
+        onReset={handleResetPerks}
+      />
+
       {/* Assignment Instructions */}
       <Card className="bg-muted/50">
         <CardContent className="pt-6">
@@ -209,15 +219,21 @@ export function SkillsPageView({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
               <p className="text-muted-foreground">Major Skills (0-3)</p>
-              <p>Your primary skills that level up faster and start at a higher level.</p>
+              <p>
+                Your primary skills that level up faster and start at a higher
+                level.
+              </p>
             </div>
             <div>
               <p className="text-muted-foreground">Minor Skills (0-6)</p>
-              <p>Secondary skills that provide additional benefits and customization.</p>
+              <p>
+                Secondary skills that provide additional benefits and
+                customization.
+              </p>
             </div>
           </div>
         </CardContent>
       </Card>
     </div>
   )
-} 
+}
