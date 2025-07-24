@@ -45,11 +45,14 @@ export function useSkillsPage() {
   // Transform skills for skills page display
   const skillsPageSkills = useMemo(() => {
     return filteredSkills.map(skill => {
-      const selectedPerksCount = skill.selectedPerksCount ?? 0
+      // Get actual selected perks count from character build store
+      const selectedPerks = build.perks?.selected?.[skill.id] || []
+      const selectedPerksCount = selectedPerks.length
       const totalPerks = skill.totalPerks ?? 0
       
       return {
         ...skill,
+        selectedPerksCount, // Update the selected perks count
         assignmentType: build.skills.major.includes(skill.id)
           ? ('major' as const)
           : build.skills.minor.includes(skill.id)
@@ -60,7 +63,7 @@ export function useSkillsPage() {
         perkCount: `${selectedPerksCount}/${totalPerks}`,
       } as SkillsPageSkill
     })
-  }, [filteredSkills, build.skills.major, build.skills.minor])
+  }, [filteredSkills, build.skills.major, build.skills.minor, build.perks?.selected])
 
   // Compute skill summary
   const skillSummary = useMemo(() => {

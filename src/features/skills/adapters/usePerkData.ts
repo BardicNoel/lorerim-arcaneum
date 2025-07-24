@@ -108,6 +108,19 @@ export function usePerkData(skillId: string | null) {
 
   const handlePerkRankChange = (perkId: string, newRank: number) => {
     setPerkRank(perkId, newRank)
+    
+    // For multi-rank perks, also handle selection state
+    if (newRank === 0) {
+      // Rank is 0, remove from selected perks if it's there
+      if (selectedPerks.includes(perkId)) {
+        removePerk(skillId, perkId)
+      }
+    } else {
+      // Rank is > 0, add to selected perks if it's not there
+      if (!selectedPerks.includes(perkId)) {
+        addPerk(skillId, perkId)
+      }
+    }
   }
 
   const handleResetPerks = () => {

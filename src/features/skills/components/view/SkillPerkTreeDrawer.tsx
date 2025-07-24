@@ -46,6 +46,7 @@ export function SkillPerkTreeDrawer({
   // Use perk data adapter
   const {
     selectedPerks,
+    perkRanks,
     handlePerkSelect,
     handlePerkRankChange,
     handleResetPerks,
@@ -60,9 +61,9 @@ export function SkillPerkTreeDrawer({
       .map(perk => ({
         ...perk,
         selected: true,
-        currentRank: 1, // Default rank, could be enhanced to track actual ranks
+        currentRank: perkRanks[perk.edid] || 1, // Use actual rank from store
       }))
-  }, [perkTree, selectedPerks])
+  }, [perkTree, selectedPerks, perkRanks])
 
   const handleTogglePerk = React.useCallback(
     (perkId: string) => {

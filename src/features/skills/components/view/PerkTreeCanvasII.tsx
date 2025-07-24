@@ -24,30 +24,15 @@ import { PerkNode } from './PerkNode'
 import type { LayoutConfig } from './PerkTreeLayoutTypes'
 import { convertToPerkRecords, layoutPerkTree } from './perkTreeLayout'
 
-const createStableNodeTypes = () => {
-  let currentCallbacks = {
-    onTogglePerk: undefined as ((perkId: string) => void) | undefined,
-    onRankChange: undefined as
-      | ((perkId: string, newRank: number) => void)
-      | undefined,
-  }
-  const nodeTypes: NodeTypes = {
-    perkNode: (props: any) => (
-      <PerkNode
-        {...props}
-        onTogglePerk={currentCallbacks.onTogglePerk}
-        onRankChange={currentCallbacks.onRankChange}
-      />
-    ),
-  }
-  return {
-    nodeTypes,
-    updateCallbacks: (callbacks: typeof currentCallbacks) => {
-      currentCallbacks = callbacks
-    },
-  }
+const nodeTypes: NodeTypes = {
+  perkNode: (props: any) => (
+    <PerkNode
+      {...props}
+      onTogglePerk={props.data.onTogglePerk}
+      onRankChange={props.data.onRankChange}
+    />
+  ),
 }
-const stableNodeTypesInstance = createStableNodeTypes()
 
 interface PerkTreeCanvasIIProps {
   tree: PerkTree | undefined
@@ -64,12 +49,6 @@ export function PerkTreeCanvasII({
 }: PerkTreeCanvasIIProps) {
   const [reactFlowInstance, setReactFlowInstance] =
     React.useState<ReactFlowInstance | null>(null)
-  useEffect(() => {
-    stableNodeTypesInstance.updateCallbacks({
-      onTogglePerk,
-      onRankChange,
-    })
-  }, [onTogglePerk, onRankChange])
   const onNodeDragStop = React.useCallback((event: any, node: Node) => {}, [])
   const validatedTree = useMemo(() => {
     if (!tree) return null
@@ -80,7 +59,7 @@ export function PerkTreeCanvasII({
     }
     return validation.data
   }, [tree])
-  const { nodeTypes } = stableNodeTypesInstance
+
   const layoutConfig: LayoutConfig = useMemo(
     () => ({
       nodeWidth: 140,
@@ -118,10 +97,15 @@ export function PerkTreeCanvasII({
           selected: false,
           hasChildren: hasChildren,
           isRoot: isRoot,
-        } as PerkNodeData,
+          onTogglePerk,
+          onRankChange,
+        } as PerkNodeData & {
+          onTogglePerk: (perkId: string) => void
+          onRankChange?: (perkId: string, newRank: number) => void
+        },
       }
     })
-  }, [validatedTree, layoutNodes])
+  }, [validatedTree, layoutNodes, onTogglePerk, onRankChange])
   const initialEdges: Edge[] = useMemo(() => {
     if (!validatedTree) return []
     const edges: Edge[] = []
@@ -166,11 +150,16 @@ export function PerkTreeCanvasII({
             ...node.data,
             selected: isSelected,
             currentRank: (selectedPerk as PerkNodeData)?.currentRank || 0,
-          } as PerkNodeData,
+            onTogglePerk,
+            onRankChange,
+          } as PerkNodeData & {
+            onTogglePerk: (perkId: string) => void
+            onRankChange?: (perkId: string, newRank: number) => void
+          },
         }
       })
     )
-  }, [selectedPerks, setNodes, validatedTree])
+  }, [selectedPerks, setNodes, validatedTree, onTogglePerk, onRankChange])
   React.useEffect(() => {
     setEdges(initialEdges)
   }, [initialEdges, setEdges])

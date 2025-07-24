@@ -33,15 +33,28 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
   const isSelected =
     totalRanks > 1 ? (data.currentRank || 0) > 0 : data.selected || selected
 
-  const handleCycleRank = (e: React.MouseEvent) => {
+  const handleNodeClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    const currentRank = data.currentRank || 0
-    const maxRank = data.totalRanks || 1
-    // Cycle: 0 (unselected) -> 1 -> ... -> maxRank -> 0
-    const nextRank = currentRank >= maxRank ? 0 : currentRank + 1
-    if (onRankChange) {
-      onRankChange(data.edid, nextRank)
+    
+    const totalRanks = data.totalRanks || 1
+    
+    if (totalRanks > 1) {
+      // Multi-rank perk: cycle through ranks
+      const currentRank = data.currentRank || 0
+      const maxRank = data.totalRanks || 1
+      // Cycle: 0 (unselected) -> 1 -> ... -> maxRank -> 0
+      const nextRank = currentRank >= maxRank ? 0 : currentRank + 1
+      
+      // Update the rank (this will also handle perk selection in the adapter)
+      if (onRankChange) {
+        onRankChange(data.edid, nextRank)
+      }
+    } else {
+      // Single-rank perk: toggle selection
+      if (onTogglePerk) {
+        onTogglePerk(data.edid)
+      }
     }
   }
 
@@ -96,7 +109,7 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
       <HoverCardTrigger asChild>
         <div
           style={getNodeStyle()}
-          onClick={handleCycleRank}
+          onClick={handleNodeClick}
           onMouseDown={e => e.stopPropagation()}
         >
           {/* Only show target handle if this node is not a root (has prerequisites) */}
