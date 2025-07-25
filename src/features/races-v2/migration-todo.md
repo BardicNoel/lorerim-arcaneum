@@ -6,8 +6,9 @@
 - ✅ Demo page created (RacesMVADemoPage)
 - ✅ Types defined
 - ✅ Atomic components implemented (RaceAvatar, CategoryBadge, KeywordTag, StatBar)
-- ❌ Missing composition components
-- ❌ Missing view components
+- ✅ Composition components implemented (RaceCard, RaceStatsDisplay, RaceEffectsDisplay, RaceKeywordsDisplay)
+- ✅ View components implemented (RacePageView, RaceReferenceView, RaceQuickSelectorView, RaceDetailView)
+- ✅ Fixed critical bug: Adapter parameter passing in view components
 
 ## Phase 1: Complete Adapter Layer
 
@@ -85,74 +86,102 @@
 
 ## Phase 3: Composition Components
 
-### 3.1 Layout Components
-- [ ] **RaceList.tsx** - List layout component
-  - [ ] Renders multiple RaceListItem
-  - [ ] Handles list-specific logic
-  - [ ] Consistent with other lists
-  - [ ] Add virtualization if needed
+### 3.1 Core Display Components
+- [x] **RaceCard.tsx** - Main race card component
+  - [x] Uses atomic components (RaceAvatar, CategoryBadge)
+  - [x] Integrates with composition components
+  - [x] Handles accordion expansion
+  - [x] Supports PlayerCreationItem and Race data
   - [ ] Write component tests
 
-- [ ] **RaceGrid.tsx** - Grid layout component
-  - [ ] Renders multiple RaceCard
-  - [ ] Handles grid layout
-  - [ ] Responsive design
-  - [ ] Add masonry layout option
+- [x] **RaceStatsDisplay.tsx** - Race statistics display
+  - [x] Uses StatBar atomic component
+  - [x] Shows starting stats and regeneration
+  - [x] Supports compact and full views
+  - [x] Configurable display options
   - [ ] Write component tests
 
-### 3.2 Interactive Components
-- [ ] **RaceSearch.tsx** - Search interface
-  - [ ] Search input with results
-  - [ ] Integrate with useRaceFilters
-  - [ ] Consistent search experience
-  - [ ] Add search suggestions
+- [x] **RaceEffectsDisplay.tsx** - Race effects/abilities display
+  - [x] Shows racial spells and abilities
+  - [x] Supports compact and full views
+  - [x] Configurable max display count
+  - [x] Handles descriptions and tooltips
   - [ ] Write component tests
 
-- [ ] **RaceFilters.tsx** - Filter controls
-  - [ ] Category and tag filtering
-  - [ ] Integrate with useRaceFilters
-  - [ ] Clear and reset functionality
-  - [ ] Visual filter indicators
+- [x] **RaceKeywordsDisplay.tsx** - Race keywords display
+  - [x] Uses KeywordTag atomic components
+  - [x] Shows keyword count
+  - [x] Configurable max display count
+  - [x] Auto-detects keyword types
+  - [ ] Write component tests
+
+### 3.2 Player Creation Components
+- [x] **RaceSelectionCard.tsx** - Race selection interface
+  - [x] Integrates with character build state
+  - [x] Shows autocomplete when no race selected
+  - [x] Shows race accordion when race selected
+  - [x] Handles navigation to race page
+  - [ ] Write component tests
+
+- [x] **RaceAccordion.tsx** - Accordion-style race display
+  - [x] Uses AccordionCard from shared components
+  - [x] Shows race details in expandable format
+  - [x] Integrates with build system
+  - [x] Supports custom styling options
+  - [ ] Write component tests
+
+- [x] **RaceAutocomplete.tsx** - Race search and selection
+  - [x] Uses GenericAutocomplete from shared components
+  - [x] Shows race avatars and categories
+  - [x] Custom option rendering
+  - [x] Handles race selection callbacks
   - [ ] Write component tests
 
 ### 3.3 Component Integration
-- [ ] Update **components/composition/index.ts** to export all composition components
-- [ ] Ensure composition components use atomic components
+- [x] Update **components/composition/index.ts** to export all composition components
+- [x] Ensure composition components use atomic components
+- [x] Update demo page to showcase composition components
 - [ ] Add integration tests
 
-## Phase 4: View Components
+## Phase 4: View Components ✅
 
 ### 4.1 Main Views
-- [ ] **RacePageView.tsx** - Main race page view
-  - [ ] Consume all race adapters
-  - [ ] Orchestrate layout
-  - [ ] Handle loading and error states
-  - [ ] Responsive design
+- [x] **RacePageView.tsx** - Main race page view
+  - [x] Consume all race adapters
+  - [x] Orchestrate layout
+  - [x] Handle loading and error states
+  - [x] Responsive design
   - [ ] Write component tests
 
-- [ ] **RaceReferenceView.tsx** - Browse/search interface
-  - [ ] Use shared PlayerCreationPage pattern
-  - [ ] Custom race-specific rendering
-  - [ ] Search and filter integration
+- [x] **RaceReferenceView.tsx** - Browse/search interface
+  - [x] Use shared PlayerCreationPage pattern
+  - [x] Custom race-specific rendering
+  - [x] Search and filter integration
   - [ ] Write component tests
 
 ### 4.2 Specialized Views
-- [ ] **RaceQuickSelectorView.tsx** - Compact selection interface
-  - [ ] For embedded contexts
-  - [ ] Simplified interaction model
-  - [ ] Quick selection workflow
+- [x] **RaceQuickSelectorView.tsx** - Compact selection interface
+  - [x] For embedded contexts
+  - [x] Simplified interaction model
+  - [x] Quick selection workflow
   - [ ] Write component tests
 
-- [ ] **RaceDetailView.tsx** - Detailed race view
-  - [ ] Consume useRaceDetail
-  - [ ] Rich information display
-  - [ ] Related races section
-  - [ ] Comparison functionality
+- [x] **RaceDetailView.tsx** - Detailed race view
+  - [x] Consume useRaceDetail
+  - [x] Rich information display
+  - [x] Related races section
+  - [x] Comparison functionality
   - [ ] Write component tests
 
 ### 4.3 View Integration
-- [ ] Update **views/index.ts** to export all view components
-- [ ] Ensure views consume adapters properly
+- [x] Update **views/index.ts** to export all view components
+- [x] Ensure views consume adapters properly
+- [x] Update demo page to showcase view components
+- [x] **CRITICAL BUG FIX**: Fixed adapter parameter passing in view components
+  - [x] Fixed `useRaceFilters()` calls to pass required `{ races }` parameter
+  - [x] Fixed `useRaceComputed()` calls to pass required `{ races, selectedRaceId }` parameters
+  - [x] Updated all view components (RacePageView, RaceReferenceView, RaceQuickSelectorView)
+  - [x] Resolved "Cannot destructure property 'races' of 'undefined'" TypeError
 - [ ] Add integration tests for view-adapter interactions
 
 ## Phase 5: Page Integration
