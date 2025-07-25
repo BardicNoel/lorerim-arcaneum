@@ -1,4 +1,5 @@
 export { UnifiedSkillsView } from './UnifiedSkillsView'
 export { SkillsPageView } from './SkillsPageView'
 export { SkillSelectionCard } from './SkillSelectionCard'
+export { BuildPageSkillCard } from './BuildPageSkillCard'
 export { PerkTreeView } from './PerkTreeView'
