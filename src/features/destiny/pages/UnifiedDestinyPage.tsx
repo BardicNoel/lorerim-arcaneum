@@ -19,6 +19,7 @@ import { DestinyDetailPanel } from '../components/composition/DestinyDetailPanel
 import { DestinyFilters } from '../components/composition/DestinyFilters'
 import { DestinyPathBuilder } from '../components/composition/DestinyPathBuilder'
 import type { DestinyNode } from '../types'
+import { destinyNodeToPlayerCreationItem } from '@/shared/utils/entityToPlayerCreationItem'
 
 export function UnifiedDestinyPage() {
   // Use MVA adapters for data and state management
@@ -65,17 +66,7 @@ export function UnifiedDestinyPage() {
 
   // Convert filtered nodes to PlayerCreationItem format for reference view
   const filteredPlayerCreationItems: PlayerCreationItem[] = filteredNodes.map(
-    node => ({
-      id: node.id,
-      name: node.name,
-      description: node.description,
-      tags: node.tags,
-      summary: node.description,
-      effects: [],
-      associatedItems: [],
-      imageUrl: undefined,
-      category: undefined,
-    })
+    node => destinyNodeToPlayerCreationItem(node)
   )
 
   const { viewMode: defaultViewMode } = usePlayerCreation({

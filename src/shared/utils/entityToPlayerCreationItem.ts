@@ -1,7 +1,5 @@
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
-import type { Trait } from '@/shared/data/schemas'
-import type { Race } from '@/shared/data/schemas'
-import type { Religion } from '@/shared/data/schemas'
+import type { Trait, Race, Religion, DestinyNode } from '@/shared/data/schemas'
 import type { Birthsign } from '@/features/birthsigns/types'
 
 /**
@@ -179,5 +177,44 @@ export function birthsignToPlayerCreationItem(
     imageUrl: undefined,
     category: birthsign.group,
     originalBirthsign: birthsign, // Include original birthsign for extensibility
+  }
+}
+
+/**
+ * Maps a DestinyNode entity to a PlayerCreationItem for use in shared player creation UIs.
+ * Returns all core PlayerCreationItem fields, but also spreads in all domain-specific fields from the original DestinyNode for extensibility.
+ */
+export function destinyNodeToPlayerCreationItem(
+  destinyNode: DestinyNode
+): PlayerCreationItem & { originalDestinyNode: DestinyNode } {
+  // Extract effects from description and prerequisites
+  const effects = [
+    {
+      type: 'positive' as const,
+      name: destinyNode.name,
+      description: destinyNode.description || '',
+      value: 0,
+      target: 'destiny',
+    },
+  ]
+
+  // Tags: include node tags and prerequisite information
+  const tags = [
+    ...(destinyNode.tags || []),
+    ...(destinyNode.prerequisites?.map(prereq => `Requires: ${prereq}`) || []),
+  ].filter((tag, index, arr) => arr.indexOf(tag) === index)
+
+  return {
+    ...destinyNode, // Spread domain-specific fields first
+    id: destinyNode.id || destinyNode.edid, // Use existing id or edid for character build compatibility
+    name: destinyNode.name,
+    description: destinyNode.description || '',
+    tags,
+    summary: destinyNode.description || '',
+    effects,
+    associatedItems: destinyNode.prerequisites || [],
+    imageUrl: destinyNode.icon,
+    category: 'Destiny',
+    originalDestinyNode: destinyNode, // Include original destiny node for extensibility
   }
 }

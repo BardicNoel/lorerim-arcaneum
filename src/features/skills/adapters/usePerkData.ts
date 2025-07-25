@@ -1,6 +1,7 @@
 import type { PerkTree } from '@/features/perks/types'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { useEffect, useMemo, useState } from 'react'
+import { getDataUrl } from '@/shared/utils/baseUrl'
 
 // Adapter for perk data loading and management
 export function usePerkData(skillId: string | null) {
@@ -25,7 +26,7 @@ export function usePerkData(skillId: string | null) {
         setError(null)
 
         const res = await fetch(
-          `${import.meta.env.BASE_URL}data/perk-trees.json`
+          getDataUrl('data/perk-trees.json')
         )
         if (!res.ok) throw new Error('Failed to fetch perk trees data')
         const data = await res.json()

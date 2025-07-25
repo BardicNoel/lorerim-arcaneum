@@ -33,6 +33,7 @@ import { ReligionAccordion } from '../components/ReligionAccordion'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { Religion, ReligionPantheon } from '../types'
 import { religionToPlayerCreationItem } from '@/shared/utils'
+import { getDataUrl } from '@/shared/utils/baseUrl'
 
 type SortOption = 'alphabetical' | 'divine-type'
 type ViewMode = 'list' | 'grid'
@@ -59,7 +60,7 @@ export function AccordionReligionsPage() {
       try {
         setLoading(true)
         const res = await fetch(
-          `${import.meta.env.BASE_URL}data/wintersun-religion-docs.json`
+          getDataUrl('data/wintersun-religion-docs.json')
         )
         if (!res.ok) throw new Error('Failed to fetch religion data')
         const data = await res.json()

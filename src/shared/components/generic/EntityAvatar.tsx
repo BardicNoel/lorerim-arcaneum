@@ -1,5 +1,6 @@
 import React from 'react'
 import { cn } from '@/lib/utils'
+import { getDataUrl } from '@/shared/utils/baseUrl'
 
 /**
  * Entity type definitions for avatar mapping
@@ -110,7 +111,7 @@ export function EntityAvatar({
       )}
     >
       <img
-        src={`${import.meta.env.BASE_URL}assets/${entityType === 'birthsign' ? 'sign-avatar' : `${entityType}-avatar`}/${avatarFileName}`}
+        src={getDataUrl(`assets/${entityType === 'birthsign' ? 'sign-avatar' : `${entityType}-avatar`}/${avatarFileName}`)}
         alt={`${entityName} avatar`}
         className="w-full h-full object-cover"
         onError={() => setImageError(true)}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { UnifiedSkill } from '../types'
+import { getDataUrl } from '@/shared/utils/baseUrl'
 
 // Utility to compute perk counts from perk trees data
 function computeSkillPerkCounts(skills: any[], perkTrees: any[]) {
@@ -29,8 +30,8 @@ export function useSkillData() {
 
         // Load both skills and perk trees data
         const [skillsRes, perkTreesRes] = await Promise.all([
-          fetch(`${import.meta.env.BASE_URL}data/skills.json`),
-          fetch(`${import.meta.env.BASE_URL}data/perk-trees.json`)
+          fetch(getDataUrl('data/skills.json')),
+          fetch(getDataUrl('data/perk-trees.json'))
         ])
         
         if (!skillsRes.ok) throw new Error('Failed to fetch skills data')
@@ -82,8 +83,8 @@ export function useSkillData() {
 
         // Load both skills and perk trees data
         const [skillsRes, perkTreesRes] = await Promise.all([
-          fetch(`${import.meta.env.BASE_URL}data/skills.json`),
-          fetch(`${import.meta.env.BASE_URL}data/perk-trees.json`)
+          fetch(getDataUrl('data/skills.json')),
+          fetch(getDataUrl('data/perk-trees.json'))
         ])
         
         if (!skillsRes.ok) throw new Error('Failed to fetch skills data')

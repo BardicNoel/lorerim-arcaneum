@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { DestinyDataProvider } from '../model/DestinyDataProvider'
 import { DestinyNodeModel } from '../model/DestinyNodeModel'
 import type { DestinyNode } from '../types'
+import { useDestinyNodes as useCachedDestinyNodes } from '@/shared/data/useDataCache'
 
 interface UseDestinyNodesOptions {
   includePrerequisites?: boolean
@@ -50,31 +50,10 @@ export function useDestinyNodes(
     sortBy = 'name',
   } = options
 
-  const [nodes, setNodes] = useState<DestinyNode[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [dataProvider] = useState(() => new DestinyDataProvider())
-
-  // Load nodes on mount
-  useEffect(() => {
-    const loadNodes = async () => {
-      try {
-        setIsLoading(true)
-        setError(null)
-
-        const loadedNodes = await dataProvider.loadNodes()
-        setNodes(loadedNodes)
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : 'Failed to load destiny nodes'
-        )
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    loadNodes()
-  }, [dataProvider])
+  // Use the cached data provider
+  const { data: destinyData, loading: isLoading, error: cacheError, reload } = useCachedDestinyNodes()
+  const nodes = destinyData || []
+  const error = cacheError
 
   // Root nodes (nodes with no prerequisites)
   const rootNodes = useMemo(() => {
@@ -154,20 +133,8 @@ export function useDestinyNodes(
     return DestinyNodeModel.search(nodes, term)
   }
 
-  const refresh = async () => {
-    try {
-      setIsLoading(true)
-      setError(null)
-
-      const loadedNodes = await dataProvider.loadNodes()
-      setNodes(loadedNodes)
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : 'Failed to refresh destiny nodes'
-      )
-    } finally {
-      setIsLoading(false)
-    }
+  const refresh = () => {
+    reload()
   }
 
   return {

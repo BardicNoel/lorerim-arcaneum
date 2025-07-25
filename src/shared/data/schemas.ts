@@ -106,6 +106,7 @@ export interface DestinyNode {
   name: string;
   edid: string;
   description?: string;
+  icon?: string;
   globalFormId?: string;
   prerequisites?: string[];
   nextBranches?: string[];

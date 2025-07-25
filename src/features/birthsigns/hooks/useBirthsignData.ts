@@ -1,5 +1,6 @@
 import { useReducer, useCallback, useEffect } from 'react'
 import type { Birthsign } from '../types'
+import { getDataUrl } from '@/shared/utils/baseUrl'
 
 interface BirthsignDataState {
   birthsigns: Birthsign[]
@@ -45,7 +46,7 @@ export function useBirthsignData() {
   const fetchBirthsigns = useCallback(async () => {
     dispatch({ type: 'FETCH_START' })
     try {
-      const res = await fetch(`${import.meta.env.BASE_URL}data/birthsigns.json`)
+      const res = await fetch(getDataUrl('data/birthsigns.json'))
       if (!res.ok) throw new Error('Failed to fetch birthsign data')
       const data = await res.json()
       dispatch({ type: 'FETCH_SUCCESS', payload: data })

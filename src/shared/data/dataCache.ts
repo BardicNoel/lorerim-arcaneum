@@ -10,6 +10,7 @@ import type {
   PerkTree,
 } from './schemas'
 import type { Birthsign } from '@/features/birthsigns/types'
+import { getDataUrl } from '@/shared/utils/baseUrl'
 
 // Type-safe dataset map - preserve existing data structures
 type DatasetMap = {
@@ -27,6 +28,53 @@ const cache: Record<string, any> = {}
 
 // Loading state tracking
 const loadingStates: Record<string, Promise<any>> = {}
+
+/**
+ * Generate tags for destiny nodes based on content analysis
+ */
+function generateDestinyTags(node: any): string[] {
+  const tags: string[] = []
+  
+  // Analyze description for keywords
+  const description = node.description?.toLowerCase() || ''
+  
+  // Combat-related tags
+  if (description.includes('damage') || description.includes('weapon')) {
+    tags.push('Combat')
+  }
+  if (description.includes('armor') || description.includes('defense')) {
+    tags.push('Defensive')
+  }
+  
+  // Magic-related tags
+  if (description.includes('magicka') || description.includes('spell') || description.includes('magic')) {
+    tags.push('Magic')
+  }
+  
+  // Utility tags
+  if (description.includes('regeneration') || description.includes('health') || description.includes('stamina')) {
+    tags.push('Utility')
+  }
+  if (description.includes('detect') || description.includes('stealth')) {
+    tags.push('Stealth')
+  }
+  
+  // Cost-related tags
+  if (description.includes('cost') || description.includes('less')) {
+    tags.push('Cost Reduction')
+  }
+  
+  // Effect-based tags
+  if (description.includes('increase') || description.includes('more')) {
+    tags.push('Enhancement')
+  }
+  if (description.includes('resistance')) {
+    tags.push('Resistance')
+  }
+  
+  // Remove duplicates and return
+  return [...new Set(tags)]
+}
 
 /**
  * Loads a JSON dataset if not already cached
@@ -49,7 +97,7 @@ export async function loadDataset<K extends keyof DatasetMap>(
   // Create new loading promise
   const loadPromise = (async () => {
     try {
-      const url = `${import.meta.env.BASE_URL}data/${name}.json`
+      const url = getDataUrl(`data/${name}.json`)
       const response = await fetch(url)
       if (!response.ok) {
         throw new Error(`Failed to load dataset: ${name} (${response.status})`)
@@ -125,7 +173,7 @@ export async function loadDataset<K extends keyof DatasetMap>(
             nextBranches: node.nextBranches || [],
             levelRequirement: node.levelRequirement,
             lore: node.lore,
-            tags: node.tags || [],
+            tags: generateDestinyTags(node),
           }))
           break
           

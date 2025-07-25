@@ -1,8 +1,9 @@
 // Pure data fetching - no UI dependencies
 import type { Skill, PerkTree } from './types'
+import { getDataUrl } from '@/shared/utils/baseUrl'
 
 export async function fetchSkills(): Promise<Skill[]> {
-  const response = await fetch(`${import.meta.env.BASE_URL}data/skills.json`)
+  const response = await fetch(getDataUrl('data/skills.json'))
   if (!response.ok) {
     throw new Error('Failed to load skills data')
   }
@@ -13,7 +14,7 @@ export async function fetchSkills(): Promise<Skill[]> {
 }
 
 export async function fetchPerkTrees(): Promise<PerkTree[]> {
-  const response = await fetch(`${import.meta.env.BASE_URL}data/perk-trees.json`)
+  const response = await fetch(getDataUrl('data/perk-trees.json'))
   if (!response.ok) {
     throw new Error('Failed to load perk trees data')
   }

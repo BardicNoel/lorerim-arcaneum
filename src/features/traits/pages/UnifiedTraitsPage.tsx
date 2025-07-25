@@ -18,6 +18,7 @@ import { TraitCard } from '../components/TraitCard'
 import { TraitDetailPanel } from '../components/TraitDetailPanel'
 import type { Trait } from '../types'
 import { traitToPlayerCreationItem } from '@/shared/utils'
+import { getDataUrl } from '@/shared/utils/baseUrl'
 
 export function UnifiedTraitsPage() {
   // Load trait data from public/data/traits.json at runtime
@@ -29,7 +30,7 @@ export function UnifiedTraitsPage() {
     async function fetchTraits() {
       try {
         setLoading(true)
-        const res = await fetch(`${import.meta.env.BASE_URL}data/traits.json`)
+        const res = await fetch(getDataUrl('data/traits.json'))
         if (!res.ok) throw new Error('Failed to fetch trait data')
         const data = await res.json()
         setTraits(data.traits as Trait[])

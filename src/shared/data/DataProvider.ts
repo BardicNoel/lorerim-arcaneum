@@ -11,6 +11,7 @@ import {
   type SearchResult,
 } from './schemas'
 import { useEffect } from 'react'
+import { getDataUrl } from '@/shared/utils/baseUrl'
 
 // Data store state
 interface DataState {
@@ -163,7 +164,7 @@ export const useDataStore = create<DataState>()(
         state.setError('skills', null)
         
         try {
-          const response = await fetch(`${import.meta.env.BASE_URL}data/skills.json`)
+          const response = await fetch(getDataUrl('data/skills.json'))
           if (!response.ok) throw new Error('Failed to fetch skills data')
           
           const rawData = await response.json()
@@ -195,7 +196,7 @@ export const useDataStore = create<DataState>()(
         state.setError('races', null)
         
         try {
-          const response = await fetch(`${import.meta.env.BASE_URL}data/playable-races.json`)
+          const response = await fetch(getDataUrl('data/playable-races.json'))
           if (!response.ok) throw new Error('Failed to fetch races data')
           
           const rawData = await response.json()
@@ -227,7 +228,7 @@ export const useDataStore = create<DataState>()(
         state.setError('traits', null)
         
         try {
-          const response = await fetch(`${import.meta.env.BASE_URL}data/traits.json`)
+          const response = await fetch(getDataUrl('data/traits.json'))
           if (!response.ok) throw new Error('Failed to fetch traits data')
           
           const rawData = await response.json()
@@ -259,7 +260,7 @@ export const useDataStore = create<DataState>()(
         state.setError('religions', null)
         
         try {
-          const response = await fetch(`${import.meta.env.BASE_URL}data/wintersun-religion-docs.json`)
+          const response = await fetch(getDataUrl('data/wintersun-religion-docs.json'))
           if (!response.ok) throw new Error('Failed to fetch religions data')
           
           const rawData = await response.json()
@@ -299,7 +300,7 @@ export const useDataStore = create<DataState>()(
         state.setError('birthsigns', null)
         
         try {
-          const response = await fetch(`${import.meta.env.BASE_URL}data/birthsigns.json`)
+          const response = await fetch(getDataUrl('data/birthsigns.json'))
           if (!response.ok) throw new Error('Failed to fetch birthsigns data')
           
           const rawData = await response.json()
@@ -330,7 +331,7 @@ export const useDataStore = create<DataState>()(
         state.setError('destinyNodes', null)
         
         try {
-          const response = await fetch(`${import.meta.env.BASE_URL}data/subclasses.json`)
+          const response = await fetch(getDataUrl('data/subclasses.json'))
           if (!response.ok) throw new Error('Failed to fetch destiny nodes data')
           
           const rawData = await response.json()
@@ -365,7 +366,7 @@ export const useDataStore = create<DataState>()(
         state.setError('perkTrees', null)
         
         try {
-          const response = await fetch(`${import.meta.env.BASE_URL}data/perk-trees.json`)
+          const response = await fetch(getDataUrl('data/perk-trees.json'))
           if (!response.ok) throw new Error('Failed to fetch perk trees data')
           
           const rawData = await response.json()

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Religion, ReligionPantheon } from '../types'
+import { getDataUrl } from '@/shared/utils/baseUrl'
 
 export function useReligionData() {
   const [religions, setReligions] = useState<Religion[]>([])
@@ -10,9 +11,9 @@ export function useReligionData() {
     async function fetchReligions() {
       try {
         setLoading(true)
-        const res = await fetch(
-          `${import.meta.env.BASE_URL}data/wintersun-religion-docs.json`
-        )
+              const res = await fetch(
+        getDataUrl('data/wintersun-religion-docs.json')
+      )
         if (!res.ok) throw new Error('Failed to fetch religion data')
         const data = await res.json()
 

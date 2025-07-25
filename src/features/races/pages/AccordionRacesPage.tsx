@@ -17,6 +17,7 @@ import { RaceAccordion } from '../components/RaceAccordion'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { Race } from '../types'
 import { raceToPlayerCreationItem } from '@/shared/utils'
+import { getDataUrl } from '@/shared/utils/baseUrl'
 
 type ViewMode = 'list' | 'grid'
 
@@ -36,7 +37,7 @@ export function AccordionRacesPage() {
       try {
         setLoading(true)
         const res = await fetch(
-          `${import.meta.env.BASE_URL}data/playable-races.json`
+          getDataUrl('data/playable-races.json')
         )
         if (!res.ok) throw new Error('Failed to fetch race data')
         const data = await res.json()
