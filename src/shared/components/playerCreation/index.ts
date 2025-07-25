@@ -38,5 +38,7 @@ export type {
   SelectedTag,
 } from './types'
 
+export type { EntityDetail } from './EntityDisplayCard'
+
 /** @deprecated Use PlayerCreationLayout, PlayerCreationContent, etc. instead */
 export { PlayerCreationPage as PlayerCreationPageDeprecated } from './PlayerCreationPage'

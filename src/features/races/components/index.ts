@@ -1,3 +1,4 @@
+export { AttributeProgressBars } from './AttributeProgressBars'
 export { CategoryBadge } from './CategoryBadge'
 export { KeywordTag } from './KeywordTag'
 export { PageShell } from './PageShell'
