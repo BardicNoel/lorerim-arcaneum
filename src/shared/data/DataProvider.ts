@@ -10,6 +10,7 @@ import {
   type PerkTree,
   type SearchResult,
 } from './schemas'
+import { useEffect } from 'react'
 
 // Data store state
 interface DataState {
@@ -629,55 +630,118 @@ function generateHighlights(entity: any, query: string): SearchResult['highlight
   return highlights
 }
 
-// Export convenience hooks
+// Export convenience hooks - Separate data from actions to prevent infinite loops
 export const useSkills = () => useDataStore((state) => ({
   skills: state.skills,
   loading: state.loading.skills,
   error: state.errors.skills,
-  loadSkills: state.loadSkills,
 }))
 
 export const useRaces = () => useDataStore((state) => ({
   races: state.races,
   loading: state.loading.races,
   error: state.errors.races,
-  loadRaces: state.loadRaces,
 }))
 
 export const useTraits = () => useDataStore((state) => ({
   traits: state.traits,
   loading: state.loading.traits,
   error: state.errors.traits,
-  loadTraits: state.loadTraits,
 }))
 
 export const useReligions = () => useDataStore((state) => ({
   religions: state.religions,
   loading: state.loading.religions,
   error: state.errors.religions,
-  loadReligions: state.loadReligions,
 }))
 
 export const useBirthsigns = () => useDataStore((state) => ({
   birthsigns: state.birthsigns,
   loading: state.loading.birthsigns,
   error: state.errors.birthsigns,
-  loadBirthsigns: state.loadBirthsigns,
 }))
 
 export const useDestinyNodes = () => useDataStore((state) => ({
   destinyNodes: state.destinyNodes,
   loading: state.loading.destinyNodes,
   error: state.errors.destinyNodes,
-  loadDestinyNodes: state.loadDestinyNodes,
 }))
 
 export const usePerkTrees = () => useDataStore((state) => ({
   perkTrees: state.perkTrees,
   loading: state.loading.perkTrees,
   error: state.errors.perkTrees,
-  loadPerkTrees: state.loadPerkTrees,
 }))
+
+// Separate action hooks - these return stable references
+export const useDataActions = () => useDataStore((state) => ({
+  loadSkills: state.loadSkills,
+  loadRaces: state.loadRaces,
+  loadTraits: state.loadTraits,
+  loadReligions: state.loadReligions,
+  loadBirthsigns: state.loadBirthsigns,
+  loadDestinyNodes: state.loadDestinyNodes,
+  loadPerkTrees: state.loadPerkTrees,
+  loadAllData: state.loadAllData,
+  clearCache: state.clearCache,
+  isCacheValid: state.isCacheValid,
+}))
+
+// Convenience hooks that automatically load data
+export const useTraitsWithAutoLoad = () => {
+  const { traits, loading, error } = useTraits()
+  const { loadTraits } = useDataActions()
+  
+  useEffect(() => {
+    loadTraits()
+  }, [loadTraits])
+  
+  return { traits, loading, error, loadTraits }
+}
+
+export const useSkillsWithAutoLoad = () => {
+  const { skills, loading, error } = useSkills()
+  const { loadSkills } = useDataActions()
+  
+  useEffect(() => {
+    loadSkills()
+  }, [loadSkills])
+  
+  return { skills, loading, error, loadSkills }
+}
+
+export const useRacesWithAutoLoad = () => {
+  const { races, loading, error } = useRaces()
+  const { loadRaces } = useDataActions()
+  
+  useEffect(() => {
+    loadRaces()
+  }, [loadRaces])
+  
+  return { races, loading, error, loadRaces }
+}
+
+export const useReligionsWithAutoLoad = () => {
+  const { religions, loading, error } = useReligions()
+  const { loadReligions } = useDataActions()
+  
+  useEffect(() => {
+    loadReligions()
+  }, [loadReligions])
+  
+  return { religions, loading, error, loadReligions }
+}
+
+export const useBirthsignsWithAutoLoad = () => {
+  const { birthsigns, loading, error } = useBirthsigns()
+  const { loadBirthsigns } = useDataActions()
+  
+  useEffect(() => {
+    loadBirthsigns()
+  }, [loadBirthsigns])
+  
+  return { birthsigns, loading, error, loadBirthsigns }
+}
 
 export const useGlobalSearch = () => useDataStore((state) => ({
   searchAll: state.searchAll,

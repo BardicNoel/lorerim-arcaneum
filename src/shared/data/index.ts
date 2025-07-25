@@ -1,61 +1,18 @@
-// Data Provider and Store
+// Export the new cache-based data system
+export * from './dataCache'
+export * from './useDataCache'
+export * from './schemas'
+
+// Legacy exports for backward compatibility (deprecated)
+// Note: These may conflict with the new system - use the new hooks instead
 export {
   useDataStore,
-  useSkills,
-  useRaces,
-  useTraits,
-  useReligions,
-  useBirthsigns,
-  useDestinyNodes,
-  usePerkTrees,
   useGlobalSearch,
-  useDataCache,
+  useDataCache as useLegacyDataCache,
 } from './DataProvider'
-
-// Schemas and Validation
-export {
-  // Schemas
-  BaseEntitySchema,
-  SkillSchema,
-  RaceSchema,
-  TraitSchema,
-  ReligionSchema,
-  BirthsignSchema,
-  DestinyNodeSchema,
-  PerkTreeSchema,
-  SearchResultSchema,
-  
-  // Data file schemas
-  SkillsDataSchema,
-  RacesDataSchema,
-  TraitsDataSchema,
-  ReligionsDataSchema,
-  BirthsignsDataSchema,
-  DestinyNodesDataSchema,
-  PerkTreesDataSchema,
-  
-  // Validation functions
-  validateSkillsData,
-  validateRacesData,
-  validateTraitsData,
-  validateReligionsData,
-  validateBirthsignsData,
-  validateDestinyNodesData,
-  validatePerkTreesData,
-  
-  // Safe validation functions
-  safeValidateSkillsData,
-  safeValidateRacesData,
-  safeValidateTraitsData,
-  safeValidateReligionsData,
-  safeValidateBirthsignsData,
-  safeValidateDestinyNodesData,
-  safeValidatePerkTreesData,
-} from './schemas'
 
 // Types
 export type {
-  BaseEntity,
   Skill,
   Race,
   Trait,

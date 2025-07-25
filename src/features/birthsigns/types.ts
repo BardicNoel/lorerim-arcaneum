@@ -1,4 +1,5 @@
 export interface Birthsign {
+  id?: string // Added by data cache
   name: string
   group: string
   description: string
@@ -9,6 +10,7 @@ export interface Birthsign {
   skill_bonuses: SkillBonus[]
   conditional_effects: ConditionalEffect[]
   mastery_effects: MasteryEffect[]
+  tags?: string[] // Added by data cache
 }
 
 export interface BirthsignPower {
