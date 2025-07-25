@@ -2,98 +2,85 @@
 
 ## Current Status
 - ✅ Model layer implemented (RaceModel, RaceDataProvider, RaceUtilities)
-- ✅ Basic adapter implemented (useRaceData)
+- ✅ All adapters implemented (useRaceData, useRaceState, useRaceFilters, useRaceComputed, useRaceDetail)
 - ✅ Demo page created (RacesMVADemoPage)
 - ✅ Types defined
-- ❌ Missing most adapters
-- ❌ Missing all components
+- ✅ Atomic components implemented (RaceAvatar, CategoryBadge, KeywordTag, StatBar)
+- ❌ Missing composition components
 - ❌ Missing view components
 
 ## Phase 1: Complete Adapter Layer
 
 ### 1.1 State Management Adapter
-- [ ] **useRaceState.ts** - Selection and view mode state
-  - [ ] Implement selectedRace state
-  - [ ] Implement viewMode state ('grid' | 'list')
-  - [ ] Implement expandedSections state
-  - [ ] Add state setters and toggles
-  - [ ] Add persistence if needed
+- [x] **useRaceState.ts** - Selection and view mode state
+  - [x] Implement selectedRace state
+  - [x] Implement viewMode state ('grid' | 'list')
+  - [x] Implement expandedSections state
+  - [x] Add state setters and toggles
+  - [x] Add persistence if needed
   - [ ] Write unit tests
 
 ### 1.2 Filters Adapter
-- [ ] **useRaceFilters.ts** - Search and filtering logic
-  - [ ] Implement searchQuery state
-  - [ ] Implement activeFilters state
-  - [ ] Implement filteredRaces computed value
-  - [ ] Add filter setters and clear functions
-  - [ ] Integrate with RaceModel filtering methods
+- [x] **useRaceFilters.ts** - Search and filtering logic
+  - [x] Implement searchQuery state
+  - [x] Implement activeFilters state
+  - [x] Implement filteredRaces computed value
+  - [x] Add filter setters and clear functions
+  - [x] Integrate with RaceModel filtering methods
   - [ ] Write unit tests
 
 ### 1.3 Computed Data Adapter
-- [ ] **useRaceComputed.ts** - Data transformation and computed values
-  - [ ] Implement transformedRaces (PlayerCreationItem format)
-  - [ ] Implement searchCategories
-  - [ ] Implement raceStats calculations
-  - [ ] Implement selectedRaceDetails
-  - [ ] Add memoization for performance
+- [x] **useRaceComputed.ts** - Data transformation and computed values
+  - [x] Implement transformedRaces (PlayerCreationItem format)
+  - [x] Implement searchCategories
+  - [x] Implement raceStats calculations
+  - [x] Implement selectedRaceDetails
+  - [x] Add memoization for performance
   - [ ] Write unit tests
 
 ### 1.4 Detail View Adapter
-- [ ] **useRaceDetail.ts** - Detailed race information
-  - [ ] Implement race detail fetching
-  - [ ] Implement relatedRaces logic
-  - [ ] Implement raceComparison data
-  - [ ] Add loading and error states
+- [x] **useRaceDetail.ts** - Detailed race information
+  - [x] Implement race detail fetching
+  - [x] Implement relatedRaces logic
+  - [x] Implement raceComparison data
+  - [x] Add loading and error states
   - [ ] Write unit tests
 
 ### 1.5 Adapter Integration
-- [ ] Update **adapters/index.ts** to export all adapters
-- [ ] Ensure adapters work together without conflicts
+- [x] Update **adapters/index.ts** to export all adapters
+- [x] Ensure adapters work together without conflicts
 - [ ] Add integration tests for adapter interactions
 
 ## Phase 2: Atomic Components
 
 ### 2.1 Core Display Components
-- [ ] **RaceItem.tsx** - Pure race display component
-  - [ ] Extract from existing RaceCard
-  - [ ] Make pure presentational
-  - [ ] Add proper TypeScript interfaces
+- [x] **RaceAvatar.tsx** - Race avatar component
+  - [x] Copy from existing races component
+  - [x] Uses generic EntityAvatar
+  - [x] Maintains backward compatibility
   - [ ] Write component tests
 
-- [ ] **RaceListItem.tsx** - List context race item
-  - [ ] Handle selection states
-  - [ ] Consistent with other list items
-  - [ ] Add hover and focus states
+- [x] **CategoryBadge.tsx** - Category badge component
+  - [x] Copy from existing races component
+  - [x] Uses generic CategoryBadge
+  - [x] Race-specific styling
   - [ ] Write component tests
 
-- [ ] **RaceCard.tsx** - Card context race item
-  - [ ] Visual race representation
-  - [ ] Hover and selection effects
-  - [ ] Responsive design
+- [x] **KeywordTag.tsx** - Keyword tag component
+  - [x] Copy from existing races component
+  - [x] Auto-detects keyword types
+  - [x] Color-coded by type
   - [ ] Write component tests
 
-### 2.2 Utility Components
-- [ ] **RaceHoverCard.tsx** - Tooltip/hover information
-  - [ ] Quick race preview
-  - [ ] Consistent with other hover cards
-  - [ ] Proper positioning
+- [x] **StatBar.tsx** - Stat bar component
+  - [x] Copy from existing races component
+  - [x] Progress bar with labels
+  - [x] Configurable colors and sizes
   - [ ] Write component tests
 
-- [ ] **RaceBreadcrumb.tsx** - Navigation component
-  - [ ] Show current selection path
-  - [ ] Consistent with other breadcrumbs
-  - [ ] Add click handlers
-  - [ ] Write component tests
-
-- [ ] **RaceBadge.tsx** - Tag/category display
-  - [ ] Color-coded by category
-  - [ ] Reusable across features
-  - [ ] Proper styling
-  - [ ] Write component tests
-
-### 2.3 Component Integration
-- [ ] Update **components/atomic/index.ts** to export all atomic components
-- [ ] Ensure consistent prop interfaces
+### 2.2 Component Integration
+- [x] Update **components/atomic/index.ts** to export all atomic components
+- [x] Ensure consistent prop interfaces
 - [ ] Add storybook stories for each component
 
 ## Phase 3: Composition Components
