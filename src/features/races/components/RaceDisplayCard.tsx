@@ -5,6 +5,7 @@ import {
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { useNavigate } from 'react-router-dom'
 import { useRaces } from '../hooks/useRaces'
+import { AttributeProgressBars } from './AttributeProgressBars'
 import { RaceAvatar } from './RaceAvatar'
 
 interface RaceDisplayCardProps {
@@ -68,17 +69,12 @@ export function RaceDisplayCard({ className }: RaceDisplayCardProps) {
 
     return (
       <div className="space-y-3">
-        {/* Basic Stats */}
-        <div className="grid grid-cols-2 gap-4">
-          {entity.stats?.map((stat, index) => (
-            <div key={index} className="flex justify-between">
-              <span className="text-sm text-muted-foreground">
-                {stat.label}
-              </span>
-              <span className="text-sm font-medium">{stat.value}</span>
-            </div>
-          ))}
-        </div>
+        {/* Attribute Progress Bars */}
+        <AttributeProgressBars
+          health={entity.stats?.find(stat => stat.label === 'Health')?.value as number || 0}
+          stamina={entity.stats?.find(stat => stat.label === 'Stamina')?.value as number || 0}
+          magicka={entity.stats?.find(stat => stat.label === 'Magicka')?.value as number || 0}
+        />
 
         {/* Regeneration Stats */}
         {regeneration && (

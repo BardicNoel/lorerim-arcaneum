@@ -4,6 +4,7 @@ import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
 import { H3, P } from '@/shared/ui/ui/typography'
+import { AttributeProgressBars } from './AttributeProgressBars'
 import { RaceAvatar } from './RaceAvatar'
 import type { Race } from '../types'
 
@@ -80,18 +81,20 @@ export function RaceAccordion({
             <h5 className="text-lg font-medium text-foreground mb-3">
               Starting Attributes
             </h5>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {Object.entries(originalRace.startingStats).map(
-                ([stat, value]) => (
-                  <div
-                    key={stat}
-                    className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
-                  >
-                    <span className="font-medium capitalize">{stat}</span>
-                    <span className="font-bold text-green-600">{value}</span>
-                  </div>
-                )
-              )}
+            <AttributeProgressBars
+              health={originalRace.startingStats.health}
+              stamina={originalRace.startingStats.stamina}
+              magicka={originalRace.startingStats.magicka}
+              showTitle={false}
+            />
+            {/* Carry Weight - shown separately since it's not part of the progress bars */}
+            <div className="mt-3 p-3 rounded-lg border bg-muted/30">
+              <div className="flex items-center justify-between">
+                <span className="font-medium">Carry Weight</span>
+                <span className="font-bold text-green-600">
+                  {originalRace.startingStats.carryWeight}
+                </span>
+              </div>
             </div>
           </div>
         )}
