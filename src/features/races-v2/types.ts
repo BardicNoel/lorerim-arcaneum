@@ -61,7 +61,7 @@ export interface Combat {
 export interface Race {
   name: string
   edid: string
-  category: 'Human' | 'Beast' | 'Elf'
+  category: 'Human' | 'Beast' | 'Elven'
   source: string
   description: string
   startingStats: StartingStats
@@ -69,7 +69,7 @@ export interface Race {
   skillBonuses: SkillBonus[]
   racialSpells: RacialSpell[]
   keywords: Keyword[]
-  flags: string[]
+  flags?: string[]
   regeneration: Regeneration
   combat: Combat
 }

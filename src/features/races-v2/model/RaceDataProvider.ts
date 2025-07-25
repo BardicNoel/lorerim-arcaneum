@@ -4,7 +4,7 @@ import type { Race } from '../types'
 interface RawRace {
   name: string
   edid: string
-  category: 'Human' | 'Beast' | 'Elf'
+  category: 'Human' | 'Beast' | 'Elven'
   source: string
   description: string
   startingStats: {
@@ -34,7 +34,7 @@ interface RawRace {
     edid: string
     globalFormId: string
   }>
-  flags: string[]
+  flags?: string[]
   regeneration: {
     health: {
       base: number
@@ -79,7 +79,8 @@ export class RaceDataProvider {
       const res = await fetch(`${import.meta.env.BASE_URL}data/playable-races.json`)
       if (!res.ok) throw new Error('Failed to fetch race data')
 
-      const rawData: RawRace[] = await res.json()
+      const responseData = await res.json()
+      const rawData: RawRace[] = responseData.races || []
 
       // Transform the data to match our Race interface
       const transformedRaces: Race[] = rawData.map((race: RawRace) => ({
@@ -93,7 +94,7 @@ export class RaceDataProvider {
         skillBonuses: race.skillBonuses,
         racialSpells: race.racialSpells,
         keywords: race.keywords,
-        flags: race.flags,
+        flags: race.flags || [],
         regeneration: race.regeneration,
         combat: race.combat,
       }))
