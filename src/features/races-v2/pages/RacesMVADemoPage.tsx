@@ -1,13 +1,48 @@
 import React from 'react'
-import { useRaceData } from '../adapters/useRaceData'
+import { useRaceData, useRaceState, useRaceFilters, useRaceComputed, useRaceDetail } from '../adapters'
 import { RaceAvatar, CategoryBadge, KeywordTag, StatBar } from '../components/atomic'
 import { RaceCard, RaceStatsDisplay, RaceEffectsDisplay, RaceKeywordsDisplay, RaceSelectionCard, RaceAccordion, RaceAutocomplete } from '../components/composition'
 import { RacePageView, RaceReferenceView, RaceQuickSelectorView, RaceDetailView } from '../views'
+import { Button } from '@/shared/ui/ui/button'
+import { Badge } from '@/shared/ui/ui/badge'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
+import { Separator } from '@/shared/ui/ui/separator'
 
 export function RacesMVADemoPage() {
+  // Demonstrate all MVA adapters
   const { races, isLoading, error, categories, tags } = useRaceData()
+  const { 
+    selectedRace, 
+    setSelectedRace, 
+    viewMode, 
+    setViewMode,
+    expandedSections,
+    toggleExpandedSection 
+  } = useRaceState()
+  const { 
+    searchQuery, 
+    setSearchQuery, 
+    activeFilters, 
+    setFilters,
+    clearFilters,
+    filteredRaces 
+  } = useRaceFilters({ races })
+  const { 
+    transformedRaces, 
+    searchCategories, 
+    categoriesWithCounts,
+    tagsWithCounts 
+  } = useRaceComputed({ races, selectedRaceId: selectedRace })
+  const { 
+    race: raceDetails, 
+    relatedRaces, 
+    raceComparison,
+    isLoading: detailLoading 
+  } = useRaceDetail({ raceId: selectedRace || '', allRaces: races })
+
   const [accordionExpanded, setAccordionExpanded] = React.useState(false)
-  const [selectedRace, setSelectedRace] = React.useState<string | null>(null)
+  const [activeTab, setActiveTab] = React.useState('overview')
 
   if (isLoading) {
     return (
@@ -37,9 +72,174 @@ export function RacesMVADemoPage() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Races MVA Demo - Atomic & Composition Components</h1>
+      <h1 className="text-3xl font-bold mb-6">Races MVA Demo - Model View Adapter Architecture</h1>
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="adapters">Adapters</TabsTrigger>
+          <TabsTrigger value="components">Components</TabsTrigger>
+          <TabsTrigger value="views">Views</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="overview" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>MVA Architecture Overview</CardTitle>
+              <CardDescription>
+                This demo showcases the Model-View-Adapter pattern implementation for the Races feature.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-4 border rounded-lg">
+                  <h3 className="font-semibold mb-2">Model Layer</h3>
+                  <p className="text-sm text-muted-foreground">Data management and business logic</p>
+                  <Badge variant="outline" className="mt-2">RaceModel</Badge>
+                </div>
+                <div className="p-4 border rounded-lg">
+                  <h3 className="font-semibold mb-2">Adapter Layer</h3>
+                  <p className="text-sm text-muted-foreground">State management and data transformation</p>
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    <Badge variant="outline">useRaceData</Badge>
+                    <Badge variant="outline">useRaceState</Badge>
+                    <Badge variant="outline">useRaceFilters</Badge>
+                  </div>
+                </div>
+                <div className="p-4 border rounded-lg">
+                  <h3 className="font-semibold mb-2">View Layer</h3>
+                  <p className="text-sm text-muted-foreground">UI components and presentation</p>
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    <Badge variant="outline">RaceCard</Badge>
+                    <Badge variant="outline">RacePageView</Badge>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="adapters" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Adapter State Demo</CardTitle>
+              <CardDescription>
+                Interactive demonstration of adapter state management
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* State Management */}
+                <div className="space-y-4">
+                  <h3 className="font-semibold">State Management (useRaceState)</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">Selected Race:</span>
+                      <Badge variant={selectedRace ? "default" : "secondary"}>
+                        {selectedRace || 'None'}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">View Mode:</span>
+                      <div className="flex border rounded">
+                        <Button
+                          variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                          size="sm"
+                          onClick={() => setViewMode('grid')}
+                        >
+                          Grid
+                        </Button>
+                        <Button
+                          variant={viewMode === 'list' ? 'default' : 'ghost'}
+                          size="sm"
+                          onClick={() => setViewMode('list')}
+                        >
+                          List
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">Expanded Sections:</span>
+                      <Badge variant="outline">{expandedSections.length}</Badge>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Filters */}
+                <div className="space-y-4">
+                  <h3 className="font-semibold">Filters (useRaceFilters)</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">Search Query:</span>
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="px-2 py-1 border rounded text-sm"
+                        placeholder="Search races..."
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">Active Filters:</span>
+                      <Badge variant="outline">{activeFilters.tags.length + (activeFilters.type ? 1 : 0)}</Badge>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">Filtered Results:</span>
+                      <Badge variant="outline">{filteredRaces.length} of {races.length}</Badge>
+                    </div>
+                    <Button size="sm" onClick={clearFilters}>Clear Filters</Button>
+                  </div>
+                </div>
+
+                {/* Computed Data */}
+                <div className="space-y-4">
+                  <h3 className="font-semibold">Computed Data (useRaceComputed)</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">Transformed Races:</span>
+                      <Badge variant="outline">{transformedRaces.length}</Badge>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">Search Categories:</span>
+                      <Badge variant="outline">{searchCategories.length}</Badge>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">Categories with Counts:</span>
+                      <Badge variant="outline">{Object.keys(categoriesWithCounts).length}</Badge>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Detail View */}
+                <div className="space-y-4">
+                  <h3 className="font-semibold">Detail View (useRaceDetail)</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">Selected Race Details:</span>
+                      <Badge variant={raceDetails ? "default" : "secondary"}>
+                        {raceDetails?.name || 'None'}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">Related Races:</span>
+                      <Badge variant="outline">{relatedRaces.length}</Badge>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">Comparison Available:</span>
+                      <Badge variant={raceComparison ? "default" : "secondary"}>
+                        {raceComparison ? 'Yes' : 'No'}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+                <TabsContent value="components" className="space-y-6">
+          <h2 className="text-2xl font-bold">Atomic & Composition Components</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Data Summary */}
         <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-4">Data Summary</h2>
@@ -398,7 +598,34 @@ export function RacesMVADemoPage() {
              )}
            </div>
          </div>
-      </div>
-    </div>
-  )
-} 
+           </div>
+         </TabsContent>
+
+         <TabsContent value="views" className="space-y-6">
+           <h2 className="text-2xl font-bold">View Components</h2>
+           <div className="space-y-6">
+             <Card>
+               <CardHeader>
+                 <CardTitle>RacePageView</CardTitle>
+                 <CardDescription>Main page view with full functionality</CardDescription>
+               </CardHeader>
+               <CardContent>
+                 <RacePageView className="border rounded-lg p-4" />
+               </CardContent>
+             </Card>
+
+             <Card>
+               <CardHeader>
+                 <CardTitle>RaceReferenceView</CardTitle>
+                 <CardDescription>Browse/search interface</CardDescription>
+               </CardHeader>
+               <CardContent>
+                 <RaceReferenceView className="border rounded-lg p-4" />
+               </CardContent>
+             </Card>
+           </div>
+         </TabsContent>
+       </Tabs>
+     </div>
+   )
+ } 

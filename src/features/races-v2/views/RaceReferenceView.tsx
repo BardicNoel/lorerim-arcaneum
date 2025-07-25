@@ -1,11 +1,13 @@
 import React from 'react'
 import { cn } from '@/lib/utils'
-import { useRaceData, useRaceFilters, useRaceComputed } from '../adapters'
+import { useRaceData, useRaceFilters } from '../adapters'
 import { RaceCard } from '../components/composition'
-import { PlayerCreationContent, PlayerCreationFilters } from '@/shared/components/playerCreation/layout'
+import {
+  PlayerCreationContent,
+  PlayerCreationFilters,
+} from '@/shared/components/playerCreation/layout'
 import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
 import { raceToPlayerCreationItem } from '@/shared/utils'
-import type { Race } from '../types'
 
 interface RaceReferenceViewProps {
   className?: string
@@ -13,60 +15,31 @@ interface RaceReferenceViewProps {
 
 export function RaceReferenceView({ className }: RaceReferenceViewProps) {
   const { races, isLoading, error, categories, tags } = useRaceData()
-  const { 
-    searchQuery, 
-    setSearchQuery, 
-    activeFilters, 
-    setActiveFilters,
-    clearFilters,
-    filteredRaces 
-  } = useRaceFilters({ races })
-  const { 
-    transformedRaces, 
-    searchCategories, 
-    categoriesWithCounts,
-    tagsWithCounts 
-  } = useRaceComputed({ races, selectedRaceId: null })
+  const { searchQuery, setSearchQuery, filteredRaces } = useRaceFilters({
+    races,
+  })
 
   // Convert races to PlayerCreationItem format for shared components
-  const playerCreationItems = React.useMemo(() => {
-    return races.map(race => raceToPlayerCreationItem(race))
-  }, [races])
-
   const filteredPlayerCreationItems = React.useMemo(() => {
     return filteredRaces.map(race => raceToPlayerCreationItem(race))
   }, [filteredRaces])
 
   // Use shared player creation filters hook
-  const {
-    searchTerm,
-    setSearchTerm,
-    selectedCategories,
-    setSelectedCategories,
-    selectedTags,
-    setSelectedTags,
-    sortBy,
-    setSortBy,
-    viewMode,
-    setViewMode
-  } = usePlayerCreationFilters()
+  const { filters, handleSearch, handleTagSelect, updateFilters } =
+    usePlayerCreationFilters({
+      onSearch: setSearchQuery,
+      onFiltersChange: _newFilters => {
+        // Sync with race filters if needed
+        // console.log('Filters changed:', newFilters)
+      },
+    })
 
-  // Sync local filters with shared filters
+  // Sync local filters with race filters
   React.useEffect(() => {
-    setSearchTerm(searchQuery)
-  }, [searchQuery, setSearchTerm])
-
-  React.useEffect(() => {
-    setSearchQuery(searchTerm)
-  }, [searchTerm, setSearchQuery])
-
-  React.useEffect(() => {
-    setSelectedCategories(activeFilters)
-  }, [activeFilters, setSelectedCategories])
-
-  React.useEffect(() => {
-    setActiveFilters(selectedCategories)
-  }, [selectedCategories, setActiveFilters])
+    if (searchQuery !== filters.search) {
+      handleSearch(searchQuery)
+    }
+  }, [searchQuery, handleSearch, filters.search])
 
   if (isLoading) {
     return (
@@ -98,18 +71,28 @@ export function RaceReferenceView({ className }: RaceReferenceViewProps) {
     <div className={cn('flex gap-6', className)}>
       {/* Filters Sidebar */}
       <PlayerCreationFilters
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
+        searchTerm={filters.search}
+        onSearchChange={handleSearch}
         categories={categories}
-        selectedCategories={selectedCategories}
-        onCategoryChange={setSelectedCategories}
+        selectedCategories={Object.keys(filters.selectedFilters)}
+        onCategoryChange={categories => {
+          const newFilters = { ...filters }
+          newFilters.selectedFilters = categories.reduce(
+            (acc, cat) => {
+              acc[cat] = true
+              return acc
+            },
+            {} as Record<string, boolean>
+          )
+          updateFilters(newFilters)
+        }}
         tags={tags}
-        selectedTags={selectedTags}
-        onTagChange={setSelectedTags}
-        sortBy={sortBy}
-        onSortChange={setSortBy}
-        viewMode={viewMode}
-        onViewModeChange={setViewMode}
+        selectedTags={filters.selectedTags}
+        onTagChange={handleTagSelect}
+        sortBy="name"
+        onSortChange={() => {}}
+        viewMode="grid"
+        onViewModeChange={() => {}}
         className="w-64 flex-shrink-0"
       />
 
@@ -117,14 +100,14 @@ export function RaceReferenceView({ className }: RaceReferenceViewProps) {
       <PlayerCreationContent
         items={filteredPlayerCreationItems}
         isLoading={isLoading}
-        searchTerm={searchTerm}
-        selectedCategories={selectedCategories}
-        selectedTags={selectedTags}
-        viewMode={viewMode}
-        renderItem={(item) => {
+        searchTerm={filters.search}
+        selectedCategories={Object.keys(filters.selectedFilters)}
+        selectedTags={filters.selectedTags}
+        viewMode="grid"
+        renderItem={item => {
           const race = races.find(r => r.edid === item.id)
           if (!race) return null
-          
+
           return (
             <RaceCard
               key={race.edid}
@@ -140,4 +123,4 @@ export function RaceReferenceView({ className }: RaceReferenceViewProps) {
       />
     </div>
   )
-} 
+}
