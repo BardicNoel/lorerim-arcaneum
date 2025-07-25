@@ -9,13 +9,6 @@ import {
   type DestinyNode,
   type PerkTree,
   type SearchResult,
-  safeValidateSkillsData,
-  safeValidateRacesData,
-  safeValidateTraitsData,
-  safeValidateReligionsData,
-  safeValidateBirthsignsData,
-  safeValidateDestinyNodesData,
-  safeValidatePerkTreesData,
 } from './schemas'
 
 // Data store state
@@ -173,15 +166,10 @@ export const useDataStore = create<DataState>()(
           if (!response.ok) throw new Error('Failed to fetch skills data')
           
           const rawData = await response.json()
-          const validatedData = safeValidateSkillsData(rawData)
-          
-          if (!validatedData) {
-            throw new Error('Invalid skills data format')
-          }
-          
-          const skills = validatedData.skills.map(skill => ({
+          const skills = rawData.skills.map((skill: any) => ({
             ...skill,
-            tags: [...(skill.metaTags || []), skill.category].filter(Boolean),
+            id: skill.id || skill.edid || skill.name.toLowerCase().replace(/\s+/g, '-'),
+            tags: [...(skill.metaTags || []), skill.category].filter((tag): tag is string => Boolean(tag)),
           }))
           
           state.setSkills(skills)
@@ -210,15 +198,10 @@ export const useDataStore = create<DataState>()(
           if (!response.ok) throw new Error('Failed to fetch races data')
           
           const rawData = await response.json()
-          const validatedData = safeValidateRacesData(rawData)
-          
-          if (!validatedData) {
-            throw new Error('Invalid races data format')
-          }
-          
-          const races = validatedData.races.map(race => ({
+          const races = rawData.races.map((race: any) => ({
             ...race,
-            tags: [race.category, ...(race.keywords || [])].filter(Boolean),
+            id: race.id || race.edid || race.name.toLowerCase().replace(/\s+/g, '-'),
+            tags: [race.category, ...(race.keywords || [])].filter((tag): tag is string => Boolean(tag)),
           }))
           
           state.setRaces(races)
@@ -247,16 +230,10 @@ export const useDataStore = create<DataState>()(
           if (!response.ok) throw new Error('Failed to fetch traits data')
           
           const rawData = await response.json()
-          const validatedData = safeValidateTraitsData(rawData)
-          
-          if (!validatedData) {
-            throw new Error('Invalid traits data format')
-          }
-          
-          const traits = validatedData.traits.map(trait => ({
+          const traits = rawData.traits.map((trait: any) => ({
             ...trait,
             id: trait.id || trait.name,
-            tags: [trait.category, ...(trait.tags || []), ...(trait.effects?.map(e => e.type) || [])].filter(Boolean),
+            tags: [trait.category, ...(trait.tags || []), ...(trait.effects?.map((e: any) => e.type) || [])].filter((tag): tag is string => Boolean(tag)),
           }))
           
           state.setTraits(traits)
@@ -285,14 +262,8 @@ export const useDataStore = create<DataState>()(
           if (!response.ok) throw new Error('Failed to fetch religions data')
           
           const rawData = await response.json()
-          const validatedData = safeValidateReligionsData(rawData)
-          
-          if (!validatedData) {
-            throw new Error('Invalid religions data format')
-          }
-          
-          const religions = validatedData.flatMap(pantheon =>
-            pantheon.deities.map(deity => ({
+                     const religions = rawData.flatMap((pantheon: any) =>
+             pantheon.deities.map((deity: any) => ({
               id: deity.id || deity.name,
               name: deity.name,
               description: deity.description,
@@ -331,15 +302,9 @@ export const useDataStore = create<DataState>()(
           if (!response.ok) throw new Error('Failed to fetch birthsigns data')
           
           const rawData = await response.json()
-          const validatedData = safeValidateBirthsignsData(rawData)
-          
-          if (!validatedData) {
-            throw new Error('Invalid birthsigns data format')
-          }
-          
-          const birthsigns = validatedData.birthsigns.map(birthsign => ({
+                     const birthsigns = rawData.birthsigns.map((birthsign: any) => ({
             ...birthsign,
-            tags: [birthsign.category, ...(birthsign.tags || [])].filter(Boolean),
+            tags: [birthsign.category, ...(birthsign.tags || [])].filter((tag): tag is string => Boolean(tag)),
           }))
           
           state.setBirthsigns(birthsigns)
@@ -368,13 +333,7 @@ export const useDataStore = create<DataState>()(
           if (!response.ok) throw new Error('Failed to fetch destiny nodes data')
           
           const rawData = await response.json()
-          const validatedData = safeValidateDestinyNodesData(rawData)
-          
-          if (!validatedData) {
-            throw new Error('Invalid destiny nodes data format')
-          }
-          
-          const destinyNodes = validatedData.map((node, index) => ({
+                     const destinyNodes = rawData.map((node: any, index: number) => ({
             ...node,
             id: node.globalFormId || node.edid || `destiny-${index}`,
             nextBranches: node.nextBranches || [],
@@ -409,13 +368,9 @@ export const useDataStore = create<DataState>()(
           if (!response.ok) throw new Error('Failed to fetch perk trees data')
           
           const rawData = await response.json()
-          const validatedData = safeValidatePerkTreesData(rawData)
+          const perkTrees = rawData
           
-          if (!validatedData) {
-            throw new Error('Invalid perk trees data format')
-          }
-          
-          state.setPerkTrees(validatedData)
+          state.setPerkTrees(perkTrees)
           set((state) => ({
             cache: {
               ...state.cache,
@@ -488,7 +443,7 @@ export const useDataStore = create<DataState>()(
           const score = calculateSearchScore(searchableText, searchTerm)
           results.push({
             type: 'skill',
-            id: skill.id,
+            id: skill.id || skill.edid || skill.name.toLowerCase().replace(/\s+/g, '-'),
             name: skill.name,
             description: skill.description,
             category: skill.category,
@@ -513,7 +468,7 @@ export const useDataStore = create<DataState>()(
           const score = calculateSearchScore(searchableText, searchTerm)
           results.push({
             type: 'race',
-            id: race.id,
+            id: race.id || race.edid || race.name.toLowerCase().replace(/\s+/g, '-'),
             name: race.name,
             description: race.description,
             category: race.category,
@@ -538,7 +493,7 @@ export const useDataStore = create<DataState>()(
           const score = calculateSearchScore(searchableText, searchTerm)
           results.push({
             type: 'trait',
-            id: trait.id,
+            id: trait.id || trait.name.toLowerCase().replace(/\s+/g, '-'),
             name: trait.name,
             description: trait.description,
             category: trait.category,
@@ -564,7 +519,7 @@ export const useDataStore = create<DataState>()(
           const score = calculateSearchScore(searchableText, searchTerm)
           results.push({
             type: 'religion',
-            id: religion.id,
+            id: religion.id || religion.name.toLowerCase().replace(/\s+/g, '-'),
             name: religion.name,
             description: religion.description,
             category: religion.pantheon,
@@ -590,7 +545,7 @@ export const useDataStore = create<DataState>()(
           const score = calculateSearchScore(searchableText, searchTerm)
           results.push({
             type: 'birthsign',
-            id: birthsign.id,
+            id: birthsign.id || birthsign.edid || birthsign.name.toLowerCase().replace(/\s+/g, '-'),
             name: birthsign.name,
             description: birthsign.description,
             category: birthsign.category,
@@ -613,7 +568,7 @@ export const useDataStore = create<DataState>()(
           const score = calculateSearchScore(searchableText, searchTerm)
           results.push({
             type: 'destiny',
-            id: node.id,
+                         id: node.id || node.edid || node.name.toLowerCase().replace(/\s+/g, '-'),
             name: node.name,
             description: node.description,
             tags: node.tags,

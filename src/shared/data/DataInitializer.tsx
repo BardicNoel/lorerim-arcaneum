@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useDataCache } from './DataProvider'
+import { useEffect, useState, useRef } from 'react'
+import { useDataStore } from './DataProvider'
 
 interface DataInitializerProps {
   children: React.ReactNode
@@ -10,16 +10,20 @@ export function DataInitializer({
   children, 
   showLoadingIndicator = false 
 }: DataInitializerProps) {
-  const { loadAllData } = useDataCache()
+  const loadAllData = useDataStore((state) => state.loadAllData)
   const [isInitializing, setIsInitializing] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const hasInitialized = useRef(false)
 
   useEffect(() => {
+    if (hasInitialized.current) return
+
     const initializeData = async () => {
       try {
         setIsInitializing(true)
         setError(null)
         await loadAllData()
+        hasInitialized.current = true
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to initialize data')
         console.error('Data initialization error:', err)
@@ -29,7 +33,7 @@ export function DataInitializer({
     }
 
     initializeData()
-  }, [loadAllData])
+  }, []) // Remove loadAllData dependency to prevent infinite loop
 
   if (showLoadingIndicator && isInitializing) {
     return (
