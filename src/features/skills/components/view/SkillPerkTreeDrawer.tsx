@@ -95,9 +95,9 @@ export function SkillPerkTreeDrawer({
       name: 'Skills',
       placeholder: 'Search skills...',
       options: skills.map(skill => ({
-        id: skill.edid,
+        id: skill.id,
         label: skill.name,
-        value: skill.edid,
+        value: skill.id,
         category: 'Skills',
         description: `${skill.selectedPerks}/${skill.totalPerks} perks selected`,
       })),
@@ -108,7 +108,7 @@ export function SkillPerkTreeDrawer({
     onSkillSelect(option.value)
   }
 
-  if (!selectedSkill || !perkTree) {
+  if (!selectedSkill) {
     return null
   }
 
@@ -141,13 +141,13 @@ export function SkillPerkTreeDrawer({
                 </div>
                 <div>
                   <DrawerTitle className="text-xl">
-                    {skillName || perkTree.treeName}
+                    {skillName || perkTree?.treeName || 'Skill Perks'}
                   </DrawerTitle>
                   <DrawerDescription className="flex items-center gap-2">
                     <span>{selectedPerks.length} perks selected</span>
-                    {skills.find(s => s.edid === selectedSkill)?.level && (
+                    {skills.find(s => s.id === selectedSkill)?.level && (
                       <span className="text-blue-600 font-medium">
-                        • Min: Level {skills.find(s => s.edid === selectedSkill)?.level}
+                        • Min: Level {skills.find(s => s.id === selectedSkill)?.level}
                       </span>
                     )}
                   </DrawerDescription>
@@ -186,7 +186,9 @@ export function SkillPerkTreeDrawer({
                 />
               ) : (
                 <div className="flex items-center justify-center h-full">
-                  <p className="text-muted-foreground">Loading perk tree...</p>
+                  <p className="text-muted-foreground">
+                    {selectedSkill ? 'Loading perk tree...' : 'No skill selected'}
+                  </p>
                 </div>
               )}
             </div>
