@@ -5,7 +5,7 @@ import type { Race } from '../types'
 
 interface UseRaceDataOptions {
   includeRelated?: boolean
-  filterByCategory?: string
+  categoryFilter?: string
   searchTerm?: string
   sortBy?: 'name' | 'category'
 }
@@ -39,7 +39,7 @@ export function useRaceData(
 ): UseRaceDataReturn {
   const {
     includeRelated = false,
-    filterByCategory = '',
+    categoryFilter = '',
     searchTerm = '',
     sortBy = 'name',
   } = options
@@ -77,7 +77,7 @@ export function useRaceData(
   // Filtered races based on options
   const filteredRaces = races.filter(race => {
     // Apply category filter
-    if (filterByCategory && race.category !== filterByCategory) {
+    if (categoryFilter && race.category !== categoryFilter) {
       return false
     }
 
