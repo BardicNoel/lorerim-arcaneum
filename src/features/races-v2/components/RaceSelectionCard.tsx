@@ -1,10 +1,10 @@
 import { SelectionCardShell } from '@/shared/components/ui'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
-import { raceToPlayerCreationItem } from '@/shared/utils'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useRaces } from '../hooks/useRaces'
+import { useRaceData } from '../adapters'
 import type { Race } from '../types'
+import { raceToPlayerCreationItem } from '../utils/raceToPlayerCreationItem'
 import { RaceAccordion, RaceAutocomplete } from './'
 
 interface RaceSelectionCardProps {
@@ -12,14 +12,14 @@ interface RaceSelectionCardProps {
 }
 
 export function RaceSelectionCard({ className }: RaceSelectionCardProps) {
-  const { allRaces } = useRaces()
+  const { races } = useRaceData()
   const { build, setRace } = useCharacterBuild()
   const navigate = useNavigate()
   const [isExpanded, setIsExpanded] = useState(true)
 
   // Find the selected race
   const selectedRace = build.race
-    ? allRaces.find(race => race.edid === build.race)
+    ? races.find(race => race.edid === build.race)
     : null
 
   const handleRaceSelect = (race: Race) => {
@@ -51,7 +51,7 @@ export function RaceSelectionCard({ className }: RaceSelectionCardProps) {
           Choose your character's race
         </p>
         <RaceAutocomplete
-          races={allRaces}
+          races={races}
           onSelect={handleRaceSelect}
           placeholder="Search for a race..."
           className="w-full"
@@ -71,7 +71,7 @@ export function RaceSelectionCard({ className }: RaceSelectionCardProps) {
       className={className}
     >
       <RaceAutocomplete
-        races={allRaces}
+        races={races}
         onSelect={handleRaceSelect}
         placeholder={`Race: Select a race (${selectedRace.name})`}
         className="w-full"

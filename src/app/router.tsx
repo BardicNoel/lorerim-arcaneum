@@ -1,7 +1,7 @@
 import { AccordionBirthsignsPage } from '@/features/birthsigns/pages/AccordionBirthsignsPage'
 import { UnifiedDestinyPage } from '@/features/destiny'
-import { AccordionRacesPage } from '@/features/races/pages/AccordionRacesPage'
 import { RacesMVADemoPage } from '@/features/races-v2'
+import { RacePageView } from '@/features/races-v2/views/RacePageView'
 import { AccordionReligionsPage } from '@/features/religions/pages/AccordionReligionsPage'
 import { SkillsPage } from '@/features/skills'
 import { AccordionTraitsPage } from '@/features/traits/pages/AccordionTraitsPage'
@@ -22,7 +22,7 @@ export const AppRouter = () => {
       {/* Character Build Flow - Nested Routes */}
       <Route path="/build" element={<CharacterBuildLayout />}>
         <Route index element={<BuildPage />} />
-        <Route path="race" element={<AccordionRacesPage />} />
+        <Route path="race" element={<RacePageView />} />
         <Route path="birth-signs" element={<AccordionBirthsignsPage />} />
         <Route path="traits" element={<AccordionTraitsPage />} />
         <Route path="religions" element={<AccordionReligionsPage />} />

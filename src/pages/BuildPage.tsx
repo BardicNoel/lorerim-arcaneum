@@ -1,6 +1,6 @@
 import { BirthsignSelectionCard } from '@/features/birthsigns'
 import BuildPageDestinyCard from '@/features/destiny/views/BuildPageDestinyCard'
-import { RaceSelectionCard } from '@/features/races/components'
+import { RaceSelectionCard } from '@/features/races-v2'
 import { ReligionSelectionCard } from '@/features/religions/components'
 import { BuildPageSkillCard } from '@/features/skills/components'
 import { TraitSelectionCard } from '@/features/traits/components'
