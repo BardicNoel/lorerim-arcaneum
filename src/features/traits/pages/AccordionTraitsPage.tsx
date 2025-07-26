@@ -1,10 +1,13 @@
 import { BuildPageShell } from '@/shared/components/playerCreation'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import type {
   PlayerCreationItem,
   SearchCategory,
   SearchOption,
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
+import type { Trait } from '@/shared/data/schemas'
+import { useTraits } from '@/shared/data/useDataCache'
 import { Button } from '@/shared/ui/ui/button'
 import {
   DropdownMenu,
@@ -12,48 +15,31 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/ui/dropdown-menu'
-import { ChevronDown, Grid3X3, List, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { TraitAccordion } from '../components/TraitAccordion'
-import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
-import { useFuzzySearch } from '../hooks'
-import type { Trait } from '../types'
-import { getAllCategories, getAllTags } from '../utils'
 import { traitToPlayerCreationItem } from '@/shared/utils'
+import { ChevronDown, Grid3X3, List, X } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { TraitAccordion } from '../components/TraitAccordion'
+import { useFuzzySearch } from '../hooks'
+import { getAllCategories, getAllTags } from '../utils'
 
 type SortOption = 'alphabetical' | 'category' | 'effect-count'
 type ViewMode = 'list' | 'grid'
 
 export function AccordionTraitsPage() {
-  const [traits, setTraits] = useState<Trait[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  // Use the new cache-based hook - no infinite loops!
+  const { data: traitsData, loading, error, reload } = useTraits()
+  const traits = traitsData || []
+
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [expandedTraits, setExpandedTraits] = useState<Set<string>>(new Set())
 
-  useEffect(() => {
-    async function fetchTraits() {
-      try {
-        setLoading(true)
-        const res = await fetch(`${import.meta.env.BASE_URL}data/traits.json`)
-        if (!res.ok) throw new Error('Failed to fetch trait data')
-        const data = await res.json()
-        setTraits(data.traits as Trait[])
-      } catch (err) {
-        setError('Failed to load trait data')
-        console.error('Error loading traits:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchTraits()
-  }, [])
-
-  // Convert traits to PlayerCreationItem format using the proper transformation
-  const traitItems: (PlayerCreationItem & { originalTrait: Trait })[] =
-    traits.map(traitToPlayerCreationItem)
+  // Memoize the trait items to prevent unnecessary re-renders
+  const traitItems = useMemo(
+    () => traits.map(traitToPlayerCreationItem),
+    [traits]
+  )
 
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
@@ -130,7 +116,7 @@ export function AccordionTraitsPage() {
   }
 
   // Apply all filters to traits
-  const filteredTraits = traits.filter(trait => {
+  const filteredTraits = traits.filter((trait: Trait) => {
     // If no tags are selected, show all traits
     if (selectedTags.length === 0) return true
 
@@ -147,7 +133,10 @@ export function AccordionTraitsPage() {
 
         case 'Tags':
           // Filter by tags
-          return trait.tags.some(traitTag => traitTag === tag.value)
+          return (
+            trait.tags?.some((traitTag: string) => traitTag === tag.value) ||
+            false
+          )
 
         default:
           return true
@@ -170,8 +159,8 @@ export function AccordionTraitsPage() {
   const displayItems: (PlayerCreationItem & { originalTrait: Trait })[] =
     fuzzyFilteredTraits.map(traitToPlayerCreationItem)
 
-  // Get all valid trait IDs for cleanup
-  const allValidTraitIds = traits.map(trait => trait.edid)
+  // Get all valid trait IDs for cleanup (use id or name as fallback)
+  const allValidTraitIds = traits.map((trait: Trait) => trait.id || trait.name)
 
   // Sort the display items
   const sortedDisplayItems = [...displayItems].sort((a, b) => {
@@ -278,7 +267,7 @@ export function AccordionTraitsPage() {
         <div className="text-center">
           <p className="text-destructive mb-4">{error}</p>
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => reload()}
             className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
           >
             Retry

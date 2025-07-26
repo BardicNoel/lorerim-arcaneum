@@ -1,4 +1,5 @@
 import type { DestinyNode } from '../types'
+import { getDataUrl } from '@/shared/utils/baseUrl'
 
 // Raw data structure from JSON
 interface RawDestinyNode {
@@ -27,7 +28,7 @@ export class DestinyDataProvider {
       this.loading = true
       this.error = null
 
-      const res = await fetch(`${import.meta.env.BASE_URL}data/subclasses.json`)
+      const res = await fetch(getDataUrl('data/subclasses.json'))
       if (!res.ok) throw new Error('Failed to fetch destiny data')
 
       const rawData: RawDestinyNode[] = await res.json()

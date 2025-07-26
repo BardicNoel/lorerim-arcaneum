@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import Fuse from 'fuse.js'
-import type { Trait } from '../types'
+import type { Trait } from '@/shared/data/schemas'
 
 interface SearchableTrait {
   id: string
@@ -19,14 +19,14 @@ export function useFuzzySearch(traits: Trait[], searchQuery: string) {
   // Create searchable trait objects
   const searchableTraits = useMemo(() => {
     return traits.map(trait => ({
-      id: trait.edid,
+      id: trait.id || trait.name,
       name: trait.name,
-      description: trait.description,
-      category: trait.category,
-      effects: trait.effects.map(
-        effect => `${effect.type} ${effect.condition || ''} ${effect.value}`
-      ),
-      tags: trait.tags,
+      description: trait.description || '',
+      category: trait.category || '',
+      effects: trait.effects?.map(
+        effect => `${effect.type} ${effect.description || ''} ${effect.value}`
+      ) || [],
+      tags: trait.tags || [],
       originalTrait: trait,
     }))
   }, [traits])

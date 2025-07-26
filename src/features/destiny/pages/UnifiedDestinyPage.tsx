@@ -5,6 +5,7 @@ import type {
 } from '@/shared/components/playerCreation/types'
 import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
+import { destinyNodeToPlayerCreationItem } from '@/shared/utils/entityToPlayerCreationItem'
 import { useMemo } from 'react'
 import {
   useDestinyFilters,
@@ -50,11 +51,11 @@ export function UnifiedDestinyPage() {
         switch (filter.type) {
           case 'tags':
             // Node must have the specified tag
-            return node.tags.includes(filter.nodeName)
+            return node.tags?.includes(filter.nodeName)
 
           case 'prerequisites':
             // Node must require the specified prerequisite
-            return node.prerequisites.includes(filter.nodeName)
+            return node.prerequisites?.includes(filter.nodeName)
 
           default:
             return true
@@ -65,17 +66,7 @@ export function UnifiedDestinyPage() {
 
   // Convert filtered nodes to PlayerCreationItem format for reference view
   const filteredPlayerCreationItems: PlayerCreationItem[] = filteredNodes.map(
-    node => ({
-      id: node.id,
-      name: node.name,
-      description: node.description,
-      tags: node.tags,
-      summary: node.description,
-      effects: [],
-      associatedItems: [],
-      imageUrl: undefined,
-      category: undefined,
-    })
+    node => destinyNodeToPlayerCreationItem(node)
   )
 
   const { viewMode: defaultViewMode } = usePlayerCreation({

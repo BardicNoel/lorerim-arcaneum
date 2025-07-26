@@ -5,7 +5,6 @@ import type { PlayerCreationItem } from '@/shared/components/playerCreation/type
 import { Badge } from '@/shared/ui/ui/badge'
 import { H3 } from '@/shared/ui/ui/typography'
 import { Star } from 'lucide-react'
-import React from 'react'
 import type { Birthsign } from '../types'
 import { BirthsignAvatar } from './BirthsignAvatar'
 import { FormattedText } from '@/shared/components/generic/FormattedText'

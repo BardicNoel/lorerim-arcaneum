@@ -1,12 +1,11 @@
-import type { PerkTree } from '@/features/perks/types'
+import { usePerkTrees } from '@/shared/data/useDataCache'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 // Adapter for perk data loading and management
 export function usePerkData(skillId: string | null) {
-  const [perkTrees, setPerkTrees] = useState<PerkTree[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  // Use the data cache hook for perk trees
+  const { data: perkTrees, loading, error } = usePerkTrees()
 
   const {
     getSkillPerks,
@@ -17,35 +16,9 @@ export function usePerkData(skillId: string | null) {
     clearSkillPerks,
   } = useCharacterBuild()
 
-  // Load perk trees data
-  useEffect(() => {
-    const loadPerkTrees = async () => {
-      try {
-        setLoading(true)
-        setError(null)
-
-        const res = await fetch(
-          `${import.meta.env.BASE_URL}data/perk-trees.json`
-        )
-        if (!res.ok) throw new Error('Failed to fetch perk trees data')
-        const data = await res.json()
-        // The data is an array directly, not wrapped in perkTrees property
-        setPerkTrees(Array.isArray(data) ? data : [])
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : 'Failed to load perk trees'
-        )
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadPerkTrees()
-  }, [])
-
   // Get perk tree for the selected skill
   const selectedPerkTree = useMemo(() => {
-    if (!skillId) return null
+    if (!skillId || !perkTrees) return null
     const found = perkTrees.find(tree => tree.treeId === skillId) || null
     return found
   }, [skillId, perkTrees])
@@ -108,7 +81,7 @@ export function usePerkData(skillId: string | null) {
 
   const handlePerkRankChange = (perkId: string, newRank: number) => {
     setPerkRank(perkId, newRank)
-    
+
     // For multi-rank perks, also handle selection state
     if (newRank === 0) {
       // Rank is 0, remove from selected perks if it's there
@@ -131,7 +104,7 @@ export function usePerkData(skillId: string | null) {
 
   return {
     // Data
-    perkTrees,
+    perkTrees: perkTrees || [],
     selectedPerkTree,
     selectedPerks,
     perkRanks,

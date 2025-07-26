@@ -1,2 +1,1 @@
-export { AccordionRacesPage } from './AccordionRacesPage'
-export { RacesMVADemoPage } from './RacesMVADemoPage' 
+export { RacesMVADemoPage } from './RacesMVADemoPage'

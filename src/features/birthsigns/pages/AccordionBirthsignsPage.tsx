@@ -1,9 +1,11 @@
 import { BuildPageShell } from '@/shared/components/playerCreation'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import type {
   SearchOption,
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
 import { AccordionGrid } from '@/shared/components/ui'
+import { useBirthsigns } from '@/shared/data/useDataCache'
 import {
   Accordion,
   AccordionContent,
@@ -28,25 +30,20 @@ import {
   Settings,
   X,
 } from 'lucide-react'
-import {
-  BirthsignAccordion,
-  BirthsignCard,
-  BirthsignDetailPanel,
-} from '../components'
-import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
-import {
-  useBirthsignData,
-  useBirthsignFilters,
-  useDisplayControls,
-} from '../hooks'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { BirthsignAccordion } from '../components'
+import { useBirthsignFilters, useDisplayControls } from '../hooks'
+
+import type { Birthsign } from '../types'
 
 type SortOption = 'alphabetical' | 'group' | 'power-count'
 type ViewMode = 'list' | 'grid'
 
 export function AccordionBirthsignsPage() {
-  // Data loading
-  const { birthsigns, loading, error, refetch } = useBirthsignData()
+  // Use the new cache-based hook - no infinite loops!
+  const { data: birthsignsData, loading, error, reload } = useBirthsigns()
+  const birthsigns = birthsignsData || []
+
   // Filters and UI state (now pass birthsigns to the hook)
   const {
     selectedTags,
@@ -62,6 +59,15 @@ export function AccordionBirthsignsPage() {
     displayItems,
     sortedDisplayItems,
   } = useBirthsignFilters(birthsigns)
+
+  // Debug logging
+  useEffect(() => {
+    console.log('birthsigns', birthsigns)
+    console.log('sortedDisplayItems', sortedDisplayItems)
+    console.log('displayItems', displayItems)
+    console.log('filteredBirthsigns', filteredBirthsigns)
+  }, [birthsigns, sortedDisplayItems, displayItems, filteredBirthsigns])
+
   // Local state for expanded accordions (row-based expansion)
   const [expandedBirthsigns, setExpandedBirthsigns] = useState<Set<string>>(
     new Set()
@@ -141,7 +147,7 @@ export function AccordionBirthsignsPage() {
         <div className="text-center">
           <p className="text-destructive mb-4">{error}</p>
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => reload()}
             className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
           >
             Retry
@@ -429,13 +435,11 @@ export function AccordionBirthsignsPage() {
       {viewMode === 'grid' ? (
         <AccordionGrid columns={3} gap="md" className="w-full mt-6">
           {sortedDisplayItems.map(item => {
-            const originalBirthsign = birthsigns.find(birthsign => {
-              const birthsignName = item.id
-              return (
-                birthsign.name.toLowerCase().replace(/\s+/g, '-') ===
-                birthsignName
-              )
-            })
+            const originalBirthsign = birthsigns.find(
+              (birthsign: Birthsign) => {
+                return birthsign.id === item.id || birthsign.edid === item.id
+              }
+            )
             if (!originalBirthsign) return null
             const isExpanded = expandedBirthsigns.has(item.id)
             return (
@@ -452,13 +456,11 @@ export function AccordionBirthsignsPage() {
       ) : (
         <div className="flex flex-col gap-4 w-full mt-6">
           {sortedDisplayItems.map(item => {
-            const originalBirthsign = birthsigns.find(birthsign => {
-              const birthsignName = item.id
-              return (
-                birthsign.name.toLowerCase().replace(/\s+/g, '-') ===
-                birthsignName
-              )
-            })
+            const originalBirthsign = birthsigns.find(
+              (birthsign: Birthsign) => {
+                return birthsign.id === item.id || birthsign.edid === item.id
+              }
+            )
             if (!originalBirthsign) return null
             const isExpanded = expandedBirthsigns.has(item.id)
 

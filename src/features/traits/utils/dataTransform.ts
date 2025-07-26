@@ -1,11 +1,11 @@
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
-import type { Trait } from '../types'
+import type { Trait } from '@/shared/data/schemas'
 
 /**
  * Extract all unique categories from traits
  */
 export function getAllCategories(traits: Trait[]): string[] {
-  const categories = traits.map(trait => trait.category)
+  const categories = traits.map(trait => trait.category).filter(Boolean)
   return [...new Set(categories)].sort()
 }
 
@@ -14,7 +14,7 @@ export function getAllCategories(traits: Trait[]): string[] {
  */
 export function getAllEffectTypes(traits: Trait[]): string[] {
   const allEffectTypes = traits.flatMap(trait =>
-    trait.effects.map(effect => effect.type)
+    trait.effects?.map(effect => effect.type) || []
   )
   return [...new Set(allEffectTypes)].sort()
 }
@@ -23,7 +23,7 @@ export function getAllEffectTypes(traits: Trait[]): string[] {
  * Extract all unique tags from traits
  */
 export function getAllTags(traits: Trait[]): string[] {
-  const allTags = traits.flatMap(trait => trait.tags)
+  const allTags = traits.flatMap(trait => trait.tags || [])
   return [...new Set(allTags)].sort()
 }
 
