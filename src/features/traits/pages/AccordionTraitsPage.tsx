@@ -1,10 +1,13 @@
 import { BuildPageShell } from '@/shared/components/playerCreation'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import type {
   PlayerCreationItem,
   SearchCategory,
   SearchOption,
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
+import type { Trait } from '@/shared/data/schemas'
+import { useTraits } from '@/shared/data/useDataCache'
 import { Button } from '@/shared/ui/ui/button'
 import {
   DropdownMenu,
@@ -12,15 +15,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/ui/dropdown-menu'
+import { traitToPlayerCreationItem } from '@/shared/utils'
 import { ChevronDown, Grid3X3, List, X } from 'lucide-react'
-import { useState, useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { TraitAccordion } from '../components/TraitAccordion'
-import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import { useFuzzySearch } from '../hooks'
 import { getAllCategories, getAllTags } from '../utils'
-import { traitToPlayerCreationItem } from '@/shared/utils'
-import { useTraits } from '@/shared/data/useDataCache'
-import type { Trait } from '@/shared/data/schemas'
 
 type SortOption = 'alphabetical' | 'category' | 'effect-count'
 type ViewMode = 'list' | 'grid'
@@ -28,16 +28,16 @@ type ViewMode = 'list' | 'grid'
 export function AccordionTraitsPage() {
   // Use the new cache-based hook - no infinite loops!
   const { data: traitsData, loading, error, reload } = useTraits()
-  const traits = traitsData?.traits || []
-  
+  const traits = traitsData || []
+
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [expandedTraits, setExpandedTraits] = useState<Set<string>>(new Set())
 
   // Memoize the trait items to prevent unnecessary re-renders
-  const traitItems = useMemo(() => 
-    traits.map(traitToPlayerCreationItem), 
+  const traitItems = useMemo(
+    () => traits.map(traitToPlayerCreationItem),
     [traits]
   )
 
@@ -133,7 +133,10 @@ export function AccordionTraitsPage() {
 
         case 'Tags':
           // Filter by tags
-          return trait.tags?.some((traitTag: string) => traitTag === tag.value) || false
+          return (
+            trait.tags?.some((traitTag: string) => traitTag === tag.value) ||
+            false
+          )
 
         default:
           return true

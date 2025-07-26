@@ -158,7 +158,7 @@ export async function loadDataset<K extends keyof DatasetMap>(
         case 'traits':
           transformedData = data.traits.map((trait: any) => ({
             ...trait,
-            id: trait.id || trait.name,
+            id: trait.id || trait.edid || trait.name,
             tags: [
               trait.category,
               ...(trait.tags || []),

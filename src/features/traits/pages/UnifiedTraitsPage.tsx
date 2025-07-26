@@ -11,53 +11,36 @@ import type {
   PlayerCreationItem,
   SearchCategory,
 } from '@/shared/components/playerCreation/types'
+import { useTraits } from '@/shared/data/useDataCache'
 import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
 import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
-import { useEffect, useState } from 'react'
+import { traitToPlayerCreationItem } from '@/shared/utils'
+import { useMemo } from 'react'
 import { TraitCard } from '../components/TraitCard'
 import { TraitDetailPanel } from '../components/TraitDetailPanel'
-import type { Trait } from '../types'
-import { traitToPlayerCreationItem } from '@/shared/utils'
-import { getDataUrl } from '@/shared/utils/baseUrl'
 
 export function UnifiedTraitsPage() {
-  // Load trait data from public/data/traits.json at runtime
-  const [traits, setTraits] = useState<Trait[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    async function fetchTraits() {
-      try {
-        setLoading(true)
-        const res = await fetch(getDataUrl('data/traits.json'))
-        if (!res.ok) throw new Error('Failed to fetch trait data')
-        const data = await res.json()
-        setTraits(data.traits as Trait[])
-      } catch (err) {
-        setError('Failed to load trait data')
-        console.error('Error loading traits:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchTraits()
-  }, [])
+  // Use the new cache-based hook - no infinite loops!
+  const { data: traitsData, loading, error, reload } = useTraits()
+  const traits = traitsData || []
 
   // Convert traits to PlayerCreationItem format using the proper transformation
-  const playerCreationItems: PlayerCreationItem[] = traits.map(
-    traitToPlayerCreationItem
+  const playerCreationItems: PlayerCreationItem[] = useMemo(
+    () => traits.map(traitToPlayerCreationItem),
+    [traits]
   )
 
   // Generate search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
-    const categories = [...new Set(traits.map(trait => trait.category))]
+    const categories = [
+      ...new Set(traits.map(trait => trait.category).filter(Boolean)),
+    ]
     const effectTypes = [
       ...new Set(
-        traits.flatMap(trait => trait.effects.map(effect => effect.type))
+        traits.flatMap(trait => trait.effects?.map(effect => effect.type) || [])
       ),
     ]
-    const tags = [...new Set(traits.flatMap(trait => trait.tags))]
+    const tags = [...new Set(traits.flatMap(trait => trait.tags || []))]
 
     return [
       {
@@ -66,8 +49,8 @@ export function UnifiedTraitsPage() {
         placeholder: 'Search by category...',
         options: categories.map(category => ({
           id: `category-${category}`,
-          label: category,
-          value: category,
+          label: category as string,
+          value: category as string,
           category: 'Categories',
           description: `Traits in ${category} category`,
         })),
@@ -147,7 +130,7 @@ export function UnifiedTraitsPage() {
         <div className="text-center">
           <p className="text-destructive mb-4">{error}</p>
           <button
-            onClick={() => window.location.reload()}
+            onClick={reload}
             className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
           >
             Retry
