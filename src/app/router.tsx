@@ -4,6 +4,7 @@ import { RacesMVADemoPage } from '@/features/races-v2'
 import { RacePageView } from '@/features/races-v2/views/RacePageView'
 import { AccordionReligionsPage } from '@/features/religions/pages/AccordionReligionsPage'
 import { SkillsPage } from '@/features/skills'
+import { SkillsPageExperimental } from '@/features/skills/pages/SkillsPageExperimental'
 import { AccordionTraitsPage } from '@/features/traits/pages/AccordionTraitsPage'
 import { BuildPage } from '@/pages/BuildPage'
 import CraftingPage from '@/pages/CraftingPage'
@@ -35,6 +36,7 @@ export const AppRouter = () => {
       {/* Other pages */}
       <Route path="/races-mva-demo" element={<RacesMVADemoPage />} />
       <Route path="/skills-mva" element={<SkillsPage />} />
+      <Route path="/skills-experimental" element={<SkillsPageExperimental />} />
       <Route path="/equipment" element={<EquipmentPage />} />
       <Route path="/crafting" element={<CraftingPage />} />
       {/* TODO: Re-implement store test if needed */}

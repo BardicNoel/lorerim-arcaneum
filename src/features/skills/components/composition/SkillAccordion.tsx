@@ -21,7 +21,7 @@ import {
   Zap,
 } from 'lucide-react'
 import React from 'react'
-import type { Skill } from '../../types'
+import type { SkillsPageSkill } from '../../adapters/useSkillsPage'
 
 // Enhanced icon mapping for skill effects
 const effectIcons: Record<string, React.ReactNode> = {
@@ -62,9 +62,10 @@ const sizeClasses = {
 
 interface SkillAccordionProps {
   item: PlayerCreationItem
-  originalSkill?: Skill
+  originalSkill?: SkillsPageSkill
   isExpanded?: boolean
   onToggle?: () => void
+  onSelect?: () => void
   className?: string
   showScaling?: boolean
   showAbilities?: boolean
@@ -76,6 +77,7 @@ export function SkillAccordion({
   originalSkill,
   isExpanded = false,
   onToggle,
+  onSelect,
   className,
   showScaling = true,
   showAbilities = true,
@@ -101,10 +103,20 @@ export function SkillAccordion({
       {/* Header Content */}
       <div className="flex items-start gap-3">
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
+          <div
+            className="flex items-center gap-2 mb-1 cursor-pointer hover:bg-muted/50 p-1 rounded transition-colors"
+            onClick={e => {
+              e.stopPropagation()
+              onSelect?.()
+            }}
+          >
             <span className="text-lg">{categoryIcon}</span>
             <H3 className="text-base font-semibold">{item.name}</H3>
-            <AddToBuildSwitchSimple item={item} />
+            <AddToBuildSwitchSimple
+              itemId={item.id}
+              itemType="skill"
+              itemName={item.name}
+            />
           </div>
           <P className="text-sm text-muted-foreground line-clamp-2">
             {item.description}
@@ -124,55 +136,49 @@ export function SkillAccordion({
           </Badge>
         </div>
 
-        {/* Scaling Information */}
-        {showScaling && originalSkill?.scaling && (
-          <div className="space-y-2">
-            <H5 className="text-sm font-medium flex items-center gap-2">
-              {getEffectIcon('scaling')}
-              Scaling
-            </H5>
-            <P className="text-sm text-muted-foreground">
-              {originalSkill.scaling}
-            </P>
-          </div>
-        )}
-
         {/* Key Abilities */}
-        {showAbilities && originalSkill?.keyAbilities && originalSkill.keyAbilities.length > 0 && (
-          <div className="space-y-2">
-            <H5 className="text-sm font-medium flex items-center gap-2">
-              {getEffectIcon('ability')}
-              Key Abilities
-            </H5>
-            <ul className="space-y-1">
-              {originalSkill.keyAbilities.map((ability, index) => (
-                <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
-                  <span className="text-skyrim-gold mt-1">•</span>
-                  <span>{ability}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {showAbilities &&
+          originalSkill?.keyAbilities &&
+          originalSkill.keyAbilities.length > 0 && (
+            <div className="space-y-2">
+              <H5 className="text-sm font-medium flex items-center gap-2">
+                {getEffectIcon('ability')}
+                Key Abilities
+              </H5>
+              <ul className="space-y-1">
+                {originalSkill.keyAbilities.map((ability, index) => (
+                  <li
+                    key={index}
+                    className="text-sm text-muted-foreground flex items-start gap-2"
+                  >
+                    <span className="text-skyrim-gold mt-1">•</span>
+                    <span>{ability}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
         {/* Meta Tags */}
-        {showTags && originalSkill?.metaTags && originalSkill.metaTags.length > 0 && (
-          <div className="space-y-2">
-            <H5 className="text-sm font-medium">Tags</H5>
-            <div className="flex flex-wrap gap-1">
-              {originalSkill.metaTags.map((tag, index) => (
-                <Badge
-                  key={index}
-                  variant="secondary"
-                  className="text-xs px-2 py-0.5"
-                >
-                  {tag}
-                </Badge>
-              ))}
+        {showTags &&
+          originalSkill?.metaTags &&
+          originalSkill.metaTags.length > 0 && (
+            <div className="space-y-2">
+              <H5 className="text-sm font-medium">Tags</H5>
+              <div className="flex flex-wrap gap-1">
+                {originalSkill.metaTags.map((tag, index) => (
+                  <Badge
+                    key={index}
+                    variant="secondary"
+                    className="text-xs px-2 py-0.5"
+                  >
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
     </GenericAccordionCard>
   )
-} 
+}
