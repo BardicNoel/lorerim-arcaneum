@@ -1,2 +1,7 @@
-export { PlayerCreationContent } from './PlayerCreationContent'
+export {
+  PlayerCreationContent,
+  PlayerCreationDetailSection,
+  PlayerCreationEmptyDetail,
+  PlayerCreationItemsSection,
+} from './PlayerCreationContent'
 export { PlayerCreationFilters } from './PlayerCreationFilters'

@@ -1,5 +1,5 @@
-import type { Race, RaceFilters, TransformedRace } from '../types'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
+import type { Race, RaceFilters } from '../types'
 
 export class RaceModel {
   /**
@@ -29,7 +29,7 @@ export class RaceModel {
   static getUniqueTags(races: Race[]): string[] {
     const allTags = races.flatMap(race => [
       ...race.keywords.map(k => k.edid),
-      ...race.flags
+      ...(race.flags || []),
     ])
     return [...new Set(allTags)]
   }
@@ -47,10 +47,11 @@ export class RaceModel {
    */
   static filterByTags(races: Race[], tags: string[]): Race[] {
     if (tags.length === 0) return races
-    return races.filter(race => 
-      tags.some(tag => 
-        race.keywords.some(k => k.edid === tag) || 
-        race.flags.includes(tag)
+    return races.filter(race =>
+      tags.some(
+        tag =>
+          race.keywords.some(k => k.edid === tag) ||
+          (race.flags || []).includes(tag)
       )
     )
   }
@@ -60,10 +61,11 @@ export class RaceModel {
    */
   static filterByAnyTag(races: Race[], tags: string[]): Race[] {
     if (tags.length === 0) return races
-    return races.filter(race => 
-      tags.some(tag => 
-        race.keywords.some(k => k.edid === tag) || 
-        race.flags.includes(tag)
+    return races.filter(race =>
+      tags.some(
+        tag =>
+          race.keywords.some(k => k.edid === tag) ||
+          (race.flags || []).includes(tag)
       )
     )
   }
@@ -74,12 +76,13 @@ export class RaceModel {
   static search(races: Race[], term: string): Race[] {
     if (!term.trim()) return races
     const searchTerm = term.toLowerCase()
-    
-    return races.filter(race => 
-      race.name.toLowerCase().includes(searchTerm) ||
-      race.description.toLowerCase().includes(searchTerm) ||
-      race.keywords.some(k => k.edid.toLowerCase().includes(searchTerm)) ||
-      race.flags.some(flag => flag.toLowerCase().includes(searchTerm))
+
+    return races.filter(
+      race =>
+        race.name.toLowerCase().includes(searchTerm) ||
+        race.description.toLowerCase().includes(searchTerm) ||
+        race.keywords.some(k => k.edid.toLowerCase().includes(searchTerm)) ||
+        (race.flags || []).some(flag => flag.toLowerCase().includes(searchTerm))
     )
   }
 
@@ -108,7 +111,7 @@ export class RaceModel {
     const tags = [
       ...race.keywords.map(k => k.edid),
       ...race.flags,
-      race.category
+      race.category,
     ]
 
     const effects = [
@@ -117,14 +120,14 @@ export class RaceModel {
         type: 'positive' as const,
         description: `Provides ${sb.bonus} bonus to ${sb.skill}`,
         value: sb.bonus,
-        target: sb.skill
+        target: sb.skill,
       })),
       ...race.racialSpells.map(spell => ({
         name: spell.name,
         type: 'positive' as const,
         description: spell.description,
-        target: 'racial ability'
-      }))
+        target: 'racial ability',
+      })),
     ]
 
     return {
@@ -135,7 +138,7 @@ export class RaceModel {
       effects,
       associatedItems: [],
       imageUrl: undefined,
-      category: race.category
+      category: race.category,
     }
   }
 
@@ -143,8 +146,8 @@ export class RaceModel {
    * Get related races (same category)
    */
   static getRelatedRaces(race: Race, allRaces: Race[]): Race[] {
-    return allRaces.filter(r => 
-      r.edid !== race.edid && r.category === race.category
+    return allRaces.filter(
+      r => r.edid !== race.edid && r.category === race.category
     )
   }
 
@@ -158,7 +161,7 @@ export class RaceModel {
       totalStamina: race.startingStats.stamina,
       totalCarryWeight: race.startingStats.carryWeight,
       skillBonusCount: race.skillBonuses.length,
-      racialSpellCount: race.racialSpells.length
+      racialSpellCount: race.racialSpells.length,
     }
   }
 
@@ -185,4 +188,4 @@ export class RaceModel {
 
     return filtered
   }
-} 
+}
