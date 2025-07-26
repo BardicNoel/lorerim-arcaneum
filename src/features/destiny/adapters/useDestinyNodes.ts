@@ -1,4 +1,4 @@
-import { useDestinyNodes as useCachedDestinyNodes } from '@/shared/data/useDataCache'
+import { useDestinyNodes as useCachedDestinyNodes } from '@/shared/stores'
 import { useMemo } from 'react'
 import { DestinyNodeModel } from '../model/DestinyNodeModel'
 import type { DestinyNode } from '../types'

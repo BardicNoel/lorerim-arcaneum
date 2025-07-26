@@ -1,4 +1,4 @@
-import { useReligions } from '@/shared/data/useDataCache'
+import { useReligions } from '@/shared/stores'
 
 export function useReligionData() {
   // Use the data cache hook

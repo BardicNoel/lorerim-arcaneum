@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { UnifiedDestinyPage } from '../UnifiedDestinyPage'
 
 // Mock the data cache hooks
-vi.mock('@/shared/data/useDataCache', () => ({
+vi.mock('@/shared/stores', () => ({
   useDestinyNodes: () => ({
     data: [
       {

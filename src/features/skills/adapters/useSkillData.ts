@@ -1,4 +1,4 @@
-import { usePerkTrees, useSkills } from '@/shared/data/useDataCache'
+import { usePerkTrees, useSkills } from '@/shared/stores'
 import { useMemo } from 'react'
 
 // Utility to compute perk counts from perk trees data

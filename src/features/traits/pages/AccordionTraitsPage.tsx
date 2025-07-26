@@ -7,7 +7,7 @@ import type {
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
 import type { Trait } from '@/shared/data/schemas'
-import { useTraits } from '@/shared/data/useDataCache'
+import { useTraits } from '@/shared/stores'
 import { Button } from '@/shared/ui/ui/button'
 import {
   DropdownMenu,
