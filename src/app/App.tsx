@@ -56,6 +56,13 @@ const navSections = [
       { to: '/vampirism', label: 'Vampirism' },
     ],
   },
+  {
+    label: 'Test',
+    items: [
+      { to: '/races-mva-demo', label: 'Races MVA Demo' },
+      { to: '/skills-mva', label: 'Skills MVA' },
+    ],
+  },
 ]
 
 function AppSidebar({ collapsed }: { collapsed: boolean }) {

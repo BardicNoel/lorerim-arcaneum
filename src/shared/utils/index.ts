@@ -1,8 +1,7 @@
 export {
-  religionToPlayerCreationItem,
-  raceToPlayerCreationItem,
-  traitToPlayerCreationItem,
   birthsignToPlayerCreationItem,
+  religionToPlayerCreationItem,
+  traitToPlayerCreationItem,
 } from './entityToPlayerCreationItem'
 
 export { getBaseUrl, getDataUrl } from './baseUrl'
