@@ -1,26 +1,37 @@
 // src/shared/data/dataCache.ts
 // Singleton module-level cache for read-only JSON datasets
 
-import type {
-  Skill,
-  Race,
-  Trait,
-  Religion,
-  DestinyNode,
-  PerkTree,
-} from './schemas'
 import type { Birthsign } from '@/features/birthsigns/types'
 import { getDataUrl } from '@/shared/utils/baseUrl'
+import type {
+  DestinyNode,
+  PerkTree,
+  Race,
+  Religion,
+  Skill,
+  Trait,
+} from './schemas'
 
-// Type-safe dataset map - preserve existing data structures
-type DatasetMap = {
-  skills: { skills: Skill[] }
-  races: { races: Race[] }
-  traits: { traits: Trait[] }
+// Type-safe dataset map - unified array structure
+export type DatasetMap = {
+  skills: Skill[]
+  races: Race[]
+  traits: Trait[]
   religions: Religion[]
-  birthsigns: { birthsigns: Birthsign[] } // Use proper Birthsign type
+  birthsigns: Birthsign[]
   destinyNodes: DestinyNode[]
   perkTrees: PerkTree[]
+}
+
+// Map dataset names to actual file names
+const datasetFileMap: Record<keyof DatasetMap, string> = {
+  skills: 'skills',
+  races: 'races',
+  traits: 'traits',
+  religions: 'wintersun-religion-docs',
+  birthsigns: 'birthsigns',
+  destinyNodes: 'subclasses', // Map destinyNodes to subclasses.json
+  perkTrees: 'perk-trees',
 }
 
 // Private cache storage
@@ -34,10 +45,10 @@ const loadingStates: Record<string, Promise<any>> = {}
  */
 function generateDestinyTags(node: any): string[] {
   const tags: string[] = []
-  
+
   // Analyze description for keywords
   const description = node.description?.toLowerCase() || ''
-  
+
   // Combat-related tags
   if (description.includes('damage') || description.includes('weapon')) {
     tags.push('Combat')
@@ -45,25 +56,33 @@ function generateDestinyTags(node: any): string[] {
   if (description.includes('armor') || description.includes('defense')) {
     tags.push('Defensive')
   }
-  
+
   // Magic-related tags
-  if (description.includes('magicka') || description.includes('spell') || description.includes('magic')) {
+  if (
+    description.includes('magicka') ||
+    description.includes('spell') ||
+    description.includes('magic')
+  ) {
     tags.push('Magic')
   }
-  
+
   // Utility tags
-  if (description.includes('regeneration') || description.includes('health') || description.includes('stamina')) {
+  if (
+    description.includes('regeneration') ||
+    description.includes('health') ||
+    description.includes('stamina')
+  ) {
     tags.push('Utility')
   }
   if (description.includes('detect') || description.includes('stealth')) {
     tags.push('Stealth')
   }
-  
+
   // Cost-related tags
   if (description.includes('cost') || description.includes('less')) {
     tags.push('Cost Reduction')
   }
-  
+
   // Effect-based tags
   if (description.includes('increase') || description.includes('more')) {
     tags.push('Enhancement')
@@ -71,7 +90,7 @@ function generateDestinyTags(node: any): string[] {
   if (description.includes('resistance')) {
     tags.push('Resistance')
   }
-  
+
   // Remove duplicates and return
   return [...new Set(tags)]
 }
@@ -90,55 +109,64 @@ export async function loadDataset<K extends keyof DatasetMap>(
   }
 
   // Return existing loading promise if already loading
-  if (loadingStates[name]) {
+  if (name in loadingStates) {
     return loadingStates[name]
   }
 
   // Create new loading promise
   const loadPromise = (async () => {
     try {
-      const url = getDataUrl(`data/${name}.json`)
+      const fileName = datasetFileMap[name]
+      const url = getDataUrl(`data/${fileName}.json`)
       const response = await fetch(url)
       if (!response.ok) {
         throw new Error(`Failed to load dataset: ${name} (${response.status})`)
       }
-      
+
       const data = await response.json()
-      
+
       // Transform data to match expected structure
       let transformedData: any
-      
+
       switch (name) {
         case 'skills':
-          transformedData = {
-            skills: data.skills.map((skill: any) => ({
-              ...skill,
-              id: skill.id || skill.edid || skill.name.toLowerCase().replace(/\s+/g, '-'),
-              tags: [...(skill.metaTags || []), skill.category].filter((tag): tag is string => Boolean(tag)),
-            }))
-          }
+          transformedData = data.skills.map((skill: any) => ({
+            ...skill,
+            id:
+              skill.id ||
+              skill.edid ||
+              skill.name.toLowerCase().replace(/\s+/g, '-'),
+            tags: [...(skill.metaTags || []), skill.category].filter(
+              (tag): tag is string => Boolean(tag)
+            ),
+          }))
           break
-          
+
         case 'races':
-          transformedData = {
-            races: data.races.map((race: any) => ({
-              ...race,
-              id: race.id || race.edid || race.name.toLowerCase().replace(/\s+/g, '-'),
-              tags: [race.category, ...(race.keywords || [])].filter((tag): tag is string => Boolean(tag)),
-            }))
-          }
+          transformedData = data.races.map((race: any) => ({
+            ...race,
+            id:
+              race.id ||
+              race.edid ||
+              race.name.toLowerCase().replace(/\s+/g, '-'),
+            tags: [race.category, ...(race.keywords || [])].filter(
+              (tag): tag is string => Boolean(tag)
+            ),
+          }))
           break
-          
+
         case 'traits':
-          transformedData = {
-            traits: data.traits.map((trait: any) => ({
-              ...trait,
-              id: trait.id || trait.name,
-              tags: [trait.category, ...(trait.tags || []), ...(trait.effects?.map((e: any) => e.type) || [])].filter((tag): tag is string => Boolean(tag)),
-            }))
-          }
+          transformedData = data.traits.map((trait: any) => ({
+            ...trait,
+            id: trait.id || trait.name,
+            tags: [
+              trait.category,
+              ...(trait.tags || []),
+              ...(trait.effects?.map((e: any) => e.type) || []),
+            ].filter((tag): tag is string => Boolean(tag)),
+          }))
           break
-          
+
         case 'religions':
           transformedData = data.flatMap((pantheon: any) =>
             pantheon.deities.map((deity: any) => ({
@@ -154,18 +182,22 @@ export async function loadDataset<K extends keyof DatasetMap>(
             }))
           )
           break
-          
+
         case 'birthsigns':
           // Transform to proper Birthsign type with id and tags
-          transformedData = {
-            birthsigns: data.map((birthsign: any) => ({
-              ...birthsign,
-              id: birthsign.edid || birthsign.name.toLowerCase().replace(/\s+/g, '-'),
-              tags: [birthsign.group, ...(birthsign.powers?.map((p: any) => p.name) || []), ...(birthsign.stat_modifications?.map((s: any) => s.stat) || [])].filter((tag): tag is string => Boolean(tag)),
-            })) as Birthsign[]
-          }
+          transformedData = data.map((birthsign: any) => ({
+            ...birthsign,
+            id:
+              birthsign.edid ||
+              birthsign.name.toLowerCase().replace(/\s+/g, '-'),
+            tags: [
+              birthsign.group,
+              ...(birthsign.powers?.map((p: any) => p.name) || []),
+              ...(birthsign.stat_modifications?.map((s: any) => s.stat) || []),
+            ].filter((tag): tag is string => Boolean(tag)),
+          })) as Birthsign[]
           break
-          
+
         case 'destinyNodes':
           transformedData = data.map((node: any, index: number) => ({
             ...node,
@@ -174,24 +206,29 @@ export async function loadDataset<K extends keyof DatasetMap>(
             levelRequirement: node.levelRequirement,
             lore: node.lore,
             tags: generateDestinyTags(node),
+            // Ensure prerequisites is always an array
+            prerequisites: Array.isArray(node.prerequisites)
+              ? node.prerequisites
+              : [],
           }))
           break
-          
+
         case 'perkTrees':
           transformedData = data
           break
-          
+
         default:
           transformedData = data
       }
-      
+
       // Cache the transformed data
       cache[name] = transformedData
       return transformedData
-      
     } catch (error) {
       console.error(`Error loading dataset ${name}:`, error)
-      throw new Error(`Failed to load ${name} dataset: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      throw new Error(
+        `Failed to load ${name} dataset: ${error instanceof Error ? error.message : 'Unknown error'}`
+      )
     } finally {
       // Clean up loading state
       delete loadingStates[name]
@@ -277,4 +314,4 @@ export const getTraits = () => getDataset('traits')
 export const getReligions = () => getDataset('religions')
 export const getBirthsigns = () => getDataset('birthsigns')
 export const getDestinyNodes = () => getDataset('destinyNodes')
-export const getPerkTrees = () => getDataset('perkTrees') 
+export const getPerkTrees = () => getDataset('perkTrees')

@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useDestinyNodes as useCachedDestinyNodes } from '@/shared/data/useDataCache'
+import { useMemo } from 'react'
 import { DestinyNodeModel } from '../model/DestinyNodeModel'
 import type { DestinyNode } from '../types'
-import { useDestinyNodes as useCachedDestinyNodes } from '@/shared/data/useDataCache'
 
 interface UseDestinyNodesOptions {
   includePrerequisites?: boolean
@@ -51,7 +51,12 @@ export function useDestinyNodes(
   } = options
 
   // Use the cached data provider
-  const { data: destinyData, loading: isLoading, error: cacheError, reload } = useCachedDestinyNodes()
+  const {
+    data: destinyData,
+    loading: isLoading,
+    error: cacheError,
+    reload,
+  } = useCachedDestinyNodes()
   const nodes = destinyData || []
   const error = cacheError
 

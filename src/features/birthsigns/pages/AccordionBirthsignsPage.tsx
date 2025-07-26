@@ -1,9 +1,11 @@
 import { BuildPageShell } from '@/shared/components/playerCreation'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import type {
   SearchOption,
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
 import { AccordionGrid } from '@/shared/components/ui'
+import { useBirthsigns } from '@/shared/data/useDataCache'
 import {
   Accordion,
   AccordionContent,
@@ -28,18 +30,9 @@ import {
   Settings,
   X,
 } from 'lucide-react'
-import {
-  BirthsignAccordion,
-  BirthsignCard,
-  BirthsignDetailPanel,
-} from '../components'
-import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
-import {
-  useBirthsignFilters,
-  useDisplayControls,
-} from '../hooks'
-import { useBirthsigns } from '@/shared/data/useDataCache'
 import { useEffect, useState } from 'react'
+import { BirthsignAccordion } from '../components'
+import { useBirthsignFilters, useDisplayControls } from '../hooks'
 
 import type { Birthsign } from '../types'
 
@@ -49,7 +42,7 @@ type ViewMode = 'list' | 'grid'
 export function AccordionBirthsignsPage() {
   // Use the new cache-based hook - no infinite loops!
   const { data: birthsignsData, loading, error, reload } = useBirthsigns()
-  const birthsigns = birthsignsData?.birthsigns || []
+  const birthsigns = birthsignsData || []
 
   // Filters and UI state (now pass birthsigns to the hook)
   const {
@@ -66,7 +59,7 @@ export function AccordionBirthsignsPage() {
     displayItems,
     sortedDisplayItems,
   } = useBirthsignFilters(birthsigns)
-  
+
   // Debug logging
   useEffect(() => {
     console.log('birthsigns', birthsigns)
@@ -74,7 +67,7 @@ export function AccordionBirthsignsPage() {
     console.log('displayItems', displayItems)
     console.log('filteredBirthsigns', filteredBirthsigns)
   }, [birthsigns, sortedDisplayItems, displayItems, filteredBirthsigns])
-  
+
   // Local state for expanded accordions (row-based expansion)
   const [expandedBirthsigns, setExpandedBirthsigns] = useState<Set<string>>(
     new Set()
@@ -442,9 +435,11 @@ export function AccordionBirthsignsPage() {
       {viewMode === 'grid' ? (
         <AccordionGrid columns={3} gap="md" className="w-full mt-6">
           {sortedDisplayItems.map(item => {
-            const originalBirthsign = birthsigns.find((birthsign: Birthsign) => {
-              return birthsign.id === item.id || birthsign.edid === item.id
-            })
+            const originalBirthsign = birthsigns.find(
+              (birthsign: Birthsign) => {
+                return birthsign.id === item.id || birthsign.edid === item.id
+              }
+            )
             if (!originalBirthsign) return null
             const isExpanded = expandedBirthsigns.has(item.id)
             return (
@@ -461,9 +456,11 @@ export function AccordionBirthsignsPage() {
       ) : (
         <div className="flex flex-col gap-4 w-full mt-6">
           {sortedDisplayItems.map(item => {
-            const originalBirthsign = birthsigns.find((birthsign: Birthsign) => {
-              return birthsign.id === item.id || birthsign.edid === item.id
-            })
+            const originalBirthsign = birthsigns.find(
+              (birthsign: Birthsign) => {
+                return birthsign.id === item.id || birthsign.edid === item.id
+              }
+            )
             if (!originalBirthsign) return null
             const isExpanded = expandedBirthsigns.has(item.id)
 

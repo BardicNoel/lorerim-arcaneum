@@ -1,12 +1,12 @@
 // src/shared/data/useDataCache.ts
 // React hooks for the cache-mapped data loader
 
-import { useState, useEffect, useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
-  loadDataset,
   getDataset,
   isCached,
   isLoading,
+  loadDataset,
   type DatasetMap,
 } from './dataCache'
 
@@ -31,9 +31,9 @@ export function useDataset<K extends keyof DatasetMap>(name: K) {
 
   const loadData = useCallback(async () => {
     // If already cached, return immediately
-    if (isCached(name)) {
+    if (isCached(name as keyof DatasetMap)) {
       try {
-        const data = getDataset(name)
+        const data = getDataset(name as keyof DatasetMap) as DatasetMap[K]
         setState({ data, loading: false, error: null })
         return
       } catch (error) {
@@ -43,7 +43,7 @@ export function useDataset<K extends keyof DatasetMap>(name: K) {
     }
 
     // If already loading, don't start another load
-    if (isLoading(name)) {
+    if (isLoading(name as keyof DatasetMap)) {
       setState(prev => ({ ...prev, loading: true }))
       return
     }
@@ -52,7 +52,9 @@ export function useDataset<K extends keyof DatasetMap>(name: K) {
     setState(prev => ({ ...prev, loading: true, error: null }))
 
     try {
-      const data = await loadDataset(name)
+      const data = (await loadDataset(
+        name as keyof DatasetMap
+      )) as DatasetMap[K]
       setState({ data, loading: false, error: null })
     } catch (error) {
       setState({
@@ -83,21 +85,25 @@ export function useDataset<K extends keyof DatasetMap>(name: K) {
  * @param name Dataset name
  * @returns The dataset (throws if not loaded)
  */
-export function useDatasetSync<K extends keyof DatasetMap>(name: K): DatasetMap[K] {
+export function useDatasetSync<K extends keyof DatasetMap>(
+  name: K
+): DatasetMap[K] {
   const [data, setData] = useState<DatasetMap[K] | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (isCached(name)) {
+    if (isCached(name as keyof DatasetMap)) {
       try {
-        const cachedData = getDataset(name)
+        const cachedData = getDataset(name as keyof DatasetMap) as DatasetMap[K]
         setData(cachedData)
         setError(null)
       } catch (err) {
         setError('Failed to get cached data')
       }
     } else {
-      setError(`Dataset "${name}" not loaded. Call loadDataset("${name}") first.`)
+      setError(
+        `Dataset "${String(name)}" not loaded. Call loadDataset("${String(name)}") first.`
+      )
     }
   }, [name])
 
@@ -106,7 +112,7 @@ export function useDatasetSync<K extends keyof DatasetMap>(name: K): DatasetMap[
   }
 
   if (!data) {
-    throw new Error(`Dataset "${name}" not available`)
+    throw new Error(`Dataset "${String(name)}" not available`)
   }
 
   return data
@@ -168,4 +174,4 @@ export function useDestinyNodesSync() {
 
 export function usePerkTreesSync() {
   return useDatasetSync('perkTrees')
-} 
+}

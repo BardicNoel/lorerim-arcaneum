@@ -5,6 +5,7 @@ import type {
 } from '@/shared/components/playerCreation/types'
 import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
+import { destinyNodeToPlayerCreationItem } from '@/shared/utils/entityToPlayerCreationItem'
 import { useMemo } from 'react'
 import {
   useDestinyFilters,
@@ -19,7 +20,6 @@ import { DestinyDetailPanel } from '../components/composition/DestinyDetailPanel
 import { DestinyFilters } from '../components/composition/DestinyFilters'
 import { DestinyPathBuilder } from '../components/composition/DestinyPathBuilder'
 import type { DestinyNode } from '../types'
-import { destinyNodeToPlayerCreationItem } from '@/shared/utils/entityToPlayerCreationItem'
 
 export function UnifiedDestinyPage() {
   // Use MVA adapters for data and state management
@@ -51,11 +51,11 @@ export function UnifiedDestinyPage() {
         switch (filter.type) {
           case 'tags':
             // Node must have the specified tag
-            return node.tags.includes(filter.nodeName)
+            return node.tags?.includes(filter.nodeName)
 
           case 'prerequisites':
             // Node must require the specified prerequisite
-            return node.prerequisites.includes(filter.nodeName)
+            return node.prerequisites?.includes(filter.nodeName)
 
           default:
             return true
