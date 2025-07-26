@@ -1,19 +1,19 @@
 import { cn } from '@/lib/utils'
 import { BuildPageShell } from '@/shared/components/playerCreation'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
+import type {
+  SearchOption,
+  SelectedTag,
+} from '@/shared/components/playerCreation/types'
 import { AccordionGrid } from '@/shared/components/ui'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Button } from '@/shared/ui/ui/button'
 import { ArrowLeft, Grid3X3, List, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
-import type {
-  SearchOption,
-  SelectedTag,
-} from '@/shared/components/playerCreation/types'
-import { useRaceData, useRaceFilters, useRaceComputed } from '../adapters'
+import { useRaceComputed, useRaceData, useRaceFilters } from '../adapters'
 import { RaceCard } from '../components/composition'
-import { raceToPlayerCreationItem } from '@/shared/utils'
+import { raceToPlayerCreationItem } from '../utils/raceToPlayerCreationItem'
 
 type ViewMode = 'list' | 'grid'
 

@@ -1,6 +1,5 @@
 export {
-  religionToPlayerCreationItem,
-  raceToPlayerCreationItem,
-  traitToPlayerCreationItem,
   birthsignToPlayerCreationItem,
+  religionToPlayerCreationItem,
+  traitToPlayerCreationItem,
 } from './entityToPlayerCreationItem'

@@ -1,18 +1,21 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { SelectionCardShell } from '@/shared/components/ui'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
-import { raceToPlayerCreationItem } from '@/shared/utils'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { Race } from '../../types'
-import { RaceAutocomplete } from './RaceAutocomplete'
+import { raceToPlayerCreationItem } from '../../utils/raceToPlayerCreationItem'
 import { RaceAccordion } from './RaceAccordion'
+import { RaceAutocomplete } from './RaceAutocomplete'
 
 interface RaceSelectionCardProps {
   className?: string
   allRaces: Race[]
 }
 
-export function RaceSelectionCard({ className, allRaces }: RaceSelectionCardProps) {
+export function RaceSelectionCard({
+  className,
+  allRaces,
+}: RaceSelectionCardProps) {
   const { build, setRace } = useCharacterBuild()
   const navigate = useNavigate()
   const [isExpanded, setIsExpanded] = useState(true)
@@ -86,4 +89,4 @@ export function RaceSelectionCard({ className, allRaces }: RaceSelectionCardProp
       />
     </SelectionCardShell>
   )
-} 
+}
