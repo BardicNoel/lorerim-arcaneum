@@ -9,6 +9,7 @@ import { BuildPage } from '@/pages/BuildPage'
 import CraftingPage from '@/pages/CraftingPage'
 import EquipmentPage from '@/pages/EquipmentPage'
 import { CharacterBuildLayout } from '@/shared/components/playerCreation'
+import { StoreTest } from '@/shared/stores/StoreTest'
 
 import HomePage from '@/pages/HomePage'
 import NotFoundPage from '@/pages/NotFoundPage'
@@ -35,6 +36,7 @@ export const AppRouter = () => {
       <Route path="/skills-mva" element={<SkillsPage />} />
       <Route path="/equipment" element={<EquipmentPage />} />
       <Route path="/crafting" element={<CraftingPage />} />
+      <Route path="/store-test" element={<StoreTest />} />
 
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
