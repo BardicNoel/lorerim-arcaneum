@@ -51,18 +51,22 @@ export function AutocompleteSearch({
     selectedCategory || singleCategory
       ? (selectedCategory || singleCategory)!.options.filter(
           option =>
-            option.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            option.description
-              ?.toLowerCase()
-              .includes(searchQuery.toLowerCase())
+            (option.label?.toLowerCase() || '').includes(
+              searchQuery.toLowerCase()
+            ) ||
+            (option.description?.toLowerCase() || '').includes(
+              searchQuery.toLowerCase()
+            )
         )
       : categories.flatMap(category =>
           category.options.filter(
             option =>
-              option.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              option.description
-                ?.toLowerCase()
-                .includes(searchQuery.toLowerCase())
+              (option.label?.toLowerCase() || '').includes(
+                searchQuery.toLowerCase()
+              ) ||
+              (option.description?.toLowerCase() || '').includes(
+                searchQuery.toLowerCase()
+              )
           )
         )
 
@@ -182,7 +186,9 @@ export function AutocompleteSearch({
                       : 'hover:bg-muted/60 hover:shadow-sm active:bg-muted/80 active:scale-[0.98]'
                   }`}
                 >
-                  <div className="font-medium">{option.label}</div>
+                  <div className="font-medium">
+                    {option.label || 'Unnamed Option'}
+                  </div>
                   {option.description && (
                     <div className="text-xs text-muted-foreground mt-1">
                       {option.description}
