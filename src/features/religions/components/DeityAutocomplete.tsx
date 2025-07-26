@@ -1,14 +1,14 @@
-import React, { useMemo } from 'react'
-import { Badge } from '@/shared/ui/ui/badge'
 import { cn } from '@/lib/utils'
-import { useFuzzySearch } from '../hooks/useFuzzySearch'
-import { getDeityOptions } from '../utils/religionFilters'
 import {
   GenericAutocomplete,
   type AutocompleteOption,
 } from '@/shared/components/generic'
+import { Badge } from '@/shared/ui/ui/badge'
 import { Star } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { Religion } from '../types'
+import { getDeityOptions } from '../utils/religionFilters'
 
 interface DeityAutocompleteProps {
   religions: Religion[]
@@ -27,11 +27,10 @@ export function DeityAutocomplete({
   className,
   disabled = false,
 }: DeityAutocompleteProps) {
-  // Get deity options
-  const deityOptions = useMemo(() => getDeityOptions(religions), [religions])
+  const [searchQuery, setSearchQuery] = useState('')
 
-  // Use fuzzy search
-  const { filteredReligions } = useFuzzySearch(religions, '')
+  // Use fuzzy search with the actual search query
+  const { filteredReligions } = useFuzzySearch(religions, searchQuery)
   const filteredDeityOptions = useMemo(() => {
     return getDeityOptions(filteredReligions)
   }, [filteredReligions])
@@ -115,6 +114,8 @@ export function DeityAutocomplete({
       disabled={disabled}
       renderOption={renderDeityOption}
       emptyMessage="No deity found."
+      searchQuery={searchQuery}
+      onSearchQueryChange={setSearchQuery}
     />
   )
 }
