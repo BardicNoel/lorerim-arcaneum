@@ -1,4 +1,5 @@
 import { BuildPageShell } from '@/shared/components/playerCreation'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import type {
   PlayerCreationItem,
   SearchCategory,
@@ -27,22 +28,19 @@ import {
   Minimize2,
   X,
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
+import { useMemo, useState } from 'react'
 import { ReligionAccordion } from '../components/ReligionAccordion'
-import { useFuzzySearch } from '../hooks/useFuzzySearch'
-import type { Religion, ReligionPantheon } from '../types'
+
+import { useReligions } from '@/shared/data/useDataCache'
 import { religionToPlayerCreationItem } from '@/shared/utils'
-import { getDataUrl } from '@/shared/utils/baseUrl'
 
 type SortOption = 'alphabetical' | 'divine-type'
 type ViewMode = 'list' | 'grid'
 
 export function AccordionReligionsPage() {
-  // Load religion data from public/data/wintersun-religion-docs.json at runtime
-  const [religions, setReligions] = useState<Religion[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  // Use the data cache hook instead of manual fetch
+  const { data: religions, loading, error } = useReligions()
+
   const [expandedReligions, setExpandedReligions] = useState<Set<string>>(
     new Set()
   )
@@ -55,42 +53,18 @@ export function AccordionReligionsPage() {
   const [showBoons, setShowBoons] = useState(true)
   const [showFavoredRaces, setShowFavoredRaces] = useState(true)
 
-  useEffect(() => {
-    async function fetchReligions() {
-      try {
-        setLoading(true)
-        const res = await fetch(
-          getDataUrl('data/wintersun-religion-docs.json')
-        )
-        if (!res.ok) throw new Error('Failed to fetch religion data')
-        const data = await res.json()
-        // Flatten the pantheon structure to get all religions
-        const allReligions: Religion[] = data.flatMap(
-          (pantheon: ReligionPantheon) =>
-            pantheon.deities.map(deity => ({
-              ...deity,
-              pantheon: pantheon.type, // Add pantheon info to each religion
-            }))
-        )
-        setReligions(allReligions)
-      } catch (err) {
-        setError('Failed to load religion data')
-        console.error('Error loading religions:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchReligions()
-  }, [])
-
   // Convert religions to PlayerCreationItem format for consolidated view
-  const religionItems: PlayerCreationItem[] = religions.map(
-    religionToPlayerCreationItem
-  )
+  const religionItems: PlayerCreationItem[] = useMemo(() => {
+    return (religions || []).map(religionToPlayerCreationItem)
+  }, [religions])
 
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
-    const pantheons = [...new Set(religions.map(religion => religion.type))]
+    const pantheons = [
+      ...new Set(
+        (religions || []).map(religion => religion.pantheon).filter(Boolean)
+      ),
+    ]
     const allTags = [...new Set(religionItems.flatMap(item => item.tags))]
 
     return [
@@ -106,8 +80,8 @@ export function AccordionReligionsPage() {
         placeholder: 'Search by pantheon...',
         options: pantheons.map(pantheon => ({
           id: `pantheon-${pantheon}`,
-          label: pantheon,
-          value: pantheon,
+          label: pantheon as string,
+          value: pantheon as string,
           category: 'Pantheons',
           description: `Religions from ${pantheon} pantheon`,
         })),
@@ -140,166 +114,123 @@ export function AccordionReligionsPage() {
         id: `custom-${optionOrTag}`,
         label: optionOrTag,
         value: optionOrTag,
-        category: 'Fuzzy Search',
+        category: 'Custom',
       }
     } else {
       tag = {
-        id: `${optionOrTag.category}-${optionOrTag.id}`,
+        id: optionOrTag.id,
         label: optionOrTag.label,
         value: optionOrTag.value,
         category: optionOrTag.category,
       }
     }
-    // Prevent duplicate tags
-    if (
-      !selectedTags.some(
-        t => t.value === tag.value && t.category === tag.category
-      )
-    ) {
+
+    // Don't add duplicate tags
+    if (!selectedTags.find(t => t.value === tag.value)) {
       setSelectedTags(prev => [...prev, tag])
     }
   }
 
-  // Remove a tag
   const handleTagRemove = (tagId: string) => {
     setSelectedTags(prev => prev.filter(tag => tag.id !== tagId))
   }
 
-  // Apply all filters to religions
-  const filteredReligions = religions.filter(religion => {
-    // If no tags are selected, show all religions
-    if (selectedTags.length === 0) return true
+  // Filter religions based on selected tags
+  const filteredReligions = useMemo(() => {
+    if (selectedTags.length === 0) {
+      return religions || []
+    }
 
-    // Check each selected tag
-    return selectedTags.every(tag => {
-      switch (tag.category) {
-        case 'Fuzzy Search':
-          // For fuzzy search, we'll handle this separately
+    return (religions || []).filter(religion => {
+      return selectedTags.every(tag => {
+        const tagValue = tag.value.toLowerCase()
+
+        // Check pantheon
+        if (religion.pantheon?.toLowerCase().includes(tagValue)) {
           return true
-
-        case 'Pantheons':
-          // Filter by pantheon type
-          return religion.type === tag.value
-
-        case 'Favored Races':
-          // Filter by favored races
-          return religion.favoredRaces.some(race => race === tag.value)
-
-        default:
-          return true
-      }
-    })
-  })
-
-  // Apply fuzzy search to the filtered religions
-  const fuzzySearchQuery = selectedTags
-    .filter(tag => tag.category === 'Fuzzy Search')
-    .map(tag => tag.value)
-    .join(' ')
-
-  const { filteredReligions: fuzzyFilteredReligions } = useFuzzySearch(
-    filteredReligions,
-    fuzzySearchQuery
-  )
-
-  // Convert to PlayerCreationItem format
-  const displayItems: PlayerCreationItem[] = fuzzyFilteredReligions.map(
-    religionToPlayerCreationItem
-  )
-
-  // Sort the display items
-  const sortedDisplayItems = [...displayItems].sort((a, b) => {
-    switch (sortBy) {
-      case 'alphabetical':
-        return a.name.localeCompare(b.name)
-      case 'divine-type':
-        // Define priority order for divine types based on actual data
-        const getTypePriority = (type: string | undefined) => {
-          switch (type) {
-            case 'Divine':
-              return 1
-            case 'Daedric Prince':
-              return 2
-            case 'Tribunal':
-              return 3
-            case 'Ancestor':
-              return 4
-            case 'Nordic Deity':
-              return 5
-            case 'Yokudan Deity':
-              return 6
-            case 'Khajiiti Deity':
-              return 7
-            case 'Deity':
-              return 8
-            default:
-              return 9
-          }
         }
 
-        const aPriority = getTypePriority(a.category)
-        const bPriority = getTypePriority(b.category)
+        // Check tags
+        if (religion.tags?.some(t => t.toLowerCase().includes(tagValue))) {
+          return true
+        }
 
-        // First sort by priority, then alphabetically within each category
-        if (aPriority !== bPriority) return aPriority - bPriority
-        return a.name.localeCompare(b.name)
+        // Check name
+        if (religion.name.toLowerCase().includes(tagValue)) {
+          return true
+        }
+
+        // Check description
+        if (religion.description?.toLowerCase().includes(tagValue)) {
+          return true
+        }
+
+        return false
+      })
+    })
+  }, [religions, selectedTags])
+
+  // Sort religions based on selected sort option
+  const sortedReligions = useMemo(() => {
+    const religionsToSort = [...filteredReligions]
+
+    switch (sortBy) {
+      case 'alphabetical':
+        return religionsToSort.sort((a, b) => a.name.localeCompare(b.name))
+
+      case 'divine-type':
+        return religionsToSort.sort((a, b) => {
+          const getTypePriority = (type: string | undefined) => {
+            switch (type?.toLowerCase()) {
+              case 'divine':
+                return 1
+              case 'daedric':
+                return 2
+              case 'yokudan':
+                return 3
+              case 'custom':
+                return 4
+              default:
+                return 5
+            }
+          }
+
+          const priorityA = getTypePriority(a.pantheon)
+          const priorityB = getTypePriority(b.pantheon)
+
+          if (priorityA !== priorityB) {
+            return priorityA - priorityB
+          }
+
+          return a.name.localeCompare(b.name)
+        })
+
       default:
-        return 0
+        return religionsToSort
     }
-  })
+  }, [filteredReligions, sortBy])
 
-  // Handle accordion expansion
+  // Convert sorted religions to PlayerCreationItem format for display
+  const sortedDisplayItems: PlayerCreationItem[] = useMemo(() => {
+    return sortedReligions.map(religionToPlayerCreationItem)
+  }, [sortedReligions])
+
   const handleReligionToggle = (religionId: string) => {
-    const newExpanded = new Set(expandedReligions)
-
-    if (viewMode === 'grid') {
-      // In grid mode, expand/collapse all items in the same row
-      const columns = 3 // Match the AccordionGrid columns prop
-      const itemIndex = sortedDisplayItems.findIndex(
-        item => item.id === religionId
-      )
-      const rowIndex = Math.floor(itemIndex / columns)
-      const rowStartIndex = rowIndex * columns
-      const rowEndIndex = Math.min(
-        rowStartIndex + columns,
-        sortedDisplayItems.length
-      )
-
-      // Check if any item in the row is currently expanded
-      const isRowExpanded = sortedDisplayItems
-        .slice(rowStartIndex, rowEndIndex)
-        .some(item => newExpanded.has(item.id))
-
-      if (isRowExpanded) {
-        // Collapse all items in the row
-        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
-          newExpanded.delete(item.id)
-        })
+    setExpandedReligions(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(religionId)) {
+        newSet.delete(religionId)
       } else {
-        // Expand all items in the row
-        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
-          newExpanded.add(item.id)
-        })
+        newSet.add(religionId)
       }
-    } else {
-      // In list mode, toggle individual items
-      if (newExpanded.has(religionId)) {
-        newExpanded.delete(religionId)
-      } else {
-        newExpanded.add(religionId)
-      }
-    }
-
-    setExpandedReligions(newExpanded)
+      return newSet
+    })
   }
 
-  // Handle expand all accordions
   const handleExpandAll = () => {
-    const allReligionIds = sortedDisplayItems.map(item => item.id)
-    setExpandedReligions(new Set(allReligionIds))
+    setExpandedReligions(new Set(sortedDisplayItems.map(item => item.id)))
   }
 
-  // Handle collapse all accordions
   const handleCollapseAll = () => {
     setExpandedReligions(new Set())
   }
@@ -505,13 +436,9 @@ export function AccordionReligionsPage() {
       {viewMode === 'grid' ? (
         <AccordionGrid columns={3} gap="md" className="w-full mt-6">
           {sortedDisplayItems.map(item => {
-            const originalReligion = religions.find(religion => {
-              const religionName = item.id.replace('religion-', '')
-              return (
-                religion.name.toLowerCase().replace(/\s+/g, '-') ===
-                religionName
-              )
-            })
+            const originalReligion = religions.find(
+              religion => religion.name === item.name
+            )
             const isExpanded = expandedReligions.has(item.id)
 
             return (
@@ -533,13 +460,9 @@ export function AccordionReligionsPage() {
       ) : (
         <div className="flex flex-col gap-4 w-full mt-6">
           {sortedDisplayItems.map(item => {
-            const originalReligion = religions.find(religion => {
-              const religionName = item.id.replace('religion-', '')
-              return (
-                religion.name.toLowerCase().replace(/\s+/g, '-') ===
-                religionName
-              )
-            })
+            const originalReligion = religions.find(
+              religion => religion.name === item.name
+            )
             const isExpanded = expandedReligions.has(item.id)
 
             return (

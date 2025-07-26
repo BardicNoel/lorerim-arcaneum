@@ -170,15 +170,15 @@ export async function loadDataset<K extends keyof DatasetMap>(
         case 'religions':
           transformedData = data.flatMap((pantheon: any) =>
             pantheon.deities.map((deity: any) => ({
+              ...deity, // Preserve all original deity fields
               id: deity.id || deity.name,
-              name: deity.name,
-              description: deity.description,
-              pantheon: pantheon.type,
-              tenets: deity.tenets || [],
-              powers: deity.powers || [],
-              restrictions: deity.restrictions || [],
-              favoredRaces: deity.favoredRaces || [],
-              tags: [pantheon.type, ...(deity.tags || [])].filter(Boolean),
+              pantheon: pantheon.type, // Add pantheon info
+              type: deity.type || pantheon.type, // Ensure type field exists
+              tags: [
+                pantheon.type,
+                ...(deity.favoredRaces || []),
+                ...(deity.tags || []),
+              ].filter(Boolean),
             }))
           )
           break

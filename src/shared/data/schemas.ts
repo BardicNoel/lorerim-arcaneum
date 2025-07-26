@@ -76,15 +76,42 @@ export interface Trait {
 }
 
 // Religion
+export interface ReligionEffect {
+  magnitude: number
+  area: number
+  duration: number
+  effectName: string
+  effectDescription: string
+  effectType: string
+  targetAttribute: string | null
+  keywords: string[]
+}
+
+export interface ReligionSpell {
+  spellId: string
+  spellName: string
+  effects: ReligionEffect[]
+}
+
+export interface ReligionTenet {
+  spellId: string
+  spellName: string
+  header: string
+  description: string
+  effects: ReligionEffect[]
+}
+
 export interface Religion {
   id?: string
   name: string
-  description?: string
+  type?: string
   pantheon?: string
-  tenets?: string[]
-  powers?: string[]
-  restrictions?: string[]
+  blessing?: ReligionSpell
+  boon1?: ReligionSpell // Follower power
+  boon2?: ReligionSpell // Devotee power
+  tenet?: ReligionTenet
   favoredRaces?: string[]
+  worshipRestrictions?: string[]
   tags?: string[]
 }
 
