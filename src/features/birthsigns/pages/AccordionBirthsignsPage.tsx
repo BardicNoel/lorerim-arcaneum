@@ -5,7 +5,7 @@ import type {
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
 import { AccordionGrid } from '@/shared/components/ui'
-import { useBirthsigns } from '@/shared/data/useDataCache'
+import { useBirthsigns } from '@/shared/stores'
 import {
   Accordion,
   AccordionContent,

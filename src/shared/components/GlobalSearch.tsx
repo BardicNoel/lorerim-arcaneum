@@ -1,93 +1,96 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { ArrowDown, ArrowUp, Command, Search, X } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, X, ArrowUp, ArrowDown, Command } from 'lucide-react'
-import { useGlobalSearch, useDataCache, type SearchResult } from '@/shared/data/DataProvider'
-import { Button } from '@/shared/ui/ui/button'
-import { Input } from '@/shared/ui/ui/input'
-import { Badge } from '@/shared/ui/ui/badge'
-import { Card, CardContent } from '@/shared/ui/ui/card'
-import { ScrollArea } from '@/shared/ui/ui/scroll-area'
+// TODO: Re-implement global search with new Zustand stores
+// import { useGlobalSearch, useDataCache, type SearchResult } from '@/shared/data/DataProvider'
 import { cn } from '@/lib/utils'
+import { Badge } from '@/shared/ui/ui/badge'
+import { Button } from '@/shared/ui/ui/button'
+import { Card, CardContent } from '@/shared/ui/ui/card'
+import { Input } from '@/shared/ui/ui/input'
+import { ScrollArea } from '@/shared/ui/ui/scroll-area'
 
 interface GlobalSearchProps {
   className?: string
   placeholder?: string
 }
 
-export function GlobalSearch({ 
-  className, 
-  placeholder = "Search skills, races, traits, religions..." 
+export function GlobalSearch({
+  className,
+  placeholder = 'Search skills, races, traits, religions...',
 }: GlobalSearchProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchResult[]>([])
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
-  
-  const { searchAll } = useGlobalSearch()
-  const { loadAllData } = useDataCache()
+
+  // TODO: Re-implement global search with new Zustand stores
+  // const { searchAll } = useGlobalSearch()
+  // const { loadAllData } = useDataCache()
   const navigate = useNavigate()
-  
+
   const inputRef = useRef<HTMLInputElement>(null)
   const resultsRef = useRef<HTMLDivElement>(null)
 
+  // TODO: Re-implement global search with new Zustand stores
   // Load all data when search is opened
-  useEffect(() => {
-    if (isOpen) {
-      loadAllData()
-    }
-  }, [isOpen, loadAllData])
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     loadAllData()
+  //   }
+  // }, [isOpen, loadAllData])
 
+  // TODO: Re-implement global search with new Zustand stores
   // Debounced search
-  useEffect(() => {
-    if (!isOpen) return
+  // useEffect(() => {
+  //   if (!isOpen) return
 
-    const timeoutId = setTimeout(() => {
-      if (query.trim()) {
-        setIsLoading(true)
-        const searchResults = searchAll(query)
-        setResults(searchResults)
-        setSelectedIndex(0)
-        setIsLoading(false)
-      } else {
-        setResults([])
-        setSelectedIndex(0)
-      }
-    }, 300)
+  //   const timeoutId = setTimeout(() => {
+  //     if (query.trim()) {
+  //       setIsLoading(true)
+  //       const searchResults = searchAll(query)
+  //       setResults(searchResults)
+  //       setSelectedIndex(0)
+  //       setIsLoading(false)
+  //     } else {
+  //       setResults([])
+  //       setSelectedIndex(0)
+  //     }
+  //   }, 300)
 
-    return () => clearTimeout(timeoutId)
-  }, [query, isOpen, searchAll])
+  //   return () => clearTimeout(timeoutId)
+  // }, [query, isOpen, searchAll])
 
   // Keyboard navigation
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (!isOpen) return
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!isOpen) return
 
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault()
-        setSelectedIndex(prev => 
-          prev < results.length - 1 ? prev + 1 : 0
-        )
-        break
-      case 'ArrowUp':
-        e.preventDefault()
-        setSelectedIndex(prev => 
-          prev > 0 ? prev - 1 : results.length - 1
-        )
-        break
-      case 'Enter':
-        e.preventDefault()
-        if (results[selectedIndex]) {
-          handleResultClick(results[selectedIndex])
-        }
-        break
-      case 'Escape':
-        e.preventDefault()
-        setIsOpen(false)
-        setQuery('')
-        break
-    }
-  }, [isOpen, results, selectedIndex])
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault()
+          setSelectedIndex(prev => (prev < results.length - 1 ? prev + 1 : 0))
+          break
+        case 'ArrowUp':
+          e.preventDefault()
+          setSelectedIndex(prev => (prev > 0 ? prev - 1 : results.length - 1))
+          break
+        case 'Enter':
+          e.preventDefault()
+          if (results[selectedIndex]) {
+            handleResultClick(results[selectedIndex])
+          }
+          break
+        case 'Escape':
+          e.preventDefault()
+          setIsOpen(false)
+          setQuery('')
+          break
+      }
+    },
+    [isOpen, results, selectedIndex]
+  )
 
   // Global keyboard shortcuts
   useEffect(() => {
@@ -120,11 +123,13 @@ export function GlobalSearch({
   // Scroll selected result into view
   useEffect(() => {
     if (resultsRef.current && selectedIndex >= 0) {
-      const selectedElement = resultsRef.current.children[selectedIndex] as HTMLElement
+      const selectedElement = resultsRef.current.children[
+        selectedIndex
+      ] as HTMLElement
       if (selectedElement) {
         selectedElement.scrollIntoView({
           block: 'nearest',
-          behavior: 'smooth'
+          behavior: 'smooth',
         })
       }
     }
@@ -152,7 +157,7 @@ export function GlobalSearch({
         navigate(`/destiny`)
         break
     }
-    
+
     setIsOpen(false)
     setQuery('')
   }
@@ -222,7 +227,7 @@ export function GlobalSearch({
                 ref={inputRef}
                 placeholder={placeholder}
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={e => setQuery(e.target.value)}
                 className="border-0 bg-transparent p-0 shadow-none focus-visible:ring-0"
                 autoFocus
               />
@@ -243,7 +248,9 @@ export function GlobalSearch({
               {isLoading ? (
                 <div className="flex items-center justify-center py-8">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-                  <span className="ml-2 text-sm text-muted-foreground">Searching...</span>
+                  <span className="ml-2 text-sm text-muted-foreground">
+                    Searching...
+                  </span>
                 </div>
               ) : results.length > 0 ? (
                 <ScrollArea className="h-[400px]">
@@ -283,12 +290,19 @@ export function GlobalSearch({
                               )}
                               {result.highlights.length > 0 && (
                                 <div className="mt-2">
-                                  {result.highlights.slice(0, 2).map((highlight, i) => (
-                                    <p key={i} className="text-xs text-muted-foreground">
-                                      <span className="font-medium">{highlight.field}:</span>{' '}
-                                      {highlight.snippet}
-                                    </p>
-                                  ))}
+                                  {result.highlights
+                                    .slice(0, 2)
+                                    .map((highlight, i) => (
+                                      <p
+                                        key={i}
+                                        className="text-xs text-muted-foreground"
+                                      >
+                                        <span className="font-medium">
+                                          {highlight.field}:
+                                        </span>{' '}
+                                        {highlight.snippet}
+                                      </p>
+                                    ))}
                                 </div>
                               )}
                             </div>
@@ -344,4 +358,4 @@ export function GlobalSearch({
       )}
     </div>
   )
-} 
+}

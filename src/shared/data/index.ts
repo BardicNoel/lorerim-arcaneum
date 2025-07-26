@@ -1,63 +1,52 @@
-// Export the new cache-based data system
-export * from './dataCache'
-export * from './useDataCache'
+// Export schemas and types
 export * from './schemas'
-
-// Legacy exports for backward compatibility (deprecated)
-// Note: These may conflict with the new system - use the new hooks instead
-export {
-  useDataStore,
-  useGlobalSearch,
-  useDataCache as useLegacyDataCache,
-} from './DataProvider'
 
 // Types
 export type {
-  Skill,
-  Race,
-  Trait,
-  Religion,
   Birthsign,
+  BirthsignsData,
   DestinyNode,
+  DestinyNodesData,
   PerkTree,
+  PerkTreesData,
+  Race,
+  RacesData,
+  Religion,
+  ReligionsData,
   SearchResult,
   SearchResultHighlight,
-  
+  Skill,
   // Data file types
   SkillsData,
-  RacesData,
+  Trait,
   TraitsData,
-  ReligionsData,
-  BirthsignsData,
-  DestinyNodesData,
-  PerkTreesData,
 } from './schemas'
 
 // Validation Utilities
 export {
-  validateData,
+  DataValidationError,
   formatZodError,
-  validateSkillsDataSafe,
-  validateRacesDataSafe,
-  validateTraitsDataSafe,
-  validateReligionsDataSafe,
-  validateBirthsignsDataSafe,
-  validateDestinyNodesDataSafe,
-  validatePerkTreesDataSafe,
   generateDataQualityReport,
-  transformSkillsData,
-  transformRacesData,
-  transformTraitsData,
-  transformReligionsData,
+  handleValidationError,
   transformBirthsignsData,
   transformDestinyNodesData,
-  DataValidationError,
-  handleValidationError,
-  type ValidationResult,
-  type ValidationFunction,
+  transformRacesData,
+  transformReligionsData,
+  transformSkillsData,
+  transformTraitsData,
+  validateBirthsignsDataSafe,
+  validateData,
+  validateDestinyNodesDataSafe,
+  validatePerkTreesDataSafe,
+  validateRacesDataSafe,
+  validateReligionsDataSafe,
+  validateSkillsDataSafe,
+  validateTraitsDataSafe,
   type DataQualityReport,
+  type ValidationFunction,
+  type ValidationResult,
 } from './validationUtils'
 
 // Components
+export { GlobalSearch } from '../components/GlobalSearch'
 export { DataInitializer } from './DataInitializer'
-export { GlobalSearch } from '../components/GlobalSearch' 

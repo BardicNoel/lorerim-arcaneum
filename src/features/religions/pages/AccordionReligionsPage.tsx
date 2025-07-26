@@ -31,7 +31,7 @@ import {
 import { useMemo, useState } from 'react'
 import { ReligionAccordion } from '../components/ReligionAccordion'
 
-import { useReligions } from '@/shared/data/useDataCache'
+import { useReligions } from '@/shared/stores'
 import { religionToPlayerCreationItem } from '@/shared/utils'
 
 type SortOption = 'alphabetical' | 'divine-type'

@@ -11,9 +11,9 @@ import type {
   PlayerCreationItem,
   SearchCategory,
 } from '@/shared/components/playerCreation/types'
-import { useTraits } from '@/shared/data/useDataCache'
 import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
 import { usePlayerCreationFilters } from '@/shared/hooks/usePlayerCreationFilters'
+import { useTraits } from '@/shared/stores'
 import { traitToPlayerCreationItem } from '@/shared/utils'
 import { useMemo } from 'react'
 import { TraitCard } from '../components/TraitCard'

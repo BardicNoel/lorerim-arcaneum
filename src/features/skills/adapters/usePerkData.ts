@@ -1,5 +1,5 @@
-import { usePerkTrees } from '@/shared/data/useDataCache'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import { usePerkTrees } from '@/shared/stores'
 import { useMemo } from 'react'
 
 // Adapter for perk data loading and management
