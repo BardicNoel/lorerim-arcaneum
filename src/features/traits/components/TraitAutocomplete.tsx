@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react'
-import { Badge } from '@/shared/ui/ui/badge'
 import {
   GenericAutocomplete,
   type AutocompleteOption,
 } from '@/shared/components/generic'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
+import { Badge } from '@/shared/ui/ui/badge'
+import { useMemo, useState } from 'react'
+import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { Trait } from '../types'
 
 interface TraitAutocompleteProps {
@@ -22,9 +23,12 @@ export function TraitAutocomplete({
   className = '',
   disabled = false,
 }: TraitAutocompleteProps) {
-  // Convert traits to AutocompleteOption format
+  const [searchQuery, setSearchQuery] = useState('')
+  const { filteredTraits } = useFuzzySearch(traits, searchQuery)
+
+  // Convert filtered traits to AutocompleteOption format
   const autocompleteOptions: AutocompleteOption[] = useMemo(() => {
-    return traits.map(trait => ({
+    return filteredTraits.map(trait => ({
       id: trait.edid,
       label: trait.name,
       description: trait.description,
@@ -39,7 +43,7 @@ export function TraitAutocomplete({
         effectsCount: trait.effects.length,
       },
     }))
-  }, [traits])
+  }, [filteredTraits])
 
   const handleTraitSelect = (option: AutocompleteOption) => {
     const selectedTrait = traits.find(trait => trait.edid === option.id)
@@ -82,6 +86,8 @@ export function TraitAutocomplete({
       disabled={disabled}
       renderOption={renderTraitOption}
       emptyMessage="No traits found"
+      searchQuery={searchQuery}
+      onSearchQueryChange={setSearchQuery}
     />
   )
 }

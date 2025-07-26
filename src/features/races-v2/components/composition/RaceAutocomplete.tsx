@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react'
-import { Badge } from '@/shared/ui/ui/badge'
 import { cn } from '@/lib/utils'
 import {
   GenericAutocomplete,
   type AutocompleteOption,
 } from '@/shared/components/generic'
+import { Badge } from '@/shared/ui/ui/badge'
+import { useMemo, useState } from 'react'
+import { useFuzzySearch } from '../../hooks/useFuzzySearch'
 import type { Race } from '../../types'
 import { RaceAvatar } from '../atomic'
 
@@ -21,9 +22,12 @@ export function RaceAutocomplete({
   placeholder = 'Search races...',
   className = '',
 }: RaceAutocompleteProps) {
-  // Convert races to AutocompleteOption format
+  const [searchQuery, setSearchQuery] = useState('')
+  const { filteredRaces } = useFuzzySearch(races, searchQuery)
+
+  // Convert filtered races to AutocompleteOption format
   const autocompleteOptions: AutocompleteOption[] = useMemo(() => {
-    return races.map(race => ({
+    return filteredRaces.map(race => ({
       id: race.edid,
       label: race.name,
       description: race.description,
@@ -44,7 +48,7 @@ export function RaceAutocomplete({
         originalRace: race,
       },
     }))
-  }, [races])
+  }, [filteredRaces])
 
   const handleRaceSelect = (option: AutocompleteOption) => {
     const selectedRace = races.find(race => race.edid === option.id)
@@ -79,6 +83,8 @@ export function RaceAutocomplete({
       className={className}
       renderOption={renderRaceOption}
       emptyMessage="No races found"
+      searchQuery={searchQuery}
+      onSearchQueryChange={setSearchQuery}
     />
   )
-} 
+}

@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react'
-import { Badge } from '@/shared/ui/ui/badge'
 import {
   GenericAutocomplete,
   type AutocompleteOption,
 } from '@/shared/components/generic'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
+import { Badge } from '@/shared/ui/ui/badge'
+import { useMemo, useState } from 'react'
 import type { Skill } from '../../types'
 
 interface SkillAutocompleteProps {
@@ -22,9 +22,31 @@ export function SkillAutocomplete({
   className = '',
   disabled = false,
 }: SkillAutocompleteProps) {
-  // Convert skills to AutocompleteOption format
+  const [searchQuery, setSearchQuery] = useState('')
+
+  // Filter skills based on search query
+  const filteredSkills = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return skills
+    }
+
+    const query = searchQuery.toLowerCase()
+    return skills.filter(skill => {
+      return (
+        skill.name.toLowerCase().includes(query) ||
+        skill.description.toLowerCase().includes(query) ||
+        skill.category.toLowerCase().includes(query) ||
+        skill.keyAbilities.some(ability =>
+          ability.toLowerCase().includes(query)
+        ) ||
+        skill.metaTags.some(tag => tag.toLowerCase().includes(query))
+      )
+    })
+  }, [skills, searchQuery])
+
+  // Convert filtered skills to AutocompleteOption format
   const autocompleteOptions: AutocompleteOption[] = useMemo(() => {
-    return skills.map(skill => ({
+    return filteredSkills.map(skill => ({
       id: skill.edid,
       label: skill.name,
       description: skill.description,
@@ -40,7 +62,7 @@ export function SkillAutocomplete({
         scaling: skill.scaling,
       },
     }))
-  }, [skills])
+  }, [filteredSkills])
 
   const handleSkillSelect = (option: AutocompleteOption) => {
     const selectedSkill = skills.find(skill => skill.edid === option.id)
@@ -88,6 +110,8 @@ export function SkillAutocomplete({
       disabled={disabled}
       renderOption={renderSkillOption}
       emptyMessage="No skills found"
+      searchQuery={searchQuery}
+      onSearchQueryChange={setSearchQuery}
     />
   )
-} 
+}

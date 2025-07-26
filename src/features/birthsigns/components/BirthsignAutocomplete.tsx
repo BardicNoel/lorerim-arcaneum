@@ -1,12 +1,13 @@
-import React, { useMemo } from 'react'
-import { Badge } from '@/shared/ui/ui/badge'
 import { cn } from '@/lib/utils'
 import {
   GenericAutocomplete,
   type AutocompleteOption,
 } from '@/shared/components/generic'
-import { BirthsignAvatar } from './BirthsignAvatar'
+import { Badge } from '@/shared/ui/ui/badge'
+import { useMemo, useState } from 'react'
+import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { Birthsign } from '../types'
+import { BirthsignAvatar } from './BirthsignAvatar'
 
 interface BirthsignAutocompleteProps {
   birthsigns: Birthsign[]
@@ -21,9 +22,12 @@ export function BirthsignAutocomplete({
   placeholder = 'Search birthsigns...',
   className = '',
 }: BirthsignAutocompleteProps) {
-  // Convert birthsigns to AutocompleteOption format
+  const [searchQuery, setSearchQuery] = useState('')
+  const { filteredBirthsigns } = useFuzzySearch(birthsigns, searchQuery)
+
+  // Convert filtered birthsigns to AutocompleteOption format
   const autocompleteOptions: AutocompleteOption[] = useMemo(() => {
-    return birthsigns.map(birthsign => ({
+    return filteredBirthsigns.map(birthsign => ({
       id: birthsign.edid,
       label: birthsign.name,
       description: birthsign.description,
@@ -44,7 +48,7 @@ export function BirthsignAutocomplete({
         originalBirthsign: birthsign,
       },
     }))
-  }, [birthsigns])
+  }, [filteredBirthsigns])
 
   const handleBirthsignSelect = (option: AutocompleteOption) => {
     const selectedBirthsign = birthsigns.find(
@@ -84,6 +88,8 @@ export function BirthsignAutocomplete({
       className={className}
       renderOption={renderBirthsignOption}
       emptyMessage="No birthsigns found"
+      searchQuery={searchQuery}
+      onSearchQueryChange={setSearchQuery}
     />
   )
 }
