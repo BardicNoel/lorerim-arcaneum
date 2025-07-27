@@ -1,0 +1,191 @@
+# Deep Analysis: useSearchState State Refresh Update Issues
+
+## Current Sequence Chart
+
+### 1. Initialization Flow
+
+```
+useSearchState() called
+├── useSearchParams() from react-router-dom
+├── Extract initial values from URL params
+├── Initialize local state with URL values
+└── Set up two useEffect hooks for bidirectional sync
+```
+
+### 2. State Update Flow (User Action)
+
+```
+User updates search state (e.g., setQuery, setActiveFilters)
+├── Local state updates (query, activeFilters, viewMode)
+├── useEffect #2 triggers (URL update effect)
+│   ├── Set isUpdatingFromURL.current = true
+│   ├── Create new URLSearchParams
+│   ├── Set params based on current state
+│   ├── Call setSearchParams(newParams, { replace: true })
+│   └── setTimeout(() => isUpdatingFromURL.current = false, 0)
+└── URL changes, triggering useEffect #1
+```
+
+### 3. URL Update Flow (External Navigation)
+
+```
+URL changes (browser back/forward, direct navigation)
+├── useSearchParams() detects change
+├── useEffect #1 triggers (state update effect)
+│   ├── Check isUpdatingFromURL.current (should be false)
+│   ├── Compare currentURLParams with lastURLParams.current
+│   ├── Update lastURLParams.current
+│   ├── Extract new values from URL
+│   └── Update local state if values changed
+└── Local state updates
+```
+
+## Critical Issues Identified
+
+### Issue 1: Race Condition in useEffect Dependencies
+
+**Problem**: The first useEffect has a dependency on `[searchParams]` but compares against current state values (`query`, `activeFilters`, `viewMode`) that are not in the dependency array.
+
+**Impact**:
+
+- State comparisons may use stale values
+- Updates may be missed or applied incorrectly
+- Circular update loops possible
+
+**Code Location**: Lines 33-67 in useSearchState.ts
+
+### Issue 2: Timing Issue with isUpdatingFromURL Flag
+
+**Problem**: The `setTimeout(() => isUpdatingFromURL.current = false, 0)` creates a race condition where the flag might be reset before the URL change is processed.
+
+**Impact**:
+
+- URL changes might be processed while flag is still true
+- State updates from URL might be blocked incorrectly
+- Inconsistent synchronization
+
+**Code Location**: Lines 95-97 in useSearchState.ts
+
+### Issue 3: JSON.stringify Comparison Inefficiency
+
+**Problem**: Using `JSON.stringify()` for array comparisons in every render is expensive and can cause unnecessary re-renders.
+
+**Impact**:
+
+- Performance degradation
+- Potential infinite loops
+- Unnecessary state updates
+
+**Code Location**: Lines 52-62 in useSearchState.ts
+
+### Issue 4: Missing State Dependencies in useEffect
+
+**Problem**: The first useEffect doesn't include state values in dependencies but uses them in comparisons, leading to stale closure issues.
+
+**Impact**:
+
+- State updates may not trigger when expected
+- Inconsistent behavior between URL and state
+- Hard to debug synchronization issues
+
+## Root Cause Analysis
+
+### Primary Issue: Bidirectional Sync Complexity
+
+The hook attempts to maintain bidirectional synchronization between:
+
+1. Local React state (query, activeFilters, viewMode)
+2. URL search parameters
+
+This creates a complex dependency graph where:
+
+- State changes → URL updates → State updates (potential loop)
+- URL changes → State updates → URL updates (potential loop)
+
+### Secondary Issue: React's Closure Behavior
+
+React's useEffect captures values at the time of effect creation, not execution. This means:
+
+- State comparisons in useEffect #1 use stale values
+- The effect doesn't re-run when state changes (missing dependencies)
+- Updates may be missed or applied incorrectly
+
+## Recommended Solutions
+
+### Solution 1: Use useReducer for Complex State
+
+Replace multiple useState calls with a single useReducer to manage all search state atomically.
+
+### Solution 2: Implement Proper Dependency Management
+
+Add all state values to the first useEffect dependency array and use useCallback for stable references.
+
+### Solution 3: Use useRef for URL State Tracking
+
+Track URL state separately using useRef to avoid dependency issues.
+
+### Solution 4: Implement Debounced URL Updates
+
+Add debouncing to URL updates to prevent rapid successive changes.
+
+### Solution 5: Use a State Machine Pattern
+
+Implement a state machine to clearly define the different states and transitions.
+
+## Immediate Fixes
+
+### Fix 1: Add Missing Dependencies
+
+```typescript
+useEffect(() => {
+  // ... existing logic
+}, [searchParams, query, activeFilters, viewMode]) // Add missing dependencies
+```
+
+### Fix 2: Use useCallback for Stable References
+
+```typescript
+const updateFilters = useCallback((newFilters: Partial<SearchFilters>) => {
+  setActiveFilters(prev => ({ ...prev, ...newFilters }))
+  setSelectedResult(null)
+}, []) // Empty dependency array for stable reference
+```
+
+### Fix 3: Improve Flag Management
+
+```typescript
+// Use a more reliable flag reset mechanism
+useEffect(() => {
+  const timeoutId = setTimeout(() => {
+    isUpdatingFromURL.current = false
+  }, 10) // Slightly longer delay
+
+  return () => clearTimeout(timeoutId)
+}, [])
+```
+
+## Testing Strategy
+
+### Test Cases Needed
+
+1. **State to URL sync**: Verify state changes update URL correctly
+2. **URL to State sync**: Verify URL changes update state correctly
+3. **Bidirectional sync**: Verify no infinite loops
+4. **Race conditions**: Test rapid successive updates
+5. **Browser navigation**: Test back/forward button behavior
+6. **Direct URL access**: Test loading page with URL params
+
+### Performance Testing
+
+1. **Render frequency**: Monitor unnecessary re-renders
+2. **Memory usage**: Check for memory leaks
+3. **Response time**: Measure update latency
+
+## Conclusion
+
+The current implementation has fundamental architectural issues that make it unreliable for production use. The bidirectional synchronization pattern is inherently complex and prone to race conditions. A complete refactor using a more robust state management approach is recommended.
+description:
+globs:
+alwaysApply: false
+
+---
