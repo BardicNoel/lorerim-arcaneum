@@ -1,6 +1,7 @@
 import { RaceCard } from '@/features/races-v2/components/composition/RaceCard'
 import { useRacesStore } from '@/shared/stores/racesStore'
 import type { SearchableItem } from '../../model/SearchModel'
+import { findItemInStore } from '../../utils/storeLookup'
 
 interface RaceSearchCardProps {
   item: SearchableItem
@@ -18,7 +19,7 @@ export function RaceSearchCard({
   const races = useRacesStore(state => state.data)
 
   // Find the full race record from the store
-  const fullRace = races?.find(race => race.id === item.originalData.id)
+  const fullRace = findItemInStore(races, item.originalData)
 
   if (!fullRace) {
     // Fallback to default card if race not found
