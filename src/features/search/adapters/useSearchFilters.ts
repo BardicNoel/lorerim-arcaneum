@@ -4,12 +4,24 @@ import { useSearchState } from './useSearchState'
 
 export function useSearchFilters() {
   const { search, getAvailableFilters, isReady } = useSearchData()
-  const { query, activeFilters } = useSearchState()
+  const { activeFilters } = useSearchState()
 
   const searchResults = useMemo(() => {
-    if (!isReady || !query.trim()) return []
-    return search(query, activeFilters)
-  }, [isReady, search, query, activeFilters])
+    if (!isReady) return []
+
+    // Only search if there are tags or other filters
+    const hasFilters =
+      activeFilters.tags.length > 0 ||
+      activeFilters.types.length > 0 ||
+      activeFilters.categories.length > 0
+
+    if (!hasFilters) return []
+
+    // Create a search query from tags
+    const searchQuery = activeFilters.tags.join(' ')
+
+    return search(searchQuery, activeFilters)
+  }, [isReady, search, activeFilters])
 
   const availableFilters = useMemo(() => {
     if (!isReady) return { types: [], categories: [], tags: [] }

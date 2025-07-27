@@ -5,6 +5,11 @@ import {
   PlayerCreationFilters,
   PlayerCreationItemsSection,
 } from '@/shared/components/playerCreation'
+import type {
+  SearchOption,
+  SelectedTag,
+} from '@/shared/components/playerCreation/types'
+import { useEffect, useState } from 'react'
 import { useSearchComputed } from '../adapters/useSearchComputed'
 import { useSearchData } from '../adapters/useSearchData'
 import { useSearchFilters } from '../adapters/useSearchFilters'
@@ -19,8 +24,6 @@ import { searchResultToPlayerCreationItem } from '../model/SearchUtilities'
 export function SearchPageView() {
   const { isReady, isIndexing, error } = useSearchData()
   const {
-    query,
-    setQuery,
     selectedResult,
     setSelectedResult,
     activeFilters,
@@ -28,9 +31,71 @@ export function SearchPageView() {
     clearFilters,
     viewMode,
     setViewMode,
+    addTag,
+    removeTag,
   } = useSearchState()
   const { availableFilters } = useSearchFilters()
   const { playerCreationItems, totalResults } = useSearchComputed()
+
+  // Tag state management
+  const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
+
+  // Sync selectedTags with activeFilters.tags from URL
+  useEffect(() => {
+    const urlTags = activeFilters.tags.map(tag => ({
+      id: `custom-${tag}`,
+      label: tag,
+      value: tag,
+      category: 'Search All',
+    }))
+
+    setSelectedTags(urlTags)
+  }, [activeFilters.tags])
+
+  // Add a tag (from autocomplete or custom input)
+  const handleTagSelect = (optionOrTag: SearchOption | string) => {
+    let tag: SelectedTag
+    if (typeof optionOrTag === 'string') {
+      tag = {
+        id: `custom-${optionOrTag}`,
+        label: optionOrTag,
+        value: optionOrTag,
+        category: 'Search All',
+      }
+    } else {
+      tag = {
+        id: `${optionOrTag.category}-${optionOrTag.id}`,
+        label: optionOrTag.label,
+        value: optionOrTag.value,
+        category: optionOrTag.category,
+      }
+    }
+
+    // Prevent duplicate tags
+    if (
+      !selectedTags.some(
+        t => t.value === tag.value && t.category === tag.category
+      )
+    ) {
+      setSelectedTags(prev => [...prev, tag])
+      addTag(tag.value)
+    }
+  }
+
+  // Remove a tag
+  const handleTagRemove = (tagId: string) => {
+    const tag = selectedTags.find(t => t.id === tagId)
+    if (tag) {
+      setSelectedTags(prev => prev.filter(t => t.id !== tagId))
+      removeTag(tag.value)
+    }
+  }
+
+  // Clear all filters
+  const handleClearFilters = () => {
+    setSelectedTags([])
+    clearFilters()
+  }
 
   if (!isReady) {
     return (
@@ -69,10 +134,11 @@ export function SearchPageView() {
     )
   }
 
-  const title = query ? `Search Results: "${query}"` : 'Search'
-  const description = query
-    ? `Found ${totalResults} result${totalResults !== 1 ? 's' : ''}`
-    : 'Search across all skills, races, traits, religions, birthsigns, and destiny nodes'
+  const title = selectedTags.length > 0 ? `Search Results` : 'Search'
+  const description =
+    selectedTags.length > 0
+      ? `Found ${totalResults} result${totalResults !== 1 ? 's' : ''} for ${selectedTags.length} filter${selectedTags.length !== 1 ? 's' : ''}`
+      : 'Search across all skills, races, traits, religions, birthsigns, and destiny nodes'
 
   const renderDetailPanel = (item: any) => {
     const searchResult = item.originalSearchResult as SearchResult
@@ -97,13 +163,14 @@ export function SearchPageView() {
         onViewModeChange={setViewMode}
       >
         <SearchFilters
-          query={query}
-          onQueryChange={setQuery}
           activeFilters={activeFilters}
           onFiltersChange={setActiveFilters}
-          onClearFilters={clearFilters}
+          onClearFilters={handleClearFilters}
           availableFilters={availableFilters}
           resultCount={totalResults}
+          onTagSelect={handleTagSelect}
+          onTagRemove={handleTagRemove}
+          selectedTags={selectedTags}
         />
       </PlayerCreationFilters>
 
