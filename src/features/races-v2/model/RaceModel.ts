@@ -1,5 +1,9 @@
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
-import type { Race, RaceFilters } from '../types'
+import type { Race as GlobalRace } from '@/shared/data/schemas'
+import type { RaceFilters } from '../types'
+
+// Use the global Race interface for consistency
+type Race = GlobalRace
 
 export class RaceModel {
   /**
@@ -28,7 +32,7 @@ export class RaceModel {
    */
   static getUniqueTags(races: Race[]): string[] {
     const allTags = races.flatMap(race => [
-      ...race.keywords.map(k => k.edid),
+      ...(race.keywords || []),
       ...(race.flags || []),
     ])
     return [...new Set(allTags)]
@@ -50,7 +54,7 @@ export class RaceModel {
     return races.filter(race =>
       tags.some(
         tag =>
-          race.keywords.some(k => k.edid === tag) ||
+          (race.keywords || []).includes(tag) ||
           (race.flags || []).includes(tag)
       )
     )
@@ -64,7 +68,7 @@ export class RaceModel {
     return races.filter(race =>
       tags.some(
         tag =>
-          race.keywords.some(k => k.edid === tag) ||
+          (race.keywords || []).includes(tag) ||
           (race.flags || []).includes(tag)
       )
     )
@@ -80,8 +84,8 @@ export class RaceModel {
     return races.filter(
       race =>
         race.name.toLowerCase().includes(searchTerm) ||
-        race.description.toLowerCase().includes(searchTerm) ||
-        race.keywords.some(k => k.edid.toLowerCase().includes(searchTerm)) ||
+        (race.description || '').toLowerCase().includes(searchTerm) ||
+        (race.keywords || []).some(k => k.toLowerCase().includes(searchTerm)) ||
         (race.flags || []).some(flag => flag.toLowerCase().includes(searchTerm))
     )
   }
@@ -109,20 +113,20 @@ export class RaceModel {
    */
   static transformToPlayerCreationItem(race: Race): PlayerCreationItem {
     const tags = [
-      ...race.keywords.map(k => k.edid),
-      ...race.flags,
+      ...(race.keywords || []),
+      ...(race.flags || []),
       race.category,
     ]
 
     const effects = [
-      ...race.skillBonuses.map(sb => ({
+      ...(race.skillBonuses || []).map(sb => ({
         name: `${sb.skill} +${sb.bonus}`,
         type: 'positive' as const,
         description: `Provides ${sb.bonus} bonus to ${sb.skill}`,
         value: sb.bonus,
         target: sb.skill,
       })),
-      ...race.racialSpells.map(spell => ({
+      ...(race.racialSpells || []).map(spell => ({
         name: spell.name,
         type: 'positive' as const,
         description: spell.description,
@@ -133,12 +137,12 @@ export class RaceModel {
     return {
       id: race.edid,
       name: race.name,
-      description: race.description,
+      description: race.description || '',
       tags,
       effects,
       associatedItems: [],
       imageUrl: undefined,
-      category: race.category,
+      category: race.category || '',
     }
   }
 
@@ -156,12 +160,12 @@ export class RaceModel {
    */
   static calculateRaceStats(race: Race) {
     return {
-      totalHealth: race.startingStats.health,
-      totalMagicka: race.startingStats.magicka,
-      totalStamina: race.startingStats.stamina,
-      totalCarryWeight: race.startingStats.carryWeight,
-      skillBonusCount: race.skillBonuses.length,
-      racialSpellCount: race.racialSpells.length,
+      totalHealth: race.startingStats?.health || 0,
+      totalMagicka: race.startingStats?.magicka || 0,
+      totalStamina: race.startingStats?.stamina || 0,
+      totalCarryWeight: race.startingStats?.carryWeight || 0,
+      skillBonusCount: race.skillBonuses?.length || 0,
+      racialSpellCount: race.racialSpells?.length || 0,
     }
   }
 

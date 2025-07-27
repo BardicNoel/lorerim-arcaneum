@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
-import { RaceDataProvider } from '../model/RaceDataProvider'
+import type { Race } from '@/shared/data/schemas'
+import { useRacesStore } from '@/shared/stores/racesStore'
+import { useMemo } from 'react'
 import { RaceModel } from '../model/RaceModel'
-import type { Race } from '../types'
 
 interface UseRaceDataOptions {
   includeRelated?: boolean
@@ -44,58 +44,42 @@ export function useRaceData(
     sortBy = 'name',
   } = options
 
-  const [races, setRaces] = useState<Race[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [dataProvider] = useState(() => new RaceDataProvider())
-
-  // Load races on mount
-  useEffect(() => {
-    const loadRaces = async () => {
-      try {
-        setIsLoading(true)
-        setError(null)
-
-        const loadedRaces = await dataProvider.loadRaces()
-        setRaces(loadedRaces)
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : 'Failed to load race data'
-        )
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    loadRaces()
-  }, [dataProvider])
+  // Use the global races store instead of RaceDataProvider
+  const { data: races, loading: isLoading, error } = useRacesStore()
 
   // Categories and tags
-  const categories = RaceModel.getUniqueCategories(races)
-  const tags = RaceModel.getUniqueTags(races)
+  const categories = useMemo(
+    () => RaceModel.getUniqueCategories(races),
+    [races]
+  )
+  const tags = useMemo(() => RaceModel.getUniqueTags(races), [races])
 
   // Filtered races based on options
-  const filteredRaces = races.filter(race => {
-    // Apply category filter
-    if (categoryFilter && race.category !== categoryFilter) {
-      return false
-    }
-
-    // Apply search term
-    if (searchTerm) {
-      const searchResults = RaceModel.search([race], searchTerm)
-      if (searchResults.length === 0) {
+  const filteredRaces = useMemo(() => {
+    return races.filter(race => {
+      // Apply category filter
+      if (categoryFilter && race.category !== categoryFilter) {
         return false
       }
-    }
 
-    return true
-  })
+      // Apply search term
+      if (searchTerm) {
+        const searchResults = RaceModel.search([race], searchTerm)
+        if (searchResults.length === 0) {
+          return false
+        }
+      }
+
+      return true
+    })
+  }, [races, categoryFilter, searchTerm])
 
   // Sort filtered races
-  const sortedFilteredRaces = sortBy === 'name' 
-    ? RaceModel.sortByName(filteredRaces)
-    : RaceModel.sortByCategory(filteredRaces)
+  const sortedFilteredRaces = useMemo(() => {
+    return sortBy === 'name'
+      ? RaceModel.sortByName(filteredRaces)
+      : RaceModel.sortByCategory(filteredRaces)
+  }, [filteredRaces, sortBy])
 
   // Helper functions
   const getRaceById = (id: string): Race | undefined => {
@@ -119,19 +103,8 @@ export function useRaceData(
   }
 
   const refresh = async () => {
-    try {
-      setIsLoading(true)
-      setError(null)
-
-      const loadedRaces = await dataProvider.loadRaces()
-      setRaces(loadedRaces)
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : 'Failed to refresh race data'
-      )
-    } finally {
-      setIsLoading(false)
-    }
+    // Trigger a reload of the global races store
+    await useRacesStore.getState().load()
   }
 
   return {
@@ -157,4 +130,4 @@ export function useRaceData(
     filterByTag,
     searchRaces,
   }
-} 
+}
