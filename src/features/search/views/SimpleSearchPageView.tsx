@@ -1,10 +1,3 @@
-import {
-  PlayerCreationContent,
-  PlayerCreationDetailSection,
-  PlayerCreationEmptyDetail,
-  PlayerCreationFilters,
-  PlayerCreationItemsSection,
-} from '@/shared/components/playerCreation'
 import type {
   SearchOption,
   SelectedTag,
@@ -15,29 +8,20 @@ import { useSearchData } from '../adapters/useSearchData'
 import { useSearchFilters } from '../adapters/useSearchFilters'
 import { useSearchState } from '../adapters/useSearchState'
 import { SearchPageLayout } from '../components/SearchPageLayout'
-import { SearchResultWrapper } from '../components/atomic/SearchResultWrapper'
+import { SearchDetailPanel } from '../components/atomic/SearchDetailPanel'
 import { SearchFilters } from '../components/composition/SearchFilters'
-import { SearchResultsGrid } from '../components/composition/SearchResultsGrid'
-import type { SearchResult } from '../model/SearchModel'
-import { searchResultToPlayerCreationItem } from '../model/SearchUtilities'
+import { SimpleSearchResultsGrid } from '../components/composition/SimpleSearchResultsGrid'
+import type { SearchableItem } from '../model/SearchModel'
 
-export function SearchPageView() {
+export function SimpleSearchPageView() {
   const { isReady, isIndexing, error } = useSearchData()
-  const {
-    selectedResult,
-    setSelectedResult,
-    activeFilters,
-    setActiveFilters,
-    clearFilters,
-    viewMode,
-    setViewMode,
-    addTag,
-    removeTag,
-  } = useSearchState()
-  const { availableFilters } = useSearchFilters()
-  const { playerCreationItems, totalResults } = useSearchComputed()
+  const { activeFilters, setActiveFilters, clearFilters, addTag, removeTag } =
+    useSearchState()
+  const { availableFilters, searchResults } = useSearchFilters()
+  const { totalResults } = useSearchComputed()
 
-  // Tag state management
+  // Local state for selected item
+  const [selectedItem, setSelectedItem] = useState<SearchableItem | null>(null)
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
 
   // Sync selectedTags with activeFilters.tags from URL
@@ -137,6 +121,11 @@ export function SearchPageView() {
     clearFilters()
   }
 
+  // Handle item selection
+  const handleItemSelect = (item: SearchableItem) => {
+    setSelectedItem(item)
+  }
+
   if (!isReady) {
     return (
       <SearchPageLayout title="Search" description="Building search index...">
@@ -180,28 +169,10 @@ export function SearchPageView() {
       ? `Found ${totalResults} result${totalResults !== 1 ? 's' : ''} for ${selectedTags.length} filter${selectedTags.length !== 1 ? 's' : ''}`
       : 'Search across all skills, races, traits, religions, birthsigns, and destiny nodes'
 
-  const renderDetailPanel = (item: any) => {
-    const searchResult = item.originalSearchResult as SearchResult
-    return (
-      <SearchResultWrapper
-        result={searchResult}
-        isSelected={false}
-        onSelect={() => {}} // No-op for detail panel
-        variant="detail"
-      />
-    )
-  }
-
   return (
     <SearchPageLayout title={title} description={description}>
-      <PlayerCreationFilters
-        searchCategories={[]} // We'll use our custom SearchFilters component
-        selectedTags={[]}
-        viewMode={viewMode}
-        onTagSelect={() => {}} // Handled by SearchFilters
-        onTagRemove={() => {}} // Handled by SearchFilters
-        onViewModeChange={setViewMode}
-      >
+      {/* Filters Section */}
+      <div className="mb-6">
         <SearchFilters
           activeFilters={activeFilters}
           onFiltersChange={setActiveFilters}
@@ -212,28 +183,24 @@ export function SearchPageView() {
           onTagRemove={handleTagRemove}
           selectedTags={selectedTags}
         />
-      </PlayerCreationFilters>
+      </div>
 
-      <PlayerCreationContent>
-        <PlayerCreationItemsSection>
-          <SearchResultsGrid
-            results={playerCreationItems.map(item => item.originalSearchResult)}
-            selectedResult={selectedResult}
-            onResultSelect={setSelectedResult}
-            viewMode={viewMode}
-            useTypeSpecificRendering={true}
-            renderMode="grouped"
+      {/* Results Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Search Results Grid */}
+        <div className="lg:col-span-2">
+          <SimpleSearchResultsGrid
+            items={searchResults.map(result => result.item)}
+            selectedItemId={selectedItem?.id}
+            onItemSelect={handleItemSelect}
           />
-        </PlayerCreationItemsSection>
+        </div>
 
-        <PlayerCreationDetailSection>
-          {selectedResult ? (
-            renderDetailPanel(searchResultToPlayerCreationItem(selectedResult))
-          ) : (
-            <PlayerCreationEmptyDetail />
-          )}
-        </PlayerCreationDetailSection>
-      </PlayerCreationContent>
+        {/* Detail Panel */}
+        <div className="lg:col-span-1">
+          <SearchDetailPanel item={selectedItem} />
+        </div>
+      </div>
     </SearchPageLayout>
   )
 }

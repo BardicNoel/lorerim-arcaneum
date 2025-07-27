@@ -3,6 +3,7 @@ import type { PlayerCreationItem } from '@/shared/components/playerCreation/type
 import type { SearchResult } from '../../model/SearchModel'
 import { searchResultToPlayerCreationItem } from '../../model/SearchUtilities'
 import { SearchResultWrapper } from '../atomic/SearchResultWrapper'
+import { TypeSpecificSearchResults } from './TypeSpecificSearchResults'
 
 interface SearchResultsGridProps {
   results: SearchResult[]
@@ -10,6 +11,8 @@ interface SearchResultsGridProps {
   onResultSelect: (result: SearchResult) => void
   viewMode?: 'grid' | 'list'
   className?: string
+  useTypeSpecificRendering?: boolean
+  renderMode?: 'grouped' | 'unified' | 'type-defaults'
 }
 
 export function SearchResultsGrid({
@@ -18,8 +21,24 @@ export function SearchResultsGrid({
   onResultSelect,
   viewMode = 'grid',
   className,
+  useTypeSpecificRendering = true,
+  renderMode = 'grouped',
 }: SearchResultsGridProps) {
-  // Transform search results to PlayerCreationItem format
+  // Use type-specific rendering if enabled
+  if (useTypeSpecificRendering) {
+    return (
+      <TypeSpecificSearchResults
+        results={results}
+        selectedResult={selectedResult}
+        onResultSelect={onResultSelect}
+        viewMode={viewMode === 'list' ? 'accordion' : 'card'}
+        renderMode={renderMode}
+        className={className}
+      />
+    )
+  }
+
+  // Fallback to original implementation
   const playerCreationItems: (PlayerCreationItem & {
     originalSearchResult: SearchResult
   })[] = results.map(searchResultToPlayerCreationItem)

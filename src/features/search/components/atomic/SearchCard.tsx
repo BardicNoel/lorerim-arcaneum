@@ -1,0 +1,106 @@
+import type { SearchableItem } from '../../model/SearchModel'
+import { RaceSearchCard } from '../type-specific/RaceSearchCard'
+import { SkillSearchCard } from '../type-specific/SkillSearchCard'
+import { DefaultSearchCard } from './DefaultSearchCard'
+
+interface SearchCardProps {
+  item: SearchableItem
+  isSelected?: boolean
+  onClick?: () => void
+  className?: string
+}
+
+export function SearchCard({
+  item,
+  isSelected = false,
+  onClick,
+  className,
+}: SearchCardProps) {
+  // Simple switchboard based on item type
+  switch (item.type) {
+    case 'race':
+      return (
+        <RaceSearchCard
+          item={item}
+          isSelected={isSelected}
+          onClick={onClick}
+          className={className}
+        />
+      )
+
+    case 'skill':
+      return (
+        <SkillSearchCard
+          item={item}
+          isSelected={isSelected}
+          onClick={onClick}
+          className={className}
+        />
+      )
+
+    case 'trait':
+      // TODO: Implement TraitSearchCard
+      return (
+        <DefaultSearchCard
+          item={item}
+          isSelected={isSelected}
+          onClick={onClick}
+          className={className}
+        />
+      )
+
+    case 'birthsign':
+      // TODO: Implement BirthsignSearchCard
+      return (
+        <DefaultSearchCard
+          item={item}
+          isSelected={isSelected}
+          onClick={onClick}
+          className={className}
+        />
+      )
+
+    case 'destiny':
+      // TODO: Implement DestinySearchCard
+      return (
+        <DefaultSearchCard
+          item={item}
+          isSelected={isSelected}
+          onClick={onClick}
+          className={className}
+        />
+      )
+
+    case 'religion':
+      // TODO: Implement ReligionSearchCard
+      return (
+        <DefaultSearchCard
+          item={item}
+          isSelected={isSelected}
+          onClick={onClick}
+          className={className}
+        />
+      )
+
+    case 'perk':
+      // TODO: Implement PerkSearchCard
+      return (
+        <DefaultSearchCard
+          item={item}
+          isSelected={isSelected}
+          onClick={onClick}
+          className={className}
+        />
+      )
+
+    default:
+      return (
+        <DefaultSearchCard
+          item={item}
+          isSelected={isSelected}
+          onClick={onClick}
+          className={className}
+        />
+      )
+  }
+}
