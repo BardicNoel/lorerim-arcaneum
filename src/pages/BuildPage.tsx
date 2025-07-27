@@ -31,7 +31,7 @@ export function BuildPage() {
   return (
     <BuildPageShell title="Character Builder">
       {/* Build Controls Area */}
-      <BuildControls onReset={() => setShowConfirm(true)} />
+      <BuildControls onReset={() => setShowConfirm(true)} build={build} />
 
       {/* Confirmation Dialog */}
       <BuildResetConfirmDialog
