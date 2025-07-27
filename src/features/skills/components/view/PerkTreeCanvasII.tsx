@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import type {
   Connection,
   Edge,
@@ -20,9 +20,15 @@ import type {
   PerkTree,
 } from '../../types'
 import { validatePerkTreeSafe } from '../../utils'
+import {
+  loadSavedTreePositions,
+  plotPositionedTree,
+  type PositionedTreeConfig,
+} from '../../utils/positionedTreePlotter'
+import type { SavedTreePositions } from '../../utils/positionUtils'
 import { PerkNode } from './PerkNode'
-import type { LayoutConfig } from './PerkTreeLayoutTypes'
 import { convertToPerkRecords, layoutPerkTree } from './perkTreeLayout'
+import type { LayoutConfig } from './PerkTreeLayoutTypes'
 
 const nodeTypes: NodeTypes = {
   perkNode: (props: any) => (
@@ -49,7 +55,12 @@ export function PerkTreeCanvasII({
 }: PerkTreeCanvasIIProps) {
   const [reactFlowInstance, setReactFlowInstance] =
     React.useState<ReactFlowInstance | null>(null)
+  const [savedPositions, setSavedPositions] =
+    React.useState<SavedTreePositions | null>(null)
+  const [isLoadingPositions, setIsLoadingPositions] = React.useState(false)
+
   const onNodeDragStop = React.useCallback((event: any, node: Node) => {}, [])
+
   const validatedTree = useMemo(() => {
     if (!tree) return null
     const validation = validatePerkTreeSafe(tree)
@@ -59,6 +70,32 @@ export function PerkTreeCanvasII({
     }
     return validation.data
   }, [tree])
+
+  // Load saved positions when tree changes
+  React.useEffect(() => {
+    if (!validatedTree) {
+      setSavedPositions(null)
+      return
+    }
+
+    console.log('Loading saved positions for tree:', validatedTree.treeId)
+    setIsLoadingPositions(true)
+    loadSavedTreePositions(validatedTree.treeId)
+      .then(positions => {
+        console.log(
+          'Loaded saved positions:',
+          positions ? 'Found' : 'Not found'
+        )
+        setSavedPositions(positions)
+      })
+      .catch(error => {
+        console.warn('Failed to load saved positions:', error)
+        setSavedPositions(null)
+      })
+      .finally(() => {
+        setIsLoadingPositions(false)
+      })
+  }, [validatedTree?.treeId])
 
   const layoutConfig: LayoutConfig = useMemo(
     () => ({
@@ -72,11 +109,65 @@ export function PerkTreeCanvasII({
     }),
     []
   )
+
+  // Configuration for the positioned tree plotter
+  const positionedTreeConfig: Partial<PositionedTreeConfig> = useMemo(
+    () => ({
+      nodeWidth: 140,
+      nodeHeight: 80,
+      horizontalSpacing: 40,
+      verticalSpacing: 200,
+      padding: 50,
+      gridScaleX: 180,
+      gridScaleY: 120,
+    }),
+    []
+  )
+
+  // Use positioned tree plotter if we have saved positions, otherwise fall back to original layout
   const layoutNodes = useMemo(() => {
     if (!validatedTree) return []
-    const perkRecords = convertToPerkRecords(validatedTree)
-    return layoutPerkTree(perkRecords, layoutConfig)
-  }, [validatedTree, layoutConfig])
+
+    console.log('Layout decision:', {
+      hasSavedPositions: !!savedPositions,
+      isLoadingPositions,
+      treeId: validatedTree.treeId,
+    })
+
+    if (savedPositions && !isLoadingPositions) {
+      // Use the new positioned tree plotter
+      console.log('Using preset positions for tree:', validatedTree.treeId)
+      const positions = plotPositionedTree(
+        validatedTree,
+        savedPositions,
+        positionedTreeConfig
+      )
+      return Array.from(positions.entries()).map(([perkId, pos]) => ({
+        id: perkId,
+        x: pos.x,
+        y: pos.y,
+        width: positionedTreeConfig.nodeWidth || 140,
+        height: positionedTreeConfig.nodeHeight || 80,
+        originalX: pos.x,
+        originalY: pos.y,
+      }))
+    } else {
+      // Fall back to original layout algorithm
+      console.log(
+        'Using fallback layout algorithm for tree:',
+        validatedTree.treeId
+      )
+      const perkRecords = convertToPerkRecords(validatedTree)
+      return layoutPerkTree(perkRecords, layoutConfig)
+    }
+  }, [
+    validatedTree,
+    layoutConfig,
+    savedPositions,
+    isLoadingPositions,
+    positionedTreeConfig,
+  ])
+
   const initialNodes: Node[] = useMemo(() => {
     if (!validatedTree || layoutNodes.length === 0) return []
     return validatedTree.perks.map(perk => {
@@ -203,10 +294,19 @@ export function PerkTreeCanvasII({
       onMouseDown={e => e.stopPropagation()}
       onTouchStart={e => e.stopPropagation()}
     >
-      <div className="absolute top-2 right-2 z-10">
+      <div className="absolute top-2 right-2 z-10 flex flex-col gap-1">
         <div className="bg-primary text-primary-foreground px-2 py-1 rounded text-xs font-medium">
-          Algorithm v2
+          {isLoadingPositions
+            ? 'Loading Positions...'
+            : savedPositions
+              ? 'Positioned Tree'
+              : 'Algorithm v2'}
         </div>
+        {savedPositions && (
+          <div className="bg-muted text-muted-foreground px-2 py-1 rounded text-xs">
+            {savedPositions.positions.length} positions loaded
+          </div>
+        )}
       </div>
       <ReactFlow
         nodes={nodes}

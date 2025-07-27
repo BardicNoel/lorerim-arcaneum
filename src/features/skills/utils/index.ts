@@ -7,4 +7,8 @@ export * from './perkData'
 // Export skill level calculation utilities
 export * from './skillLevels'
 
+// Export positioning utilities
+export * from './positionedTreePlotter'
+export * from './positionUtils'
+
 export { getSkillAssignmentAndPerks } from './skillAssignment'

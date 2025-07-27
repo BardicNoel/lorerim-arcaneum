@@ -1,0 +1,180 @@
+{
+  "treeId": "AVLockpicking",
+  "treeName": "Wayfarer",
+  "positions": [
+    {
+      "perkId": "REQ_Lockpicking_00_Looter",
+      "x": 497.8571492433548,
+      "y": 871.714289970696,
+      "gridX": 1,
+      "gridY": 4,
+      "horizontal": 0.35714298486709595,
+      "vertical": 0.05714299902319908
+    },
+    {
+      "perkId": "REQ_Lockpicking_30_LoneWolf",
+      "x": 1032.8571499884129,
+      "y": 683.999999910593,
+      "gridX": 3,
+      "gridY": 3,
+      "horizontal": -0.14285700023174286,
+      "vertical": -0.20000000298023224
+    },
+    {
+      "perkId": "REQ_Lockpicking_50_Solo",
+      "x": 1031.2938635427563,
+      "y": 602.048261849034,
+      "gridX": 3,
+      "gridY": 2,
+      "horizontal": -0.17412272914487403,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Lockpicking_70_Maverick",
+      "x": 1032.8571499884129,
+      "y": 487.2000002861023,
+      "gridX": 3,
+      "gridY": 2,
+      "horizontal": -0.14285700023174286,
+      "vertical": -0.7599999904632568
+    },
+    {
+      "perkId": "REQ_Lockpicking_100_OneManLegion",
+      "x": 1032.8571499884129,
+      "y": 309.5999997854233,
+      "gridX": 3,
+      "gridY": 1,
+      "horizontal": -0.14285700023174286,
+      "vertical": -0.6800000071525574
+    },
+    {
+      "perkId": "REQ_Lockpicking_25_Locksmith",
+      "x": 497.14285016059875,
+      "y": 842.399999499321,
+      "gridX": 1,
+      "gridY": 4,
+      "horizontal": 0.3428570032119751,
+      "vertical": -0.9200000166893005
+    },
+    {
+      "perkId": "REQ_Lockpicking_40_TreasureHunter",
+      "x": 497.14285016059875,
+      "y": 645.5999994277954,
+      "gridX": 1,
+      "gridY": 3,
+      "horizontal": 0.3428570032119751,
+      "vertical": -1.4800000190734863
+    },
+    {
+      "perkId": "REQ_Lockpicking_60_ExtraPocketsReplacer",
+      "x": 497.14285016059875,
+      "y": 468.00000071525574,
+      "gridX": 1,
+      "gridY": 2,
+      "horizontal": 0.3428570032119751,
+      "vertical": -1.399999976158142
+    },
+    {
+      "perkId": "REQ_Lockpicking_90_VeteranDelver",
+      "x": 497.14285016059875,
+      "y": 141.5999999642372,
+      "gridX": 1,
+      "gridY": 0,
+      "horizontal": 0.3428570032119751,
+      "vertical": -0.2800000011920929
+    },
+    {
+      "perkId": "REQ_Lockpicking_30_Leader",
+      "x": 200,
+      "y": 683.999999910593,
+      "gridX": 0,
+      "gridY": 3,
+      "horizontal": 0,
+      "vertical": -0.20000000298023224
+    },
+    {
+      "perkId": "REQ_Lockpicking_50_Captain",
+      "x": 201.56328644565656,
+      "y": 606.7381211860038,
+      "gridX": 0,
+      "gridY": 2,
+      "horizontal": 0.03126572891313117,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Lockpicking_70_Commander",
+      "x": 200,
+      "y": 487.2000002861023,
+      "gridX": 0,
+      "gridY": 2,
+      "horizontal": 0,
+      "vertical": -0.7599999904632568
+    },
+    {
+      "perkId": "REQ_Lockpicking_100_Legion",
+      "x": 200,
+      "y": 309.5999997854233,
+      "gridX": 0,
+      "gridY": 1,
+      "horizontal": 0,
+      "vertical": -0.6800000071525574
+    },
+    {
+      "perkId": "BBWayfarerTaming",
+      "x": 1316.4285500347614,
+      "y": 143.99999991059303,
+      "gridX": 4,
+      "gridY": 0,
+      "horizontal": -0.07142899930477142,
+      "vertical": -0.20000000298023224
+    },
+    {
+      "perkId": "BBWayfarerFood",
+      "x": 1317.14285004884,
+      "y": 343.2857099175453,
+      "gridX": 4,
+      "gridY": 1,
+      "horizontal": -0.05714299902319908,
+      "vertical": 0.4428569972515106
+    },
+    {
+      "perkId": "BBWayfarer1",
+      "x": 1317.14285004884,
+      "y": 684.4285798072815,
+      "gridX": 4,
+      "gridY": 3,
+      "horizontal": -0.05714299902319908,
+      "vertical": -0.1857140064239502
+    },
+    {
+      "perkId": "ORD_Loc30_Lockdown_Perk_30_OrdASISExclude",
+      "x": 761.428550016135,
+      "y": 496.2857097387314,
+      "gridX": 2,
+      "gridY": 2,
+      "horizontal": 0.028571000322699547,
+      "vertical": -0.45714300870895386
+    },
+    {
+      "perkId": "ORD_Loc50_Hotwire_Perk_50_OrdASISExclude",
+      "x": 762.85714995116,
+      "y": 318.8571301102638,
+      "gridX": 2,
+      "gridY": 1,
+      "horizontal": 0.05714299902319908,
+      "vertical": -0.3714289963245392
+    },
+    {
+      "perkId": "ORD_Loc90_PercussiveMaintenance_Perk_90_OrdASISExclude",
+      "x": 763.5714499652386,
+      "y": 140.99999964237213,
+      "gridX": 2,
+      "gridY": 0,
+      "horizontal": 0.07142899930477142,
+      "vertical": -0.30000001192092896
+    }
+  ],
+  "version": "1.0.0",
+  "createdAt": "2025-07-26T21:07:13.931Z",
+  "updatedAt": "2025-07-26T21:07:13.931Z"
+}

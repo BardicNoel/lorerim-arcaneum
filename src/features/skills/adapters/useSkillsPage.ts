@@ -2,6 +2,7 @@ import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { useCallback, useMemo, useState } from 'react'
 import type { UnifiedSkill } from '../types'
 import { calculateMinimumSkillLevel } from '../utils/skillLevels'
+import { usePerkData } from './usePerkData'
 import { useSkillData } from './useSkillData'
 import { useSkillFilters } from './useSkillFilters'
 
@@ -150,16 +151,13 @@ export function useSkillsPage() {
     return skillsPageSkills.find(skill => skill.id === selectedSkillId) || null
   }, [selectedSkillId, skillsPageSkills])
 
-  // Get perk tree for selected skill
-  const perkTree = useMemo(() => {
-    if (!selectedSkill) return null
-
-    // Find the perk tree for this skill
-    const skillPerkTree = perkTreesData?.find(
-      tree => tree.treeId === selectedSkill.id
-    )
-    return skillPerkTree || null
-  }, [selectedSkill, perkTreesData])
+  // Use perk data adapter for the selected skill
+  const {
+    selectedPerkTree,
+    loading: perkLoading,
+    error: perkError,
+    handleResetPerks,
+  } = usePerkData(selectedSkillId)
 
   // Get selected perks for the selected skill
   const selectedPerks = useMemo(() => {
@@ -175,9 +173,9 @@ export function useSkillsPage() {
 
   // Get available perks for the selected skill
   const availablePerks = useMemo(() => {
-    if (!perkTree) return []
-    return perkTree.perks || []
-  }, [perkTree])
+    if (!selectedPerkTree) return []
+    return selectedPerkTree.perks || []
+  }, [selectedPerkTree])
 
   // Perk selection handlers
   const handlePerkSelect = useCallback(
@@ -229,7 +227,8 @@ export function useSkillsPage() {
     skills: skillsPageSkills,
     skillSummary,
     selectedSkill,
-    perkTree,
+    selectedSkillId,
+    perkTree: selectedPerkTree,
     selectedPerks,
     perkRanks,
     availablePerks,
@@ -253,6 +252,7 @@ export function useSkillsPage() {
     onSkillSelect: handleSkillSelect,
     onPerkSelect: handlePerkSelect,
     onPerkRankChange: handlePerkRankChange,
+    onResetPerks: handleResetPerks,
     refreshSkills,
   }
 }

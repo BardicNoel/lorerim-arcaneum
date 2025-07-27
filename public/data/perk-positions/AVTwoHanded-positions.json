@@ -1,0 +1,180 @@
+{
+  "treeId": "AVTwoHanded",
+  "treeName": "Two-handed",
+  "positions": [
+    {
+      "perkId": "REQ_TwoHanded_GreatWeaponMastery1",
+      "x": 765.6666500866413,
+      "y": 873.0000000447035,
+      "gridX": 2,
+      "gridY": 4,
+      "horizontal": 0.11333300173282623,
+      "vertical": 0.10000000149011612
+    },
+    {
+      "perkId": "REQ_TwoHanded_BarbaricMight",
+      "x": 766.666649878025,
+      "y": 693.0000000447035,
+      "gridX": 2,
+      "gridY": 3,
+      "horizontal": 0.1333329975605011,
+      "vertical": 0.10000000149011612
+    },
+    {
+      "perkId": "REQ_TwoHanded_DevastatingStrike",
+      "x": 874.2798768379603,
+      "y": 437.4527179132906,
+      "gridX": 2,
+      "gridY": 1,
+      "horizontal": 1,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_TwoHanded_Cleave",
+      "x": 766.666649878025,
+      "y": 281.39999985694885,
+      "gridX": 2,
+      "gridY": 1,
+      "horizontal": 0.1333329975605011,
+      "vertical": -1.6200000047683716
+    },
+    {
+      "perkId": "REQ_TwoHanded_DevastatingCleave",
+      "x": 765.1529678303277,
+      "y": 105.15150499909316,
+      "gridX": 2,
+      "gridY": 0,
+      "horizontal": 0.1030593566065545,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_TwoHanded_MightyStrike",
+      "x": 766.666649878025,
+      "y": -60,
+      "gridX": 2,
+      "gridY": 0,
+      "horizontal": 0.1333329975605011,
+      "vertical": -7
+    },
+    {
+      "perkId": "REQ_TwoHanded_DevastatingCharge",
+      "x": 632.6356110317668,
+      "y": 435.93903586559315,
+      "gridX": 1,
+      "gridY": 1,
+      "horizontal": 1,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_TwoHanded_BattleAxeFocus1",
+      "x": 468.4346294882646,
+      "y": 509.54405582910283,
+      "gridX": 1,
+      "gridY": 2,
+      "horizontal": -0.2313074102347082,
+      "vertical": -0.015198139029905633
+    },
+    {
+      "perkId": "REQ_TwoHanded_GreatswordFocus1",
+      "x": 1044.2856998741627,
+      "y": 512.1428699791431,
+      "gridX": 3,
+      "gridY": 2,
+      "horizontal": 0.08571399748325348,
+      "vertical": 0.07142899930477142
+    },
+    {
+      "perkId": "REQ_TwoHanded_WarhammerFocus1",
+      "x": 1323.5714499652386,
+      "y": 513.0000000447035,
+      "gridX": 4,
+      "gridY": 2,
+      "horizontal": 0.07142899930477142,
+      "vertical": 0.10000000149011612
+    },
+    {
+      "perkId": "REQ_TwoHanded_QuarterstaffFocus1",
+      "x": 204.28569987416267,
+      "y": 512.1428699791431,
+      "gridX": 0,
+      "gridY": 2,
+      "horizontal": 0.08571399748325348,
+      "vertical": 0.07142899930477142
+    },
+    {
+      "perkId": "REQ_TwoHanded_Greatsword_ReverseSlash",
+      "x": 1051.7690280931097,
+      "y": 432.71106373544103,
+      "gridX": 3,
+      "gridY": 1,
+      "horizontal": 0.23538056186219364,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_TwoHanded_Warhammer_Onslaught",
+      "x": 1323.5714499652386,
+      "y": 437.8812982570138,
+      "gridX": 4,
+      "gridY": 1,
+      "horizontal": 0.07142899930477142,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_TwoHanded_Battleaxe_ShieldBreaker",
+      "x": 457.12455514030444,
+      "y": 419.06056192602557,
+      "gridX": 1,
+      "gridY": 1,
+      "horizontal": -0.45750889719391125,
+      "vertical": 1
+    },
+    {
+      "perkId": "ORD_Two90_BearHide_Perk_90",
+      "x": 204.28569987416267,
+      "y": 332.14286997914314,
+      "gridX": 0,
+      "gridY": 1,
+      "horizontal": 0.08571399748325348,
+      "vertical": 0.07142899930477142
+    },
+    {
+      "perkId": "ORD_Two50_Execute_Perk_50_OrdASISExclude",
+      "x": 460.1519192356991,
+      "y": 331.05773787680016,
+      "gridX": 1,
+      "gridY": 1,
+      "horizontal": -0.39696161528601803,
+      "vertical": 0.03525792922667203
+    },
+    {
+      "perkId": "REQ_TwoHanded_Quarterstaff_DefensiveStrike",
+      "x": 207.31306396955756,
+      "y": 429.25512019039263,
+      "gridX": 0,
+      "gridY": 1,
+      "horizontal": 0.14626127939115122,
+      "vertical": 1
+    },
+    {
+      "perkId": "ORD_Two70_GrandSlam_Perk_70_OrdASISExclude",
+      "x": 1322.85714995116,
+      "y": 334.2857100069523,
+      "gridX": 4,
+      "gridY": 1,
+      "horizontal": 0.05714299902319908,
+      "vertical": 0.14285700023174286
+    },
+    {
+      "perkId": "ORD_Two60_DeathOrGlory_Perk_60",
+      "x": 1045.0000000745058,
+      "y": 280.2491003489848,
+      "gridX": 3,
+      "gridY": 1,
+      "horizontal": 0.10000000149011612,
+      "vertical": -1
+    }
+  ],
+  "version": "1.0.0",
+  "createdAt": "2025-07-26T21:21:25.066Z",
+  "updatedAt": "2025-07-26T21:21:25.066Z"
+}

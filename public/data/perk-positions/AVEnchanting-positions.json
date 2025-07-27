@@ -1,0 +1,135 @@
+{
+  "treeId": "AVEnchanting",
+  "treeName": "Enchanting",
+  "positions": [
+    {
+      "perkId": "REQ_Enchanting_Enchantment_000_EnchantersInsight1",
+      "x": 480,
+      "y": 870,
+      "gridX": 1,
+      "gridY": 4,
+      "horizontal": 0,
+      "vertical": 0
+    },
+    {
+      "perkId": "REQ_Enchanting_Enchantment_025_ElementalLore",
+      "x": 357.0081419212611,
+      "y": 693.6487137181228,
+      "gridX": 0,
+      "gridY": 3,
+      "horizontal": 1,
+      "vertical": 0.12162379060409496
+    },
+    {
+      "perkId": "REQ_Enchanting_Enchantment_050_CorpusLore",
+      "x": 345.4005017692623,
+      "y": 542.6898454748215,
+      "gridX": 0,
+      "gridY": 2,
+      "horizontal": 1,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Enchanting_Enchantment_075_SkillLore",
+      "x": 357.13233458589093,
+      "y": 385.9834262098733,
+      "gridX": 0,
+      "gridY": 1,
+      "horizontal": 1,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Enchanting_Enchantment_100_EnchantmentMastery",
+      "x": 512.5410443371122,
+      "y": 257.648917005153,
+      "gridX": 1,
+      "gridY": 0,
+      "horizontal": 0.6508208867422445,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Enchanting_Artificer_025_SoulGemMastery",
+      "x": 655.2747353709251,
+      "y": 704.1426942148697,
+      "gridX": 2,
+      "gridY": 3,
+      "horizontal": -1,
+      "vertical": 0.47142314049565737
+    },
+    {
+      "perkId": "REQ_Enchanting_Artificer_050_ArcaneExperimentation",
+      "x": 658.338826663459,
+      "y": 536.2902720137031,
+      "gridX": 2,
+      "gridY": 2,
+      "horizontal": -1,
+      "vertical": 0.8763424004567696
+    },
+    {
+      "perkId": "REQ_Enchanting_Artificer_075_ArtificersInsight",
+      "x": 651.6254841124164,
+      "y": 391.68507347487264,
+      "gridX": 2,
+      "gridY": 1,
+      "horizontal": -1,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Enchanting_Artifact_100_ArtifactEnchanter",
+      "x": 541.6297295404613,
+      "y": 106.51021035741906,
+      "gridX": 1,
+      "gridY": 0,
+      "horizontal": 1,
+      "vertical": -1
+    },
+    {
+      "perkId": "Feat_Perk_Skill_Enchanting_ArcaneArtificery1",
+      "x": 893.1200932375166,
+      "y": 769.2623888939643,
+      "gridX": 2,
+      "gridY": 3,
+      "horizontal": 1,
+      "vertical": 1
+    },
+    {
+      "perkId": "Feat_Perk_Char_Enchanting_StaffChanneling1",
+      "x": 896.800126333372,
+      "y": 639.0615233091943,
+      "gridX": 2,
+      "gridY": 3,
+      "horizontal": 1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Enchanting_50_WandMastery",
+      "x": 841.2808894570226,
+      "y": 428.73956467235826,
+      "gridX": 2,
+      "gridY": 1,
+      "horizontal": 1,
+      "vertical": 1
+    },
+    {
+      "perkId": "ORD_Enc70_ChargeTap_Perk_70_OrdASISExclude",
+      "x": 1026.5102109534655,
+      "y": 426.59962441685013,
+      "gridX": 3,
+      "gridY": 1,
+      "horizontal": -0.26979578093068995,
+      "vertical": 1
+    },
+    {
+      "perkId": "ORD_Enc90_YouShallNotPass_Perk_90_OrdASISExclude",
+      "x": 942.7522309947717,
+      "y": 288.65598055589805,
+      "gridX": 3,
+      "gridY": 1,
+      "horizontal": -1,
+      "vertical": -1
+    }
+  ],
+  "version": "1.0.0",
+  "createdAt": "2025-07-26T20:48:28.285Z",
+  "updatedAt": "2025-07-26T20:48:28.285Z"
+}

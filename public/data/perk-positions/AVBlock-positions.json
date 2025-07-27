@@ -1,0 +1,135 @@
+{
+  "treeId": "AVBlock",
+  "treeName": "Block",
+  "positions": [
+    {
+      "perkId": "REQ_Block_ImprovedBlocking",
+      "x": 967.5183411813773,
+      "y": 969.9071513445883,
+      "gridX": 3,
+      "gridY": 4,
+      "horizontal": -1,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Block_StrongGrip",
+      "x": 514.6345092470881,
+      "y": 749.2774409672782,
+      "gridX": 1,
+      "gridY": 3,
+      "horizontal": 0.6926901849417618,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Block_ElementalProtection",
+      "x": 503.01517743917066,
+      "y": 540.6666866411647,
+      "gridX": 1,
+      "gridY": 2,
+      "horizontal": 0.4603035487834131,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Block_DefensiveStance",
+      "x": 709.4280201126021,
+      "y": 329.43226155676916,
+      "gridX": 2,
+      "gridY": 1,
+      "horizontal": -1,
+      "vertical": -0.01892461477436124
+    },
+    {
+      "perkId": "REQ_Block_UnstoppableCharge",
+      "x": 1110.6172456457757,
+      "y": 284.04451853427724,
+      "gridX": 3,
+      "gridY": 1,
+      "horizontal": 1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Block_PowerfulBashes",
+      "x": 1496.5947638349157,
+      "y": 849.8230840290196,
+      "gridX": 5,
+      "gridY": 4,
+      "horizontal": -1,
+      "vertical": -0.6725638656993472
+    },
+    {
+      "perkId": "REQ_Block_OverpoweringBashes",
+      "x": 1583.4614929410172,
+      "y": 683.1231041638641,
+      "gridX": 5,
+      "gridY": 3,
+      "horizontal": -0.3307701411796552,
+      "vertical": -0.2292298612045291
+    },
+    {
+      "perkId": "REQ_Block_DisarmingBash",
+      "x": 1454.9639578539436,
+      "y": 461.77691504114784,
+      "gridX": 4,
+      "gridY": 2,
+      "horizontal": 1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Block_ExperiencedBlocking",
+      "x": 1130.4456825741108,
+      "y": 807.333470939787,
+      "gridX": 3,
+      "gridY": 4,
+      "horizontal": 1,
+      "vertical": -1
+    },
+    {
+      "perkId": "Feat_Perk_Skill_Block_ShieldStrike1",
+      "x": 1247.2537716089523,
+      "y": 575.3231438613489,
+      "gridX": 4,
+      "gridY": 2,
+      "horizontal": -1,
+      "vertical": 1
+    },
+    {
+      "perkId": "Feat_Perk_Skill_Block_TorchCombat1",
+      "x": 1324.8666211955388,
+      "y": 812.3428699386247,
+      "gridX": 4,
+      "gridY": 4,
+      "horizontal": 0.09733242391077511,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_WeaponsMaster1",
+      "x": 769.2857003211975,
+      "y": 693.428579941392,
+      "gridX": 3,
+      "gridY": 3,
+      "horizontal": 0.1857140064239502,
+      "vertical": 0.11428599804639816
+    },
+    {
+      "perkId": "REQ_PenetratingStrikes_Master",
+      "x": 1017.8571501374245,
+      "y": 521.1428698897362,
+      "gridX": 4,
+      "gridY": 2,
+      "horizontal": -0.4428569972515106,
+      "vertical": 0.3714289963245392
+    },
+    {
+      "perkId": "REQ_Block_Shortsword",
+      "x": 1050.572953164145,
+      "y": 677.2828984211146,
+      "gridX": 3,
+      "gridY": 3,
+      "horizontal": 0.2114590632829004,
+      "vertical": -0.4239033859628459
+    }
+  ],
+  "version": "1.0.0",
+  "createdAt": "2025-07-26T21:09:17.778Z",
+  "updatedAt": "2025-07-26T21:09:17.778Z"
+}

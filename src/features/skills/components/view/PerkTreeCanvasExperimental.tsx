@@ -1,5 +1,5 @@
 import { Z_INDEX } from '@/lib/constants'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import type {
   Connection,
   Edge,
@@ -24,8 +24,13 @@ import { validatePerkTreeSafe } from '../../utils'
 import {
   type CanvasPosition,
   calculateGridBounds,
-  DEFAULT_GRID_CONFIG,
 } from '../../utils/avifGridUtils'
+import {
+  type SavedTreePositions,
+  downloadPositionsAsJson,
+  loadTreePositions,
+  saveTreePositions,
+} from '../../utils/positionUtils'
 import { PerkNode } from './PerkNode'
 
 interface PerkTreeCanvasExperimentalProps {
@@ -50,6 +55,24 @@ const createNodeTypes = (
   ),
 })
 
+// Enhanced grid configuration for better spacing
+// Based on PerkNode actual dimensions: minWidth: 140px + padding + borders
+const ENHANCED_GRID_CONFIG = {
+  // cellWidth: 200, // Increased from 200 to accommodate node width + spacing
+  // cellHeight: 120, // Increased from 120 to accommodate node height + spacing
+  // nodeWidth: 140, // Increased from 140 to account for padding and borders
+  // nodeHeight: 80, // Increased from 80 to account for padding and borders
+  // padding: 80, // Increased from 50 for better edge spacing
+  // gridGap: 40, // Increased from 20 for better separation
+
+  cellWidth: 240,
+  cellHeight: 140,
+  nodeWidth: 140,
+  nodeHeight: 80,
+  gridGap: 40,
+  padding: 80,
+}
+
 /**
  * Convert AVIF grid coordinates to canvas pixel coordinates with mirroring
  * This creates a bottom-up, left-right mirrored tree layout
@@ -57,7 +80,7 @@ const createNodeTypes = (
 function avifToCanvasPositionMirrored(
   position: { x: number; y: number; horizontal: number; vertical: number },
   bounds: { minX: number; maxX: number; minY: number; maxY: number },
-  config: typeof DEFAULT_GRID_CONFIG
+  config: typeof ENHANCED_GRID_CONFIG
 ): CanvasPosition {
   const { x: gridX, y: gridY, horizontal, vertical } = position
 
@@ -101,6 +124,56 @@ function avifToCanvasPositionMirrored(
   }
 }
 
+/**
+ * Convert canvas pixel coordinates back to AVIF grid coordinates
+ */
+function canvasToAvifPosition(
+  pixelX: number,
+  pixelY: number,
+  bounds: { minX: number; maxX: number; minY: number; maxY: number },
+  config: typeof ENHANCED_GRID_CONFIG
+): CanvasPosition {
+  // Remove padding offset
+  const adjustedX = pixelX - config.padding
+  const adjustedY = pixelY - config.padding
+
+  // Calculate grid position
+  const gridX = Math.floor(adjustedX / (config.cellWidth + config.gridGap))
+  const gridY = Math.floor(adjustedY / (config.cellHeight + config.gridGap))
+
+  // Calculate sub-cell offset
+  const baseX =
+    gridX * config.cellWidth +
+    gridX * config.gridGap +
+    config.padding +
+    config.cellWidth / 2
+
+  const baseY =
+    gridY * config.cellHeight +
+    gridY * config.gridGap +
+    config.padding +
+    config.cellHeight / 2
+
+  const offsetX = pixelX - baseX
+  const offsetY = pixelY - baseY
+
+  // Convert to normalized sub-cell coordinates
+  const maxOffsetX = config.cellWidth / 2 - config.nodeWidth / 2
+  const maxOffsetY = config.cellHeight / 2 - config.nodeHeight / 2
+
+  const horizontal = Math.max(-1, Math.min(1, offsetX / maxOffsetX))
+  const vertical = Math.max(-1, Math.min(1, offsetY / maxOffsetY))
+
+  return {
+    x: pixelX,
+    y: pixelY,
+    gridX,
+    gridY,
+    horizontal,
+    vertical,
+  }
+}
+
 export function PerkTreeCanvasExperimental({
   tree,
   onTogglePerk,
@@ -111,6 +184,18 @@ export function PerkTreeCanvasExperimental({
   // React Flow instance
   const [reactFlowInstance, setReactFlowInstance] =
     React.useState<ReactFlowInstance | null>(null)
+
+  // State for saved positions
+  const [savedPositions, setSavedPositions] = useState<
+    Map<string, CanvasPosition>
+  >(new Map())
+  const [isEditMode, setIsEditMode] = useState(false)
+  const [gridBounds, setGridBounds] = useState<{
+    minX: number
+    maxX: number
+    minY: number
+    maxY: number
+  } | null>(null)
 
   // Validate tree data
   const validatedTree = useMemo(() => {
@@ -134,7 +219,6 @@ export function PerkTreeCanvasExperimental({
     if (!validatedTree) return new Map<string, CanvasPosition>()
 
     const positions = new Map<string, CanvasPosition>()
-    const config = DEFAULT_GRID_CONFIG
 
     // Extract all positions and calculate grid bounds
     const allPositions = validatedTree.perks
@@ -142,21 +226,30 @@ export function PerkTreeCanvasExperimental({
       .filter((pos): pos is NonNullable<typeof pos> => pos !== undefined)
 
     const bounds = calculateGridBounds(allPositions)
+    setGridBounds(bounds) // Store bounds for later use
 
-    // Position each node according to AVIF coordinates with mirroring
+    // Position each node - use saved positions if available, otherwise calculate from AVIF
     validatedTree.perks.forEach(perk => {
       if (perk.position) {
-        const canvasPos = avifToCanvasPositionMirrored(
-          perk.position,
-          bounds,
-          config
-        )
-        positions.set(perk.edid, canvasPos)
+        const savedPos = savedPositions.get(perk.edid)
+
+        if (savedPos) {
+          // Use saved position
+          positions.set(perk.edid, savedPos)
+        } else {
+          // Calculate new position using AVIF algorithm
+          const canvasPos = avifToCanvasPositionMirrored(
+            perk.position,
+            bounds,
+            ENHANCED_GRID_CONFIG
+          )
+          positions.set(perk.edid, canvasPos)
+        }
       }
     })
 
     return positions
-  }, [validatedTree])
+  }, [validatedTree, savedPositions])
 
   // Create React Flow nodes
   const initialNodes: Node[] = useMemo(() => {
@@ -172,6 +265,7 @@ export function PerkTreeCanvasExperimental({
         id: perkId,
         type: 'perkNode',
         position: { x: position.x, y: position.y },
+        draggable: isEditMode, // Only draggable in edit mode
         data: {
           ...perk,
           selected: false, // Will be updated via useEffect
@@ -182,7 +276,7 @@ export function PerkTreeCanvasExperimental({
     })
 
     return nodes
-  }, [validatedTree, nodePositions])
+  }, [validatedTree, nodePositions, isEditMode])
 
   // Create React Flow edges from connections array
   const initialEdges: Edge[] = useMemo(() => {
@@ -239,6 +333,7 @@ export function PerkTreeCanvasExperimental({
 
         return {
           ...node,
+          draggable: isEditMode, // Update draggable state
           data: {
             ...node.data,
             selected: isSelected,
@@ -247,7 +342,7 @@ export function PerkTreeCanvasExperimental({
         }
       })
     )
-  }, [selectedPerks, setNodes, validatedTree])
+  }, [selectedPerks, setNodes, validatedTree, isEditMode])
 
   // Update edges when tree changes
   React.useEffect(() => {
@@ -273,6 +368,86 @@ export function PerkTreeCanvasExperimental({
     [setEdges]
   )
 
+  // Handle node drag stop to save new positions
+  const onNodeDragStop = useCallback(
+    (event: any, draggedNode: Node) => {
+      if (!isEditMode || !gridBounds) return
+
+      // Convert the new pixel position back to AVIF grid coordinates
+      const newAvifPosition = canvasToAvifPosition(
+        draggedNode.position.x,
+        draggedNode.position.y,
+        gridBounds,
+        ENHANCED_GRID_CONFIG
+      )
+
+      // Update saved positions with new position
+      const newPositions = new Map(savedPositions)
+      newPositions.set(draggedNode.id, newAvifPosition)
+      setSavedPositions(newPositions)
+    },
+    [isEditMode, savedPositions, gridBounds]
+  )
+
+  // Save current positions to JSON
+  const handleSavePositions = useCallback(() => {
+    if (!validatedTree) return
+
+    const positionsToSave = new Map<string, CanvasPosition>()
+
+    // Combine AVIF positions with any saved positions
+    validatedTree.perks.forEach(perk => {
+      const savedPos = savedPositions.get(perk.edid)
+      const avifPos = nodePositions.get(perk.edid)
+
+      if (savedPos) {
+        positionsToSave.set(perk.edid, savedPos)
+      } else if (avifPos) {
+        positionsToSave.set(perk.edid, avifPos)
+      }
+    })
+
+    const savedData = saveTreePositions(validatedTree, positionsToSave)
+    downloadPositionsAsJson(savedData)
+  }, [validatedTree, savedPositions, nodePositions])
+
+  // Load positions from JSON file
+  const handleLoadPositions = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0]
+      if (!file || !validatedTree) return
+
+      const reader = new FileReader()
+      reader.onload = e => {
+        try {
+          const savedData: SavedTreePositions = JSON.parse(
+            e.target?.result as string
+          )
+
+          if (savedData.treeId === validatedTree.treeId) {
+            const loadedPositions = loadTreePositions(
+              validatedTree.treeId,
+              savedData
+            )
+            setSavedPositions(loadedPositions)
+          } else {
+            alert('Position file does not match current tree!')
+          }
+        } catch (error) {
+          alert('Error loading position file!')
+          console.error('Error loading positions:', error)
+        }
+      }
+      reader.readAsText(file)
+    },
+    [validatedTree]
+  )
+
+  // Toggle edit mode
+  const toggleEditMode = useCallback(() => {
+    setIsEditMode(!isEditMode)
+  }, [isEditMode])
+
   if (!validatedTree) {
     return (
       <div
@@ -296,12 +471,48 @@ export function PerkTreeCanvasExperimental({
       }`}
     >
       <div className="p-4 border-b bg-muted/20">
-        <h3 className="text-sm font-medium text-muted-foreground">
-          Experimental AVIF Grid Canvas (Mirrored)
-        </h3>
-        <p className="text-xs text-muted-foreground mt-1">
-          Bottom-up tree with left-right mirroring using AVIF coordinates
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-medium text-muted-foreground">
+              Experimental AVIF Grid Canvas (Mirrored + Enhanced Spacing)
+            </h3>
+            <p className="text-xs text-muted-foreground mt-1">
+              Bottom-up tree with left-right mirroring using enhanced grid
+              spacing
+            </p>
+          </div>
+
+          {/* Position Management Toolbar */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={toggleEditMode}
+              className={`px-3 py-1 text-xs rounded border ${
+                isEditMode
+                  ? 'bg-blue-500 text-white border-blue-500'
+                  : 'bg-background text-foreground border-border hover:bg-muted'
+              }`}
+            >
+              {isEditMode ? 'Exit Edit' : 'Edit Mode'}
+            </button>
+
+            <button
+              onClick={handleSavePositions}
+              className="px-3 py-1 text-xs rounded border bg-background text-foreground border-border hover:bg-muted"
+            >
+              Save Positions
+            </button>
+
+            <label className="px-3 py-1 text-xs rounded border bg-background text-foreground border-border hover:bg-muted cursor-pointer">
+              Load Positions
+              <input
+                type="file"
+                accept=".json"
+                onChange={handleLoadPositions}
+                className="hidden"
+              />
+            </label>
+          </div>
+        </div>
       </div>
 
       <div
@@ -315,8 +526,9 @@ export function PerkTreeCanvasExperimental({
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           onInit={setReactFlowInstance}
+          onNodeDragStop={onNodeDragStop}
           nodeTypes={nodeTypes}
-          nodesDraggable={false}
+          nodesDraggable={isEditMode}
           nodesFocusable={false}
           selectNodesOnDrag={false}
           nodesConnectable={false}
