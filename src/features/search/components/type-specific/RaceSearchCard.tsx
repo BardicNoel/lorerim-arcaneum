@@ -37,9 +37,9 @@ export function RaceSearchCard({
   return (
     <div className={className} onClick={onClick}>
       <RaceCard
-        race={fullRace}
+        originalRace={fullRace}
         isSelected={isSelected}
-        // Add any other props that RaceCard expects
+        showToggle={false} // Disable the add to build toggle for search results
       />
     </div>
   )
