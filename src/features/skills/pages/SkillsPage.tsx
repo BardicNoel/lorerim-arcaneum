@@ -18,6 +18,8 @@ export function SkillsPage() {
     onAssignMajor: handleAssignMajor,
     onAssignMinor: handleAssignMinor,
     onRemoveAssignment: handleRemoveAssignment,
+    onResetPerks: handleResetPerks,
+    perkTree,
     skillSummary,
   } = useSkillsPage()
 
@@ -36,6 +38,8 @@ export function SkillsPage() {
       onAssignMajor={handleAssignMajor}
       onAssignMinor={handleAssignMinor}
       onRemoveAssignment={handleRemoveAssignment}
+      onResetPerks={handleResetPerks}
+      perkTree={perkTree}
       skillSummary={skillSummary}
     />
   )

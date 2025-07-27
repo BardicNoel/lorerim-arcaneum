@@ -43,6 +43,14 @@ export function SkillPerkTreeDrawer({
   onSkillSelect,
   onReset,
 }: SkillPerkTreeDrawerProps) {
+  // Debug logging
+  console.log('SkillPerkTreeDrawer props:', {
+    open,
+    selectedSkill,
+    skillName,
+    perkTree: perkTree ? 'Found' : 'Not found',
+    skillsCount: skills.length,
+  })
   // Use perk data adapter
   const {
     selectedPerks,
@@ -119,6 +127,7 @@ export function SkillPerkTreeDrawer({
       shouldScaleBackground={false}
       dismissible={true}
     >
+      {console.log('Drawer render - open:', open)}
       <DrawerPortal>
         <DrawerOverlay />
         <DrawerPrimitive.Content
@@ -129,6 +138,7 @@ export function SkillPerkTreeDrawer({
             zIndex: Z_INDEX.DRAWER,
           }}
         >
+          {console.log('Drawer content render - zIndex:', Z_INDEX.DRAWER)}
           <DrawerHeader className="border-b">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -147,7 +157,8 @@ export function SkillPerkTreeDrawer({
                     <span>{selectedPerks.length} perks selected</span>
                     {skills.find(s => s.id === selectedSkill)?.level && (
                       <span className="text-blue-600 font-medium">
-                        • Min: Level {skills.find(s => s.id === selectedSkill)?.level}
+                        • Min: Level{' '}
+                        {skills.find(s => s.id === selectedSkill)?.level}
                       </span>
                     )}
                   </DrawerDescription>
@@ -187,7 +198,9 @@ export function SkillPerkTreeDrawer({
               ) : (
                 <div className="flex items-center justify-center h-full">
                   <p className="text-muted-foreground">
-                    {selectedSkill ? 'Loading perk tree...' : 'No skill selected'}
+                    {selectedSkill
+                      ? 'Loading perk tree...'
+                      : 'No skill selected'}
                   </p>
                 </div>
               )}

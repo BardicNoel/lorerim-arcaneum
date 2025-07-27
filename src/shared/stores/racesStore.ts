@@ -36,7 +36,7 @@ export const useRacesStore = create<RacesStore>((set, get) => ({
     set({ loading: true, error: null })
 
     try {
-      const response = await fetch(getDataUrl('data/races.json'))
+      const response = await fetch(getDataUrl('data/playable-races.json'))
       if (!response.ok) {
         throw new Error(`Failed to fetch races data: ${response.status}`)
       }
@@ -49,6 +49,20 @@ export const useRacesStore = create<RacesStore>((set, get) => ({
         tags: [race.category, ...(race.keywords || [])].filter(
           (tag): tag is string => Boolean(tag)
         ),
+        // Ensure all fields are properly mapped
+        name: race.name,
+        edid: race.edid,
+        description: race.description,
+        category: race.category,
+        source: race.source,
+        startingStats: race.startingStats,
+        physicalAttributes: race.physicalAttributes,
+        skillBonuses: race.skillBonuses,
+        racialSpells: race.racialSpells,
+        keywords: race.keywords,
+        flags: race.flags,
+        regeneration: race.regeneration,
+        combat: race.combat,
       }))
 
       set({

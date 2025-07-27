@@ -61,6 +61,7 @@ const navSections = [
     items: [
       { to: '/races-mva-demo', label: 'Races MVA Demo' },
       { to: '/skills-mva', label: 'Skills MVA' },
+      { to: '/skills-experimental', label: 'Skills Experimental' },
     ],
   },
 ]

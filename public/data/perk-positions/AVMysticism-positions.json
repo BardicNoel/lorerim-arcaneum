@@ -1,0 +1,171 @@
+{
+  "treeId": "AVMysticism",
+  "treeName": "Illusion",
+  "positions": [
+    {
+      "perkId": "REQ_Illusion_Mastery_000_NovicelIllusion",
+      "x": 1004.997238708987,
+      "y": 945.0207096825966,
+      "gridX": 3,
+      "gridY": 4,
+      "horizontal": -0.7000552258202606,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Illusion_Perceptual_025_PerceptualIllusions",
+      "x": 586.7734365858312,
+      "y": 758.3522021552546,
+      "gridX": 1,
+      "gridY": 3,
+      "horizontal": 1,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Illusion_Perceptual_050_EnvironmentalManipulation",
+      "x": 415.0524645292446,
+      "y": 640.0358967831675,
+      "gridX": 1,
+      "gridY": 3,
+      "horizontal": -1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Illusion_Shadow_050_ShadowShaping",
+      "x": 688.3908602294346,
+      "y": 468.3715311923447,
+      "gridX": 2,
+      "gridY": 2,
+      "horizontal": -1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Illusion_Delusive_075_ObliterateTheMind",
+      "x": 1411.6988817284828,
+      "y": 308.37705377437044,
+      "gridX": 4,
+      "gridY": 1,
+      "horizontal": 1,
+      "vertical": -0.7207648741876521
+    },
+    {
+      "perkId": "REQ_Illusion_Emotional_025_EmotionalIllusions",
+      "x": 1284.9130193330943,
+      "y": 818.3687699013319,
+      "gridX": 4,
+      "gridY": 4,
+      "horizontal": -0.7017396133381135,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Illusion_Emotional_050_Domination",
+      "x": 1519.984812899429,
+      "y": 668.3770537743703,
+      "gridX": 5,
+      "gridY": 3,
+      "horizontal": -1,
+      "vertical": -0.7207648741876559
+    },
+    {
+      "perkId": "REQ_Illusion_Delusive_050_DelusiveIllusions",
+      "x": 1213.3038795625293,
+      "y": 443.3646279648125,
+      "gridX": 4,
+      "gridY": 2,
+      "horizontal": -1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Illusion_Mastery_025_ApprenticeIllusion",
+      "x": 968.3204473086066,
+      "y": 710.0055225820258,
+      "gridX": 3,
+      "gridY": 3,
+      "horizontal": -1,
+      "vertical": 0.6668507527341945
+    },
+    {
+      "perkId": "REQ_Illusion_Mastery_050_AdeptIllusion",
+      "x": 951.6491784902519,
+      "y": 575.0179483915837,
+      "gridX": 3,
+      "gridY": 2,
+      "horizontal": -1,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Illusion_Mastery_075_ExpertIllusion",
+      "x": 949.9820516084164,
+      "y": 378.3466795732288,
+      "gridX": 3,
+      "gridY": 1,
+      "horizontal": -1,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Illusion_Mastery_100_MasterIllusion",
+      "x": 961.6519397812644,
+      "y": 206.68231398240619,
+      "gridX": 3,
+      "gridY": 0,
+      "horizontal": -1,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Illusion_Empower_025_EmpoweredIllusion",
+      "x": 566.6905978554448,
+      "y": 871.6671268818357,
+      "gridX": 1,
+      "gridY": 4,
+      "horizontal": 1,
+      "vertical": 0.055570896061188556
+    },
+    {
+      "perkId": "REQ_Illusion_Shadow_075_MasterOfShadows",
+      "x": 488.32873118164525,
+      "y": 351.72235270209285,
+      "gridX": 1,
+      "gridY": 1,
+      "horizontal": 0.16657462363290507,
+      "vertical": 0.7240784234030949
+    },
+    {
+      "perkId": "REQ_Illusion_Emotional_050_Mesmerize",
+      "x": 1256.6491784902519,
+      "y": 648.3259698906325,
+      "gridX": 4,
+      "gridY": 3,
+      "horizontal": -1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Illusion_Perceptual_050_DeceptiveImage",
+      "x": 661.7168301200672,
+      "y": 646.658843008797,
+      "gridX": 2,
+      "gridY": 3,
+      "horizontal": -1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Illusion_Delusive_075_Curse",
+      "x": 1196.7099268925353,
+      "y": 263.3190666631002,
+      "gridX": 3,
+      "gridY": 1,
+      "horizontal": 1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Illusion_Shadow_075_ShadowsOfConflict",
+      "x": 679.9779096718971,
+      "y": 289.99309677246777,
+      "gridX": 2,
+      "gridY": 1,
+      "horizontal": -1,
+      "vertical": -1
+    }
+  ],
+  "version": "1.0.0",
+  "createdAt": "2025-07-26T20:51:29.751Z",
+  "updatedAt": "2025-07-26T20:51:29.751Z"
+}

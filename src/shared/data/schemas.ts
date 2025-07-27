@@ -43,6 +43,36 @@ export interface Race {
   skillBonuses?: RaceSkillBonus[]
   racialSpells?: RaceRacialSpell[]
   keywords?: string[]
+  // Additional fields from playable-races.json
+  physicalAttributes?: {
+    heightMale: number
+    heightFemale: number
+    weightMale: number
+    weightFemale: number
+    size: string
+  }
+  flags?: string[]
+  regeneration?: {
+    health: {
+      base: number
+      multipliers?: Array<{ value: number; source: string }>
+      adjustments?: Array<{ value: number; source: string }>
+    }
+    magicka: {
+      base: number
+      multipliers?: Array<{ value: number; source: string }>
+      adjustments?: Array<{ value: number; source: string }>
+    }
+    stamina: {
+      base: number
+      multipliers?: Array<{ value: number; source: string }>
+      adjustments?: Array<{ value: number; source: string }>
+    }
+  }
+  combat?: {
+    unarmedDamage: number
+    unarmedReach: number
+  }
 }
 
 // Trait
@@ -143,15 +173,49 @@ export interface DestinyNode {
 }
 
 // PerkTree
-export interface PerkTreePerk {
-  id: string
-  name: string
-  description: string
+export interface PerkTreePerkRank {
   rank: number
-  requirements?: string[]
+  edid: string
+  name: string
+  description: {
+    base: string
+    subtext?: string
+  }
+  prerequisites?: {
+    skillLevel?: {
+      skill: string
+      level: number
+    }
+    items?: Array<{
+      type: string
+      id: string
+    }>
+  }
 }
+
+export interface PerkTreePerk {
+  edid: string
+  name: string
+  ranks: PerkTreePerkRank[]
+  totalRanks: number
+  connections: {
+    parents: string[]
+    children: string[]
+  }
+  isRoot: boolean
+  position: {
+    x: number
+    y: number
+    horizontal: number
+    vertical: number
+  }
+}
+
 export interface PerkTree {
   treeId: string
+  treeName: string
+  treeDescription: string
+  category: string
   perks: PerkTreePerk[]
 }
 
