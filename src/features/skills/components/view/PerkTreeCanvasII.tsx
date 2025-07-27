@@ -178,6 +178,11 @@ export function PerkTreeCanvasII({
         : { x: 0, y: 0 }
       const hasChildren = perk.connections.children.length > 0
       const isRoot = perk.connections.parents.length === 0
+
+      // Check if this perk is selected
+      const selectedPerk = selectedPerks.find(p => p.edid === perkId)
+      const isSelected = selectedPerk !== undefined
+
       return {
         id: perkId,
         type: 'perkNode',
@@ -185,7 +190,8 @@ export function PerkTreeCanvasII({
         draggable: true,
         data: {
           ...perk,
-          selected: false,
+          selected: isSelected,
+          currentRank: (selectedPerk as PerkNodeData)?.currentRank || 0,
           hasChildren: hasChildren,
           isRoot: isRoot,
           onTogglePerk,
@@ -196,7 +202,7 @@ export function PerkTreeCanvasII({
         },
       }
     })
-  }, [validatedTree, layoutNodes, onTogglePerk, onRankChange])
+  }, [validatedTree, layoutNodes, selectedPerks, onTogglePerk, onRankChange])
   const initialEdges: Edge[] = useMemo(() => {
     if (!validatedTree) return []
     const edges: Edge[] = []
@@ -229,28 +235,6 @@ export function PerkTreeCanvasII({
   React.useEffect(() => {
     setNodes(initialNodes)
   }, [initialNodes, setNodes])
-  React.useEffect(() => {
-    if (!validatedTree) return
-    setNodes(currentNodes =>
-      currentNodes.map(node => {
-        const selectedPerk = selectedPerks.find(p => p.edid === node.id)
-        const isSelected = selectedPerk !== undefined
-        return {
-          ...node,
-          data: {
-            ...node.data,
-            selected: isSelected,
-            currentRank: (selectedPerk as PerkNodeData)?.currentRank || 0,
-            onTogglePerk,
-            onRankChange,
-          } as PerkNodeData & {
-            onTogglePerk: (perkId: string) => void
-            onRankChange?: (perkId: string, newRank: number) => void
-          },
-        }
-      })
-    )
-  }, [selectedPerks, setNodes, validatedTree, onTogglePerk, onRankChange])
   React.useEffect(() => {
     setEdges(initialEdges)
   }, [initialEdges, setEdges])
@@ -294,7 +278,7 @@ export function PerkTreeCanvasII({
       onMouseDown={e => e.stopPropagation()}
       onTouchStart={e => e.stopPropagation()}
     >
-      <div className="absolute top-2 right-2 z-10 flex flex-col gap-1">
+      <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
         <div className="bg-primary text-primary-foreground px-2 py-1 rounded text-xs font-medium">
           {isLoadingPositions
             ? 'Loading Positions...'
@@ -302,11 +286,6 @@ export function PerkTreeCanvasII({
               ? 'Positioned Tree'
               : 'Algorithm v2'}
         </div>
-        {savedPositions && (
-          <div className="bg-muted text-muted-foreground px-2 py-1 rounded text-xs">
-            {savedPositions.positions.length} positions loaded
-          </div>
-        )}
       </div>
       <ReactFlow
         nodes={nodes}
