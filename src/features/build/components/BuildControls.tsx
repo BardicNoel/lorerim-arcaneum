@@ -1,8 +1,7 @@
 import type { BuildState } from '@/shared/types/build'
 import { Button } from '@/shared/ui/ui/button'
 import { RotateCcw } from 'lucide-react'
-import { DiscordExportButton } from './DiscordExportButton'
-import { BuildLinkShareButton } from './ShareBuildButton'
+import { ExportControls } from './ExportControls'
 
 interface BuildControlsProps {
   onReset: () => void
@@ -33,8 +32,7 @@ export function BuildControls({
         <RotateCcw className="w-4 h-4 mr-2" />
         Reset Build
       </Button>
-      <BuildLinkShareButton />
-      <DiscordExportButton build={build} />
+      <ExportControls build={build} />
     </div>
   )
 }
