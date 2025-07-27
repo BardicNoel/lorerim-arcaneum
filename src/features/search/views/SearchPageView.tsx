@@ -42,15 +42,40 @@ export function SearchPageView() {
 
   // Sync selectedTags with activeFilters.tags from URL
   useEffect(() => {
-    const urlTags = activeFilters.tags.map(tag => ({
-      id: `custom-${tag}`,
-      label: tag,
-      value: tag,
-      category: 'Search All',
-    }))
+    const urlTags: SelectedTag[] = []
+
+    // Add tags from URL
+    activeFilters.tags.forEach(tag => {
+      urlTags.push({
+        id: `custom-${tag}`,
+        label: tag,
+        value: tag,
+        category: 'Search All',
+      })
+    })
+
+    // Add type filters from URL
+    activeFilters.types.forEach(type => {
+      urlTags.push({
+        id: `type-${type}`,
+        label: type.charAt(0).toUpperCase() + type.slice(1),
+        value: type,
+        category: 'Types',
+      })
+    })
+
+    // Add category filters from URL
+    activeFilters.categories.forEach(category => {
+      urlTags.push({
+        id: `category-${category}`,
+        label: category,
+        value: category,
+        category: 'Categories',
+      })
+    })
 
     setSelectedTags(urlTags)
-  }, [activeFilters.tags])
+  }, [activeFilters.tags, activeFilters.types, activeFilters.categories])
 
   // Add a tag (from autocomplete or custom input)
   const handleTagSelect = (optionOrTag: SearchOption | string) => {
@@ -87,7 +112,22 @@ export function SearchPageView() {
     const tag = selectedTags.find(t => t.id === tagId)
     if (tag) {
       setSelectedTags(prev => prev.filter(t => t.id !== tagId))
-      removeTag(tag.value)
+
+      // Remove from appropriate filter based on category
+      if (tag.category === 'Types') {
+        setActiveFilters(prev => ({
+          ...prev,
+          types: prev.types.filter(t => t !== tag.value),
+        }))
+      } else if (tag.category === 'Categories') {
+        setActiveFilters(prev => ({
+          ...prev,
+          categories: prev.categories.filter(c => c !== tag.value),
+        }))
+      } else {
+        // Default to removing from tags
+        removeTag(tag.value)
+      }
     }
   }
 

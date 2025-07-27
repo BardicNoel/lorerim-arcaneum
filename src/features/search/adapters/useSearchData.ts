@@ -49,10 +49,8 @@ export function useSearchData() {
       if (!data?.length) return
 
       try {
-        console.log(`Indexing ${storeName} with ${data.length} items`)
         const searchableItems = transformer(data)
         await provider.addToIndex(storeName, searchableItems)
-        console.log(`Successfully indexed ${storeName}`)
       } catch (err) {
         console.error(`Failed to index ${storeName}:`, err)
       }

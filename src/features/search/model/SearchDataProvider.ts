@@ -46,7 +46,6 @@ export class SearchDataProvider {
     searchableItems: SearchableItem[]
   ): Promise<void> {
     if (this.indexedStores.has(storeName)) {
-      console.log(`Store ${storeName} already indexed, skipping`)
       return
     }
 
@@ -58,10 +57,6 @@ export class SearchDataProvider {
 
     // Rebuild the search index with all items
     this.searchIndex = new Fuse(this.allSearchableItems, this.fuseOptions)
-
-    console.log(
-      `Added ${searchableItems.length} items from ${storeName}, total items: ${this.allSearchableItems.length}`
-    )
   }
 
   // Check if any data has been indexed

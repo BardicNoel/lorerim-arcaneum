@@ -42,15 +42,20 @@ export function GlobalSearchView({
   const searchCategories = generateSearchCategories()
 
   const handleTagSelect = (optionOrTag: SearchOption | string) => {
-    let searchTerm: string
     if (typeof optionOrTag === 'string') {
-      searchTerm = optionOrTag
+      // Custom search term - add as tag
+      navigate(`/search?tags=${encodeURIComponent(optionOrTag)}`)
     } else {
-      searchTerm = optionOrTag.value
+      // Check if this is a type selection
+      if (optionOrTag.id.startsWith('type-')) {
+        // It's a type filter - add as type filter
+        const typeValue = optionOrTag.value
+        navigate(`/search?types=${encodeURIComponent(typeValue)}`)
+      } else {
+        // It's a regular search term - add as tag
+        navigate(`/search?tags=${encodeURIComponent(optionOrTag.value)}`)
+      }
     }
-
-    // Navigate to search page with the selected term as a tag
-    navigate(`/search?tags=${encodeURIComponent(searchTerm)}`)
   }
 
   if (!isReady) {
