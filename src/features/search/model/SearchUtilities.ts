@@ -1,4 +1,3 @@
-import Fuse from 'fuse.js'
 import type { Birthsign } from '@/features/birthsigns/types'
 import type { DestinyNode } from '@/features/destiny/types'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
@@ -12,7 +11,7 @@ import type {
 
 export function transformSkillsToSearchable(skills: Skill[]): SearchableItem[] {
   return skills.map(skill => ({
-    id: skill.id,
+    id: `skill-${skill.id}`,
     type: 'skill' as const,
     name: skill.name,
     description: skill.description,
@@ -34,7 +33,7 @@ export function transformSkillsToSearchable(skills: Skill[]): SearchableItem[] {
 
 export function transformRacesToSearchable(races: Race[]): SearchableItem[] {
   return races.map(race => ({
-    id: race.id,
+    id: `race-${race.id}`,
     type: 'race' as const,
     name: race.name,
     description: race.description,
@@ -55,7 +54,7 @@ export function transformRacesToSearchable(races: Race[]): SearchableItem[] {
 
 export function transformTraitsToSearchable(traits: Trait[]): SearchableItem[] {
   return traits.map(trait => ({
-    id: trait.id,
+    id: `trait-${trait.id}`,
     type: 'trait' as const,
     name: trait.name,
     description: trait.description,
@@ -78,7 +77,7 @@ export function transformReligionsToSearchable(
   religions: Religion[]
 ): SearchableItem[] {
   return religions.map(religion => ({
-    id: religion.id,
+    id: `religion-${religion.id}`,
     type: 'religion' as const,
     name: religion.name,
     description: religion.description,
@@ -104,7 +103,7 @@ export function transformBirthsignsToSearchable(
   birthsigns: Birthsign[]
 ): SearchableItem[] {
   return birthsigns.map(birthsign => ({
-    id: birthsign.id || birthsign.edid,
+    id: `birthsign-${birthsign.id || birthsign.edid}`,
     type: 'birthsign' as const,
     name: birthsign.name,
     description: birthsign.description,
@@ -128,7 +127,7 @@ export function transformDestinyNodesToSearchable(
   nodes: DestinyNode[]
 ): SearchableItem[] {
   return nodes.map(node => ({
-    id: node.id,
+    id: `destiny-${node.id}`,
     type: 'destiny' as const,
     name: node.name,
     description: node.description,
@@ -151,7 +150,7 @@ export function transformPerkTreesToSearchable(
   perkTrees: any[]
 ): SearchableItem[] {
   return perkTrees.map(tree => ({
-    id: tree.id,
+    id: `perk-${tree.id}`,
     type: 'perk' as const,
     name: tree.name,
     description: tree.description,

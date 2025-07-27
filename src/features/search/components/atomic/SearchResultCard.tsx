@@ -49,8 +49,12 @@ export function SearchResultCard({
             )}
             {result.item.tags.length > 0 && (
               <div className="flex flex-wrap gap-1 mt-2">
-                {result.item.tags.slice(0, 3).map(tag => (
-                  <Badge key={tag} variant="secondary" className="text-xs">
+                {result.item.tags.slice(0, 3).map((tag, idx) => (
+                  <Badge
+                    key={`${tag}-${idx}`}
+                    variant="secondary"
+                    className="text-xs"
+                  >
                     {tag}
                   </Badge>
                 ))}
