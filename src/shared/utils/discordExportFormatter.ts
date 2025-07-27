@@ -17,15 +17,11 @@ export function formatBuildForDiscord(data: HydratedBuildData): string {
   // Race
   lines.push(`__🧬 Race__`)
   lines.push(`${data.race.name}`)
-  if (data.race.effects) {
-    lines.push(`${data.race.effects}`)
-  }
   lines.push('')
 
   // Birth Sign
   lines.push(`__🌌 Birth Sign__`)
   lines.push(`${data.birthSign.name}`)
-  lines.push(`${data.birthSign.effects}`)
   lines.push('')
 
   // Traits
@@ -34,15 +30,13 @@ export function formatBuildForDiscord(data: HydratedBuildData): string {
     data.traits.forEach(trait => {
       const typeIndicator = trait.type === 'bonus' ? ' (Late Game)' : ''
       lines.push(`**${trait.name}${typeIndicator}**`)
-      lines.push(`${trait.effects}`)
-      lines.push('')
     })
+    lines.push('')
   }
 
   // Religion
   lines.push(`__✝️ Religion__`)
   lines.push(`${data.religion.name}`)
-  lines.push(`${data.religion.effects}`)
   lines.push('')
 
   // Skills
@@ -76,13 +70,12 @@ export function formatBuildForDiscord(data: HydratedBuildData): string {
         const rankText =
           perk.rank && perk.rank > 1 ? ` (Rank ${perk.rank})` : ''
         lines.push(`• **${perk.name}${rankText}**`)
-        lines.push(`  ${perk.effects}`)
       })
       lines.push('')
     })
   }
 
-  // Destiny Path
+  // Destiny Path - Keep detailed as requested
   if (data.destinyPath.length > 0) {
     lines.push(`__🌟 Destiny Path__`)
     data.destinyPath.forEach(node => {
