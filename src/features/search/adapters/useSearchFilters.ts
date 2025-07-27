@@ -3,25 +3,35 @@ import { useSearchData } from './useSearchData'
 import { useSearchState } from './useSearchState'
 
 export function useSearchFilters() {
-  const { search, getAvailableFilters, isReady } = useSearchData()
+  const { search, getAvailableFilters, isReady, getSearchableItems } =
+    useSearchData()
   const { activeFilters } = useSearchState()
 
   const searchResults = useMemo(() => {
     if (!isReady) return []
 
-    // Only search if there are tags or other filters
+    // If no filters are applied, show all items
     const hasFilters =
       activeFilters.tags.length > 0 ||
       activeFilters.types.length > 0 ||
       activeFilters.categories.length > 0
 
-    if (!hasFilters) return []
+    if (!hasFilters) {
+      // Return all searchable items when no filters are applied
+      const allItems = getSearchableItems()
+      return allItems.map(item => ({
+        item,
+        score: 1, // Perfect score for unfiltered results
+        matches: [],
+        highlights: [],
+      }))
+    }
 
     // Create a search query from tags
     const searchQuery = activeFilters.tags.join(' ')
 
     return search(searchQuery, activeFilters)
-  }, [isReady, search, activeFilters])
+  }, [isReady, search, activeFilters, getSearchableItems])
 
   const availableFilters = useMemo(() => {
     if (!isReady) return { types: [], categories: [], tags: [] }
