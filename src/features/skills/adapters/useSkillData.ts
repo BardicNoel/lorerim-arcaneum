@@ -68,6 +68,7 @@ export function useSkillData() {
 
   return {
     skills,
+    perkTrees: perkTreesData || [],
     loading,
     error,
     refreshSkills,

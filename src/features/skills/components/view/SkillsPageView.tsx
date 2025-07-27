@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Separator } from '@/shared/ui/ui/separator'
 import { useState } from 'react'
 import type { SkillsPageSkill, SkillSummary } from '../../adapters'
-import { usePerkData } from '../../adapters'
 import { ErrorView, LoadingView } from '../atomic'
 import { SkillFilters, SkillGrid, SkillSearch } from '../composition'
 import { SkillPerkTreeDrawer } from './SkillPerkTreeDrawer'
@@ -23,6 +22,8 @@ interface SkillsPageViewProps {
   onAssignMajor: (skillId: string) => void
   onAssignMinor: (skillId: string) => void
   onRemoveAssignment: (skillId: string) => void
+  onResetPerks: () => void
+  perkTree?: any
   skillSummary: SkillSummary
 }
 
@@ -40,18 +41,12 @@ export function SkillsPageView({
   onAssignMajor,
   onAssignMinor,
   onRemoveAssignment,
+  onResetPerks,
+  perkTree,
   skillSummary,
 }: SkillsPageViewProps) {
   // Local state for perk tree drawer
   const [perkTreeOpen, setPerkTreeOpen] = useState(false)
-
-  // Use perk data adapter for the selected skill
-  const {
-    selectedPerkTree,
-    loading: perkLoading,
-    error: perkError,
-    handleResetPerks,
-  } = usePerkData(selectedSkillId)
 
   if (loading) {
     return <LoadingView />
@@ -158,6 +153,7 @@ export function SkillsPageView({
           skills={skills}
           onSkillSelect={skillId => {
             console.log('Skill selected:', skillId) // Debug log
+            console.log('Setting perkTreeOpen to true') // Debug log
             onSkillSelect(skillId)
             setPerkTreeOpen(true)
           }}
@@ -167,15 +163,6 @@ export function SkillsPageView({
           selectedSkillId={selectedSkillId || undefined}
         />
       </div>
-
-      {/* Debug info */}
-      {selectedSkillId && (
-        <div className="text-xs text-muted-foreground">
-          Debug: Selected skill: {selectedSkillId}, Perk tree:{' '}
-          {selectedPerkTree ? 'Found' : 'Not found'}, Drawer open:{' '}
-          {perkTreeOpen ? 'Yes' : 'No'}
-        </div>
-      )}
 
       {/* Perk Tree Drawer */}
       <SkillPerkTreeDrawer
@@ -187,10 +174,10 @@ export function SkillsPageView({
             ? skills.find(s => s.id === selectedSkillId)?.name
             : undefined
         }
-        perkTree={selectedPerkTree || undefined}
+        perkTree={perkTree || undefined}
         skills={drawerSkills}
         onSkillSelect={onSkillSelect}
-        onReset={handleResetPerks}
+        onReset={onResetPerks}
       />
 
       {/* Assignment Instructions */}
