@@ -1,35 +1,39 @@
 import { cn } from '@/lib/utils'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
+import type {
+  SearchCategory,
+  SearchOption,
+  SelectedTag,
+} from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
-import { Input } from '@/shared/ui/ui/input'
-import { Label } from '@/shared/ui/ui/label'
-import { ScrollArea } from '@/shared/ui/ui/scroll-area'
-import { Separator } from '@/shared/ui/ui/separator'
-import { Filter, Search, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import type {
   SearchFilterOptions,
   SearchFilters,
 } from '../../model/SearchModel'
 
 interface SearchFiltersProps {
-  query: string
-  onQueryChange: (query: string) => void
   activeFilters: SearchFilters
   onFiltersChange: (filters: Partial<SearchFilters>) => void
   onClearFilters: () => void
   availableFilters: SearchFilterOptions
   resultCount: number
+  onTagSelect: (optionOrTag: SearchOption | string) => void
+  onTagRemove: (tagId: string) => void
+  selectedTags: SelectedTag[]
   className?: string
 }
 
 export function SearchFilters({
-  query,
-  onQueryChange,
   activeFilters,
   onFiltersChange,
   onClearFilters,
   availableFilters,
   resultCount,
+  onTagSelect,
+  onTagRemove,
+  selectedTags,
   className,
 }: SearchFiltersProps) {
   const hasActiveFilters =
@@ -51,31 +55,66 @@ export function SearchFilters({
     onFiltersChange({ categories: newCategories })
   }
 
-  const handleTagToggle = (tag: string) => {
-    const newTags = activeFilters.tags.includes(tag)
-      ? activeFilters.tags.filter(t => t !== tag)
-      : [...activeFilters.tags, tag]
-    onFiltersChange({ tags: newTags })
+  // Generate search categories for autocomplete
+  const generateSearchCategories = (): SearchCategory[] => {
+    return [
+      {
+        id: 'fuzzy-search',
+        name: 'Search All',
+        placeholder: 'Search by name, description, or abilities...',
+        options: availableFilters.types.map(type => ({
+          id: `type-${type.value}`,
+          label: type.label,
+          value: type.value,
+          category: 'Search All',
+          description: `${type.count} ${type.label}${type.count !== 1 ? 's' : ''}`,
+        })),
+      },
+      {
+        id: 'categories',
+        name: 'Categories',
+        placeholder: 'Filter by category...',
+        options: availableFilters.categories.map(category => ({
+          id: `category-${category.value}`,
+          label: category.label,
+          value: category.value,
+          category: 'Categories',
+          description: `${category.count} item${category.count !== 1 ? 's' : ''}`,
+        })),
+      },
+      {
+        id: 'tags',
+        name: 'Tags',
+        placeholder: 'Filter by tag...',
+        options: availableFilters.tags.map(tag => ({
+          id: `tag-${tag.value}`,
+          label: tag.label,
+          value: tag.value,
+          category: 'Tags',
+          description: `${tag.count} item${tag.count !== 1 ? 's' : ''}`,
+        })),
+      },
+    ]
   }
+
+  const searchCategories = generateSearchCategories()
 
   return (
     <div className={cn('space-y-4', className)}>
-      {/* Search Input */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Search skills, races, traits, religions..."
-          value={query}
-          onChange={e => onQueryChange(e.target.value)}
-          className="pl-10"
+      {/* Search Autocomplete */}
+      <div className="space-y-2">
+        <CustomMultiAutocompleteSearch
+          categories={searchCategories}
+          onSelect={onTagSelect}
+          onCustomSearch={onTagSelect}
         />
       </div>
 
-      {/* Active Filters */}
-      {hasActiveFilters && (
+      {/* Selected Tags */}
+      {selectedTags.length > 0 && (
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label className="text-sm font-medium">Active Filters</Label>
+            <span className="text-sm font-medium">Active Filters</span>
             <Button
               variant="ghost"
               size="sm"
@@ -86,47 +125,13 @@ export function SearchFilters({
             </Button>
           </div>
           <div className="flex flex-wrap gap-2">
-            {activeFilters.types.map(type => (
-              <Badge
-                key={`type-${type}`}
-                variant="secondary"
-                className="text-xs"
-              >
-                Type: {type}
+            {selectedTags.map(tag => (
+              <Badge key={tag.id} variant="secondary" className="text-xs">
+                {tag.category}: {tag.label}
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => handleTypeToggle(type)}
-                  className="h-4 w-4 p-0 ml-1 hover:bg-transparent"
-                >
-                  <X className="h-3 w-3" />
-                </Button>
-              </Badge>
-            ))}
-            {activeFilters.categories.map(category => (
-              <Badge
-                key={`category-${category}`}
-                variant="secondary"
-                className="text-xs"
-              >
-                Category: {category}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleCategoryToggle(category)}
-                  className="h-4 w-4 p-0 ml-1 hover:bg-transparent"
-                >
-                  <X className="h-3 w-3" />
-                </Button>
-              </Badge>
-            ))}
-            {activeFilters.tags.map(tag => (
-              <Badge key={`tag-${tag}`} variant="secondary" className="text-xs">
-                Tag: {tag}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleTagToggle(tag)}
+                  onClick={() => onTagRemove(tag.id)}
                   className="h-4 w-4 p-0 ml-1 hover:bg-transparent"
                 >
                   <X className="h-3 w-3" />
@@ -151,101 +156,6 @@ export function SearchFilters({
           >
             Clear Filters
           </Button>
-        )}
-      </div>
-
-      <Separator />
-
-      {/* Filter Options */}
-      <div className="space-y-4">
-        {/* Types Filter */}
-        {availableFilters.types.length > 0 && (
-          <div className="space-y-2">
-            <Label className="text-sm font-medium flex items-center gap-2">
-              <Filter className="h-4 w-4" />
-              Types
-            </Label>
-            <ScrollArea className="h-32">
-              <div className="space-y-1">
-                {availableFilters.types.map(type => (
-                  <Button
-                    key={type.value}
-                    variant={
-                      activeFilters.types.includes(type.value)
-                        ? 'default'
-                        : 'ghost'
-                    }
-                    size="sm"
-                    onClick={() => handleTypeToggle(type.value)}
-                    className="w-full justify-between h-8 text-xs"
-                  >
-                    <span>{type.label}</span>
-                    <Badge variant="secondary" className="text-xs">
-                      {type.count}
-                    </Badge>
-                  </Button>
-                ))}
-              </div>
-            </ScrollArea>
-          </div>
-        )}
-
-        {/* Categories Filter */}
-        {availableFilters.categories.length > 0 && (
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Categories</Label>
-            <ScrollArea className="h-32">
-              <div className="space-y-1">
-                {availableFilters.categories.map(category => (
-                  <Button
-                    key={category.value}
-                    variant={
-                      activeFilters.categories.includes(category.value)
-                        ? 'default'
-                        : 'ghost'
-                    }
-                    size="sm"
-                    onClick={() => handleCategoryToggle(category.value)}
-                    className="w-full justify-between h-8 text-xs"
-                  >
-                    <span>{category.label}</span>
-                    <Badge variant="secondary" className="text-xs">
-                      {category.count}
-                    </Badge>
-                  </Button>
-                ))}
-              </div>
-            </ScrollArea>
-          </div>
-        )}
-
-        {/* Tags Filter */}
-        {availableFilters.tags.length > 0 && (
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Tags</Label>
-            <ScrollArea className="h-32">
-              <div className="space-y-1">
-                {availableFilters.tags.map(tag => (
-                  <Button
-                    key={tag.value}
-                    variant={
-                      activeFilters.tags.includes(tag.value)
-                        ? 'default'
-                        : 'ghost'
-                    }
-                    size="sm"
-                    onClick={() => handleTagToggle(tag.value)}
-                    className="w-full justify-between h-8 text-xs"
-                  >
-                    <span>{tag.label}</span>
-                    <Badge variant="secondary" className="text-xs">
-                      {tag.count}
-                    </Badge>
-                  </Button>
-                ))}
-              </div>
-            </ScrollArea>
-          </div>
         )}
       </div>
     </div>

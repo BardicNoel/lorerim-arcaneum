@@ -22,21 +22,22 @@ export class SearchDataProvider {
   private allSearchableItems: SearchableItem[] = []
   private indexedStores = new Set<string>()
 
-  // Configure Fuse.js options
+  // Configure Fuse.js options for better tag-based searching
   private fuseOptions: IFuseOptions<SearchableItem> = {
     keys: [
-      { name: 'name', weight: 0.7 },
-      { name: 'description', weight: 0.5 },
-      { name: 'category', weight: 0.3 },
-      { name: 'tags', weight: 0.4 },
-      { name: 'searchableText', weight: 0.2 },
+      { name: 'name', weight: 0.8 },
+      { name: 'description', weight: 0.6 },
+      { name: 'category', weight: 0.4 },
+      { name: 'tags', weight: 0.5 },
+      { name: 'searchableText', weight: 0.3 },
     ],
-    threshold: 0.3,
+    threshold: 0.4, // Slightly higher threshold for better precision
     includeMatches: true,
     includeScore: true,
     minMatchCharLength: 2,
     ignoreLocation: true,
     useExtendedSearch: true,
+    findAllMatches: true,
   }
 
   // Add items to the search index incrementally
@@ -199,12 +200,22 @@ export class SearchDataProvider {
         return false
       }
 
-      // Filter by tags
-      if (
-        filters.tags.length > 0 &&
-        !filters.tags.some(tag => item.tags.includes(tag))
-      ) {
-        return false
+      // Filter by tags - check if any of the filter tags match any of the item's tags
+      if (filters.tags.length > 0) {
+        const itemTags = item.tags.map(tag => tag.toLowerCase())
+        const filterTags = filters.tags.map(tag => tag.toLowerCase())
+
+        // Check if any filter tag matches any item tag
+        const hasMatchingTag = filterTags.some(filterTag =>
+          itemTags.some(
+            itemTag =>
+              itemTag.includes(filterTag) || filterTag.includes(itemTag)
+          )
+        )
+
+        if (!hasMatchingTag) {
+          return false
+        }
       }
 
       // Type-specific filters

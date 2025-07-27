@@ -11,11 +11,10 @@ function arraysEqual<T>(a: T[], b: T[]): boolean {
 // Helper function to parse URL params consistently
 function parseURLParams(searchParams: URLSearchParams) {
   return {
-    query: searchParams.get('q') || '',
+    tags: searchParams.get('tags')?.split(',').filter(Boolean) || [],
     types: searchParams.get('types')?.split(',').filter(Boolean) || [],
     categories:
       searchParams.get('categories')?.split(',').filter(Boolean) || [],
-    tags: searchParams.get('tags')?.split(',').filter(Boolean) || [],
     viewMode:
       (searchParams.get('view') as 'grid' | 'list') || ('grid' as const),
   }
@@ -30,7 +29,6 @@ export function useSearchState() {
   // Get initial state from URL params
   const initialParams = parseURLParams(searchParams)
 
-  const [query, setQuery] = useState(initialParams.query)
   const [selectedResult, setSelectedResult] = useState<SearchResult | null>(
     null
   )
@@ -58,11 +56,6 @@ export function useSearchState() {
 
     const urlParams = parseURLParams(searchParams)
 
-    // Update state only if values have actually changed
-    if (urlParams.query !== query) {
-      setQuery(urlParams.query)
-    }
-
     if (!arraysEqual(urlParams.types, activeFilters.types)) {
       setActiveFilters(prev => ({ ...prev, types: urlParams.types }))
     }
@@ -80,7 +73,6 @@ export function useSearchState() {
     }
   }, [
     searchParams,
-    query,
     activeFilters.types,
     activeFilters.categories,
     activeFilters.tags,
@@ -98,10 +90,6 @@ export function useSearchState() {
     isUpdatingFromURL.current = true
 
     const newParams = new URLSearchParams()
-
-    if (query) {
-      newParams.set('q', query)
-    }
 
     if (activeFilters.types.length > 0) {
       newParams.set('types', activeFilters.types.join(','))
@@ -125,7 +113,7 @@ export function useSearchState() {
     updateTimeoutRef.current = setTimeout(() => {
       isUpdatingFromURL.current = false
     }, 10)
-  }, [query, activeFilters, viewMode, setSearchParams])
+  }, [activeFilters, viewMode, setSearchParams])
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -136,15 +124,25 @@ export function useSearchState() {
     }
   }, [])
 
-  const updateQuery = useCallback((newQuery: string) => {
-    setQuery(newQuery)
-    // Clear selection when query changes
-    setSelectedResult(null)
-  }, [])
-
   const updateFilters = useCallback((newFilters: Partial<SearchFilters>) => {
     setActiveFilters(prev => ({ ...prev, ...newFilters }))
     // Clear selection when filters change
+    setSelectedResult(null)
+  }, [])
+
+  const addTag = useCallback((tag: string) => {
+    setActiveFilters(prev => ({
+      ...prev,
+      tags: prev.tags.includes(tag) ? prev.tags : [...prev.tags, tag],
+    }))
+    setSelectedResult(null)
+  }, [])
+
+  const removeTag = useCallback((tag: string) => {
+    setActiveFilters(prev => ({
+      ...prev,
+      tags: prev.tags.filter(t => t !== tag),
+    }))
     setSelectedResult(null)
   }, [])
 
@@ -166,12 +164,12 @@ export function useSearchState() {
   }, [])
 
   return {
-    query,
-    setQuery: updateQuery,
     selectedResult,
     setSelectedResult: selectResult,
     activeFilters,
     setActiveFilters: updateFilters,
+    addTag,
+    removeTag,
     clearFilters,
     viewMode,
     setViewMode: updateViewMode,
