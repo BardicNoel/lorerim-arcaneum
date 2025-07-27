@@ -1,6 +1,7 @@
 import type { SearchableItem } from '../../model/SearchModel'
 import { RaceSearchCard } from '../type-specific/RaceSearchCard'
 import { SkillSearchCard } from '../type-specific/SkillSearchCard'
+import { TraitSearchCard } from '../type-specific/TraitSearchCard'
 import { DefaultSearchCard } from './DefaultSearchCard'
 
 interface SearchCardProps {
@@ -39,9 +40,8 @@ export function SearchCard({
       )
 
     case 'trait':
-      // TODO: Implement TraitSearchCard
       return (
-        <DefaultSearchCard
+        <TraitSearchCard
           item={item}
           isSelected={isSelected}
           onClick={onClick}

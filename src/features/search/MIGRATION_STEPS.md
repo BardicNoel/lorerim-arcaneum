@@ -16,32 +16,63 @@
 
 ## Phase 2: Complete Type-Specific Cards
 
-### 2.1 TraitSearchCard
+### 2.1 TraitSearchCard ✅ **COMPLETE**
 
 **File:** `src/features/search/components/type-specific/TraitSearchCard.tsx`
 
 ```tsx
-import { useTraitsStore } from '@/shared/stores/traitsStore'
 import { TraitCard } from '@/features/traits/components/TraitCard'
+import { useTraitsStore } from '@/shared/stores/traitsStore'
+import type { SearchableItem } from '../../model/SearchModel'
+import { findItemInStore } from '../../utils/storeLookup'
 
-export function TraitSearchCard({ item, isSelected, onClick, className }) {
+interface TraitSearchCardProps {
+  item: SearchableItem
+  isSelected?: boolean
+  onClick?: () => void
+  className?: string
+}
+
+export function TraitSearchCard({
+  item,
+  isSelected = false,
+  onClick,
+  className,
+}: TraitSearchCardProps) {
   const traits = useTraitsStore(state => state.data)
-  const fullTrait = traits?.find(trait => trait.id === item.originalData.id)
+
+  // Find the full trait record from the store
+  const fullTrait = findItemInStore(traits, item.originalData)
 
   if (!fullTrait) {
+    // Fallback to default card if trait not found
     return (
-      <DefaultSearchCard
-        item={item}
-        isSelected={isSelected}
+      <div
+        className={`p-4 border rounded-lg bg-muted cursor-pointer ${isSelected ? 'ring-2 ring-primary' : ''} ${className}`}
         onClick={onClick}
-        className={className}
-      />
+      >
+        <h3 className="font-semibold">{item.name}</h3>
+        <p className="text-sm text-muted-foreground">
+          Trait not found in store
+        </p>
+      </div>
     )
   }
 
+  // Convert the trait to PlayerCreationItem format for TraitCard
+  const traitAsPlayerCreationItem = {
+    id: fullTrait.id || fullTrait.edid || fullTrait.name,
+    name: fullTrait.name,
+    description: fullTrait.description || '',
+    category: fullTrait.category || '',
+    tags: fullTrait.tags || [],
+    type: 'trait' as const,
+  }
+
+  // Render the existing TraitCard with the full trait data
   return (
     <div className={className} onClick={onClick}>
-      <TraitCard trait={fullTrait} isSelected={isSelected} />
+      <TraitCard item={traitAsPlayerCreationItem} />
     </div>
   )
 }
@@ -49,10 +80,10 @@ export function TraitSearchCard({ item, isSelected, onClick, className }) {
 
 **Steps:**
 
-1. Create `TraitSearchCard.tsx`
-2. Add to type-specific index
-3. Update `SearchCard` switchboard
-4. Test with trait search results
+✅ 1. Create `TraitSearchCard.tsx`
+✅ 2. Add to type-specific index
+✅ 3. Update `SearchCard` switchboard
+⏳ 4. Test with trait search results
 
 ### 2.2 BirthsignSearchCard
 
@@ -403,7 +434,7 @@ Clean up index files to remove exports of deleted components.
 
 ### Immediate (Next Sprint)
 
-- [ ] Implement TraitSearchCard
+- [x] Implement TraitSearchCard
 - [ ] Implement BirthsignSearchCard
 - [ ] Implement DestinySearchCard
 - [ ] Test all implemented cards
