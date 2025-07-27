@@ -1,4 +1,5 @@
 import type { SearchableItem } from '../../model/SearchModel'
+import { DestinySearchCard } from '../type-specific/DestinySearchCard'
 import { RaceSearchCard } from '../type-specific/RaceSearchCard'
 import { SkillSearchCard } from '../type-specific/SkillSearchCard'
 import { TraitSearchCard } from '../type-specific/TraitSearchCard'
@@ -61,9 +62,8 @@ export function SearchCard({
       )
 
     case 'destiny':
-      // TODO: Implement DestinySearchCard
       return (
-        <DefaultSearchCard
+        <DestinySearchCard
           item={item}
           isSelected={isSelected}
           onClick={onClick}

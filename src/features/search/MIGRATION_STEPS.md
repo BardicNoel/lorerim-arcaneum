@@ -125,34 +125,71 @@ export function BirthsignSearchCard({ item, isSelected, onClick, className }) {
 3. Update `SearchCard` switchboard
 4. Test with birthsign search results
 
-### 2.3 DestinySearchCard
+### 2.3 DestinySearchCard ✅ **COMPLETE**
 
 **File:** `src/features/search/components/type-specific/DestinySearchCard.tsx`
 
 ```tsx
-import { useDestinyNodesStore } from '@/shared/stores/destinyNodesStore'
 import { DestinyCard } from '@/features/destiny/components/composition/DestinyCard'
+import { useDestinyNodesStore } from '@/shared/stores/destinyNodesStore'
+import type { SearchableItem } from '../../model/SearchModel'
+import { findItemInStore } from '../../utils/storeLookup'
 
-export function DestinySearchCard({ item, isSelected, onClick, className }) {
+interface DestinySearchCardProps {
+  item: SearchableItem
+  isSelected?: boolean
+  onClick?: () => void
+  className?: string
+}
+
+export function DestinySearchCard({
+  item,
+  isSelected = false,
+  onClick,
+  className,
+}: DestinySearchCardProps) {
   const destinyNodes = useDestinyNodesStore(state => state.data)
-  const fullDestiny = destinyNodes?.find(
-    node => node.id === item.originalData.id
-  )
+
+  // Find the full destiny node record from the store
+  const fullDestiny = findItemInStore(destinyNodes, item.originalData)
 
   if (!fullDestiny) {
+    // Fallback to default card if destiny node not found
     return (
-      <DefaultSearchCard
-        item={item}
-        isSelected={isSelected}
+      <div
+        className={`p-4 border rounded-lg bg-muted cursor-pointer ${isSelected ? 'ring-2 ring-primary' : ''} ${className}`}
         onClick={onClick}
-        className={className}
-      />
+      >
+        <h3 className="font-semibold">{item.name}</h3>
+        <p className="text-sm text-muted-foreground">
+          Destiny node not found in store
+        </p>
+      </div>
     )
   }
 
+  // Convert the destiny node to PlayerCreationItem format for DestinyCard
+  const destinyAsPlayerCreationItem = {
+    id: fullDestiny.id || fullDestiny.edid || fullDestiny.name,
+    name: fullDestiny.name,
+    description: fullDestiny.description || '',
+    category: fullDestiny.category || '',
+    tags: fullDestiny.tags || [],
+    type: 'destiny' as const,
+    imageUrl: fullDestiny.icon,
+    effects: fullDestiny.effects,
+  }
+
+  // Render the existing DestinyCard with the full destiny data
   return (
     <div className={className} onClick={onClick}>
-      <DestinyCard destiny={fullDestiny} isSelected={isSelected} />
+      <DestinyCard
+        item={destinyAsPlayerCreationItem}
+        isSelected={isSelected}
+        originalNode={fullDestiny}
+        allNodes={destinyNodes}
+        viewMode="grid"
+      />
     </div>
   )
 }
@@ -160,10 +197,10 @@ export function DestinySearchCard({ item, isSelected, onClick, className }) {
 
 **Steps:**
 
-1. Create `DestinySearchCard.tsx`
-2. Add to type-specific index
-3. Update `SearchCard` switchboard
-4. Test with destiny search results
+✅ 1. Create `DestinySearchCard.tsx`
+✅ 2. Add to type-specific index
+✅ 3. Update `SearchCard` switchboard
+⏳ 4. Test with destiny search results
 
 ### 2.4 ReligionSearchCard
 
@@ -436,7 +473,7 @@ Clean up index files to remove exports of deleted components.
 
 - [x] Implement TraitSearchCard
 - [ ] Implement BirthsignSearchCard
-- [ ] Implement DestinySearchCard
+- [x] Implement DestinySearchCard
 - [ ] Test all implemented cards
 
 ### Short Term (2-3 Sprints)
