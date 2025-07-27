@@ -1,3 +1,4 @@
+import { GlobalSearchView } from '@/features/search/views/GlobalSearchView'
 import { Z_INDEX } from '@/lib/constants'
 import { ThemeToggle } from '@/shared/ui/ThemeToggle'
 import { Menu } from 'lucide-react'
@@ -33,6 +34,14 @@ export function SiteHeader({
       <span className="ml-2 text-xs text-skyrim-gold/60 select-none">
         Theorycrafting Hub
       </span>
+
+      {/* Global Search */}
+      <div className="flex-1 max-w-md mx-4">
+        <GlobalSearchView
+          placeholder="Search skills, races, traits..."
+          className="w-full"
+        />
+      </div>
 
       {/* Theme Toggle */}
       <div className="ml-auto">

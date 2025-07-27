@@ -3,6 +3,7 @@ import { UnifiedDestinyPage } from '@/features/destiny'
 import { RacesMVADemoPage } from '@/features/races-v2'
 import { RacePageView } from '@/features/races-v2/views/RacePageView'
 import { AccordionReligionsPage } from '@/features/religions/pages/AccordionReligionsPage'
+import { SearchPage } from '@/features/search'
 import { SkillsPage } from '@/features/skills'
 import { AccordionTraitsPage } from '@/features/traits/pages/AccordionTraitsPage'
 import { BuildPage } from '@/pages/BuildPage'
@@ -33,6 +34,7 @@ export const AppRouter = () => {
       </Route>
 
       {/* Other pages */}
+      <Route path="/search" element={<SearchPage />} />
       <Route path="/races-mva-demo" element={<RacesMVADemoPage />} />
       <Route path="/skills-mva" element={<SkillsPage />} />
       <Route path="/equipment" element={<EquipmentPage />} />
