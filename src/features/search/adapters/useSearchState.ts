@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import type { SearchFilters, SearchResult } from '../model/SearchModel'
+import type { SearchFilters } from '../model/SearchModel'
 
 // Helper function to compare arrays efficiently
 function arraysEqual<T>(a: T[], b: T[]): boolean {
@@ -29,9 +29,6 @@ export function useSearchState() {
   // Get initial state from URL params
   const initialParams = parseURLParams(searchParams)
 
-  const [selectedResult, setSelectedResult] = useState<SearchResult | null>(
-    null
-  )
   const [activeFilters, setActiveFilters] = useState<SearchFilters>({
     types: initialParams.types,
     categories: initialParams.categories,
@@ -126,8 +123,6 @@ export function useSearchState() {
 
   const updateFilters = useCallback((newFilters: Partial<SearchFilters>) => {
     setActiveFilters(prev => ({ ...prev, ...newFilters }))
-    // Clear selection when filters change
-    setSelectedResult(null)
   }, [])
 
   const addTag = useCallback((tag: string) => {
@@ -135,7 +130,6 @@ export function useSearchState() {
       ...prev,
       tags: prev.tags.includes(tag) ? prev.tags : [...prev.tags, tag],
     }))
-    setSelectedResult(null)
   }, [])
 
   const removeTag = useCallback((tag: string) => {
@@ -143,7 +137,6 @@ export function useSearchState() {
       ...prev,
       tags: prev.tags.filter(t => t !== tag),
     }))
-    setSelectedResult(null)
   }, [])
 
   const clearFilters = useCallback(() => {
@@ -152,11 +145,6 @@ export function useSearchState() {
       categories: [],
       tags: [],
     })
-    setSelectedResult(null)
-  }, [])
-
-  const selectResult = useCallback((result: SearchResult | null) => {
-    setSelectedResult(result)
   }, [])
 
   const updateViewMode = useCallback((mode: 'grid' | 'list') => {
@@ -164,8 +152,6 @@ export function useSearchState() {
   }, [])
 
   return {
-    selectedResult,
-    setSelectedResult: selectResult,
     activeFilters,
     setActiveFilters: updateFilters,
     addTag,

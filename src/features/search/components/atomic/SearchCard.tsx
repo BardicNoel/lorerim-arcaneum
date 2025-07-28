@@ -8,99 +8,36 @@ import { DefaultSearchCard } from './DefaultSearchCard'
 
 interface SearchCardProps {
   item: SearchableItem
-  isSelected?: boolean
-  onClick?: () => void
   className?: string
 }
 
-export function SearchCard({
-  item,
-  isSelected = false,
-  onClick,
-  className,
-}: SearchCardProps) {
+export function SearchCard({ item, className }: SearchCardProps) {
   // Simple switchboard based on item type
   switch (item.type) {
     case 'race':
-      return (
-        <RaceSearchCard
-          item={item}
-          isSelected={isSelected}
-          onClick={onClick}
-          className={className}
-        />
-      )
+      return <RaceSearchCard item={item} className={className} />
 
     case 'skill':
-      return (
-        <SkillSearchCard
-          item={item}
-          isSelected={isSelected}
-          onClick={onClick}
-          className={className}
-        />
-      )
+      return <SkillSearchCard item={item} className={className} />
 
     case 'trait':
-      return (
-        <TraitSearchCard
-          item={item}
-          isSelected={isSelected}
-          onClick={onClick}
-          className={className}
-        />
-      )
+      return <TraitSearchCard item={item} className={className} />
 
     case 'birthsign':
       // TODO: Implement BirthsignSearchCard
-      return (
-        <DefaultSearchCard
-          item={item}
-          isSelected={isSelected}
-          onClick={onClick}
-          className={className}
-        />
-      )
+      return <DefaultSearchCard item={item} className={className} />
 
     case 'destiny':
-      return (
-        <DestinySearchCard
-          item={item}
-          isSelected={isSelected}
-          onClick={onClick}
-          className={className}
-        />
-      )
+      return <DestinySearchCard item={item} className={className} />
 
     case 'religion':
-      return (
-        <ReligionSearchCard
-          item={item}
-          isSelected={isSelected}
-          onClick={onClick}
-          className={className}
-        />
-      )
+      return <ReligionSearchCard item={item} className={className} />
 
     case 'perk':
       // TODO: Implement PerkSearchCard
-      return (
-        <DefaultSearchCard
-          item={item}
-          isSelected={isSelected}
-          onClick={onClick}
-          className={className}
-        />
-      )
+      return <DefaultSearchCard item={item} className={className} />
 
     default:
-      return (
-        <DefaultSearchCard
-          item={item}
-          isSelected={isSelected}
-          onClick={onClick}
-          className={className}
-        />
-      )
+      return <DefaultSearchCard item={item} className={className} />
   }
 }

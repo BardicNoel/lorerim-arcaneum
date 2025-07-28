@@ -4,8 +4,6 @@ import { groupResultsByType } from '../../utils/typeTransformers'
 
 interface TypeSpecificSearchResultsProps {
   results: SearchResult[]
-  selectedResult: SearchResult | null
-  onResultSelect: (result: SearchResult) => void
   viewMode?: 'card' | 'accordion' | 'grid'
   renderMode?: 'grouped' | 'unified' | 'type-defaults'
   className?: string
@@ -13,18 +11,11 @@ interface TypeSpecificSearchResultsProps {
 
 export function TypeSpecificSearchResults({
   results,
-  selectedResult,
-  onResultSelect,
   viewMode = 'card',
   renderMode = 'grouped',
   className,
 }: TypeSpecificSearchResultsProps) {
   const { renderSearchResult } = useTypeSpecificRenderers()
-
-  // Handle result selection
-  const handleResultSelect = (result: SearchResult) => {
-    onResultSelect(result)
-  }
 
   // Render based on the selected mode
   const renderContent = () => {
@@ -43,8 +34,8 @@ export function TypeSpecificSearchResults({
                   {renderSearchResult(
                     result,
                     viewMode,
-                    selectedResult?.item.id === result.item.id,
-                    handleResultSelect
+                    false, // No selection needed
+                    () => {} // No selection handler needed
                   )}
                 </div>
               ))}
@@ -75,8 +66,8 @@ export function TypeSpecificSearchResults({
                     {renderSearchResult(
                       result,
                       defaultViewMode,
-                      selectedResult?.item.id === result.item.id,
-                      handleResultSelect
+                      false, // No selection needed
+                      () => {} // No selection handler needed
                     )}
                   </div>
                 ))}
@@ -95,8 +86,8 @@ export function TypeSpecificSearchResults({
                 {renderSearchResult(
                   result,
                   viewMode,
-                  selectedResult?.item.id === result.item.id,
-                  handleResultSelect
+                  false, // No selection needed
+                  () => {} // No selection handler needed
                 )}
               </div>
             ))}
@@ -121,7 +112,6 @@ interface TypeGroupProps {
   type: string
   results: SearchResult[]
   viewMode: 'card' | 'accordion' | 'grid'
-  onResultSelect: (result: SearchResult) => void
   className?: string
 }
 
@@ -129,7 +119,6 @@ export function TypeGroup({
   type,
   results,
   viewMode,
-  onResultSelect,
   className,
 }: TypeGroupProps) {
   const { renderSearchResult } = useTypeSpecificRenderers()
@@ -142,7 +131,7 @@ export function TypeGroup({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {results.map(result => (
           <div key={result.item.id}>
-            {renderSearchResult(result, viewMode, false, onResultSelect)}
+            {renderSearchResult(result, viewMode, false, () => {})}
           </div>
         ))}
       </div>
@@ -154,14 +143,12 @@ export function TypeGroup({
 interface ViewModeResultsProps {
   results: SearchResult[]
   viewMode: 'card' | 'accordion' | 'grid'
-  onResultSelect: (result: SearchResult) => void
   className?: string
 }
 
 export function ViewModeResults({
   results,
   viewMode,
-  onResultSelect,
   className,
 }: ViewModeResultsProps) {
   const { renderSearchResult } = useTypeSpecificRenderers()
@@ -172,7 +159,7 @@ export function ViewModeResults({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {results.map(result => (
             <div key={result.item.id}>
-              {renderSearchResult(result, viewMode, false, onResultSelect)}
+              {renderSearchResult(result, viewMode, false, () => {})}
             </div>
           ))}
         </div>
@@ -180,7 +167,7 @@ export function ViewModeResults({
         <div className="space-y-4">
           {results.map(result => (
             <div key={result.item.id}>
-              {renderSearchResult(result, viewMode, false, onResultSelect)}
+              {renderSearchResult(result, viewMode, false, () => {})}
             </div>
           ))}
         </div>

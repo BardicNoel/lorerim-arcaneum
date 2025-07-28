@@ -7,8 +7,6 @@ import { TypeSpecificSearchResults } from './TypeSpecificSearchResults'
 
 interface SearchResultsGridProps {
   results: SearchResult[]
-  selectedResult: SearchResult | null
-  onResultSelect: (result: SearchResult) => void
   viewMode?: 'grid' | 'list'
   className?: string
   useTypeSpecificRendering?: boolean
@@ -17,8 +15,6 @@ interface SearchResultsGridProps {
 
 export function SearchResultsGrid({
   results,
-  selectedResult,
-  onResultSelect,
   viewMode = 'grid',
   className,
   useTypeSpecificRendering = true,
@@ -29,8 +25,8 @@ export function SearchResultsGrid({
     return (
       <TypeSpecificSearchResults
         results={results}
-        selectedResult={selectedResult}
-        onResultSelect={onResultSelect}
+        selectedResult={null}
+        onResultSelect={() => {}} // No selection needed
         viewMode={viewMode === 'list' ? 'accordion' : 'card'}
         renderMode={renderMode}
         className={className}
@@ -50,8 +46,8 @@ export function SearchResultsGrid({
     return (
       <SearchResultWrapper
         result={item.originalSearchResult}
-        isSelected={isSelected}
-        onSelect={onResultSelect}
+        isSelected={false}
+        onSelect={() => {}} // No selection needed
         variant="card"
       />
     )
@@ -62,12 +58,8 @@ export function SearchResultsGrid({
       <ItemGrid
         items={playerCreationItems}
         viewMode={viewMode}
-        onItemSelect={item => onResultSelect(item.originalSearchResult)}
-        selectedItem={
-          selectedResult
-            ? searchResultToPlayerCreationItem(selectedResult)
-            : null
-        }
+        onItemSelect={() => {}} // No selection needed
+        selectedItem={null}
         renderItemCard={renderItemCard}
       />
     </div>

@@ -4,17 +4,10 @@ import { findItemInStore } from '../../utils/storeLookup'
 
 interface SkillSearchCardProps {
   item: SearchableItem
-  isSelected?: boolean
-  onClick?: () => void
   className?: string
 }
 
-export function SkillSearchCard({
-  item,
-  isSelected = false,
-  onClick,
-  className,
-}: SkillSearchCardProps) {
+export function SkillSearchCard({ item, className }: SkillSearchCardProps) {
   const skills = useSkillsStore(state => state.data)
 
   // Find the full skill record from the store
@@ -23,10 +16,7 @@ export function SkillSearchCard({
   if (!fullSkill) {
     // Fallback to default card if skill not found
     return (
-      <div
-        className={`p-4 border rounded-lg bg-muted cursor-pointer ${isSelected ? 'ring-2 ring-primary' : ''} ${className}`}
-        onClick={onClick}
-      >
+      <div className={`p-4 border rounded-lg bg-muted ${className}`}>
         <h3 className="font-semibold">{item.name}</h3>
         <p className="text-sm text-muted-foreground">
           Skill not found in store
@@ -38,10 +28,7 @@ export function SkillSearchCard({
   // Render a simplified skill card for search results
   return (
     <div
-      className={`p-4 border rounded-lg bg-card shadow-sm cursor-pointer transition-all hover:shadow-md ${
-        isSelected ? 'ring-2 ring-primary' : ''
-      } ${className}`}
-      onClick={onClick}
+      className={`p-4 border rounded-lg bg-card shadow-sm transition-all hover:shadow-md ${className}`}
     >
       <div className="space-y-2">
         <div className="flex items-start justify-between gap-2">

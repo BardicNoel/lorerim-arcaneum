@@ -6,26 +6,12 @@ import { SearchTypeBadge } from './SearchTypeBadge'
 
 interface DefaultSearchCardProps {
   item: SearchableItem
-  isSelected?: boolean
-  onClick?: () => void
   className?: string
 }
 
-export function DefaultSearchCard({
-  item,
-  isSelected = false,
-  onClick,
-  className,
-}: DefaultSearchCardProps) {
+export function DefaultSearchCard({ item, className }: DefaultSearchCardProps) {
   return (
-    <Card
-      className={cn(
-        'cursor-pointer transition-all hover:shadow-md',
-        isSelected && 'ring-2 ring-primary',
-        className
-      )}
-      onClick={onClick}
-    >
+    <Card className={cn('transition-all hover:shadow-md', className)}>
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0">
@@ -33,9 +19,7 @@ export function DefaultSearchCard({
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <h4 className="font-medium text-sm truncate">
-                {item.name}
-              </h4>
+              <h4 className="font-medium text-sm truncate">{item.name}</h4>
               {item.category && (
                 <Badge variant="outline" className="text-xs">
                   {item.category}
@@ -70,4 +54,4 @@ export function DefaultSearchCard({
       </CardContent>
     </Card>
   )
-} 
+}

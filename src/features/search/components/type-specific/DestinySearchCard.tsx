@@ -5,17 +5,10 @@ import { findItemInStore } from '../../utils/storeLookup'
 
 interface DestinySearchCardProps {
   item: SearchableItem
-  isSelected?: boolean
-  onClick?: () => void
   className?: string
 }
 
-export function DestinySearchCard({
-  item,
-  isSelected = false,
-  onClick,
-  className,
-}: DestinySearchCardProps) {
+export function DestinySearchCard({ item, className }: DestinySearchCardProps) {
   const destinyNodes = useDestinyNodesStore(state => state.data)
 
   // Find the full destiny node record from the store
@@ -24,10 +17,7 @@ export function DestinySearchCard({
   if (!fullDestiny) {
     // Fallback to default card if destiny node not found
     return (
-      <div
-        className={`p-4 border rounded-lg bg-muted cursor-pointer ${isSelected ? 'ring-2 ring-primary' : ''} ${className}`}
-        onClick={onClick}
-      >
+      <div className={`p-4 border rounded-lg bg-muted ${className}`}>
         <h3 className="font-semibold">{item.name}</h3>
         <p className="text-sm text-muted-foreground">
           Destiny node not found in store
@@ -50,10 +40,10 @@ export function DestinySearchCard({
 
   // Render the existing DestinyCard with the full destiny data
   return (
-    <div className={className} onClick={onClick}>
+    <div className={className}>
       <DestinyCard
         item={destinyAsPlayerCreationItem}
-        isSelected={isSelected}
+        isSelected={false}
         originalNode={fullDestiny}
         allNodes={destinyNodes}
         viewMode="grid"

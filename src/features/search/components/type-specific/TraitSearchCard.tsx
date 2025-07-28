@@ -5,17 +5,10 @@ import { findItemInStore } from '../../utils/storeLookup'
 
 interface TraitSearchCardProps {
   item: SearchableItem
-  isSelected?: boolean
-  onClick?: () => void
   className?: string
 }
 
-export function TraitSearchCard({
-  item,
-  isSelected = false,
-  onClick,
-  className,
-}: TraitSearchCardProps) {
+export function TraitSearchCard({ item, className }: TraitSearchCardProps) {
   const traits = useTraitsStore(state => state.data)
 
   // Find the full trait record from the store
@@ -24,10 +17,7 @@ export function TraitSearchCard({
   if (!fullTrait) {
     // Fallback to default card if trait not found
     return (
-      <div
-        className={`p-4 border rounded-lg bg-muted cursor-pointer ${isSelected ? 'ring-2 ring-primary' : ''} ${className}`}
-        onClick={onClick}
-      >
+      <div className={`p-4 border rounded-lg bg-muted ${className}`}>
         <h3 className="font-semibold">{item.name}</h3>
         <p className="text-sm text-muted-foreground">
           Trait not found in store
@@ -48,7 +38,7 @@ export function TraitSearchCard({
 
   // Render the existing TraitCard with the full trait data
   return (
-    <div className={className} onClick={onClick}>
+    <div className={className}>
       <TraitCard item={traitAsPlayerCreationItem} />
     </div>
   )

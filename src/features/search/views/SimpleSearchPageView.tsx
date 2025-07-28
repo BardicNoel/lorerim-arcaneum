@@ -8,10 +8,8 @@ import { useSearchData } from '../adapters/useSearchData'
 import { useSearchFilters } from '../adapters/useSearchFilters'
 import { useSearchState } from '../adapters/useSearchState'
 import { SearchPageLayout } from '../components/SearchPageLayout'
-import { SearchDetailPanel } from '../components/atomic/SearchDetailPanel'
 import { SearchFilters } from '../components/composition/SearchFilters'
 import { SimpleSearchResultsGrid } from '../components/composition/SimpleSearchResultsGrid'
-import type { SearchableItem } from '../model/SearchModel'
 
 export function SimpleSearchPageView() {
   const { isReady, isIndexing, error } = useSearchData()
@@ -20,8 +18,7 @@ export function SimpleSearchPageView() {
   const { availableFilters, searchResults } = useSearchFilters()
   const { totalResults } = useSearchComputed()
 
-  // Local state for selected item
-  const [selectedItem, setSelectedItem] = useState<SearchableItem | null>(null)
+  // Tag state management
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
 
   // Sync selectedTags with activeFilters.tags from URL
@@ -121,11 +118,6 @@ export function SimpleSearchPageView() {
     clearFilters()
   }
 
-  // Handle item selection
-  const handleItemSelect = (item: SearchableItem) => {
-    setSelectedItem(item)
-  }
-
   if (!isReady) {
     return (
       <SearchPageLayout title="Search" description="Building search index...">
@@ -186,20 +178,12 @@ export function SimpleSearchPageView() {
       </div>
 
       {/* Results Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Search Results Grid */}
-        <div className="lg:col-span-2">
-          <SimpleSearchResultsGrid
-            items={searchResults.map(result => result.item)}
-            selectedItemId={selectedItem?.id}
-            onItemSelect={handleItemSelect}
-          />
-        </div>
-
-        {/* Detail Panel */}
-        <div className="lg:col-span-1">
-          <SearchDetailPanel item={selectedItem} />
-        </div>
+      <div className="w-full">
+        <SimpleSearchResultsGrid
+          items={searchResults.map(result => result.item)}
+          selectedItemId={undefined}
+          onItemSelect={() => {}} // No selection needed
+        />
       </div>
     </SearchPageLayout>
   )

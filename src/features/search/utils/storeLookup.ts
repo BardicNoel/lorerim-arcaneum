@@ -17,6 +17,5 @@ export function findItemInStore<
     const nameMatch = !!item.name && item.name === searchItem.name
     return idMatch || edidMatch || nameMatch
   })
-  console.log('foundItem', foundItem, searchItem)
   return foundItem
 }

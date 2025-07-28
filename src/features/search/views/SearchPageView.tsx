@@ -1,7 +1,5 @@
 import {
   PlayerCreationContent,
-  PlayerCreationDetailSection,
-  PlayerCreationEmptyDetail,
   PlayerCreationFilters,
   PlayerCreationItemsSection,
 } from '@/shared/components/playerCreation'
@@ -15,17 +13,12 @@ import { useSearchData } from '../adapters/useSearchData'
 import { useSearchFilters } from '../adapters/useSearchFilters'
 import { useSearchState } from '../adapters/useSearchState'
 import { SearchPageLayout } from '../components/SearchPageLayout'
-import { SearchResultWrapper } from '../components/atomic/SearchResultWrapper'
 import { SearchFilters } from '../components/composition/SearchFilters'
 import { SearchResultsGrid } from '../components/composition/SearchResultsGrid'
-import type { SearchResult } from '../model/SearchModel'
-import { searchResultToPlayerCreationItem } from '../model/SearchUtilities'
 
 export function SearchPageView() {
   const { isReady, isIndexing, error } = useSearchData()
   const {
-    selectedResult,
-    setSelectedResult,
     activeFilters,
     setActiveFilters,
     clearFilters,
@@ -180,18 +173,6 @@ export function SearchPageView() {
       ? `Found ${totalResults} result${totalResults !== 1 ? 's' : ''} for ${selectedTags.length} filter${selectedTags.length !== 1 ? 's' : ''}`
       : 'Search across all skills, races, traits, religions, birthsigns, and destiny nodes'
 
-  const renderDetailPanel = (item: any) => {
-    const searchResult = item.originalSearchResult as SearchResult
-    return (
-      <SearchResultWrapper
-        result={searchResult}
-        isSelected={false}
-        onSelect={() => {}} // No-op for detail panel
-        variant="detail"
-      />
-    )
-  }
-
   return (
     <SearchPageLayout title={title} description={description}>
       <PlayerCreationFilters
@@ -218,21 +199,13 @@ export function SearchPageView() {
         <PlayerCreationItemsSection>
           <SearchResultsGrid
             results={playerCreationItems.map(item => item.originalSearchResult)}
-            selectedResult={selectedResult}
-            onResultSelect={setSelectedResult}
+            selectedResult={null}
+            onResultSelect={() => {}} // No selection needed
             viewMode={viewMode}
             useTypeSpecificRendering={true}
             renderMode="grouped"
           />
         </PlayerCreationItemsSection>
-
-        <PlayerCreationDetailSection>
-          {selectedResult ? (
-            renderDetailPanel(searchResultToPlayerCreationItem(selectedResult))
-          ) : (
-            <PlayerCreationEmptyDetail />
-          )}
-        </PlayerCreationDetailSection>
       </PlayerCreationContent>
     </SearchPageLayout>
   )
