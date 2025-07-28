@@ -16,25 +16,10 @@ export function ReligionSearchCard({
 }: ReligionSearchCardProps) {
   const religions = useReligionsStore(state => state.data)
 
-  console.log('ReligionSearchCard Debug:', { item, religions })
-
   // Find the full religion record from the store
   const fullReligion = findItemInStore(religions, item.originalData) as
     | SharedReligion
     | undefined
-
-  // Debug logging to understand the data matching
-  console.log('ReligionSearchCard Debug:', {
-    searchItemName: item.name,
-    searchItemId: item.id,
-    searchItemOriginalData: item.originalData,
-    foundReligionName: fullReligion?.name,
-    foundReligionId: fullReligion?.id,
-    totalReligionsInStore: religions.length,
-    firstFewReligions: religions
-      .slice(0, 3)
-      .map(r => ({ name: r.name, id: r.id })),
-  })
 
   if (!fullReligion) {
     // Fallback to default card if religion not found
