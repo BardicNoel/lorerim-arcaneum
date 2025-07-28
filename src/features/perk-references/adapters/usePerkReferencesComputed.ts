@@ -3,6 +3,7 @@ import { usePerkReferencesData } from './usePerkReferencesData'
 import { usePerkReferencesFilters } from './usePerkReferencesFilters'
 import { usePerkReferenceModel } from '../model/PerkReferenceModel'
 import type { PerkReferenceItem, PerkReferenceViewMode } from '../types'
+import type { SearchCategory } from '@/shared/components/playerCreation/types'
 
 // Adapter for computed perk references data
 export function usePerkReferencesComputed() {
@@ -27,18 +28,35 @@ export function usePerkReferencesComputed() {
     onSearchChange,
   } = usePerkReferencesFilters()
 
-  // Create a default filters object since the filters adapter now returns different properties
-  const filters = useMemo(() => ({
-    skills: [],
-    categories: [],
-    prerequisites: [],
-    tags: [],
-    rankLevel: 'all' as const,
-    rootOnly: false,
-    searchQuery: searchQuery || '',
-  }), [searchQuery])
+  // Create filters object from the filters adapter state
+  const filters = useMemo(() => {
+    // Extract filter values from selectedTags
+    const skills = selectedTags
+      .filter(tag => tag.category === 'skill')
+      .map(tag => tag.value)
+    
+    const tags = selectedTags
+      .filter(tag => tag.category === 'tag')
+      .map(tag => tag.value)
+    
+    const minLevel = selectedTags
+      .filter(tag => tag.category === 'minLevel')
+      .map(tag => parseInt(tag.value))
+      .find(level => !isNaN(level))
 
-  // Note: Available filters are now handled by the model itself
+    const filterObj = {
+      skills,
+      categories: [], // Removed category filtering
+      prerequisites: [], // TODO: Add prerequisite filtering
+      tags,
+      rankLevel: 'all' as const,
+      rootOnly: false,
+      searchQuery: searchQuery || '',
+      minLevel,
+    }
+
+    return filterObj
+  }, [selectedTags, searchQuery])
 
   // Use the model to transform and filter data
   const {
@@ -47,6 +65,54 @@ export function usePerkReferencesComputed() {
     perkItems,
     availableFilters: modelAvailableFilters,
   } = usePerkReferenceModel(allPerks, filters)
+
+  // Generate enhanced search categories for autocomplete (matching races page pattern)
+  const generateSearchCategories = useMemo((): SearchCategory[] => {
+    const allSkillTrees = [...new Set(allPerks.map(perk => perk.skillTreeName))]
+    const allTags = [...new Set(allPerks.flatMap(perk => perk.tags))]
+    
+    // Get unique minimum levels from perks
+    const allMinLevels = [...new Set(allPerks.map(perk => perk.minLevel || 0))].sort((a, b) => a - b)
+
+    return [
+      {
+        id: 'keywords',
+        name: 'Fuzzy Search',
+        placeholder: 'Search by name, description, or tags...',
+        options: allTags.map(tag => ({
+          id: `keyword-${tag}`,
+          label: tag,
+          value: tag,
+          category: 'Fuzzy Search',
+          description: `Perks with ${tag} tag`,
+        })),
+      },
+      {
+        id: 'skill-trees',
+        name: 'Skill Trees',
+        placeholder: 'Filter by skill tree...',
+        options: allSkillTrees.map(skillTree => ({
+          id: `skill-${skillTree}`,
+          label: skillTree,
+          value: skillTree,
+          category: 'Skill Trees',
+          description: `Perks from ${skillTree} skill tree`,
+        })),
+      },
+      {
+        id: 'min-levels',
+        name: 'Minimum Level',
+        placeholder: 'Filter by minimum level...',
+        options: allMinLevels.map(level => ({
+          id: `level-${level}`,
+          label: `Level ${level}+`,
+          value: level.toString(),
+          category: 'Minimum Level',
+          description: `Perks requiring level ${level} or higher`,
+        })),
+      },
+    ]
+  }, [allPerks])
 
   // Computed statistics
   const statistics = useMemo(() => {
@@ -86,17 +152,17 @@ export function usePerkReferencesComputed() {
     const grouped = new Map<string, PerkReferenceItem[]>()
     
     perkItems.forEach(item => {
-      if (!grouped.has(item.category)) {
-        grouped.set(item.category, [])
+      if (!grouped.has(item.category || '')) {
+        grouped.set(item.category || '', [])
       }
-      grouped.get(item.category)!.push(item)
+      grouped.get(item.category || '')!.push(item)
     })
 
     return Array.from(grouped.entries()).map(([category, perks]) => ({
       category,
       perks,
       count: perks.length,
-    })).sort((a, b) => a.category.localeCompare(b.category))
+    })).sort((a, b) => (a.category || '').localeCompare(b.category || ''))
   }, [perkItems])
 
   // Get selected perks
@@ -135,7 +201,7 @@ export function usePerkReferencesComputed() {
         case 'skill':
           return sorted.sort((a, b) => a.skillTreeName.localeCompare(b.skillTreeName))
         case 'category':
-          return sorted.sort((a, b) => a.category.localeCompare(b.category))
+          return sorted.sort((a, b) => (a.category || '').localeCompare(b.category || ''))
         case 'rank':
           return sorted.sort((a, b) => b.totalRanks - a.totalRanks)
         case 'prerequisites':
@@ -161,7 +227,7 @@ export function usePerkReferencesComputed() {
       singleRank: statistics.singleRankPerks,
       withPrerequisites: allPerks.filter(perk => perk.prerequisites && perk.prerequisites.length > 0).length,
     },
-    searchCategories: [], // TODO: Generate search categories from available filters
+    searchCategories: generateSearchCategories,
     availableFilters: modelAvailableFilters,
 
     // State

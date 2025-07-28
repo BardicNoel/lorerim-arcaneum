@@ -16,6 +16,7 @@ export interface PerkReferenceNode extends PerkNode {
   searchableText: string
   tags: string[]
   category: string
+  minLevel?: number // Minimum level required for this perk
 }
 
 // Perk Reference Item that extends PlayerCreationItem for consistency
@@ -35,12 +36,13 @@ export interface PerkReferenceItem extends PlayerCreationItem {
   currentRank: number
   isSelected: boolean
   isAvailable: boolean
+  minLevel?: number // Minimum level required for this perk
 }
 
 // Filter types for perk references
 export interface PerkReferenceFilter {
   id: string
-  type: 'skill' | 'category' | 'prerequisite' | 'tag' | 'rankLevel' | 'rootOnly'
+  type: 'skill' | 'category' | 'prerequisite' | 'tag' | 'rankLevel' | 'rootOnly' | 'minLevel'
   value: string
   label: string
 }
@@ -54,6 +56,7 @@ export interface PerkReferenceFilters {
   rankLevel: 'single' | 'multi' | 'all'
   rootOnly: boolean
   searchQuery: string
+  minLevel?: number // Minimum level filter
 }
 
 // Search categories for autocomplete

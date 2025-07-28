@@ -1,34 +1,31 @@
-import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
-import type { PerkReferenceNode, PerkReferenceItem } from '../types'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import type { PerkReferenceNode } from '../types'
 
-// Transform a PerkReferenceNode to PlayerCreationItem format
-export function perkToPlayerCreationItem(
-  node: PerkReferenceNode,
-  buildState: any
-): PerkReferenceItem {
-  const selectedPerks = buildState.perks?.selected?.[node.skillTree] || []
-  const perkRanks = buildState.perks?.ranks?.[node.skillTree] || {}
+export function perkToPlayerCreationItem(perk: PerkReferenceNode, build: any) {
+  const selectedPerks = build.perks?.selected?.[perk.skillTree] || []
+  const perkRanks = build.perks?.ranks?.[perk.skillTree] || {}
   
-  const isSelected = selectedPerks.includes(node.edid)
-  const currentRank = perkRanks[node.edid] || 0
+  const isSelected = selectedPerks.includes(perk.edid)
+  const currentRank = perkRanks[perk.edid] || 0
 
   return {
-    id: node.edid,
-    name: node.name,
-    description: node.ranks[0]?.description?.base || '',
-    category: node.category,
-    tags: node.tags,
+    id: perk.edid,
+    name: perk.name,
+    description: perk.ranks[0]?.description?.base || '',
+    category: perk.category,
+    tags: perk.tags,
     isSelected,
-    originalPerk: node,
-    skillTree: node.skillTree,
-    skillTreeName: node.skillTreeName,
-    isRoot: node.isRoot,
-    hasChildren: node.hasChildren,
-    prerequisites: node.prerequisites,
-    connections: node.connections,
-    totalRanks: node.totalRanks,
+    originalPerk: perk,
+    skillTree: perk.skillTree,
+    skillTreeName: perk.skillTreeName,
+    isRoot: perk.isRoot,
+    hasChildren: perk.hasChildren,
+    prerequisites: perk.prerequisites,
+    connections: perk.connections,
+    totalRanks: perk.totalRanks,
     currentRank,
-    isAvailable: isPerkAvailable(node, buildState),
+    isAvailable: perk.isRoot || perk.prerequisites.every(prereq => selectedPerks.includes(prereq)),
+    minLevel: perk.minLevel,
   }
 }
 

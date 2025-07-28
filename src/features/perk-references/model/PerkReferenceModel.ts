@@ -1,5 +1,6 @@
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { useMemo } from 'react'
+import Fuse from 'fuse.js'
 import type { 
   PerkReferenceNode, 
   PerkReferenceItem, 
@@ -42,6 +43,7 @@ export class PerkReferenceModel {
       totalRanks: node.totalRanks,
       currentRank,
       isAvailable: this.isPerkAvailable(node),
+      minLevel: node.minLevel,
     }
   }
 
@@ -94,6 +96,13 @@ export class PerkReferenceModel {
       )
     }
 
+    // Apply minimum level filter
+    if (filters.minLevel !== undefined) {
+      filteredNodes = filteredNodes.filter(node => 
+        (node.minLevel || 0) >= filters.minLevel!
+      )
+    }
+
     // Apply rank level filter
     if (filters.rankLevel !== 'all') {
       filteredNodes = filteredNodes.filter(node => {
@@ -113,12 +122,41 @@ export class PerkReferenceModel {
 
     // Apply search query
     if (filters.searchQuery && filters.searchQuery.trim()) {
-      const query = filters.searchQuery.toLowerCase()
-      filteredNodes = filteredNodes.filter(node => 
-        node.searchableText.includes(query) ||
-        node.name.toLowerCase().includes(query) ||
-        node.tags.some(tag => tag.toLowerCase().includes(query))
-      )
+      const query = filters.searchQuery.trim()
+      
+      // Create searchable perk objects for Fuse.js
+      const searchablePerks = filteredNodes.map(node => ({
+        id: node.edid,
+        name: node.name,
+        description: node.ranks[0]?.description?.base || '',
+        searchableText: node.searchableText,
+        tags: node.tags,
+        category: node.category,
+        skillTree: node.skillTreeName,
+        originalNode: node,
+      }))
+
+      // Configure Fuse.js options
+      const fuseOptions = {
+        keys: [
+          { name: 'name', weight: 0.4 },
+          { name: 'description', weight: 0.3 },
+          { name: 'searchableText', weight: 0.2 },
+          { name: 'tags', weight: 0.1 },
+          { name: 'category', weight: 0.05 },
+          { name: 'skillTree', weight: 0.05 },
+        ],
+        threshold: 0.4, // Lower threshold = more strict matching
+        includeScore: true,
+        includeMatches: true,
+      }
+
+      // Create Fuse instance and search
+      const fuse = new Fuse(searchablePerks, fuseOptions)
+      const searchResults = fuse.search(query)
+      
+      // Get the original nodes from search results
+      filteredNodes = searchResults.map(result => result.item.originalNode)
     }
 
     return filteredNodes
@@ -187,6 +225,7 @@ export function usePerkReferenceModel(
       rankLevel: 'all',
       rootOnly: false,
       searchQuery: '',
+      minLevel: undefined,
     })
   }, [model, perkNodes, filters])
 

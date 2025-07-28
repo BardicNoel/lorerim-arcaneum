@@ -1,5 +1,14 @@
 import { useCallback, useMemo, useState } from 'react'
 import type { PerkReferenceFilters, PerkReferenceFilter, PerkReferenceSearchOption } from '../types'
+import type { SelectedTag } from '@/shared/components/playerCreation/types'
+
+// Available filter options interface
+interface AvailableFilters {
+  skills: Array<{ id: string; name: string }>
+  categories: string[]
+  prerequisites: string[]
+  tags: string[]
+}
 
 // Adapter for perk references filters
 export function usePerkReferencesFilters() {
@@ -12,10 +21,11 @@ export function usePerkReferencesFilters() {
     rankLevel: 'all',
     rootOnly: false,
     searchQuery: '',
+    minLevel: undefined,
   })
 
   // Available filter options (will be populated by data adapter)
-  const [availableFilters, setAvailableFilters] = useState({
+  const [availableFilters, setAvailableFilters] = useState<AvailableFilters>({
     skills: [],
     categories: [],
     prerequisites: [],
@@ -23,7 +33,7 @@ export function usePerkReferencesFilters() {
   })
 
   // Update available filter options
-  const updateAvailableFilters = useCallback((newFilters: typeof availableFilters) => {
+  const updateAvailableFilters = useCallback((newFilters: AvailableFilters) => {
     setAvailableFilters(newFilters)
   }, [])
 
@@ -98,6 +108,13 @@ export function usePerkReferencesFilters() {
     }))
   }, [])
 
+  const setMinLevelFilter = useCallback((minLevel: number | undefined) => {
+    setFilters(prev => ({
+      ...prev,
+      minLevel,
+    }))
+  }, [])
+
   const setSearchQuery = useCallback((query: string) => {
     setFilters(prev => ({
       ...prev,
@@ -114,6 +131,7 @@ export function usePerkReferencesFilters() {
       rankLevel: 'all',
       rootOnly: false,
       searchQuery: '',
+      minLevel: undefined,
     })
   }, [])
 
@@ -178,6 +196,15 @@ export function usePerkReferencesFilters() {
       })
     }
 
+    if (filters.minLevel !== undefined) {
+      active.push({
+        id: 'min-level',
+        type: 'minLevel',
+        value: filters.minLevel.toString(),
+        label: `Level ${filters.minLevel}+`,
+      })
+    }
+
     return active
   }, [filters, availableFilters])
 
@@ -196,17 +223,6 @@ export function usePerkReferencesFilters() {
       })
     })
 
-    // Add category options
-    availableFilters.categories.forEach(category => {
-      options.push({
-        id: `category-${category}`,
-        label: category,
-        value: category,
-        category: 'Categories',
-        type: 'category',
-      })
-    })
-
     // Add tag options
     availableFilters.tags.forEach(tag => {
       options.push({
@@ -221,44 +237,91 @@ export function usePerkReferencesFilters() {
     return options
   }, [availableFilters])
 
+  // Handle tag selection (matching races page pattern)
+  const handleTagSelect = useCallback((optionOrTag: any) => {
+    let tag: SelectedTag
+    
+    if (typeof optionOrTag === 'string') {
+      // Custom search input - add as a fuzzy search tag
+      tag = {
+        id: `custom-${optionOrTag}`,
+        label: optionOrTag,
+        value: optionOrTag,
+        category: 'Fuzzy Search',
+      }
+      // Add to search query for fuzzy search (not tags)
+      setSearchQuery(optionOrTag)
+    } else {
+      // Autocomplete option
+      tag = {
+        id: `${optionOrTag.category}-${optionOrTag.id}`,
+        label: optionOrTag.label,
+        value: optionOrTag.value,
+        category: optionOrTag.category,
+      }
+      
+      // Add to appropriate filter based on category
+      if (optionOrTag.category === 'Skill Trees') {
+        addSkillFilter(optionOrTag.value)
+      } else if (optionOrTag.category === 'Minimum Level') {
+        // Handle minimum level filter
+        const level = parseInt(optionOrTag.value)
+        if (!isNaN(level)) {
+          setMinLevelFilter(level)
+        }
+      } else if (optionOrTag.category === 'Fuzzy Search') {
+        // Add to search query for fuzzy search
+        setSearchQuery(optionOrTag.value)
+      }
+    }
+  }, [addSkillFilter, setSearchQuery, setMinLevelFilter])
+
+  // Handle tag removal
+  const handleTagRemove = useCallback((tagId: string) => {
+    const filter = activeFilters.find(f => f.id === tagId)
+    if (filter) {
+      if (filter.type === 'skill') {
+        removeSkillFilter(filter.value)
+      } else if (filter.type === 'tag') {
+        removeTagFilter(filter.value)
+      } else if (filter.type === 'minLevel') {
+        setMinLevelFilter(undefined)
+      }
+    } else {
+      // Handle custom fuzzy search tags (they don't appear in activeFilters)
+      if (tagId.startsWith('custom-')) {
+        const customValue = tagId.replace('custom-', '')
+        // Clear search query if it matches the removed tag
+        if (filters.searchQuery === customValue) {
+          setSearchQuery('')
+        }
+      }
+    }
+  }, [activeFilters, removeSkillFilter, removeTagFilter, setMinLevelFilter, filters.searchQuery, setSearchQuery])
+
   return {
     // State - using the expected property names
-    selectedTags: activeFilters.map(filter => ({
-      id: filter.id,
-      label: filter.label,
-      category: filter.type,
-    })),
+    selectedTags: [
+      ...activeFilters.map(filter => ({
+        id: filter.id,
+        label: filter.label,
+        value: filter.value,
+        category: filter.type,
+      })),
+      // Add custom fuzzy search tags from search query
+      ...(filters.searchQuery ? [{
+        id: `custom-${filters.searchQuery}`,
+        label: filters.searchQuery,
+        value: filters.searchQuery,
+        category: 'Fuzzy Search',
+      }] : [])
+    ],
     viewMode: 'grid' as const, // Default view mode
     searchQuery: filters.searchQuery,
 
     // Actions - using the expected function names
-    onTagSelect: (option: string | { id: string; label: string; category: string }) => {
-      if (typeof option === 'string') {
-        // Handle custom search
-        return
-      }
-      
-      const filterId = option.id
-      if (filterId.startsWith('skill-')) {
-        addSkillFilter(filterId.replace('skill-', ''))
-      } else if (filterId.startsWith('category-')) {
-        addCategoryFilter(filterId.replace('category-', ''))
-      } else if (filterId.startsWith('tag-')) {
-        addTagFilter(filterId.replace('tag-', ''))
-      }
-    },
-    onTagRemove: (tagId: string) => {
-      const filter = activeFilters.find(f => f.id === tagId)
-      if (filter) {
-        if (filter.type === 'skill') {
-          removeSkillFilter(filter.value)
-        } else if (filter.type === 'category') {
-          removeCategoryFilter(filter.value)
-        } else if (filter.type === 'tag') {
-          removeTagFilter(filter.value)
-        }
-      }
-    },
+    onTagSelect: handleTagSelect,
+    onTagRemove: handleTagRemove,
     onClearTags: clearFilters,
     onViewModeChange: () => {}, // TODO: Implement view mode change
     onSearchChange: setSearchQuery,
