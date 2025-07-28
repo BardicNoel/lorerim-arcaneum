@@ -27,6 +27,14 @@ export interface BuildState {
     unlocks: string[] // Array of unlock IDs
   }
   destinyPath: string[] // Ordered array of DestinyNode ids or names, from root to leaf
+  // NEW: Attribute assignments
+  attributeAssignments: {
+    health: number    // Total health increases
+    stamina: number   // Total stamina increases
+    magicka: number   // Total magicka increases
+    level: number     // Current character level
+    assignments: Record<number, 'health' | 'stamina' | 'magicka'> // Level -> attribute mapping
+  }
 }
 
 export const DEFAULT_BUILD: BuildState = {
@@ -58,4 +66,12 @@ export const DEFAULT_BUILD: BuildState = {
     unlocks: [],
   },
   destinyPath: [], // No destiny path selected by default
+  // NEW: Default attribute assignments
+  attributeAssignments: {
+    health: 0,
+    stamina: 0,
+    magicka: 0,
+    level: 1,
+    assignments: {},
+  },
 }
