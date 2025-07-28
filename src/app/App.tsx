@@ -29,41 +29,47 @@ const navSections = [
       { to: '/build/perks', label: 'Skills and Perks' },
     ],
   },
+  {
+    label: "Docs",
+    items: [
+      { to: '/spells', label: 'Spells' },
+    ]
+  },
 
-  {
-    label: 'Gear',
-    items: [
-      { to: '/weapons', label: 'Weapons' },
-      { to: '/armor', label: 'Armor' },
-      { to: '/food', label: 'Food' },
-      { to: '/alcohol', label: 'Alcohol' },
-    ],
-  },
-  {
-    label: 'Crafting',
-    items: [
-      { to: '/alchemy', label: 'Alchemy' },
-      { to: '/smithing', label: 'Smithing' },
-      { to: '/enchanting', label: 'Enchanting' },
-    ],
-  },
-  {
-    label: 'Ascensions',
-    items: [
-      { to: '/shouts', label: 'Shouts of the Dragonborn' },
-      { to: '/lichdom', label: 'Lichdom' },
-      { to: '/lycanthropy', label: 'Lycanthropy' },
-      { to: '/vampirism', label: 'Vampirism' },
-    ],
-  },
-  {
-    label: 'Test',
-    items: [
-      { to: '/races-mva-demo', label: 'Races MVA Demo' },
-      { to: '/skills-mva', label: 'Skills MVA' },
-      { to: '/skills-experimental', label: 'Skills Experimental' },
-    ],
-  },
+  // {
+  //   label: 'Gear',
+  //   items: [
+  //     { to: '/weapons', label: 'Weapons' },
+  //     { to: '/armor', label: 'Armor' },
+  //     { to: '/food', label: 'Food' },
+  //     { to: '/alcohol', label: 'Alcohol' },
+  //   ],
+  // },
+  // {
+  //   label: 'Crafting',
+  //   items: [
+  //     { to: '/alchemy', label: 'Alchemy' },
+  //     { to: '/smithing', label: 'Smithing' },
+  //     { to: '/enchanting', label: 'Enchanting' },
+  //   ],
+  // },
+  // {
+  //   label: 'Ascensions',
+  //   items: [
+  //     { to: '/shouts', label: 'Shouts of the Dragonborn' },
+  //     { to: '/lichdom', label: 'Lichdom' },
+  //     { to: '/lycanthropy', label: 'Lycanthropy' },
+  //     { to: '/vampirism', label: 'Vampirism' },
+  //   ],
+  // },
+  // {
+  //   label: 'Test',
+  //   items: [
+  //     { to: '/races-mva-demo', label: 'Races MVA Demo' },
+  //     { to: '/skills-mva', label: 'Skills MVA' },
+  //     { to: '/skills-experimental', label: 'Skills Experimental' },
+  //   ],
+  // },
 ]
 
 function AppSidebar({ collapsed }: { collapsed: boolean }) {
