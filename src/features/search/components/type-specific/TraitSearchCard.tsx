@@ -15,15 +15,18 @@ export function TraitSearchCard({ item, className }: TraitSearchCardProps) {
   const fullTrait = findItemInStore(traits, item.originalData)
 
   if (!fullTrait) {
-    // Fallback to default card if trait not found
-    return (
-      <div className={`p-4 border rounded-lg bg-muted ${className}`}>
-        <h3 className="font-semibold">{item.name}</h3>
-        <p className="text-sm text-muted-foreground">
-          Trait not found in store
-        </p>
-      </div>
-    )
+    // Log error for debugging but don't show a card
+    console.error('Trait not found in store:', {
+      searchItemName: item.name,
+      searchItemId: item.id,
+      searchItemOriginalData: item.originalData,
+      totalTraitsInStore: traits.length,
+      firstFewTraits: traits.slice(0, 3).map(trait => ({
+        id: trait.id,
+        name: trait.name,
+      })),
+    })
+    return null
   }
 
   // Convert the trait to PlayerCreationItem format for TraitCard

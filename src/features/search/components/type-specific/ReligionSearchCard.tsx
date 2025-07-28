@@ -18,36 +18,24 @@ export function ReligionSearchCard({
   const religions = useReligionsStore(state => state.data)
   const [isExpanded, setIsExpanded] = useState(false)
 
-  console.log('ReligionSearchCard Debug:', { item, religions })
-
   // Find the full religion record from the store
   const fullReligion = findItemInStore(religions, item.originalData) as
     | SharedReligion
     | undefined
 
-  // Debug logging to understand the data matching
-  console.log('ReligionSearchCard Debug:', {
-    searchItemName: item.name,
-    searchItemId: item.id,
-    searchItemOriginalData: item.originalData,
-    foundReligionName: fullReligion?.name,
-    foundReligionId: fullReligion?.id,
-    totalReligionsInStore: religions.length,
-    firstFewReligions: religions
-      .slice(0, 3)
-      .map(r => ({ name: r.name, id: r.id })),
-  })
-
   if (!fullReligion) {
-    // Fallback to default card if religion not found
-    return (
-      <div className={`p-4 border rounded-lg bg-muted ${className}`}>
-        <h3 className="font-semibold">{item.name}</h3>
-        <p className="text-sm text-muted-foreground">
-          Religion not found in store
-        </p>
-      </div>
-    )
+    // Log error for debugging but don't show a card
+    console.error('Religion not found in store:', {
+      searchItemName: item.name,
+      searchItemId: item.id,
+      searchItemOriginalData: item.originalData,
+      totalReligionsInStore: religions.length,
+      firstFewReligions: religions.slice(0, 3).map(religion => ({
+        id: religion.id,
+        name: religion.name,
+      })),
+    })
+    return null
   }
 
   // Handle accordion toggle

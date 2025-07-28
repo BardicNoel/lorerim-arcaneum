@@ -14,15 +14,18 @@ export function SkillSearchCard({ item, className }: SkillSearchCardProps) {
   const fullSkill = findItemInStore(skills, item.originalData)
 
   if (!fullSkill) {
-    // Fallback to default card if skill not found
-    return (
-      <div className={`p-4 border rounded-lg bg-muted ${className}`}>
-        <h3 className="font-semibold">{item.name}</h3>
-        <p className="text-sm text-muted-foreground">
-          Skill not found in store
-        </p>
-      </div>
-    )
+    // Log error for debugging but don't show a card
+    console.error('Skill not found in store:', {
+      searchItemName: item.name,
+      searchItemId: item.id,
+      searchItemOriginalData: item.originalData,
+      totalSkillsInStore: skills.length,
+      firstFewSkills: skills.slice(0, 3).map(skill => ({
+        id: skill.id,
+        name: skill.name,
+      })),
+    })
+    return null
   }
 
   // Render a simplified skill card for search results

@@ -1,4 +1,5 @@
 import { RaceAccordion } from '@/features/races-v2/components/composition/RaceAccordion'
+import type { Race as RaceV2Type } from '@/features/races-v2/types'
 import { useRacesStore } from '@/shared/stores/racesStore'
 import { useState } from 'react'
 import type { SearchableItem } from '../../model/SearchModel'
@@ -17,13 +18,18 @@ export function RaceSearchCard({ item, className }: RaceSearchCardProps) {
   const fullRace = findItemInStore(races, item.originalData)
 
   if (!fullRace) {
-    // Fallback to default card if race not found
-    return (
-      <div className={`p-4 border rounded-lg bg-muted ${className}`}>
-        <h3 className="font-semibold">{item.name}</h3>
-        <p className="text-sm text-muted-foreground">Race not found in store</p>
-      </div>
-    )
+    // Log error for debugging but don't show a card
+    console.error('Race not found in store:', {
+      searchItemName: item.name,
+      searchItemId: item.id,
+      searchItemOriginalData: item.originalData,
+      totalRacesInStore: races.length,
+      firstFewRaces: races.slice(0, 3).map(race => ({
+        edid: race.edid,
+        name: race.name,
+      })),
+    })
+    return null
   }
 
   // Handle accordion toggle
@@ -47,7 +53,10 @@ export function RaceSearchCard({ item, className }: RaceSearchCardProps) {
   return (
     <div className={className}>
       <RaceAccordion
-        item={{ ...raceAsPlayerCreationItem, originalRace: fullRace }}
+        item={{
+          ...raceAsPlayerCreationItem,
+          originalRace: fullRace as unknown as RaceV2Type,
+        }}
         isExpanded={isExpanded}
         onToggle={handleToggle}
         showToggle={false} // Disable the add to build toggle for search results

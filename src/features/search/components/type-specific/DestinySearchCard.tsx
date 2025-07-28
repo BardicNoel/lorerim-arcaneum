@@ -15,15 +15,18 @@ export function DestinySearchCard({ item, className }: DestinySearchCardProps) {
   const fullDestiny = findItemInStore(destinyNodes, item.originalData)
 
   if (!fullDestiny) {
-    // Fallback to default card if destiny node not found
-    return (
-      <div className={`p-4 border rounded-lg bg-muted ${className}`}>
-        <h3 className="font-semibold">{item.name}</h3>
-        <p className="text-sm text-muted-foreground">
-          Destiny node not found in store
-        </p>
-      </div>
-    )
+    // Log error for debugging but don't show a card
+    console.error('Destiny node not found in store:', {
+      searchItemName: item.name,
+      searchItemId: item.id,
+      searchItemOriginalData: item.originalData,
+      totalDestinyNodesInStore: destinyNodes.length,
+      firstFewDestinyNodes: destinyNodes.slice(0, 3).map(node => ({
+        id: node.id,
+        name: node.name,
+      })),
+    })
+    return null
   }
 
   // Convert the destiny node to PlayerCreationItem format for DestinyCard

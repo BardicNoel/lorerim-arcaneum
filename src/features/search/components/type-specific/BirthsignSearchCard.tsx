@@ -17,15 +17,18 @@ export function BirthsignSearchCard({
   const fullBirthsign = findItemInStore(birthsigns, item.originalData)
 
   if (!fullBirthsign) {
-    // Fallback to default card if birthsign not found
-    return (
-      <div className={`p-4 border rounded-lg bg-muted ${className}`}>
-        <h3 className="font-semibold">{item.name}</h3>
-        <p className="text-sm text-muted-foreground">
-          Birthsign not found in store
-        </p>
-      </div>
-    )
+    // Log error for debugging but don't show a card
+    console.error('Birthsign not found in store:', {
+      searchItemName: item.name,
+      searchItemId: item.id,
+      searchItemOriginalData: item.originalData,
+      totalBirthsignsInStore: birthsigns.length,
+      firstFewBirthsigns: birthsigns.slice(0, 3).map(birthsign => ({
+        id: birthsign.id,
+        name: birthsign.name,
+      })),
+    })
+    return null
   }
 
   // Render a birthsign card for search results

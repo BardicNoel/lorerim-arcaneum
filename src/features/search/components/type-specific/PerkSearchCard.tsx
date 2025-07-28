@@ -14,15 +14,18 @@ export function PerkSearchCard({ item, className }: PerkSearchCardProps) {
   const fullPerkTree = findItemInStore(perkTrees, item.originalData)
 
   if (!fullPerkTree) {
-    // Fallback to default card if perk tree not found
-    return (
-      <div className={`p-4 border rounded-lg bg-muted ${className}`}>
-        <h3 className="font-semibold">{item.name}</h3>
-        <p className="text-sm text-muted-foreground">
-          Perk tree not found in store
-        </p>
-      </div>
-    )
+    // Log error for debugging but don't show a card
+    console.error('Perk tree not found in store:', {
+      searchItemName: item.name,
+      searchItemId: item.id,
+      searchItemOriginalData: item.originalData,
+      totalPerkTreesInStore: perkTrees.length,
+      firstFewPerkTrees: perkTrees.slice(0, 3).map(tree => ({
+        treeId: tree.treeId,
+        treeName: tree.treeName || tree.name,
+      })),
+    })
+    return null
   }
 
   // Count total perks in the tree
