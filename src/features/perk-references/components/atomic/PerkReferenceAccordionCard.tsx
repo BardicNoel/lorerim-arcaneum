@@ -1,0 +1,199 @@
+import { cn } from '@/lib/utils'
+import { AccordionCard } from '@/shared/components/generic/AccordionCard'
+import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
+import { Badge } from '@/shared/ui/ui/badge'
+import { H3, P, Small } from '@/shared/ui/ui/typography'
+import { usePerkReferencesData } from '../../adapters/usePerkReferencesData'
+import type { PerkReferenceNode } from '../../types'
+import { PerkReferenceBadge } from './PerkReferenceBadge'
+
+interface PerkReferenceAccordionCardProps {
+  item: PlayerCreationItem & { originalPerk: PerkReferenceNode }
+  className?: string
+  isExpanded?: boolean
+  onToggle?: () => void
+  disableHover?: boolean
+  viewMode?: 'grid' | 'list'
+}
+
+export function PerkReferenceAccordionCard({
+  item,
+  className,
+  isExpanded = false,
+  onToggle,
+  disableHover = false,
+  viewMode = 'grid',
+}: PerkReferenceAccordionCardProps) {
+  const originalPerk = item.originalPerk
+  const { allPerks } = usePerkReferencesData()
+  
+  if (!originalPerk) return null
+
+  // Function to look up perk names from IDs
+  const getPrerequisiteNames = (prerequisiteIds: string[]): string[] => {
+    return prerequisiteIds.map(id => {
+      const perk = allPerks.find(p => p.edid === id)
+      return perk?.name || id // Fallback to ID if perk not found
+    })
+  }
+
+  const prerequisiteNames = getPrerequisiteNames(originalPerk.prerequisites)
+
+  return (
+    <AccordionCard
+      className={className}
+      expanded={isExpanded}
+      onToggle={onToggle}
+      disableHover={disableHover}
+    >
+      <AccordionCard.Header>
+        <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
+          <span className="text-lg font-bold text-muted-foreground">
+            {item.name.charAt(0)}
+          </span>
+        </div>
+        <div className="flex-1 min-w-0">
+          {viewMode === 'grid' ? (
+            // Grid mode: badges under the name
+            <div className="space-y-1">
+              <H3 className="text-primary font-semibold truncate">{item.name}</H3>
+              <div className="flex items-center gap-2 flex-wrap">
+                {originalPerk.skillTreeName && (
+                  <PerkReferenceBadge
+                    label={originalPerk.skillTreeName}
+                    type="skill"
+                    size="sm"
+                  />
+                )}
+                {originalPerk.totalRanks > 1 && (
+                  <PerkReferenceBadge
+                    label={`${originalPerk.totalRanks} ranks`}
+                    type="rank"
+                    size="sm"
+                  />
+                )}
+                {originalPerk.minLevel && (
+                  <PerkReferenceBadge
+                    label={`Level ${originalPerk.minLevel}+`}
+                    type="level"
+                    size="sm"
+                  />
+                )}
+              </div>
+            </div>
+          ) : (
+            // List mode: badges right-aligned
+            <div className="flex items-center justify-between gap-2">
+              <H3 className="text-primary font-semibold truncate">{item.name}</H3>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                {originalPerk.skillTreeName && (
+                  <PerkReferenceBadge
+                    label={originalPerk.skillTreeName}
+                    type="skill"
+                    size="sm"
+                  />
+                )}
+                {originalPerk.totalRanks > 1 && (
+                  <PerkReferenceBadge
+                    label={`${originalPerk.totalRanks} ranks`}
+                    type="rank"
+                    size="sm"
+                  />
+                )}
+                {originalPerk.minLevel && (
+                  <PerkReferenceBadge
+                    label={`Level ${originalPerk.minLevel}+`}
+                    type="level"
+                    size="sm"
+                  />
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </AccordionCard.Header>
+      
+      <AccordionCard.Summary>
+        <P className="text-sm text-muted-foreground line-clamp-2">
+          {item.description}
+        </P>
+        {item.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-2">
+            {item.tags.slice(0, 3).map((tag, index) => (
+              <Badge key={index} variant="outline" className="text-xs">
+                {tag}
+              </Badge>
+            ))}
+            {item.tags.length > 3 && (
+              <Small className="text-muted-foreground">
+                +{item.tags.length - 3} more
+              </Small>
+            )}
+          </div>
+        )}
+      </AccordionCard.Summary>
+      
+      <AccordionCard.Details>
+        {/* Prerequisites */}
+        {originalPerk.prerequisites && originalPerk.prerequisites.length > 0 && (
+          <div className="mb-4">
+            <h5 className="text-sm font-medium text-foreground mb-2">
+              Prerequisites
+            </h5>
+            <div className="flex flex-wrap gap-1">
+              {prerequisiteNames.map((prereq, index) => (
+                <Badge key={index} variant="secondary" className="text-xs">
+                  {prereq}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Perk Ranks */}
+        {originalPerk.ranks && originalPerk.ranks.length > 0 && (
+          <div className="mb-4">
+            <h5 className="text-sm font-medium text-foreground mb-2">
+              Perk Ranks
+            </h5>
+            <div className="space-y-2">
+              {originalPerk.ranks.map((rank, index) => (
+                <div
+                  key={index}
+                  className="p-3 rounded-lg border bg-muted/30"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-medium text-sm">
+                      Rank {index + 1}
+                    </span>
+                  </div>
+                  {rank.description?.base && (
+                    <P className="text-sm text-muted-foreground">
+                      {rank.description.base}
+                    </P>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* All Tags */}
+        {item.tags.length > 0 && (
+          <div>
+            <h5 className="text-sm font-medium text-foreground mb-2">
+              Tags
+            </h5>
+            <div className="flex flex-wrap gap-1">
+              {item.tags.map((tag, index) => (
+                <Badge key={index} variant="outline" className="text-xs">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+      </AccordionCard.Details>
+    </AccordionCard>
+  )
+} 
