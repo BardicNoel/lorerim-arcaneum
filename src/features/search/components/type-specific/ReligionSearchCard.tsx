@@ -2,6 +2,7 @@ import { ReligionAccordion } from '@/features/religions/components/ReligionAccor
 import type { Religion as FeatureReligion } from '@/features/religions/types'
 import type { Religion as SharedReligion } from '@/shared/data/schemas'
 import { useReligionsStore } from '@/shared/stores/religionsStore'
+import { useState } from 'react'
 import type { SearchableItem } from '../../model/SearchModel'
 import { findItemInStore } from '../../utils/storeLookup'
 
@@ -15,11 +16,27 @@ export function ReligionSearchCard({
   className,
 }: ReligionSearchCardProps) {
   const religions = useReligionsStore(state => state.data)
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  console.log('ReligionSearchCard Debug:', { item, religions })
 
   // Find the full religion record from the store
   const fullReligion = findItemInStore(religions, item.originalData) as
     | SharedReligion
     | undefined
+
+  // Debug logging to understand the data matching
+  console.log('ReligionSearchCard Debug:', {
+    searchItemName: item.name,
+    searchItemId: item.id,
+    searchItemOriginalData: item.originalData,
+    foundReligionName: fullReligion?.name,
+    foundReligionId: fullReligion?.id,
+    totalReligionsInStore: religions.length,
+    firstFewReligions: religions
+      .slice(0, 3)
+      .map(r => ({ name: r.name, id: r.id })),
+  })
 
   if (!fullReligion) {
     // Fallback to default card if religion not found
@@ -31,6 +48,11 @@ export function ReligionSearchCard({
         </p>
       </div>
     )
+  }
+
+  // Handle accordion toggle
+  const handleToggle = () => {
+    setIsExpanded(!isExpanded)
   }
 
   // Convert the shared Religion type to the feature Religion type
@@ -92,20 +114,20 @@ export function ReligionSearchCard({
     ],
   }
 
-  // Render the existing ReligionAccordion with the full religion data, always expanded
+  // Render the existing ReligionAccordion with the full religion data
   return (
     <div className={className}>
       <ReligionAccordion
         item={religionAsPlayerCreationItem}
         originalReligion={religionAsFeatureReligion}
-        isExpanded={true} // Always expanded to show all information
-        onToggle={() => {}} // No-op since we don't need toggle functionality
+        isExpanded={isExpanded}
+        onToggle={handleToggle}
         className="w-full"
         showBlessings={true}
         showTenets={true}
         showBoons={true}
         showFavoredRaces={true}
-        disableHover={true} // Disable hover since this is not selectable
+        disableHover={false} // Enable hover for better UX
         showToggle={false}
       />
     </div>
