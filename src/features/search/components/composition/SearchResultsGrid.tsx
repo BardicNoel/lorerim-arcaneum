@@ -3,23 +3,38 @@ import type { PlayerCreationItem } from '@/shared/components/playerCreation/type
 import type { SearchResult } from '../../model/SearchModel'
 import { searchResultToPlayerCreationItem } from '../../model/SearchUtilities'
 import { SearchResultWrapper } from '../atomic/SearchResultWrapper'
+import { TypeSpecificSearchResults } from './TypeSpecificSearchResults'
 
 interface SearchResultsGridProps {
   results: SearchResult[]
-  selectedResult: SearchResult | null
-  onResultSelect: (result: SearchResult) => void
   viewMode?: 'grid' | 'list'
   className?: string
+  useTypeSpecificRendering?: boolean
+  renderMode?: 'grouped' | 'unified' | 'type-defaults'
 }
 
 export function SearchResultsGrid({
   results,
-  selectedResult,
-  onResultSelect,
   viewMode = 'grid',
   className,
+  useTypeSpecificRendering = true,
+  renderMode = 'grouped',
 }: SearchResultsGridProps) {
-  // Transform search results to PlayerCreationItem format
+  // Use type-specific rendering if enabled
+  if (useTypeSpecificRendering) {
+    return (
+      <TypeSpecificSearchResults
+        results={results}
+        selectedResult={null}
+        onResultSelect={() => {}} // No selection needed
+        viewMode={viewMode === 'list' ? 'accordion' : 'card'}
+        renderMode={renderMode}
+        className={className}
+      />
+    )
+  }
+
+  // Fallback to original implementation
   const playerCreationItems: (PlayerCreationItem & {
     originalSearchResult: SearchResult
   })[] = results.map(searchResultToPlayerCreationItem)
@@ -31,8 +46,8 @@ export function SearchResultsGrid({
     return (
       <SearchResultWrapper
         result={item.originalSearchResult}
-        isSelected={isSelected}
-        onSelect={onResultSelect}
+        isSelected={false}
+        onSelect={() => {}} // No selection needed
         variant="card"
       />
     )
@@ -43,12 +58,8 @@ export function SearchResultsGrid({
       <ItemGrid
         items={playerCreationItems}
         viewMode={viewMode}
-        onItemSelect={item => onResultSelect(item.originalSearchResult)}
-        selectedItem={
-          selectedResult
-            ? searchResultToPlayerCreationItem(selectedResult)
-            : null
-        }
+        onItemSelect={() => {}} // No selection needed
+        selectedItem={null}
         renderItemCard={renderItemCard}
       />
     </div>

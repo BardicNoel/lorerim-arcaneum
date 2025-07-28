@@ -1,8 +1,3 @@
-import {
-  PlayerCreationContent,
-  PlayerCreationFilters,
-  PlayerCreationItemsSection,
-} from '@/shared/components/playerCreation'
 import type {
   SearchOption,
   SelectedTag,
@@ -14,21 +9,14 @@ import { useSearchFilters } from '../adapters/useSearchFilters'
 import { useSearchState } from '../adapters/useSearchState'
 import { SearchPageLayout } from '../components/SearchPageLayout'
 import { SearchFilters } from '../components/composition/SearchFilters'
-import { SearchResultsGrid } from '../components/composition/SearchResultsGrid'
+import { SimpleSearchResultsGrid } from '../components/composition/SimpleSearchResultsGrid'
 
-export function SearchPageView() {
+export function SimpleSearchPageView() {
   const { isReady, isIndexing, error } = useSearchData()
-  const {
-    activeFilters,
-    setActiveFilters,
-    clearFilters,
-    viewMode,
-    setViewMode,
-    addTag,
-    removeTag,
-  } = useSearchState()
-  const { availableFilters } = useSearchFilters()
-  const { playerCreationItems, totalResults } = useSearchComputed()
+  const { activeFilters, setActiveFilters, clearFilters, addTag, removeTag } =
+    useSearchState()
+  const { availableFilters, searchResults } = useSearchFilters()
+  const { totalResults } = useSearchComputed()
 
   // Tag state management
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
@@ -175,14 +163,8 @@ export function SearchPageView() {
 
   return (
     <SearchPageLayout title={title} description={description}>
-      <PlayerCreationFilters
-        searchCategories={[]} // We'll use our custom SearchFilters component
-        selectedTags={[]}
-        viewMode={viewMode}
-        onTagSelect={() => {}} // Handled by SearchFilters
-        onTagRemove={() => {}} // Handled by SearchFilters
-        onViewModeChange={setViewMode}
-      >
+      {/* Filters Section */}
+      <div className="mb-6">
         <SearchFilters
           activeFilters={activeFilters}
           onFiltersChange={setActiveFilters}
@@ -193,20 +175,16 @@ export function SearchPageView() {
           onTagRemove={handleTagRemove}
           selectedTags={selectedTags}
         />
-      </PlayerCreationFilters>
+      </div>
 
-      <PlayerCreationContent>
-        <PlayerCreationItemsSection>
-          <SearchResultsGrid
-            results={playerCreationItems.map(item => item.originalSearchResult)}
-            selectedResult={null}
-            onResultSelect={() => {}} // No selection needed
-            viewMode={viewMode}
-            useTypeSpecificRendering={true}
-            renderMode="grouped"
-          />
-        </PlayerCreationItemsSection>
-      </PlayerCreationContent>
+      {/* Results Section */}
+      <div className="w-full">
+        <SimpleSearchResultsGrid
+          items={searchResults.map(result => result.item)}
+          selectedItemId={undefined}
+          onItemSelect={() => {}} // No selection needed
+        />
+      </div>
     </SearchPageLayout>
   )
 }
