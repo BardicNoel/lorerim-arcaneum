@@ -1,6 +1,7 @@
 import React from 'react'
 import type { SearchResult } from '../model/SearchModel'
 import type { ViewMode } from '../model/TypeSpecificComponents'
+import type { PerkReferenceNode } from '@/features/perk-references/types'
 
 // Import type-specific components
 import { RaceAccordion } from '@/features/races-v2/components/composition/RaceAccordion'
@@ -23,6 +24,49 @@ import { DestinyCard } from '@/features/destiny/components/composition/DestinyCa
 import { DestinyDetailPanel } from '@/features/destiny/components/composition/DestinyDetailPanel'
 
 import { PerkTreeGrid } from '@/features/skills/components/composition/PerkTreeGrid'
+
+import { PerkReferenceCard } from '@/features/perk-references/components/composition/PerkReferenceCard'
+import { PerkReferenceAccordion } from '@/features/perk-references/components/composition/PerkReferenceAccordion'
+
+// Wrapper component to convert SearchResult to PerkReferenceItem format
+const PerkReferenceSearchWrapper: React.FC<{
+  result: SearchResult
+  isSelected?: boolean
+  onClick?: () => void
+  compact?: boolean
+}> = ({ result, isSelected, onClick, compact }) => {
+  const perkData = result.item.originalData as PerkReferenceNode
+  
+  // Convert to PerkReferenceItem format
+  const perkItem = {
+    id: result.item.id,
+    name: result.item.name,
+    description: result.item.description || '',
+    skillTree: perkData.skillTree,
+    skillTreeName: perkData.skillTreeName,
+    category: result.item.category || 'Unknown',
+    tags: result.item.tags,
+    totalRanks: perkData.totalRanks,
+    currentRank: 1, // Default to first rank for search display
+    isSelected: isSelected || false,
+    isAvailable: true, // Assume available for search display
+    isRoot: perkData.isRoot,
+    hasChildren: perkData.hasChildren,
+    prerequisites: perkData.prerequisites,
+    connections: perkData.connections,
+    minLevel: perkData.minLevel,
+    originalPerk: perkData,
+  }
+
+  return (
+    <PerkReferenceCard
+      item={perkItem}
+      isSelected={isSelected}
+      onClick={onClick}
+      compact={compact}
+    />
+  )
+}
 
 // Fallback components for unknown types
 const FallbackCard: React.FC<{
@@ -104,6 +148,13 @@ const COMPONENT_MAP: Record<
     grid: PerkTreeGrid,
     detail: FallbackDetail,
     compact: FallbackCard,
+  },
+  'perk-reference': {
+    card: PerkReferenceSearchWrapper,
+    accordion: PerkReferenceAccordion,
+    grid: PerkReferenceSearchWrapper,
+    detail: FallbackDetail,
+    compact: PerkReferenceSearchWrapper,
   },
 }
 

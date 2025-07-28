@@ -125,7 +125,6 @@ export class PerkReferenceDataProvider implements IPerkReferenceDataProvider {
       'Sneak': 'Stealth',
       'Speech': 'Stealth',
       'Enchanting': 'Crafting',
-      'Enchanting': 'Crafting',
     }
 
     return categoryMap[skillTreeName] || 'Other'

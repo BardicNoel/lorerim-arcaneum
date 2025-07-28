@@ -19,6 +19,7 @@ export function useSearchFilters() {
     if (!hasFilters) {
       // Return all searchable items when no filters are applied
       const allItems = getSearchableItems()
+      
       return allItems.map(item => ({
         item,
         score: 1, // Perfect score for unfiltered results
