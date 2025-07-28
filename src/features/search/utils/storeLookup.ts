@@ -11,10 +11,12 @@ export function findItemInStore<
 ): T | undefined {
   if (!items) return undefined
 
-  return items.find(
-    item =>
-      item.id === searchItem.id ||
-      item.edid === searchItem.edid ||
-      item.name === searchItem.name
-  )
+  const foundItem = items.find(item => {
+    const idMatch = !!item.id && item.id === searchItem.id
+    const edidMatch = !!item.edid && item.edid === searchItem.edid
+    const nameMatch = !!item.name && item.name === searchItem.name
+    return idMatch || edidMatch || nameMatch
+  })
+  console.log('foundItem', foundItem, searchItem)
+  return foundItem
 }

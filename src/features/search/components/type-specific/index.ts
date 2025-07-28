@@ -1,4 +1,5 @@
 export * from './DestinySearchCard'
 export * from './RaceSearchCard'
+export * from './ReligionSearchCard'
 export * from './SkillSearchCard'
 export * from './TraitSearchCard'

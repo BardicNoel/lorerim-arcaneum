@@ -202,50 +202,89 @@ export function DestinySearchCard({
 ✅ 3. Update `SearchCard` switchboard
 ⏳ 4. Test with destiny search results
 
-### 2.4 ReligionSearchCard
+### 2.4 ReligionSearchCard ✅ **COMPLETE**
 
 **File:** `src/features/search/components/type-specific/ReligionSearchCard.tsx`
 
 ```tsx
+import { ReligionAccordion } from '@/features/religions/components/ReligionAccordion'
 import { useReligionsStore } from '@/shared/stores/religionsStore'
-// Note: May need to create ReligionCard component first
+import type { SearchableItem } from '../../model/SearchModel'
+import { findItemInStore } from '../../utils/storeLookup'
 
-export function ReligionSearchCard({ item, isSelected, onClick, className }) {
+interface ReligionSearchCardProps {
+  item: SearchableItem
+  isSelected?: boolean
+  onClick?: () => void
+  className?: string
+}
+
+export function ReligionSearchCard({
+  item,
+  isSelected = false,
+  onClick,
+  className,
+}: ReligionSearchCardProps) {
   const religions = useReligionsStore(state => state.data)
-  const fullReligion = religions?.find(
-    religion => religion.id === item.originalData.id
-  )
+
+  // Find the full religion record from the store
+  const fullReligion = findItemInStore(religions, item.originalData)
 
   if (!fullReligion) {
+    // Fallback to default card if religion not found
     return (
-      <DefaultSearchCard
-        item={item}
-        isSelected={isSelected}
+      <div
+        className={`p-4 border rounded-lg bg-muted cursor-pointer ${isSelected ? 'ring-2 ring-primary' : ''} ${className}`}
         onClick={onClick}
-        className={className}
-      />
+      >
+        <h3 className="font-semibold">{item.name}</h3>
+        <p className="text-sm text-muted-foreground">
+          Religion not found in store
+        </p>
+      </div>
     )
   }
 
-  // For now, use DefaultSearchCard until ReligionCard is created
+  // Convert the religion to PlayerCreationItem format for ReligionAccordion
+  const religionAsPlayerCreationItem = {
+    id: fullReligion.id || fullReligion.name,
+    name: fullReligion.name,
+    description: fullReligion.description || '',
+    category: fullReligion.category || fullReligion.pantheon || '',
+    tags: fullReligion.tags || [],
+    type: 'religion' as const,
+    summary: fullReligion.description,
+    effects: fullReligion.effects,
+  }
+
+  // Render the existing ReligionAccordion with the full religion data
   return (
-    <DefaultSearchCard
-      item={item}
-      isSelected={isSelected}
-      onClick={onClick}
-      className={className}
-    />
+    <div className={className} onClick={onClick}>
+      <ReligionAccordion
+        item={religionAsPlayerCreationItem}
+        originalReligion={fullReligion}
+        isExpanded={false}
+        onToggle={onClick}
+        className="w-full"
+        showBlessings={true}
+        showTenets={true}
+        showBoons={true}
+        showFavoredRaces={true}
+        disableHover={false}
+        showToggle={false}
+      />
+    </div>
   )
 }
 ```
 
 **Steps:**
 
-1. Create `ReligionSearchCard.tsx`
-2. Add to type-specific index
-3. Update `SearchCard` switchboard
-4. Create `ReligionCard` component (if needed)
-5. Test with religion search results
+✅ 1. Create `ReligionSearchCard.tsx`
+✅ 2. Add to type-specific index
+✅ 3. Update `SearchCard` switchboard
+✅ 4. Use existing `ReligionAccordion` component
+⏳ 5. Test with religion search results
 
 ### 2.5 PerkSearchCard
 
@@ -474,6 +513,7 @@ Clean up index files to remove exports of deleted components.
 - [x] Implement TraitSearchCard
 - [ ] Implement BirthsignSearchCard
 - [x] Implement DestinySearchCard
+- [x] Implement ReligionSearchCard
 - [ ] Test all implemented cards
 
 ### Short Term (2-3 Sprints)
