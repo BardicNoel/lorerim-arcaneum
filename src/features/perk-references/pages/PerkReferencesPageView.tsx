@@ -13,7 +13,7 @@ import { ArrowLeft, Grid3X3, List, X } from 'lucide-react'
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { usePerkReferencesData } from '../adapters/usePerkReferencesData'
-import { PerkReferenceAccordion } from '../components/composition/PerkReferenceAccordion'
+import { PerkReferenceAccordionCard } from '../components/atomic/PerkReferenceAccordionCard'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { PerkReferenceNode } from '../types'
 import { perkToPlayerCreationItem } from '../utils/perkToPlayerCreationItem'
@@ -329,23 +329,24 @@ export function PerkReferencesPageView() {
         {viewMode === 'grid' ? (
           <AccordionGrid columns={3} gap="md">
             {displayItems.map((item) => (
-              <PerkReferenceAccordion
+              <PerkReferenceAccordionCard
                 key={item.id}
-                items={[item]}
-                selectedItem={null}
-                onItemSelect={() => {}}
-                showToggle={true}
+                item={item}
+                isExpanded={expandedPerks.has(item.id)}
+                onToggle={() => handlePerkToggle(item.id)}
               />
             ))}
           </AccordionGrid>
         ) : (
           <div className="space-y-2">
-            <PerkReferenceAccordion
-              items={displayItems}
-              selectedItem={null}
-              onItemSelect={() => {}}
-              showToggle={true}
-            />
+            {displayItems.map((item) => (
+              <PerkReferenceAccordionCard
+                key={item.id}
+                item={item}
+                isExpanded={expandedPerks.has(item.id)}
+                onToggle={() => handlePerkToggle(item.id)}
+              />
+            ))}
           </div>
         )}
       </div>
