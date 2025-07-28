@@ -1,0 +1,1 @@
+export { useAttributeAssignments } from './useAttributeAssignments' 
