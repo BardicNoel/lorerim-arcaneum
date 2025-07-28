@@ -40,18 +40,18 @@ export function AttributeAssignmentDemo() {
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            This demo showcases the enhanced attribute assignment tracking feature. Players can assign Health, Stamina, or Magicka increases for each character level.
+            This demo showcases the enhanced attribute assignment tracking feature. Players can assign Health, Stamina, or Magicka increases for each character level. The system now uses race starting stats as the base values when a race is selected in the build.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <h4 className="font-medium text-sm">How to Assign Attributes:</h4>
               <ul className="text-xs space-y-1 text-muted-foreground">
-                <li>• <Badge variant="outline" className="text-xs">1</Badge> Set your character level using the level control</li>
-                <li>• <Badge variant="outline" className="text-xs">2</Badge> Click any level button (2-{useCharacterStore.getState().build.attributeAssignments.level}) to assign Health</li>
-                <li>• <Badge variant="outline" className="text-xs">3</Badge> Click again to cycle: Health → Stamina → Magicka</li>
-                <li>• <Badge variant="outline" className="text-xs">4</Badge> Click once more to clear the assignment</li>
-                <li>• <Badge variant="outline" className="text-xs">5</Badge> Use "Quick Assign" buttons for faster assignment</li>
+                <li>• <Badge variant="outline" className="text-xs">1</Badge> Type directly in the input fields or use + and - buttons</li>
+                <li>• <Badge variant="outline" className="text-xs">2</Badge> Character level is automatically calculated (level = total points + 1)</li>
+                <li>• <Badge variant="outline" className="text-xs">3</Badge> Points are automatically assigned to the next available level</li>
+                <li>• <Badge variant="outline" className="text-xs">4</Badge> Use "Clear All" to reset all assignments</li>
+                <li>• <Badge variant="outline" className="text-xs">5</Badge> Select a race in the build to see base stats integration</li>
               </ul>
             </div>
             
@@ -82,9 +82,10 @@ export function AttributeAssignmentDemo() {
               <ol className="text-xs space-y-1">
                 <li>1. Click "Load Demo Data" to see a level 10 character with sample assignments</li>
                 <li>2. Expand the Attribute Assignment card below</li>
-                <li>3. Try clicking different level buttons to see the assignment mechanism</li>
-                <li>4. Use the "Quick Assign" buttons to quickly add more assignments</li>
-                <li>5. Adjust the character level to see more assignment options</li>
+                <li>3. Try typing in the input fields or using + and - buttons</li>
+                <li>4. Watch how the character level updates automatically</li>
+                <li>5. Notice how level is derived from total attribute points</li>
+                <li>6. Select a race in the build to see base stats integration</li>
               </ol>
             </div>
           </div>

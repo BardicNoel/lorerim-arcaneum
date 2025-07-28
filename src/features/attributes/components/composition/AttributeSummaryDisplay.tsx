@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils'
 import { H5 } from '@/shared/ui/ui/typography'
 import { StatBar } from '@/features/races-v2/components/atomic'
 import type { AttributeDisplayData } from '../../types'
+import type { Race } from '@/shared/data/schemas'
 
 interface AttributeSummaryDisplayProps {
   displayData: AttributeDisplayData
@@ -10,6 +11,7 @@ interface AttributeSummaryDisplayProps {
   className?: string
   showRatios?: boolean
   compact?: boolean
+  selectedRace?: Race | null
 }
 
 export function AttributeSummaryDisplay({
@@ -18,12 +20,19 @@ export function AttributeSummaryDisplay({
   className,
   showRatios = true,
   compact = false,
+  selectedRace,
 }: AttributeSummaryDisplayProps) {
   if (compact) {
     return (
       <div className={cn('space-y-3', className)}>
         <H5 className="text-lg font-medium text-foreground">Attribute Assignments</H5>
-        
+
+        {selectedRace && (
+          <div className="text-xs text-muted-foreground mb-2">
+            Base stats from {selectedRace.name}
+          </div>
+        )}
+
         <div className="grid grid-cols-3 gap-3">
           <div className="flex flex-col items-center p-3 bg-muted/50 rounded">
             <div className="text-sm text-muted-foreground">Health</div>
@@ -47,7 +56,7 @@ export function AttributeSummaryDisplay({
             </div>
           </div>
         </div>
-        
+
         {showRatios && (
           <div className="text-xs text-muted-foreground text-center">
             Level {level} • {displayData.health.assigned + displayData.stamina.assigned + displayData.magicka.assigned} assignments
@@ -56,38 +65,60 @@ export function AttributeSummaryDisplay({
       </div>
     )
   }
-  
+
   return (
     <div className={cn('space-y-4', className)}>
       <H5 className="text-lg font-medium text-foreground">Attribute Assignments</H5>
-      
+
+      {selectedRace && selectedRace.startingStats && (
+        <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+          <div className="text-sm text-blue-800 dark:text-blue-200">
+            <p className="font-medium mb-1">Base Stats from {selectedRace.name}:</p>
+            <div className="grid grid-cols-3 gap-2 text-xs">
+              <div className="text-center">
+                <div className="font-medium">Health</div>
+                <div className="text-muted-foreground">{selectedRace.startingStats.health}</div>
+              </div>
+              <div className="text-center">
+                <div className="font-medium">Stamina</div>
+                <div className="text-muted-foreground">{selectedRace.startingStats.stamina}</div>
+              </div>
+              <div className="text-center">
+                <div className="font-medium">Magicka</div>
+                <div className="text-muted-foreground">{selectedRace.startingStats.magicka}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="space-y-3">
-        <StatBar 
-          value={displayData.health.total} 
-          maxValue={200} 
-          label="Health" 
-          color="red" 
+        <StatBar
+          value={displayData.health.total}
+          maxValue={200}
+          label="Health"
+          color="red"
           size="sm"
           showValue={true}
         />
-        <StatBar 
-          value={displayData.stamina.total} 
-          maxValue={200} 
-          label="Stamina" 
-          color="green" 
+        <StatBar
+          value={displayData.stamina.total}
+          maxValue={200}
+          label="Stamina"
+          color="green"
           size="sm"
           showValue={true}
         />
-        <StatBar 
-          value={displayData.magicka.total} 
-          maxValue={200} 
-          label="Magicka" 
-          color="blue" 
+        <StatBar
+          value={displayData.magicka.total}
+          maxValue={200}
+          label="Magicka"
+          color="blue"
           size="sm"
           showValue={true}
         />
       </div>
-      
+
       {showRatios && (
         <div className="grid grid-cols-3 gap-2 text-xs">
           <div className="text-center p-2 bg-muted rounded">
@@ -110,7 +141,7 @@ export function AttributeSummaryDisplay({
           </div>
         </div>
       )}
-      
+
       <div className="text-sm text-muted-foreground text-center">
         Level {level} • {displayData.health.assigned + displayData.stamina.assigned + displayData.magicka.assigned} assignments made
       </div>

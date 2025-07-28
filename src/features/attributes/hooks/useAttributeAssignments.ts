@@ -1,77 +1,104 @@
 import { useMemo } from 'react'
 import { useCharacterStore } from '@/shared/stores/characterStore'
+import { useRacesStore } from '@/shared/stores/racesStore'
 import type { AttributeType, AttributeDisplayData } from '../types'
 
 export function useAttributeAssignments() {
   const { build, setAttributeAssignment, clearAttributeAssignment, clearAllAttributeAssignments, updateAttributeLevel } = useCharacterStore()
-  
+  const { data: races } = useRacesStore()
+
   const assignments = build.attributeAssignments
-  
+
+  // Get the selected race data
+  const selectedRace = useMemo(() => {
+    if (!build.race || races.length === 0) return null
+    return races.find(race => race.edid === build.race) || null
+  }, [build.race, races])
+
+  // Get base stats from race or use defaults
+  const baseStats = useMemo(() => {
+    if (selectedRace?.startingStats) {
+      return {
+        health: selectedRace.startingStats.health,
+        stamina: selectedRace.startingStats.stamina,
+        magicka: selectedRace.startingStats.magicka,
+      }
+    }
+    // Default values if no race is selected
+    return {
+      health: 100,
+      stamina: 100,
+      magicka: 100,
+    }
+  }, [selectedRace])
+
   // Calculate display data
   const displayData = useMemo((): AttributeDisplayData => {
     const level = assignments.level || 1
     const totalAssignments = assignments.health + assignments.stamina + assignments.magicka
-    
+
     return {
       health: {
-        base: 100, // Base health - could come from race data
+        base: baseStats.health,
         assigned: assignments.health,
-        total: 100 + assignments.health,
+        total: baseStats.health + assignments.health,
         ratio: level > 0 ? (assignments.health / level) * 100 : 0,
       },
       stamina: {
-        base: 100, // Base stamina - could come from race data
+        base: baseStats.stamina,
         assigned: assignments.stamina,
-        total: 100 + assignments.stamina,
+        total: baseStats.stamina + assignments.stamina,
         ratio: level > 0 ? (assignments.stamina / level) * 100 : 0,
       },
       magicka: {
-        base: 100, // Base magicka - could come from race data
+        base: baseStats.magicka,
         assigned: assignments.magicka,
-        total: 100 + assignments.magicka,
+        total: baseStats.magicka + assignments.magicka,
         ratio: level > 0 ? (assignments.magicka / level) * 100 : 0,
       },
     }
-  }, [assignments])
-  
+  }, [assignments, baseStats])
+
   // Validation helpers
   const canAssignAtLevel = (level: number) => {
     return level > 0 && level <= assignments.level
   }
-  
+
   const getAssignmentAtLevel = (level: number): AttributeType | null => {
     return assignments.assignments[level] || null
   }
-  
+
   const getTotalAssignments = () => {
     return assignments.health + assignments.stamina + assignments.magicka
   }
-  
+
   const getUnassignedLevels = () => {
     const assignedLevels = Object.keys(assignments.assignments).map(Number)
     const unassigned = []
-    
+
     for (let i = 2; i <= assignments.level; i++) { // Start at level 2 (level 1 has no assignment)
       if (!assignedLevels.includes(i)) {
         unassigned.push(i)
       }
     }
-    
+
     return unassigned
   }
-  
+
   return {
     // State
     assignments,
     displayData,
     level: assignments.level,
-    
+    selectedRace,
+    baseStats,
+
     // Actions
     setAttributeAssignment,
     clearAttributeAssignment,
     clearAllAttributeAssignments,
     updateAttributeLevel,
-    
+
     // Computed
     canAssignAtLevel,
     getAssignmentAtLevel,
