@@ -3,6 +3,7 @@ import { AccordionCard } from '@/shared/components/generic/AccordionCard'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
 import { H3, P, Small } from '@/shared/ui/ui/typography'
+import { usePerkReferencesData } from '../../adapters/usePerkReferencesData'
 import type { PerkReferenceNode } from '../../types'
 import { PerkReferenceBadge } from './PerkReferenceBadge'
 
@@ -12,6 +13,7 @@ interface PerkReferenceAccordionCardProps {
   isExpanded?: boolean
   onToggle?: () => void
   disableHover?: boolean
+  viewMode?: 'grid' | 'list'
 }
 
 export function PerkReferenceAccordionCard({
@@ -20,9 +22,22 @@ export function PerkReferenceAccordionCard({
   isExpanded = false,
   onToggle,
   disableHover = false,
+  viewMode = 'grid',
 }: PerkReferenceAccordionCardProps) {
   const originalPerk = item.originalPerk
+  const { allPerks } = usePerkReferencesData()
+  
   if (!originalPerk) return null
+
+  // Function to look up perk names from IDs
+  const getPrerequisiteNames = (prerequisiteIds: string[]): string[] => {
+    return prerequisiteIds.map(id => {
+      const perk = allPerks.find(p => p.edid === id)
+      return perk?.name || id // Fallback to ID if perk not found
+    })
+  }
+
+  const prerequisiteNames = getPrerequisiteNames(originalPerk.prerequisites)
 
   return (
     <AccordionCard
@@ -38,32 +53,63 @@ export function PerkReferenceAccordionCard({
           </span>
         </div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-2">
-            <H3 className="text-primary font-semibold truncate">{item.name}</H3>
-            <div className="flex items-center gap-2 flex-shrink-0">
-              {originalPerk.skillTreeName && (
-                <PerkReferenceBadge
-                  label={originalPerk.skillTreeName}
-                  type="skill"
-                  size="sm"
-                />
-              )}
-              {originalPerk.totalRanks > 1 && (
-                <PerkReferenceBadge
-                  label={`${originalPerk.totalRanks} ranks`}
-                  type="rank"
-                  size="sm"
-                />
-              )}
-              {originalPerk.minLevel && (
-                <PerkReferenceBadge
-                  label={`Level ${originalPerk.minLevel}+`}
-                  type="level"
-                  size="sm"
-                />
-              )}
+          {viewMode === 'grid' ? (
+            // Grid mode: badges under the name
+            <div className="space-y-1">
+              <H3 className="text-primary font-semibold truncate">{item.name}</H3>
+              <div className="flex items-center gap-2 flex-wrap">
+                {originalPerk.skillTreeName && (
+                  <PerkReferenceBadge
+                    label={originalPerk.skillTreeName}
+                    type="skill"
+                    size="sm"
+                  />
+                )}
+                {originalPerk.totalRanks > 1 && (
+                  <PerkReferenceBadge
+                    label={`${originalPerk.totalRanks} ranks`}
+                    type="rank"
+                    size="sm"
+                  />
+                )}
+                {originalPerk.minLevel && (
+                  <PerkReferenceBadge
+                    label={`Level ${originalPerk.minLevel}+`}
+                    type="level"
+                    size="sm"
+                  />
+                )}
+              </div>
             </div>
-          </div>
+          ) : (
+            // List mode: badges right-aligned
+            <div className="flex items-center justify-between gap-2">
+              <H3 className="text-primary font-semibold truncate">{item.name}</H3>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                {originalPerk.skillTreeName && (
+                  <PerkReferenceBadge
+                    label={originalPerk.skillTreeName}
+                    type="skill"
+                    size="sm"
+                  />
+                )}
+                {originalPerk.totalRanks > 1 && (
+                  <PerkReferenceBadge
+                    label={`${originalPerk.totalRanks} ranks`}
+                    type="rank"
+                    size="sm"
+                  />
+                )}
+                {originalPerk.minLevel && (
+                  <PerkReferenceBadge
+                    label={`Level ${originalPerk.minLevel}+`}
+                    type="level"
+                    size="sm"
+                  />
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </AccordionCard.Header>
       
@@ -95,7 +141,7 @@ export function PerkReferenceAccordionCard({
               Prerequisites
             </h5>
             <div className="flex flex-wrap gap-1">
-              {originalPerk.prerequisites.map((prereq, index) => (
+              {prerequisiteNames.map((prereq, index) => (
                 <Badge key={index} variant="secondary" className="text-xs">
                   {prereq}
                 </Badge>

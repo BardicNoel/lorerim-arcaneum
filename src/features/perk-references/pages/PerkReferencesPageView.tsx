@@ -23,7 +23,7 @@ export function PerkReferencesPageView() {
   const { build } = useCharacterBuild()
 
   const { allPerks, loading, error } = usePerkReferencesData()
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list')
 
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
@@ -334,6 +334,7 @@ export function PerkReferencesPageView() {
                 item={item}
                 isExpanded={expandedPerks.has(item.id)}
                 onToggle={() => handlePerkToggle(item.id)}
+                viewMode="grid"
               />
             ))}
           </AccordionGrid>
@@ -345,6 +346,7 @@ export function PerkReferencesPageView() {
                 item={item}
                 isExpanded={expandedPerks.has(item.id)}
                 onToggle={() => handlePerkToggle(item.id)}
+                viewMode="list"
               />
             ))}
           </div>
