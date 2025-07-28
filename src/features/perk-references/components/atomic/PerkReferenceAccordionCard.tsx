@@ -3,7 +3,6 @@ import { AccordionCard } from '@/shared/components/generic/AccordionCard'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
 import { H3, P, Small } from '@/shared/ui/ui/typography'
-import { ChevronRight } from 'lucide-react'
 import type { PerkReferenceNode } from '../../types'
 import { PerkReferenceBadge } from './PerkReferenceBadge'
 
@@ -39,37 +38,33 @@ export function PerkReferenceAccordionCard({
           </span>
         </div>
         <div className="flex-1 min-w-0">
-          <H3 className="text-primary font-semibold truncate">{item.name}</H3>
-          <div className="flex items-center gap-2 mt-1">
-            {originalPerk.skillTreeName && (
-              <PerkReferenceBadge
-                label={originalPerk.skillTreeName}
-                type="skill"
-                size="sm"
-              />
-            )}
-            {originalPerk.totalRanks > 1 && (
-              <PerkReferenceBadge
-                label={`Rank ${originalPerk.totalRanks}`}
-                type="rank"
-                size="sm"
-              />
-            )}
-            {originalPerk.minLevel && (
-              <PerkReferenceBadge
-                label={`Level ${originalPerk.minLevel}+`}
-                type="level"
-                size="sm"
-              />
-            )}
+          <div className="flex items-center justify-between gap-2">
+            <H3 className="text-primary font-semibold truncate">{item.name}</H3>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              {originalPerk.skillTreeName && (
+                <PerkReferenceBadge
+                  label={originalPerk.skillTreeName}
+                  type="skill"
+                  size="sm"
+                />
+              )}
+              {originalPerk.totalRanks > 1 && (
+                <PerkReferenceBadge
+                  label={`${originalPerk.totalRanks} ranks`}
+                  type="rank"
+                  size="sm"
+                />
+              )}
+              {originalPerk.minLevel && (
+                <PerkReferenceBadge
+                  label={`Level ${originalPerk.minLevel}+`}
+                  type="level"
+                  size="sm"
+                />
+              )}
+            </div>
           </div>
         </div>
-        <ChevronRight
-          className={cn(
-            'h-4 w-4 text-muted-foreground transition-transform',
-            isExpanded ? 'rotate-90' : ''
-          )}
-        />
       </AccordionCard.Header>
       
       <AccordionCard.Summary>

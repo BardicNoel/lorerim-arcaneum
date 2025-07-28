@@ -56,11 +56,11 @@ const badgeStyles: Record<PerkBadgeType, Record<string, string>> = {
   },
   rank: {
     // Rank indicators
-    'Rank 1': 'bg-blue-100 text-blue-800 border-blue-200',
-    'Rank 2': 'bg-green-100 text-green-800 border-green-200',
-    'Rank 3': 'bg-purple-100 text-purple-800 border-purple-200',
-    'Rank 4': 'bg-orange-100 text-orange-800 border-orange-200',
-    'Rank 5': 'bg-red-100 text-red-800 border-red-200',
+    '1 rank': 'bg-blue-100 text-blue-800 border-blue-200',
+    '2 ranks': 'bg-green-100 text-green-800 border-green-200',
+    '3 ranks': 'bg-purple-100 text-purple-800 border-purple-200',
+    '4 ranks': 'bg-orange-100 text-orange-800 border-orange-200',
+    '5 ranks': 'bg-red-100 text-red-800 border-red-200',
   },
   availability: {
     // Availability states
