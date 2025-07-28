@@ -481,6 +481,17 @@ export function hydrateBuildData(build: BuildState): HydratedBuildData {
   // Generate tags
   const tags = generateTags(race, skills, traits)
 
+  // NEW: Extract attribute assignments
+  const attributes = {
+    level: build.attributeAssignments.level || 1,
+    health: build.attributeAssignments.health || 0,
+    stamina: build.attributeAssignments.stamina || 0,
+    magicka: build.attributeAssignments.magicka || 0,
+    totalPoints: (build.attributeAssignments.health || 0) + 
+                 (build.attributeAssignments.stamina || 0) + 
+                 (build.attributeAssignments.magicka || 0),
+  }
+
   return {
     name: build.name || 'Unnamed Character',
     notes: build.notes || '',
@@ -492,5 +503,6 @@ export function hydrateBuildData(build: BuildState): HydratedBuildData {
     perks,
     destinyPath,
     tags,
+    attributes, // NEW
   }
 }

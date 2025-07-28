@@ -48,6 +48,25 @@ export function formatBuildForDiscordNamesOnly(
   lines.push(`${data.religion.name}`)
   lines.push('')
 
+  // NEW: Attributes
+  lines.push(`__⚔️ Attributes (Level ${data.attributes.level})__`)
+  const attributeParts = []
+  if (data.attributes.health > 0) {
+    attributeParts.push(`Health: ${data.attributes.health}`)
+  }
+  if (data.attributes.stamina > 0) {
+    attributeParts.push(`Stamina: ${data.attributes.stamina}`)
+  }
+  if (data.attributes.magicka > 0) {
+    attributeParts.push(`Magicka: ${data.attributes.magicka}`)
+  }
+  if (attributeParts.length > 0) {
+    lines.push(attributeParts.join(', '))
+  } else {
+    lines.push('No attribute points assigned')
+  }
+  lines.push('')
+
   // Skills
   lines.push(`__📚 Skills__`)
   if (data.skills.major.length > 0) {
@@ -151,6 +170,25 @@ export function formatBuildForDiscord(
   // Religion
   lines.push(`__✝️ Religion__`)
   lines.push(`${data.religion.name}`)
+  lines.push('')
+
+  // NEW: Attributes
+  lines.push(`__⚔️ Attributes (Level ${data.attributes.level})__`)
+  const attributeParts = []
+  if (data.attributes.health > 0) {
+    attributeParts.push(`Health: ${data.attributes.health}`)
+  }
+  if (data.attributes.stamina > 0) {
+    attributeParts.push(`Stamina: ${data.attributes.stamina}`)
+  }
+  if (data.attributes.magicka > 0) {
+    attributeParts.push(`Magicka: ${data.attributes.magicka}`)
+  }
+  if (attributeParts.length > 0) {
+    lines.push(attributeParts.join(', '))
+  } else {
+    lines.push('No attribute points assigned')
+  }
   lines.push('')
 
   // Skills

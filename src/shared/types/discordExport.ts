@@ -16,4 +16,12 @@ export interface HydratedBuildData {
   }>
   destinyPath: Array<{ name: string; effects?: string }>
   tags: string[]
+  // NEW: Attribute assignments
+  attributes: {
+    level: number
+    health: number
+    stamina: number
+    magicka: number
+    totalPoints: number
+  }
 }
