@@ -39,12 +39,12 @@ export function SpellGrid({
 
   return (
     <div className={`grid gap-4 ${gridColumns[columns]} ${className}`}>
-      {spells.map((spell) => (
+      {spells.map((spell, index) => (
         <SpellAccordionCard
-          key={spell.editorId}
+          key={`${spell.name}-${spell.editorId}-${index}`}
           spell={spell}
-          isExpanded={expandedCards.has(spell.editorId)}
-          onToggle={() => onToggleExpansion?.(spell.editorId)}
+          isExpanded={expandedCards.has(`${spell.name}-${spell.editorId}-${index}`)}
+          onToggle={() => onToggleExpansion?.(`${spell.name}-${spell.editorId}-${index}`)}
         />
       ))}
     </div>

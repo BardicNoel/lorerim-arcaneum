@@ -82,9 +82,6 @@ export function SpellAccordionCard({
           >
             {spell.level}
           </Badge>
-          <Badge variant="secondary" className="text-xs">
-            {spell.magickaCost} MP
-          </Badge>
         </div>
       </AccordionCard.Header>
       
@@ -174,6 +171,10 @@ export function SpellAccordionCard({
         <div>
           <h5 className="text-lg font-medium text-foreground mb-3">Statistics</h5>
           <div className="grid grid-cols-2 gap-3">
+            <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
+              <span className="font-medium">Magicka Cost</span>
+              <span className="font-bold">{spell.magickaCost} MP</span>
+            </div>
             <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
               <span className="font-medium">Total Magnitude</span>
               <span className="font-bold">{spell.totalMagnitude}</span>
