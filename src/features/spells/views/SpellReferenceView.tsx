@@ -5,10 +5,7 @@ import {
   Grid3X3, 
   List, 
   ChevronDown,
-  X,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown
+  X
 } from 'lucide-react'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import { useSpellData, useSpellState, useSpellFilters, useSpellComputed } from '../adapters'
@@ -146,6 +143,23 @@ export function SpellReferenceView() {
             />
           </div>
           
+          {/* Sort Dropdown */}
+          <div className="relative">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as 'name' | 'school' | 'level' | 'magickaCost' | 'magnitude' | 'duration')}
+              className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
+            >
+              <option value="name">Sort: A-Z</option>
+              <option value="school">Sort: School</option>
+              <option value="level">Sort: Level</option>
+              <option value="magickaCost">Sort: Cost</option>
+              <option value="magnitude">Sort: Magnitude</option>
+              <option value="duration">Sort: Duration</option>
+            </select>
+            <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+          </div>
+          
           {/* View Mode Toggle */}
           <div className="flex border rounded-lg p-1 bg-muted">
             <Button
@@ -202,27 +216,6 @@ export function SpellReferenceView() {
 
       {/* View Controls */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          {/* Sort Controls */}
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={toggleSortOrder}
-              className="flex items-center gap-2"
-            >
-              <ArrowUpDown className="h-4 w-4" />
-              {sortBy === 'name' ? 'Name' : 
-               sortBy === 'school' ? 'School' : 
-               sortBy === 'level' ? 'Level' : 
-               sortBy === 'magickaCost' ? 'Cost' : 
-               sortBy === 'magnitude' ? 'Magnitude' : 
-               sortBy === 'duration' ? 'Duration' : 'Sort By'}
-              {sortOrder === 'asc' ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />}
-            </Button>
-          </div>
-        </div>
-
         {/* Results Count */}
         <div className="text-sm text-muted-foreground">
           {filteredSpells.length} of {spells.length} spells

@@ -3,6 +3,17 @@ import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreatio
 import { useSpellData, useSpellState } from '../adapters'
 import { SpellGrid, SpellList } from '../components'
 import type { SearchOption, SelectedTag, SearchCategory } from '@/shared/components/playerCreation/types'
+import { ChevronDown } from 'lucide-react'
+
+type SortOption = 'alphabetical' | 'school' | 'level'
+
+const levelOrder = {
+  'Novice': 1,
+  'Apprentice': 2,
+  'Adept': 3,
+  'Expert': 4,
+  'Master': 5
+}
 
 export function SpellPageView() {
   // Adapters
@@ -14,6 +25,9 @@ export function SpellPageView() {
   
   // State for tracking expanded cards
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set())
+  
+  // State for sorting
+  const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
   
   // Toggle expanded state for a card
   const toggleCardExpansion = (spellId: string) => {
@@ -156,6 +170,27 @@ export function SpellPageView() {
     })
   })
 
+  // Sort the filtered spells
+  const sortedSpells = useMemo(() => {
+    return [...filteredSpells].sort((a, b) => {
+      switch (sortBy) {
+        case 'alphabetical':
+          return a.name.localeCompare(b.name)
+        case 'school':
+          const schoolComparison = a.school.localeCompare(b.school)
+          if (schoolComparison !== 0) return schoolComparison
+          return a.name.localeCompare(b.name) // Secondary sort by name
+        case 'level':
+          const levelA = levelOrder[a.level as keyof typeof levelOrder] || 0
+          const levelB = levelOrder[b.level as keyof typeof levelOrder] || 0
+          if (levelA !== levelB) return levelA - levelB
+          return a.name.localeCompare(b.name) // Secondary sort by name
+        default:
+          return 0
+      }
+    })
+  }, [filteredSpells, sortBy])
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -208,6 +243,20 @@ export function SpellPageView() {
                 No search categories available. Spells loaded: {safeSpells.length}
               </div>
             )}
+          </div>
+          
+          {/* Sort Dropdown */}
+          <div className="relative">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as SortOption)}
+              className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
+            >
+              <option value="alphabetical">Sort: A-Z</option>
+              <option value="school">Sort: School</option>
+              <option value="level">Sort: Level</option>
+            </select>
+            <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
           </div>
           
           {/* View Mode Toggle */}
@@ -270,12 +319,12 @@ export function SpellPageView() {
 
       {/* Results Count */}
       <div className="text-sm text-muted-foreground">
-        {filteredSpells.length} of {safeSpells.length} spells
+        {sortedSpells.length} of {safeSpells.length} spells
       </div>
 
       {/* Results Display */}
       <div>
-        {filteredSpells.length === 0 ? (
+        {sortedSpells.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground">
               No spells found matching your criteria.
@@ -288,7 +337,7 @@ export function SpellPageView() {
           <>
             {viewMode === 'grid' && (
               <SpellGrid 
-                spells={filteredSpells} 
+                spells={sortedSpells} 
                 variant="default"
                 columns={3}
                 expandedCards={expandedCards}
@@ -298,7 +347,7 @@ export function SpellPageView() {
             
             {viewMode === 'list' && (
               <SpellList 
-                spells={filteredSpells} 
+                spells={sortedSpells} 
                 variant="default"
                 expandedCards={expandedCards}
                 onToggleExpansion={toggleCardExpansion}
