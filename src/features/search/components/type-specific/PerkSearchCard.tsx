@@ -89,7 +89,7 @@ export function PerkSearchCard({
               Sample Perks
             </h5>
             <div className="flex flex-wrap gap-1">
-              {fullPerkTree.perks.map((perk, idx) => (
+              {fullPerkTree.perks.slice(0, 6).map((perk, idx) => (
                 <span
                   key={`${perk.edid}-${idx}`}
                   className="inline-block px-2 py-1 text-xs bg-muted rounded"
@@ -97,6 +97,11 @@ export function PerkSearchCard({
                   {perk.name}
                 </span>
               ))}
+              {fullPerkTree.perks.length > 6 && (
+                <span className="inline-block px-2 py-1 text-xs bg-muted rounded text-muted-foreground">
+                  +{fullPerkTree.perks.length - 6} more
+                </span>
+              )}
             </div>
           </div>
         )}

@@ -153,17 +153,18 @@ export function transformPerkTreesToSearchable(
   perkTrees: any[]
 ): SearchableItem[] {
   return perkTrees.map(tree => ({
-    id: `perk-${tree.id}`,
+    id: `perk-${tree.treeId || tree.id}`,
     type: 'perk' as const,
-    name: tree.name,
-    description: tree.description,
+    name: tree.treeName || tree.name,
+    description: tree.treeDescription || tree.description,
     category: tree.category,
     tags: tree.tags || [],
     searchableText: [
-      tree.name,
-      tree.description || '',
+      tree.treeName || tree.name,
+      tree.treeDescription || tree.description || '',
       tree.category || '',
       ...(tree.tags || []),
+      ...(tree.perks?.map((perk: any) => perk.name) || []),
     ],
     originalData: tree,
     url: `/build/perks`,

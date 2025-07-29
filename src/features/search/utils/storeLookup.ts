@@ -4,18 +4,20 @@
  * than the processed store data
  */
 export function findItemInStore<
-  T extends { id?: string; edid?: string; name: string },
+  T extends { id?: string; edid?: string; treeId?: string; name: string },
 >(
   items: T[] | undefined,
-  searchItem: { id?: string; edid?: string; name: string }
+  searchItem: { id?: string; edid?: string; treeId?: string; name: string }
 ): T | undefined {
   if (!items) return undefined
 
   const foundItem = items.find(item => {
     const idMatch = !!item.id && item.id === searchItem.id
     const edidMatch = !!item.edid && item.edid === searchItem.edid
+    const treeIdMatch = !!item.treeId && item.treeId === searchItem.treeId
     const nameMatch = !!item.name && item.name === searchItem.name
-    return idMatch || edidMatch || nameMatch
+
+    return idMatch || edidMatch || treeIdMatch || nameMatch
   })
   return foundItem
 }
