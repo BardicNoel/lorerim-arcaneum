@@ -12,6 +12,22 @@ export function SpellPageView() {
   // Ensure spells is always an array
   const safeSpells = Array.isArray(spells) ? spells : []
   
+  // State for tracking expanded cards
+  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set())
+  
+  // Toggle expanded state for a card
+  const toggleCardExpansion = (spellId: string) => {
+    setExpandedCards(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(spellId)) {
+        newSet.delete(spellId)
+      } else {
+        newSet.add(spellId)
+      }
+      return newSet
+    })
+  }
+  
   // Generate search categories directly in the component
   const searchCategories = useMemo((): SearchCategory[] => {
     console.log('Generating search categories directly:', {
@@ -274,9 +290,9 @@ export function SpellPageView() {
               <SpellGrid 
                 spells={filteredSpells} 
                 variant="default"
-                showEffects={true}
-                showTags={true}
                 columns={3}
+                expandedCards={expandedCards}
+                onToggleExpansion={toggleCardExpansion}
               />
             )}
             
@@ -284,8 +300,8 @@ export function SpellPageView() {
               <SpellList 
                 spells={filteredSpells} 
                 variant="default"
-                showEffects={true}
-                showTags={true}
+                expandedCards={expandedCards}
+                onToggleExpansion={toggleCardExpansion}
               />
             )}
           </>

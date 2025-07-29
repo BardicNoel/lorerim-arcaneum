@@ -6,13 +6,17 @@ interface SpellResultsDisplayProps {
   viewMode: 'grid' | 'list'
   onSpellSelect?: (spell: SpellWithComputed) => void
   className?: string
+  expandedCards?: Set<string>
+  onToggleExpansion?: (spellId: string) => void
 }
 
 export function SpellResultsDisplay({ 
   spells, 
   viewMode, 
   onSpellSelect, 
-  className = '' 
+  className = '',
+  expandedCards = new Set(),
+  onToggleExpansion
 }: SpellResultsDisplayProps) {
   if (spells.length === 0) {
     return (
@@ -33,10 +37,10 @@ export function SpellResultsDisplay({
         <SpellGrid 
           spells={spells} 
           variant="default"
-          showEffects={true}
-          showTags={true}
           columns={3}
           onSpellSelect={onSpellSelect}
+          expandedCards={expandedCards}
+          onToggleExpansion={onToggleExpansion}
         />
       )}
       
@@ -44,9 +48,9 @@ export function SpellResultsDisplay({
         <SpellList 
           spells={spells} 
           variant="default"
-          showEffects={true}
-          showTags={true}
           onSpellSelect={onSpellSelect}
+          expandedCards={expandedCards}
+          onToggleExpansion={onToggleExpansion}
         />
       )}
     </div>

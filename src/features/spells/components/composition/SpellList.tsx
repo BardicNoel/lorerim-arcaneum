@@ -1,4 +1,4 @@
-import { SpellItem } from '../atomic/SpellItem'
+import { SpellAccordionCard } from '../atomic/SpellAccordionCard'
 import type { SpellWithComputed } from '../../types'
 
 interface SpellListProps {
@@ -7,6 +7,8 @@ interface SpellListProps {
   showEffects?: boolean
   showTags?: boolean
   className?: string
+  expandedCards?: Set<string>
+  onToggleExpansion?: (spellId: string) => void
 }
 
 export function SpellList({ 
@@ -14,7 +16,9 @@ export function SpellList({
   variant = 'default',
   showEffects = true,
   showTags = true,
-  className = ''
+  className = '',
+  expandedCards = new Set(),
+  onToggleExpansion
 }: SpellListProps) {
   if (spells.length === 0) {
     return (
@@ -27,12 +31,11 @@ export function SpellList({
   return (
     <div className={`space-y-4 ${className}`}>
       {spells.map((spell) => (
-        <SpellItem
+        <SpellAccordionCard
           key={spell.editorId}
           spell={spell}
-          variant={variant}
-          showEffects={showEffects}
-          showTags={showTags}
+          isExpanded={expandedCards.has(spell.editorId)}
+          onToggle={() => onToggleExpansion?.(spell.editorId)}
         />
       ))}
     </div>

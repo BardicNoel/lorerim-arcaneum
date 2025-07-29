@@ -1,4 +1,4 @@
-import { SpellItem } from '../atomic/SpellItem'
+import { SpellAccordionCard } from '../atomic/SpellAccordionCard'
 import type { SpellWithComputed } from '../../types'
 
 interface SpellGridProps {
@@ -8,6 +8,8 @@ interface SpellGridProps {
   showTags?: boolean
   columns?: 1 | 2 | 3 | 4
   className?: string
+  expandedCards?: Set<string>
+  onToggleExpansion?: (spellId: string) => void
 }
 
 const gridColumns = {
@@ -23,7 +25,9 @@ export function SpellGrid({
   showEffects = true,
   showTags = true,
   columns = 3,
-  className = ''
+  className = '',
+  expandedCards = new Set(),
+  onToggleExpansion
 }: SpellGridProps) {
   if (spells.length === 0) {
     return (
@@ -36,12 +40,11 @@ export function SpellGrid({
   return (
     <div className={`grid gap-4 ${gridColumns[columns]} ${className}`}>
       {spells.map((spell) => (
-        <SpellItem
+        <SpellAccordionCard
           key={spell.editorId}
           spell={spell}
-          variant={variant}
-          showEffects={showEffects}
-          showTags={showTags}
+          isExpanded={expandedCards.has(spell.editorId)}
+          onToggle={() => onToggleExpansion?.(spell.editorId)}
         />
       ))}
     </div>

@@ -22,6 +22,22 @@ export function SpellReferenceView() {
   // State adapters
   const { viewMode, setViewMode } = useSpellState()
   
+  // State for tracking expanded cards
+  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set())
+  
+  // Toggle expanded state for a card
+  const toggleCardExpansion = (spellId: string) => {
+    setExpandedCards(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(spellId)) {
+        newSet.delete(spellId)
+      } else {
+        newSet.add(spellId)
+      }
+      return newSet
+    })
+  }
+  
   // Filter adapters
   const {
     filteredSpells,
@@ -150,15 +166,6 @@ export function SpellReferenceView() {
             >
               <List className="h-4 w-4" />
             </Button>
-            <Button
-              variant={viewMode === 'accordion' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('accordion')}
-              className="h-8 px-3"
-              title="Accordion view"
-            >
-              <ChevronDown className="h-4 w-4" />
-            </Button>
           </div>
         </div>
 
@@ -230,9 +237,9 @@ export function SpellReferenceView() {
           <SpellGrid 
             spells={filteredSpells} 
             variant="default"
-            showEffects={true}
-            showTags={true}
             columns={3}
+            expandedCards={expandedCards}
+            onToggleExpansion={toggleCardExpansion}
           />
         )}
         
@@ -240,8 +247,8 @@ export function SpellReferenceView() {
           <SpellList 
             spells={filteredSpells} 
             variant="default"
-            showEffects={true}
-            showTags={true}
+            expandedCards={expandedCards}
+            onToggleExpansion={toggleCardExpansion}
           />
         )}
       </div>
