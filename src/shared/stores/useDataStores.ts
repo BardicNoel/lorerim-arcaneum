@@ -7,6 +7,7 @@ import { usePerkTreesStore } from './perkTreesStore'
 import { useRacesStore } from './racesStore'
 import { useReligionsStore } from './religionsStore'
 import { useSkillsStore } from './skillsStore'
+import { useSpellsStore } from './spellsStore'
 import { useTraitsStore } from './traitsStore'
 
 // Hook state interface (matches old useDataCache pattern)
@@ -107,6 +108,19 @@ export function usePerkTrees() {
   }
 }
 
+/**
+ * Hook for accessing spells data
+ */
+export function useSpells() {
+  const { data, loading, error } = useSpellsStore()
+
+  return {
+    data: data.length > 0 ? data : null,
+    loading,
+    error,
+  }
+}
+
 // Synchronous hooks for when you know data is loaded
 export function useSkillsSync() {
   const { data } = useSkillsStore()
@@ -160,6 +174,14 @@ export function usePerkTreesSync() {
   const { data } = usePerkTreesStore()
   if (data.length === 0) {
     throw new Error('Perk trees data not loaded. Call loadAllData() first.')
+  }
+  return data
+}
+
+export function useSpellsSync() {
+  const { data } = useSpellsStore()
+  if (data.length === 0) {
+    throw new Error('Spells data not loaded. Call loadAllData() first.')
   }
   return data
 }

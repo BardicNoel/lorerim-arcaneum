@@ -7,6 +7,11 @@ export function useSearchFilters() {
     useSearchData()
   const { activeFilters } = useSearchState()
 
+  // Get the current count of searchable items to trigger re-computation
+  const searchableItemsCount = useMemo(() => {
+    return getSearchableItems().length
+  }, [getSearchableItems])
+
   const searchResults = useMemo(() => {
     if (!isReady) return []
 
@@ -47,7 +52,7 @@ export function useSearchFilters() {
   const availableFilters = useMemo(() => {
     if (!isReady) return { types: [], categories: [], tags: [] }
     return getAvailableFilters()
-  }, [isReady, getAvailableFilters])
+  }, [isReady, getAvailableFilters, searchableItemsCount])
 
   const resultCounts = useMemo(() => {
     const counts: Record<string, number> = {}

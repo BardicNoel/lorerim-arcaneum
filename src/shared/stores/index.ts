@@ -5,6 +5,7 @@ export { usePerkTreesStore } from './perkTreesStore'
 export { useRacesStore } from './racesStore'
 export { useReligionsStore } from './religionsStore'
 export { useSkillsStore } from './skillsStore'
+export { useSpellsStore } from './spellsStore'
 export { useTraitsStore } from './traitsStore'
 
 // Export convenience hooks (matches old useDataCache API)
@@ -21,6 +22,8 @@ export {
   useReligionsSync,
   useSkills,
   useSkillsSync,
+  useSpells,
+  useSpellsSync,
   useTraits,
   useTraitsSync,
 } from './useDataStores'

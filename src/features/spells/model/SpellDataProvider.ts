@@ -21,17 +21,13 @@ export class SpellDataProvider {
    * Load spell data from the JSON file
    */
   async loadSpells(): Promise<SpellWithComputed[]> {
-    console.log('SpellDataProvider: loadSpells called')
-    
     // Check cache first
     if (this.cache && Date.now() - this.lastFetch < this.CACHE_DURATION) {
-      console.log('SpellDataProvider: Returning cached data, count:', this.cache.length)
       return this.cache
     }
 
     try {
       const dataUrl = getDataUrl('data/player_spells.json')
-      console.log('SpellDataProvider: Fetching from URL:', dataUrl)
       
       const response = await fetch(dataUrl)
       if (!response.ok) {
@@ -39,7 +35,6 @@ export class SpellDataProvider {
       }
 
       const rawData = await response.json()
-      console.log('SpellDataProvider: Raw data loaded, count:', rawData.length)
       
       // Validate and transform the data
       const spells: SpellWithComputed[] = []
@@ -56,13 +51,6 @@ export class SpellDataProvider {
           invalidCount++
         }
       }
-
-      console.log('SpellDataProvider: Data processing complete:', {
-        total: rawData.length,
-        valid: validCount,
-        invalid: invalidCount,
-        processed: spells.length
-      })
 
       // Update cache
       this.cache = spells
