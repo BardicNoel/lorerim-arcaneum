@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import { useSpellData, useSpellState, useSpellFilters, useSpellComputed } from '../adapters'
-import { SpellGrid, SpellList, SpellAccordion } from '../components'
+import { SpellGrid, SpellList } from '../components'
 import type { SearchCategory, SearchOption, SelectedTag } from '@/shared/components/playerCreation/types'
 
 export function SpellReferenceView() {
@@ -239,16 +239,6 @@ export function SpellReferenceView() {
         {viewMode === 'list' && (
           <SpellList 
             spells={filteredSpells} 
-            variant="default"
-            showEffects={true}
-            showTags={true}
-          />
-        )}
-        
-        {viewMode === 'accordion' && (
-          <SpellAccordion 
-            spells={filteredSpells} 
-            groupBy="school"
             variant="default"
             showEffects={true}
             showTags={true}

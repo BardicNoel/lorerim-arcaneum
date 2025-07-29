@@ -1,9 +1,9 @@
 import type { SpellWithComputed } from '../types'
-import { SpellGrid, SpellList, SpellAccordion } from './composition'
+import { SpellGrid, SpellList } from './composition'
 
 interface SpellResultsDisplayProps {
   spells: SpellWithComputed[]
-  viewMode: 'grid' | 'list' | 'accordion'
+  viewMode: 'grid' | 'list'
   onSpellSelect?: (spell: SpellWithComputed) => void
   className?: string
 }
@@ -43,17 +43,6 @@ export function SpellResultsDisplay({
       {viewMode === 'list' && (
         <SpellList 
           spells={spells} 
-          variant="default"
-          showEffects={true}
-          showTags={true}
-          onSpellSelect={onSpellSelect}
-        />
-      )}
-      
-      {viewMode === 'accordion' && (
-        <SpellAccordion 
-          spells={spells} 
-          groupBy="school"
           variant="default"
           showEffects={true}
           showTags={true}

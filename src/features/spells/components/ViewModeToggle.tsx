@@ -1,8 +1,8 @@
-import { Grid3X3, List, ChevronDown } from 'lucide-react'
+import { Grid3X3, List } from 'lucide-react'
 
 interface ViewModeToggleProps {
-  viewMode: 'grid' | 'list' | 'accordion'
-  onViewModeChange: (mode: 'grid' | 'list' | 'accordion') => void
+  viewMode: 'grid' | 'list'
+  onViewModeChange: (mode: 'grid' | 'list') => void
   className?: string
 }
 
@@ -32,18 +32,6 @@ export function ViewModeToggle({ viewMode, onViewModeChange, className = '' }: V
       >
         <List className="h-4 w-4" />
         List
-      </button>
-      <button
-        onClick={() => onViewModeChange('accordion')}
-        className={`px-3 py-1.5 rounded text-sm font-medium transition-colors flex items-center gap-2 ${
-          viewMode === 'accordion' 
-            ? 'bg-primary text-primary-foreground' 
-            : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-        }`}
-        title="Accordion view"
-      >
-        <ChevronDown className="h-4 w-4" />
-        Accordion
       </button>
     </div>
   )

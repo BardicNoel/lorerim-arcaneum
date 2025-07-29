@@ -110,8 +110,6 @@ export function useSpellFilters(
             return spell.school === tag.value
           case 'Spell Levels':
             return spell.level === tag.value
-          case 'Effect Types':
-            return spell.effects.some(effect => effect.name === tag.value)
           case 'Fuzzy Search':
             return true // Handled by fuzzy search later
           default:

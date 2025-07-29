@@ -1,0 +1,144 @@
+{
+  "treeId": "AVSpeechcraft",
+  "treeName": "Speech",
+  "positions": [
+    {
+      "perkId": "REQ_Speech_Haggling",
+      "x": 543.0908292816375,
+      "y": 709.2755169957918,
+      "gridX": 1,
+      "gridY": 3,
+      "horizontal": 1,
+      "vertical": 0.6425172331930601
+    },
+    {
+      "perkId": "REQ_Speech_Merchant",
+      "x": 542.3046643922653,
+      "y": 631.9662332165612,
+      "gridX": 1,
+      "gridY": 3,
+      "horizontal": 1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Speech_Fencing",
+      "x": 558.803253752697,
+      "y": 508.5518038149054,
+      "gridX": 1,
+      "gridY": 2,
+      "horizontal": 1,
+      "vertical": -0.048273206169820546
+    },
+    {
+      "perkId": "REQ_Speech_SilverTongue",
+      "x": 333.81377263920217,
+      "y": 647.0007697786184,
+      "gridX": 0,
+      "gridY": 3,
+      "horizontal": 1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Speech_Masquerade1",
+      "x": 381.30697369831773,
+      "y": 356.9092817765146,
+      "gridX": 1,
+      "gridY": 1,
+      "horizontal": -1,
+      "vertical": 0.8969760592171535
+    },
+    {
+      "perkId": "REQ_Speech_Leadership",
+      "x": 259.1028377617854,
+      "y": 491.93092794876964,
+      "gridX": 0,
+      "gridY": 2,
+      "horizontal": 1,
+      "vertical": -0.6023024017076788
+    },
+    {
+      "perkId": "REQ_Speech_LoreOfTheThuum",
+      "x": 1338.333350121975,
+      "y": 690,
+      "gridX": 4,
+      "gridY": 3,
+      "horizontal": 0.3666670024394989,
+      "vertical": 0
+    },
+    {
+      "perkId": "REQ_Speech_TonguesInsight",
+      "x": 1495.6457121514113,
+      "y": 231.20490574495284,
+      "gridX": 5,
+      "gridY": 0,
+      "horizontal": -1,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Speech_SpritiualEquilibirum",
+      "x": 1174.7334126828077,
+      "y": 484.69639288874964,
+      "gridX": 3,
+      "gridY": 2,
+      "horizontal": 1,
+      "vertical": -0.8434535703750119
+    },
+    {
+      "perkId": "REQ_Speech_IndomitableForce",
+      "x": 1048.7470104192898,
+      "y": 552.1510339111173,
+      "gridX": 3,
+      "gridY": 2,
+      "horizontal": 0.1749402083857967,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Speech_DestructiveUrge",
+      "x": 1037.7244831830221,
+      "y": 645.5180377020189,
+      "gridX": 3,
+      "gridY": 3,
+      "horizontal": -0.045510336339557395,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Speech_TheWayOfTheVoice",
+      "x": 1310.1839179504373,
+      "y": 345.5438184816227,
+      "gridX": 4,
+      "gridY": 1,
+      "horizontal": -0.19632164099125476,
+      "vertical": 0.518127282720756
+    },
+    {
+      "perkId": "Feat_Perk_Skill_Speechcraft_Commander1",
+      "x": 721.6554113106054,
+      "y": 614.2079848594261,
+      "gridX": 2,
+      "gridY": 2,
+      "horizontal": -0.7668917737878929,
+      "vertical": 1
+    },
+    {
+      "perkId": "Feat_Perk_Char_Speechcraft_ShoutFocus1",
+      "x": 854.864935727268,
+      "y": 690,
+      "gridX": 2,
+      "gridY": 3,
+      "horizontal": 1,
+      "vertical": 0
+    },
+    {
+      "perkId": "Feat_Perk_Skill_Speechcraft_WarCry",
+      "x": 126.06984147222056,
+      "y": 569.1366038299685,
+      "gridX": 0,
+      "gridY": 2,
+      "horizontal": -1,
+      "vertical": 1
+    }
+  ],
+  "version": "1.0.0",
+  "createdAt": "2025-07-26T21:05:56.365Z",
+  "updatedAt": "2025-07-26T21:05:56.365Z"
+}

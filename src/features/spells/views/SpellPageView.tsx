@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import { useSpellData, useSpellState } from '../adapters'
-import { SpellGrid, SpellList, SpellAccordion } from '../components'
+import { SpellGrid, SpellList } from '../components'
 import type { SearchOption, SelectedTag, SearchCategory } from '@/shared/components/playerCreation/types'
 
 export function SpellPageView() {
@@ -23,15 +23,13 @@ export function SpellPageView() {
       return []
     }
 
-    // Extract unique schools, levels, and effect types
+    // Extract unique schools and levels
     const allSchools = [...new Set(safeSpells.map(spell => spell.school))]
     const allLevels = [...new Set(safeSpells.map(spell => spell.level))]
-    const allEffectTypes = [...new Set(safeSpells.flatMap(spell => spell.effects.map(effect => effect.name)))]
     
     console.log('Extracted categories:', {
       schools: allSchools,
-      levels: allLevels,
-      effectTypes: allEffectTypes.slice(0, 5)
+      levels: allLevels
     })
     
     return [
@@ -63,18 +61,6 @@ export function SpellPageView() {
           value: level,
           category: 'Spell Levels',
           description: `${level} spells`,
-        })),
-      },
-      {
-        id: 'effect-types',
-        name: 'Effect Types',
-        placeholder: 'Filter by effect type...',
-        options: allEffectTypes.map(effectType => ({
-          id: `effect-${effectType}`,
-          label: effectType,
-          value: effectType,
-          category: 'Effect Types',
-          description: `Spells with ${effectType} effects`,
         })),
       },
     ]
@@ -137,8 +123,6 @@ export function SpellPageView() {
           return spell.school === tag.value
         case 'Spell Levels':
           return spell.level === tag.value
-        case 'Effect Types':
-          return spell.effects.some(effect => effect.name === tag.value)
         case 'Fuzzy Search':
           // Simple text search for now - can be enhanced with proper fuzzy search
           const searchText = tag.value.toLowerCase()
@@ -234,17 +218,6 @@ export function SpellPageView() {
             >
               List
             </button>
-            <button
-              onClick={() => setViewMode('accordion')}
-              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-                viewMode === 'accordion' 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-              }`}
-              title="Accordion view"
-            >
-              Accordion
-            </button>
           </div>
         </div>
         
@@ -310,16 +283,6 @@ export function SpellPageView() {
             {viewMode === 'list' && (
               <SpellList 
                 spells={filteredSpells} 
-                variant="default"
-                showEffects={true}
-                showTags={true}
-              />
-            )}
-            
-            {viewMode === 'accordion' && (
-              <SpellAccordion 
-                spells={filteredSpells} 
-                groupBy="school"
                 variant="default"
                 showEffects={true}
                 showTags={true}

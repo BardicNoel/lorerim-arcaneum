@@ -104,12 +104,10 @@ export function useSpellComputed(
 
     const allSchools = [...new Set(safeSpells.map(spell => spell.school))]
     const allLevels = [...new Set(safeSpells.map(spell => spell.level))]
-    const allEffectTypes = [...new Set(safeSpells.flatMap(spell => spell.effects.map(effect => effect.name)))]
     
     console.log('Extracted categories:', {
       schools: allSchools,
-      levels: allLevels,
-      effectTypes: allEffectTypes.slice(0, 5) // Log first 5 effect types
+      levels: allLevels
     })
     
     const categories = [
@@ -141,18 +139,6 @@ export function useSpellComputed(
           value: level,
           category: 'Spell Levels',
           description: `${level} spells`,
-        })),
-      },
-      {
-        id: 'effect-types',
-        name: 'Effect Types',
-        placeholder: 'Filter by effect type...',
-        options: allEffectTypes.map(effectType => ({
-          id: `effect-${effectType}`,
-          label: effectType,
-          value: effectType,
-          category: 'Effect Types',
-          description: `Spells with ${effectType} effects`,
         })),
       },
     ]
@@ -190,13 +176,6 @@ export function useSpellComputed(
     if (!enableSearchCategories) return {}
     
     const counts: Record<string, number> = {}
-    
-    // Count by effect types
-    safeSpells.forEach(spell => {
-      spell.effects.forEach(effect => {
-        counts[effect.name] = (counts[effect.name] || 0) + 1
-      })
-    })
     
     // Count by tags
     safeSpells.forEach(spell => {

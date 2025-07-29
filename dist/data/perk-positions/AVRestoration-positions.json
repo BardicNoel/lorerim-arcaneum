@@ -1,0 +1,198 @@
+{
+  "treeId": "AVRestoration",
+  "treeName": "Restoration",
+  "positions": [
+    {
+      "perkId": "REQ_Restoration_Mastery_000_NoviceRestoration",
+      "x": 1277.3283451478228,
+      "y": 1073.8701317379875,
+      "gridX": 4,
+      "gridY": 5,
+      "horizontal": -0.853433097043544,
+      "vertical": 0.7956710579329183
+    },
+    {
+      "perkId": "REQ_Restoration_Mastery_025_ApprenticeRestoration",
+      "x": 1305.588058980913,
+      "y": 851.1880343702289,
+      "gridX": 4,
+      "gridY": 4,
+      "horizontal": -0.28823882038173904,
+      "vertical": -0.6270655209923689
+    },
+    {
+      "perkId": "REQ_Restoration_Mastery_050_AdeptRestoration",
+      "x": 1317.716489330282,
+      "y": 664.1164893362429,
+      "gridX": 4,
+      "gridY": 3,
+      "horizontal": -0.04567021339435996,
+      "vertical": -0.8627836887919026
+    },
+    {
+      "perkId": "REQ_Restoration_Mastery_075_ExpertRestoration",
+      "x": 1320.3333499887958,
+      "y": 458.3999991416931,
+      "gridX": 4,
+      "gridY": 2,
+      "horizontal": 0.006666999775916338,
+      "vertical": -1.7200000286102295
+    },
+    {
+      "perkId": "REQ_Restoration_Mastery_100_MasterRestoration",
+      "x": 1330.6308278312104,
+      "y": 355.9901590004357,
+      "gridX": 4,
+      "gridY": 1,
+      "horizontal": 0.2126165566242071,
+      "vertical": 0.866338633347857
+    },
+    {
+      "perkId": "REQ_Restoration_Healing_025_ImprovedHealing",
+      "x": 713.5938140753456,
+      "y": 821.968283039876,
+      "gridX": 2,
+      "gridY": 4,
+      "horizontal": -0.9281237184930887,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Restoration_Turning_075_MysticTurning",
+      "x": 839.6821783916976,
+      "y": 647.1849479922664,
+      "gridX": 2,
+      "gridY": 3,
+      "horizontal": 1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Restoration_Healing_075_Respite",
+      "x": 549.3170555758202,
+      "y": 630.816487283292,
+      "gridX": 1,
+      "gridY": 3,
+      "horizontal": 1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Restoration_Protection_075_ImprovedWards",
+      "x": 1716.3804457483047,
+      "y": 641.1803211479964,
+      "gridX": 5,
+      "gridY": 3,
+      "horizontal": 1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Restoration_Empower_025_EmpoweredRestoration",
+      "x": 1738.2488012218269,
+      "y": 993.6803211479967,
+      "gridX": 5,
+      "gridY": 5,
+      "horizontal": 1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Restoration_Recovery_025_FocusedMind",
+      "x": 1516.1224723165315,
+      "y": 662.4006672160547,
+      "gridX": 5,
+      "gridY": 3,
+      "horizontal": -1,
+      "vertical": -0.9199777594648443
+    },
+    {
+      "perkId": "REQ_Restoration_Recovery_050_PowerOfLife",
+      "x": 1553.7010631242365,
+      "y": 459.25119877817326,
+      "gridX": 5,
+      "gridY": 2,
+      "horizontal": -0.92597873751527,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Restoration_Recovery_075_EssenceOfLife",
+      "x": 1556.4022776245756,
+      "y": 365.52743021978904,
+      "gridX": 5,
+      "gridY": 1,
+      "horizontal": -0.8719544475084876,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Restoration_PainfulRegrets_000_PainfulRegrets",
+      "x": 1951.5198371314723,
+      "y": 1041.143766350355,
+      "gridX": 6,
+      "gridY": 5,
+      "horizontal": 1,
+      "vertical": -0.29520778832149974
+    },
+    {
+      "perkId": "REQ_Restoration_Venomancy_025_Venomancy",
+      "x": 1165.392954038526,
+      "y": 668.1880343255252,
+      "gridX": 3,
+      "gridY": 3,
+      "horizontal": 1,
+      "vertical": -0.7270655224824926
+    },
+    {
+      "perkId": "REQ_Restoration_Venomancy_075_ParalyzingPoison",
+      "x": 1116.23962901188,
+      "y": 519.486971201289,
+      "gridX": 3,
+      "gridY": 2,
+      "horizontal": 1,
+      "vertical": 0.3162323733762984
+    },
+    {
+      "perkId": "REQ_Restoration_Heliomancy_025_Heliomancy",
+      "x": 1028.2169992657837,
+      "y": 747.9618880516384,
+      "gridX": 3,
+      "gridY": 3,
+      "horizontal": -0.2356600146843266,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Restoration_Heliomancy_075_ScorchingLight",
+      "x": 893.1880343255252,
+      "y": 509.40838039358357,
+      "gridX": 2,
+      "gridY": 2,
+      "horizontal": 1,
+      "vertical": -0.01972065354721432
+    },
+    {
+      "perkId": "REQ_Restoration_Turning_025_ImprovedTurning",
+      "x": 844.8813842722329,
+      "y": 730.728059245587,
+      "gridX": 2,
+      "gridY": 3,
+      "horizontal": 1,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Restoration_Protection_025_ImprovedProtection",
+      "x": 1506.4375650635607,
+      "y": 857.8336461746428,
+      "gridX": 5,
+      "gridY": 4,
+      "horizontal": -1,
+      "vertical": -0.40554512751190636
+    },
+    {
+      "perkId": "Feat_Perk_Skill_Restoration_WardMastery1",
+      "x": 1852.38357282086,
+      "y": 755.5901605739983,
+      "gridX": 6,
+      "gridY": 3,
+      "horizontal": -0.5523285435827984,
+      "vertical": 1
+    }
+  ],
+  "version": "1.0.0",
+  "createdAt": "2025-07-26T20:49:53.817Z",
+  "updatedAt": "2025-07-26T20:49:53.817Z"
+}

@@ -58,7 +58,7 @@ export interface SpellSearchResult {
 
 // View state types
 export interface SpellViewState {
-  viewMode: 'grid' | 'list' | 'accordion'
+  viewMode: 'grid' | 'list'
   sortBy: 'name' | 'school' | 'level' | 'magickaCost' | 'magnitude' | 'duration'
   sortOrder: 'asc' | 'desc'
   selectedSpells: string[]
