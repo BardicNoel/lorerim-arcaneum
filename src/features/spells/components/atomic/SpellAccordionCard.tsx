@@ -3,13 +3,10 @@ import { AccordionCard } from '@/shared/components/generic/AccordionCard'
 import { Badge } from '@/shared/ui/ui/badge'
 import { 
   BookOpen, 
-  Zap, 
   Clock, 
   Target, 
   Sparkles,
   Flame,
-  Snowflake,
-  Bolt,
   Heart,
   Ghost,
   Eye,
@@ -51,13 +48,6 @@ export function SpellAccordionCard({
 }: SpellAccordionCardProps) {
   const SchoolIcon = schoolIcons[spell.school as keyof typeof schoolIcons] || Sparkles
 
-  // Generate tags from the spell data
-  const tags = [
-    spell.school,
-    spell.level,
-    ...spell.effects.slice(0, 2).map(effect => effect.name),
-  ].filter((tag, index, arr) => arr.indexOf(tag) === index) // Remove duplicates
-
   const handleToggle = () => {
     onToggle?.()
   }
@@ -72,17 +62,6 @@ export function SpellAccordionCard({
       <AccordionCard.Header>
         <SchoolIcon className="w-5 h-5 text-muted-foreground" />
         <h3 className="text-primary font-semibold text-lg">{spell.name}</h3>
-        <div className="flex items-center gap-3 ml-auto pointer-events-none">
-          <Badge
-            variant="outline"
-            className={cn(
-              levelColors[spell.level as keyof typeof levelColors] || 'bg-gray-100 text-gray-800 border-gray-200',
-              'text-xs font-medium transition-colors'
-            )}
-          >
-            {spell.level}
-          </Badge>
-        </div>
       </AccordionCard.Header>
       
       <AccordionCard.Summary>
@@ -91,6 +70,15 @@ export function SpellAccordionCard({
             <BookOpen className="w-4 h-4" />
             <span>{spell.school}</span>
           </div>
+          <Badge 
+            variant="outline" 
+            className={cn(
+              levelColors[spell.level as keyof typeof levelColors] || 'bg-gray-100 text-gray-800 border-gray-200',
+              'text-xs font-medium'
+            )}
+          >
+            {spell.level}
+          </Badge>
           {spell.isAreaSpell && (
             <div className="flex items-center gap-1">
               <Target className="w-4 h-4" />
@@ -111,24 +99,7 @@ export function SpellAccordionCard({
           </p>
         )}
 
-        <div className="flex flex-wrap gap-1">
-          {tags.slice(0, 3).map((tag, index) => (
-            <Badge key={index} variant="outline" className="text-xs">
-              {tag}
-            </Badge>
-          ))}
-          {tags.length > 3 && (
-            <Badge variant="outline" className="text-xs">
-              +{tags.length - 3} more
-            </Badge>
-          )}
-        </div>
 
-        {spell.hasEffects && (
-          <div className="mt-2 text-xs text-muted-foreground">
-            {spell.effectCount} effect{spell.effectCount !== 1 ? 's' : ''}
-          </div>
-        )}
       </AccordionCard.Summary>
       
       <AccordionCard.Details>
@@ -142,11 +113,10 @@ export function SpellAccordionCard({
                   key={index}
                   className="p-3 rounded-lg border bg-muted/30"
                 >
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex items-center gap-2 mb-2">
                     <Sparkles className="h-4 w-4 text-yellow-500" />
                     <span className="font-medium text-sm">{effect.name}</span>
                   </div>
-                  <div className="border-t border-border my-2" />
                   <div className="text-sm text-muted-foreground mb-2">
                     {effect.description}
                   </div>
@@ -170,7 +140,7 @@ export function SpellAccordionCard({
         {/* Spell Statistics */}
         <div>
           <h5 className="text-lg font-medium text-foreground mb-3">Statistics</h5>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 mb-6">
             <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
               <span className="font-medium">Magicka Cost</span>
               <span className="font-bold">{spell.magickaCost} MP</span>
@@ -187,26 +157,10 @@ export function SpellAccordionCard({
               <span className="font-medium">Max Area</span>
               <span className="font-bold">{spell.maxArea}ft</span>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
-              <span className="font-medium">Effect Count</span>
-              <span className="font-bold">{spell.effectCount}</span>
-            </div>
           </div>
         </div>
 
-        {/* Additional Tags */}
-        {spell.tags.length > 0 && (
-          <div>
-            <h5 className="text-lg font-medium text-foreground mb-3">Tags</h5>
-            <div className="flex flex-wrap gap-2">
-              {spell.tags.map((tag, index) => (
-                <Badge key={index} variant="outline" className="text-sm">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        )}
+
       </AccordionCard.Details>
     </AccordionCard>
   )
