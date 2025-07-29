@@ -55,20 +55,14 @@ export function SearchFilters({
     onFiltersChange({ categories: newCategories })
   }
 
-  // Generate search categories for autocomplete
+  // Generate search categories for freeform search (excluding record types)
   const generateSearchCategories = (): SearchCategory[] => {
     return [
       {
         id: 'fuzzy-search',
         name: 'Search All',
         placeholder: 'Search by name, description, or abilities...',
-        options: availableFilters.types.map(type => ({
-          id: `type-${type.value}`,
-          label: type.label,
-          value: type.value,
-          category: 'Search All',
-          description: `${type.count} ${type.label}${type.count !== 1 ? 's' : ''}`,
-        })),
+        options: [], // No predefined options for freeform search
       },
       {
         id: 'categories',
@@ -101,13 +95,36 @@ export function SearchFilters({
 
   return (
     <div className={cn('space-y-4', className)}>
-      {/* Search Autocomplete */}
+      {/* Freeform Search Autocomplete */}
       <div className="space-y-2">
         <CustomMultiAutocompleteSearch
           categories={searchCategories}
           onSelect={onTagSelect}
           onCustomSearch={onTagSelect}
         />
+      </div>
+
+      {/* Record Type Filters */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium">Record Types</span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {availableFilters.types.map(type => (
+            <Button
+              key={type.value}
+              variant={
+                activeFilters.types.includes(type.value) ? 'default' : 'outline'
+              }
+              size="sm"
+              onClick={() => handleTypeToggle(type.value)}
+              className="text-xs"
+            >
+              {type.label}
+              <span className="ml-1 text-muted-foreground">({type.count})</span>
+            </Button>
+          ))}
+        </div>
       </div>
 
       {/* Selected Tags */}

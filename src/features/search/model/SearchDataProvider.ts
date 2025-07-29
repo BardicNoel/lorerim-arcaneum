@@ -9,6 +9,7 @@ import {
   createSearchHighlights,
   transformBirthsignsToSearchable,
   transformDestinyNodesToSearchable,
+  transformPerkReferencesToSearchable,
   transformPerkTreesToSearchable,
   transformRacesToSearchable,
   transformReligionsToSearchable,
@@ -72,6 +73,7 @@ export class SearchDataProvider {
   transformBirthsignsToSearchable = transformBirthsignsToSearchable
   transformDestinyNodesToSearchable = transformDestinyNodesToSearchable
   transformPerkTreesToSearchable = transformPerkTreesToSearchable
+  transformPerkReferencesToSearchable = transformPerkReferencesToSearchable
 
   async buildSearchIndex(): Promise<void> {
     if (this.isIndexing) return
@@ -143,16 +145,45 @@ export class SearchDataProvider {
     }
   }
 
+  // Add perk references to the search index
+  async addPerkReferencesToIndex(perkReferences: any[]): Promise<void> {
+    if (this.indexedStores.has('perk-references')) {
+      return
+    }
+
+    // Transform perk references to searchable items
+    const searchablePerkReferences =
+      transformPerkReferencesToSearchable(perkReferences)
+
+    // Add items to the collection
+    this.allSearchableItems.push(...searchablePerkReferences)
+
+    // Mark store as indexed
+    this.indexedStores.add('perk-references')
+
+    // Rebuild the search index with all items
+    this.searchIndex = new Fuse(this.allSearchableItems, this.fuseOptions)
+  }
+
   search(query: string, filters?: SearchFilters): SearchResult[] {
-    if (!this.searchIndex || !query.trim()) {
+    if (!this.searchIndex) {
       return []
     }
 
-    // Apply filters to searchable items
-    let filteredItems = this.allSearchableItems
+    // If query is empty or just a wildcard, return filtered items without text search
+    if (!query.trim() || query.trim() === '*') {
+      let filteredItems = this.allSearchableItems
 
-    if (filters) {
-      filteredItems = this.applyFilters(filteredItems, filters)
+      if (filters) {
+        filteredItems = this.applyFilters(filteredItems, filters)
+      }
+
+      return filteredItems.map(item => ({
+        item,
+        score: 1, // Perfect score for filtered results
+        matches: [],
+        highlights: [],
+      }))
     }
 
     // Double-check that searchIndex is still valid
@@ -161,19 +192,28 @@ export class SearchDataProvider {
       return []
     }
 
-    // Create a new Fuse instance with filtered items
-    const filteredFuse = new Fuse(filteredItems, this.fuseOptions)
+    // Perform search on all items first
+    const fuseResults = this.searchIndex.search(query)
 
-    // Perform search
-    const fuseResults = filteredFuse.search(query)
+    // Apply filters to search results
+    let filteredResults = fuseResults
+
+    if (filters) {
+      filteredResults = fuseResults.filter(fuseResult => {
+        const item = fuseResult.item
+        return this.applyFilters([item], filters).length > 0
+      })
+    }
 
     // Transform Fuse results to SearchResult format
-    return fuseResults.map(fuseResult => ({
+    const results = filteredResults.map(fuseResult => ({
       item: fuseResult.item,
       score: fuseResult.score || 0,
       matches: [...(fuseResult.matches || [])],
       highlights: createSearchHighlights([...(fuseResult.matches || [])]),
     }))
+
+    return results
   }
 
   private applyFilters(

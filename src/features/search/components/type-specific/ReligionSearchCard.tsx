@@ -2,21 +2,25 @@ import { ReligionAccordion } from '@/features/religions/components/ReligionAccor
 import type { Religion as FeatureReligion } from '@/features/religions/types'
 import type { Religion as SharedReligion } from '@/shared/data/schemas'
 import { useReligionsStore } from '@/shared/stores/religionsStore'
-import { useState } from 'react'
 import type { SearchableItem } from '../../model/SearchModel'
 import { findItemInStore } from '../../utils/storeLookup'
 
 interface ReligionSearchCardProps {
   item: SearchableItem
   className?: string
+  isExpanded?: boolean
+  onToggle?: () => void
+  viewMode?: 'grid' | 'list'
 }
 
 export function ReligionSearchCard({
   item,
   className,
+  isExpanded = false,
+  onToggle,
+  viewMode = 'grid',
 }: ReligionSearchCardProps) {
   const religions = useReligionsStore(state => state.data)
-  const [isExpanded, setIsExpanded] = useState(false)
 
   // Find the full religion record from the store
   const fullReligion = findItemInStore(religions, item.originalData) as
@@ -36,11 +40,6 @@ export function ReligionSearchCard({
       })),
     })
     return null
-  }
-
-  // Handle accordion toggle
-  const handleToggle = () => {
-    setIsExpanded(!isExpanded)
   }
 
   // Convert the shared Religion type to the feature Religion type
@@ -109,7 +108,7 @@ export function ReligionSearchCard({
         item={religionAsPlayerCreationItem}
         originalReligion={religionAsFeatureReligion}
         isExpanded={isExpanded}
-        onToggle={handleToggle}
+        onToggle={onToggle}
         className="w-full"
         showBlessings={true}
         showTenets={true}

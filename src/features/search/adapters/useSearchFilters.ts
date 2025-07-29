@@ -19,6 +19,7 @@ export function useSearchFilters() {
     if (!hasFilters) {
       // Return all searchable items when no filters are applied
       const allItems = getSearchableItems()
+
       return allItems.map(item => ({
         item,
         score: 1, // Perfect score for unfiltered results
@@ -27,10 +28,20 @@ export function useSearchFilters() {
       }))
     }
 
-    // Create a search query from tags
+    // Create a search query from tags for freeform search
     const searchQuery = activeFilters.tags.join(' ')
 
-    return search(searchQuery, activeFilters)
+    // Create filters without the search terms (tags will be handled separately)
+    const searchFilters = {
+      ...activeFilters,
+      tags: [], // Remove tags from filters since they're used for search query
+    }
+
+    // If we have type/category filters but no search query, use a wildcard query
+    // to ensure the search function processes the filters
+    const finalQuery = searchQuery || '*'
+
+    return search(finalQuery, searchFilters)
   }, [isReady, search, activeFilters, getSearchableItems])
 
   const availableFilters = useMemo(() => {

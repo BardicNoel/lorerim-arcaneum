@@ -1,18 +1,25 @@
 import { RaceAccordion } from '@/features/races-v2/components/composition/RaceAccordion'
 import type { Race as RaceV2Type } from '@/features/races-v2/types'
 import { useRacesStore } from '@/shared/stores/racesStore'
-import { useState } from 'react'
 import type { SearchableItem } from '../../model/SearchModel'
 import { findItemInStore } from '../../utils/storeLookup'
 
 interface RaceSearchCardProps {
   item: SearchableItem
   className?: string
+  isExpanded?: boolean
+  onToggle?: () => void
+  viewMode?: 'grid' | 'list'
 }
 
-export function RaceSearchCard({ item, className }: RaceSearchCardProps) {
+export function RaceSearchCard({
+  item,
+  className,
+  isExpanded = false,
+  onToggle,
+  viewMode = 'grid',
+}: RaceSearchCardProps) {
   const races = useRacesStore(state => state.data)
-  const [isExpanded, setIsExpanded] = useState(false)
 
   // Find the full race record from the store
   const fullRace = findItemInStore(races, item.originalData)
@@ -30,11 +37,6 @@ export function RaceSearchCard({ item, className }: RaceSearchCardProps) {
       })),
     })
     return null
-  }
-
-  // Handle accordion toggle
-  const handleToggle = () => {
-    setIsExpanded(!isExpanded)
   }
 
   // Convert the race to PlayerCreationItem format for RaceAccordion
@@ -58,7 +60,7 @@ export function RaceSearchCard({ item, className }: RaceSearchCardProps) {
           originalRace: fullRace as unknown as RaceV2Type,
         }}
         isExpanded={isExpanded}
-        onToggle={handleToggle}
+        onToggle={onToggle}
         showToggle={false} // Disable the add to build toggle for search results
         disableHover={false} // Enable hover for better UX
         className="w-full"

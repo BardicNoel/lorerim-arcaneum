@@ -10,6 +10,7 @@ export const TYPE_DEFAULT_VIEWS: Record<string, ViewMode> = {
   trait: 'card',
   religion: 'card',
   perk: 'grid',
+  'perk-reference': 'card',
 }
 
 // Get the effective view mode for a type
@@ -39,6 +40,7 @@ export function getAvailableViewModes(type: string): ViewMode[] {
       break
     case 'skill':
     case 'perk':
+    case 'perk-reference':
       modes.push('grid')
       break
   }

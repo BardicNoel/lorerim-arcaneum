@@ -9,7 +9,7 @@ import { useSearchFilters } from '../adapters/useSearchFilters'
 import { useSearchState } from '../adapters/useSearchState'
 import { SearchPageLayout } from '../components/SearchPageLayout'
 import { SearchFilters } from '../components/composition/SearchFilters'
-import { SimpleSearchResultsGrid } from '../components/composition/SimpleSearchResultsGrid'
+import { SearchResultsAccordionGrid } from '../components/composition/SearchResultsAccordionGrid'
 
 export function SimpleSearchPageView() {
   const { isReady, isIndexing, error } = useSearchData()
@@ -20,6 +20,9 @@ export function SimpleSearchPageView() {
 
   // Tag state management
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
+
+  // View mode state
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
   // Sync selectedTags with activeFilters.tags from URL
   useEffect(() => {
@@ -35,16 +38,6 @@ export function SimpleSearchPageView() {
       })
     })
 
-    // Add type filters from URL
-    activeFilters.types.forEach(type => {
-      urlTags.push({
-        id: `type-${type}`,
-        label: type.charAt(0).toUpperCase() + type.slice(1),
-        value: type,
-        category: 'Types',
-      })
-    })
-
     // Add category filters from URL
     activeFilters.categories.forEach(category => {
       urlTags.push({
@@ -56,7 +49,7 @@ export function SimpleSearchPageView() {
     })
 
     setSelectedTags(urlTags)
-  }, [activeFilters.tags, activeFilters.types, activeFilters.categories])
+  }, [activeFilters.tags, activeFilters.categories])
 
   // Add a tag (from autocomplete or custom input)
   const handleTagSelect = (optionOrTag: SearchOption | string) => {
@@ -84,7 +77,22 @@ export function SimpleSearchPageView() {
       )
     ) {
       setSelectedTags(prev => [...prev, tag])
-      addTag(tag.value)
+
+      // Add to appropriate filter based on category
+      if (tag.category === 'Categories') {
+        setActiveFilters(prev => ({
+          ...prev,
+          categories: [...prev.categories, tag.value],
+        }))
+      } else if (tag.category === 'Tags') {
+        setActiveFilters(prev => ({
+          ...prev,
+          tags: [...prev.tags, tag.value],
+        }))
+      } else {
+        // Default to adding as a search tag
+        addTag(tag.value)
+      }
     }
   }
 
@@ -95,18 +103,18 @@ export function SimpleSearchPageView() {
       setSelectedTags(prev => prev.filter(t => t.id !== tagId))
 
       // Remove from appropriate filter based on category
-      if (tag.category === 'Types') {
-        setActiveFilters(prev => ({
-          ...prev,
-          types: prev.types.filter(t => t !== tag.value),
-        }))
-      } else if (tag.category === 'Categories') {
+      if (tag.category === 'Categories') {
         setActiveFilters(prev => ({
           ...prev,
           categories: prev.categories.filter(c => c !== tag.value),
         }))
+      } else if (tag.category === 'Tags') {
+        setActiveFilters(prev => ({
+          ...prev,
+          tags: prev.tags.filter(t => t !== tag.value),
+        }))
       } else {
-        // Default to removing from tags
+        // Default to removing from search tags
         removeTag(tag.value)
       }
     }
@@ -116,6 +124,11 @@ export function SimpleSearchPageView() {
   const handleClearFilters = () => {
     setSelectedTags([])
     clearFilters()
+  }
+
+  // Handle view mode change
+  const handleViewModeChange = (mode: 'grid' | 'list') => {
+    setViewMode(mode)
   }
 
   if (!isReady) {
@@ -159,7 +172,7 @@ export function SimpleSearchPageView() {
   const description =
     selectedTags.length > 0
       ? `Found ${totalResults} result${totalResults !== 1 ? 's' : ''} for ${selectedTags.length} filter${selectedTags.length !== 1 ? 's' : ''}`
-      : 'Search across all skills, races, traits, religions, birthsigns, and destiny nodes'
+      : 'Search across all skills, races, traits, religions, birthsigns, destiny nodes, and perk references'
 
   return (
     <SearchPageLayout title={title} description={description}>
@@ -179,10 +192,10 @@ export function SimpleSearchPageView() {
 
       {/* Results Section */}
       <div className="w-full">
-        <SimpleSearchResultsGrid
+        <SearchResultsAccordionGrid
           items={searchResults.map(result => result.item)}
-          selectedItemId={undefined}
-          onItemSelect={() => {}} // No selection needed
+          viewMode={viewMode}
+          onViewModeChange={handleViewModeChange}
         />
       </div>
     </SearchPageLayout>
