@@ -1,19 +1,7 @@
 import { useState } from 'react'
 import { Button } from '@/shared/ui/ui/button'
-import { Input } from '@/shared/ui/ui/input'
-import { Label } from '@/shared/ui/ui/label'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/shared/ui/ui/dropdown-menu'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
-import { Badge } from '@/shared/ui/ui/badge'
 import { Separator } from '@/shared/ui/ui/separator'
 import { 
-  Search, 
-  Filter, 
   Grid3X3, 
   List, 
   ChevronDown,
@@ -22,33 +10,28 @@ import {
   ArrowUp,
   ArrowDown
 } from 'lucide-react'
-import { useSpellData } from '../adapters/useSpellData'
-import { useSpellFilters } from '../adapters/useSpellFilters'
-import { useSpellComputed } from '../adapters/useSpellComputed'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
+import { useSpellData, useSpellState, useSpellFilters, useSpellComputed } from '../adapters'
 import { SpellGrid, SpellList, SpellAccordion } from '../components'
-import { SpellBadge } from '../components/atomic'
+import type { SearchCategory, SearchOption, SelectedTag } from '@/shared/components/playerCreation/types'
 
 export function SpellReferenceView() {
-  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'accordion'>('grid')
-  const [groupBy, setGroupBy] = useState<'school' | 'level' | 'none'>('school')
-
   // Data adapters
-  const { spells, loading, error, schools, levels } = useSpellData()
+  const { spells, loading, error } = useSpellData()
+  
+  // State adapters
+  const { viewMode, setViewMode } = useSpellState()
   
   // Filter adapters
   const {
-    filters,
     filteredSpells,
+    selectedTags,
+    setSelectedTags,
+    addTagFilter,
+    removeTagFilter,
+    clearAllTags,
     hasActiveFilters,
     filterCount,
-    setSearchTerm,
-    setSchools: setFilterSchools,
-    setLevels: setFilterLevels,
-    setHasEffects,
-    setIsAreaSpell,
-    setIsDurationSpell,
-    clearFilters,
-    clearSearch,
     sortBy,
     sortOrder,
     setSortBy,
@@ -56,7 +39,35 @@ export function SpellReferenceView() {
   } = useSpellFilters(spells)
 
   // Computed adapters
-  const { statistics } = useSpellComputed(spells)
+  const { statistics, searchCategories } = useSpellComputed(spells)
+
+  // Tag management
+  const handleTagSelect = (optionOrTag: SearchOption | string) => {
+    let tag: SelectedTag
+    if (typeof optionOrTag === 'string') {
+      tag = {
+        id: `custom-${optionOrTag}`,
+        label: optionOrTag,
+        value: optionOrTag,
+        category: 'Fuzzy Search',
+      }
+    } else {
+      tag = {
+        id: `${optionOrTag.category}-${optionOrTag.id}`,
+        label: optionOrTag.label,
+        value: optionOrTag.value,
+        category: optionOrTag.category,
+      }
+    }
+    
+    if (!selectedTags.some(t => t.value === tag.value && t.category === tag.category)) {
+      addTagFilter(tag)
+    }
+  }
+  
+  const handleTagRemove = (tagId: string) => {
+    removeTagFilter(tagId)
+  }
 
   if (loading) {
     return (
@@ -108,212 +119,101 @@ export function SpellReferenceView() {
         </div>
       </div>
 
-      {/* Search and Filters */}
+      {/* Search Interface */}
       <div className="space-y-4">
-        {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-          <Input
-            placeholder="Search spells by name, school, level, or effects..."
-            value={filters.searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-          {filters.searchTerm && (
+        <div className="flex items-center gap-4">
+          <div className="flex-1">
+            <CustomMultiAutocompleteSearch
+              categories={searchCategories}
+              onSelect={handleTagSelect}
+              onCustomSearch={handleTagSelect}
+            />
+          </div>
+          
+          {/* View Mode Toggle */}
+          <div className="flex border rounded-lg p-1 bg-muted">
             <Button
-              variant="ghost"
+              variant={viewMode === 'grid' ? 'default' : 'ghost'}
               size="sm"
-              onClick={clearSearch}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
+              onClick={() => setViewMode('grid')}
+              className="h-8 px-3"
+              title="Grid view"
             >
-              <X className="w-4 h-4" />
+              <Grid3X3 className="h-4 w-4" />
             </Button>
-          )}
+            <Button
+              variant={viewMode === 'list' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('list')}
+              className="h-8 px-3"
+              title="List view"
+            >
+              <List className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={viewMode === 'accordion' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('accordion')}
+              className="h-8 px-3"
+              title="Accordion view"
+            >
+              <ChevronDown className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
 
-        {/* Filters */}
-        <div className="flex flex-wrap gap-4">
-          {/* School Filter */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Schools</Label>
-            <div className="flex flex-wrap gap-2">
-              {schools.map((school) => (
-                <SpellBadge
-                  key={school}
-                  variant={filters.schools.includes(school) ? 'school' : 'outline'}
-                  size="sm"
-                  className="cursor-pointer"
-                  onClick={() => {
-                    const newSchools = filters.schools.includes(school)
-                      ? filters.schools.filter(s => s !== school)
-                      : [...filters.schools, school]
-                    setFilterSchools(newSchools)
-                  }}
-                >
-                  {school}
-                </SpellBadge>
-              ))}
-            </div>
-          </div>
+        {/* Selected Tags Display */}
+        {selectedTags.length > 0 && (
+          <div className="flex flex-wrap gap-2 items-center">
+            {/* Clear All Button */}
+            <button
+              onClick={clearAllTags}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors duration-200 border border-border/50 hover:border-border cursor-pointer group"
+              title="Clear all filters"
+            >
+              <X className="h-3.5 w-3.5 group-hover:scale-110 transition-transform duration-200" />
+              Clear All
+            </button>
 
-          {/* Level Filter */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Levels</Label>
-            <div className="flex flex-wrap gap-2">
-              {levels.map((level) => (
-                <SpellBadge
-                  key={level}
-                  variant={filters.levels.includes(level) ? 'level' : 'outline'}
-                  size="sm"
-                  className="cursor-pointer"
-                  onClick={() => {
-                    const newLevels = filters.levels.includes(level)
-                      ? filters.levels.filter(l => l !== level)
-                      : [...filters.levels, level]
-                    setFilterLevels(newLevels)
-                  }}
-                >
-                  {level}
-                </SpellBadge>
-              ))}
-            </div>
+            {/* Individual Tags */}
+            {selectedTags.map(tag => (
+              <span
+                key={tag.id}
+                className="inline-flex items-center px-3 py-1.5 rounded-full bg-skyrim-gold/20 border border-skyrim-gold/30 text-sm font-medium text-skyrim-gold hover:bg-skyrim-gold/30 transition-colors duration-200 cursor-pointer group"
+                onClick={() => handleTagRemove(tag.id)}
+                title="Click to remove"
+              >
+                {tag.label}
+                <span className="ml-2 text-skyrim-gold/70 group-hover:text-skyrim-gold transition-colors duration-200">
+                  ×
+                </span>
+              </span>
+            ))}
           </div>
-
-          {/* Effect Type Filters */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Effect Types</Label>
-            <div className="flex flex-wrap gap-2">
-              <SpellBadge
-                variant={filters.hasEffects === true ? 'effect' : 'outline'}
-                size="sm"
-                className="cursor-pointer"
-                onClick={() => setHasEffects(filters.hasEffects === true ? null : true)}
-              >
-                Has Effects
-              </SpellBadge>
-              <SpellBadge
-                variant={filters.isAreaSpell === true ? 'effect' : 'outline'}
-                size="sm"
-                className="cursor-pointer"
-                onClick={() => setIsAreaSpell(filters.isAreaSpell === true ? null : true)}
-              >
-                Area Spells
-              </SpellBadge>
-              <SpellBadge
-                variant={filters.isDurationSpell === true ? 'effect' : 'outline'}
-                size="sm"
-                className="cursor-pointer"
-                onClick={() => setIsDurationSpell(filters.isDurationSpell === true ? null : true)}
-              >
-                Duration Spells
-              </SpellBadge>
-            </div>
-          </div>
-
-          {/* Clear Filters */}
-          {hasActiveFilters && (
-            <Button variant="outline" size="sm" onClick={clearFilters}>
-              Clear Filters ({filterCount})
-            </Button>
-          )}
-        </div>
+        )}
       </div>
 
       {/* View Controls */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          {/* View Mode Toggle */}
-          <div className="flex items-center gap-2">
-            <Button
-              variant={viewMode === 'grid' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setViewMode('grid')}
-            >
-              <Grid3X3 className="w-4 h-4" />
-            </Button>
-            <Button
-              variant={viewMode === 'list' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setViewMode('list')}
-            >
-              <List className="w-4 h-4" />
-            </Button>
-            <Button
-              variant={viewMode === 'accordion' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setViewMode('accordion')}
-            >
-              <ChevronDown className="w-4 h-4" />
-            </Button>
-          </div>
-
           {/* Sort Controls */}
           <div className="flex items-center gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="w-32 flex items-center gap-2">
-                  <ChevronDown className="h-4 w-4" />
-                  {sortBy === 'name' ? 'Name' : 
-                   sortBy === 'school' ? 'School' : 
-                   sortBy === 'level' ? 'Level' : 
-                   sortBy === 'magickaCost' ? 'Cost' : 
-                   sortBy === 'magnitude' ? 'Magnitude' : 
-                   sortBy === 'duration' ? 'Duration' : 'Sort By'}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setSortBy('name')}>
-                  Name
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy('school')}>
-                  School
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy('level')}>
-                  Level
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy('magickaCost')}>
-                  Cost
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy('magnitude')}>
-                  Magnitude
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy('duration')}>
-                  Duration
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Button variant="outline" size="sm" onClick={toggleSortOrder}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={toggleSortOrder}
+              className="flex items-center gap-2"
+            >
+              <ArrowUpDown className="h-4 w-4" />
+              {sortBy === 'name' ? 'Name' : 
+               sortBy === 'school' ? 'School' : 
+               sortBy === 'level' ? 'Level' : 
+               sortBy === 'magickaCost' ? 'Cost' : 
+               sortBy === 'magnitude' ? 'Magnitude' : 
+               sortBy === 'duration' ? 'Duration' : 'Sort By'}
               {sortOrder === 'asc' ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />}
             </Button>
           </div>
-
-          {/* Group By (for accordion) */}
-          {viewMode === 'accordion' && (
-            <div className="flex items-center gap-2">
-              <Label className="text-sm">Group by:</Label>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="w-24 flex items-center gap-2">
-                    <ChevronDown className="h-4 w-4" />
-                    {groupBy === 'school' ? 'School' : 
-                     groupBy === 'level' ? 'Level' : 
-                     groupBy === 'none' ? 'None' : 'Group By'}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setGroupBy('school')}>
-                    School
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setGroupBy('level')}>
-                    Level
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setGroupBy('none')}>
-                    None
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          )}
         </div>
 
         {/* Results Count */}
@@ -348,7 +248,7 @@ export function SpellReferenceView() {
         {viewMode === 'accordion' && (
           <SpellAccordion 
             spells={filteredSpells} 
-            groupBy={groupBy}
+            groupBy="school"
             variant="default"
             showEffects={true}
             showTags={true}

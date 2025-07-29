@@ -1,10 +1,12 @@
 import { useMemo } from 'react'
 import { SpellModel } from '../model/SpellModel'
 import type { SpellWithComputed, SpellComparison } from '../types'
+import type { SearchCategory, SearchOption } from '@/shared/components/playerCreation/types'
 
 interface UseSpellComputedOptions {
   enableStatistics?: boolean
   enableGrouping?: boolean
+  enableSearchCategories?: boolean
 }
 
 interface UseSpellComputedReturn {
@@ -21,6 +23,11 @@ interface UseSpellComputedReturn {
     levels: string[]
     tags: string[]
   }
+  
+  // Search categories (new)
+  searchCategories: SearchCategory[]
+  categoriesWithCounts: Record<string, number>
+  tagsWithCounts: Record<string, number>
   
   // Grouped data
   spellsBySchool: Record<string, SpellWithComputed[]>
@@ -46,7 +53,22 @@ export function useSpellComputed(
   spells: SpellWithComputed[],
   options: UseSpellComputedOptions = {}
 ): UseSpellComputedReturn {
-  const { enableStatistics = true, enableGrouping = true } = options
+  const { 
+    enableStatistics = true, 
+    enableGrouping = true, 
+    enableSearchCategories = true 
+  } = options
+
+  // Ensure spells is always an array
+  const safeSpells = Array.isArray(spells) ? spells : []
+
+  // Debug logging
+  console.log('useSpellComputed Debug:', {
+    spellsLength: spells?.length || 0,
+    safeSpellsLength: safeSpells.length,
+    enableSearchCategories,
+    isArray: Array.isArray(spells)
+  })
 
   // Statistics
   const statistics = useMemo(() => {
@@ -64,15 +86,134 @@ export function useSpellComputed(
         tags: []
       }
     }
-    return SpellModel.getStatistics(spells)
-  }, [spells, enableStatistics])
+    return SpellModel.getStatistics(safeSpells)
+  }, [safeSpells, enableStatistics])
+
+  // Search categories generation (new)
+  const searchCategories = useMemo((): SearchCategory[] => {
+    console.log('Generating search categories:', {
+      enableSearchCategories,
+      safeSpellsLength: safeSpells.length,
+      safeSpells: safeSpells.slice(0, 2) // Log first 2 spells for debugging
+    })
+    
+    if (!enableSearchCategories || safeSpells.length === 0) {
+      console.log('Returning empty search categories')
+      return []
+    }
+
+    const allSchools = [...new Set(safeSpells.map(spell => spell.school))]
+    const allLevels = [...new Set(safeSpells.map(spell => spell.level))]
+    const allEffectTypes = [...new Set(safeSpells.flatMap(spell => spell.effects.map(effect => effect.name)))]
+    
+    console.log('Extracted categories:', {
+      schools: allSchools,
+      levels: allLevels,
+      effectTypes: allEffectTypes.slice(0, 5) // Log first 5 effect types
+    })
+    
+    const categories = [
+      {
+        id: 'keywords',
+        name: 'Fuzzy Search',
+        placeholder: 'Search spells by name, school, level, or effects...',
+        options: [], // Will be populated by fuzzy search
+      },
+      {
+        id: 'schools',
+        name: 'Magic Schools',
+        placeholder: 'Filter by school...',
+        options: allSchools.map(school => ({
+          id: `school-${school}`,
+          label: school,
+          value: school,
+          category: 'Magic Schools',
+          description: `${school} spells`,
+        })),
+      },
+      {
+        id: 'levels',
+        name: 'Spell Levels',
+        placeholder: 'Filter by level...',
+        options: allLevels.map(level => ({
+          id: `level-${level}`,
+          label: level,
+          value: level,
+          category: 'Spell Levels',
+          description: `${level} spells`,
+        })),
+      },
+      {
+        id: 'effect-types',
+        name: 'Effect Types',
+        placeholder: 'Filter by effect type...',
+        options: allEffectTypes.map(effectType => ({
+          id: `effect-${effectType}`,
+          label: effectType,
+          value: effectType,
+          category: 'Effect Types',
+          description: `Spells with ${effectType} effects`,
+        })),
+      },
+    ]
+    
+    console.log('Generated categories:', categories.map(cat => ({
+      id: cat.id,
+      name: cat.name,
+      optionsCount: cat.options.length
+    })))
+    
+    return categories
+  }, [safeSpells, enableSearchCategories])
+
+  // Categories with counts (new)
+  const categoriesWithCounts = useMemo(() => {
+    if (!enableSearchCategories) return {}
+    
+    const counts: Record<string, number> = {}
+    
+    // Count by school
+    safeSpells.forEach(spell => {
+      counts[spell.school] = (counts[spell.school] || 0) + 1
+    })
+    
+    // Count by level
+    safeSpells.forEach(spell => {
+      counts[spell.level] = (counts[spell.level] || 0) + 1
+    })
+    
+    return counts
+  }, [safeSpells, enableSearchCategories])
+
+  // Tags with counts (new)
+  const tagsWithCounts = useMemo(() => {
+    if (!enableSearchCategories) return {}
+    
+    const counts: Record<string, number> = {}
+    
+    // Count by effect types
+    safeSpells.forEach(spell => {
+      spell.effects.forEach(effect => {
+        counts[effect.name] = (counts[effect.name] || 0) + 1
+      })
+    })
+    
+    // Count by tags
+    safeSpells.forEach(spell => {
+      spell.tags.forEach(tag => {
+        counts[tag] = (counts[tag] || 0) + 1
+      })
+    })
+    
+    return counts
+  }, [safeSpells, enableSearchCategories])
 
   // Grouped data
   const spellsBySchool = useMemo(() => {
     if (!enableGrouping) return {}
     
     const grouped: Record<string, SpellWithComputed[]> = {}
-    spells.forEach(spell => {
+    safeSpells.forEach(spell => {
       if (!grouped[spell.school]) {
         grouped[spell.school] = []
       }
@@ -85,13 +226,13 @@ export function useSpellComputed(
     })
     
     return grouped
-  }, [spells, enableGrouping])
+  }, [safeSpells, enableGrouping])
 
   const spellsByLevel = useMemo(() => {
     if (!enableGrouping) return {}
     
     const grouped: Record<string, SpellWithComputed[]> = {}
-    spells.forEach(spell => {
+    safeSpells.forEach(spell => {
       if (!grouped[spell.level]) {
         grouped[spell.level] = []
       }
@@ -104,13 +245,13 @@ export function useSpellComputed(
     })
     
     return grouped
-  }, [spells, enableGrouping])
+  }, [safeSpells, enableGrouping])
 
   const spellsByTag = useMemo(() => {
     if (!enableGrouping) return {}
     
     const grouped: Record<string, SpellWithComputed[]> = {}
-    spells.forEach(spell => {
+    safeSpells.forEach(spell => {
       spell.tags.forEach(tag => {
         if (!grouped[tag]) {
           grouped[tag] = []
@@ -125,32 +266,32 @@ export function useSpellComputed(
     })
     
     return grouped
-  }, [spells, enableGrouping])
+  }, [safeSpells, enableGrouping])
 
   // Computed lists
   const freeSpells = useMemo(() => {
-    return spells.filter(spell => spell.magickaCost === 0)
-  }, [spells])
+    return safeSpells.filter(spell => spell.magickaCost === 0)
+  }, [safeSpells])
 
   const areaSpells = useMemo(() => {
-    return spells.filter(spell => spell.isAreaSpell)
-  }, [spells])
+    return safeSpells.filter(spell => spell.isAreaSpell)
+  }, [safeSpells])
 
   const durationSpells = useMemo(() => {
-    return spells.filter(spell => spell.isDurationSpell)
-  }, [spells])
+    return safeSpells.filter(spell => spell.isDurationSpell)
+  }, [safeSpells])
 
   const instantSpells = useMemo(() => {
-    return spells.filter(spell => spell.isInstantSpell)
-  }, [spells])
+    return safeSpells.filter(spell => spell.isInstantSpell)
+  }, [safeSpells])
 
   const highCostSpells = useMemo(() => {
-    return spells.filter(spell => spell.magickaCost > 150)
-  }, [spells])
+    return safeSpells.filter(spell => spell.magickaCost > 150)
+  }, [safeSpells])
 
   const lowCostSpells = useMemo(() => {
-    return spells.filter(spell => spell.magickaCost <= 50)
-  }, [spells])
+    return safeSpells.filter(spell => spell.magickaCost <= 50)
+  }, [safeSpells])
 
   // Utility functions
   const compareSpells = useMemo(() => {
@@ -252,6 +393,11 @@ export function useSpellComputed(
   return {
     // Statistics
     statistics,
+    
+    // Search categories (new)
+    searchCategories,
+    categoriesWithCounts,
+    tagsWithCounts,
     
     // Grouped data
     spellsBySchool,

@@ -1,5 +1,5 @@
 import { BuildPageShell } from '@/shared/components/playerCreation'
-import { SpellReferenceView } from '../views/SpellReferenceView'
+import { SpellPageView } from '../views/SpellPageView'
 
 export function SpellsPage() {
   return (
@@ -7,7 +7,7 @@ export function SpellsPage() {
       title="Spell Reference"
       description="Browse and search all available spells. Find the perfect magic for your character build."
     >
-      <SpellReferenceView />
+      <SpellPageView />
     </BuildPageShell>
   )
 } 

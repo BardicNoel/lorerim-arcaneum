@@ -44,23 +44,32 @@ export function useSpellData(options: UseSpellDataOptions = {}): UseSpellDataRet
   const dataProvider = SpellDataProvider.getInstance()
 
   const loadSpells = useCallback(async () => {
+    console.log('useSpellData: Starting to load spells...')
     setLoading(true)
     setError(null)
     
     try {
       const data = await dataProvider.getSpellData()
+      console.log('useSpellData: Successfully loaded spells:', {
+        spellsCount: data.spells.length,
+        totalCount: data.totalCount,
+        schools: data.schools,
+        levels: data.levels,
+        firstSpell: data.spells[0]
+      })
       setSpells(data.spells)
       setSpellData(data)
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load spells'
+      console.error('useSpellData: Error loading spells:', err)
       setError(errorMessage)
-      console.error('Error loading spells:', err)
     } finally {
       setLoading(false)
     }
   }, [dataProvider])
 
   const refresh = useCallback(async () => {
+    console.log('useSpellData: Refreshing spells...')
     dataProvider.clearCache()
     await loadSpells()
   }, [dataProvider, loadSpells])
@@ -71,6 +80,7 @@ export function useSpellData(options: UseSpellDataOptions = {}): UseSpellDataRet
 
   // Load spells on mount if autoLoad is enabled
   useEffect(() => {
+    console.log('useSpellData: useEffect triggered, autoLoad:', autoLoad)
     if (autoLoad) {
       loadSpells()
     }
@@ -82,6 +92,16 @@ export function useSpellData(options: UseSpellDataOptions = {}): UseSpellDataRet
       refresh()
     }
   }, [refreshOnMount, refresh])
+
+  // Debug logging for state changes
+  useEffect(() => {
+    console.log('useSpellData: State changed:', {
+      spellsLength: spells.length,
+      loading,
+      error,
+      hasSpellData: !!spellData
+    })
+  }, [spells, loading, error, spellData])
 
   // Utility functions
   const getSpellByEditorId = useCallback((editorId: string): SpellWithComputed | undefined => {

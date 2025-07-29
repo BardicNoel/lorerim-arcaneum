@@ -21,30 +21,48 @@ export class SpellDataProvider {
    * Load spell data from the JSON file
    */
   async loadSpells(): Promise<SpellWithComputed[]> {
+    console.log('SpellDataProvider: loadSpells called')
+    
     // Check cache first
     if (this.cache && Date.now() - this.lastFetch < this.CACHE_DURATION) {
+      console.log('SpellDataProvider: Returning cached data, count:', this.cache.length)
       return this.cache
     }
 
     try {
-      const response = await fetch(getDataUrl('data/player_spells.json'))
+      const dataUrl = getDataUrl('data/player_spells.json')
+      console.log('SpellDataProvider: Fetching from URL:', dataUrl)
+      
+      const response = await fetch(dataUrl)
       if (!response.ok) {
         throw new Error(`Failed to fetch spells: ${response.status} ${response.statusText}`)
       }
 
       const rawData = await response.json()
+      console.log('SpellDataProvider: Raw data loaded, count:', rawData.length)
       
       // Validate and transform the data
       const spells: SpellWithComputed[] = []
+      let validCount = 0
+      let invalidCount = 0
       
       for (const item of rawData) {
         if (SpellModel.isValid(item)) {
           const spellWithComputed = SpellModel.addComputedProperties(item)
           spells.push(spellWithComputed)
+          validCount++
         } else {
-          console.warn('Invalid spell data:', item)
+          console.warn('SpellDataProvider: Invalid spell data:', item)
+          invalidCount++
         }
       }
+
+      console.log('SpellDataProvider: Data processing complete:', {
+        total: rawData.length,
+        valid: validCount,
+        invalid: invalidCount,
+        processed: spells.length
+      })
 
       // Update cache
       this.cache = spells
@@ -52,7 +70,7 @@ export class SpellDataProvider {
 
       return spells
     } catch (error) {
-      console.error('Error loading spells:', error)
+      console.error('SpellDataProvider: Error loading spells:', error)
       throw error
     }
   }
@@ -61,16 +79,27 @@ export class SpellDataProvider {
    * Get spell data with statistics
    */
   async getSpellData(): Promise<SpellDataResponse> {
+    console.log('SpellDataProvider: getSpellData called')
     const spells = await this.loadSpells()
+    console.log('SpellDataProvider: Getting statistics for', spells.length, 'spells')
     const stats = SpellModel.getStatistics(spells)
     
-    return {
+    const result = {
       spells,
       totalCount: stats.totalSpells,
       schools: stats.schools,
       levels: stats.levels,
       lastUpdated: new Date().toISOString()
     }
+    
+    console.log('SpellDataProvider: getSpellData result:', {
+      spellsCount: result.spells.length,
+      totalCount: result.totalCount,
+      schools: result.schools,
+      levels: result.levels
+    })
+    
+    return result
   }
 
   /**
@@ -98,12 +127,12 @@ export class SpellDataProvider {
   }
 
   /**
-   * Search spells
+   * Search spells by query
    */
   async searchSpells(query: string): Promise<SpellWithComputed[]> {
     const spells = await this.loadSpells()
-    const searchResults = SpellModel.search(spells, query)
-    return searchResults.map(result => result.spell)
+    const results = SpellModel.search(spells, query)
+    return results.map(result => result.spell)
   }
 
   /**
@@ -118,6 +147,7 @@ export class SpellDataProvider {
    * Clear the cache
    */
   clearCache(): void {
+    console.log('SpellDataProvider: Clearing cache')
     this.cache = null
     this.lastFetch = 0
   }
@@ -130,7 +160,7 @@ export class SpellDataProvider {
   }
 
   /**
-   * Get cache info
+   * Get cache information
    */
   getCacheInfo() {
     return {

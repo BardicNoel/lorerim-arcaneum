@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react'
 import { SpellModel } from '../model/SpellModel'
 import type { SpellWithComputed, SpellFilters, SpellSearchResult } from '../types'
+import type { SelectedTag } from '@/shared/components/playerCreation/types'
 
 interface UseSpellFiltersOptions {
   initialFilters?: Partial<SpellFilters>
@@ -12,6 +13,13 @@ interface UseSpellFiltersReturn {
   // Filters state
   filters: SpellFilters
   searchTerm: string
+  
+  // Tag-based filtering (new)
+  selectedTags: SelectedTag[]
+  setSelectedTags: (tags: SelectedTag[]) => void
+  addTagFilter: (tag: SelectedTag) => void
+  removeTagFilter: (tagId: string) => void
+  clearAllTags: () => void
   
   // Filtered data
   filteredSpells: SpellWithComputed[]
@@ -51,6 +59,9 @@ export function useSpellFilters(
     enableSorting = true 
   } = options
 
+  // Ensure spells is always an array
+  const safeSpells = Array.isArray(spells) ? spells : []
+
   // Filters state
   const [filters, setFilters] = useState<SpellFilters>({
     schools: [],
@@ -66,14 +77,54 @@ export function useSpellFilters(
     ...initialFilters
   })
 
+  // Tag-based filtering state (new)
+  const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
+
   // Sorting state
   const [sortBy, setSortBy] = useState<'name' | 'school' | 'level' | 'magickaCost' | 'magnitude' | 'duration'>('name')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
 
-  // Apply filters to spells
+  // Tag management functions (new)
+  const addTagFilter = useCallback((tag: SelectedTag) => {
+    if (!selectedTags.some(t => t.value === tag.value && t.category === tag.category)) {
+      setSelectedTags(prev => [...prev, tag])
+    }
+  }, [selectedTags])
+
+  const removeTagFilter = useCallback((tagId: string) => {
+    setSelectedTags(prev => prev.filter(tag => tag.id !== tagId))
+  }, [])
+
+  const clearAllTags = useCallback(() => {
+    setSelectedTags([])
+  }, [])
+
+  // Apply tag-based filters first (new)
+  const filteredByTags = useMemo(() => {
+    if (selectedTags.length === 0) return safeSpells
+    
+    return safeSpells.filter(spell => {
+      return selectedTags.every(tag => {
+        switch (tag.category) {
+          case 'Magic Schools':
+            return spell.school === tag.value
+          case 'Spell Levels':
+            return spell.level === tag.value
+          case 'Effect Types':
+            return spell.effects.some(effect => effect.name === tag.value)
+          case 'Fuzzy Search':
+            return true // Handled by fuzzy search later
+          default:
+            return true
+        }
+      })
+    })
+  }, [safeSpells, selectedTags])
+
+  // Apply existing filters to tag-filtered spells
   const filteredSpells = useMemo(() => {
-    return SpellModel.applyFilters(spells, filters)
-  }, [spells, filters])
+    return SpellModel.applyFilters(filteredByTags, filters)
+  }, [filteredByTags, filters])
 
   // Apply sorting
   const sortedSpells = useMemo(() => {
@@ -96,6 +147,7 @@ export function useSpellFilters(
   // Computed properties
   const hasActiveFilters = useMemo(() => {
     return (
+      selectedTags.length > 0 ||
       filters.schools.length > 0 ||
       filters.levels.length > 0 ||
       filters.searchTerm !== '' ||
@@ -107,10 +159,11 @@ export function useSpellFilters(
       filters.minMagnitude !== null ||
       filters.maxMagnitude !== null
     )
-  }, [filters])
+  }, [selectedTags, filters])
 
   const filterCount = useMemo(() => {
     let count = 0
+    if (selectedTags.length > 0) count += 1
     if (filters.schools.length > 0) count += 1
     if (filters.levels.length > 0) count += 1
     if (filters.searchTerm) count += 1
@@ -120,7 +173,7 @@ export function useSpellFilters(
     if (filters.minMagickaCost !== null || filters.maxMagickaCost !== null) count += 1
     if (filters.minMagnitude !== null || filters.maxMagnitude !== null) count += 1
     return count
-  }, [filters])
+  }, [selectedTags, filters])
 
   // Filter actions
   const setSearchTerm = useCallback((term: string) => {
@@ -164,6 +217,7 @@ export function useSpellFilters(
   }, [])
 
   const clearFilters = useCallback(() => {
+    setSelectedTags([])
     setFilters({
       schools: [],
       levels: [],
@@ -191,6 +245,13 @@ export function useSpellFilters(
     // Filters state
     filters,
     searchTerm: filters.searchTerm,
+    
+    // Tag-based filtering (new)
+    selectedTags,
+    setSelectedTags,
+    addTagFilter,
+    removeTagFilter,
+    clearAllTags,
     
     // Filtered data
     filteredSpells: sortedSpells,
