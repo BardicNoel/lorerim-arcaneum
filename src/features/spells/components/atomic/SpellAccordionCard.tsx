@@ -49,6 +49,7 @@ export function SpellAccordionCard({
   const SchoolIcon = schoolIcons[spell.school as keyof typeof schoolIcons] || Sparkles
 
   const handleToggle = () => {
+    console.log('SpellAccordionCard handleToggle called, isExpanded:', isExpanded)
     onToggle?.()
   }
 

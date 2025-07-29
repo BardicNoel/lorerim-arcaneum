@@ -7,6 +7,7 @@ import { RaceSearchCard } from '../type-specific/RaceSearchCard'
 import { ReligionSearchCard } from '../type-specific/ReligionSearchCard'
 import { SkillSearchCard } from '../type-specific/SkillSearchCard'
 import { TraitSearchCard } from '../type-specific/TraitSearchCard'
+import { SpellSearchCard } from '../type-specific/SpellSearchCard'
 import { DefaultSearchCard } from './DefaultSearchCard'
 
 interface SearchCardProps {
@@ -24,6 +25,7 @@ export function SearchCard({
   onToggle,
   viewMode = 'grid',
 }: SearchCardProps) {
+  console.log('SearchCard props:', { type: item.type, isExpanded, onToggle: !!onToggle, viewMode })
   // Simple switchboard based on item type
   switch (item.type) {
     case 'race':
@@ -95,6 +97,17 @@ export function SearchCard({
     case 'perk':
       return (
         <PerkSearchCard
+          item={item}
+          className={className}
+          isExpanded={isExpanded}
+          onToggle={onToggle}
+          viewMode={viewMode}
+        />
+      )
+
+    case 'spell':
+      return (
+        <SpellSearchCard
           item={item}
           className={className}
           isExpanded={isExpanded}

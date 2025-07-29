@@ -83,9 +83,9 @@ describe('SpellSearchCard', () => {
   it('renders spell information correctly', () => {
     render(
       <SpellSearchCard
-        result={mockSpellResult}
-        isSelected={false}
-        onClick={() => {}}
+        item={mockSpellResult.item}
+        isExpanded={false}
+        onToggle={() => {}}
       />
     )
 
@@ -103,27 +103,27 @@ describe('SpellSearchCard', () => {
   })
 
   it('handles spell selection', () => {
-    const onClick = vi.fn()
+    const onToggle = vi.fn()
 
     render(
       <SpellSearchCard
-        result={mockSpellResult}
-        isSelected={false}
-        onClick={onClick}
+        item={mockSpellResult.item}
+        isExpanded={false}
+        onToggle={onToggle}
       />
     )
 
     // The component should render without errors
     expect(screen.getAllByText('Fireball').length).toBeGreaterThan(0)
-    expect(onClick).toBeDefined()
+    expect(onToggle).toBeDefined()
   })
 
   it('shows selected state', () => {
     render(
       <SpellSearchCard
-        result={mockSpellResult}
-        isSelected={true}
-        onClick={() => {}}
+        item={mockSpellResult.item}
+        isExpanded={true}
+        onToggle={() => {}}
       />
     )
 
@@ -132,19 +132,16 @@ describe('SpellSearchCard', () => {
   })
 
   it('handles missing spell data gracefully', () => {
-    const resultWithMissingData: SearchResult = {
-      ...mockSpellResult,
-      item: {
-        ...mockSpellResult.item,
-        originalData: null,
-      },
+    const itemWithMissingData = {
+      ...mockSpellResult.item,
+      originalData: null,
     }
 
     render(
       <SpellSearchCard
-        result={resultWithMissingData}
-        isSelected={false}
-        onClick={() => {}}
+        item={itemWithMissingData}
+        isExpanded={false}
+        onToggle={() => {}}
       />
     )
 
@@ -152,17 +149,45 @@ describe('SpellSearchCard', () => {
     expect(screen.getByText('Spell not found')).toBeDefined()
   })
 
-  it('renders in compact mode', () => {
+  it('renders with className', () => {
     render(
       <SpellSearchCard
-        result={mockSpellResult}
-        isSelected={false}
-        onClick={() => {}}
-        compact={true}
+        item={mockSpellResult.item}
+        isExpanded={false}
+        onToggle={() => {}}
+        className="test-class"
       />
     )
 
     // Should still render the spell name
+    expect(screen.getAllByText('Fireball').length).toBeGreaterThan(0)
+  })
+
+  it('handles different view modes', () => {
+    // Test grid view mode
+    const { rerender } = render(
+      <SpellSearchCard
+        item={mockSpellResult.item}
+        isExpanded={false}
+        onToggle={() => {}}
+        viewMode="grid"
+      />
+    )
+
+    // Should render the spell name in grid mode
+    expect(screen.getAllByText('Fireball').length).toBeGreaterThan(0)
+
+    // Test list view mode
+    rerender(
+      <SpellSearchCard
+        item={mockSpellResult.item}
+        isExpanded={false}
+        onToggle={() => {}}
+        viewMode="list"
+      />
+    )
+
+    // Should render the spell name in list mode
     expect(screen.getAllByText('Fireball').length).toBeGreaterThan(0)
   })
 }) 
