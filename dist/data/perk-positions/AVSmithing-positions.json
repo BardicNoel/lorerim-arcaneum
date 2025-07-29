@@ -1,0 +1,153 @@
+{
+  "treeId": "AVSmithing",
+  "treeName": "Smithing",
+  "positions": [
+    {
+      "perkId": "REQ_Smithing_Craftsmanship",
+      "x": 1324.2856998741627,
+      "y": 512.5714199244976,
+      "gridX": 4,
+      "gridY": 3,
+      "horizontal": 0.08571399748325348,
+      "vertical": 0.08571399748325348
+    },
+    {
+      "perkId": "REQ_Smithing_DwarvenSmithing",
+      "x": 1800.9544449701039,
+      "y": 462.8185115041879,
+      "gridX": 6,
+      "gridY": 2,
+      "horizontal": -1,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Smithing_OrcishSmithing",
+      "x": 1796.1537222890843,
+      "y": 322.0265020205553,
+      "gridX": 6,
+      "gridY": 1,
+      "horizontal": -1,
+      "vertical": -0.26578326598148955
+    },
+    {
+      "perkId": "REQ_Smithing_EbonySmithing",
+      "x": 1933.168974987705,
+      "y": 180.3045349506814,
+      "gridX": 6,
+      "gridY": 0,
+      "horizontal": 1,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Smithing_DaedricSmithing",
+      "x": 1333.9695792346415,
+      "y": 186.29924051867386,
+      "gridX": 4,
+      "gridY": 0,
+      "horizontal": 0.2793915846928303,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Smithing_DraconicBlacksmithing",
+      "x": 1317.7611223489512,
+      "y": 97.24565779316958,
+      "gridX": 4,
+      "gridY": 0,
+      "horizontal": -0.04477755302097648,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Smithing_AdvancedBlacksmithing",
+      "x": 1320.1175405183021,
+      "y": 774.0805804201655,
+      "gridX": 4,
+      "gridY": 3,
+      "horizontal": 0.002350810366042424,
+      "vertical": 1
+    },
+    {
+      "perkId": "REQ_Smithing_LegendaryBlacksmithing",
+      "x": 1528.262263188879,
+      "y": 716.1151852437324,
+      "gridX": 5,
+      "gridY": 3,
+      "horizontal": -1,
+      "vertical": 0.8705061747910804
+    },
+    {
+      "perkId": "REQ_Smithing_ArcaneCraftsmanship",
+      "x": 1018.2805300687687,
+      "y": 681.597922012108,
+      "gridX": 3,
+      "gridY": 3,
+      "horizontal": -0.4343893986246258,
+      "vertical": -0.2800692662630657
+    },
+    {
+      "perkId": "REQ_Smithing_AdvancedLightArmors",
+      "x": 764.7319323010313,
+      "y": 470.232491708794,
+      "gridX": 2,
+      "gridY": 2,
+      "horizontal": 0.09463864602062586,
+      "vertical": -1
+    },
+    {
+      "perkId": "REQ_Smithing_ElvenSmithing",
+      "x": 778.0317018890419,
+      "y": 332.5714199244976,
+      "gridX": 2,
+      "gridY": 1,
+      "horizontal": 0.3606340377808374,
+      "vertical": 0.08571399748325348
+    },
+    {
+      "perkId": "REQ_Smithing_GlassSmithing",
+      "x": 604.9951387720598,
+      "y": 165.31566531962983,
+      "gridX": 1,
+      "gridY": 0,
+      "horizontal": 1,
+      "vertical": 0.5105221773209944
+    },
+    {
+      "perkId": "Trad_Smithing_ShiveringIlsesSmithing",
+      "x": 1324.7939258232554,
+      "y": 311.2668853314441,
+      "gridX": 4,
+      "gridY": 1,
+      "horizontal": 0.09587851646510899,
+      "vertical": -0.6244371556185304
+    },
+    {
+      "perkId": "REQ_Smithing_Tailoring",
+      "x": 1166.2218638631957,
+      "y": 591.5540639675121,
+      "gridX": 3,
+      "gridY": 2,
+      "horizontal": 1,
+      "vertical": 1
+    },
+    {
+      "perkId": "ORD_Smh60_SmithingSpecialization_Perk_60_OrdASISExclude",
+      "x": 1439.998725330861,
+      "y": 650.5662103926081,
+      "gridX": 4,
+      "gridY": 3,
+      "horizontal": 1,
+      "vertical": -1
+    },
+    {
+      "perkId": "ORD_Smh80_IronLore_Perk_80_OrdASISExclude",
+      "x": 1628.3721226528628,
+      "y": 596.6122479468056,
+      "gridX": 5,
+      "gridY": 2,
+      "horizontal": 0.5674424530572559,
+      "vertical": 1
+    }
+  ],
+  "version": "1.0.0",
+  "createdAt": "2025-07-26T23:54:09.845Z",
+  "updatedAt": "2025-07-26T23:54:09.845Z"
+}

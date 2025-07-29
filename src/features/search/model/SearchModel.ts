@@ -8,6 +8,7 @@ export interface SearchableItem {
     | 'birthsign'
     | 'destiny'
     | 'perk'
+    | 'perk-reference'
   name: string
   description?: string
   category?: string

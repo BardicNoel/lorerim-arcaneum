@@ -10,6 +10,7 @@ import {
   transformBirthsignsToSearchable,
   transformDestinyNodesToSearchable,
   transformPerkTreesToSearchable,
+  transformPerkReferencesToSearchable,
   transformRacesToSearchable,
   transformReligionsToSearchable,
   transformSkillsToSearchable,
@@ -72,6 +73,7 @@ export class SearchDataProvider {
   transformBirthsignsToSearchable = transformBirthsignsToSearchable
   transformDestinyNodesToSearchable = transformDestinyNodesToSearchable
   transformPerkTreesToSearchable = transformPerkTreesToSearchable
+  transformPerkReferencesToSearchable = transformPerkReferencesToSearchable
 
   async buildSearchIndex(): Promise<void> {
     if (this.isIndexing) return
@@ -143,6 +145,25 @@ export class SearchDataProvider {
     }
   }
 
+  // Add perk references to the search index
+  async addPerkReferencesToIndex(perkReferences: any[]): Promise<void> {
+    if (this.indexedStores.has('perk-references')) {
+      return
+    }
+
+    // Transform perk references to searchable items
+    const searchablePerkReferences = transformPerkReferencesToSearchable(perkReferences)
+    
+    // Add items to the collection
+    this.allSearchableItems.push(...searchablePerkReferences)
+
+    // Mark store as indexed
+    this.indexedStores.add('perk-references')
+
+    // Rebuild the search index with all items
+    this.searchIndex = new Fuse(this.allSearchableItems, this.fuseOptions)
+  }
+
   search(query: string, filters?: SearchFilters): SearchResult[] {
     if (!this.searchIndex || !query.trim()) {
       return []
@@ -168,12 +189,14 @@ export class SearchDataProvider {
     const fuseResults = filteredFuse.search(query)
 
     // Transform Fuse results to SearchResult format
-    return fuseResults.map(fuseResult => ({
+    const results = fuseResults.map(fuseResult => ({
       item: fuseResult.item,
       score: fuseResult.score || 0,
       matches: [...(fuseResult.matches || [])],
       highlights: createSearchHighlights([...(fuseResult.matches || [])]),
     }))
+    
+    return results
   }
 
   private applyFilters(

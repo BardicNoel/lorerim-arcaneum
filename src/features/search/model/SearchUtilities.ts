@@ -1,5 +1,6 @@
 import type { Birthsign } from '@/features/birthsigns/types'
 import type { DestinyNode } from '@/features/destiny/types'
+import type { PerkReferenceNode } from '@/features/perk-references/types'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import type { Race, Religion, Skill, Trait } from '@/shared/data/schemas'
 import type {
@@ -152,20 +153,47 @@ export function transformPerkTreesToSearchable(
   perkTrees: any[]
 ): SearchableItem[] {
   return perkTrees.map(tree => ({
-    id: `perk-${tree.id}`,
+    id: `perk-${tree.treeId || tree.id}`,
     type: 'perk' as const,
-    name: tree.name,
-    description: tree.description,
+    name: tree.treeName || tree.name,
+    description: tree.treeDescription || tree.description,
     category: tree.category,
     tags: tree.tags || [],
     searchableText: [
-      tree.name,
-      tree.description || '',
+      tree.treeName || tree.name,
+      tree.treeDescription || tree.description || '',
       tree.category || '',
       ...(tree.tags || []),
+      ...(tree.perks?.map((perk: any) => perk.name) || []),
     ],
     originalData: tree,
     url: `/build/perks`,
+  }))
+}
+
+export function transformPerkReferencesToSearchable(
+  perkReferences: PerkReferenceNode[]
+): SearchableItem[] {
+  return perkReferences.map(perk => ({
+    id: `perk-ref-${perk.edid}`,
+    type: 'perk-reference' as const,
+    name: perk.name,
+    description: perk.ranks[0]?.description?.base || '',
+    category: perk.category,
+    tags: perk.tags,
+    searchableText: [
+      perk.name,
+      perk.ranks[0]?.description?.base || '',
+      perk.ranks[0]?.description?.subtext || '',
+      perk.skillTreeName,
+      perk.category,
+      ...perk.tags,
+      ...perk.prerequisites,
+      perk.isRoot ? 'root perk' : 'branch perk',
+      perk.totalRanks > 1 ? 'multi-rank' : 'single-rank',
+    ],
+    originalData: perk,
+    url: `/perk-references?skill=${perk.skillTree}&perk=${perk.edid}`,
   }))
 }
 

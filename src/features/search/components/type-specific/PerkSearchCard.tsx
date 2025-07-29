@@ -1,3 +1,4 @@
+import { AccordionCard } from '@/shared/components/generic/AccordionCard'
 import { usePerkTreesStore } from '@/shared/stores/perkTreesStore'
 import type { SearchableItem } from '../../model/SearchModel'
 import { findItemInStore } from '../../utils/storeLookup'
@@ -5,9 +6,18 @@ import { findItemInStore } from '../../utils/storeLookup'
 interface PerkSearchCardProps {
   item: SearchableItem
   className?: string
+  isExpanded?: boolean
+  onToggle?: () => void
+  viewMode?: 'grid' | 'list'
 }
 
-export function PerkSearchCard({ item, className }: PerkSearchCardProps) {
+export function PerkSearchCard({
+  item,
+  className,
+  isExpanded = false,
+  onToggle,
+  viewMode = 'grid',
+}: PerkSearchCardProps) {
   const perkTrees = usePerkTreesStore(state => state.data)
 
   // Find the full perk tree record from the store
@@ -31,55 +41,65 @@ export function PerkSearchCard({ item, className }: PerkSearchCardProps) {
   // Count total perks in the tree
   const totalPerks = fullPerkTree.perks?.length || 0
 
-  // Render a perk tree card for search results
   return (
-    <div
-      className={`p-4 border rounded-lg bg-card shadow-sm transition-all hover:shadow-md ${className}`}
+    <AccordionCard
+      className={className}
+      expanded={isExpanded}
+      onToggle={onToggle}
     >
-      <div className="space-y-3">
-        <div className="flex items-start justify-between gap-2">
+      <AccordionCard.Header>
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
+            <span className="text-lg font-bold text-muted-foreground">
+              {(fullPerkTree.treeName || fullPerkTree.name).charAt(0)}
+            </span>
+          </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-sm leading-tight text-foreground">
+            <h3 className="font-semibold text-primary">
               {fullPerkTree.treeName || fullPerkTree.name}
             </h3>
-            {fullPerkTree.treeDescription && (
-              <p className="text-xs mt-1 line-clamp-2 text-muted-foreground">
-                {fullPerkTree.treeDescription}
-              </p>
+            {fullPerkTree.category && (
+              <span className="text-sm text-muted-foreground">
+                {fullPerkTree.category}
+              </span>
             )}
           </div>
-          {fullPerkTree.category && (
-            <span className="text-xs text-muted-foreground flex-shrink-0">
-              {fullPerkTree.category}
-            </span>
-          )}
         </div>
+      </AccordionCard.Header>
 
-        {/* Perk count */}
+      <AccordionCard.Summary>
+        {fullPerkTree.treeDescription && (
+          <p className="text-sm text-muted-foreground line-clamp-2">
+            {fullPerkTree.treeDescription}
+          </p>
+        )}
+
         {totalPerks > 0 && (
-          <div className="text-xs text-muted-foreground">
+          <div className="text-xs text-muted-foreground mt-2">
             <span className="font-medium">Perks:</span> {totalPerks} total
           </div>
         )}
+      </AccordionCard.Summary>
 
-        {/* Sample perks (first 3) */}
+      <AccordionCard.Details>
+        {/* Sample perks */}
         {fullPerkTree.perks && fullPerkTree.perks.length > 0 && (
-          <div className="space-y-1">
-            <div className="text-xs font-medium text-muted-foreground">
-              Sample perks:
-            </div>
+          <div className="space-y-2">
+            <h5 className="text-sm font-medium text-foreground">
+              Sample Perks
+            </h5>
             <div className="flex flex-wrap gap-1">
-              {fullPerkTree.perks.slice(0, 3).map((perk, idx) => (
+              {fullPerkTree.perks.slice(0, 6).map((perk, idx) => (
                 <span
                   key={`${perk.edid}-${idx}`}
-                  className="inline-block px-1.5 py-0.5 text-xs bg-muted rounded"
+                  className="inline-block px-2 py-1 text-xs bg-muted rounded"
                 >
                   {perk.name}
                 </span>
               ))}
-              {fullPerkTree.perks.length > 3 && (
-                <span className="inline-block px-1.5 py-0.5 text-xs bg-muted rounded">
-                  +{fullPerkTree.perks.length - 3} more
+              {fullPerkTree.perks.length > 6 && (
+                <span className="inline-block px-2 py-1 text-xs bg-muted rounded text-muted-foreground">
+                  +{fullPerkTree.perks.length - 6} more
                 </span>
               )}
             </div>
@@ -88,23 +108,21 @@ export function PerkSearchCard({ item, className }: PerkSearchCardProps) {
 
         {/* Tags */}
         {fullPerkTree.tags && fullPerkTree.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {fullPerkTree.tags.slice(0, 3).map((tag, idx) => (
-              <span
-                key={`${tag}-${idx}`}
-                className="inline-block px-1.5 py-0.5 text-xs bg-secondary text-secondary-foreground rounded"
-              >
-                {tag}
-              </span>
-            ))}
-            {fullPerkTree.tags.length > 3 && (
-              <span className="inline-block px-1.5 py-0.5 text-xs bg-secondary text-secondary-foreground rounded">
-                +{fullPerkTree.tags.length - 3}
-              </span>
-            )}
+          <div className="space-y-2">
+            <h5 className="text-sm font-medium text-foreground">Tags</h5>
+            <div className="flex flex-wrap gap-1">
+              {fullPerkTree.tags.map((tag, idx) => (
+                <span
+                  key={`${tag}-${idx}`}
+                  className="inline-block px-2 py-1 text-xs bg-secondary text-secondary-foreground rounded"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
         )}
-      </div>
-    </div>
+      </AccordionCard.Details>
+    </AccordionCard>
   )
 }

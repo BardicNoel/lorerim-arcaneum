@@ -10,7 +10,7 @@ export type PerkBadgeSize = 'sm' | 'md' | 'lg'
 /**
  * Perk badge types for different styling
  */
-export type PerkBadgeType = 'skill' | 'category' | 'rank' | 'availability' | 'level'
+export type PerkBadgeType = 'skill' | 'category' | 'rank' | 'availability' | 'level' | 'root'
 
 /**
  * PerkReferenceBadge component for displaying skill categories, ranks, and availability
@@ -82,6 +82,10 @@ const badgeStyles: Record<PerkBadgeType, Record<string, string>> = {
     'Level 40+': 'bg-cyan-100 text-cyan-800 border-cyan-200',
     'Level 45+': 'bg-emerald-100 text-emerald-800 border-emerald-200',
     'Level 50+': 'bg-amber-100 text-amber-800 border-amber-200',
+  },
+  root: {
+    // Root perk indicators
+    'Root': 'bg-gold-100 text-gold-800 border-gold-200 hover:bg-gold-200',
   },
 }
 

@@ -12,11 +12,12 @@ import type {
   SearchFilters,
   SearchResult,
 } from '../model/SearchModel'
+import { usePerkReferenceData } from '@/features/perk-references/model/PerkReferenceDataProvider'
 
 // Singleton instance of SearchDataProvider
 let searchDataProvider: SearchDataProvider | null = null
 
-function getSearchDataProvider(): SearchDataProvider {
+export function getSearchDataProvider(): SearchDataProvider {
   if (!searchDataProvider) {
     searchDataProvider = new SearchDataProvider()
   }
@@ -36,6 +37,9 @@ export function useSearchData() {
   const birthsigns = useBirthsignsStore(state => state.data)
   const destinyNodes = useDestinyNodesStore(state => state.data)
   const perkTrees = usePerkTreesStore(state => state.data)
+
+  // Get perk references data
+  const { allPerks: perkReferences } = usePerkReferenceData()
 
   const provider = getSearchDataProvider()
 
@@ -117,6 +121,17 @@ export function useSearchData() {
     }
   }, [perkTrees, indexStore])
 
+  // Index perk references when they have data
+  useEffect(() => {
+    if (perkReferences?.length) {
+      indexStore(
+        'perk-references',
+        perkReferences,
+        provider.transformPerkReferencesToSearchable
+      )
+    }
+  }, [perkReferences, indexStore])
+
   // Check if we have any data indexed
   useEffect(() => {
     const hasAnyData =
@@ -126,7 +141,8 @@ export function useSearchData() {
       religions?.length ||
       birthsigns?.length ||
       destinyNodes?.length ||
-      perkTrees?.length
+      perkTrees?.length ||
+      perkReferences?.length
 
     if (hasAnyData && provider.hasIndexedData()) {
       setIsReady(true)
@@ -139,6 +155,7 @@ export function useSearchData() {
     birthsigns,
     destinyNodes,
     perkTrees,
+    perkReferences,
     provider,
   ])
 

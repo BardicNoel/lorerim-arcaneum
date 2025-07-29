@@ -5,7 +5,7 @@ import React from 'react'
 
 interface AddToBuildButtonProps {
   itemId: string
-  itemType: 'race' | 'stone' | 'religion' | 'trait' | 'skill' | 'equipment'
+  itemType: 'race' | 'stone' | 'religion' | 'trait' | 'skill' | 'equipment' | 'perk'
   itemName: string
   isInBuild?: boolean
   className?: string

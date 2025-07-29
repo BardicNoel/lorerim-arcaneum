@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
 import { cn } from '@/lib/utils'
+import React, { useState } from 'react'
 
 /**
  * Compound AccordionCard component with slottable Header, Summary, Footer, and Details.
@@ -81,22 +81,34 @@ AccordionCard.Header = function Header({
   onClick?: () => void
   expanded?: boolean
 }) {
+  const handleClick = () => {
+    console.log('AccordionCard.Header clicked, expanded:', expanded)
+    onClick?.()
+  }
+
   return (
     <div
       className={cn(
-        'flex items-center gap-3 px-4 py-2 bg-muted/30 cursor-pointer select-none',
+        'flex items-center gap-3 px-4 py-3 bg-muted/30 cursor-pointer select-none hover:bg-muted/50 transition-colors duration-200 rounded-t-lg',
+        expanded && 'bg-muted/50',
         className
       )}
-      onClick={onClick}
+      onClick={handleClick}
       tabIndex={0}
       role="button"
       aria-expanded={expanded}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          handleClick()
+        }
+      }}
     >
       {children}
       <span
         className={cn(
-          'ml-auto transition-transform',
-          expanded ? 'rotate-90' : ''
+          'ml-auto transition-transform duration-200 text-muted-foreground',
+          expanded ? 'rotate-180' : ''
         )}
       >
         <svg
@@ -139,7 +151,12 @@ AccordionCard.Details = function Details({
   className?: string
 }) {
   return (
-    <div className={cn('px-4 py-4 space-y-4 bg-background', className)}>
+    <div
+      className={cn(
+        'px-4 py-4 space-y-4 bg-background rounded-b-lg',
+        className
+      )}
+    >
       {children}
     </div>
   )

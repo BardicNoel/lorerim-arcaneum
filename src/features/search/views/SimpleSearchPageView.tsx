@@ -9,7 +9,7 @@ import { useSearchFilters } from '../adapters/useSearchFilters'
 import { useSearchState } from '../adapters/useSearchState'
 import { SearchPageLayout } from '../components/SearchPageLayout'
 import { SearchFilters } from '../components/composition/SearchFilters'
-import { SimpleSearchResultsGrid } from '../components/composition/SimpleSearchResultsGrid'
+import { SearchResultsAccordionGrid } from '../components/composition/SearchResultsAccordionGrid'
 
 export function SimpleSearchPageView() {
   const { isReady, isIndexing, error } = useSearchData()
@@ -20,6 +20,9 @@ export function SimpleSearchPageView() {
 
   // Tag state management
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
+
+  // View mode state
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
   // Sync selectedTags with activeFilters.tags from URL
   useEffect(() => {
@@ -118,6 +121,11 @@ export function SimpleSearchPageView() {
     clearFilters()
   }
 
+  // Handle view mode change
+  const handleViewModeChange = (mode: 'grid' | 'list') => {
+    setViewMode(mode)
+  }
+
   if (!isReady) {
     return (
       <SearchPageLayout title="Search" description="Building search index...">
@@ -159,7 +167,7 @@ export function SimpleSearchPageView() {
   const description =
     selectedTags.length > 0
       ? `Found ${totalResults} result${totalResults !== 1 ? 's' : ''} for ${selectedTags.length} filter${selectedTags.length !== 1 ? 's' : ''}`
-      : 'Search across all skills, races, traits, religions, birthsigns, and destiny nodes'
+      : 'Search across all skills, races, traits, religions, birthsigns, destiny nodes, and perk references'
 
   return (
     <SearchPageLayout title={title} description={description}>
@@ -179,10 +187,10 @@ export function SimpleSearchPageView() {
 
       {/* Results Section */}
       <div className="w-full">
-        <SimpleSearchResultsGrid
+        <SearchResultsAccordionGrid
           items={searchResults.map(result => result.item)}
-          selectedItemId={undefined}
-          onItemSelect={() => {}} // No selection needed
+          viewMode={viewMode}
+          onViewModeChange={handleViewModeChange}
         />
       </div>
     </SearchPageLayout>
