@@ -1,5 +1,6 @@
 import type { Spell, SpellWithComputed, SpellDataResponse } from '../types'
 import { SpellModel } from './SpellModel'
+import { getDataUrl } from '@/shared/utils/baseUrl'
 
 export class SpellDataProvider {
   private static instance: SpellDataProvider
@@ -26,7 +27,7 @@ export class SpellDataProvider {
     }
 
     try {
-      const response = await fetch('/data/player_spells.json')
+      const response = await fetch(getDataUrl('data/player_spells.json'))
       if (!response.ok) {
         throw new Error(`Failed to fetch spells: ${response.status} ${response.statusText}`)
       }
