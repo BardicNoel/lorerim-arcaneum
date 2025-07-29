@@ -1,14 +1,14 @@
-import { ArrowDown, ArrowUp, Command, Search, X } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-// TODO: Re-implement global search with new Zustand stores
-// import { useGlobalSearch, useDataCache, type SearchResult } from '@/shared/data/DataProvider'
+import { useSearchData } from '@/features/search/adapters/useSearchData'
+import type { SearchResult } from '@/features/search/model/SearchModel'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { Card, CardContent } from '@/shared/ui/ui/card'
 import { Input } from '@/shared/ui/ui/input'
 import { ScrollArea } from '@/shared/ui/ui/scroll-area'
+import { ArrowDown, ArrowUp, Command, Search, X } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface GlobalSearchProps {
   className?: string
@@ -25,42 +25,31 @@ export function GlobalSearch({
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
 
-  // TODO: Re-implement global search with new Zustand stores
-  // const { searchAll } = useGlobalSearch()
-  // const { loadAllData } = useDataCache()
+  const { search, isReady } = useSearchData()
   const navigate = useNavigate()
 
   const inputRef = useRef<HTMLInputElement>(null)
   const resultsRef = useRef<HTMLDivElement>(null)
 
-  // TODO: Re-implement global search with new Zustand stores
-  // Load all data when search is opened
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     loadAllData()
-  //   }
-  // }, [isOpen, loadAllData])
-
-  // TODO: Re-implement global search with new Zustand stores
   // Debounced search
-  // useEffect(() => {
-  //   if (!isOpen) return
+  useEffect(() => {
+    if (!isOpen || !isReady) return
 
-  //   const timeoutId = setTimeout(() => {
-  //     if (query.trim()) {
-  //       setIsLoading(true)
-  //       const searchResults = searchAll(query)
-  //       setResults(searchResults)
-  //       setSelectedIndex(0)
-  //       setIsLoading(false)
-  //     } else {
-  //       setResults([])
-  //       setSelectedIndex(0)
-  //     }
-  //   }, 300)
+    const timeoutId = setTimeout(() => {
+      if (query.trim()) {
+        setIsLoading(true)
+        const searchResults = search(query)
+        setResults(searchResults)
+        setSelectedIndex(0)
+        setIsLoading(false)
+      } else {
+        setResults([])
+        setSelectedIndex(0)
+      }
+    }, 300)
 
-  //   return () => clearTimeout(timeoutId)
-  // }, [query, isOpen, searchAll])
+    return () => clearTimeout(timeoutId)
+  }, [query, isOpen, search, isReady])
 
   // Keyboard navigation
   const handleKeyDown = useCallback(
@@ -137,9 +126,9 @@ export function GlobalSearch({
 
   const handleResultClick = (result: SearchResult) => {
     // Navigate based on result type
-    switch (result.type) {
+    switch (result.item.type) {
       case 'skill':
-        navigate(`/build/perks?skill=${result.id}`)
+        navigate(`/build/perks?skill=${result.item.id.replace('skill-', '')}`)
         break
       case 'race':
         navigate(`/races`)
@@ -156,13 +145,19 @@ export function GlobalSearch({
       case 'destiny':
         navigate(`/destiny`)
         break
+      case 'perk':
+        navigate(`/build/perks`)
+        break
+      case 'perk-reference':
+        navigate(`/perk-references`)
+        break
     }
 
     setIsOpen(false)
     setQuery('')
   }
 
-  const getTypeIcon = (type: SearchResult['type']) => {
+  const getTypeIcon = (type: SearchResult['item']['type']) => {
     switch (type) {
       case 'skill':
         return '⚔️'
@@ -176,12 +171,16 @@ export function GlobalSearch({
         return '⭐'
       case 'destiny':
         return '🌟'
+      case 'perk':
+        return '🔧'
+      case 'perk-reference':
+        return '📖'
       default:
         return '📄'
     }
   }
 
-  const getTypeLabel = (type: SearchResult['type']) => {
+  const getTypeLabel = (type: SearchResult['item']['type']) => {
     switch (type) {
       case 'skill':
         return 'Skill'
@@ -195,6 +194,10 @@ export function GlobalSearch({
         return 'Birthsign'
       case 'destiny':
         return 'Destiny'
+      case 'perk':
+        return 'Perk Tree'
+      case 'perk-reference':
+        return 'Perk Reference'
       default:
         return 'Item'
     }
@@ -257,7 +260,7 @@ export function GlobalSearch({
                   <div ref={resultsRef} className="space-y-1">
                     {results.map((result, index) => (
                       <Card
-                        key={`${result.type}-${result.id}`}
+                        key={`${result.item.type}-${result.item.id}`}
                         className={cn(
                           'cursor-pointer transition-colors hover:bg-accent',
                           selectedIndex === index && 'bg-accent border-primary'
@@ -267,25 +270,25 @@ export function GlobalSearch({
                         <CardContent className="p-3">
                           <div className="flex items-start gap-3">
                             <div className="flex-shrink-0 text-lg">
-                              {getTypeIcon(result.type)}
+                              {getTypeIcon(result.item.type)}
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1">
                                 <h4 className="font-medium text-sm truncate">
-                                  {result.name}
+                                  {result.item.name}
                                 </h4>
                                 <Badge variant="secondary" className="text-xs">
-                                  {getTypeLabel(result.type)}
+                                  {getTypeLabel(result.item.type)}
                                 </Badge>
-                                {result.category && (
+                                {result.item.category && (
                                   <Badge variant="outline" className="text-xs">
-                                    {result.category}
+                                    {result.item.category}
                                   </Badge>
                                 )}
                               </div>
-                              {result.description && (
+                              {result.item.description && (
                                 <p className="text-xs text-muted-foreground line-clamp-2">
-                                  {result.description}
+                                  {result.item.description}
                                 </p>
                               )}
                               {result.highlights.length > 0 && (

@@ -9,8 +9,8 @@ import {
   createSearchHighlights,
   transformBirthsignsToSearchable,
   transformDestinyNodesToSearchable,
-  transformPerkTreesToSearchable,
   transformPerkReferencesToSearchable,
+  transformPerkTreesToSearchable,
   transformRacesToSearchable,
   transformReligionsToSearchable,
   transformSkillsToSearchable,
@@ -152,8 +152,9 @@ export class SearchDataProvider {
     }
 
     // Transform perk references to searchable items
-    const searchablePerkReferences = transformPerkReferencesToSearchable(perkReferences)
-    
+    const searchablePerkReferences =
+      transformPerkReferencesToSearchable(perkReferences)
+
     // Add items to the collection
     this.allSearchableItems.push(...searchablePerkReferences)
 
@@ -165,15 +166,24 @@ export class SearchDataProvider {
   }
 
   search(query: string, filters?: SearchFilters): SearchResult[] {
-    if (!this.searchIndex || !query.trim()) {
+    if (!this.searchIndex) {
       return []
     }
 
-    // Apply filters to searchable items
-    let filteredItems = this.allSearchableItems
+    // If query is empty or just a wildcard, return filtered items without text search
+    if (!query.trim() || query.trim() === '*') {
+      let filteredItems = this.allSearchableItems
 
-    if (filters) {
-      filteredItems = this.applyFilters(filteredItems, filters)
+      if (filters) {
+        filteredItems = this.applyFilters(filteredItems, filters)
+      }
+
+      return filteredItems.map(item => ({
+        item,
+        score: 1, // Perfect score for filtered results
+        matches: [],
+        highlights: [],
+      }))
     }
 
     // Double-check that searchIndex is still valid
@@ -182,20 +192,27 @@ export class SearchDataProvider {
       return []
     }
 
-    // Create a new Fuse instance with filtered items
-    const filteredFuse = new Fuse(filteredItems, this.fuseOptions)
+    // Perform search on all items first
+    const fuseResults = this.searchIndex.search(query)
 
-    // Perform search
-    const fuseResults = filteredFuse.search(query)
+    // Apply filters to search results
+    let filteredResults = fuseResults
+
+    if (filters) {
+      filteredResults = fuseResults.filter(fuseResult => {
+        const item = fuseResult.item
+        return this.applyFilters([item], filters).length > 0
+      })
+    }
 
     // Transform Fuse results to SearchResult format
-    const results = fuseResults.map(fuseResult => ({
+    const results = filteredResults.map(fuseResult => ({
       item: fuseResult.item,
       score: fuseResult.score || 0,
       matches: [...(fuseResult.matches || [])],
       highlights: createSearchHighlights([...(fuseResult.matches || [])]),
     }))
-    
+
     return results
   }
 
