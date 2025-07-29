@@ -47,16 +47,6 @@ export function SearchPageView() {
       })
     })
 
-    // Add type filters from URL
-    activeFilters.types.forEach(type => {
-      urlTags.push({
-        id: `type-${type}`,
-        label: type.charAt(0).toUpperCase() + type.slice(1),
-        value: type,
-        category: 'Types',
-      })
-    })
-
     // Add category filters from URL
     activeFilters.categories.forEach(category => {
       urlTags.push({
@@ -68,7 +58,7 @@ export function SearchPageView() {
     })
 
     setSelectedTags(urlTags)
-  }, [activeFilters.tags, activeFilters.types, activeFilters.categories])
+  }, [activeFilters.tags, activeFilters.categories])
 
   // Add a tag (from autocomplete or custom input)
   const handleTagSelect = (optionOrTag: SearchOption | string) => {
@@ -96,7 +86,22 @@ export function SearchPageView() {
       )
     ) {
       setSelectedTags(prev => [...prev, tag])
-      addTag(tag.value)
+
+      // Add to appropriate filter based on category
+      if (tag.category === 'Categories') {
+        setActiveFilters(prev => ({
+          ...prev,
+          categories: [...prev.categories, tag.value],
+        }))
+      } else if (tag.category === 'Tags') {
+        setActiveFilters(prev => ({
+          ...prev,
+          tags: [...prev.tags, tag.value],
+        }))
+      } else {
+        // Default to adding as a search tag
+        addTag(tag.value)
+      }
     }
   }
 
@@ -107,18 +112,18 @@ export function SearchPageView() {
       setSelectedTags(prev => prev.filter(t => t.id !== tagId))
 
       // Remove from appropriate filter based on category
-      if (tag.category === 'Types') {
-        setActiveFilters(prev => ({
-          ...prev,
-          types: prev.types.filter(t => t !== tag.value),
-        }))
-      } else if (tag.category === 'Categories') {
+      if (tag.category === 'Categories') {
         setActiveFilters(prev => ({
           ...prev,
           categories: prev.categories.filter(c => c !== tag.value),
         }))
+      } else if (tag.category === 'Tags') {
+        setActiveFilters(prev => ({
+          ...prev,
+          tags: prev.tags.filter(t => t !== tag.value),
+        }))
       } else {
-        // Default to removing from tags
+        // Default to removing from search tags
         removeTag(tag.value)
       }
     }
