@@ -1,6 +1,7 @@
 import type { Birthsign } from '@/features/birthsigns/types'
 import type { DestinyNode } from '@/features/destiny/types'
 import type { PerkReferenceNode } from '@/features/perk-references/types'
+import type { SpellWithComputed } from '@/features/spells/types'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import type { Race, Religion, Skill, Trait } from '@/shared/data/schemas'
 import type {
@@ -194,6 +195,38 @@ export function transformPerkReferencesToSearchable(
     ],
     originalData: perk,
     url: `/perk-references?skill=${perk.skillTree}&perk=${perk.edid}`,
+  }))
+}
+
+export function transformSpellsToSearchable(
+  spells: SpellWithComputed[]
+): SearchableItem[] {
+  return spells.map(spell => ({
+    id: `spell-${spell.editorId}`,
+    type: 'spell' as const,
+    name: spell.name,
+    description: spell.description,
+    category: spell.school,
+    tags: spell.tags,
+    searchableText: [
+      spell.name,
+      spell.description || '',
+      spell.school || '',
+      spell.level || '',
+      spell.tome || '',
+      ...spell.tags,
+      ...spell.effects.map(effect => effect.name),
+      ...spell.effects.map(effect => effect.description),
+      spell.isAreaSpell ? 'area spell' : '',
+      spell.isDurationSpell ? 'duration spell' : '',
+      spell.isInstantSpell ? 'instant spell' : '',
+      `magicka cost ${spell.magickaCost}`,
+      `magnitude ${spell.totalMagnitude}`,
+      `duration ${spell.maxDuration}`,
+      `area ${spell.maxArea}`,
+    ].filter(Boolean),
+    originalData: spell,
+    url: `/spells?spell=${spell.editorId}`,
   }))
 }
 

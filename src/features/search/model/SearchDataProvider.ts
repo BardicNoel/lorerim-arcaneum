@@ -14,6 +14,7 @@ import {
   transformRacesToSearchable,
   transformReligionsToSearchable,
   transformSkillsToSearchable,
+  transformSpellsToSearchable,
   transformTraitsToSearchable,
 } from './SearchUtilities'
 
@@ -74,6 +75,7 @@ export class SearchDataProvider {
   transformDestinyNodesToSearchable = transformDestinyNodesToSearchable
   transformPerkTreesToSearchable = transformPerkTreesToSearchable
   transformPerkReferencesToSearchable = transformPerkReferencesToSearchable
+  transformSpellsToSearchable = transformSpellsToSearchable
 
   async buildSearchIndex(): Promise<void> {
     if (this.isIndexing) return
@@ -97,6 +99,9 @@ export class SearchDataProvider {
         '@/shared/stores/perkTreesStore'
       )
 
+      // Import spell data provider
+      const { SpellDataProvider } = await import('@/features/spells/model/SpellDataProvider')
+
       // Get data from all stores
       const skills = useSkillsStore.getState().data
       const races = useRacesStore.getState().data
@@ -106,6 +111,10 @@ export class SearchDataProvider {
       const destinyNodes = useDestinyNodesStore.getState().data
       const perkTrees = usePerkTreesStore.getState().data
 
+      // Get spell data
+      const spellDataProvider = SpellDataProvider.getInstance()
+      const spells = await spellDataProvider.loadSpells()
+
       // Check if stores have data
       if (
         !skills?.length ||
@@ -114,7 +123,8 @@ export class SearchDataProvider {
         !religions?.length ||
         !birthsigns?.length ||
         !destinyNodes?.length ||
-        !perkTrees?.length
+        !perkTrees?.length ||
+        !spells?.length
       ) {
         console.log('Stores not loaded yet, cannot build search index')
         throw new Error(
@@ -131,6 +141,7 @@ export class SearchDataProvider {
         ...transformBirthsignsToSearchable(birthsigns),
         ...transformDestinyNodesToSearchable(destinyNodes),
         ...transformPerkTreesToSearchable(perkTrees),
+        ...transformSpellsToSearchable(spells),
       ]
 
       this.allSearchableItems = searchableItems
@@ -286,6 +297,19 @@ export class SearchDataProvider {
           !item.category ||
           !filters.birthsignGroups.includes(item.category)
         ) {
+          return false
+        }
+      }
+
+      if (item.type === 'spell' && filters.spellSchools?.length) {
+        if (!item.category || !filters.spellSchools.includes(item.category)) {
+          return false
+        }
+      }
+
+      if (item.type === 'spell' && filters.spellLevels?.length) {
+        const spellData = item.originalData
+        if (!spellData.level || !filters.spellLevels.includes(spellData.level)) {
           return false
         }
       }

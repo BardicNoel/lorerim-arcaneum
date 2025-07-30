@@ -1,17 +1,7 @@
-import { cn } from '@/lib/utils'
+import React from 'react'
 import { AccordionCard } from '@/shared/components/generic/AccordionCard'
 import { Badge } from '@/shared/ui/ui/badge'
-import { 
-  BookOpen, 
-  Clock, 
-  Target, 
-  Sparkles,
-  Flame,
-  Heart,
-  Ghost,
-  Eye,
-  Shield
-} from 'lucide-react'
+import { Flame, Heart, Ghost, Eye, Shield, Sparkles } from 'lucide-react'
 import type { SpellWithComputed } from '../../types'
 
 interface SpellAccordionCardProps {
@@ -60,107 +50,155 @@ export function SpellAccordionCard({
       disableHover={disableHover}
     >
       <AccordionCard.Header>
-        <SchoolIcon className="w-5 h-5 text-muted-foreground" />
-        <h3 className="text-primary font-semibold text-lg">{spell.name}</h3>
+        <div className="flex items-center gap-3">
+          <SchoolIcon className="w-5 h-5 text-muted-foreground" />
+          <h3 className="text-primary font-semibold text-lg">{spell.name}</h3>
+          <span className="ml-auto transition-transform duration-200 text-muted-foreground">
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 8l4 4 4-4"
+              />
+            </svg>
+          </span>
+        </div>
       </AccordionCard.Header>
-      
+
       <AccordionCard.Summary>
-        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-          <div className="flex items-center gap-1">
-            <BookOpen className="w-4 h-4" />
-            <span>{spell.school}</span>
+        <div className="px-4 py-2 space-y-3">
+          <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+            <div className="flex items-center gap-1">
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 7v14"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
+                />
+              </svg>
+              <span>{spell.school}</span>
+            </div>
+            <Badge
+              variant="secondary"
+              className={levelColors[spell.level as keyof typeof levelColors] || ''}
+            >
+              {spell.level}
+            </Badge>
           </div>
-          <Badge 
-            variant="outline" 
-            className={cn(
-              levelColors[spell.level as keyof typeof levelColors] || 'bg-gray-100 text-gray-800 border-gray-200',
-              'text-xs font-medium'
-            )}
-          >
-            {spell.level}
-          </Badge>
-          {spell.isAreaSpell && (
-            <div className="flex items-center gap-1">
-              <Target className="w-4 h-4" />
-              <span>Area</span>
-            </div>
-          )}
-          {spell.isDurationSpell && (
-            <div className="flex items-center gap-1">
-              <Clock className="w-4 h-4" />
-              <span>Duration</span>
-            </div>
-          )}
+          <p className="text-sm text-muted-foreground mb-3">{spell.description}</p>
         </div>
-
-        {spell.description && (
-          <p className="text-sm text-muted-foreground mb-3">
-            {spell.description}
-          </p>
-        )}
-
-
       </AccordionCard.Summary>
-      
+
       <AccordionCard.Details>
-        {/* Effects */}
-        {spell.hasEffects && (
+        <div className="px-4 pb-4 space-y-4">
+          {/* Effects Section */}
+          {spell.hasEffects && (
+            <div>
+              <h5 className="text-lg font-medium text-foreground mb-3">Effects</h5>
+              <div className="space-y-2">
+                {spell.effects.map((effect, index) => (
+                  <div key={index} className="bg-muted/50 rounded-lg p-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-medium text-sm">{effect.name}</span>
+                      {effect.magnitude > 0 && (
+                        <Badge variant="outline" className="text-xs">
+                          {effect.magnitude}
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-muted-foreground">{effect.description}</p>
+                    <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
+                      {effect.duration > 0 && <span>Duration: {effect.duration}s</span>}
+                      {effect.area > 0 && <span>Area: {effect.area}ft</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Statistics Section */}
           <div>
-            <h5 className="text-lg font-medium text-foreground mb-3">Effects</h5>
-            <div className="space-y-3">
-              {spell.effects.map((effect, index) => (
-                <div
-                  key={index}
-                  className="p-3 rounded-lg border bg-muted/30"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <Sparkles className="h-4 w-4 text-yellow-500" />
-                    <span className="font-medium text-sm">{effect.name}</span>
-                  </div>
-                  <div className="text-sm text-muted-foreground mb-2">
-                    {effect.description}
-                  </div>
-                  <div className="flex gap-4 text-xs text-muted-foreground">
-                    {effect.magnitude > 0 && (
-                      <span>Magnitude: {effect.magnitude}</span>
-                    )}
-                    {effect.duration > 0 && (
-                      <span>Duration: {effect.duration}s</span>
-                    )}
-                    {effect.area > 0 && (
-                      <span>Area: {effect.area}ft</span>
-                    )}
-                  </div>
+            <h5 className="text-lg font-medium text-foreground mb-3">Statistics</h5>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Magicka Cost:</span>
+                <span className="font-medium">{spell.magickaCost} MP</span>
+              </div>
+              {spell.totalMagnitude > 0 && (
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Total Magnitude:</span>
+                  <span className="font-medium">{spell.totalMagnitude}</span>
                 </div>
-              ))}
+              )}
+              {spell.maxDuration > 0 && (
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Max Duration:</span>
+                  <span className="font-medium">{spell.maxDuration}s</span>
+                </div>
+              )}
+              {spell.maxArea > 0 && (
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Max Area:</span>
+                  <span className="font-medium">{spell.maxArea}ft</span>
+                </div>
+              )}
             </div>
           </div>
-        )}
 
-        {/* Spell Statistics */}
-        <div>
-          <h5 className="text-lg font-medium text-foreground mb-3">Statistics</h5>
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
-              <span className="font-medium">Magicka Cost</span>
-              <span className="font-bold">{spell.magickaCost} MP</span>
+          {/* Additional Information */}
+          {(spell.tome || spell.vendors?.length) && (
+            <div>
+              <h5 className="text-lg font-medium text-foreground mb-3">Additional Info</h5>
+              <div className="space-y-2 text-sm">
+                {spell.tome && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-muted-foreground">Tome:</span>
+                    <span>{spell.tome}</span>
+                  </div>
+                )}
+                {spell.vendors && spell.vendors.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-muted-foreground">Vendors:</span>
+                    <span>{spell.vendors.join(', ')}</span>
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
-              <span className="font-medium">Total Magnitude</span>
-              <span className="font-bold">{spell.totalMagnitude}</span>
+          )}
+
+          {/* Tags */}
+          {spell.tags && spell.tags.length > 0 && (
+            <div>
+              <h5 className="text-lg font-medium text-foreground mb-3">Tags</h5>
+              <div className="flex flex-wrap gap-2">
+                {spell.tags.map((tag, index) => (
+                  <Badge key={index} variant="outline" className="text-xs">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
-              <span className="font-medium">Max Duration</span>
-              <span className="font-bold">{spell.maxDuration}s</span>
-            </div>
-            <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
-              <span className="font-medium">Max Area</span>
-              <span className="font-bold">{spell.maxArea}ft</span>
-            </div>
-          </div>
+          )}
         </div>
-
-
       </AccordionCard.Details>
     </AccordionCard>
   )

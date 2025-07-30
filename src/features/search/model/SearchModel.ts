@@ -9,6 +9,7 @@ export interface SearchableItem {
     | 'destiny'
     | 'perk'
     | 'perk-reference'
+    | 'spell'
   name: string
   description?: string
   category?: string
@@ -41,6 +42,8 @@ export interface SearchFilters {
   traitTypes?: string[]
   religionTypes?: string[]
   birthsignGroups?: string[]
+  spellSchools?: string[]
+  spellLevels?: string[]
 }
 
 export interface SearchFilterOptions {

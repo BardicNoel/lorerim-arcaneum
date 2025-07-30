@@ -4,6 +4,7 @@ import { usePerkTreesStore } from './perkTreesStore'
 import { useRacesStore } from './racesStore'
 import { useReligionsStore } from './religionsStore'
 import { useSkillsStore } from './skillsStore'
+import { useSpellsStore } from './spellsStore'
 import { useTraitsStore } from './traitsStore'
 
 /**
@@ -18,6 +19,7 @@ export async function loadAllData() {
     useBirthsignsStore.getState().load(),
     useDestinyNodesStore.getState().load(),
     usePerkTreesStore.getState().load(),
+    useSpellsStore.getState().load(),
   ])
 }
 
@@ -32,7 +34,8 @@ export function areAllDataStoresLoaded() {
     useReligionsStore.getState().data.length > 0 &&
     useBirthsignsStore.getState().data.length > 0 &&
     useDestinyNodesStore.getState().data.length > 0 &&
-    usePerkTreesStore.getState().data.length > 0
+    usePerkTreesStore.getState().data.length > 0 &&
+    useSpellsStore.getState().data.length > 0
   )
 }
 
@@ -48,6 +51,7 @@ export function getGlobalLoadingState() {
     useBirthsignsStore,
     useDestinyNodesStore,
     usePerkTreesStore,
+    useSpellsStore,
   ]
 
   return stores.some(store => store.getState().loading)
@@ -65,6 +69,7 @@ export function getGlobalErrors() {
     useBirthsignsStore,
     useDestinyNodesStore,
     usePerkTreesStore,
+    useSpellsStore,
   ]
 
   return stores.map(store => store.getState().error).filter(Boolean) as string[]

@@ -28,6 +28,9 @@ import { PerkTreeGrid } from '@/features/skills/components/composition/PerkTreeG
 import { PerkReferenceCard } from '@/features/perk-references/components/composition/PerkReferenceCard'
 import { PerkReferenceAccordion } from '@/features/perk-references/components/composition/PerkReferenceAccordion'
 
+import { SpellSearchCard } from '@/features/search/components/type-specific/SpellSearchCard'
+import { SpellDetailView } from '@/features/search/components/type-specific/SpellDetailView'
+
 // Wrapper component to convert SearchResult to PerkReferenceItem format
 const PerkReferenceSearchWrapper: React.FC<{
   result: SearchResult
@@ -155,6 +158,13 @@ const COMPONENT_MAP: Record<
     grid: PerkReferenceSearchWrapper,
     detail: FallbackDetail,
     compact: PerkReferenceSearchWrapper,
+  },
+  spell: {
+    card: SpellSearchCard,
+    accordion: SpellSearchCard,
+    grid: SpellSearchCard,
+    detail: SpellDetailView,
+    compact: SpellSearchCard,
   },
 }
 

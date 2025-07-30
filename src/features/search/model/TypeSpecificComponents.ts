@@ -11,6 +11,7 @@ export const TYPE_DEFAULT_VIEWS: Record<string, ViewMode> = {
   religion: 'card',
   perk: 'grid',
   'perk-reference': 'card',
+  spell: 'grid',
 }
 
 // Get the effective view mode for a type
@@ -41,6 +42,7 @@ export function getAvailableViewModes(type: string): ViewMode[] {
     case 'skill':
     case 'perk':
     case 'perk-reference':
+    case 'spell':
       modes.push('grid')
       break
   }

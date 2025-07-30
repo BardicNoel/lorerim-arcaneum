@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils'
 import React, { useState } from 'react'
+import { cn } from '@/lib/utils'
 
 /**
  * Compound AccordionCard component with slottable Header, Summary, Footer, and Details.
@@ -37,6 +37,7 @@ export function AccordionCard({
     if (child.type === AccordionCard.Footer) footer = child
     if (child.type === AccordionCard.Details) details = child
   })
+
   // Expansion state (controlled or uncontrolled)
   const [internalExpanded, setInternalExpanded] = useState(false)
   const isExpanded = expanded !== undefined ? expanded : internalExpanded
@@ -82,7 +83,6 @@ AccordionCard.Header = function Header({
   expanded?: boolean
 }) {
   const handleClick = () => {
-    console.log('AccordionCard.Header clicked, expanded:', expanded)
     onClick?.()
   }
 

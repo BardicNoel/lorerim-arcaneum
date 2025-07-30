@@ -4,6 +4,7 @@ import { usePerkTreesStore } from '@/shared/stores/perkTreesStore'
 import { useRacesStore } from '@/shared/stores/racesStore'
 import { useReligionsStore } from '@/shared/stores/religionsStore'
 import { useSkillsStore } from '@/shared/stores/skillsStore'
+import { useSpellsStore } from '@/shared/stores/spellsStore'
 import { useTraitsStore } from '@/shared/stores/traitsStore'
 import { useCallback, useEffect, useState } from 'react'
 import { SearchDataProvider } from '../model/SearchDataProvider'
@@ -37,6 +38,7 @@ export function useSearchData() {
   const birthsigns = useBirthsignsStore(state => state.data)
   const destinyNodes = useDestinyNodesStore(state => state.data)
   const perkTrees = usePerkTreesStore(state => state.data)
+  const spells = useSpellsStore(state => state.data)
 
   // Get perk references data
   const { allPerks: perkReferences } = usePerkReferenceData()
@@ -132,6 +134,17 @@ export function useSearchData() {
     }
   }, [perkReferences, indexStore])
 
+  // Index spells when they have data
+  useEffect(() => {
+    if (spells?.length) {
+      indexStore(
+        'spells',
+        spells,
+        provider.transformSpellsToSearchable
+      )
+    }
+  }, [spells, indexStore])
+
   // Check if we have any data indexed
   useEffect(() => {
     const hasAnyData =
@@ -142,7 +155,8 @@ export function useSearchData() {
       birthsigns?.length ||
       destinyNodes?.length ||
       perkTrees?.length ||
-      perkReferences?.length
+      perkReferences?.length ||
+      spells?.length
 
     if (hasAnyData && provider.hasIndexedData()) {
       setIsReady(true)
@@ -156,6 +170,7 @@ export function useSearchData() {
     destinyNodes,
     perkTrees,
     perkReferences,
+    spells,
     provider,
   ])
 

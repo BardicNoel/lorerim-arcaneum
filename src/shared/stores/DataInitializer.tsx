@@ -6,6 +6,7 @@ import {
   useRacesStore,
   useReligionsStore,
   useSkillsStore,
+  useSpellsStore,
   useTraitsStore,
 } from './index'
 
@@ -29,6 +30,7 @@ export function DataInitializer({
   const racesLoad = useRacesStore(state => state.load)
   const religionsLoad = useReligionsStore(state => state.load)
   const skillsLoad = useSkillsStore(state => state.load)
+  const spellsLoad = useSpellsStore(state => state.load)
   const traitsLoad = useTraitsStore(state => state.load)
 
   const initializeData = useCallback(async () => {
@@ -46,6 +48,7 @@ export function DataInitializer({
         racesLoad(),
         religionsLoad(),
         skillsLoad(),
+        spellsLoad(),
         traitsLoad(),
       ])
 
@@ -63,6 +66,7 @@ export function DataInitializer({
     racesLoad,
     religionsLoad,
     skillsLoad,
+    spellsLoad,
     traitsLoad,
   ])
 

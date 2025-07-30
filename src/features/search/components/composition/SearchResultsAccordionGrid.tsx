@@ -1,9 +1,9 @@
-import { AccordionGrid } from '@/shared/components/ui'
+import React, { useState } from 'react'
 import { Button } from '@/shared/ui/ui/button'
 import { Grid3X3, List } from 'lucide-react'
-import { useState } from 'react'
-import type { SearchableItem } from '../../model/SearchModel'
+import { AccordionGrid } from '@/shared/components/ui/AccordionGrid'
 import { SearchCard } from '../atomic/SearchCard'
+import type { SearchableItem } from '../../model/SearchModel'
 
 interface SearchResultsAccordionGridProps {
   items: SearchableItem[]
@@ -22,9 +22,6 @@ export function SearchResultsAccordionGrid({
 
   // Handle accordion expansion (row-based for grid view)
   const handleItemToggle = (itemId: string) => {
-    console.log('handleItemToggle called with itemId:', itemId)
-    console.log('Current expandedItems:', Array.from(expandedItems))
-
     const newExpanded = new Set(expandedItems)
 
     if (viewMode === 'grid') {
@@ -39,13 +36,6 @@ export function SearchResultsAccordionGrid({
       const isRowExpanded = items
         .slice(rowStartIndex, rowEndIndex)
         .some(item => newExpanded.has(item.id))
-
-      console.log(
-        'Grid mode - rowIndex:',
-        rowIndex,
-        'isRowExpanded:',
-        isRowExpanded
-      )
 
       if (isRowExpanded) {
         // Collapse all items in the row
@@ -62,14 +52,11 @@ export function SearchResultsAccordionGrid({
       // In list mode, just toggle the single item
       if (newExpanded.has(itemId)) {
         newExpanded.delete(itemId)
-        console.log('List mode - collapsing item:', itemId)
       } else {
         newExpanded.add(itemId)
-        console.log('List mode - expanding item:', itemId)
       }
     }
 
-    console.log('New expandedItems:', Array.from(newExpanded))
     setExpandedItems(newExpanded)
   }
 
@@ -118,27 +105,35 @@ export function SearchResultsAccordionGrid({
       {/* Results Section */}
       {viewMode === 'grid' ? (
         <AccordionGrid columns={3} gap="md">
-          {items.map(item => (
-            <SearchCard
-              key={item.id}
-              item={item}
-              isExpanded={expandedItems.has(item.id)}
-              onToggle={() => handleItemToggle(item.id)}
-              viewMode="grid"
-            />
-          ))}
+          {items.map(item => {
+            const isExpanded = expandedItems.has(item.id)
+
+            return (
+              <SearchCard
+                key={item.id}
+                item={item}
+                isExpanded={isExpanded}
+                onToggle={() => handleItemToggle(item.id)}
+                viewMode="grid"
+              />
+            )
+          })}
         </AccordionGrid>
       ) : (
         <div className="space-y-2">
-          {items.map(item => (
-            <SearchCard
-              key={item.id}
-              item={item}
-              isExpanded={expandedItems.has(item.id)}
-              onToggle={() => handleItemToggle(item.id)}
-              viewMode="list"
-            />
-          ))}
+          {items.map(item => {
+            const isExpanded = expandedItems.has(item.id)
+
+            return (
+              <SearchCard
+                key={item.id}
+                item={item}
+                isExpanded={isExpanded}
+                onToggle={() => handleItemToggle(item.id)}
+                viewMode="list"
+              />
+            )
+          })}
         </div>
       )}
     </div>
