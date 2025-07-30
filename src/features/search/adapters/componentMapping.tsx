@@ -30,8 +30,6 @@ import { PerkReferenceAccordion } from '@/features/perk-references/components/co
 
 import { SpellSearchCard } from '@/features/search/components/type-specific/SpellSearchCard'
 import { SpellDetailView } from '@/features/search/components/type-specific/SpellDetailView'
-import { SpellGridWrapper } from '@/features/search/components/type-specific/SpellGridWrapper'
-import { SpellListWrapper } from '@/features/search/components/type-specific/SpellListWrapper'
 
 // Wrapper component to convert SearchResult to PerkReferenceItem format
 const PerkReferenceSearchWrapper: React.FC<{
@@ -164,7 +162,7 @@ const COMPONENT_MAP: Record<
   spell: {
     card: SpellSearchCard,
     accordion: SpellSearchCard,
-    grid: SpellGridWrapper,
+    grid: SpellSearchCard,
     detail: SpellDetailView,
     compact: SpellSearchCard,
   },

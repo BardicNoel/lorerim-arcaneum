@@ -25,7 +25,6 @@ export function SearchCard({
   onToggle,
   viewMode = 'grid',
 }: SearchCardProps) {
-  console.log('SearchCard props:', { type: item.type, isExpanded, onToggle: !!onToggle, viewMode })
   // Simple switchboard based on item type
   switch (item.type) {
     case 'race':

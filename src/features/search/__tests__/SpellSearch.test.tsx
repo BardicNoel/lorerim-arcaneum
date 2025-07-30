@@ -149,6 +149,28 @@ describe('SpellSearchCard', () => {
     expect(screen.getByText('Spell not found')).toBeDefined()
   })
 
+  it('handles invalid spell data structure gracefully', () => {
+    const itemWithInvalidData = {
+      ...mockSpellResult.item,
+      originalData: {
+        // Missing required fields
+        name: '',
+        editorId: '',
+      },
+    }
+
+    render(
+      <SpellSearchCard
+        item={itemWithInvalidData}
+        isExpanded={false}
+        onToggle={() => {}}
+      />
+    )
+
+    // Should show fallback message
+    expect(screen.getByText('Invalid spell data')).toBeDefined()
+  })
+
   it('renders with className', () => {
     render(
       <SpellSearchCard
@@ -163,7 +185,7 @@ describe('SpellSearchCard', () => {
     expect(screen.getAllByText('Fireball').length).toBeGreaterThan(0)
   })
 
-  it('handles different view modes', () => {
+  it('handles different view modes consistently', () => {
     // Test grid view mode
     const { rerender } = render(
       <SpellSearchCard
@@ -189,8 +211,103 @@ describe('SpellSearchCard', () => {
 
     // Should render the spell name in list mode
     expect(screen.getAllByText('Fireball').length).toBeGreaterThan(0)
+
+    // Test card view mode
+    rerender(
+      <SpellSearchCard
+        item={mockSpellResult.item}
+        isExpanded={false}
+        onToggle={() => {}}
+        viewMode="card"
+      />
+    )
+
+    // Should render the spell name in card mode
+    expect(screen.getAllByText('Fireball').length).toBeGreaterThan(0)
   })
-}) 
+
+  it('calls onToggle when header is clicked', () => {
+    const onToggle = vi.fn()
+
+    render(
+      <SpellSearchCard
+        item={mockSpellResult.item}
+        isExpanded={false}
+        onToggle={onToggle}
+      />
+    )
+
+    // Find and click the first header (which should trigger expansion)
+    const headers = screen.getAllByRole('button')
+    const firstHeader = headers[0]
+    fireEvent.click(firstHeader)
+
+    expect(onToggle).toHaveBeenCalledTimes(1)
+  })
+
+  it('shows expanded content when isExpanded is true', () => {
+    render(
+      <SpellSearchCard
+        item={mockSpellResult.item}
+        isExpanded={true}
+        onToggle={() => {}}
+      />
+    )
+
+    // When expanded, we should see the effects section
+    const effectsSections = screen.getAllByText('Effects')
+    expect(effectsSections.length).toBeGreaterThan(0)
+    
+    // Should show the effect name
+    expect(screen.getByText('Fire Damage')).toBeDefined()
+    
+    // Should show statistics section
+    expect(screen.getByText('Statistics')).toBeDefined()
+    
+    // Should show magicka cost
+    expect(screen.getByText('50 MP')).toBeDefined()
+  })
+
+  it('does not show expanded content when isExpanded is false', () => {
+    render(
+      <SpellSearchCard
+        item={mockSpellResult.item}
+        isExpanded={false}
+        onToggle={() => {}}
+      />
+    )
+
+    // When not expanded, we should not see the effects section
+    // Note: The component might still render effects in some cases due to the way it's structured
+    // Let's check for the specific expanded content instead
+    expect(screen.queryByText('Statistics')).toBeNull()
+    expect(screen.queryByText('50 MP')).toBeNull()
+  })
+
+  it('shows consistent content across all view modes when expanded', () => {
+    // Test that all view modes show the same detailed content when expanded
+    const viewModes: Array<'grid' | 'list' | 'card'> = ['grid', 'list', 'card']
+    
+    viewModes.forEach(viewMode => {
+      const { unmount } = render(
+        <SpellSearchCard
+          item={mockSpellResult.item}
+          isExpanded={true}
+          onToggle={() => {}}
+          viewMode={viewMode}
+        />
+      )
+
+      // All view modes should show the same detailed content
+      expect(screen.getByText('Effects')).toBeDefined()
+      expect(screen.getByText('Fire Damage')).toBeDefined()
+      expect(screen.getByText('Statistics')).toBeDefined()
+      expect(screen.getByText('50 MP')).toBeDefined()
+
+      unmount()
+    })
+  })
+})
 
 describe('SearchDataProvider Spell Integration', () => {
   it('should load and index spell data', async () => {
