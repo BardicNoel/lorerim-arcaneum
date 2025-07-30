@@ -8,6 +8,7 @@ import { SkillsPage } from '@/features/skills'
 import { SkillsPageExperimental } from '@/features/skills/pages/SkillsPageExperimental'
 import { SpellsPage } from '@/features/spells'
 import { AccordionTraitsPage } from '@/features/traits/pages/AccordionTraitsPage'
+import { CookbookPage } from '@/features/cookbook/pages'
 import { BuildPage } from '@/pages/BuildPage'
 import CraftingPage from '@/pages/CraftingPage'
 import EquipmentPage from '@/pages/EquipmentPage'
@@ -35,6 +36,7 @@ export const AppRouter = () => {
         <Route path="perks" element={<SkillsPage />} />
       </Route>
       <Route path="/spells" element={<SpellsPage />} />
+      <Route path="/cookbook" element={<CookbookPage />} />
 
       {/* Other pages */}
       <Route path="/search" element={<SimpleSearchPage />} />

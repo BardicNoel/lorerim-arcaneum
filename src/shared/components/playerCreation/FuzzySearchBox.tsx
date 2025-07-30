@@ -54,18 +54,14 @@ export function FuzzySearchBox({
     selectedCategory || singleCategory
       ? (selectedCategory || singleCategory)!.options.filter(
           option =>
-            option.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            option.description
-              ?.toLowerCase()
-              .includes(searchQuery.toLowerCase())
+            (option.label && typeof option.label === 'string' && option.label.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (option.description && typeof option.description === 'string' && option.description.toLowerCase().includes(searchQuery.toLowerCase()))
         )
       : categories.flatMap(category =>
           category.options.filter(
             option =>
-              option.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              option.description
-                ?.toLowerCase()
-                .includes(searchQuery.toLowerCase())
+              (option.label && typeof option.label === 'string' && option.label.toLowerCase().includes(searchQuery.toLowerCase())) ||
+              (option.description && typeof option.description === 'string' && option.description.toLowerCase().includes(searchQuery.toLowerCase()))
           )
         )
 
@@ -130,7 +126,7 @@ export function FuzzySearchBox({
   const hasCustomQuery =
     searchQuery.trim() &&
     !filteredOptions.some(
-      option => option.label.toLowerCase() === searchQuery.toLowerCase()
+      option => option.label && typeof option.label === 'string' && option.label.toLowerCase() === searchQuery.toLowerCase()
     )
 
   return (
