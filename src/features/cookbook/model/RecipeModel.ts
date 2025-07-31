@@ -146,11 +146,21 @@ export class RecipeModel {
    * Create searchable text for fuzzy search
    */
   private static createSearchableText(recipe: Recipe, tags: string[]): string {
+    const ingredientNames = recipe.ingredients.map(ingredient => {
+      if (typeof ingredient === 'string') {
+        return ingredient
+      }
+      if (ingredient && typeof ingredient === 'object') {
+        return ingredient.item || ingredient.name || ingredient.label || ingredient.id || String(ingredient)
+      }
+      return String(ingredient)
+    })
+
     const parts = [
       recipe.name,
       recipe.output,
       recipe.description || '',
-      ...recipe.ingredients,
+      ...ingredientNames,
       ...recipe.effects.map(effect => effect.name),
       ...recipe.effects.map(effect => effect.description),
       ...tags
@@ -243,9 +253,12 @@ export class RecipeModel {
     if (ingredients.length === 0) return recipes
     return recipes.filter(recipe => 
       ingredients.some(ingredient => 
-        recipe.ingredients.some(recipeIngredient => 
-          recipeIngredient.toLowerCase().includes(ingredient.toLowerCase())
-        )
+        recipe.ingredients.some(recipeIngredient => {
+          const ingredientName = typeof recipeIngredient === 'string' 
+            ? recipeIngredient 
+            : (recipeIngredient.item || recipeIngredient.name || recipeIngredient.label || recipeIngredient.id || String(recipeIngredient))
+          return ingredientName.toLowerCase().includes(ingredient.toLowerCase())
+        })
       )
     )
   }
@@ -309,8 +322,11 @@ export class RecipeModel {
 
     // Matches in ingredients
     recipe.ingredients.forEach(ingredient => {
-      if (ingredient.toLowerCase() === term) score += 40
-      if (ingredient.toLowerCase().includes(term)) score += 20
+      const ingredientName = typeof ingredient === 'string' 
+        ? ingredient 
+        : (ingredient.item || ingredient.name || ingredient.label || ingredient.id || String(ingredient))
+      if (ingredientName.toLowerCase() === term) score += 40
+      if (ingredientName.toLowerCase().includes(term)) score += 20
     })
 
     // Matches in effects
@@ -341,7 +357,10 @@ export class RecipeModel {
     if (recipe.description?.toLowerCase().includes(term)) matchedFields.push('description')
     
     recipe.ingredients.forEach(ingredient => {
-      if (ingredient.toLowerCase().includes(term)) matchedFields.push('ingredients')
+      const ingredientName = typeof ingredient === 'string' 
+        ? ingredient 
+        : (ingredient.item || ingredient.name || ingredient.label || ingredient.id || String(ingredient))
+      if (ingredientName.toLowerCase().includes(term)) matchedFields.push('ingredients')
     })
     
     recipe.effects.forEach(effect => {
@@ -433,8 +452,18 @@ export class RecipeModel {
    * Get unique ingredients from recipes
    */
   static getUniqueIngredients(recipes: RecipeWithComputed[]): string[] {
-    const ingredients = recipes.flatMap(recipe => recipe.ingredients)
-    return [...new Set(ingredients)].sort()
+    const ingredientNames = recipes.flatMap(recipe => 
+      recipe.ingredients.map(ingredient => {
+        if (typeof ingredient === 'string') {
+          return ingredient
+        }
+        if (ingredient && typeof ingredient === 'object') {
+          return ingredient.item || ingredient.name || ingredient.label || ingredient.id || String(ingredient)
+        }
+        return String(ingredient)
+      })
+    )
+    return [...new Set(ingredientNames)].filter(name => name && name !== '[object Object]').sort()
   }
 
   /**

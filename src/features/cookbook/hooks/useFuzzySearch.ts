@@ -1,86 +1,49 @@
-import Fuse from 'fuse.js'
 import { useMemo } from 'react'
 import type { RecipeWithComputed } from '../types'
 
-interface SearchableRecipe {
-  id: string
-  name: string
-  output: string
-  description: string
-  ingredients: string[]
-  effects: string[]
-  category: string
-  difficulty: string
-  type: string
-  originalRecipe: RecipeWithComputed
-}
-
 /**
- * Hook for fuzzy searching through recipe data using Fuse.js
+ * Hook for fuzzy searching through recipe data
+ * This is a simple string-based search that searches across all recipe fields
  */
 export function useFuzzySearch(recipes: RecipeWithComputed[], searchQuery: string) {
-  // Create searchable recipe objects
-  const searchableRecipes = useMemo(() => {
-    return recipes.map(recipe => ({
-      id: recipe.name.toLowerCase().replace(/\s+/g, '-'),
-      name: recipe.name,
-      output: recipe.output,
-      description: recipe.description || '',
-      ingredients: recipe.ingredients,
-      effects: recipe.effects.map(effect => effect.name),
-      category: recipe.category || '',
-      difficulty: recipe.difficulty || '',
-      type: recipe.type || '',
-      originalRecipe: recipe,
-    }))
-  }, [recipes])
-
-  // Configure Fuse.js options
-  const fuseOptions = useMemo(
-    () => ({
-      keys: [
-        { name: 'name', weight: 0.4 },
-        { name: 'output', weight: 0.3 },
-        { name: 'description', weight: 0.2 },
-        { name: 'ingredients', weight: 0.15 },
-        { name: 'effects', weight: 0.15 },
-        { name: 'category', weight: 0.1 },
-        { name: 'difficulty', weight: 0.05 },
-        { name: 'type', weight: 0.05 },
-      ],
-      threshold: 0.3, // Lower threshold = more strict matching
-      includeScore: true,
-      includeMatches: true,
-    }),
-    []
-  )
-
-  // Create Fuse instance
-  const fuse = useMemo(() => {
-    return new Fuse(searchableRecipes, fuseOptions)
-  }, [searchableRecipes, fuseOptions])
-
-  // Perform search
-  const searchResults = useMemo(() => {
+  const filteredRecipes = useMemo(() => {
     if (!searchQuery.trim()) {
-      return searchableRecipes.map(recipe => ({
-        item: recipe,
-        score: 0,
-        matches: [],
-      }))
+      return recipes
     }
 
-    return fuse.search(searchQuery)
-  }, [fuse, searchQuery])
+    const query = searchQuery.toLowerCase().trim()
+    const searchTerms = query.split(/\s+/)
 
-  // Return filtered recipes based on search results
-  const filteredRecipes = useMemo(() => {
-    return searchResults.map(result => result.item.originalRecipe)
-  }, [searchResults])
+    return recipes.filter(recipe => {
+      // Create a searchable text string from all recipe fields
+      const searchableText = [
+        recipe.name,
+        recipe.output,
+        recipe.description || '',
+        ...recipe.ingredients.map(ingredient => {
+          if (typeof ingredient === 'string') {
+            return ingredient
+          }
+          if (ingredient && typeof ingredient === 'object') {
+            return ingredient.name || ingredient.label || ingredient.id || String(ingredient)
+          }
+          return String(ingredient)
+        }),
+        ...recipe.effects.map(effect => effect.name),
+        ...recipe.effects.map(effect => effect.description),
+        recipe.category || '',
+        recipe.difficulty || '',
+        recipe.type || '',
+        ...recipe.tags
+      ].join(' ').toLowerCase()
+
+      // Check if all search terms are found in the searchable text
+      return searchTerms.every(term => searchableText.includes(term))
+    })
+  }, [recipes, searchQuery])
 
   return {
     filteredRecipes,
-    searchResults,
-    searchableRecipes,
+    searchQuery: searchQuery.trim()
   }
 } 

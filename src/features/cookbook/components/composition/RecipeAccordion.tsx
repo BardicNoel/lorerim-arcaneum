@@ -37,15 +37,33 @@ function RecipeAccordionItem({
     onRecipeClick?.(recipe)
   }
 
+  // Helper function to extract ingredient name from object or string
+  const getIngredientName = (ingredient: any): string => {
+    if (typeof ingredient === 'string') return ingredient
+    if (ingredient && typeof ingredient === 'object') {
+      // Prioritize 'item' property as that's the actual structure
+      if (ingredient.item) return ingredient.item
+      if (ingredient.name) return ingredient.name
+      if (ingredient.label) return ingredient.label
+      if (ingredient.id) return ingredient.id
+      // If we can't extract a meaningful name, return a fallback
+      return 'Unknown Ingredient'
+    }
+    return String(ingredient || '')
+  }
+
   // Helper function to safely render text content
   const renderText = (value: any): string => {
     if (typeof value === 'string') return value
     if (typeof value === 'number') return value.toString()
     if (value && typeof value === 'object') {
       if (value.name) return value.name
+      if (value.label) return value.label
+      if (value.id) return value.id
       if (value.item) return value.item
       if (value.category) return value.category
-      return JSON.stringify(value)
+      // For ingredient objects, use the dedicated helper
+      return getIngredientName(value)
     }
     return String(value || '')
   }

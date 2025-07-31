@@ -7,10 +7,18 @@ export interface RecipeEffect {
   area?: number
 }
 
+// Ingredient can be either a string or an object with name/label/id
+export interface RecipeIngredient {
+  name?: string
+  label?: string
+  id?: string
+  [key: string]: any // Allow other properties
+}
+
 export interface Recipe {
   name: string
   output: string
-  ingredients: string[]
+  ingredients: (string | RecipeIngredient)[]
   effects: RecipeEffect[]
   category?: string
   difficulty?: string

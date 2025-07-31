@@ -31,51 +31,28 @@ export function RecipePageView() {
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
     try {
-      const allIngredients = [...new Set(recipes.flatMap(recipe => recipe.ingredients || []))]
-        .filter(ingredient => ingredient && typeof ingredient === 'string')
-        .map(ingredient => ingredient.trim())
-        .filter(ingredient => ingredient.length > 0)
-        .sort()
+      // Check if recipes are loaded
+      if (!recipes || recipes.length === 0) {
+        console.warn('No recipes loaded for search categories')
+        return []
+      }
       
-      const allEffects = [...new Set(recipes.flatMap(recipe => recipe.effects?.map(effect => effect.name) || []))]
-        .filter(effect => effect && typeof effect === 'string')
-        .map(effect => effect.trim())
-        .filter(effect => effect.length > 0)
-        .sort()
+      // Use the pre-computed available options from useRecipeComputed
+      // This ensures consistency and avoids duplicate calculations
+      const allIngredients = availableIngredients || []
+      const allEffects = availableEffects || []
+      const allCategories = availableCategories || []
       
-      const allCategories = [...new Set(recipes.map(recipe => recipe.category))]
-        .filter(category => category && typeof category === 'string')
-        .map(category => category.trim())
-        .filter(category => category.length > 0)
-        .sort()
+      console.log('Using pre-computed ingredients:', allIngredients.slice(0, 10), `(total: ${allIngredients.length})`)
       
-      const allDifficulties = [...new Set(recipes.map(recipe => recipe.difficulty))]
-        .filter(difficulty => difficulty && typeof difficulty === 'string')
-        .map(difficulty => difficulty.trim())
-        .filter(difficulty => difficulty.length > 0)
-        .sort()
+      
 
     return [
       {
         id: 'fuzzy-search',
         name: 'Fuzzy Search',
         placeholder: 'Search by name, ingredients, effects, or description...',
-        options: [
-          ...allIngredients.map(ingredient => ({
-            id: `ingredient-${ingredient}`,
-            label: ingredient,
-            value: ingredient,
-            category: 'Fuzzy Search',
-            description: `Recipes with ${ingredient}`,
-          })),
-          ...allEffects.map(effect => ({
-            id: `effect-${effect}`,
-            label: effect,
-            value: effect,
-            category: 'Fuzzy Search',
-            description: `Recipes with ${effect} effect`,
-          })),
-        ],
+        options: [], // No autocomplete options - this should be free-form text input
       },
       {
         id: 'ingredients',
@@ -113,18 +90,7 @@ export function RecipePageView() {
           description: `${category} recipes`,
         })),
       },
-      {
-        id: 'difficulties',
-        name: 'Difficulty',
-        placeholder: 'Filter by difficulty...',
-        options: allDifficulties.map(difficulty => ({
-          id: `difficulty-${difficulty}`,
-          label: difficulty,
-          value: difficulty,
-          category: 'Difficulty',
-          description: `${difficulty} recipes`,
-        })),
-      },
+      
     ]
     } catch (error) {
       console.error('Error generating search categories:', error)
@@ -186,13 +152,22 @@ export function RecipePageView() {
           // Filter by recipe category
           return recipe.category === tag.value
 
-        case 'Difficulty':
-          // Filter by difficulty
-          return recipe.difficulty === tag.value
+        
 
-        case 'Ingredients':
-          // Filter by ingredients
-          return recipe.ingredients.includes(tag.value)
+                         case 'Ingredients':
+          // Filter by ingredients (handle both objects and strings)
+          return recipe.ingredients.some(ingredient => {
+            if (typeof ingredient === 'string') {
+              return ingredient === tag.value
+            }
+            if (ingredient && typeof ingredient === 'object') {
+              return ingredient.item === tag.value || 
+                     ingredient.name === tag.value || 
+                     ingredient.label === tag.value || 
+                     ingredient.id === tag.value
+            }
+            return false
+          })
 
         case 'Effects':
           // Filter by effects
