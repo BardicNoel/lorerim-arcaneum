@@ -5,6 +5,7 @@ import {
   RecipeList, 
   ViewModeToggle,
   StatisticsDashboard,
+  FoodMetaAnalysis,
   type ViewMode
 } from '../components'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
@@ -23,7 +24,7 @@ export function RecipePageView() {
   const { filteredRecipes: baseFilteredRecipes } = useRecipeFilters(recipes)
 
   // Computed adapters
-  const { statistics, availableCategories, availableDifficulties, availableEffects, availableIngredients } = useRecipeComputed(recipes)
+  const { statistics, availableCategories, availableDifficulties, availableEffects, availableIngredients, getEffectComparisons } = useRecipeComputed(recipes)
   
   // View state
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
@@ -283,6 +284,7 @@ export function RecipePageView() {
         <TabsList className="mb-4">
           <TabsTrigger value="recipes">Recipes</TabsTrigger>
           <TabsTrigger value="statistics">Statistics</TabsTrigger>
+          <TabsTrigger value="meta">Meta Analysis</TabsTrigger>
         </TabsList>
         
         <TabsContent value="recipes">
@@ -306,6 +308,7 @@ export function RecipePageView() {
                 onRecipeClick={handleRecipeClick}
                 showEffects={true}
                 showIngredients={true}
+                getEffectComparisons={getEffectComparisons}
               />
             )}
 
@@ -316,6 +319,7 @@ export function RecipePageView() {
                 onRecipeClick={handleRecipeClick}
                 showEffects={true}
                 showIngredients={true}
+                getEffectComparisons={getEffectComparisons}
               />
             )}
           </div>
@@ -324,6 +328,11 @@ export function RecipePageView() {
         <TabsContent value="statistics">
           {/* Statistics Dashboard */}
           <StatisticsDashboard statistics={statistics} />
+        </TabsContent>
+        
+        <TabsContent value="meta">
+          {/* Food Meta Analysis */}
+          <FoodMetaAnalysis recipes={recipes} />
         </TabsContent>
       </Tabs>
     </div>

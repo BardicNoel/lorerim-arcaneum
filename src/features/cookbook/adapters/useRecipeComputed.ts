@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { RecipeModel } from '../model/RecipeModel'
-import type { RecipeWithComputed, RecipeStatistics, SearchCategory, RecipeComparison } from '../types'
+import type { RecipeWithComputed, RecipeStatistics, SearchCategory, RecipeComparison, EffectComparison } from '../types'
 
 interface UseRecipeComputedOptions {
   enableStatistics?: boolean
@@ -30,6 +30,7 @@ interface UseRecipeComputedReturn {
   compareRecipes: (recipe1: RecipeWithComputed, recipe2: RecipeWithComputed) => RecipeComparison
   getRecipeEfficiency: (recipe: RecipeWithComputed) => number
   getRecipeComplexity: (recipe: RecipeWithComputed) => number
+  getEffectComparisons: (recipe: RecipeWithComputed) => EffectComparison[]
 }
 
 export function useRecipeComputed(
@@ -258,6 +259,12 @@ export function useRecipeComputed(
     }
   }, [])
 
+  const getEffectComparisons = useMemo(() => {
+    return (recipe: RecipeWithComputed): EffectComparison[] => {
+      return RecipeModel.getEffectComparisons(recipe, safeRecipes)
+    }
+  }, [safeRecipes])
+
   return {
     // Statistics
     statistics,
@@ -281,5 +288,6 @@ export function useRecipeComputed(
     compareRecipes,
     getRecipeEfficiency,
     getRecipeComplexity,
+    getEffectComparisons,
   }
 } 

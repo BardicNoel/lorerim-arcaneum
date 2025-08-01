@@ -1,7 +1,9 @@
 import React from 'react'
 import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
 import { Badge } from '@/shared/ui/ui/badge'
-import type { RecipeWithComputed } from '../../types'
+import { cn } from '@/lib/utils'
+import { Plus, Minus, Circle } from 'lucide-react'
+import type { RecipeWithComputed, EffectComparison } from '../../types'
 
 interface RecipeCardProps {
   recipe: RecipeWithComputed
@@ -10,6 +12,7 @@ interface RecipeCardProps {
   isSelected?: boolean
   showEffects?: boolean
   showIngredients?: boolean
+  effectComparisons?: EffectComparison[]
 }
 
 export function RecipeCard({
@@ -19,6 +22,7 @@ export function RecipeCard({
   isSelected = false,
   showEffects = true,
   showIngredients = true,
+  effectComparisons = [],
 }: RecipeCardProps) {
   const handleClick = () => {
     onClick?.()
@@ -56,6 +60,60 @@ export function RecipeCard({
     return String(value || '')
   }
 
+  // Helper function to get effect icon based on effect type
+  const getEffectIcon = (effect: any) => {
+    // For recipe effects, we'll use positive icons since they're generally beneficial
+    return <Plus className="h-4 w-4 text-green-500" />
+  }
+
+  // Helper function to format ingredient with count
+  const formatIngredientWithCount = (ingredient: any): { name: string; count: number } => {
+    if (typeof ingredient === 'string') {
+      return { name: ingredient, count: 1 }
+    }
+    if (ingredient && typeof ingredient === 'object') {
+      const name = getIngredientName(ingredient)
+      const count = ingredient.count || ingredient.amount || 1
+      return { name, count }
+    }
+    return { name: String(ingredient || ''), count: 1 }
+  }
+
+    // Helper function to render effect comparison
+  const renderEffectComparison = (comparison: EffectComparison) => {
+    return (
+      <div key={comparison.name} className="p-2 bg-muted/30 rounded-lg border border-border">
+        <div className="text-xs font-medium mb-2">{comparison.name}</div>
+        <div className="space-y-1">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-muted-foreground">Magnitude:</span>
+            <div className="flex items-center gap-1">
+              <span className={cn(
+                "font-medium",
+                comparison.magnitude.difference > 0 ? "text-green-600" : "text-red-600"
+              )}>
+                {comparison.magnitude.difference > 0 ? '+' : ''}{comparison.magnitude.difference.toFixed(1)}
+              </span>
+              <span className="text-muted-foreground">({comparison.magnitude.percentage > 0 ? '+' : ''}{comparison.magnitude.percentage.toFixed(0)}%)</span>
+            </div>
+          </div>
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-muted-foreground">Duration:</span>
+            <div className="flex items-center gap-1">
+              <span className={cn(
+                "font-medium",
+                comparison.duration.difference > 0 ? "text-green-600" : "text-red-600"
+              )}>
+                {comparison.duration.difference > 0 ? '+' : ''}{comparison.duration.difference.toFixed(1)}s
+              </span>
+              <span className="text-muted-foreground">({comparison.duration.percentage > 0 ? '+' : ''}{comparison.duration.percentage.toFixed(0)}%)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   const renderCompact = () => (
     <Card 
       className={`cursor-pointer transition-all hover:shadow-md ${
@@ -72,12 +130,6 @@ export function RecipeCard({
                  {renderText(recipe.category)}
                </Badge>
              )}
-             <Badge 
-               variant={recipe.difficulty === 'Simple' ? 'default' : recipe.difficulty === 'Moderate' ? 'secondary' : 'destructive'}
-               className="text-xs"
-             >
-               {renderText(recipe.difficulty)}
-             </Badge>
            </div>
         </div>
       </CardHeader>
@@ -112,53 +164,67 @@ export function RecipeCard({
                  {renderText(recipe.category)}
                </Badge>
              )}
-             <Badge 
-               variant={recipe.difficulty === 'Simple' ? 'default' : recipe.difficulty === 'Moderate' ? 'secondary' : 'destructive'}
-               className="text-xs"
-             >
-               {renderText(recipe.difficulty)}
-             </Badge>
            </div>
         </div>
       </CardHeader>
       <CardContent className="pt-0">
         <div className="space-y-2">
-          {showIngredients && recipe.ingredients.length > 0 && (
+                    {showIngredients && recipe.ingredients.length > 0 && (
             <div>
               <div className="text-xs font-medium text-muted-foreground mb-1">
                 Ingredients ({recipe.ingredientCount})
               </div>
-              <div className="flex flex-wrap gap-1">
-                                 {recipe.ingredients.slice(0, 3).map((ingredient, index) => (
-                   <Badge key={index} variant="outline" className="text-xs">
-                     {renderText(ingredient)}
-                   </Badge>
-                 ))}
-                {recipe.ingredients.length > 3 && (
-                  <Badge variant="outline" className="text-xs">
-                    +{recipe.ingredients.length - 3} more
-                  </Badge>
-                )}
-              </div>
+                             <div className="space-y-1">
+                 {recipe.ingredients.map((ingredient, index) => {
+                   const { name, count } = formatIngredientWithCount(ingredient)
+                   return (
+                     <div key={index} className="flex items-center justify-between text-xs">
+                       <span className="text-muted-foreground">{name}</span>
+                       <span className="font-medium">×{count}</span>
+                     </div>
+                   )
+                 })}
+               </div>
             </div>
           )}
           
           {showEffects && recipe.effects.length > 0 && (
             <div>
-              <div className="text-xs font-medium text-muted-foreground mb-1">
+              <div className="text-xs font-medium text-muted-foreground mb-2">
                 Effects ({recipe.effectCount})
               </div>
-              <div className="flex flex-wrap gap-1">
-                                 {recipe.effects.slice(0, 2).map((effect, index) => (
-                   <Badge key={index} variant="outline" className="text-xs">
-                     {renderText(effect.name)} ({renderText(effect.magnitude)})
-                   </Badge>
+                             <div className="space-y-2">
+                 {recipe.effects.map((effect, index) => (
+                   <div
+                     key={index}
+                     className="p-2 bg-muted/50 rounded-lg border border-border"
+                   >
+                     <div className="flex items-start gap-2">
+                       {getEffectIcon(effect)}
+                       <div className="flex-1">
+                         <div className="font-medium text-xs mb-1">
+                           {renderText(effect.name)}
+                         </div>
+                         {effect.description && (
+                           <div className="text-xs text-muted-foreground">
+                             {renderText(effect.description)}
+                           </div>
+                         )}
+                       </div>
+                     </div>
+                   </div>
                  ))}
-                {recipe.effects.length > 2 && (
-                  <Badge variant="outline" className="text-xs">
-                    +{recipe.effects.length - 2} more
-                  </Badge>
-                )}
+               </div>
+            </div>
+          )}
+
+          {effectComparisons.length > 0 && (
+            <div>
+              <div className="text-xs font-medium text-muted-foreground mb-2">
+                Effect Comparison
+              </div>
+              <div className="space-y-2">
+                {effectComparisons.map(renderEffectComparison)}
               </div>
             </div>
           )}
@@ -190,12 +256,6 @@ export function RecipeCard({
                  {renderText(recipe.category)}
                </Badge>
              )}
-             <Badge 
-               variant={recipe.difficulty === 'Simple' ? 'default' : recipe.difficulty === 'Moderate' ? 'secondary' : 'destructive'}
-               className="text-xs"
-             >
-               {renderText(recipe.difficulty)}
-             </Badge>
              {recipe.type && (
                <Badge variant="outline" className="text-xs">
                  {renderText(recipe.type)}
@@ -206,35 +266,89 @@ export function RecipeCard({
       </CardHeader>
       <CardContent className="pt-0">
         <div className="space-y-3">
-          {showIngredients && recipe.ingredients.length > 0 && (
+                    {showIngredients && recipe.ingredients.length > 0 && (
             <div>
               <div className="text-sm font-medium mb-2">Ingredients</div>
-              <div className="flex flex-wrap gap-1">
-                                 {recipe.ingredients.map((ingredient, index) => (
-                   <Badge key={index} variant="outline" className="text-xs">
-                     {renderText(ingredient)}
-                   </Badge>
-                 ))}
+              <div className="space-y-2">
+                {recipe.ingredients.map((ingredient, index) => {
+                  const { name, count } = formatIngredientWithCount(ingredient)
+                  return (
+                    <div key={index} className="flex items-center justify-between p-2 bg-muted/30 rounded-lg">
+                      <span className="text-sm">{name}</span>
+                      <span className="font-medium text-sm">×{count}</span>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           )}
           
-          {showEffects && recipe.effects.length > 0 && (
-            <div>
-              <div className="text-sm font-medium mb-2">Effects</div>
-              <div className="space-y-1">
-                                 {recipe.effects.map((effect, index) => (
-                   <div key={index} className="flex items-center justify-between text-sm">
-                     <span className="font-medium">{renderText(effect.name)}</span>
-                     <div className="flex items-center gap-2 text-muted-foreground">
-                       <span>{renderText(effect.magnitude)}</span>
-                       {effect.duration > 0 && <span>{renderText(effect.duration)}s</span>}
+                     {showEffects && recipe.effects.length > 0 && (
+             <div>
+               <div className="text-sm font-medium mb-3">Effects</div>
+               <div className="space-y-3">
+                                  {recipe.effects.map((effect, index) => (
+                   <div
+                     key={index}
+                     className="p-3 bg-muted/50 rounded-lg border border-border"
+                   >
+                     <div className="flex items-start gap-3">
+                       {getEffectIcon(effect)}
+                       <div className="flex-1">
+                         <div className="font-medium text-sm mb-1">
+                           {renderText(effect.name)}
+                         </div>
+                         {effect.description && (
+                           <div className="text-sm text-muted-foreground">
+                             {renderText(effect.description)}
+                           </div>
+                         )}
+                       </div>
                      </div>
                    </div>
                  ))}
-              </div>
-            </div>
-          )}
+               </div>
+             </div>
+           )}
+
+           {effectComparisons.length > 0 && (
+             <div>
+               <div className="text-sm font-medium mb-3">Effect Comparison</div>
+               <div className="space-y-3">
+                 {effectComparisons.map(comparison => (
+                   <div key={comparison.name} className="p-3 bg-muted/30 rounded-lg border border-border">
+                     <div className="text-sm font-medium mb-2">{comparison.name}</div>
+                                          <div className="space-y-2">
+                       <div className="flex items-center justify-between text-sm">
+                         <span className="text-muted-foreground">Magnitude:</span>
+                         <div className="flex items-center gap-2">
+                           <span className={cn(
+                             "font-medium",
+                             comparison.magnitude.difference > 0 ? "text-green-600" : "text-red-600"
+                           )}>
+                             {comparison.magnitude.difference > 0 ? '+' : ''}{comparison.magnitude.difference.toFixed(1)}
+                           </span>
+                           <span className="text-muted-foreground">({comparison.magnitude.percentage > 0 ? '+' : ''}{comparison.magnitude.percentage.toFixed(0)}%)</span>
+                         </div>
+                       </div>
+                       <div className="flex items-center justify-between text-sm">
+                         <span className="text-muted-foreground">Duration:</span>
+                         <div className="flex items-center gap-2">
+                           <span className={cn(
+                             "font-medium",
+                             comparison.duration.difference > 0 ? "text-green-600" : "text-red-600"
+                           )}>
+                             {comparison.duration.difference > 0 ? '+' : ''}{comparison.duration.difference.toFixed(1)}s
+                           </span>
+                           <span className="text-muted-foreground">({comparison.duration.percentage > 0 ? '+' : ''}{comparison.duration.percentage.toFixed(0)}%)</span>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                 ))}
+               </div>
+             </div>
+           )}
           
           <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t">
             <span>Total Magnitude: {recipe.totalMagnitude}</span>

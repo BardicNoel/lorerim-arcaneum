@@ -1,4 +1,4 @@
-import type { Recipe, RecipeWithComputed, RecipeFilters, RecipeSearchResult, RecipeStatistics } from '../types'
+import type { Recipe, RecipeWithComputed, RecipeFilters, RecipeSearchResult, RecipeStatistics, EffectComparison } from '../types'
 
 export class RecipeModel {
   /**
@@ -612,5 +612,50 @@ export class RecipeModel {
       topEffects,
       topIngredients
     }
+  }
+
+  /**
+   * Calculate effect comparisons for a recipe against all recipes
+   */
+  static getEffectComparisons(recipe: RecipeWithComputed, allRecipes: RecipeWithComputed[]): EffectComparison[] {
+    // Calculate mean values for each effect across all recipes
+    const effectStats: Record<string, { magnitudeSum: number; durationSum: number; count: number }> = {}
+    
+    allRecipes.forEach(r => {
+      r.effects.forEach(effect => {
+        if (!effectStats[effect.name]) {
+          effectStats[effect.name] = { magnitudeSum: 0, durationSum: 0, count: 0 }
+        }
+        effectStats[effect.name].magnitudeSum += effect.magnitude
+        effectStats[effect.name].durationSum += effect.duration
+        effectStats[effect.name].count += 1
+      })
+    })
+
+    // Calculate comparisons for each effect in the recipe
+    return recipe.effects.map(effect => {
+      const stats = effectStats[effect.name]
+      const meanMagnitude = stats.count > 0 ? stats.magnitudeSum / stats.count : 0
+      const meanDuration = stats.count > 0 ? stats.durationSum / stats.count : 0
+      
+      const magnitudeDiff = effect.magnitude - meanMagnitude
+      const durationDiff = effect.duration - meanDuration
+      
+      return {
+        name: effect.name,
+        magnitude: {
+          value: effect.magnitude,
+          mean: meanMagnitude,
+          difference: magnitudeDiff,
+          percentage: meanMagnitude > 0 ? (magnitudeDiff / meanMagnitude) * 100 : 0
+        },
+        duration: {
+          value: effect.duration,
+          mean: meanDuration,
+          difference: durationDiff,
+          percentage: meanDuration > 0 ? (durationDiff / meanDuration) * 100 : 0
+        }
+      }
+    })
   }
 } 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { RecipeCard } from '../atomic'
-import type { RecipeWithComputed } from '../../types'
+import type { RecipeWithComputed, EffectComparison } from '../../types'
 
 interface RecipeListProps {
   recipes: RecipeWithComputed[]
@@ -10,6 +10,7 @@ interface RecipeListProps {
   showEffects?: boolean
   showIngredients?: boolean
   className?: string
+  getEffectComparisons?: (recipe: RecipeWithComputed) => EffectComparison[]
 }
 
 export function RecipeList({
@@ -20,6 +21,7 @@ export function RecipeList({
   showEffects = true,
   showIngredients = true,
   className,
+  getEffectComparisons,
 }: RecipeListProps) {
   const handleRecipeClick = (recipe: RecipeWithComputed) => {
     onRecipeClick?.(recipe)
@@ -46,6 +48,7 @@ export function RecipeList({
           isSelected={selectedRecipes.includes(recipe.name)}
           showEffects={showEffects}
           showIngredients={showIngredients}
+          effectComparisons={getEffectComparisons?.(recipe) || []}
         />
       ))}
     </div>

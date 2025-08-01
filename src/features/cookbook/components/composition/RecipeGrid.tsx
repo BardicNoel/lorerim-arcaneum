@@ -1,6 +1,6 @@
 import React from 'react'
 import { RecipeCard } from '../atomic'
-import type { RecipeWithComputed } from '../../types'
+import type { RecipeWithComputed, EffectComparison } from '../../types'
 
 interface RecipeGridProps {
   recipes: RecipeWithComputed[]
@@ -11,6 +11,7 @@ interface RecipeGridProps {
   showEffects?: boolean
   showIngredients?: boolean
   className?: string
+  getEffectComparisons?: (recipe: RecipeWithComputed) => EffectComparison[]
 }
 
 export function RecipeGrid({
@@ -22,6 +23,7 @@ export function RecipeGrid({
   showEffects = true,
   showIngredients = true,
   className,
+  getEffectComparisons,
 }: RecipeGridProps) {
   const getGridClasses = () => {
     const baseClasses = 'grid gap-4'
@@ -65,6 +67,7 @@ export function RecipeGrid({
           isSelected={selectedRecipes.includes(recipe.name)}
           showEffects={showEffects}
           showIngredients={showIngredients}
+          effectComparisons={getEffectComparisons?.(recipe) || []}
         />
       ))}
     </div>

@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
-import { ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronDown, ChevronRight, Plus, Minus, Circle } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import type { RecipeWithComputed } from '../../types'
 
 interface RecipeAccordionProps {
@@ -68,6 +69,25 @@ function RecipeAccordionItem({
     return String(value || '')
   }
 
+  // Helper function to get effect icon based on effect type
+  const getEffectIcon = (effect: any) => {
+    // For recipe effects, we'll use positive icons since they're generally beneficial
+    return <Plus className="h-4 w-4 text-green-500" />
+  }
+
+  // Helper function to format ingredient with count
+  const formatIngredientWithCount = (ingredient: any): { name: string; count: number } => {
+    if (typeof ingredient === 'string') {
+      return { name: ingredient, count: 1 }
+    }
+    if (ingredient && typeof ingredient === 'object') {
+      const name = getIngredientName(ingredient)
+      const count = ingredient.count || ingredient.amount || 1
+      return { name, count }
+    }
+    return { name: String(ingredient || ''), count: 1 }
+  }
+
   return (
     <Card className={`mb-2 ${isSelected ? 'ring-2 ring-primary' : ''}`}>
       <CardHeader className="pb-3">
@@ -98,12 +118,6 @@ function RecipeAccordionItem({
                 {renderText(recipe.category)}
               </Badge>
             )}
-            <Badge 
-              variant={recipe.difficulty === 'Simple' ? 'default' : recipe.difficulty === 'Moderate' ? 'secondary' : 'destructive'}
-              className="text-xs"
-            >
-              {renderText(recipe.difficulty)}
-            </Badge>
             {recipe.type && (
               <Badge variant="outline" className="text-xs">
                 {renderText(recipe.type)}
@@ -127,29 +141,44 @@ function RecipeAccordionItem({
             {showIngredients && recipe.ingredients.length > 0 && (
               <div>
                 <div className="text-sm font-medium mb-2">Ingredients</div>
-                <div className="flex flex-wrap gap-1">
-                  {recipe.ingredients.map((ingredient, index) => (
-                    <Badge key={index} variant="outline" className="text-xs">
-                      {renderText(ingredient)}
-                    </Badge>
-                  ))}
+                <div className="space-y-2">
+                  {recipe.ingredients.map((ingredient, index) => {
+                    const { name, count } = formatIngredientWithCount(ingredient)
+                    return (
+                      <div key={index} className="flex items-center justify-between p-2 bg-muted/30 rounded-lg">
+                        <span className="text-sm">{name}</span>
+                        <span className="font-medium text-sm">×{count}</span>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             )}
             
             {showEffects && recipe.effects.length > 0 && (
               <div>
-                <div className="text-sm font-medium mb-2">Effects</div>
-                <div className="space-y-1">
-                  {recipe.effects.map((effect, index) => (
-                    <div key={index} className="flex items-center justify-between text-sm">
-                      <span className="font-medium">{renderText(effect.name)}</span>
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <span>{renderText(effect.magnitude)}</span>
-                        {effect.duration > 0 && <span>{renderText(effect.duration)}s</span>}
-                      </div>
-                    </div>
-                  ))}
+                <div className="text-sm font-medium mb-3">Effects</div>
+                <div className="space-y-3">
+                                     {recipe.effects.map((effect, index) => (
+                     <div
+                       key={index}
+                       className="p-3 bg-muted/50 rounded-lg border border-border"
+                     >
+                       <div className="flex items-start gap-3">
+                         {getEffectIcon(effect)}
+                         <div className="flex-1">
+                           <div className="font-medium text-sm mb-1">
+                             {renderText(effect.name)}
+                           </div>
+                           {effect.description && (
+                             <div className="text-sm text-muted-foreground">
+                               {renderText(effect.description)}
+                             </div>
+                           )}
+                         </div>
+                       </div>
+                     </div>
+                   ))}
                 </div>
               </div>
             )}

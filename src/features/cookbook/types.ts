@@ -7,6 +7,23 @@ export interface RecipeEffect {
   area?: number
 }
 
+// Effect comparison data
+export interface EffectComparison {
+  name: string
+  magnitude: {
+    value: number
+    mean: number
+    difference: number
+    percentage: number
+  }
+  duration: {
+    value: number
+    mean: number
+    difference: number
+    percentage: number
+  }
+}
+
 // Ingredient can be either a string or an object with name/label/id
 export interface RecipeIngredient {
   name?: string
