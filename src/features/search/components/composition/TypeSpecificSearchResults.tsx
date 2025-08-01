@@ -17,6 +17,8 @@ export function TypeSpecificSearchResults({
 }: TypeSpecificSearchResultsProps) {
   const { renderSearchResult } = useTypeSpecificRenderers()
 
+  console.log('TypeSpecificSearchResults', results, viewMode, renderMode)
+
   // Render based on the selected mode
   const renderContent = () => {
     switch (renderMode) {

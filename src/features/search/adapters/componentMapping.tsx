@@ -1,7 +1,6 @@
 import React from 'react'
 import type { SearchResult } from '../model/SearchModel'
 import type { ViewMode } from '../model/TypeSpecificComponents'
-import type { PerkReferenceNode } from '@/features/perk-references/types'
 
 // Import type-specific components
 import { RaceAccordion } from '@/features/races-v2/components/composition/RaceAccordion'
@@ -25,78 +24,20 @@ import { DestinyDetailPanel } from '@/features/destiny/components/composition/De
 
 import { PerkTreeGrid } from '@/features/skills/components/composition/PerkTreeGrid'
 
-import { PerkReferenceCard } from '@/features/perk-references/components/composition/PerkReferenceCard'
 import { PerkReferenceAccordion } from '@/features/perk-references/components/composition/PerkReferenceAccordion'
 
 import { SpellSearchCard } from '@/features/search/components/type-specific/SpellSearchCard'
 import { SpellDetailView } from '@/features/search/components/type-specific/SpellDetailView'
 
-// Wrapper component to convert SearchResult to PerkReferenceItem format
-const PerkReferenceSearchWrapper: React.FC<{
-  result: SearchResult
-  isSelected?: boolean
-  onClick?: () => void
-  compact?: boolean
-}> = ({ result, isSelected, onClick, compact }) => {
-  const perkData = result.item.originalData as PerkReferenceNode
-  
-  // Convert to PerkReferenceItem format
-  const perkItem = {
-    id: result.item.id,
-    name: result.item.name,
-    description: result.item.description || '',
-    skillTree: perkData.skillTree,
-    skillTreeName: perkData.skillTreeName,
-    category: result.item.category || 'Unknown',
-    tags: result.item.tags,
-    totalRanks: perkData.totalRanks,
-    currentRank: 1, // Default to first rank for search display
-    isSelected: isSelected || false,
-    isAvailable: true, // Assume available for search display
-    isRoot: perkData.isRoot,
-    hasChildren: perkData.hasChildren,
-    prerequisites: perkData.prerequisites,
-    connections: perkData.connections,
-    minLevel: perkData.minLevel,
-    originalPerk: perkData,
-  }
+import { RecipeAccordion } from '@/features/cookbook/components/composition/RecipeAccordion'
 
-  return (
-    <PerkReferenceCard
-      item={perkItem}
-      isSelected={isSelected}
-      onClick={onClick}
-      compact={compact}
-    />
-  )
-}
-
-// Fallback components for unknown types
-const FallbackCard: React.FC<{
-  result: SearchResult
-  isSelected?: boolean
-  onClick?: () => void
-}> = ({ result, isSelected, onClick }) => (
-  <div
-    className={`p-4 border rounded-lg bg-muted cursor-pointer ${isSelected ? 'ring-2 ring-primary' : ''}`}
-    onClick={onClick}
-  >
-    <h3 className="font-semibold">{result.item.name}</h3>
-    <p className="text-sm text-muted-foreground">{result.item.description}</p>
-  </div>
-)
-
-const FallbackDetail: React.FC<{ result: SearchResult }> = ({ result }) => (
-  <div className="p-4 border rounded-lg bg-muted">
-    <h2 className="text-lg font-semibold mb-4">{result.item.name}</h2>
-    <p className="text-sm text-muted-foreground mb-4">
-      {result.item.description}
-    </p>
-    <div className="text-xs text-muted-foreground">
-      Type: {result.item.type} | ID: {result.item.id}
-    </div>
-  </div>
-)
+// Import wrapper components
+import { 
+  PerkReferenceSearchWrapper, 
+  RecipeSearchWrapper, 
+  FallbackCard, 
+  FallbackDetail 
+} from './wrappers'
 
 // Component mapping by type and view mode
 const COMPONENT_MAP: Record<
@@ -166,6 +107,13 @@ const COMPONENT_MAP: Record<
     detail: SpellDetailView,
     compact: SpellSearchCard,
   },
+  recipe: {
+    card: RecipeSearchWrapper,
+    accordion: RecipeAccordion,
+    grid: RecipeSearchWrapper,
+    detail: FallbackDetail,
+    compact: RecipeSearchWrapper,
+  },
 }
 
 // Get component for a specific type and view mode
@@ -173,6 +121,8 @@ export function getComponentForType(
   type: string,
   viewMode: ViewMode
 ): React.ComponentType<any> {
+
+  console.log("getComponentForType", type, viewMode)
   const typeComponents = COMPONENT_MAP[type]
   if (!typeComponents) {
     return FallbackCard

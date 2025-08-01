@@ -4,6 +4,7 @@ import {
   useDestinyNodesStore,
   usePerkTreesStore,
   useRacesStore,
+  useRecipesStore,
   useReligionsStore,
   useSkillsStore,
   useSpellsStore,
@@ -28,6 +29,7 @@ export function DataInitializer({
   const destinyNodesLoad = useDestinyNodesStore(state => state.load)
   const perkTreesLoad = usePerkTreesStore(state => state.load)
   const racesLoad = useRacesStore(state => state.load)
+  const recipesLoad = useRecipesStore(state => state.load)
   const religionsLoad = useReligionsStore(state => state.load)
   const skillsLoad = useSkillsStore(state => state.load)
   const spellsLoad = useSpellsStore(state => state.load)
@@ -46,6 +48,7 @@ export function DataInitializer({
         destinyNodesLoad(),
         perkTreesLoad(),
         racesLoad(),
+        recipesLoad(),
         religionsLoad(),
         skillsLoad(),
         spellsLoad(),
@@ -64,6 +67,7 @@ export function DataInitializer({
     destinyNodesLoad,
     perkTreesLoad,
     racesLoad,
+    recipesLoad,
     religionsLoad,
     skillsLoad,
     spellsLoad,

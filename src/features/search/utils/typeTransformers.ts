@@ -194,6 +194,19 @@ export function transformSearchResultData(result: SearchResult): any {
       return transformDestinyData(result)
     case 'perk':
       return transformPerkData(result)
+    case 'recipe':
+      // Transform recipe data to include originalData properly
+      return applySearchHighlights(
+        {
+          id: result.item.id,
+          name: result.item.name,
+          description: result.item.description,
+          originalData: result.item.originalData,
+          // Include recipe-specific fields
+          ...result.item.originalData,
+        },
+        result.highlights
+      )
     case 'religion':
       // For now, return generic data for religion
       return applySearchHighlights(

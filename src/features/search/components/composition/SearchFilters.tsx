@@ -68,25 +68,29 @@ export function SearchFilters({
         id: 'categories',
         name: 'Categories',
         placeholder: 'Filter by category...',
-        options: availableFilters.categories.map(category => ({
-          id: `category-${category.value}`,
-          label: category.label,
-          value: category.value,
-          category: 'Categories',
-          description: `${category.count} item${category.count !== 1 ? 's' : ''}`,
-        })),
+        options: (availableFilters.categories || [])
+          .filter(category => category && typeof category.label === 'string')
+          .map(category => ({
+            id: `category-${category.value}`,
+            label: String(category.label),
+            value: category.value,
+            category: 'Categories',
+            description: `${category.count} item${category.count !== 1 ? 's' : ''}`,
+          })),
       },
       {
         id: 'tags',
         name: 'Tags',
         placeholder: 'Filter by tag...',
-        options: availableFilters.tags.map(tag => ({
-          id: `tag-${tag.value}`,
-          label: tag.label,
-          value: tag.value,
-          category: 'Tags',
-          description: `${tag.count} item${tag.count !== 1 ? 's' : ''}`,
-        })),
+        options: (availableFilters.tags || [])
+          .filter(tag => tag && typeof tag.label === 'string')
+          .map(tag => ({
+            id: `tag-${tag.value}`,
+            label: String(tag.label),
+            value: tag.value,
+            category: 'Tags',
+            description: `${tag.count} item${tag.count !== 1 ? 's' : ''}`,
+          })),
       },
     ]
   }
@@ -126,6 +130,8 @@ export function SearchFilters({
           ))}
         </div>
       </div>
+
+
 
       {/* Selected Tags */}
       {selectedTags.length > 0 && (
