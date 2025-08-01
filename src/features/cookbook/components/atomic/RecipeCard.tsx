@@ -5,6 +5,9 @@ import { cn } from '@/lib/utils'
 import { Plus, Minus, Circle } from 'lucide-react'
 import type { RecipeWithComputed, EffectComparison } from '../../types'
 
+// Feature flag to disable effect comparison until ready for production
+const DISABLE_EFFECT_COMPARISON = true
+
 interface RecipeCardProps {
   recipe: RecipeWithComputed
   variant?: 'default' | 'compact' | 'detailed'
@@ -77,6 +80,34 @@ export function RecipeCard({
       return { name, count }
     }
     return { name: String(ingredient || ''), count: 1 }
+  }
+
+  // Helper function to find comparison data for a specific effect
+  const getEffectComparison = (effectName: string): EffectComparison | undefined => {
+    return effectComparisons.find(comparison => comparison.name === effectName)
+  }
+
+  // Helper function to format effect description with variance
+  const formatEffectDescription = (effect: any): string => {
+    if (DISABLE_EFFECT_COMPARISON) {
+      return renderText(effect.description || '')
+    }
+
+    const comparison = getEffectComparison(effect.name)
+    if (!comparison) return renderText(effect.description || '')
+
+    const magnitudeText = comparison.magnitude.difference > 0 
+      ? `${comparison.magnitude.difference.toFixed(1)} more than mean`
+      : `${Math.abs(comparison.magnitude.difference).toFixed(1)} less than mean`
+    
+    const durationText = comparison.duration.difference > 0 
+      ? `${comparison.duration.difference.toFixed(1)}s longer than mean`
+      : `${Math.abs(comparison.duration.difference).toFixed(1)}s shorter than mean`
+
+    const baseDescription = renderText(effect.description || '')
+    const varianceText = `(${magnitudeText}, ${durationText})`
+    
+    return baseDescription ? `${baseDescription} ${varianceText}` : varianceText
   }
 
     // Helper function to render effect comparison
@@ -205,11 +236,9 @@ export function RecipeCard({
                          <div className="font-medium text-xs mb-1">
                            {renderText(effect.name)}
                          </div>
-                         {effect.description && (
-                           <div className="text-xs text-muted-foreground">
-                             {renderText(effect.description)}
-                           </div>
-                         )}
+                                                   <div className="text-xs text-muted-foreground">
+                            {formatEffectDescription(effect)}
+                          </div>
                        </div>
                      </div>
                    </div>
@@ -218,7 +247,7 @@ export function RecipeCard({
             </div>
           )}
 
-          {effectComparisons.length > 0 && (
+          {!DISABLE_EFFECT_COMPARISON && effectComparisons.length > 0 && (
             <div>
               <div className="text-xs font-medium text-muted-foreground mb-2">
                 Effect Comparison
@@ -298,11 +327,9 @@ export function RecipeCard({
                          <div className="font-medium text-sm mb-1">
                            {renderText(effect.name)}
                          </div>
-                         {effect.description && (
-                           <div className="text-sm text-muted-foreground">
-                             {renderText(effect.description)}
-                           </div>
-                         )}
+                                                   <div className="text-sm text-muted-foreground">
+                            {formatEffectDescription(effect)}
+                          </div>
                        </div>
                      </div>
                    </div>
@@ -311,7 +338,7 @@ export function RecipeCard({
              </div>
            )}
 
-           {effectComparisons.length > 0 && (
+           {!DISABLE_EFFECT_COMPARISON && effectComparisons.length > 0 && (
              <div>
                <div className="text-sm font-medium mb-3">Effect Comparison</div>
                <div className="space-y-3">
