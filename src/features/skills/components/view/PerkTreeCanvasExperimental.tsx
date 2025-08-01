@@ -25,6 +25,7 @@ import {
   type CanvasPosition,
   calculateGridBounds,
 } from '../../utils/avifGridUtils'
+import { loadSavedTreePositions } from '../../utils/positionedTreePlotter'
 import {
   type SavedTreePositions,
   downloadPositionsAsJson,
@@ -189,6 +190,7 @@ export function PerkTreeCanvasExperimental({
   const [savedPositions, setSavedPositions] = useState<
     Map<string, CanvasPosition>
   >(new Map())
+  const [isLoadingPositions, setIsLoadingPositions] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false)
   const [gridBounds, setGridBounds] = useState<{
     minX: number
@@ -208,6 +210,40 @@ export function PerkTreeCanvasExperimental({
     return validation.data
   }, [tree])
 
+  // Load saved positions when tree changes
+  React.useEffect(() => {
+    if (!validatedTree) {
+      setSavedPositions(new Map())
+      return
+    }
+
+    console.log('Loading saved positions for tree:', validatedTree.treeId)
+    setIsLoadingPositions(true)
+    loadSavedTreePositions(validatedTree.treeId)
+      .then(savedData => {
+        console.log(
+          'Loaded saved positions:',
+          savedData ? 'Found' : 'Not found'
+        )
+        if (savedData) {
+          const loadedPositions = loadTreePositions(
+            validatedTree.treeId,
+            savedData
+          )
+          setSavedPositions(loadedPositions)
+        } else {
+          setSavedPositions(new Map())
+        }
+      })
+      .catch(error => {
+        console.warn('Failed to load saved positions:', error)
+        setSavedPositions(new Map())
+      })
+      .finally(() => {
+        setIsLoadingPositions(false)
+      })
+  }, [validatedTree?.treeId])
+
   // Create node types with callbacks
   const nodeTypes: NodeTypes = useMemo(
     () => createNodeTypes(onTogglePerk, onRankChange),
@@ -216,7 +252,8 @@ export function PerkTreeCanvasExperimental({
 
   // Calculate node positions using AVIF grid system with mirroring
   const nodePositions = useMemo(() => {
-    if (!validatedTree) return new Map<string, CanvasPosition>()
+    if (!validatedTree || isLoadingPositions)
+      return new Map<string, CanvasPosition>()
 
     const positions = new Map<string, CanvasPosition>()
 
@@ -249,11 +286,11 @@ export function PerkTreeCanvasExperimental({
     })
 
     return positions
-  }, [validatedTree, savedPositions])
+  }, [validatedTree, savedPositions, isLoadingPositions])
 
   // Create React Flow nodes
   const initialNodes: Node[] = useMemo(() => {
-    if (!validatedTree) return []
+    if (!validatedTree || isLoadingPositions) return []
 
     const nodes = validatedTree.perks.map(perk => {
       const perkId = perk.edid
@@ -276,7 +313,7 @@ export function PerkTreeCanvasExperimental({
     })
 
     return nodes
-  }, [validatedTree, nodePositions, isEditMode])
+  }, [validatedTree, nodePositions, isEditMode, isLoadingPositions])
 
   // Create React Flow edges from connections array
   const initialEdges: Edge[] = useMemo(() => {
@@ -479,11 +516,23 @@ export function PerkTreeCanvasExperimental({
             <p className="text-xs text-muted-foreground mt-1">
               Bottom-up tree with left-right mirroring using enhanced grid
               spacing
+              {savedPositions.size > 0 && !isLoadingPositions && (
+                <span className="text-green-600 ml-2">
+                  • Using saved positions
+                </span>
+              )}
             </p>
           </div>
 
           {/* Position Management Toolbar */}
           <div className="flex items-center gap-2">
+            {isLoadingPositions && (
+              <div className="flex items-center gap-2 px-3 py-1 text-xs text-blue-600">
+                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
+                Loading positions...
+              </div>
+            )}
+
             <button
               onClick={toggleEditMode}
               className={`px-3 py-1 text-xs rounded border ${
