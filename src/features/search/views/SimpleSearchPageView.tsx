@@ -9,7 +9,7 @@ import { useSearchFilters } from '../adapters/useSearchFilters'
 import { useSearchState } from '../adapters/useSearchState'
 import { SearchPageLayout } from '../components/SearchPageLayout'
 import { SearchFilters } from '../components/composition/SearchFilters'
-import { SearchResultsMasonry } from '../components/composition/SearchResultsMasonry'
+import { SearchResultsGrid } from '../components/composition/SearchResultsGrid'
 import type { SearchFilters as SearchFiltersType } from '../model/SearchModel'
 
 export function SimpleSearchPageView() {
@@ -23,7 +23,7 @@ export function SimpleSearchPageView() {
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
 
   // View mode state
-  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'masonry'>('masonry')
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid')
 
   // Sync selectedTags with activeFilters.tags from URL
   useEffect(() => {
@@ -124,7 +124,7 @@ export function SimpleSearchPageView() {
   }
 
   // Handle view mode change
-  const handleViewModeChange = (mode: 'grid' | 'list' | 'masonry') => {
+  const handleViewModeChange = (mode: 'list' | 'grid') => {
     setViewMode(mode)
   }
 
@@ -189,7 +189,7 @@ export function SimpleSearchPageView() {
 
       {/* Results Section */}
       <div className="w-full">
-        <SearchResultsMasonry
+        <SearchResultsGrid
           items={searchResults.map(result => result.item)}
           viewMode={viewMode}
           onViewModeChange={handleViewModeChange}

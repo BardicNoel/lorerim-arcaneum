@@ -9,7 +9,7 @@ interface SpellSearchCardProps {
   className?: string
   isExpanded?: boolean
   onToggle?: () => void
-  viewMode?: 'grid' | 'list' | 'masonry' | ViewMode
+  viewMode?: 'list' | 'grid' | ViewMode
 }
 
 export const SpellSearchCard: React.FC<SpellSearchCardProps> = ({

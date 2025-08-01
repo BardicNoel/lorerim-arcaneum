@@ -8,7 +8,7 @@ interface DestinySearchCardProps {
   className?: string
   isExpanded?: boolean
   onToggle?: () => void
-  viewMode?: 'grid' | 'list' | 'masonry'
+  viewMode?: 'list' | 'grid'
 }
 
 export function DestinySearchCard({
