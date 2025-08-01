@@ -8,7 +8,7 @@ interface PerkSearchCardProps {
   className?: string
   isExpanded?: boolean
   onToggle?: () => void
-  viewMode?: 'grid' | 'list'
+  viewMode?: 'grid' | 'list' | 'masonry'
 }
 
 export function PerkSearchCard({

@@ -16,7 +16,7 @@ function parseURLParams(searchParams: URLSearchParams) {
     categories:
       searchParams.get('categories')?.split(',').filter(Boolean) || [],
     viewMode:
-      (searchParams.get('view') as 'grid' | 'list') || ('grid' as const),
+      (searchParams.get('view') as 'grid' | 'list' | 'masonry') || ('grid' as const),
   }
 }
 
@@ -34,7 +34,7 @@ export function useSearchState() {
     categories: initialParams.categories,
     tags: initialParams.tags,
   })
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>(
+  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'masonry'>(
     initialParams.viewMode
   )
 
@@ -147,7 +147,7 @@ export function useSearchState() {
     })
   }, [])
 
-  const updateViewMode = useCallback((mode: 'grid' | 'list') => {
+  const updateViewMode = useCallback((mode: 'grid' | 'list' | 'masonry') => {
     setViewMode(mode)
   }, [])
 

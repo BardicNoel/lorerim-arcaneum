@@ -9,7 +9,8 @@ import { useSearchFilters } from '../adapters/useSearchFilters'
 import { useSearchState } from '../adapters/useSearchState'
 import { SearchPageLayout } from '../components/SearchPageLayout'
 import { SearchFilters } from '../components/composition/SearchFilters'
-import { SearchResultsAccordionGrid } from '../components/composition/SearchResultsAccordionGrid'
+import { SearchResultsMasonry } from '../components/composition/SearchResultsMasonry'
+import type { SearchFilters as SearchFiltersType } from '../model/SearchModel'
 
 export function SimpleSearchPageView() {
   const { isReady, isIndexing, error } = useSearchData()
@@ -22,7 +23,7 @@ export function SimpleSearchPageView() {
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
 
   // View mode state
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'masonry'>('masonry')
 
   // Sync selectedTags with activeFilters.tags from URL
   useEffect(() => {
@@ -80,15 +81,13 @@ export function SimpleSearchPageView() {
 
       // Add to appropriate filter based on category
       if (tag.category === 'Categories') {
-        setActiveFilters(prev => ({
-          ...prev,
-          categories: [...prev.categories, tag.value],
-        }))
+        setActiveFilters({
+          categories: [...activeFilters.categories, tag.value],
+        })
       } else if (tag.category === 'Tags') {
-        setActiveFilters(prev => ({
-          ...prev,
-          tags: [...prev.tags, tag.value],
-        }))
+        setActiveFilters({
+          tags: [...activeFilters.tags, tag.value],
+        })
       } else {
         // Default to adding as a search tag
         addTag(tag.value)
@@ -104,15 +103,13 @@ export function SimpleSearchPageView() {
 
       // Remove from appropriate filter based on category
       if (tag.category === 'Categories') {
-        setActiveFilters(prev => ({
-          ...prev,
-          categories: prev.categories.filter(c => c !== tag.value),
-        }))
+        setActiveFilters({
+          categories: activeFilters.categories.filter((c: string) => c !== tag.value),
+        })
       } else if (tag.category === 'Tags') {
-        setActiveFilters(prev => ({
-          ...prev,
-          tags: prev.tags.filter(t => t !== tag.value),
-        }))
+        setActiveFilters({
+          tags: activeFilters.tags.filter((t: string) => t !== tag.value),
+        })
       } else {
         // Default to removing from search tags
         removeTag(tag.value)
@@ -127,7 +124,7 @@ export function SimpleSearchPageView() {
   }
 
   // Handle view mode change
-  const handleViewModeChange = (mode: 'grid' | 'list') => {
+  const handleViewModeChange = (mode: 'grid' | 'list' | 'masonry') => {
     setViewMode(mode)
   }
 
@@ -192,7 +189,7 @@ export function SimpleSearchPageView() {
 
       {/* Results Section */}
       <div className="w-full">
-        <SearchResultsAccordionGrid
+        <SearchResultsMasonry
           items={searchResults.map(result => result.item)}
           viewMode={viewMode}
           onViewModeChange={handleViewModeChange}

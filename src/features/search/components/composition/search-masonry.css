@@ -1,0 +1,32 @@
+.search-masonry-grid {
+  display: flex;
+  margin-left: -16px; /* gutter size offset */
+  width: auto;
+}
+
+.search-masonry-grid_column {
+  padding-left: 16px; /* gutter size */
+  background-clip: padding-box;
+}
+
+/* Optional: Add some responsive adjustments */
+@media (max-width: 500px) {
+  .search-masonry-grid {
+    margin-left: -8px;
+  }
+  
+  .search-masonry-grid_column {
+    padding-left: 8px;
+  }
+}
+
+/* Ensure cards have consistent styling in masonry layout */
+.search-masonry-grid .card {
+  margin-bottom: 16px;
+  break-inside: avoid;
+}
+
+/* Smooth transitions for masonry items */
+.search-masonry-grid > div {
+  transition: all 0.3s ease;
+} 
