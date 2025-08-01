@@ -194,7 +194,11 @@ export function useSearchData() {
       if (!query.trim()) return []
 
       // Search even if not all stores are ready
-      return provider.search(query, filters)
+      const results = provider.search(query, filters)
+      
+
+      
+      return results
     },
     [provider]
   )

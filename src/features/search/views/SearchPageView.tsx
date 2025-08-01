@@ -6,14 +6,16 @@ import {
 import type {
   SearchOption,
   SelectedTag,
+  PlayerCreationItem,
 } from '@/shared/components/playerCreation/types'
+import type { SearchFilters, SearchResult } from '../model/SearchModel'
 import { useEffect, useState } from 'react'
 import { useSearchComputed } from '../adapters/useSearchComputed'
 import { useSearchData } from '../adapters/useSearchData'
 import { useSearchFilters } from '../adapters/useSearchFilters'
 import { useSearchState } from '../adapters/useSearchState'
 import { SearchPageLayout } from '../components/SearchPageLayout'
-import { SearchFilters } from '../components/composition/SearchFilters'
+import { SearchFilters as SearchFiltersComponent } from '../components/composition/SearchFilters'
 import { SearchResultsGrid } from '../components/composition/SearchResultsGrid'
 
 export function SearchPageView() {
@@ -29,6 +31,9 @@ export function SearchPageView() {
   } = useSearchState()
   const { availableFilters } = useSearchFilters()
   const { playerCreationItems, totalResults } = useSearchComputed()
+  
+  // Type the playerCreationItems to include originalSearchResult
+  const typedPlayerCreationItems = playerCreationItems as (PlayerCreationItem & { originalSearchResult: SearchResult })[]
 
   // Tag state management
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
@@ -89,15 +94,15 @@ export function SearchPageView() {
 
       // Add to appropriate filter based on category
       if (tag.category === 'Categories') {
-        setActiveFilters(prev => ({
-          ...prev,
-          categories: [...prev.categories, tag.value],
-        }))
+        setActiveFilters({
+          ...activeFilters,
+          categories: [...activeFilters.categories, tag.value],
+        })
       } else if (tag.category === 'Tags') {
-        setActiveFilters(prev => ({
-          ...prev,
-          tags: [...prev.tags, tag.value],
-        }))
+        setActiveFilters({
+          ...activeFilters,
+          tags: [...activeFilters.tags, tag.value],
+        })
       } else {
         // Default to adding as a search tag
         addTag(tag.value)
@@ -113,15 +118,15 @@ export function SearchPageView() {
 
       // Remove from appropriate filter based on category
       if (tag.category === 'Categories') {
-        setActiveFilters(prev => ({
-          ...prev,
-          categories: prev.categories.filter(c => c !== tag.value),
-        }))
+        setActiveFilters({
+          ...activeFilters,
+          categories: activeFilters.categories.filter((c: string) => c !== tag.value),
+        })
       } else if (tag.category === 'Tags') {
-        setActiveFilters(prev => ({
-          ...prev,
-          tags: prev.tags.filter(t => t !== tag.value),
-        }))
+        setActiveFilters({
+          ...activeFilters,
+          tags: activeFilters.tags.filter((t: string) => t !== tag.value),
+        })
       } else {
         // Default to removing from search tags
         removeTag(tag.value)
@@ -188,7 +193,7 @@ export function SearchPageView() {
         onTagRemove={() => {}} // Handled by SearchFilters
         onViewModeChange={setViewMode}
       >
-        <SearchFilters
+        <SearchFiltersComponent
           activeFilters={activeFilters}
           onFiltersChange={setActiveFilters}
           onClearFilters={handleClearFilters}
@@ -203,9 +208,7 @@ export function SearchPageView() {
       <PlayerCreationContent>
         <PlayerCreationItemsSection>
           <SearchResultsGrid
-            results={playerCreationItems.map(item => item.originalSearchResult)}
-            selectedResult={null}
-            onResultSelect={() => {}} // No selection needed
+            results={typedPlayerCreationItems.map(item => item.originalSearchResult)}
             viewMode={viewMode}
             useTypeSpecificRendering={true}
             renderMode="grouped"
