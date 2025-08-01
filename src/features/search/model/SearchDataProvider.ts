@@ -12,6 +12,7 @@ import {
   transformPerkReferencesToSearchable,
   transformPerkTreesToSearchable,
   transformRacesToSearchable,
+  transformRecipesToSearchable,
   transformReligionsToSearchable,
   transformSkillsToSearchable,
   transformSpellsToSearchable,
@@ -75,6 +76,7 @@ export class SearchDataProvider {
   transformDestinyNodesToSearchable = transformDestinyNodesToSearchable
   transformPerkTreesToSearchable = transformPerkTreesToSearchable
   transformPerkReferencesToSearchable = transformPerkReferencesToSearchable
+  transformRecipesToSearchable = transformRecipesToSearchable
   transformSpellsToSearchable = transformSpellsToSearchable
 
   async buildSearchIndex(): Promise<void> {
@@ -98,6 +100,9 @@ export class SearchDataProvider {
       const { usePerkTreesStore } = await import(
         '@/shared/stores/perkTreesStore'
       )
+      const { useRecipesStore } = await import(
+        '@/shared/stores/recipesStore'
+      )
 
       // Import spell data provider
       const { SpellDataProvider } = await import('@/features/spells/model/SpellDataProvider')
@@ -110,6 +115,7 @@ export class SearchDataProvider {
       const birthsigns = useBirthsignsStore.getState().data
       const destinyNodes = useDestinyNodesStore.getState().data
       const perkTrees = usePerkTreesStore.getState().data
+      const recipes = useRecipesStore.getState().data
 
       // Get spell data
       const spellDataProvider = SpellDataProvider.getInstance()
@@ -124,6 +130,7 @@ export class SearchDataProvider {
         !birthsigns?.length ||
         !destinyNodes?.length ||
         !perkTrees?.length ||
+        !recipes?.length ||
         !spells?.length
       ) {
         console.log('Stores not loaded yet, cannot build search index')
@@ -141,6 +148,7 @@ export class SearchDataProvider {
         ...transformBirthsignsToSearchable(birthsigns),
         ...transformDestinyNodesToSearchable(destinyNodes),
         ...transformPerkTreesToSearchable(perkTrees),
+        ...transformRecipesToSearchable(recipes),
         ...transformSpellsToSearchable(spells),
       ]
 
@@ -313,6 +321,8 @@ export class SearchDataProvider {
           return false
         }
       }
+
+
 
       return true
     })

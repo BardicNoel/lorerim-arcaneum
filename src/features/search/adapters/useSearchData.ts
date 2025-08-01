@@ -2,6 +2,7 @@ import { useBirthsignsStore } from '@/shared/stores/birthsignsStore'
 import { useDestinyNodesStore } from '@/shared/stores/destinyNodesStore'
 import { usePerkTreesStore } from '@/shared/stores/perkTreesStore'
 import { useRacesStore } from '@/shared/stores/racesStore'
+import { useRecipesStore } from '@/shared/stores/recipesStore'
 import { useReligionsStore } from '@/shared/stores/religionsStore'
 import { useSkillsStore } from '@/shared/stores/skillsStore'
 import { useSpellsStore } from '@/shared/stores/spellsStore'
@@ -38,6 +39,7 @@ export function useSearchData() {
   const birthsigns = useBirthsignsStore(state => state.data)
   const destinyNodes = useDestinyNodesStore(state => state.data)
   const perkTrees = usePerkTreesStore(state => state.data)
+  const recipes = useRecipesStore(state => state.data)
   const spells = useSpellsStore(state => state.data)
 
   // Get perk references data
@@ -123,6 +125,17 @@ export function useSearchData() {
     }
   }, [perkTrees, indexStore])
 
+  // Index recipes when they have data
+  useEffect(() => {
+    if (recipes?.length) {
+      indexStore(
+        'recipes',
+        recipes,
+        provider.transformRecipesToSearchable
+      )
+    }
+  }, [recipes, indexStore])
+
   // Index perk references when they have data
   useEffect(() => {
     if (perkReferences?.length) {
@@ -155,6 +168,7 @@ export function useSearchData() {
       birthsigns?.length ||
       destinyNodes?.length ||
       perkTrees?.length ||
+      recipes?.length ||
       perkReferences?.length ||
       spells?.length
 
@@ -169,6 +183,7 @@ export function useSearchData() {
     birthsigns,
     destinyNodes,
     perkTrees,
+    recipes,
     perkReferences,
     spells,
     provider,

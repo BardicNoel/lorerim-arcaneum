@@ -10,6 +10,7 @@ export interface SearchableItem {
     | 'perk'
     | 'perk-reference'
     | 'spell'
+    | 'recipe'
   name: string
   description?: string
   category?: string

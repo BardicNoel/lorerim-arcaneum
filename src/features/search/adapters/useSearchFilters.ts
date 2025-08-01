@@ -50,7 +50,11 @@ export function useSearchFilters() {
   }, [isReady, search, activeFilters, getSearchableItems])
 
   const availableFilters = useMemo(() => {
-    if (!isReady) return { types: [], categories: [], tags: [] }
+    if (!isReady) return { 
+      types: [], 
+      categories: [], 
+      tags: []
+    }
     return getAvailableFilters()
   }, [isReady, getAvailableFilters, searchableItemsCount])
 

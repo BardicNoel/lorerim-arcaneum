@@ -2,6 +2,7 @@ import type { Birthsign } from '@/features/birthsigns/types'
 import type { DestinyNode } from '@/features/destiny/types'
 import type { PerkReferenceNode } from '@/features/perk-references/types'
 import type { SpellWithComputed } from '@/features/spells/types'
+import type { RecipeWithComputed } from '@/features/cookbook/types'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import type { Race, Religion, Skill, Trait } from '@/shared/data/schemas'
 import type {
@@ -227,6 +228,39 @@ export function transformSpellsToSearchable(
     ].filter(Boolean),
     originalData: spell,
     url: `/spells?spell=${spell.editorId}`,
+  }))
+}
+
+export function transformRecipesToSearchable(
+  recipes: RecipeWithComputed[]
+): SearchableItem[] {
+  return recipes.map(recipe => ({
+    id: `recipe-${recipe.name}`,
+    type: 'recipe' as const, // Group all recipes under 'recipe' type
+    name: recipe.name,
+    description: recipe.description,
+    category: recipe.category,
+    tags: recipe.tags,
+    searchableText: [
+      recipe.name,
+      recipe.description || '',
+      recipe.category || '',
+      recipe.output || '',
+      recipe.difficulty || '',
+      recipe.type || '', // Keep the original type in searchable text for filtering
+      ...recipe.tags,
+      ...recipe.ingredients.map(ingredient => 
+        typeof ingredient === 'string' ? ingredient : ingredient.name || ingredient.item || ''
+      ),
+      ...recipe.effects.map(effect => effect.name),
+      ...recipe.effects.map(effect => effect.description),
+      `ingredients ${recipe.ingredientCount}`,
+      `effects ${recipe.effectCount}`,
+      `magnitude ${recipe.totalMagnitude}`,
+      `duration ${recipe.maxDuration}`,
+    ].filter(Boolean),
+    originalData: recipe,
+    url: `/cookbook?recipe=${encodeURIComponent(recipe.name)}`,
   }))
 }
 

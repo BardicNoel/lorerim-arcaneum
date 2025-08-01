@@ -51,20 +51,20 @@ export function AutocompleteSearch({
     selectedCategory || singleCategory
       ? (selectedCategory || singleCategory)!.options.filter(
           option =>
-            (option.label?.toLowerCase() || '').includes(
+            (String(option.label || '').toLowerCase()).includes(
               searchQuery.toLowerCase()
             ) ||
-            (option.description?.toLowerCase() || '').includes(
+            (String(option.description || '').toLowerCase()).includes(
               searchQuery.toLowerCase()
             )
         )
       : categories.flatMap(category =>
           category.options.filter(
             option =>
-              (option.label?.toLowerCase() || '').includes(
+              (String(option.label || '').toLowerCase()).includes(
                 searchQuery.toLowerCase()
               ) ||
-              (option.description?.toLowerCase() || '').includes(
+              (String(option.description || '').toLowerCase()).includes(
                 searchQuery.toLowerCase()
               )
           )

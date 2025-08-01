@@ -31,6 +31,9 @@ import { PerkReferenceAccordion } from '@/features/perk-references/components/co
 import { SpellSearchCard } from '@/features/search/components/type-specific/SpellSearchCard'
 import { SpellDetailView } from '@/features/search/components/type-specific/SpellDetailView'
 
+import { RecipeCard } from '@/features/cookbook/components/atomic/RecipeCard'
+import { RecipeAccordion } from '@/features/cookbook/components/composition/RecipeAccordion'
+
 // Wrapper component to convert SearchResult to PerkReferenceItem format
 const PerkReferenceSearchWrapper: React.FC<{
   result: SearchResult
@@ -67,6 +70,25 @@ const PerkReferenceSearchWrapper: React.FC<{
       isSelected={isSelected}
       onClick={onClick}
       compact={compact}
+    />
+  )
+}
+
+// Wrapper component to convert SearchResult to Recipe format
+const RecipeSearchWrapper: React.FC<{
+  result: SearchResult
+  isSelected?: boolean
+  onClick?: () => void
+  compact?: boolean
+}> = ({ result, isSelected, onClick, compact }) => {
+  const recipeData = result.item.originalData
+  
+  return (
+    <RecipeCard
+      recipe={recipeData}
+      variant={compact ? 'compact' : 'default'}
+      isSelected={isSelected}
+      onClick={onClick}
     />
   )
 }
@@ -165,6 +187,13 @@ const COMPONENT_MAP: Record<
     grid: SpellSearchCard,
     detail: SpellDetailView,
     compact: SpellSearchCard,
+  },
+  recipe: {
+    card: RecipeSearchWrapper,
+    accordion: RecipeAccordion,
+    grid: RecipeSearchWrapper,
+    detail: FallbackDetail,
+    compact: RecipeSearchWrapper,
   },
 }
 
