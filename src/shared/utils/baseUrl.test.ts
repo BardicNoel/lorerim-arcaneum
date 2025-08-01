@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { getBaseUrl, getDataUrl } from './baseUrl'
 
 describe('baseUrl utilities', () => {
@@ -19,7 +19,7 @@ describe('baseUrl utilities', () => {
       // Mock development environment
       import.meta.env.DEV = true
       import.meta.env.BASE_URL = '/lorerim-arcaneum/'
-      
+
       expect(getBaseUrl()).toBe('')
     })
 
@@ -27,7 +27,7 @@ describe('baseUrl utilities', () => {
       // Mock production environment
       import.meta.env.DEV = false
       import.meta.env.BASE_URL = '/lorerim-arcaneum/'
-      
+
       expect(getBaseUrl()).toBe('/lorerim-arcaneum/')
     })
 
@@ -35,7 +35,7 @@ describe('baseUrl utilities', () => {
       // Mock production environment with empty base URL
       import.meta.env.DEV = false
       import.meta.env.BASE_URL = ''
-      
+
       expect(getBaseUrl()).toBe('')
     })
   })
@@ -45,18 +45,24 @@ describe('baseUrl utilities', () => {
       // Mock development environment
       import.meta.env.DEV = true
       import.meta.env.BASE_URL = '/lorerim-arcaneum/'
-      
+
       expect(getDataUrl('data/skills.json')).toBe('data/skills.json')
-      expect(getDataUrl('assets/race-avatar/nord.png')).toBe('assets/race-avatar/nord.png')
+      expect(getDataUrl('assets/race-avatar/nord.svg')).toBe(
+        'assets/race-avatar/nord.svg'
+      )
     })
 
     it('should construct correct URL in production', () => {
       // Mock production environment
       import.meta.env.DEV = false
       import.meta.env.BASE_URL = '/lorerim-arcaneum/'
-      
-      expect(getDataUrl('data/skills.json')).toBe('/lorerim-arcaneum/data/skills.json')
-      expect(getDataUrl('assets/race-avatar/nord.png')).toBe('/lorerim-arcaneum/assets/race-avatar/nord.png')
+
+      expect(getDataUrl('data/skills.json')).toBe(
+        '/lorerim-arcaneum/data/skills.json'
+      )
+      expect(getDataUrl('assets/race-avatar/nord.svg')).toBe(
+        '/lorerim-arcaneum/assets/race-avatar/nord.svg'
+      )
     })
   })
-}) 
+})

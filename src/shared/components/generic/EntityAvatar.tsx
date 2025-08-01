@@ -1,6 +1,6 @@
-import React from 'react'
 import { cn } from '@/lib/utils'
 import { getDataUrl } from '@/shared/utils/baseUrl'
+import React from 'react'
 
 /**
  * Entity type definitions for avatar mapping
@@ -31,16 +31,16 @@ interface EntityAvatarProps {
 // Avatar file mapping for different entity types
 const entityAvatarMaps: Record<EntityType, Record<string, string>> = {
   race: {
-    Altmer: 'altmer.png',
-    Argonian: 'argonian.png',
-    Bosmer: 'bosmer.png',
-    Breton: 'breton.png',
-    Dunmer: 'dunmer.png',
-    Imperial: 'imperial.png',
-    Khajiit: 'khajit.png',
-    Nord: 'nord.png',
-    Orsimer: 'orismer.png',
-    Redguard: 'redguard.png',
+    Altmer: 'altmer.svg',
+    Argonian: 'argonian.svg',
+    Bosmer: 'woodelf.svg',
+    Breton: 'breton.svg',
+    Dunmer: 'dunmer.svg',
+    Imperial: 'imperial.svg',
+    Khajiit: 'khajit.svg',
+    Nord: 'nord.svg',
+    Orsimer: 'orc.svg',
+    Redguard: 'redguard.svg',
   },
   religion: {
     // Add religion avatars as they become available
@@ -105,15 +105,18 @@ export function EntityAvatar({
   return (
     <div
       className={cn(
-        'rounded-full overflow-hidden bg-muted flex items-center justify-center',
+        'rounded-full overflow-hidden flex items-center justify-center',
+        'bg-muted dark:bg-white',
         sizeClasses[size],
         className
       )}
     >
       <img
-        src={getDataUrl(`assets/${entityType === 'birthsign' ? 'sign-avatar' : `${entityType}-avatar`}/${avatarFileName}`)}
+        src={getDataUrl(
+          `assets/${entityType === 'birthsign' ? 'sign-avatar' : `${entityType}-avatar`}/${avatarFileName}`
+        )}
         alt={`${entityName} avatar`}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-contain p-1 dark:brightness-0"
         onError={() => setImageError(true)}
         loading="lazy"
       />
