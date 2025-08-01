@@ -8,7 +8,7 @@ interface RecipeSearchCardProps {
   className?: string
   isExpanded?: boolean
   onToggle?: () => void
-  viewMode?: 'grid' | 'list'
+  viewMode?: 'list' | 'grid'
 }
 
 export const RecipeSearchCard: React.FC<RecipeSearchCardProps> = ({

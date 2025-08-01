@@ -173,6 +173,8 @@ export function useSearchData() {
       spells?.length
 
     if (hasAnyData && provider.hasIndexedData()) {
+      // Force rebuild the search index with current options
+      provider.rebuildSearchIndex()
       setIsReady(true)
     }
   }, [

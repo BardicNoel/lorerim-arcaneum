@@ -34,12 +34,12 @@ export class SearchDataProvider {
       { name: 'tags', weight: 0.5 },
       { name: 'searchableText', weight: 0.3 },
     ],
-    threshold: 0.4, // Slightly higher threshold for better precision
+    threshold: 0.6, // More permissive threshold for better recall
     includeMatches: true,
     includeScore: true,
     minMatchCharLength: 2,
     ignoreLocation: true,
-    useExtendedSearch: true,
+    useExtendedSearch: false, // Disable extended search for simple text matching
     findAllMatches: true,
   }
 
@@ -65,6 +65,13 @@ export class SearchDataProvider {
   // Check if any data has been indexed
   hasIndexedData(): boolean {
     return this.allSearchableItems.length > 0
+  }
+
+  // Force rebuild the search index with current options
+  rebuildSearchIndex(): void {
+    if (this.allSearchableItems.length > 0) {
+      this.searchIndex = new Fuse(this.allSearchableItems, this.fuseOptions)
+    }
   }
 
   // Transform methods for each store type

@@ -8,7 +8,7 @@ interface TraitSearchCardProps {
   className?: string
   isExpanded?: boolean
   onToggle?: () => void
-  viewMode?: 'grid' | 'list'
+  viewMode?: 'list' | 'grid'
 }
 
 export function TraitSearchCard({
