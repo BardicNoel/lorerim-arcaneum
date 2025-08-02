@@ -10,7 +10,7 @@ export type EntityType = 'race' | 'religion' | 'trait' | 'destiny' | 'birthsign'
 /**
  * Avatar size options
  */
-export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
 
 /**
  * Centralized avatar management for all entity types.
@@ -65,6 +65,8 @@ const sizeClasses: Record<AvatarSize, string> = {
   lg: 'w-12 h-12',
   xl: 'w-16 h-16',
   '2xl': 'w-16 h-16', // 64px (w-16 = 4rem = 64px)
+  '3xl': 'w-24 h-24', // 96px (w-24 = 6rem = 96px)
+  '4xl': 'w-32 h-32', // 128px (w-32 = 8rem = 128px)
 }
 
 // Text size classes for fallback avatars
@@ -74,6 +76,8 @@ const textSizeClasses: Record<AvatarSize, string> = {
   lg: 'text-xl',
   xl: 'text-2xl',
   '2xl': 'text-3xl',
+  '3xl': 'text-3xl',
+  '4xl': 'text-4xl',
 }
 
 export function EntityAvatar({

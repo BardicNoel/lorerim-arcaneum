@@ -2,7 +2,7 @@ import { EntityAvatar } from '@/shared/components/generic'
 
 interface RaceAvatarProps {
   raceName: string
-  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
   className?: string
 }
 
