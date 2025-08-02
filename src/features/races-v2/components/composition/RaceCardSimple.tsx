@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Button } from '@/shared/ui/ui/button'
+
 import { H3 } from '@/shared/ui/ui/typography'
 import { ExternalLink, Star } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
@@ -60,18 +61,34 @@ export function RaceCardSimple({
 
         {/* Right Section: Content */}
         <div className="flex-1 min-w-0">
-          {/* Top Row: Name, Category, Toggle */}
+          {/* Top Row: Name, Category, Stats, Toggle */}
           <div className="flex items-start justify-between mb-2">
             <div className="flex-1 min-w-0">
               <H3 className="text-primary font-semibold truncate">
                 {displayName}
               </H3>
-              {displayCategory && (
-                <CategoryBadge
-                  category={displayCategory as 'Human' | 'Elf' | 'Beast'}
-                  size="sm"
-                />
-              )}
+              <div className="flex items-center gap-2 mt-1">
+                {displayCategory && (
+                  <CategoryBadge
+                    category={displayCategory as 'Human' | 'Elf' | 'Beast'}
+                    size="sm"
+                  />
+                )}
+                {/* Mini Stat Pills */}
+                {originalRace?.startingStats && (
+                  <div className="flex gap-1">
+                    <div className="inline-flex items-center justify-center px-2 py-1 bg-red-500/20 text-red-700 dark:text-red-400 rounded-full text-xs font-medium whitespace-nowrap">
+                      ❤️ {originalRace.startingStats.health}
+                    </div>
+                    <div className="inline-flex items-center justify-center px-2 py-1 bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded-full text-xs font-medium whitespace-nowrap">
+                      🔷 {originalRace.startingStats.magicka}
+                    </div>
+                    <div className="inline-flex items-center justify-center px-2 py-1 bg-green-500/20 text-green-700 dark:text-green-400 rounded-full text-xs font-medium whitespace-nowrap">
+                      💚 {originalRace.startingStats.stamina}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Right side: Effects count + Toggle */}
@@ -97,33 +114,17 @@ export function RaceCardSimple({
             </div>
           </div>
 
-          {/* Bottom Row: Stats and Skills */}
+          {/* Bottom Row: Skills */}
           <div className="space-y-2">
-            {/* Mini Stat Pills */}
-            {originalRace?.startingStats && (
-              <div className="flex gap-2">
-                <div className="flex items-center gap-1 px-2 py-1 bg-red-500/20 text-red-700 dark:text-red-400 rounded-full text-xs font-medium">
-                  ❤️ {originalRace.startingStats.health}
-                </div>
-                <div className="flex items-center gap-1 px-2 py-1 bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded-full text-xs font-medium">
-                  🔷 {originalRace.startingStats.magicka}
-                </div>
-                <div className="flex items-center gap-1 px-2 py-1 bg-green-500/20 text-green-700 dark:text-green-400 rounded-full text-xs font-medium">
-                  💚 {originalRace.startingStats.stamina}
-                </div>
-              </div>
-            )}
-
             {/* Key Skill Badges */}
             {originalRace?.skillBonuses &&
               originalRace.skillBonuses.length > 0 && (
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-3 gap-1 justify-items-center">
                   {originalRace.skillBonuses.map((bonus, index) => (
                     <div
                       key={index}
-                      className="flex items-center gap-1 px-2 py-1 bg-muted/50 text-muted-foreground rounded-full text-xs font-medium"
+                      className="px-2 py-1 bg-muted/50 text-muted-foreground rounded text-xs font-medium text-left w-full"
                     >
-                      <span>🗡</span>
                       {bonus.skill} +{bonus.bonus}
                     </div>
                   ))}
