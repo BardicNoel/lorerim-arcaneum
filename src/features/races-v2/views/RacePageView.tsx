@@ -6,20 +6,18 @@ import type {
   SearchOption,
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
-import { AccordionGrid } from '@/shared/components/ui'
+
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Button } from '@/shared/ui/ui/button'
-import { ArrowLeft, Grid3X3, List, X } from 'lucide-react'
+import { Grid3X3, List, X } from 'lucide-react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useRaceData, useRaceFilters, useRaceState } from '../adapters'
-import { RaceAccordion } from '../components/composition/RaceAccordion'
+import { RaceCardSimple, RaceDetailsSheet } from '../components/composition'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { Race } from '../types'
 import { raceToPlayerCreationItem } from '../utils/raceToPlayerCreationItem'
 
 export function RacePageView() {
-  const navigate = useNavigate()
   const { build } = useCharacterBuild()
 
   const { races, isLoading, error } = useRaceData()
@@ -169,46 +167,13 @@ export function RacePageView() {
     return { ...item, originalRace: race }
   })
 
-  // Handle accordion expansion
-  const [expandedRaces, setExpandedRaces] = useState<Set<string>>(new Set())
+  // Handle sheet state
+  const [selectedRace, setSelectedRace] = useState<Race | null>(null)
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
 
-  const handleRaceToggle = (raceId: string) => {
-    const newExpanded = new Set(expandedRaces)
-
-    if (viewMode === 'grid') {
-      // In grid mode, expand/collapse all items in the same row
-      const columns = 3 // Match the AccordionGrid columns prop
-      const itemIndex = displayItems.findIndex(item => item.id === raceId)
-      const rowIndex = Math.floor(itemIndex / columns)
-      const rowStartIndex = rowIndex * columns
-      const rowEndIndex = Math.min(rowStartIndex + columns, displayItems.length)
-
-      // Check if any item in the row is currently expanded
-      const isRowExpanded = displayItems
-        .slice(rowStartIndex, rowEndIndex)
-        .some(item => newExpanded.has(item.id))
-
-      if (isRowExpanded) {
-        // Collapse all items in the row
-        displayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
-          newExpanded.delete(item.id)
-        })
-      } else {
-        // Expand all items in the row
-        displayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
-          newExpanded.add(item.id)
-        })
-      }
-    } else {
-      // In list mode, toggle individual items
-      if (newExpanded.has(raceId)) {
-        newExpanded.delete(raceId)
-      } else {
-        newExpanded.add(raceId)
-      }
-    }
-
-    setExpandedRaces(newExpanded)
+  const handleRaceClick = (race: Race) => {
+    setSelectedRace(race)
+    setIsSheetOpen(true)
   }
 
   if (isLoading) {
@@ -243,19 +208,6 @@ export function RacePageView() {
       title="Races"
       description="Choose your character's race. Each race has unique abilities, starting attributes, and racial traits that will shape your journey through Tamriel."
     >
-      {/* Header with back button */}
-      <div className="flex items-center justify-between mb-6">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => navigate('/build')}
-          className="flex items-center gap-2"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Build
-        </Button>
-      </div>
-
       {/* Custom MultiAutocompleteSearch with FuzzySearchBox for keywords */}
       <div className="flex items-center gap-4 mb-4">
         <div className="flex-1">
@@ -322,40 +274,36 @@ export function RacePageView() {
       </div>
 
       {viewMode === 'grid' ? (
-        <AccordionGrid columns={3} gap="md" className="w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
           {displayItems.map(item => {
-            const isExpanded = expandedRaces.has(item.id)
             const isSelected = build.race === item.originalRace?.edid
 
             return (
-              <RaceAccordion
+              <RaceCardSimple
                 key={item.id}
                 item={item}
-                isExpanded={isExpanded}
-                onToggle={() => handleRaceToggle(item.id)}
+                originalRace={item.originalRace}
+                onClick={() => handleRaceClick(item.originalRace)}
                 className={cn(
-                  'w-full',
                   isSelected &&
                     'bg-skyrim-gold/20 border-2 border-skyrim-gold/30 shadow-sm'
                 )}
               />
             )
           })}
-        </AccordionGrid>
+        </div>
       ) : (
         <div className="flex flex-col gap-4 w-full">
           {displayItems.map(item => {
-            const isExpanded = expandedRaces.has(item.id)
             const isSelected = build.race === item.originalRace?.edid
 
             return (
-              <RaceAccordion
+              <RaceCardSimple
                 key={item.id}
                 item={item}
-                isExpanded={isExpanded}
-                onToggle={() => handleRaceToggle(item.id)}
+                originalRace={item.originalRace}
+                onClick={() => handleRaceClick(item.originalRace)}
                 className={cn(
-                  'w-full',
                   isSelected &&
                     'bg-skyrim-gold/20 border-2 border-skyrim-gold/30 shadow-sm'
                 )}
@@ -375,6 +323,13 @@ export function RacePageView() {
           </p>
         </div>
       )}
+
+      {/* Race Details Sheet */}
+      <RaceDetailsSheet
+        race={selectedRace}
+        isOpen={isSheetOpen}
+        onOpenChange={setIsSheetOpen}
+      />
     </BuildPageShell>
   )
 }

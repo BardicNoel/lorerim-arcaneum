@@ -1,6 +1,6 @@
-import React from 'react'
 import { cn } from '@/lib/utils'
 import { getDataUrl } from '@/shared/utils/baseUrl'
+import React from 'react'
 
 /**
  * Entity type definitions for avatar mapping
@@ -10,7 +10,7 @@ export type EntityType = 'race' | 'religion' | 'trait' | 'destiny' | 'birthsign'
 /**
  * Avatar size options
  */
-export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl'
+export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
 
 /**
  * Centralized avatar management for all entity types.
@@ -31,16 +31,16 @@ interface EntityAvatarProps {
 // Avatar file mapping for different entity types
 const entityAvatarMaps: Record<EntityType, Record<string, string>> = {
   race: {
-    Altmer: 'altmer.png',
-    Argonian: 'argonian.png',
-    Bosmer: 'bosmer.png',
-    Breton: 'breton.png',
-    Dunmer: 'dunmer.png',
-    Imperial: 'imperial.png',
-    Khajiit: 'khajit.png',
-    Nord: 'nord.png',
-    Orsimer: 'orismer.png',
-    Redguard: 'redguard.png',
+    Altmer: 'altmer.svg',
+    Argonian: 'argonian.svg',
+    Bosmer: 'woodelf.svg',
+    Breton: 'breton.svg',
+    Dunmer: 'dunmer.svg',
+    Imperial: 'imperial.svg',
+    Khajiit: 'khajit.svg',
+    Nord: 'nord.svg',
+    Orsimer: 'orc.svg',
+    Redguard: 'redguard.svg',
   },
   religion: {
     // Add religion avatars as they become available
@@ -64,6 +64,9 @@ const sizeClasses: Record<AvatarSize, string> = {
   md: 'w-10 h-10',
   lg: 'w-12 h-12',
   xl: 'w-16 h-16',
+  '2xl': 'w-16 h-16', // 64px (w-16 = 4rem = 64px)
+  '3xl': 'w-24 h-24', // 96px (w-24 = 6rem = 96px)
+  '4xl': 'w-32 h-32', // 128px (w-32 = 8rem = 128px)
 }
 
 // Text size classes for fallback avatars
@@ -72,6 +75,9 @@ const textSizeClasses: Record<AvatarSize, string> = {
   md: 'text-lg',
   lg: 'text-xl',
   xl: 'text-2xl',
+  '2xl': 'text-3xl',
+  '3xl': 'text-3xl',
+  '4xl': 'text-4xl',
 }
 
 export function EntityAvatar({
@@ -105,15 +111,18 @@ export function EntityAvatar({
   return (
     <div
       className={cn(
-        'rounded-full overflow-hidden bg-muted flex items-center justify-center',
+        'rounded-full overflow-hidden flex items-center justify-center',
+        'bg-muted dark:bg-white',
         sizeClasses[size],
         className
       )}
     >
       <img
-        src={getDataUrl(`assets/${entityType === 'birthsign' ? 'sign-avatar' : `${entityType}-avatar`}/${avatarFileName}`)}
+        src={getDataUrl(
+          `assets/${entityType === 'birthsign' ? 'sign-avatar' : `${entityType}-avatar`}/${avatarFileName}`
+        )}
         alt={`${entityName} avatar`}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-contain dark:brightness-0"
         onError={() => setImageError(true)}
         loading="lazy"
       />

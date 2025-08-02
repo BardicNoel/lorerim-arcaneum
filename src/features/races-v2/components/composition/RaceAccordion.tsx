@@ -1,4 +1,3 @@
-import React from 'react'
 import { cn } from '@/lib/utils'
 import { AccordionCard } from '@/shared/components/generic/AccordionCard'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
@@ -7,8 +6,8 @@ import { Badge } from '@/shared/ui/ui/badge'
 import { H3, P } from '@/shared/ui/ui/typography'
 import type { Race } from '../../types'
 import { RaceAvatar } from '../atomic'
-import { RaceStatsDisplay } from './RaceStatsDisplay'
 import { RaceEffectsDisplay } from './RaceEffectsDisplay'
+import { RaceStatsDisplay } from './RaceStatsDisplay'
 
 interface RaceAccordionProps {
   item: PlayerCreationItem & { originalRace: Race }
@@ -37,7 +36,24 @@ export function RaceAccordion({
       disableHover={disableHover}
     >
       <AccordionCard.Header>
-        <div className="flex items-center justify-between w-full">
+        <div className="flex items-start justify-between w-full">
+          <div className="flex items-start gap-3">
+            <RaceAvatar raceName={item.name} size="2xl" />
+            <div className="flex flex-col gap-1">
+              <H3 className="text-primary font-semibold">{item.name}</H3>
+              {item.category && (
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
+                    'text-xs font-medium transition-colors'
+                  )}
+                >
+                  {item.category}
+                </Badge>
+              )}
+            </div>
+          </div>
           <div className="flex items-center gap-3">
             {showToggle && (
               <AddToBuildSwitchSimple
@@ -46,25 +62,10 @@ export function RaceAccordion({
                 itemName={item.name}
               />
             )}
-            <RaceAvatar raceName={item.name} size="md" />
-            <H3 className="text-primary font-semibold">{item.name}</H3>
-          </div>
-          <div className="flex items-center gap-3">
-            {item.category && (
-              <Badge
-                variant="outline"
-                className={cn(
-                  'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
-                  'text-xs font-medium transition-colors'
-                )}
-              >
-                {item.category}
-              </Badge>
-            )}
           </div>
         </div>
       </AccordionCard.Header>
-      
+
       <AccordionCard.Summary>
         <div className="line-clamp-2">
           <P className="text-sm text-muted-foreground">
@@ -72,7 +73,7 @@ export function RaceAccordion({
           </P>
         </div>
       </AccordionCard.Summary>
-      
+
       <AccordionCard.Details>
         {/* Full Description */}
         <div>
@@ -121,7 +122,7 @@ export function RaceAccordion({
           <RaceEffectsDisplay
             effects={originalRace.racialSpells.map(spell => ({
               name: spell.name,
-              description: spell.description
+              description: spell.description,
             }))}
             title="Quirks"
             showDescriptions={true}
@@ -130,4 +131,4 @@ export function RaceAccordion({
       </AccordionCard.Details>
     </AccordionCard>
   )
-} 
+}

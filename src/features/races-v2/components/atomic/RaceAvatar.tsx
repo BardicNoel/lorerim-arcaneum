@@ -1,9 +1,8 @@
-import React from 'react'
 import { EntityAvatar } from '@/shared/components/generic'
 
 interface RaceAvatarProps {
   raceName: string
-  size?: 'sm' | 'md' | 'lg' | 'xl'
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
   className?: string
 }
 
@@ -24,4 +23,4 @@ export function RaceAvatar({
       className={className}
     />
   )
-} 
+}
