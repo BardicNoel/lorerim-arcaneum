@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import {
   BasicInfoCard,
   BuildControls,
+  BuildMasonryGrid,
   BuildResetConfirmDialog,
   BuildSummaryCard,
   TraitLimitConfigCard,
@@ -29,6 +30,64 @@ export function BuildPage() {
   const traitLimits = useTraitLimits()
 
   const navigate = useNavigate()
+
+  // Define build cards for masonry layout
+  // Layout: Basic Info | Race+Birthsign | Traits+Religion | Attributes | Skills | Destiny | Summary
+  // Full-width cards: Basic Info, Attributes, Skills, Destiny, Summary
+  const buildCards = [
+    {
+      id: 'basic-info',
+      component: (
+        <BasicInfoCard
+          name={build.name}
+          notes={build.notes}
+          onNameChange={setBuildName}
+          onNotesChange={setBuildNotes}
+        />
+      ),
+      size: 'full',
+    },
+    {
+      id: 'race',
+      component: <RaceSelectionCard />,
+      size: 'half',
+    },
+    {
+      id: 'birthsign',
+      component: <BirthsignSelectionCard />,
+      size: 'half',
+    },
+    {
+      id: 'trait',
+      component: <TraitSelectionCard />,
+      size: 'half',
+    },
+    {
+      id: 'religion',
+      component: <ReligionSelectionCard />,
+      size: 'half',
+    },
+    {
+      id: 'attributes',
+      component: <AttributeAssignmentCard />,
+      size: 'full',
+    },
+    {
+      id: 'skills',
+      component: <BuildPageSkillCard />,
+      size: 'full',
+    },
+    {
+      id: 'destiny',
+      component: <BuildPageDestinyCard navigate={navigate} />,
+      size: 'full',
+    },
+    {
+      id: 'summary',
+      component: <BuildSummaryCard build={build} />,
+      size: 'full',
+    },
+  ]
 
   return (
     <BuildPageShell title="Character Builder">
@@ -51,40 +110,8 @@ export function BuildPage() {
           <TabsTrigger value="config">Config</TabsTrigger>
         </TabsList>
         <TabsContent value="build">
-          {/* Basic Information (always below tabs) */}
-          <BasicInfoCard
-            name={build.name}
-            notes={build.notes}
-            onNameChange={setBuildName}
-            onNotesChange={setBuildNotes}
-          />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            {/* Race Selection and Display */}
-            <RaceSelectionCard />
-            {/* Birth Sign Selection and Display */}
-            <BirthsignSelectionCard />
-            {/* Trait Selection and Display */}
-            <TraitSelectionCard />
-            {/* Religion Selection and Display */}
-            <ReligionSelectionCard />
-          </div>
-
-          {/* NEW: Attribute Assignment Card */}
-          <div className="mb-6">
-            <AttributeAssignmentCard />
-          </div>
-
-          {/* Skill Selection and Display - Double Wide */}
-          <div className="mb-6">
-            <BuildPageSkillCard />
-          </div>
-
-          {/* Destiny Section */}
-          <BuildPageDestinyCard navigate={navigate} />
-
-          {/* Build Summary */}
-          <BuildSummaryCard build={build} />
+          {/* Build Cards in Masonry Layout */}
+          <BuildMasonryGrid cards={buildCards} gap={16} />
         </TabsContent>
         <TabsContent value="config">
           {/* Trait Limits Configuration */}

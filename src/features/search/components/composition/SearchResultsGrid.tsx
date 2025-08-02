@@ -1,23 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import Masonry from 'react-masonry-css'
 import { Button } from '@/shared/ui/ui/button'
-import { List, LayoutGrid } from 'lucide-react'
-import { SearchCard } from '../atomic/SearchCard'
+import { LayoutGrid, List } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import type { SearchableItem } from '../../model/SearchModel'
-import './search-masonry.css'
+import { SearchCard } from '../atomic/SearchCard'
+import { VirtualMasonryGrid } from './VirtualMasonryGrid'
 
 interface SearchResultsGridProps {
   items: SearchableItem[]
   className?: string
   viewMode?: 'list' | 'grid'
   onViewModeChange?: (mode: 'list' | 'grid') => void
-}
-
-// Responsive breakpoints for masonry
-const breakpointColumnsObj = {
-  default: 3,
-  1100: 2,
-  700: 1,
 }
 
 export function SearchResultsGrid({
@@ -98,22 +90,21 @@ export function SearchResultsGrid({
 
       {/* Results Section */}
       {viewMode === 'grid' ? (
-        <Masonry
-          breakpointCols={breakpointColumnsObj}
-          className="search-masonry-grid"
-          columnClassName="search-masonry-grid_column"
-        >
-          {items.map(item => (
-            <div key={item.id} className="mb-4">
-              <SearchCard
-                item={item}
-                isExpanded={true}
-                onToggle={() => {}} // No-op in grid view
-                viewMode="grid"
-              />
-            </div>
-          ))}
-        </Masonry>
+        <VirtualMasonryGrid
+          items={items}
+          keyExtractor={item => item.id}
+          renderItem={item => (
+            <SearchCard
+              item={item}
+              isExpanded={true}
+              onToggle={() => {}} // No-op in grid view
+              viewMode="grid"
+            />
+          )}
+          columns={3}
+          gap={16}
+          maxColumnWidth={400}
+        />
       ) : (
         <div className="space-y-2">
           {items.map(item => {
