@@ -1,38 +1,24 @@
-// Pure data fetching - no UI dependencies
-import type { Skill, PerkTree } from './types'
-import { getDataUrl } from '@/shared/utils/baseUrl'
+// Pure data access - now uses centralized stores
+import { usePerkTreesStore } from '@/shared/stores/perkTreesStore'
+import { useSkillsStore } from '@/shared/stores/skillsStore'
+import type { PerkTree, Skill } from './types'
 
-export async function fetchSkills(): Promise<Skill[]> {
-  const response = await fetch(getDataUrl('data/skills.json'))
-  if (!response.ok) {
-    throw new Error('Failed to load skills data')
-  }
-  const data = await response.json()
-  return (data.skills || []).sort((a: Skill, b: Skill) =>
-    a.name.localeCompare(b.name)
-  )
+export function fetchSkills(): Skill[] {
+  const skills = useSkillsStore.getState().data
+  return skills.sort((a: Skill, b: Skill) => a.name.localeCompare(b.name))
 }
 
-export async function fetchPerkTrees(): Promise<PerkTree[]> {
-  const response = await fetch(getDataUrl('data/perk-trees.json'))
-  if (!response.ok) {
-    throw new Error('Failed to load perk trees data')
-  }
-  return response.json()
+export function fetchPerkTrees(): PerkTree[] {
+  return usePerkTreesStore.getState().data
 }
 
-export async function fetchSkillsAndPerks(): Promise<{
+export function fetchSkillsAndPerks(): {
   skills: Skill[]
   perkTrees: PerkTree[]
-}> {
-  try {
-    const [skills, perkTrees] = await Promise.all([
-      fetchSkills(),
-      fetchPerkTrees(),
-    ])
-    return { skills, perkTrees }
-  } catch (error) {
-    throw new Error(`Failed to load skills and perks data: ${error}`)
+} {
+  return {
+    skills: fetchSkills(),
+    perkTrees: fetchPerkTrees(),
   }
 }
 
@@ -74,4 +60,4 @@ export function getPerkCountForSkill(
 ): number {
   const tree = getPerkTreeForSkill(skillId, perkTrees)
   return tree ? tree.perks.length : 0
-} 
+}

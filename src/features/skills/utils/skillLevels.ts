@@ -1,5 +1,3 @@
-import perkTreesData from '../../../../public/data/perk-trees.json'
-
 interface SkillLevelRequirement {
   skill: string
   level: number
@@ -48,6 +46,15 @@ interface PerkTree {
   perks: Perk[]
 }
 
+import { usePerkTreesStore } from '@/shared/stores/perkTreesStore'
+
+/**
+ * Get perk trees data from the centralized store
+ */
+function getPerkTreesData(): PerkTree[] {
+  return usePerkTreesStore.getState().data
+}
+
 /**
  * Calculate the minimum skill level required for a given skill based on selected perks
  * @param skillId - The skill ID (e.g., 'AVSmithing')
@@ -64,8 +71,11 @@ export function calculateMinimumSkillLevel(
     return 0
   }
 
+  // Get perk trees data from store
+  const perkTreesData = getPerkTreesData()
+
   // Find the perk tree for this skill
-  const perkTree = (perkTreesData as PerkTree[]).find(tree => tree.treeId === skillId)
+  const perkTree = perkTreesData.find(tree => tree.treeId === skillId)
   if (!perkTree) {
     return 0
   }
@@ -108,7 +118,11 @@ export function calculateAllSkillLevels(perks: {
   // Calculate minimum level for each skill that has selected perks
   for (const [skillId, selectedPerks] of Object.entries(perks.selected)) {
     if (selectedPerks.length > 0) {
-      const minLevel = calculateMinimumSkillLevel(skillId, selectedPerks, perks.ranks)
+      const minLevel = calculateMinimumSkillLevel(
+        skillId,
+        selectedPerks,
+        perks.ranks
+      )
       // Only include skills that actually have level requirements
       if (minLevel > 0) {
         skillLevels[skillId] = minLevel
@@ -117,4 +131,4 @@ export function calculateAllSkillLevels(perks: {
   }
 
   return skillLevels
-} 
+}

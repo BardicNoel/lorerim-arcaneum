@@ -1,5 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
-import { calculateMinimumSkillLevel, calculateAllSkillLevels } from '../skillLevels'
+import { describe, expect, it, vi } from 'vitest'
+import {
+  calculateAllSkillLevels,
+  calculateMinimumSkillLevel,
+} from '../skillLevels'
 
 // Mock perk trees data for testing
 const mockPerkTreesData = [
@@ -19,17 +22,20 @@ const mockPerkTreesData = [
             name: 'Craftsmanship',
             description: {
               base: 'You know how to use tools.',
-              subtext: 'You understand material properties.'
+              subtext: 'You understand material properties.',
             },
             prerequisites: {
-              items: [{ type: 'INGR', id: '0x8C35B997' }]
-            }
-          }
+              items: [{ type: 'INGR', id: '0x8C35B997' }],
+            },
+          },
         ],
         totalRanks: 1,
-        connections: { parents: [], children: ['REQ_Smithing_DwarvenSmithing'] },
+        connections: {
+          parents: [],
+          children: ['REQ_Smithing_DwarvenSmithing'],
+        },
         isRoot: false,
-        position: { x: 4, y: 2, horizontal: -0.085, vertical: -0.085 }
+        position: { x: 4, y: 2, horizontal: -0.085, vertical: -0.085 },
       },
       {
         edid: 'REQ_Smithing_DwarvenSmithing',
@@ -41,18 +47,18 @@ const mockPerkTreesData = [
             name: 'Dwarven Smithing',
             description: {
               base: 'You can create Dwarven equipment.',
-              subtext: 'You have the secret knowledge.'
+              subtext: 'You have the secret knowledge.',
             },
             prerequisites: {
               skillLevel: { skill: 'Smithing', level: 25 },
-              items: [{ type: 'INGR', id: '0x8C05CBC7' }]
-            }
-          }
+              items: [{ type: 'INGR', id: '0x8C05CBC7' }],
+            },
+          },
         ],
         totalRanks: 1,
         connections: { parents: ['REQ_Smithing_Craftsmanship'], children: [] },
         isRoot: false,
-        position: { x: 2, y: 2, horizontal: -0.071, vertical: -0.057 }
+        position: { x: 2, y: 2, horizontal: -0.071, vertical: -0.057 },
       },
       {
         edid: 'REQ_Smithing_OrcishSmithing',
@@ -64,27 +70,36 @@ const mockPerkTreesData = [
             name: 'Orcish Smithing',
             description: {
               base: 'You can craft Orcish equipment.',
-              subtext: 'You have studied the almanac.'
+              subtext: 'You have studied the almanac.',
             },
             prerequisites: {
               skillLevel: { skill: 'Smithing', level: 50 },
-              items: [{ type: 'INGR', id: '0x8C05CBCA' }]
-            }
-          }
+              items: [{ type: 'INGR', id: '0x8C05CBCA' }],
+            },
+          },
         ],
         totalRanks: 1,
-        connections: { parents: ['REQ_Smithing_DwarvenSmithing'], children: [] },
+        connections: {
+          parents: ['REQ_Smithing_DwarvenSmithing'],
+          children: [],
+        },
         isRoot: false,
-        position: { x: 2, y: 3, horizontal: -0.042, vertical: -0.071 }
-      }
-    ]
-  }
+        position: { x: 2, y: 3, horizontal: -0.042, vertical: -0.071 },
+      },
+    ],
+  },
 ]
 
-// Mock the perk trees data import
-vi.mock('../../../public/data/perk-trees.json', () => ({
-  default: mockPerkTreesData
-}))
+// Mock fetch for perk trees data
+vi.stubGlobal(
+  'fetch',
+  vi.fn(() =>
+    Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve(mockPerkTreesData),
+    })
+  )
+)
 
 describe('skillLevels', () => {
   describe('calculateMinimumSkillLevel', () => {
@@ -94,7 +109,11 @@ describe('skillLevels', () => {
     })
 
     it('should return 0 when skill tree is not found', () => {
-      const result = calculateMinimumSkillLevel('NonExistentSkill', ['some-perk'], {})
+      const result = calculateMinimumSkillLevel(
+        'NonExistentSkill',
+        ['some-perk'],
+        {}
+      )
       expect(result).toBe(0)
     })
 
@@ -129,7 +148,7 @@ describe('skillLevels', () => {
       const result = calculateMinimumSkillLevel(
         'AVSmithing',
         ['REQ_Smithing_DwarvenSmithing'],
-        { 'REQ_Smithing_DwarvenSmithing': 1 }
+        { REQ_Smithing_DwarvenSmithing: 1 }
       )
       expect(result).toBe(25)
     })
@@ -153,17 +172,20 @@ describe('skillLevels', () => {
     it('should calculate skill levels for multiple skills', () => {
       const perks = {
         selected: {
-          'AVSmithing': ['REQ_Smithing_DwarvenSmithing', 'REQ_Smithing_OrcishSmithing'],
-          'AVHeavyArmor': ['REQ_HeavyArmor_Conditioning']
+          AVSmithing: [
+            'REQ_Smithing_DwarvenSmithing',
+            'REQ_Smithing_OrcishSmithing',
+          ],
+          AVHeavyArmor: ['REQ_HeavyArmor_Conditioning'],
         },
-        ranks: {}
+        ranks: {},
       }
-      
+
       const result = calculateAllSkillLevels(perks)
-      
+
       // Should include AVSmithing with level 50 (highest requirement)
       expect(result['AVSmithing']).toBe(50)
-      
+
       // Should not include AVHeavyArmor since it's not in our mock data
       expect(result['AVHeavyArmor']).toBeUndefined()
     })
@@ -171,15 +193,15 @@ describe('skillLevels', () => {
     it('should handle perks with no skill level requirements', () => {
       const perks = {
         selected: {
-          'AVSmithing': ['REQ_Smithing_Craftsmanship']
+          AVSmithing: ['REQ_Smithing_Craftsmanship'],
         },
-        ranks: {}
+        ranks: {},
       }
-      
+
       const result = calculateAllSkillLevels(perks)
-      
+
       // Should not include skills with no level requirements
       expect(result['AVSmithing']).toBeUndefined()
     })
   })
-}) 
+})
