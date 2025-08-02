@@ -1,5 +1,3 @@
-import React from 'react'
-import { cn } from '@/lib/utils'
 import { GenericAccordionCard } from '@/shared/components/generic'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
@@ -8,10 +6,10 @@ import { H3, P } from '@/shared/ui/ui/typography'
 import { ExternalLink, Star } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import type { Race } from '../../types'
-import { RaceAvatar, CategoryBadge } from '../atomic'
-import { RaceStatsDisplay } from './RaceStatsDisplay'
+import { CategoryBadge, RaceAvatar } from '../atomic'
 import { RaceEffectsDisplay } from './RaceEffectsDisplay'
 import { RaceKeywordsDisplay } from './RaceKeywordsDisplay'
+import { RaceStatsDisplay } from './RaceStatsDisplay'
 
 interface RaceCardProps {
   item?: PlayerCreationItem
@@ -57,35 +55,25 @@ export function RaceCard({
       onToggle={onToggle || (() => {})}
       className={className}
     >
-      {/* Left Controls */}
-      <div className="flex items-center gap-3">
-        {showToggle && (
-          <AddToBuildSwitchSimple
-            itemId={originalRace?.edid || item?.id || ''}
-            itemType="race"
-            itemName={displayName}
-          />
-        )}
-      </div>
-
       {/* Header Content */}
-      <div className="flex items-center gap-3">
-        {/* Left side: Avatar + Name */}
-        <div className="flex items-center gap-3">
-          <RaceAvatar raceName={displayName} size="md" />
-          <H3 className="text-primary font-semibold">{displayName}</H3>
+      <div className="flex items-start justify-between">
+        {/* Left side: Avatar + Name + Badge */}
+        <div className="flex items-start gap-3">
+          <RaceAvatar raceName={displayName} size="2xl" />
+          <div className="flex flex-col gap-1">
+            <H3 className="text-primary font-semibold">{displayName}</H3>
+            {/* Race type tag */}
+            {displayCategory && (
+              <CategoryBadge
+                category={displayCategory as 'Human' | 'Elf' | 'Beast'}
+                size="sm"
+              />
+            )}
+          </div>
         </div>
 
-        {/* Right side: Classification + Effects + Optional View All Button */}
-        <div className="flex items-center gap-3 ml-auto">
-          {/* Race type tag */}
-          {displayCategory && (
-            <CategoryBadge 
-              category={displayCategory as 'Human' | 'Elf' | 'Beast'} 
-              size="sm" 
-            />
-          )}
-
+        {/* Right side: Switch + Effects + Optional View All Button */}
+        <div className="flex items-center gap-3">
           {/* Quick effects preview */}
           {displayEffects && displayEffects.length > 0 && (
             <div className="hidden md:flex items-center gap-2 text-xs text-muted-foreground">
@@ -108,6 +96,15 @@ export function RaceCard({
               {viewAllButtonText}
             </Button>
           )}
+
+          {/* Switch */}
+          {showToggle && (
+            <AddToBuildSwitchSimple
+              itemId={originalRace?.edid || item?.id || ''}
+              itemType="race"
+              itemName={displayName}
+            />
+          )}
         </div>
       </div>
 
@@ -119,10 +116,10 @@ export function RaceCard({
         </div>
 
         {/* Quick effects */}
-        <RaceEffectsDisplay 
-          effects={displayEffects} 
-          maxDisplay={2} 
-          compact={true} 
+        <RaceEffectsDisplay
+          effects={displayEffects}
+          maxDisplay={2}
+          compact={true}
         />
       </div>
 
@@ -137,7 +134,7 @@ export function RaceCard({
 
         {/* Race Stats */}
         {originalRace?.startingStats && (
-          <RaceStatsDisplay 
+          <RaceStatsDisplay
             stats={originalRace.startingStats}
             regeneration={originalRace.regeneration}
             title="Starting Stats"
@@ -146,10 +143,10 @@ export function RaceCard({
 
         {/* Race Effects */}
         {originalRace?.racialSpells && originalRace.racialSpells.length > 0 && (
-          <RaceEffectsDisplay 
+          <RaceEffectsDisplay
             effects={originalRace.racialSpells.map(spell => ({
               name: spell.name,
-              description: spell.description
+              description: spell.description,
             }))}
             title="Racial Abilities"
           />
@@ -157,7 +154,7 @@ export function RaceCard({
 
         {/* Race Keywords */}
         {originalRace?.keywords && originalRace.keywords.length > 0 && (
-          <RaceKeywordsDisplay 
+          <RaceKeywordsDisplay
             keywords={originalRace.keywords.map(k => k.edid)}
             title="Keywords"
           />
@@ -165,4 +162,4 @@ export function RaceCard({
       </div>
     </GenericAccordionCard>
   )
-} 
+}

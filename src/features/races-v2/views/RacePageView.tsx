@@ -9,9 +9,8 @@ import type {
 import { AccordionGrid } from '@/shared/components/ui'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Button } from '@/shared/ui/ui/button'
-import { ArrowLeft, Grid3X3, List, X } from 'lucide-react'
+import { Grid3X3, List, X } from 'lucide-react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useRaceData, useRaceFilters, useRaceState } from '../adapters'
 import { RaceAccordion } from '../components/composition/RaceAccordion'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
@@ -19,7 +18,6 @@ import type { Race } from '../types'
 import { raceToPlayerCreationItem } from '../utils/raceToPlayerCreationItem'
 
 export function RacePageView() {
-  const navigate = useNavigate()
   const { build } = useCharacterBuild()
 
   const { races, isLoading, error } = useRaceData()
@@ -243,19 +241,6 @@ export function RacePageView() {
       title="Races"
       description="Choose your character's race. Each race has unique abilities, starting attributes, and racial traits that will shape your journey through Tamriel."
     >
-      {/* Header with back button */}
-      <div className="flex items-center justify-between mb-6">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => navigate('/build')}
-          className="flex items-center gap-2"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Build
-        </Button>
-      </div>
-
       {/* Custom MultiAutocompleteSearch with FuzzySearchBox for keywords */}
       <div className="flex items-center gap-4 mb-4">
         <div className="flex-1">

@@ -10,7 +10,7 @@ export type EntityType = 'race' | 'religion' | 'trait' | 'destiny' | 'birthsign'
 /**
  * Avatar size options
  */
-export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl'
+export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl'
 
 /**
  * Centralized avatar management for all entity types.
@@ -64,6 +64,7 @@ const sizeClasses: Record<AvatarSize, string> = {
   md: 'w-10 h-10',
   lg: 'w-12 h-12',
   xl: 'w-16 h-16',
+  '2xl': 'w-16 h-16', // 64px (w-16 = 4rem = 64px)
 }
 
 // Text size classes for fallback avatars
@@ -72,6 +73,7 @@ const textSizeClasses: Record<AvatarSize, string> = {
   md: 'text-lg',
   lg: 'text-xl',
   xl: 'text-2xl',
+  '2xl': 'text-3xl',
 }
 
 export function EntityAvatar({
@@ -116,7 +118,7 @@ export function EntityAvatar({
           `assets/${entityType === 'birthsign' ? 'sign-avatar' : `${entityType}-avatar`}/${avatarFileName}`
         )}
         alt={`${entityName} avatar`}
-        className="w-full h-full object-contain p-1 dark:brightness-0"
+        className="w-full h-full object-contain dark:brightness-0"
         onError={() => setImageError(true)}
         loading="lazy"
       />
