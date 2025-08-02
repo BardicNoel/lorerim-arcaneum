@@ -1,14 +1,15 @@
 import { AccordionBirthsignsPage } from '@/features/birthsigns/pages/AccordionBirthsignsPage'
+import { CookbookPage } from '@/features/cookbook/pages'
 import { UnifiedDestinyPage } from '@/features/destiny'
 import { RacesMVADemoPage } from '@/features/races-v2'
 import { RacePageView } from '@/features/races-v2/views/RacePageView'
 import { AccordionReligionsPage } from '@/features/religions/pages/AccordionReligionsPage'
 import { SimpleSearchPage } from '@/features/search'
+import { VirtualMasonryDemoPage } from '@/features/search/pages/VirtualMasonryDemoPage'
 import { SkillsPage } from '@/features/skills'
 import { SkillsPageExperimental } from '@/features/skills/pages/SkillsPageExperimental'
 import { SpellsPage } from '@/features/spells'
 import { AccordionTraitsPage } from '@/features/traits/pages/AccordionTraitsPage'
-import { CookbookPage } from '@/features/cookbook/pages'
 import { BuildPage } from '@/pages/BuildPage'
 import CraftingPage from '@/pages/CraftingPage'
 import EquipmentPage from '@/pages/EquipmentPage'
@@ -40,6 +41,10 @@ export const AppRouter = () => {
 
       {/* Other pages */}
       <Route path="/search" element={<SimpleSearchPage />} />
+      <Route
+        path="/virtual-masonry-demo"
+        element={<VirtualMasonryDemoPage />}
+      />
       <Route path="/races-mva-demo" element={<RacesMVADemoPage />} />
       <Route path="/skills-mva" element={<SkillsPage />} />
       <Route path="/skills-experimental" element={<SkillsPageExperimental />} />
