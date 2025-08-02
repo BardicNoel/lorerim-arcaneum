@@ -1,5 +1,5 @@
-import { useCharacterStore } from '@/shared/stores/characterStore'
 import { calculateAllSkillLevels } from '@/features/skills/utils/skillLevels'
+import { useCharacterStore } from '@/shared/stores/characterStore'
 
 export function useCharacterBuild() {
   // Specific selectors for better reactivity
@@ -34,7 +34,9 @@ export function useCharacterBuild() {
         skills: newSkills,
       })
     } else {
-      console.log('addMajorSkill - skill already major or limit reached, skipping')
+      console.log(
+        'addMajorSkill - skill already major or limit reached, skipping'
+      )
     }
   }
 
@@ -209,7 +211,7 @@ export function useCharacterBuild() {
     console.log('addPerk called:', { skillId, perkId })
     const currentPerks = build?.perks?.selected ?? {}
     const skillPerks = currentPerks[skillId] ?? []
-    
+
     if (!skillPerks.includes(perkId)) {
       const newPerks = {
         ...build?.perks,
@@ -218,13 +220,13 @@ export function useCharacterBuild() {
           [skillId]: [...skillPerks, perkId],
         },
       }
-      
+
       // Calculate new skill levels based on updated perks
       const newSkillLevels = calculateAllSkillLevels(newPerks)
-      
+
       console.log('addPerk - updating build with new perks:', newPerks)
       console.log('addPerk - calculated skill levels:', newSkillLevels)
-      
+
       updateBuild({
         perks: newPerks,
         skillLevels: newSkillLevels,
@@ -237,9 +239,9 @@ export function useCharacterBuild() {
   const removePerk = (skillId: string, perkId: string) => {
     const currentPerks = build?.perks?.selected ?? {}
     const skillPerks = currentPerks[skillId] ?? []
-    
+
     const newSkillPerks = skillPerks.filter(id => id !== perkId)
-    
+
     const newPerks = {
       ...build?.perks,
       selected: {
@@ -247,10 +249,10 @@ export function useCharacterBuild() {
         [skillId]: newSkillPerks,
       },
     }
-    
+
     // Calculate new skill levels based on updated perks
     const newSkillLevels = calculateAllSkillLevels(newPerks)
-    
+
     updateBuild({
       perks: newPerks,
       skillLevels: newSkillLevels,
@@ -260,7 +262,7 @@ export function useCharacterBuild() {
   const setPerkRank = (perkId: string, rank: number) => {
     console.log('setPerkRank called:', { perkId, rank })
     const currentRanks = build?.perks?.ranks ?? {}
-    
+
     const newPerks = {
       ...build?.perks,
       ranks: {
@@ -268,13 +270,13 @@ export function useCharacterBuild() {
         [perkId]: rank,
       },
     }
-    
+
     // Calculate new skill levels based on updated perks
     const newSkillLevels = calculateAllSkillLevels(newPerks)
-    
+
     console.log('setPerkRank - updating build with new ranks:', newPerks)
     console.log('setPerkRank - calculated skill levels:', newSkillLevels)
-    
+
     updateBuild({
       perks: newPerks,
       skillLevels: newSkillLevels,
@@ -284,10 +286,10 @@ export function useCharacterBuild() {
   const clearSkillPerks = (skillId: string) => {
     const currentPerks = build?.perks?.selected ?? {}
     const currentRanks = build?.perks?.ranks ?? {}
-    
+
     // Remove all perks for this skill
     const { [skillId]: removedPerks, ...remainingPerks } = currentPerks
-    
+
     // Remove ranks for removed perks
     const newRanks = { ...currentRanks }
     if (removedPerks) {
@@ -295,16 +297,16 @@ export function useCharacterBuild() {
         delete newRanks[perkId]
       })
     }
-    
+
     const newPerks = {
       ...build?.perks,
       selected: remainingPerks,
       ranks: newRanks,
     }
-    
+
     // Calculate new skill levels based on updated perks
     const newSkillLevels = calculateAllSkillLevels(newPerks)
-    
+
     updateBuild({
       perks: newPerks,
       skillLevels: newSkillLevels,
@@ -529,19 +531,23 @@ export function useCharacterBuild() {
  * @param perkId - The perk's id
  * @param maxRank - The maximum rank for this perk
  */
-export function usePerkNodeCycle(skillId: string, perkId: string, maxRank: number) {
-  const { getPerkRank, addPerk, setPerkRank, removePerk } = useCharacterBuild();
+export function usePerkNodeCycle(
+  skillId: string,
+  perkId: string,
+  maxRank: number
+) {
+  const { getPerkRank, addPerk, setPerkRank, removePerk } = useCharacterBuild()
 
   return () => {
-    const currentRank = getPerkRank(perkId) || 0;
+    const currentRank = getPerkRank(perkId) || 0
     if (currentRank === 0) {
-      addPerk(skillId, perkId);
-      setPerkRank(perkId, 1);
+      addPerk(skillId, perkId)
+      setPerkRank(perkId, 1)
     } else if (currentRank > 0 && currentRank < maxRank) {
-      setPerkRank(perkId, currentRank + 1);
+      setPerkRank(perkId, currentRank + 1)
     } else if (currentRank === maxRank) {
-      removePerk(skillId, perkId);
-      setPerkRank(perkId, 0);
+      removePerk(skillId, perkId)
+      setPerkRank(perkId, 0)
     }
-  };
+  }
 }

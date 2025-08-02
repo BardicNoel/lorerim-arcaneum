@@ -1,13 +1,11 @@
+import { useTraitsStore } from '@/shared/stores/traitsStore'
 import { useMemo, useState } from 'react'
-import type { Trait, TraitFilters } from '../types'
+import type { TraitFilters } from '../types'
 import {
   getAllCategories,
   getAllEffectTypes,
   getAllTags,
 } from '../utils/dataTransform'
-
-// Import trait data
-import traitData from '../../../../public/data/traits.json'
 
 export function useTraits() {
   const [filters, setFilters] = useState<TraitFilters>({
@@ -16,29 +14,8 @@ export function useTraits() {
     tags: [],
   })
 
-  // Transform and validate the trait data
-  const traits = useMemo(() => {
-    const rawData = (traitData as { traits: Trait[] }).traits
-
-    // Basic validation
-    if (!rawData || !Array.isArray(rawData)) {
-      console.error('Invalid trait data structure detected')
-      return []
-    }
-
-    // Sanitize each trait to ensure data integrity
-    const sanitizedTraits = rawData.map(trait => ({
-      ...trait,
-      name: trait.name || 'Unknown Trait',
-      description: trait.description || '',
-      category: trait.category || 'misc',
-      tags: trait.tags || [],
-      effects: trait.effects || [],
-    }))
-
-    console.log(`Successfully loaded ${sanitizedTraits.length} traits`)
-    return sanitizedTraits
-  }, [])
+  // Use the centralized traits store
+  const { data: traits, loading, error } = useTraitsStore()
 
   // Filter traits based on current filters
   const filteredTraits = useMemo(() => {
@@ -50,8 +27,8 @@ export function useTraits() {
           trait.name,
           trait.description,
           trait.category,
-          ...trait.tags,
-          ...trait.effects.map(effect => effect.type),
+          ...(trait.tags || []),
+          ...(trait.effects?.map(effect => effect.type) || []),
         ]
           .join(' ')
           .toLowerCase()
@@ -66,9 +43,9 @@ export function useTraits() {
       if (filters.tags.length > 0) {
         const hasMatchingTag = filters.tags.some(tag => {
           return (
-            trait.tags.includes(tag) ||
+            trait.tags?.includes(tag) ||
             trait.category === tag ||
-            trait.effects.some(effect => effect.type === tag)
+            trait.effects?.some(effect => effect.type === tag)
           )
         })
 
@@ -87,8 +64,8 @@ export function useTraits() {
   return {
     traits: filteredTraits,
     allTraits: traits,
-    loading: false,
-    error: null,
+    loading,
+    error,
     filters,
     setFilters,
     allCategories,
