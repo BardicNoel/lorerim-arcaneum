@@ -34,12 +34,6 @@ export function VirtualMasonryGrid<T>({
     return columns
   }, [columns, maxColumnWidth, containerWidth])
 
-  // Calculate item width based on current columns
-  const getItemWidth = useCallback(() => {
-    const currentColumns = getResponsiveColumns()
-    return `calc(${100 / currentColumns}% - ${gap}px)`
-  }, [getResponsiveColumns, gap])
-
   // Handle resize to recalculate layout
   useEffect(() => {
     const handleResize = () => {
@@ -78,17 +72,24 @@ export function VirtualMasonryGrid<T>({
     return () => observer.disconnect()
   }, [loadMore, hasMore, items.length])
 
-  // Render grid items
-  const renderGridItems = useCallback(() => {
-    return items.map((item, index) => {
-      const key = keyExtractor(item)
-      const itemWidth = getItemWidth()
+  // Create masonry columns
+  const renderMasonryColumns = useCallback(() => {
+    const currentColumns = getResponsiveColumns()
+    const columns: React.ReactNode[][] = Array.from(
+      { length: currentColumns },
+      () => []
+    )
 
-      return (
+    // Distribute items across columns
+    items.forEach((item, index) => {
+      const columnIndex = index % currentColumns
+      const key = keyExtractor(item)
+
+      columns[columnIndex].push(
         <div
           key={key}
           style={{
-            width: itemWidth,
+            width: '100%',
             marginBottom: `${gap}px`,
           }}
         >
@@ -96,7 +97,19 @@ export function VirtualMasonryGrid<T>({
         </div>
       )
     })
-  }, [items, keyExtractor, renderItem, getItemWidth, gap])
+
+    return columns.map((columnItems, columnIndex) => (
+      <div
+        key={columnIndex}
+        style={{
+          width: `calc(${100 / currentColumns}% - ${gap / 2}px)`,
+          marginRight: columnIndex < currentColumns - 1 ? `${gap}px` : 0,
+        }}
+      >
+        {columnItems}
+      </div>
+    ))
+  }, [items, keyExtractor, renderItem, getResponsiveColumns, gap])
 
   if (items.length === 0) {
     return (
@@ -110,13 +123,11 @@ export function VirtualMasonryGrid<T>({
     <div ref={containerRef} className={className}>
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${getResponsiveColumns()}, 1fr)`,
-          gap: `${gap}px`,
+          display: 'flex',
           width: '100%',
         }}
       >
-        {renderGridItems()}
+        {renderMasonryColumns()}
       </div>
     </div>
   )
