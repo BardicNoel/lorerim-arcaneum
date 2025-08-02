@@ -1,0 +1,442 @@
+[
+  {
+    "name": "Warrior",
+    "group": "Warrior",
+    "description": "Those under the sign of the Warrior have increased strength and endurance. Health increases by <50>, all weapons deal <10>% more damage, armor penetration with all weapons is increased by <5> (doubling when the corresponding weapon skill is mastered), unarmed strikes do <10> additional damage.",
+    "powers": [],
+    "edid": "REQ_Ability_Birthsign_Warrior",
+    "formid": "0x000E5F4C",
+    "stat_modifications": [
+      {
+        "stat": "health",
+        "type": "bonus",
+        "value": 50,
+        "value_type": "flat"
+      },
+      {
+        "stat": "weapon_damage",
+        "type": "bonus",
+        "value": 10,
+        "value_type": "percentage"
+      },
+      {
+        "stat": "armor_penetration",
+        "type": "bonus",
+        "value": 5,
+        "value_type": "flat"
+      },
+      {
+        "stat": "unarmed_damage",
+        "type": "bonus",
+        "value": 10,
+        "value_type": "flat"
+      }
+    ],
+    "skill_bonuses": [],
+    "conditional_effects": [
+      {
+        "stat": "weapon_damage",
+        "type": "conditional",
+        "value": 2,
+        "value_type": "multiplier",
+        "condition": "when weapon skill is mastered",
+        "description": "Effect doubles when weapon skill is mastered"
+      }
+    ],
+    "mastery_effects": []
+  },
+  {
+    "name": "Lady",
+    "group": "Warrior",
+    "description": "Those under the sign of the Lady have increased vitality. Health and stamina increase by <25>, health and stamina regenerate <40>% faster (doubling when a warrior skill is mastered), you can run or swim without exertion.",
+    "powers": [],
+    "edid": "REQ_Ability_Birthsign_Lady",
+    "formid": "0x000E5F54",
+    "stat_modifications": [
+      {
+        "stat": "health",
+        "type": "bonus",
+        "value": 25,
+        "value_type": "flat"
+      },
+      {
+        "stat": "stamina",
+        "type": "bonus",
+        "value": 25,
+        "value_type": "flat"
+      },
+      {
+        "stat": "stamina_regeneration",
+        "type": "bonus",
+        "value": 40,
+        "value_type": "percentage"
+      },
+      {
+        "stat": "health_regeneration",
+        "type": "bonus",
+        "value": 25,
+        "value_type": "percentage"
+      }
+    ],
+    "skill_bonuses": [],
+    "conditional_effects": [
+      {
+        "stat": "health_regeneration",
+        "type": "conditional",
+        "value": 2,
+        "value_type": "multiplier",
+        "condition": "when warrior skill is mastered",
+        "description": "Effect doubles when warrior skill is mastered"
+      }
+    ],
+    "mastery_effects": []
+  },
+  {
+    "name": "Lord",
+    "group": "Warrior",
+    "description": "The Stone of the Lord grants natural regeneration and weakened hostile spells, but also afflicts them with the Trollkin curse. <10>% Magic Resist, <150> Armor Rating, <25>% Weakness to Fire if you have not mastered a warrior skill.",
+    "powers": [],
+    "edid": "REQ_Ability_Birthsign_Lord",
+    "formid": "0x000E5F58",
+    "stat_modifications": [
+      {
+        "stat": "fire_resistance",
+        "type": "penalty",
+        "value": -25,
+        "value_type": "percentage"
+      }
+    ],
+    "skill_bonuses": [],
+    "conditional_effects": [],
+    "mastery_effects": []
+  },
+  {
+    "name": "Steed",
+    "group": "Warrior",
+    "description": "Those under the sign of the Steed have increased speed. Movement is <10>% faster, sprinting is <10>% faster, carry weight increases by <25>, stamina increased by <50>, most slow effects don't affect you. Restore <1> stamina per second if you have mastered a warrior skill.",
+    "powers": [],
+    "edid": "REQ_Ability_Birthsign_Steed",
+    "formid": "0x000E5F5E",
+    "stat_modifications": [
+      {
+        "stat": "stamina",
+        "type": "bonus",
+        "value": 50,
+        "value_type": "flat"
+      },
+      {
+        "stat": "movement_speed",
+        "type": "bonus",
+        "value": 10,
+        "value_type": "percentage"
+      },
+      {
+        "stat": "sprint_speed",
+        "type": "bonus",
+        "value": 10,
+        "value_type": "percentage"
+      },
+      {
+        "stat": "carry_weight",
+        "type": "bonus",
+        "value": 25,
+        "value_type": "flat"
+      }
+    ],
+    "skill_bonuses": [],
+    "conditional_effects": [],
+    "mastery_effects": [
+      {
+        "stat": "mastery_bonus",
+        "type": "bonus",
+        "value": 1,
+        "value_type": "flat",
+        "condition": "if you have mastered a warrior skill.",
+        "description": "restore stamina per second if you have mastered a warrior skill."
+      }
+    ]
+  },
+  {
+    "name": "Mage",
+    "group": "Mage",
+    "description": "Those under the sign of the Mage have increased magicka reserves and cast more potent spells. Magicka increases by <150>. Spells are 10% stronger, doubling up to 20% when you master the relevant magic skill.",
+    "powers": [],
+    "edid": "REQ_Ability_Birthsign_Mage",
+    "formid": "0x000E5F47",
+    "stat_modifications": [
+      {
+        "stat": "magicka",
+        "type": "bonus",
+        "value": 150,
+        "value_type": "flat"
+      },
+      {
+        "stat": "spell_strength",
+        "type": "bonus",
+        "value": 10,
+        "value_type": "percentage"
+      }
+    ],
+    "skill_bonuses": [],
+    "conditional_effects": [
+      {
+        "stat": "magicka",
+        "type": "conditional",
+        "value": 2,
+        "value_type": "multiplier",
+        "condition": "when the relevant magic skill is mastered",
+        "description": "Effect doubles when the relevant magic skill is mastered"
+      }
+    ],
+    "mastery_effects": []
+  },
+  {
+    "name": "Apprentice",
+    "group": "Mage",
+    "description": "Those under the sign of the Apprentice have increased magicka and faster regeneration, but also have a weakness to magic. Magicka increases by <100>, magicka regenerates an extra 5 per second, magic deals <25>% more damage to you if you have not mastered any magical skills.",
+    "powers": [],
+    "edid": "REQ_Ability_Birthsign_Apprentice",
+    "formid": "0x000E5F4E",
+    "stat_modifications": [
+      {
+        "stat": "magicka",
+        "type": "bonus",
+        "value": 100,
+        "value_type": "flat"
+      },
+      {
+        "stat": "magicka_regeneration",
+        "type": "bonus",
+        "value": 5,
+        "value_type": "flat"
+      }
+    ],
+    "skill_bonuses": [],
+    "conditional_effects": [],
+    "mastery_effects": []
+  },
+  {
+    "name": "Atronach",
+    "group": "Mage",
+    "description": "Those under the sign of the Atronach have deep reserves of magicka and can absorb harmful magic, but cannot generate magicka on their own. Magicka increases by <200> increasing up to <300> when you master a magic skill, you do not lose magicka when hit, increases chance to absorb the magicka from hostile spells by <30>%, you cannot regenerate magicka by yourself or non-magical sources.",
+    "powers": [],
+    "edid": "REQ_Ability_Birthsign_Atronach",
+    "formid": "0x000E5F51",
+    "stat_modifications": [
+      {
+        "stat": "magicka",
+        "type": "bonus",
+        "value": 200,
+        "value_type": "flat"
+      }
+    ],
+    "skill_bonuses": [],
+    "conditional_effects": [],
+    "mastery_effects": []
+  },
+  {
+    "name": "Ritual",
+    "group": "Mage",
+    "description": "Those under the sign of the Ritual have various abilities depending on the aspects of the moons and the Divines. You receive <Blessed Fire>, <Dead Horde>, and <Salvation> powers. Enchanting is <10>% stronger when you master enchanting.",
+    "powers": [
+      {
+        "name": "Blessed Fire",
+        "description": "Causes all nearby undead up to level <50> to flee for <60> seconds.",
+        "magnitude": 50,
+        "duration": 60
+      },
+      {
+        "name": "Dead Horde",
+        "description": "Reanimate all nearby dead bodies up to level <50> for <600> seconds.",
+        "magnitude": 50,
+        "duration": 600
+      }
+    ],
+    "edid": "REQ_Ability_Birthsign_Ritual",
+    "formid": "0x000E7329",
+    "stat_modifications": [],
+    "skill_bonuses": [
+      {
+        "stat": "enchanting_strength",
+        "type": "bonus",
+        "value": 10,
+        "value_type": "percentage"
+      }
+    ],
+    "conditional_effects": [],
+    "mastery_effects": []
+  },
+  {
+    "name": "Thief",
+    "group": "Thief",
+    "description": "Those under the sign of the Thief have increased dexterity. Lockpicks are <30>% more durable, lockpicking expertise is increased by <2>, pickpocketing is <30>% more likely to succeed, you are <30>% harder to detect, you can sneak without proficiency, gain <10>% chance to avoid physical damage. After mastering alchemy, able to apply <1> extra poison dose.",
+    "powers": [],
+    "edid": "REQ_Ability_Birthsign_Thief",
+    "formid": "0x000E5F45",
+    "stat_modifications": [],
+    "skill_bonuses": [
+      {
+        "stat": "lockpicking_durability",
+        "type": "bonus",
+        "value": 30,
+        "value_type": "percentage"
+      },
+      {
+        "stat": "lockpicking_expertise",
+        "type": "bonus",
+        "value": 2,
+        "value_type": "flat"
+      },
+      {
+        "stat": "pickpocketing_success",
+        "type": "bonus",
+        "value": 30,
+        "value_type": "percentage"
+      },
+      {
+        "stat": "stealth_detection",
+        "type": "bonus",
+        "value": 30,
+        "value_type": "percentage"
+      }
+    ],
+    "conditional_effects": [],
+    "mastery_effects": [
+      {
+        "stat": "special_ability",
+        "type": "bonus",
+        "value": 1,
+        "value_type": "flat",
+        "condition": "after mastering alchemy",
+        "description": "Able to apply <1> extra poison dose. after mastering alchemy"
+      }
+    ]
+  },
+  {
+    "name": "Lover",
+    "group": "Thief",
+    "description": "Those under the sign of the Lover have increased agility and natural charm. Stamina regeneration increases by <40>%, increases chance to avoid physical damage by <25>%, speech skill is <25> higher, shout cooldown reduced by <5>% and an additional <5>% after mastering speechcraft.",
+    "powers": [],
+    "edid": "REQ_Ability_Birthsign_Lover",
+    "formid": "0x000E5F5A",
+    "stat_modifications": [
+      {
+        "stat": "shout_cooldown",
+        "type": "bonus",
+        "value": -5,
+        "value_type": "percentage"
+      }
+    ],
+    "skill_bonuses": [
+      {
+        "stat": "speech",
+        "type": "bonus",
+        "value": 25,
+        "value_type": "flat"
+      }
+    ],
+    "conditional_effects": [],
+    "mastery_effects": []
+  },
+  {
+    "name": "Shadow",
+    "group": "Thief",
+    "description": "Those under the sign of the Shadow are natually skilled at stealth, and can hide in the shadows once a day. You are <50>% harder to detect, you can sneak without proficiency, movement noise is <30>% quieter, you receive <Moonshadow> power. Gain <5>% armor penetration upon mastering sneak, wayfarer or finesse.",
+    "powers": [
+      {
+        "name": "Moonshadow",
+        "description": "You are invisible. Activating an object or attacking will break the spell."
+      }
+    ],
+    "edid": "REQ_Ability_Birthsign_Shadow",
+    "formid": "0x000E732A",
+    "stat_modifications": [],
+    "skill_bonuses": [
+      {
+        "stat": "stealth_detection",
+        "type": "bonus",
+        "value": 50,
+        "value_type": "percentage"
+      }
+    ],
+    "conditional_effects": [],
+    "mastery_effects": [
+      {
+        "stat": "armor_penetration",
+        "type": "bonus",
+        "value": 5,
+        "value_type": "percentage",
+        "condition": "upon mastering sneak, wayfarer, finesse",
+        "description": "Gain 5% armor penetration upon mastering sneak, wayfarer, finesse"
+      }
+    ]
+  },
+  {
+    "name": "Tower",
+    "group": "Thief",
+    "description": "Those under the sign of the Tower have nimble hands and a knack for finding fortune. Prices are <20>% more favorable, <50> more carryweight, lockpicks are <40>% more durable, lockpicking expertise is increased by <4>, you can pick effortless locks in plain sight without being noticed. Reflect <10>% damage when you've mastered a defensive skill.",
+    "powers": [],
+    "edid": "REQ_Ability_Birthsign_Tower",
+    "formid": "0x000E7328",
+    "stat_modifications": [
+      {
+        "stat": "price_modification",
+        "type": "bonus",
+        "value": 20,
+        "value_type": "percentage"
+      },
+      {
+        "stat": "damage_reflection",
+        "type": "bonus",
+        "value": 10,
+        "value_type": "percentage"
+      }
+    ],
+    "skill_bonuses": [
+      {
+        "stat": "lockpicking_durability",
+        "type": "bonus",
+        "value": 40,
+        "value_type": "percentage"
+      },
+      {
+        "stat": "lockpicking_expertise",
+        "type": "bonus",
+        "value": 4,
+        "value_type": "flat"
+      }
+    ],
+    "conditional_effects": [],
+    "mastery_effects": []
+  },
+  {
+    "name": "Serpent",
+    "group": "Serpent",
+    "description": "Those under the sign of the serpent have improved precision, resistance to poison and paralysis, and can cast Serpent's Curse once a day. Armor penetration with all weapons is increased by <15>, poison deals <50>% less damage to you, doubling at level <40>, most paralysis effects don't adversely affect you, you receive <Serpent's Curse> power.",
+    "powers": [
+      {
+        "name": "Serpent's Curse",
+        "description": "Dispels all magical effects and paralyzes the target for <5> seconds. Deals <5> poison damage and <5> magical damage per second for <30> seconds. Damage is doubled when you reach level 40."
+      }
+    ],
+    "edid": "REQ_Ability_Birthsign_Serpent",
+    "formid": "0x000E5F61",
+    "stat_modifications": [
+      {
+        "stat": "armor_penetration",
+        "type": "bonus",
+        "value": 15,
+        "value_type": "flat"
+      },
+      {
+        "stat": "poison_resistance",
+        "type": "bonus",
+        "value": 50,
+        "value_type": "percentage"
+      }
+    ],
+    "skill_bonuses": [],
+    "conditional_effects": [],
+    "mastery_effects": []
+  }
+]

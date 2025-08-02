@@ -1,0 +1,700 @@
+{
+  "skills": [
+    {
+      "name": "Smithing",
+      "edid": "AVSmithing",
+      "category": "Combat",
+      "description": "The art of creating and improving weapons and armor from raw materials.",
+      "scaling": "Allows crafting of better weapons and armor",
+      "keyAbilities": [
+        "Craft weapons and armor",
+        "Improve existing equipment",
+        "Create unique items",
+        "Unlock new crafting materials"
+      ],
+      "metaTags": [
+        "crafting",
+        "equipment",
+        "improvement",
+        "materials"
+      ]
+    },
+    {
+      "name": "Destruction",
+      "edid": "AVDestruction",
+      "category": "Magic",
+      "description": "The School of Destruction involves harnessing of fire, frost, shock and other forces that undo creation.",
+      "scaling": "Increases damage of destruction spells",
+      "keyAbilities": [
+        "Cast destruction spells",
+        "Deal elemental damage",
+        "Control fire, frost, and lightning",
+        "Area of effect damage"
+      ],
+      "metaTags": [
+        "magic",
+        "combat",
+        "damage",
+        "elements"
+      ]
+    },
+    {
+      "name": "Enchanting",
+      "edid": "AVEnchanting",
+      "category": "Magic",
+      "description": "Enchanting is the arcane art of infusing matter permanently with magic energy.",
+      "scaling": "Allows creation of more powerful enchantments",
+      "keyAbilities": [
+        "Enchant weapons and armor",
+        "Create magical items",
+        "Recharge enchanted items",
+        "Disenchant items to learn effects"
+      ],
+      "metaTags": [
+        "crafting",
+        "magic",
+        "equipment",
+        "effects"
+      ]
+    },
+    {
+      "name": "Restoration",
+      "edid": "AVRestoration",
+      "category": "Magic",
+      "description": "The School of Restoration involves both healing and protecting spells, as well as those that undo the undead.",
+      "scaling": "Increases effectiveness of restoration spells",
+      "keyAbilities": [
+        "Heal wounds and cure diseases",
+        "Protect against magic",
+        "Turn undead",
+        "Restore stamina and magicka"
+      ],
+      "metaTags": [
+        "magic",
+        "healing",
+        "protection",
+        "support"
+      ]
+    },
+    {
+      "name": "Illusion",
+      "edid": "AVMysticism",
+      "category": "Magic",
+      "description": "The School of Illusion involves manipulating the mind of the enemy, as well as the dark arts not known to many.",
+      "scaling": "Reduces spell cost for illusion spells",
+      "keyAbilities": [
+        "Cast illusion spells",
+        "Control minds and emotions",
+        "Invisibility and stealth magic",
+        "Calm and frenzy effects"
+      ],
+      "metaTags": [
+        "magic",
+        "illusion",
+        "stealth",
+        "control"
+      ]
+    },
+    {
+      "name": "Conjuration",
+      "edid": "AVConjuration",
+      "category": "Magic",
+      "description": "The School of Conjuration governs both Necromancy and summoning entities from the realms of Oblivion.",
+      "scaling": "Reduces spell cost for conjuration spells",
+      "keyAbilities": [
+        "Summon creatures and weapons",
+        "Bind weapons from Oblivion",
+        "Raise undead minions",
+        "Create magical barriers"
+      ],
+      "metaTags": [
+        "magic",
+        "summoning",
+        "combat",
+        "minions"
+      ]
+    },
+    {
+      "name": "Alteration",
+      "edid": "AVAlteration",
+      "category": "Magic",
+      "description": "The School of Alteration involves the manipulation of the physical world and its natural properties.",
+      "scaling": "Reduces spell cost for alteration spells",
+      "keyAbilities": [
+        "Cast alteration spells",
+        "Manipulate the environment",
+        "Enhance armor and protection",
+        "Control magic and elements"
+      ],
+      "metaTags": [
+        "magic",
+        "utility",
+        "protection",
+        "environment"
+      ]
+    },
+    {
+      "name": "Speech",
+      "edid": "AVSpeechcraft",
+      "category": "Stealth",
+      "description": "Those who dabble in the fine art of speechcraft are able to haggle for the best prices, and to convince about anyone of anything.",
+      "scaling": "Improves prices when buying and selling",
+      "keyAbilities": [
+        "Get better prices when trading",
+        "Persuade and intimidate NPCs",
+        "Bribe guards and officials",
+        "Influence dialogue outcomes"
+      ],
+      "metaTags": [
+        "social",
+        "trading",
+        "persuasion",
+        "diplomacy"
+      ]
+    },
+    {
+      "name": "Alchemy",
+      "edid": "AVAlchemy",
+      "category": "Magic",
+      "description": "Alchemy is the art of creating magical potions, extracts and deadly poisons.",
+      "scaling": "Increases potion strength and allows discovery of more effects",
+      "keyAbilities": [
+        "Brew potions and poisons",
+        "Discover ingredient effects",
+        "Create powerful buffs",
+        "Craft healing and utility items"
+      ],
+      "metaTags": [
+        "crafting",
+        "magic",
+        "consumables",
+        "effects"
+      ]
+    },
+    {
+      "name": "Sneak",
+      "edid": "AVSneak",
+      "category": "Stealth",
+      "description": "Sneaking is the art of moving unseen and unheard.",
+      "scaling": "Reduces detection chance and increases sneak attack damage",
+      "keyAbilities": [
+        "Move silently and avoid detection",
+        "Perform sneak attacks for bonus damage",
+        "Sneak past enemies",
+        "Hide in shadows and cover"
+      ],
+      "metaTags": [
+        "stealth",
+        "combat",
+        "movement",
+        "assassination"
+      ]
+    },
+    {
+      "name": "Wayfarer",
+      "edid": "AVLockpicking",
+      "category": "Stealth",
+      "description": "Seasoned Wayfarers, whether travelling alone or grouped, are proficient at opening locked doors and containers, as well as exploring and fining more treasures.",
+      "scaling": "Makes lockpicking easier and reduces lockpick breakage",
+      "keyAbilities": [
+        "Pick locks on doors and containers",
+        "Break into secure areas",
+        "Access hidden treasures",
+        "Reduce lockpick breakage"
+      ],
+      "metaTags": [
+        "stealth",
+        "thievery",
+        "utility",
+        "exploration"
+      ]
+    },
+    {
+      "name": "Finesse",
+      "edid": "AVPickpocket",
+      "category": "Stealth",
+      "description": "The art of pickpocketing, taking risks and elevating your own self.",
+      "scaling": "Increases success chance when pickpocketing",
+      "keyAbilities": [
+        "Steal items from NPCs",
+        "Plant items on NPCs",
+        "Pickpocket weapons during combat",
+        "Steal equipped items"
+      ],
+      "metaTags": [
+        "stealth",
+        "thievery",
+        "social",
+        "criminal"
+      ]
+    },
+    {
+      "name": "Evasion",
+      "edid": "AVLightArmor",
+      "category": "Stealth",
+      "description": "Evasion is the art to evade enemy blows and allows a character to defend efficiently if he wears only light or even no armor.",
+      "scaling": "Reduces damage taken when wearing light armor",
+      "keyAbilities": [
+        "Wear light armor for mobility",
+        "Reduce damage while maintaining speed",
+        "Unlock light armor perks",
+        "Sneak effectively in armor"
+      ],
+      "metaTags": [
+        "defense",
+        "armor",
+        "mobility",
+        "stealth"
+      ]
+    },
+    {
+      "name": "Heavy Armor",
+      "edid": "AVHeavyArmor",
+      "category": "Combat",
+      "description": "Heavy armor reflects a warrior's talent in wearing heavy armor and fighting in it.",
+      "scaling": "Reduces damage taken when wearing heavy armor",
+      "keyAbilities": [
+        "Wear heavy armor for maximum protection",
+        "Reduce damage from physical attacks",
+        "Unlock heavy armor perks",
+        "Maintain mobility in heavy armor"
+      ],
+      "metaTags": [
+        "defense",
+        "armor",
+        "protection",
+        "tank"
+      ]
+    },
+    {
+      "name": "Block",
+      "edid": "AVBlock",
+      "category": "Combat",
+      "description": "Blocking reflects a warrior's skill in parrying and deflecting blows and his aptitude with a shield.",
+      "scaling": "Reduces damage taken when blocking and increases bash damage",
+      "keyAbilities": [
+        "Block incoming damage",
+        "Bash enemies to stagger them",
+        "Shield charge attacks",
+        "Block arrows and spells"
+      ],
+      "metaTags": [
+        "defense",
+        "combat",
+        "shield",
+        "protection"
+      ]
+    },
+    {
+      "name": "Marksman",
+      "edid": "AVMarksman",
+      "category": "Combat",
+      "description": "Archery governs the use of bows and crossbows. The greater the skill, the more deadly the shot.",
+      "scaling": "Increases damage with bows and crossbows",
+      "keyAbilities": [
+        "Use bows and crossbows",
+        "Sneak attacks with ranged weapons",
+        "Quick shot and zoom abilities",
+        "Poison application to arrows"
+      ],
+      "metaTags": [
+        "weapon",
+        "combat",
+        "ranged",
+        "archery"
+      ]
+    },
+    {
+      "name": "Two-handed",
+      "edid": "AVTwoHanded",
+      "category": "Combat",
+      "abbreviation": "2H",
+      "description": "The art of combat using two-handed weapons, such as greatswords, battle axes, and warhammers.",
+      "scaling": "Increases damage with two-handed weapons",
+      "keyAbilities": [
+        "Use greatswords, battleaxes, and warhammers",
+        "Powerful single-target attacks",
+        "Unstoppable power attacks",
+        "Block with two-handed weapons"
+      ],
+      "metaTags": [
+        "weapon",
+        "combat",
+        "melee",
+        "heavy"
+      ]
+    },
+    {
+      "name": "One-handed",
+      "edid": "AVOneHanded",
+      "category": "Combat",
+      "abbreviation": "1H",
+      "description": "The skill to use light weaponry, among which are daggers, swords, axes and maces. ",
+      "scaling": "Increases damage with one-handed weapons",
+      "keyAbilities": [
+        "Use swords, daggers, axes, and maces",
+        "Dual-wielding capabilities",
+        "Power attacks with one-handed weapons",
+        "Block with one-handed weapons"
+      ],
+      "metaTags": [
+        "weapon",
+        "combat",
+        "melee",
+        "dual-wield"
+      ]
+    }
+  ],
+  "combatSkills": [
+    {
+      "name": "Smithing",
+      "edid": "AVSmithing",
+      "category": "Combat",
+      "description": "The art of creating and improving weapons and armor from raw materials.",
+      "scaling": "Allows crafting of better weapons and armor",
+      "keyAbilities": [
+        "Craft weapons and armor",
+        "Improve existing equipment",
+        "Create unique items",
+        "Unlock new crafting materials"
+      ],
+      "metaTags": [
+        "crafting",
+        "equipment",
+        "improvement",
+        "materials"
+      ]
+    },
+    {
+      "name": "Heavy Armor",
+      "edid": "AVHeavyArmor",
+      "category": "Combat",
+      "description": "Heavy armor reflects a warrior's talent in wearing heavy armor and fighting in it.",
+      "scaling": "Reduces damage taken when wearing heavy armor",
+      "keyAbilities": [
+        "Wear heavy armor for maximum protection",
+        "Reduce damage from physical attacks",
+        "Unlock heavy armor perks",
+        "Maintain mobility in heavy armor"
+      ],
+      "metaTags": [
+        "defense",
+        "armor",
+        "protection",
+        "tank"
+      ]
+    },
+    {
+      "name": "Block",
+      "edid": "AVBlock",
+      "category": "Combat",
+      "description": "Blocking reflects a warrior's skill in parrying and deflecting blows and his aptitude with a shield.",
+      "scaling": "Reduces damage taken when blocking and increases bash damage",
+      "keyAbilities": [
+        "Block incoming damage",
+        "Bash enemies to stagger them",
+        "Shield charge attacks",
+        "Block arrows and spells"
+      ],
+      "metaTags": [
+        "defense",
+        "combat",
+        "shield",
+        "protection"
+      ]
+    },
+    {
+      "name": "Marksman",
+      "edid": "AVMarksman",
+      "category": "Combat",
+      "description": "Archery governs the use of bows and crossbows. The greater the skill, the more deadly the shot.",
+      "scaling": "Increases damage with bows and crossbows",
+      "keyAbilities": [
+        "Use bows and crossbows",
+        "Sneak attacks with ranged weapons",
+        "Quick shot and zoom abilities",
+        "Poison application to arrows"
+      ],
+      "metaTags": [
+        "weapon",
+        "combat",
+        "ranged",
+        "archery"
+      ]
+    },
+    {
+      "name": "Two-handed",
+      "edid": "AVTwoHanded",
+      "category": "Combat",
+      "abbreviation": "2H",
+      "description": "The art of combat using two-handed weapons, such as greatswords, battle axes, and warhammers.",
+      "scaling": "Increases damage with two-handed weapons",
+      "keyAbilities": [
+        "Use greatswords, battleaxes, and warhammers",
+        "Powerful single-target attacks",
+        "Unstoppable power attacks",
+        "Block with two-handed weapons"
+      ],
+      "metaTags": [
+        "weapon",
+        "combat",
+        "melee",
+        "heavy"
+      ]
+    },
+    {
+      "name": "One-handed",
+      "edid": "AVOneHanded",
+      "category": "Combat",
+      "abbreviation": "1H",
+      "description": "The skill to use light weaponry, among which are daggers, swords, axes and maces. ",
+      "scaling": "Increases damage with one-handed weapons",
+      "keyAbilities": [
+        "Use swords, daggers, axes, and maces",
+        "Dual-wielding capabilities",
+        "Power attacks with one-handed weapons",
+        "Block with one-handed weapons"
+      ],
+      "metaTags": [
+        "weapon",
+        "combat",
+        "melee",
+        "dual-wield"
+      ]
+    }
+  ],
+  "magicSkills": [
+    {
+      "name": "Destruction",
+      "edid": "AVDestruction",
+      "category": "Magic",
+      "description": "The School of Destruction involves harnessing of fire, frost, shock and other forces that undo creation.",
+      "scaling": "Increases damage of destruction spells",
+      "keyAbilities": [
+        "Cast destruction spells",
+        "Deal elemental damage",
+        "Control fire, frost, and lightning",
+        "Area of effect damage"
+      ],
+      "metaTags": [
+        "magic",
+        "combat",
+        "damage",
+        "elements"
+      ]
+    },
+    {
+      "name": "Enchanting",
+      "edid": "AVEnchanting",
+      "category": "Magic",
+      "description": "Enchanting is the arcane art of infusing matter permanently with magic energy.",
+      "scaling": "Allows creation of more powerful enchantments",
+      "keyAbilities": [
+        "Enchant weapons and armor",
+        "Create magical items",
+        "Recharge enchanted items",
+        "Disenchant items to learn effects"
+      ],
+      "metaTags": [
+        "crafting",
+        "magic",
+        "equipment",
+        "effects"
+      ]
+    },
+    {
+      "name": "Restoration",
+      "edid": "AVRestoration",
+      "category": "Magic",
+      "description": "The School of Restoration involves both healing and protecting spells, as well as those that undo the undead.",
+      "scaling": "Increases effectiveness of restoration spells",
+      "keyAbilities": [
+        "Heal wounds and cure diseases",
+        "Protect against magic",
+        "Turn undead",
+        "Restore stamina and magicka"
+      ],
+      "metaTags": [
+        "magic",
+        "healing",
+        "protection",
+        "support"
+      ]
+    },
+    {
+      "name": "Illusion",
+      "edid": "AVMysticism",
+      "category": "Magic",
+      "description": "The School of Illusion involves manipulating the mind of the enemy, as well as the dark arts not known to many.",
+      "scaling": "Reduces spell cost for illusion spells",
+      "keyAbilities": [
+        "Cast illusion spells",
+        "Control minds and emotions",
+        "Invisibility and stealth magic",
+        "Calm and frenzy effects"
+      ],
+      "metaTags": [
+        "magic",
+        "illusion",
+        "stealth",
+        "control"
+      ]
+    },
+    {
+      "name": "Conjuration",
+      "edid": "AVConjuration",
+      "category": "Magic",
+      "description": "The School of Conjuration governs both Necromancy and summoning entities from the realms of Oblivion.",
+      "scaling": "Reduces spell cost for conjuration spells",
+      "keyAbilities": [
+        "Summon creatures and weapons",
+        "Bind weapons from Oblivion",
+        "Raise undead minions",
+        "Create magical barriers"
+      ],
+      "metaTags": [
+        "magic",
+        "summoning",
+        "combat",
+        "minions"
+      ]
+    },
+    {
+      "name": "Alteration",
+      "edid": "AVAlteration",
+      "category": "Magic",
+      "description": "The School of Alteration involves the manipulation of the physical world and its natural properties.",
+      "scaling": "Reduces spell cost for alteration spells",
+      "keyAbilities": [
+        "Cast alteration spells",
+        "Manipulate the environment",
+        "Enhance armor and protection",
+        "Control magic and elements"
+      ],
+      "metaTags": [
+        "magic",
+        "utility",
+        "protection",
+        "environment"
+      ]
+    },
+    {
+      "name": "Alchemy",
+      "edid": "AVAlchemy",
+      "category": "Magic",
+      "description": "Alchemy is the art of creating magical potions, extracts and deadly poisons.",
+      "scaling": "Increases potion strength and allows discovery of more effects",
+      "keyAbilities": [
+        "Brew potions and poisons",
+        "Discover ingredient effects",
+        "Create powerful buffs",
+        "Craft healing and utility items"
+      ],
+      "metaTags": [
+        "crafting",
+        "magic",
+        "consumables",
+        "effects"
+      ]
+    }
+  ],
+  "stealthSkills": [
+    {
+      "name": "Speech",
+      "edid": "AVSpeechcraft",
+      "category": "Stealth",
+      "description": "Those who dabble in the fine art of speechcraft are able to haggle for the best prices, and to convince about anyone of anything.",
+      "scaling": "Improves prices when buying and selling",
+      "keyAbilities": [
+        "Get better prices when trading",
+        "Persuade and intimidate NPCs",
+        "Bribe guards and officials",
+        "Influence dialogue outcomes"
+      ],
+      "metaTags": [
+        "social",
+        "trading",
+        "persuasion",
+        "diplomacy"
+      ]
+    },
+    {
+      "name": "Sneak",
+      "edid": "AVSneak",
+      "category": "Stealth",
+      "description": "Sneaking is the art of moving unseen and unheard.",
+      "scaling": "Reduces detection chance and increases sneak attack damage",
+      "keyAbilities": [
+        "Move silently and avoid detection",
+        "Perform sneak attacks for bonus damage",
+        "Sneak past enemies",
+        "Hide in shadows and cover"
+      ],
+      "metaTags": [
+        "stealth",
+        "combat",
+        "movement",
+        "assassination"
+      ]
+    },
+    {
+      "name": "Wayfarer",
+      "edid": "AVLockpicking",
+      "category": "Stealth",
+      "description": "Seasoned Wayfarers, whether travelling alone or grouped, are proficient at opening locked doors and containers, as well as exploring and fining more treasures.",
+      "scaling": "Makes lockpicking easier and reduces lockpick breakage",
+      "keyAbilities": [
+        "Pick locks on doors and containers",
+        "Break into secure areas",
+        "Access hidden treasures",
+        "Reduce lockpick breakage"
+      ],
+      "metaTags": [
+        "stealth",
+        "thievery",
+        "utility",
+        "exploration"
+      ]
+    },
+    {
+      "name": "Finesse",
+      "edid": "AVPickpocket",
+      "category": "Stealth",
+      "description": "The art of pickpocketing, taking risks and elevating your own self.",
+      "scaling": "Increases success chance when pickpocketing",
+      "keyAbilities": [
+        "Steal items from NPCs",
+        "Plant items on NPCs",
+        "Pickpocket weapons during combat",
+        "Steal equipped items"
+      ],
+      "metaTags": [
+        "stealth",
+        "thievery",
+        "social",
+        "criminal"
+      ]
+    },
+    {
+      "name": "Evasion",
+      "edid": "AVLightArmor",
+      "category": "Stealth",
+      "description": "Evasion is the art to evade enemy blows and allows a character to defend efficiently if he wears only light or even no armor.",
+      "scaling": "Reduces damage taken when wearing light armor",
+      "keyAbilities": [
+        "Wear light armor for mobility",
+        "Reduce damage while maintaining speed",
+        "Unlock light armor perks",
+        "Sneak effectively in armor"
+      ],
+      "metaTags": [
+        "defense",
+        "armor",
+        "mobility",
+        "stealth"
+      ]
+    }
+  ],
+  "craftingSkills": [],
+  "totalSkills": 18
+}
