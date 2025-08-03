@@ -1,4 +1,3 @@
-import { Z_INDEX } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button } from '@/shared/ui/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
@@ -83,7 +82,6 @@ export const CharacterFlowNav = ({ currentPath }: CharacterFlowNavProps) => {
     <div
       className="bg-background border-b border-border shadow-sm sticky top-12 backdrop-blur-sm"
       style={{
-        zIndex: Z_INDEX.NAVIGATION,
         backgroundColor: 'hsl(var(--background))',
         backgroundImage: 'none',
       }}
