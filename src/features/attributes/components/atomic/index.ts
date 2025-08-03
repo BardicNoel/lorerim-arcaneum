@@ -1,1 +1,2 @@
-export { LevelAssignmentButton } from './LevelAssignmentButton' 
+export { AttributeStatBar } from './AttributeStatBar'
+export { LevelAssignmentButton } from './LevelAssignmentButton'
