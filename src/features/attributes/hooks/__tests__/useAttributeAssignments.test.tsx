@@ -52,5 +52,25 @@ describe('useAttributeAssignments', () => {
     expect(result.current.displayData.health.total).toBe(105) // 100 base + 5 assigned
     expect(result.current.displayData.stamina.total).toBe(105) // 100 base + 5 assigned
     expect(result.current.displayData.magicka.total).toBe(105) // 100 base + 5 assigned
+
+    // Test ratios - each should be 33.3% since all have equal assignments
+    expect(result.current.displayData.health.ratio).toBeCloseTo(33.33, 1)
+    expect(result.current.displayData.stamina.ratio).toBeCloseTo(33.33, 1)
+    expect(result.current.displayData.magicka.ratio).toBeCloseTo(33.33, 1)
+  })
+
+  it('should calculate ratios correctly when only one attribute is assigned', () => {
+    const { result } = renderHook(() => useAttributeAssignments())
+
+    act(() => {
+      result.current.setAttributeAssignment(2, 'health')
+      result.current.setAttributeAssignment(3, 'health')
+      result.current.setAttributeAssignment(4, 'health')
+    })
+
+    // Health should have 100% of assignments, others 0%
+    expect(result.current.displayData.health.ratio).toBe(100)
+    expect(result.current.displayData.stamina.ratio).toBe(0)
+    expect(result.current.displayData.magicka.ratio).toBe(0)
   })
 })
