@@ -49,9 +49,9 @@
         "connections": {
           "parents": [],
           "children": [
-            "REQ_Smithing_AdvancedLightArmors",
             "REQ_Smithing_DwarvenSmithing",
-            "REQ_Smithing_AdvancedBlacksmithing"
+            "REQ_Smithing_AdvancedBlacksmithing",
+            "REQ_Smithing_AdvancedLightArmors"
           ]
         },
         "isRoot": false,
@@ -96,8 +96,8 @@
             "REQ_Smithing_Craftsmanship"
           ],
           "children": [
-            "REQ_Smithing_ElvenSmithing",
-            "REQ_Smithing_OrcishSmithing"
+            "REQ_Smithing_OrcishSmithing",
+            "REQ_Smithing_ElvenSmithing"
           ]
         },
         "isRoot": false,
@@ -139,12 +139,12 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Smithing_AdvancedLightArmors",
-            "REQ_Smithing_DwarvenSmithing"
+            "REQ_Smithing_DwarvenSmithing",
+            "REQ_Smithing_AdvancedLightArmors"
           ],
           "children": [
-            "REQ_Smithing_GlassSmithing",
-            "REQ_Smithing_EbonySmithing"
+            "REQ_Smithing_EbonySmithing",
+            "REQ_Smithing_GlassSmithing"
           ]
         },
         "isRoot": false,
@@ -186,13 +186,13 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Smithing_ElvenSmithing",
-            "REQ_Smithing_OrcishSmithing"
+            "REQ_Smithing_OrcishSmithing",
+            "REQ_Smithing_ElvenSmithing"
           ],
           "children": [
-            "Trad_Smithing_ShiveringIlsesSmithing",
             "REQ_Smithing_DaedricSmithing",
-            "REQ_Smithing_DraconicBlacksmithing"
+            "REQ_Smithing_DraconicBlacksmithing",
+            "Trad_Smithing_ShiveringIlsesSmithing"
           ]
         },
         "isRoot": false,
@@ -234,8 +234,8 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Smithing_GlassSmithing",
-            "REQ_Smithing_EbonySmithing"
+            "REQ_Smithing_EbonySmithing",
+            "REQ_Smithing_GlassSmithing"
           ],
           "children": []
         },
@@ -278,8 +278,8 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Smithing_GlassSmithing",
-            "REQ_Smithing_EbonySmithing"
+            "REQ_Smithing_EbonySmithing",
+            "REQ_Smithing_GlassSmithing"
           ],
           "children": []
         },
@@ -316,13 +316,13 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Smithing_Craftsmanship",
-            "REQ_Smithing_Tailoring"
+            "REQ_Smithing_Craftsmanship"
           ],
           "children": [
-            "ORD_Smh60_SmithingSpecialization_Perk_60_OrdASISExclude",
             "REQ_Smithing_LegendaryBlacksmithing",
-            "REQ_Smithing_ArcaneCraftsmanship"
+            "REQ_Smithing_ArcaneCraftsmanship",
+            "REQ_Smithing_Tailoring",
+            "ORD_Smh60_SmithingSpecialization_Perk_60_OrdASISExclude"
           ]
         },
         "isRoot": false,
@@ -447,8 +447,8 @@
             "REQ_Smithing_Craftsmanship"
           ],
           "children": [
-            "REQ_Smithing_OrcishSmithing",
-            "REQ_Smithing_ElvenSmithing"
+            "REQ_Smithing_ElvenSmithing",
+            "REQ_Smithing_OrcishSmithing"
           ]
         },
         "isRoot": false,
@@ -494,8 +494,8 @@
             "REQ_Smithing_AdvancedLightArmors"
           ],
           "children": [
-            "REQ_Smithing_EbonySmithing",
-            "REQ_Smithing_GlassSmithing"
+            "REQ_Smithing_GlassSmithing",
+            "REQ_Smithing_EbonySmithing"
           ]
         },
         "isRoot": false,
@@ -541,9 +541,9 @@
             "REQ_Smithing_ElvenSmithing"
           ],
           "children": [
-            "Trad_Smithing_ShiveringIlsesSmithing",
+            "REQ_Smithing_DraconicBlacksmithing",
             "REQ_Smithing_DaedricSmithing",
-            "REQ_Smithing_DraconicBlacksmithing"
+            "Trad_Smithing_ShiveringIlsesSmithing"
           ]
         },
         "isRoot": false,
@@ -580,12 +580,9 @@
         "connections": {
           "parents": [
             "REQ_Smithing_EbonySmithing",
-            "REQ_Smithing_GlassSmithing",
-            "Trad_Smithing_ShiveringIlsesSmithing"
+            "REQ_Smithing_GlassSmithing"
           ],
-          "children": [
-            "Trad_Smithing_ShiveringIlsesSmithing"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -614,12 +611,12 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [],
-          "children": [
+          "parents": [
             "REQ_Smithing_AdvancedBlacksmithing"
-          ]
+          ],
+          "children": []
         },
-        "isRoot": true,
+        "isRoot": false,
         "position": {
           "x": 5,
           "y": 1,
@@ -654,9 +651,7 @@
           "parents": [
             "REQ_Smithing_AdvancedBlacksmithing"
           ],
-          "children": [
-            "ORD_Smh80_IronLore_Perk_80_OrdASISExclude"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -690,9 +685,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "ORD_Smh60_SmithingSpecialization_Perk_60_OrdASISExclude"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -732,14 +725,14 @@
         "connections": {
           "parents": [],
           "children": [
-            "REQ_Destruction_BloodMagic_025_BloodMagic1",
             "REQ_Destruction_Mastery_025_ApprenticeDestruction",
             "REQ_Destruction_Pyromancy_025_Pyromancy1",
             "REQ_Destruction_Cryomancy_025_Cyromancy1",
             "REQ_Destruction_Electromancy_025_Electromancy1",
             "REQ_Destruction_Empower_025_EmpoweredDestruction",
             "REQ_Destruction_Arcane_025_ArcaneFocus1",
-            "REQ_Destruction_Entropic_025_EntropicFocus1"
+            "REQ_Destruction_Entropic_025_EntropicFocus1",
+            "REQ_Destruction_BloodMagic_025_BloodMagic1"
           ]
         },
         "isRoot": true,
@@ -778,10 +771,10 @@
             "REQ_Destruction_Mastery_000_NoviceDestruction"
           ],
           "children": [
-            "REQ_Destruction_Battlemage_075_ImprovedCloaks",
             "REQ_Destruction_Mastery_050_AdeptDestruction",
             "REQ_Destruction_RuneMastery",
-            "REQ_Destruction_Battlemage_050_DestructiveBlow"
+            "REQ_Destruction_Battlemage_050_DestructiveBlow",
+            "REQ_Destruction_Battlemage_075_ImprovedCloaks"
           ]
         },
         "isRoot": false,
@@ -819,9 +812,7 @@
           "parents": [
             "REQ_Destruction_Mastery_025_ApprenticeDestruction"
           ],
-          "children": [
-            "REQ_Destruction_Mastery_075_ExpertDestruction"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -855,12 +846,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Destruction_Mastery_050_AdeptDestruction"
-          ],
-          "children": [
-            "REQ_Destruction_Mastery_100_MasterDestruction"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -894,9 +881,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Destruction_Mastery_075_ExpertDestruction"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -987,9 +972,7 @@
           "parents": [
             "REQ_Destruction_Mastery_000_NoviceDestruction"
           ],
-          "children": [
-            "REQ_Destruction_Pyromancy_075_Cremation"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -1023,12 +1006,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Destruction_Pyromancy_025_Pyromancy1"
-          ],
-          "children": [
-            "REQ_Destruction_Pyromancy_100_FireMastery"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -1062,9 +1041,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Destruction_Pyromancy_075_Cremation"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -1118,9 +1095,7 @@
           "parents": [
             "REQ_Destruction_Mastery_000_NoviceDestruction"
           ],
-          "children": [
-            "REQ_Destruction_Cryomancy_075_DeepFreeze"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -1154,12 +1129,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Destruction_Cryomancy_025_Cyromancy1"
-          ],
-          "children": [
-            "REQ_Destruction_Cryomancy_100_FrostMastery"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -1193,9 +1164,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Destruction_Cryomancy_075_DeepFreeze"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -1249,9 +1218,7 @@
           "parents": [
             "REQ_Destruction_Mastery_000_NoviceDestruction"
           ],
-          "children": [
-            "REQ_Destruction_Electromancy_075_ElectrostaticDischarge"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -1285,12 +1252,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Destruction_Electromancy_025_Electromancy1"
-          ],
-          "children": [
-            "REQ_Destruction_Electromancy_100_LightningMastery"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -1324,9 +1287,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Destruction_Electromancy_075_ElectrostaticDischarge"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -1364,9 +1325,7 @@
           "parents": [
             "REQ_Destruction_Mastery_000_NoviceDestruction"
           ],
-          "children": [
-            "REQ_Destruction_Empower_050_Impact"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -1400,9 +1359,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Destruction_Empower_025_EmpoweredDestruction"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -1456,9 +1413,7 @@
           "parents": [
             "REQ_Destruction_Mastery_000_NoviceDestruction"
           ],
-          "children": [
-            "REQ_Destruction_Arcane_075_ArcaneDisruption"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -1492,9 +1447,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Destruction_Arcane_025_ArcaneFocus1"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -1548,9 +1501,7 @@
           "parents": [
             "REQ_Destruction_Mastery_000_NoviceDestruction"
           ],
-          "children": [
-            "REQ_Destruction_Entropic_075_EntropicDisarray"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -1584,9 +1535,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Destruction_Entropic_025_EntropicFocus1"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -1714,9 +1663,7 @@
           "parents": [
             "REQ_Destruction_Mastery_000_NoviceDestruction"
           ],
-          "children": [
-            "REQ_Destruction_BloodMagic_075_ConsumeLife"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -1750,9 +1697,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Destruction_BloodMagic_025_BloodMagic1"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -1808,9 +1753,9 @@
         "connections": {
           "parents": [],
           "children": [
-            "Feat_Perk_Skill_Enchanting_ArcaneArtificery1",
             "REQ_Enchanting_Enchantment_025_ElementalLore",
-            "REQ_Enchanting_Artificer_025_SoulGemMastery"
+            "REQ_Enchanting_Artificer_025_SoulGemMastery",
+            "Feat_Perk_Skill_Enchanting_ArcaneArtificery1"
           ]
         },
         "isRoot": true,
@@ -1848,9 +1793,7 @@
           "parents": [
             "REQ_Enchanting_Enchantment_000_EnchantersInsight1"
           ],
-          "children": [
-            "REQ_Enchanting_Enchantment_050_CorpusLore"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -1884,12 +1827,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Enchanting_Enchantment_025_ElementalLore"
-          ],
-          "children": [
-            "REQ_Enchanting_Enchantment_075_SkillLore"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -1923,12 +1862,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Enchanting_Enchantment_050_CorpusLore"
-          ],
-          "children": [
-            "REQ_Enchanting_Enchantment_100_EnchantmentMastery"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -1962,13 +1897,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Enchanting_Enchantment_075_SkillLore",
-            "REQ_Enchanting_Artificer_075_ArtificersInsight"
-          ],
-          "children": [
-            "REQ_Enchanting_Artifact_100_ArtifactEnchanter"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -2005,9 +1935,7 @@
           "parents": [
             "REQ_Enchanting_Enchantment_000_EnchantersInsight1"
           ],
-          "children": [
-            "REQ_Enchanting_Artificer_050_ArcaneExperimentation"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -2041,12 +1969,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Enchanting_Artificer_025_SoulGemMastery"
-          ],
-          "children": [
-            "REQ_Enchanting_Artificer_075_ArtificersInsight"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -2080,12 +2004,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Enchanting_Artificer_050_ArcaneExperimentation"
-          ],
-          "children": [
-            "REQ_Enchanting_Enchantment_100_EnchantmentMastery"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -2119,9 +2039,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Enchanting_Enchantment_100_EnchantmentMastery"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -2191,9 +2109,7 @@
           "parents": [
             "REQ_Enchanting_Enchantment_000_EnchantersInsight1"
           ],
-          "children": [
-            "Feat_Perk_Char_Enchanting_StaffChanneling1"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -2243,12 +2159,10 @@
         ],
         "totalRanks": 2,
         "connections": {
-          "parents": [
-            "Feat_Perk_Skill_Enchanting_ArcaneArtificery1"
-          ],
+          "parents": [],
           "children": [
-            "ORD_Enc70_ChargeTap_Perk_70_OrdASISExclude",
-            "REQ_Enchanting_50_WandMastery"
+            "REQ_Enchanting_50_WandMastery",
+            "ORD_Enc70_ChargeTap_Perk_70_OrdASISExclude"
           ]
         },
         "isRoot": false,
@@ -2286,9 +2200,7 @@
           "parents": [
             "Feat_Perk_Char_Enchanting_StaffChanneling1"
           ],
-          "children": [
-            "ORD_Enc90_YouShallNotPass_Perk_90_OrdASISExclude"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -2325,9 +2237,7 @@
           "parents": [
             "Feat_Perk_Char_Enchanting_StaffChanneling1"
           ],
-          "children": [
-            "ORD_Enc90_YouShallNotPass_Perk_90_OrdASISExclude"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -2361,10 +2271,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Enchanting_50_WandMastery",
-            "ORD_Enc70_ChargeTap_Perk_70_OrdASISExclude"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -2402,21 +2309,18 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Restoration_Empower_025_EmpoweredRestoration"
-          ],
+          "parents": [],
           "children": [
-            "Feat_Perk_Skill_Restoration_WardMastery1",
             "REQ_Restoration_Mastery_025_ApprenticeRestoration",
             "REQ_Restoration_Healing_025_ImprovedHealing",
-            "REQ_Restoration_Empower_025_EmpoweredRestoration",
             "REQ_Restoration_Venomancy_025_Venomancy",
             "REQ_Restoration_Heliomancy_025_Heliomancy",
             "REQ_Restoration_Turning_025_ImprovedTurning",
-            "REQ_Restoration_Protection_025_ImprovedProtection"
+            "REQ_Restoration_Protection_025_ImprovedProtection",
+            "Feat_Perk_Skill_Restoration_WardMastery1"
           ]
         },
-        "isRoot": false,
+        "isRoot": true,
         "position": {
           "x": 3,
           "y": 0,
@@ -2449,13 +2353,10 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Restoration_Recovery_025_FocusedMind",
-            "REQ_Restoration_Mastery_000_NoviceRestoration"
-          ],
-          "children": [
-            "REQ_Restoration_Mastery_050_AdeptRestoration",
+            "REQ_Restoration_Mastery_000_NoviceRestoration",
             "REQ_Restoration_Recovery_025_FocusedMind"
-          ]
+          ],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -2489,12 +2390,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Restoration_Mastery_025_ApprenticeRestoration"
-          ],
-          "children": [
-            "REQ_Restoration_Mastery_075_ExpertRestoration"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -2528,12 +2425,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Restoration_Mastery_050_AdeptRestoration"
-          ],
-          "children": [
-            "REQ_Restoration_Mastery_100_MasterRestoration"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -2567,9 +2460,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Restoration_Mastery_075_ExpertRestoration"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -2607,9 +2498,7 @@
           "parents": [
             "REQ_Restoration_Mastery_000_NoviceRestoration"
           ],
-          "children": [
-            "REQ_Restoration_Healing_075_Respite"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -2643,9 +2532,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Restoration_Turning_025_ImprovedTurning"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -2680,9 +2567,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Restoration_Healing_025_ImprovedHealing"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -2717,9 +2602,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Restoration_Protection_025_ImprovedProtection"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -2754,14 +2637,10 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Restoration_Mastery_000_NoviceRestoration"
-          ],
-          "children": [
-            "REQ_Restoration_Mastery_000_NoviceRestoration"
-          ]
+          "parents": [],
+          "children": []
         },
-        "isRoot": false,
+        "isRoot": true,
         "position": {
           "x": 1,
           "y": 0,
@@ -2793,12 +2672,10 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Restoration_Mastery_025_ApprenticeRestoration"
-          ],
+          "parents": [],
           "children": [
-            "REQ_Restoration_Mastery_025_ApprenticeRestoration",
-            "REQ_Restoration_Recovery_050_PowerOfLife"
+            "REQ_Restoration_Recovery_050_PowerOfLife",
+            "REQ_Restoration_Mastery_025_ApprenticeRestoration"
           ]
         },
         "isRoot": false,
@@ -2836,9 +2713,7 @@
           "parents": [
             "REQ_Restoration_Recovery_025_FocusedMind"
           ],
-          "children": [
-            "REQ_Restoration_Recovery_075_EssenceOfLife"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -2872,9 +2747,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Restoration_Recovery_050_PowerOfLife"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -2942,9 +2815,7 @@
           "parents": [
             "REQ_Restoration_Mastery_000_NoviceRestoration"
           ],
-          "children": [
-            "REQ_Restoration_Venomancy_075_ParalyzingPoison"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -2978,9 +2849,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Restoration_Venomancy_025_Venomancy"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -3018,9 +2887,7 @@
           "parents": [
             "REQ_Restoration_Mastery_000_NoviceRestoration"
           ],
-          "children": [
-            "REQ_Restoration_Heliomancy_075_ScorchingLight"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -3054,9 +2921,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Restoration_Heliomancy_025_Heliomancy"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -3094,9 +2959,7 @@
           "parents": [
             "REQ_Restoration_Mastery_000_NoviceRestoration"
           ],
-          "children": [
-            "REQ_Restoration_Turning_075_MysticTurning"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -3133,9 +2996,7 @@
           "parents": [
             "REQ_Restoration_Mastery_000_NoviceRestoration"
           ],
-          "children": [
-            "REQ_Restoration_Protection_075_ImprovedWards"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -3211,10 +3072,10 @@
         "connections": {
           "parents": [],
           "children": [
-            "REQ_Illusion_Empower_025_EmpoweredIllusion",
             "REQ_Illusion_Perceptual_025_PerceptualIllusions",
             "REQ_Illusion_Emotional_025_EmotionalIllusions",
-            "REQ_Illusion_Mastery_025_ApprenticeIllusion"
+            "REQ_Illusion_Mastery_025_ApprenticeIllusion",
+            "REQ_Illusion_Empower_025_EmpoweredIllusion"
           ]
         },
         "isRoot": true,
@@ -3253,8 +3114,8 @@
             "REQ_Illusion_Mastery_000_NovicelIllusion"
           ],
           "children": [
-            "REQ_Illusion_Perceptual_050_DeceptiveImage",
-            "REQ_Illusion_Perceptual_050_EnvironmentalManipulation"
+            "REQ_Illusion_Perceptual_050_EnvironmentalManipulation",
+            "REQ_Illusion_Perceptual_050_DeceptiveImage"
           ]
         },
         "isRoot": false,
@@ -3330,8 +3191,8 @@
             "REQ_Illusion_Mastery_050_AdeptIllusion"
           ],
           "children": [
-            "REQ_Illusion_Shadow_075_ShadowsOfConflict",
-            "REQ_Illusion_Shadow_075_MasterOfShadows"
+            "REQ_Illusion_Shadow_075_MasterOfShadows",
+            "REQ_Illusion_Shadow_075_ShadowsOfConflict"
           ]
         },
         "isRoot": false,
@@ -3407,8 +3268,8 @@
             "REQ_Illusion_Mastery_000_NovicelIllusion"
           ],
           "children": [
-            "REQ_Illusion_Emotional_050_Mesmerize",
-            "REQ_Illusion_Emotional_050_Domination"
+            "REQ_Illusion_Emotional_050_Domination",
+            "REQ_Illusion_Emotional_050_Mesmerize"
           ]
         },
         "isRoot": false,
@@ -3484,8 +3345,8 @@
             "REQ_Illusion_Mastery_050_AdeptIllusion"
           ],
           "children": [
-            "REQ_Illusion_Delusive_075_Curse",
-            "REQ_Illusion_Delusive_075_ObliterateTheMind"
+            "REQ_Illusion_Delusive_075_ObliterateTheMind",
+            "REQ_Illusion_Delusive_075_Curse"
           ]
         },
         "isRoot": false,
@@ -3523,9 +3384,7 @@
           "parents": [
             "REQ_Illusion_Mastery_000_NovicelIllusion"
           ],
-          "children": [
-            "REQ_Illusion_Mastery_050_AdeptIllusion"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -3559,13 +3418,11 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Illusion_Mastery_025_ApprenticeIllusion"
-          ],
+          "parents": [],
           "children": [
-            "REQ_Illusion_Shadow_050_ShadowShaping",
+            "REQ_Illusion_Mastery_075_ExpertIllusion",
             "REQ_Illusion_Delusive_050_DelusiveIllusions",
-            "REQ_Illusion_Mastery_075_ExpertIllusion"
+            "REQ_Illusion_Shadow_050_ShadowShaping"
           ]
         },
         "isRoot": false,
@@ -3603,9 +3460,7 @@
           "parents": [
             "REQ_Illusion_Mastery_050_AdeptIllusion"
           ],
-          "children": [
-            "REQ_Illusion_Mastery_100_MasterIllusion"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -3639,9 +3494,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Illusion_Mastery_075_ExpertIllusion"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -3903,12 +3756,12 @@
         "connections": {
           "parents": [],
           "children": [
-            "REQ_Conjuration_Spirit_025_SpiritCalling",
             "REQ_Conjuration_Mastery_025_ApprenticeConjuration",
             "REQ_Conjuration_Empower_025_EmpoweredConjuration",
             "REQ_Conjuration_Necromancy_025_Necromancy",
             "REQ_Conjuration_Bound_025_MysticBinding",
-            "REQ_Conjuration_Daedric_025_DaedricBinding"
+            "REQ_Conjuration_Daedric_025_DaedricBinding",
+            "REQ_Conjuration_Spirit_025_SpiritCalling"
           ]
         },
         "isRoot": true,
@@ -3946,9 +3799,7 @@
           "parents": [
             "REQ_Conjuration_Mastery_000_NoviceConjuration"
           ],
-          "children": [
-            "REQ_Conjuration_Mastery_050_AdeptConjuration"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -3982,12 +3833,10 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Conjuration_Mastery_025_ApprenticeConjuration"
-          ],
+          "parents": [],
           "children": [
-            "REQ_Conjuration_SoulMagic_025_SoulMagic",
-            "REQ_Conjuration_Mastery_075_ExpertConjuration"
+            "REQ_Conjuration_Mastery_075_ExpertConjuration",
+            "REQ_Conjuration_SoulMagic_025_SoulMagic"
           ]
         },
         "isRoot": false,
@@ -4025,9 +3874,7 @@
           "parents": [
             "REQ_Conjuration_Mastery_050_AdeptConjuration"
           ],
-          "children": [
-            "REQ_Conjuration_Mastery_100_MasterConjuration"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -4061,9 +3908,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Conjuration_Mastery_075_ExpertConjuration"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -4101,9 +3946,7 @@
           "parents": [
             "REQ_Conjuration_Mastery_000_NoviceConjuration"
           ],
-          "children": [
-            "REQ_Conjuration_Empower_050_CognitiveFlexibility1"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -4153,9 +3996,7 @@
         ],
         "totalRanks": 2,
         "connections": {
-          "parents": [
-            "REQ_Conjuration_Empower_025_EmpoweredConjuration"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -4193,9 +4034,7 @@
           "parents": [
             "REQ_Conjuration_Mastery_000_NoviceConjuration"
           ],
-          "children": [
-            "REQ_Conjuration_Necromancy_050_Ritualism"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -4229,12 +4068,10 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Conjuration_Necromancy_025_Necromancy"
-          ],
+          "parents": [],
           "children": [
-            "REQ_Conjuration_Necromancy_050_SiphonCorpse",
-            "REQ_Conjuration_Necromancy_075_DarkInfusion"
+            "REQ_Conjuration_Necromancy_075_DarkInfusion",
+            "REQ_Conjuration_Necromancy_050_SiphonCorpse"
           ]
         },
         "isRoot": false,
@@ -4309,9 +4146,7 @@
           "parents": [
             "REQ_Conjuration_Mastery_000_NoviceConjuration"
           ],
-          "children": [
-            "REQ_Conjuration_Bound_050_MysticInfusion"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -4345,12 +4180,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Conjuration_Bound_025_MysticBinding"
-          ],
-          "children": [
-            "REQ_Conjuration_Bound_075_MysticEmpowerment"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -4384,12 +4215,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Conjuration_Bound_050_MysticInfusion"
-          ],
-          "children": [
-            "REQ_Conjuration_Bound_100_MysticDisruption"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -4423,9 +4250,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Conjuration_Bound_075_MysticEmpowerment"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -4463,9 +4288,7 @@
           "parents": [
             "REQ_Conjuration_Mastery_000_NoviceConjuration"
           ],
-          "children": [
-            "REQ_Conjuration_Daedric_050_GatesOfOblivion"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -4499,12 +4322,10 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Conjuration_Daedric_025_DaedricBinding"
-          ],
+          "parents": [],
           "children": [
-            "REQ_Conjuration_Daedric_050_DarkChanneling",
-            "REQ_Conjuration_Daedric_075_WatersOfOblivion"
+            "REQ_Conjuration_Daedric_075_WatersOfOblivion",
+            "REQ_Conjuration_Daedric_050_DarkChanneling"
           ]
         },
         "isRoot": false,
@@ -4616,9 +4437,7 @@
           "parents": [
             "REQ_Conjuration_Mastery_000_NoviceConjuration"
           ],
-          "children": [
-            "REQ_Conjuration_Spirit_050_SpiritualBond"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -4652,12 +4471,10 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Conjuration_Spirit_025_SpiritCalling"
-          ],
+          "parents": [],
           "children": [
-            "REQ_Conjuration_Spirit_050_SpiritGuardian",
-            "REQ_Conjuration_Spirit_075_AncientSpirits"
+            "REQ_Conjuration_Spirit_075_AncientSpirits",
+            "REQ_Conjuration_Spirit_050_SpiritGuardian"
           ]
         },
         "isRoot": false,
@@ -4806,9 +4623,7 @@
           "parents": [
             "REQ_Conjuration_Mastery_050_AdeptConjuration"
           ],
-          "children": [
-            "REQ_Conjuration_SoulMagic_075_Necropotence"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -4842,9 +4657,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Conjuration_SoulMagic_025_SoulMagic"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -4884,9 +4697,9 @@
         "connections": {
           "parents": [],
           "children": [
-            "REQ_Alteration_Transmutation_025_Transmutation",
             "REQ_Alteration_Mastery_025_ApprenticeAlteration",
-            "REQ_Alteration_Empower_025_EmpoweredAlteration"
+            "REQ_Alteration_Empower_025_EmpoweredAlteration",
+            "REQ_Alteration_Transmutation_025_Transmutation"
           ]
         },
         "isRoot": true,
@@ -4922,14 +4735,12 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Alteration_MagicResistance_025_MagicResistance1",
             "REQ_Alteration_Mastery_000_NoviceAlteration"
           ],
           "children": [
-            "REQ_Alteration_Kinetomancy_025_Kinetomancy",
             "REQ_Alteration_Mastery_050_AdeptAlteration",
             "REQ_Alteration_MageArmor_025_ImprovedMageArmor",
-            "REQ_Alteration_MagicResistance_025_MagicResistance1"
+            "REQ_Alteration_Kinetomancy_025_Kinetomancy"
           ]
         },
         "isRoot": false,
@@ -4968,9 +4779,9 @@
             "REQ_Alteration_Mastery_025_ApprenticeAlteration"
           ],
           "children": [
-            "REQ_Alteration_WeatherMagic_050_WeatherMagic",
             "REQ_Alteration_Mastery_075_ExpertAlteration",
-            "REQ_Alteration_Metamagic_050_Stability"
+            "REQ_Alteration_Metamagic_050_Stability",
+            "REQ_Alteration_WeatherMagic_050_WeatherMagic"
           ]
         },
         "isRoot": false,
@@ -5009,8 +4820,8 @@
             "REQ_Alteration_Mastery_050_AdeptAlteration"
           ],
           "children": [
-            "REQ_Alteration_MagicalAbsorption_100_MagicalAbsorption",
-            "REQ_Alteration_Mastery_100_MasterAlteration"
+            "REQ_Alteration_Mastery_100_MasterAlteration",
+            "REQ_Alteration_MagicalAbsorption_100_MagicalAbsorption"
           ]
         },
         "isRoot": false,
@@ -5119,9 +4930,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Alteration_MageArmor_025_ImprovedMageArmor"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -5159,9 +4968,7 @@
           "parents": [
             "REQ_Alteration_Mastery_050_AdeptAlteration"
           ],
-          "children": [
-            "REQ_Alteration_Metamagic_075_MetamagicalThesis"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -5195,12 +5002,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Alteration_Metamagic_050_Stability"
-          ],
-          "children": [
-            "REQ_Alteration_Metamagic_100_MetamagicalEmpowerment"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -5234,9 +5037,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Alteration_Metamagic_075_MetamagicalThesis"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -5274,9 +5075,7 @@
           "parents": [
             "REQ_Alteration_Mastery_025_ApprenticeAlteration"
           ],
-          "children": [
-            "REQ_Alteration_MageArmor_050_VersatileArmor"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -5379,12 +5178,8 @@
         ],
         "totalRanks": 3,
         "connections": {
-          "parents": [
-            "REQ_Alteration_Mastery_025_ApprenticeAlteration"
-          ],
-          "children": [
-            "REQ_Alteration_Mastery_025_ApprenticeAlteration"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -5421,9 +5216,7 @@
           "parents": [
             "REQ_Alteration_Mastery_000_NoviceAlteration"
           ],
-          "children": [
-            "REQ_Alteration_Transmutation_075_TransmutationalMending"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -5457,9 +5250,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Alteration_Transmutation_025_Transmutation"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -5497,9 +5288,7 @@
           "parents": [
             "REQ_Alteration_Mastery_025_ApprenticeAlteration"
           ],
-          "children": [
-            "REQ_Alteration_Kinetomancy_075_PowerOfTheForce"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -5533,9 +5322,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Alteration_Kinetomancy_025_Kinetomancy"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -5573,9 +5360,7 @@
           "parents": [
             "REQ_Alteration_Mastery_050_AdeptAlteration"
           ],
-          "children": [
-            "REQ_Alteration_WeatherMagic_075_MasterOfStorms"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -5609,9 +5394,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Alteration_WeatherMagic_050_WeatherMagic"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -5797,9 +5580,9 @@
         "connections": {
           "parents": [],
           "children": [
-            "Feat_Perk_Skill_Speechcraft_Commander1",
             "REQ_Speech_Merchant",
-            "REQ_Speech_SilverTongue"
+            "REQ_Speech_SilverTongue",
+            "Feat_Perk_Skill_Speechcraft_Commander1"
           ]
         },
         "isRoot": true,
@@ -5837,9 +5620,7 @@
           "parents": [
             "REQ_Speech_Haggling"
           ],
-          "children": [
-            "REQ_Speech_Fencing"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -5873,9 +5654,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Speech_Merchant"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -5914,9 +5693,9 @@
             "REQ_Speech_Haggling"
           ],
           "children": [
-            "Feat_Perk_Skill_Speechcraft_WarCry",
             "REQ_Speech_Masquerade1",
-            "REQ_Speech_Leadership"
+            "REQ_Speech_Leadership",
+            "Feat_Perk_Skill_Speechcraft_WarCry"
           ]
         },
         "isRoot": false,
@@ -6038,11 +5817,11 @@
         "connections": {
           "parents": [],
           "children": [
-            "REQ_Speech_TheWayOfTheVoice",
             "REQ_Speech_TonguesInsight",
             "REQ_Speech_SpritiualEquilibirum",
             "REQ_Speech_IndomitableForce",
-            "REQ_Speech_DestructiveUrge"
+            "REQ_Speech_DestructiveUrge",
+            "REQ_Speech_TheWayOfTheVoice"
           ]
         },
         "isRoot": true,
@@ -6422,8 +6201,8 @@
         "connections": {
           "parents": [],
           "children": [
-            "REQ_Alchemy_ConcentratedPoisons",
-            "REQ_Alchemy_ImprovedElixirs"
+            "REQ_Alchemy_ImprovedElixirs",
+            "REQ_Alchemy_ConcentratedPoisons"
           ]
         },
         "isRoot": true,
@@ -6462,9 +6241,9 @@
             "REQ_Alchemy_AlchemicalLore1"
           ],
           "children": [
-            "REQ_Alchemy_Regeneration",
             "REQ_Alchemy_Catalysis1",
-            "REQ_Alchemy_NightVision"
+            "REQ_Alchemy_NightVision",
+            "REQ_Alchemy_Regeneration"
           ]
         },
         "isRoot": false,
@@ -6518,9 +6297,7 @@
           "parents": [
             "REQ_Alchemy_ImprovedElixirs"
           ],
-          "children": [
-            "REQ_Alchemy_Immunization"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -6555,13 +6332,12 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Alchemy_Catalysis1",
             "REQ_Alchemy_ImprovedPoisons"
           ],
           "children": [
-            "REQ_Alchemy_AlchemicalIntellect",
             "REQ_Alchemy_PurificationProcess",
-            "REQ_Alchemy_FortifiedMuscles"
+            "REQ_Alchemy_FortifiedMuscles",
+            "REQ_Alchemy_AlchemicalIntellect"
           ]
         },
         "isRoot": false,
@@ -6644,12 +6420,9 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Alchemy_FortifiedMuscles",
             "REQ_Alchemy_Immunization"
           ],
-          "children": [
-            "REQ_Alchemy_FortifiedMuscles"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -6694,12 +6467,9 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Alchemy_Immunization",
-            "REQ_Alchemy_AlchemicalIntellect"
+            "REQ_Alchemy_Immunization"
           ],
-          "children": [
-            "REQ_Alchemy_AlchemicalIntellect"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -6740,12 +6510,9 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Alchemy_NightVision",
             "REQ_Alchemy_ImprovedElixirs"
           ],
-          "children": [
-            "REQ_Alchemy_NightVision"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -6794,12 +6561,9 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Alchemy_ImprovedElixirs",
-            "REQ_Alchemy_Regeneration"
+            "REQ_Alchemy_ImprovedElixirs"
           ],
-          "children": [
-            "REQ_Alchemy_Regeneration"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -6836,9 +6600,7 @@
           "parents": [
             "REQ_Alchemy_AlchemicalLore1"
           ],
-          "children": [
-            "REQ_Alchemy_ImprovedPoisons"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -6872,12 +6634,10 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Alchemy_ConcentratedPoisons"
-          ],
+          "parents": [],
           "children": [
-            "ORD_Alc60_Alkahest_Perk_60",
-            "REQ_Alchemy_Immunization"
+            "REQ_Alchemy_Immunization",
+            "ORD_Alc60_Alkahest_Perk_60"
           ]
         },
         "isRoot": false,
@@ -7037,9 +6797,7 @@
           "parents": [
             "REQ_Alchemy_ImprovedPoisons"
           ],
-          "children": [
-            "ORD_Alc90_WorldSerpent_Perk_90_OrdASISExclude"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -7073,9 +6831,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "ORD_Alc60_Alkahest_Perk_60"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -7131,11 +6887,11 @@
         "connections": {
           "parents": [],
           "children": [
-            "ORD_Sne30_FogOfWar_Perk_30_OrdASISExclude",
             "REQ_Sneak_Assassin_025_DeftStrike",
             "REQ_Sneak_Mastery_025_MuffledMovement",
             "Feat_Perk_Skill_Sneak_ArcaneAssassin1",
-            "ORD_Sne20_Tripwire_Perk_20_OrdASISExclude"
+            "ORD_Sne20_Tripwire_Perk_20_OrdASISExclude",
+            "ORD_Sne30_FogOfWar_Perk_30_OrdASISExclude"
           ]
         },
         "isRoot": true,
@@ -7173,9 +6929,7 @@
           "parents": [
             "REQ_Sneak_Mastery_000_Stealth1"
           ],
-          "children": [
-            "REQ_Sneak_Assassin_050_AnatomicalLore"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -7209,12 +6963,10 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Sneak_Assassin_025_DeftStrike"
-          ],
+          "parents": [],
           "children": [
-            "ORD_Sne80_ProblemSolver_Perk_80",
-            "REQ_Sneak_Assassin_075_AdvancedAnatomicalLore"
+            "REQ_Sneak_Assassin_075_AdvancedAnatomicalLore",
+            "ORD_Sne80_ProblemSolver_Perk_80"
           ]
         },
         "isRoot": false,
@@ -7289,9 +7041,7 @@
           "parents": [
             "REQ_Sneak_Mastery_000_Stealth1"
           ],
-          "children": [
-            "REQ_Sneak_Mastery_050_LightSteps"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -7325,12 +7075,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Sneak_Mastery_025_MuffledMovement"
-          ],
-          "children": [
-            "REQ_Sneak_Mastery_075_Acrobatics"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -7364,12 +7110,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Sneak_Mastery_050_LightSteps"
-          ],
-          "children": [
-            "REQ_Sneak_Mastery_100_Shadowrunner"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -7403,9 +7145,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Sneak_Mastery_075_Acrobatics"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -7549,9 +7289,7 @@
           "parents": [
             "REQ_Sneak_Mastery_000_Stealth1"
           ],
-          "children": [
-            "ORD_Sne90_CloakAndDagger_Perk_90"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -7588,9 +7326,7 @@
           "parents": [
             "REQ_Sneak_Mastery_000_Stealth1"
           ],
-          "children": [
-            "ORD_Sne40_Whiplash_Perk_40_OrdASISExclude"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -7624,9 +7360,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "ORD_Sne20_Tripwire_Perk_20_OrdASISExclude"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -7661,9 +7395,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "ORD_Sne30_FogOfWar_Perk_30_OrdASISExclude"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -7703,10 +7435,10 @@
         "connections": {
           "parents": [],
           "children": [
-            "BBWayfarer1",
             "REQ_Lockpicking_30_LoneWolf",
             "REQ_Lockpicking_25_Locksmith",
-            "REQ_Lockpicking_30_Leader"
+            "REQ_Lockpicking_30_Leader",
+            "BBWayfarer1"
           ]
         },
         "isRoot": true,
@@ -7744,9 +7476,7 @@
           "parents": [
             "REQ_Lockpicking_00_Looter"
           ],
-          "children": [
-            "REQ_Lockpicking_50_Solo"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -7780,12 +7510,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Lockpicking_30_LoneWolf"
-          ],
-          "children": [
-            "REQ_Lockpicking_70_Maverick"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -7819,12 +7545,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Lockpicking_50_Solo"
-          ],
-          "children": [
-            "REQ_Lockpicking_100_OneManLegion"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -7858,9 +7580,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Lockpicking_70_Maverick"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -7899,8 +7619,8 @@
             "REQ_Lockpicking_00_Looter"
           ],
           "children": [
-            "ORD_Loc30_Lockdown_Perk_30_OrdASISExclude",
-            "REQ_Lockpicking_40_TreasureHunter"
+            "REQ_Lockpicking_40_TreasureHunter",
+            "ORD_Loc30_Lockdown_Perk_30_OrdASISExclude"
           ]
         },
         "isRoot": false,
@@ -7938,9 +7658,7 @@
           "parents": [
             "REQ_Lockpicking_25_Locksmith"
           ],
-          "children": [
-            "REQ_Lockpicking_60_ExtraPocketsReplacer"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -7974,12 +7692,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Lockpicking_40_TreasureHunter"
-          ],
-          "children": [
-            "REQ_Lockpicking_90_VeteranDelver"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -8013,9 +7727,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Lockpicking_60_ExtraPocketsReplacer"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -8053,9 +7765,7 @@
           "parents": [
             "REQ_Lockpicking_00_Looter"
           ],
-          "children": [
-            "REQ_Lockpicking_50_Captain"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -8089,12 +7799,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Lockpicking_30_Leader"
-          ],
-          "children": [
-            "REQ_Lockpicking_70_Commander"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -8128,12 +7834,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Lockpicking_50_Captain"
-          ],
-          "children": [
-            "REQ_Lockpicking_100_Legion"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -8167,9 +7869,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Lockpicking_70_Commander"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -8204,9 +7904,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "BBWayfarerFood"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -8241,12 +7939,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "BBWayfarer1"
-          ],
-          "children": [
-            "BBWayfarerTaming"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -8299,9 +7993,7 @@
           "parents": [
             "REQ_Lockpicking_00_Looter"
           ],
-          "children": [
-            "BBWayfarerFood"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -8338,9 +8030,7 @@
           "parents": [
             "REQ_Lockpicking_25_Locksmith"
           ],
-          "children": [
-            "ORD_Loc50_Hotwire_Perk_50_OrdASISExclude"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -8374,12 +8064,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "ORD_Loc30_Lockdown_Perk_30_OrdASISExclude"
-          ],
-          "children": [
-            "ORD_Loc90_PercussiveMaintenance_Perk_90_OrdASISExclude"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -8413,9 +8099,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "ORD_Loc50_Hotwire_Perk_50_OrdASISExclude"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -8471,9 +8155,9 @@
         "connections": {
           "parents": [],
           "children": [
-            "REQ_Pickpocket_30_Sound_Body",
             "REQ_Pickpocket_20_Outlaw1",
-            "REQ_Pickpocket_30_Cutpurse"
+            "REQ_Pickpocket_30_Cutpurse",
+            "REQ_Pickpocket_30_Sound_Body"
           ]
         },
         "isRoot": true,
@@ -8512,8 +8196,8 @@
             "REQ_Pickpocket_Mastery_000_NimbleFingers1"
           ],
           "children": [
-            "ORD_Pic50_LawlessWorld_Perk_50_OrdASISExclude",
-            "REQ_Pickpocket_50_Thief"
+            "REQ_Pickpocket_50_Thief",
+            "ORD_Pic50_LawlessWorld_Perk_50_OrdASISExclude"
           ]
         },
         "isRoot": false,
@@ -8552,8 +8236,8 @@
             "REQ_Pickpocket_20_Outlaw1"
           ],
           "children": [
-            "ORD_Pic40_DeathsEmperor_Perk_40_OrdASISExclude",
-            "REQ_Pickpocket_77_Lucky"
+            "REQ_Pickpocket_77_Lucky",
+            "ORD_Pic40_DeathsEmperor_Perk_40_OrdASISExclude"
           ]
         },
         "isRoot": false,
@@ -8628,9 +8312,7 @@
           "parents": [
             "REQ_Pickpocket_Mastery_000_NimbleFingers1"
           ],
-          "children": [
-            "REQ_Pickpocket_50_NightThief"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -8664,12 +8346,10 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Pickpocket_30_Cutpurse"
-          ],
+          "parents": [],
           "children": [
-            "ORD_Pic40_DeathsEmperor_Perk_40_OrdASISExclude",
-            "REQ_Pickpocket_70_Misdirection"
+            "REQ_Pickpocket_70_Misdirection",
+            "ORD_Pic40_DeathsEmperor_Perk_40_OrdASISExclude"
           ]
         },
         "isRoot": false,
@@ -8707,9 +8387,7 @@
           "parents": [
             "REQ_Pickpocket_50_NightThief"
           ],
-          "children": [
-            "REQ_Pickpocket_100_PerfectTouch"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -8743,9 +8421,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Pickpocket_70_Misdirection"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -8800,9 +8476,7 @@
             "REQ_Pickpocket_Mastery_000_NimbleFingers1",
             "LoreRimTrapper_Rank1"
           ],
-          "children": [
-            "Req_Pickpocket_60_Sound_Mind"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -8836,12 +8510,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Pickpocket_30_Sound_Body"
-          ],
-          "children": [
-            "REQ_Pickpocket_80_Sound_Spirit"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -8875,9 +8545,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "Req_Pickpocket_60_Sound_Mind"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -8909,9 +8577,9 @@
         "connections": {
           "parents": [],
           "children": [
-            "REQ_Pickpocket_25_Pocket_sand",
+            "LoreRimTrapper_Rank2",
             "REQ_Pickpocket_30_Sound_Body",
-            "LoreRimTrapper_Rank2"
+            "REQ_Pickpocket_25_Pocket_sand"
           ]
         },
         "isRoot": true,
@@ -8949,9 +8617,7 @@
           "parents": [
             "LoreRimTrapper_Rank1"
           ],
-          "children": [
-            "LoreRimTrapper_Rank3"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -8985,9 +8651,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "LoreRimTrapper_Rank2"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -9025,9 +8689,7 @@
           "parents": [
             "LoreRimTrapper_Rank1"
           ],
-          "children": [
-            "REQ_Pickpocket_50_quick_sand"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -9061,9 +8723,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Pickpocket_25_Pocket_sand"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -9098,9 +8758,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "ORD_Pic40_DeathsEmperor_Perk_40_OrdASISExclude"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -9139,9 +8797,7 @@
             "REQ_Pickpocket_50_Thief",
             "REQ_Pickpocket_50_NightThief"
           ],
-          "children": [
-            "ORD_Pic90_Mutiny_Perk_90_OrdASISExclude"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -9217,10 +8873,10 @@
         "connections": {
           "parents": [],
           "children": [
-            "Feat_Perk_Skill_Evasion_Unarmored1",
             "REQ_Evasion_Finesse",
             "REQ_Evasion_Dodge",
-            "REQ_Evasion_AgileSpellcasting"
+            "REQ_Evasion_AgileSpellcasting",
+            "Feat_Perk_Skill_Evasion_Unarmored1"
           ]
         },
         "isRoot": true,
@@ -9259,10 +8915,10 @@
             "REQ_Evasion_Agility"
           ],
           "children": [
-            "Feat_Perk_Skill_Evasion_Athletics1",
             "REQ_Evasion_CombatReflexes",
             "REQ_Evasion_Dexterity",
-            "REQ_Evasion_VexingFlanker"
+            "REQ_Evasion_VexingFlanker",
+            "Feat_Perk_Skill_Evasion_Athletics1"
           ]
         },
         "isRoot": false,
@@ -9298,12 +8954,9 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Evasion_VexingFlanker",
             "REQ_Evasion_Finesse"
           ],
-          "children": [
-            "REQ_Evasion_MeteoricReflexes"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -9337,10 +8990,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Evasion_CombatReflexes",
-            "REQ_Evasion_WindWalker"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -9378,9 +9028,7 @@
           "parents": [
             "REQ_Evasion_Finesse"
           ],
-          "children": [
-            "REQ_Evasion_WindWalker"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -9414,12 +9062,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Evasion_Dexterity"
-          ],
-          "children": [
-            "REQ_Evasion_MeteoricReflexes"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -9456,9 +9100,7 @@
           "parents": [
             "REQ_Evasion_Finesse"
           ],
-          "children": [
-            "REQ_Evasion_CombatReflexes"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -9496,8 +9138,8 @@
             "REQ_Evasion_Agility"
           ],
           "children": [
-            "ORD_Lia30_AsALeaf_Perk_30",
-            "ORD_Lia60_EvasiveLeap_Perk_60_OrdASISExclude"
+            "ORD_Lia60_EvasiveLeap_Perk_60_OrdASISExclude",
+            "ORD_Lia30_AsALeaf_Perk_30"
           ]
         },
         "isRoot": false,
@@ -9625,9 +9267,7 @@
           "parents": [
             "REQ_Evasion_Finesse"
           ],
-          "children": [
-            "ORD_Lia20_AnnoyingMosquitoes_Perk_20"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -9677,9 +9317,7 @@
         ],
         "totalRanks": 2,
         "connections": {
-          "parents": [
-            "Feat_Perk_Skill_Evasion_Athletics1"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -9793,9 +9431,9 @@
         "connections": {
           "parents": [],
           "children": [
-            "REQ_HeavyArmor_RelentlessOnslaught",
             "REQ_HeavyArmor_CombatCasting",
-            "REQ_HeavyArmor_CombatTraining"
+            "REQ_HeavyArmor_CombatTraining",
+            "REQ_HeavyArmor_RelentlessOnslaught"
           ]
         },
         "isRoot": true,
@@ -9833,9 +9471,7 @@
           "parents": [
             "REQ_HeavyArmor_Conditioning"
           ],
-          "children": [
-            "REQ_HeavyArmor_CombatTrance"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -9869,12 +9505,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_HeavyArmor_CombatCasting"
-          ],
-          "children": [
-            "REQ_HeavyArmor_CombatMeditation"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -9908,12 +9540,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_HeavyArmor_CombatTrance"
-          ],
-          "children": [
-            "REQ_HeavyArmor_BattleMage"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -9947,9 +9575,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_HeavyArmor_CombatMeditation"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -9988,8 +9614,8 @@
             "REQ_HeavyArmor_Conditioning"
           ],
           "children": [
-            "Feat_Perk_Skill_HeavyArmor_Immovable1",
-            "REQ_HeavyArmor_Fortitude"
+            "REQ_HeavyArmor_Fortitude",
+            "Feat_Perk_Skill_HeavyArmor_Immovable1"
           ]
         },
         "isRoot": false,
@@ -10027,9 +9653,7 @@
           "parents": [
             "REQ_HeavyArmor_CombatTraining"
           ],
-          "children": [
-            "REQ_HeavyArmor_PowerOfTheCombatant"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -10063,12 +9687,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_HeavyArmor_Fortitude"
-          ],
-          "children": [
-            "REQ_HeavyArmor_Juggernaut"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -10102,9 +9722,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_HeavyArmor_PowerOfTheCombatant"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -10143,8 +9761,8 @@
             "REQ_HeavyArmor_Conditioning"
           ],
           "children": [
-            "ORD_Hea20_Cushioned_Perk_50",
-            "Feat_Perk_Skill_HeavyArmor_DevastatingTackle1"
+            "Feat_Perk_Skill_HeavyArmor_DevastatingTackle1",
+            "ORD_Hea20_Cushioned_Perk_50"
           ]
         },
         "isRoot": false,
@@ -10288,9 +9906,7 @@
           "parents": [
             "REQ_HeavyArmor_RelentlessOnslaught"
           ],
-          "children": [
-            "ORD_Hea40_Defiance_Perk_40"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -10324,12 +9940,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "ORD_Hea20_Cushioned_Perk_50"
-          ],
-          "children": [
-            "ORD_Hea60_NeverKneel_Perk_60"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -10363,12 +9975,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "ORD_Hea40_Defiance_Perk_40"
-          ],
-          "children": [
-            "ORD_Hea70_ReapTheWhirlwind_Perk_70_OrdASISExclude"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -10402,9 +10010,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "ORD_Hea60_NeverKneel_Perk_60"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -10444,12 +10050,12 @@
         "connections": {
           "parents": [],
           "children": [
-            "REQ_Block_Shortsword",
             "REQ_Block_StrongGrip",
             "REQ_Block_PowerfulBashes",
             "REQ_Block_ExperiencedBlocking",
             "Feat_Perk_Skill_Block_TorchCombat1",
-            "REQ_WeaponsMaster1"
+            "REQ_WeaponsMaster1",
+            "REQ_Block_Shortsword"
           ]
         },
         "isRoot": true,
@@ -10487,9 +10093,7 @@
           "parents": [
             "REQ_Block_ImprovedBlocking"
           ],
-          "children": [
-            "REQ_Block_ElementalProtection"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -10523,12 +10127,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Block_StrongGrip"
-          ],
-          "children": [
-            "REQ_Block_DefensiveStance"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -10562,12 +10162,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Block_ElementalProtection"
-          ],
-          "children": [
-            "REQ_Block_UnstoppableCharge"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -10601,10 +10197,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Block_DefensiveStance",
-            "REQ_Block_DisarmingBash"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -10643,8 +10236,8 @@
             "REQ_Block_ImprovedBlocking"
           ],
           "children": [
-            "Feat_Perk_Skill_Block_ShieldStrike1",
-            "REQ_Block_OverpoweringBashes"
+            "REQ_Block_OverpoweringBashes",
+            "Feat_Perk_Skill_Block_ShieldStrike1"
           ]
         },
         "isRoot": false,
@@ -10682,9 +10275,7 @@
           "parents": [
             "REQ_Block_PowerfulBashes"
           ],
-          "children": [
-            "REQ_Block_DisarmingBash"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -10718,12 +10309,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_Block_OverpoweringBashes"
-          ],
-          "children": [
-            "REQ_Block_UnstoppableCharge"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -10903,9 +10490,7 @@
           "parents": [
             "REQ_Block_ImprovedBlocking"
           ],
-          "children": [
-            "REQ_PenetratingStrikes_Master"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -10939,9 +10524,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_WeaponsMaster1"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -11018,12 +10601,12 @@
         "connections": {
           "parents": [],
           "children": [
-            "Feat_Perk_Skill_Marksmanship_BowStrike1",
             "REQ_Marksmanship_EagleEye",
             "REQ_Marksmanship_PreciseAim",
             "REQ_Marksmanship_Ranger",
             "REQ_Marksmanship_Sniper",
-            "REQ_Marksmanship_HiddenBlade"
+            "REQ_Marksmanship_HiddenBlade",
+            "Feat_Perk_Skill_Marksmanship_BowStrike1"
           ]
         },
         "isRoot": true,
@@ -11062,11 +10645,11 @@
             "REQ_Marksmanship_RangedCombatTraining"
           ],
           "children": [
-            "REQ_Marksmanship_SharpThrow",
             "REQ_Marksmanship_MarksmansFocus",
             "REQ_Marksmanship_QuickShot",
             "REQ_Marksmanship_RapidReload",
-            "REQ_Marksmanship_PowerShot"
+            "REQ_Marksmanship_PowerShot",
+            "REQ_Marksmanship_SharpThrow"
           ]
         },
         "isRoot": false,
@@ -11216,8 +10799,8 @@
             "REQ_Marksmanship_EagleEye"
           ],
           "children": [
-            "ORD_Arc90_LionsArrow_Perk_90_OrdASISExclude",
-            "REQ_Marksmanship_StunningPrecision"
+            "REQ_Marksmanship_StunningPrecision",
+            "ORD_Arc90_LionsArrow_Perk_90_OrdASISExclude"
           ]
         },
         "isRoot": false,
@@ -11253,8 +10836,8 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Marksmanship_PenetratingShot",
-            "REQ_Marksmanship_PowerShot"
+            "REQ_Marksmanship_PowerShot",
+            "REQ_Marksmanship_PenetratingShot"
           ],
           "children": []
         },
@@ -11294,8 +10877,8 @@
             "REQ_Marksmanship_RangedCombatTraining"
           ],
           "children": [
-            "ORD_Arc30_FocusOnThePrey_Perk_30_OrdASISExclude",
-            "REQ_Marksmanship_PiercingShot"
+            "REQ_Marksmanship_PiercingShot",
+            "ORD_Arc30_FocusOnThePrey_Perk_30_OrdASISExclude"
           ]
         },
         "isRoot": false,
@@ -11334,8 +10917,8 @@
             "REQ_Marksmanship_PreciseAim"
           ],
           "children": [
-            "ORD_Arc75_ThreeCrows_Perk_75_OrdASISExclude",
-            "REQ_Marksmanship_PenetratingShot"
+            "REQ_Marksmanship_PenetratingShot",
+            "ORD_Arc75_ThreeCrows_Perk_75_OrdASISExclude"
           ]
         },
         "isRoot": false,
@@ -11374,8 +10957,8 @@
             "REQ_Marksmanship_PiercingShot"
           ],
           "children": [
-            "ORD_Arc90_LionsArrow_Perk_90_OrdASISExclude",
-            "REQ_Marksmanship_StunningPrecision"
+            "REQ_Marksmanship_StunningPrecision",
+            "ORD_Arc90_LionsArrow_Perk_90_OrdASISExclude"
           ]
         },
         "isRoot": false,
@@ -11773,9 +11356,7 @@
         "totalRanks": 2,
         "connections": {
           "parents": [],
-          "children": [
-            "REQ_TwoHanded_BarbaricMight"
-          ]
+          "children": []
         },
         "isRoot": true,
         "position": {
@@ -11809,16 +11390,14 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_TwoHanded_GreatWeaponMastery1"
-          ],
+          "parents": [],
           "children": [
-            "REQ_TwoHanded_QuarterstaffFocus1",
             "REQ_TwoHanded_DevastatingStrike",
             "REQ_TwoHanded_DevastatingCharge",
             "REQ_TwoHanded_BattleAxeFocus1",
             "REQ_TwoHanded_GreatswordFocus1",
-            "REQ_TwoHanded_WarhammerFocus1"
+            "REQ_TwoHanded_WarhammerFocus1",
+            "REQ_TwoHanded_QuarterstaffFocus1"
           ]
         },
         "isRoot": false,
@@ -11856,9 +11435,7 @@
           "parents": [
             "REQ_TwoHanded_BarbaricMight"
           ],
-          "children": [
-            "REQ_TwoHanded_Cleave"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -11892,13 +11469,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_TwoHanded_DevastatingStrike",
-            "REQ_TwoHanded_DevastatingCharge"
-          ],
-          "children": [
-            "REQ_TwoHanded_DevastatingCleave"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -11932,12 +11504,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_TwoHanded_Cleave"
-          ],
-          "children": [
-            "REQ_TwoHanded_MightyStrike"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -11971,9 +11539,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_TwoHanded_DevastatingCleave"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -12011,9 +11577,7 @@
           "parents": [
             "REQ_TwoHanded_BarbaricMight"
           ],
-          "children": [
-            "REQ_TwoHanded_Cleave"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -12082,9 +11646,7 @@
           "parents": [
             "REQ_TwoHanded_BarbaricMight"
           ],
-          "children": [
-            "REQ_TwoHanded_Battleaxe_ShieldBreaker"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -12153,9 +11715,7 @@
           "parents": [
             "REQ_TwoHanded_BarbaricMight"
           ],
-          "children": [
-            "REQ_TwoHanded_Greatsword_ReverseSlash"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -12224,9 +11784,7 @@
           "parents": [
             "REQ_TwoHanded_BarbaricMight"
           ],
-          "children": [
-            "REQ_TwoHanded_Warhammer_Onslaught"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -12295,9 +11853,7 @@
           "parents": [
             "REQ_TwoHanded_BarbaricMight"
           ],
-          "children": [
-            "REQ_TwoHanded_Quarterstaff_DefensiveStrike"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -12331,12 +11887,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_TwoHanded_GreatswordFocus1"
-          ],
-          "children": [
-            "ORD_Two60_DeathOrGlory_Perk_60"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -12370,12 +11922,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_TwoHanded_WarhammerFocus1"
-          ],
-          "children": [
-            "ORD_Two70_GrandSlam_Perk_70_OrdASISExclude"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -12409,12 +11957,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_TwoHanded_BattleAxeFocus1"
-          ],
-          "children": [
-            "ORD_Two50_Execute_Perk_50_OrdASISExclude"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -12448,9 +11992,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_TwoHanded_Quarterstaff_DefensiveStrike"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -12485,9 +12027,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_TwoHanded_Battleaxe_ShieldBreaker"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -12522,12 +12062,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_TwoHanded_QuarterstaffFocus1"
-          ],
-          "children": [
-            "ORD_Two90_BearHide_Perk_90"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -12561,9 +12097,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_TwoHanded_Warhammer_Onslaught"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -12598,9 +12132,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_TwoHanded_Greatsword_ReverseSlash"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -12657,10 +12189,10 @@
         "connections": {
           "parents": [],
           "children": [
-            "Feat_Perk_Skill_OneHanded_ArmedSpellcasting1",
             "REQ_OneHanded_PenetratingStrikes",
             "REQ_OneHanded_Flurry1",
-            "Feat_Perk_Skill_Onehanded_BalancedWielding1"
+            "Feat_Perk_Skill_Onehanded_BalancedWielding1",
+            "Feat_Perk_Skill_OneHanded_ArmedSpellcasting1"
           ]
         },
         "isRoot": true,
@@ -12696,15 +12228,15 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_OneHanded_WeaponMastery1"
+            "REQ_OneHanded_WeaponMastery1",
+            "REQ_OneHanded_DaggerFocus1"
           ],
           "children": [
-            "REQ_OneHanded_SwordFocus1",
             "REQ_OneHanded_PowerfulStrike",
             "REQ_OneHanded_PowerfulCharge",
             "REQ_OneHanded_WarAxeFocus1",
             "REQ_OneHanded_MaceFocus1",
-            "REQ_OneHanded_DaggerFocus1"
+            "REQ_OneHanded_SwordFocus1"
           ]
         },
         "isRoot": false,
@@ -12742,9 +12274,7 @@
           "parents": [
             "REQ_OneHanded_PenetratingStrikes"
           ],
-          "children": [
-            "REQ_OneHanded_StunningCharge"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -12778,10 +12308,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_OneHanded_PowerfulStrike",
-            "REQ_OneHanded_PowerfulCharge"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -12819,9 +12346,7 @@
           "parents": [
             "REQ_OneHanded_PenetratingStrikes"
           ],
-          "children": [
-            "REQ_OneHanded_StunningCharge"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -12890,9 +12415,7 @@
           "parents": [
             "REQ_OneHanded_PenetratingStrikes"
           ],
-          "children": [
-            "REQ_OneHanded_WarAxe_Armsbreaker"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -12961,9 +12484,7 @@
           "parents": [
             "REQ_OneHanded_PenetratingStrikes"
           ],
-          "children": [
-            "REQ_OneHanded_Mace_StunningBlow"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -13032,9 +12553,7 @@
           "parents": [
             "REQ_OneHanded_PenetratingStrikes"
           ],
-          "children": [
-            "REQ_OneHanded_Sword_DisarmingBlade"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -13087,9 +12606,7 @@
           "parents": [
             "REQ_OneHanded_WeaponMastery1"
           ],
-          "children": [
-            "REQ_OneHanded_StormOfSteel"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -13123,9 +12640,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_OneHanded_Flurry1"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -13157,8 +12672,8 @@
         "connections": {
           "parents": [],
           "children": [
-            "REQ_OneHanded_Unarmed_UnarmedDefense",
-            "REQ_OneHanded_Grapple_Grappling"
+            "REQ_OneHanded_Grapple_Grappling",
+            "REQ_OneHanded_Unarmed_UnarmedDefense"
           ]
         },
         "isRoot": true,
@@ -13225,10 +12740,9 @@
         ],
         "totalRanks": 3,
         "connections": {
-          "parents": [
-            "REQ_OneHanded_PenetratingStrikes"
-          ],
+          "parents": [],
           "children": [
+            "REQ_OneHanded_PenetratingStrikes",
             "REQ_OneHanded_Dagger_Puncture"
           ]
         },
@@ -13264,12 +12778,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_OneHanded_SwordFocus1"
-          ],
-          "children": [
-            "SWORDORD_One60_DeathOrGlory_Perk_60"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -13303,12 +12813,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_OneHanded_MaceFocus1"
-          ],
-          "children": [
-            "MACEORD_One70_GrandSlam_Perk_70_OrdASISExclude"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -13342,12 +12848,8 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_OneHanded_WarAxeFocus1"
-          ],
-          "children": [
-            "AXEORD_One50_Execute_Perk_50_OrdASISExclude"
-          ]
+          "parents": [],
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -13384,9 +12886,7 @@
           "parents": [
             "REQ_OneHanded_DaggerFocus1"
           ],
-          "children": [
-            "DAGGERORD_One70_DeathAdder_Perk_70_OrdASISExclude"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -13423,9 +12923,7 @@
           "parents": [
             "REQ_OneHanded_HandToHand"
           ],
-          "children": [
-            "REQ_OneHanded_Grapple_Takedown"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -13459,12 +12957,10 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_OneHanded_Grapple_Grappling"
-          ],
+          "parents": [],
           "children": []
         },
-        "isRoot": false,
+        "isRoot": true,
         "position": {
           "x": 4,
           "y": 0,
@@ -13499,9 +12995,7 @@
           "parents": [
             "REQ_OneHanded_HandToHand"
           ],
-          "children": [
-            "REQ_OneHanded_Unarmed_UnarmedStance"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -13535,9 +13029,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_OneHanded_Unarmed_UnarmedDefense"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -13646,9 +13138,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_OneHanded_Sword_DisarmingBlade"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -13683,9 +13173,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_OneHanded_Mace_StunningBlow"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -13720,9 +13208,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_OneHanded_WarAxe_Armsbreaker"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
@@ -13757,9 +13243,7 @@
         ],
         "totalRanks": 1,
         "connections": {
-          "parents": [
-            "REQ_OneHanded_Dagger_Puncture"
-          ],
+          "parents": [],
           "children": []
         },
         "isRoot": false,
