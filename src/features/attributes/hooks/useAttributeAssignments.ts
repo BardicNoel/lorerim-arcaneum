@@ -1,10 +1,16 @@
-import { useMemo } from 'react'
 import { useCharacterStore } from '@/shared/stores/characterStore'
 import { useRacesStore } from '@/shared/stores/racesStore'
-import type { AttributeType, AttributeDisplayData } from '../types'
+import { useMemo } from 'react'
+import type { AttributeDisplayData, AttributeType } from '../types'
 
 export function useAttributeAssignments() {
-  const { build, setAttributeAssignment, clearAttributeAssignment, clearAllAttributeAssignments, updateAttributeLevel } = useCharacterStore()
+  const {
+    build,
+    setAttributeAssignment,
+    clearAttributeAssignment,
+    clearAllAttributeAssignments,
+    updateAttributeLevel,
+  } = useCharacterStore()
   const { data: races } = useRacesStore()
 
   const assignments = build.attributeAssignments
@@ -35,26 +41,36 @@ export function useAttributeAssignments() {
   // Calculate display data
   const displayData = useMemo((): AttributeDisplayData => {
     const level = assignments.level || 1
-    const totalAssignments = assignments.health + assignments.stamina + assignments.magicka
+    const totalAssignments =
+      assignments.health + assignments.stamina + assignments.magicka
 
     return {
       health: {
         base: baseStats.health,
         assigned: assignments.health,
         total: baseStats.health + assignments.health,
-        ratio: level > 0 ? (assignments.health / level) * 100 : 0,
+        ratio:
+          totalAssignments > 0
+            ? (assignments.health / totalAssignments) * 100
+            : 0,
       },
       stamina: {
         base: baseStats.stamina,
         assigned: assignments.stamina,
         total: baseStats.stamina + assignments.stamina,
-        ratio: level > 0 ? (assignments.stamina / level) * 100 : 0,
+        ratio:
+          totalAssignments > 0
+            ? (assignments.stamina / totalAssignments) * 100
+            : 0,
       },
       magicka: {
         base: baseStats.magicka,
         assigned: assignments.magicka,
         total: baseStats.magicka + assignments.magicka,
-        ratio: level > 0 ? (assignments.magicka / level) * 100 : 0,
+        ratio:
+          totalAssignments > 0
+            ? (assignments.magicka / totalAssignments) * 100
+            : 0,
       },
     }
   }, [assignments, baseStats])
@@ -76,7 +92,8 @@ export function useAttributeAssignments() {
     const assignedLevels = Object.keys(assignments.assignments).map(Number)
     const unassigned = []
 
-    for (let i = 2; i <= assignments.level; i++) { // Start at level 2 (level 1 has no assignment)
+    for (let i = 2; i <= assignments.level; i++) {
+      // Start at level 2 (level 1 has no assignment)
       if (!assignedLevels.includes(i)) {
         unassigned.push(i)
       }
@@ -105,4 +122,4 @@ export function useAttributeAssignments() {
     getTotalAssignments,
     getUnassignedLevels,
   }
-} 
+}
