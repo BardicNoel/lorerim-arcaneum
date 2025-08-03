@@ -1,11 +1,11 @@
-import React, { memo } from 'react'
-import { Handle, Position } from 'reactflow'
+import { Z_INDEX } from '@/lib/constants'
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from '@/shared/ui/ui/hover-card'
-import { Z_INDEX } from '@/lib/constants'
+import React, { memo } from 'react'
+import { Handle, Position } from 'reactflow'
 import type { PerkNode as PerkNodeType } from '../../types'
 
 interface PerkNodeProps {
@@ -14,6 +14,7 @@ interface PerkNodeProps {
     isRoot?: boolean
     selected?: boolean
     currentRank?: number
+    hasNoPosition?: boolean
   }
   selected?: boolean
   onTogglePerk?: (perkId: string) => void
@@ -26,7 +27,6 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
   onTogglePerk,
   onRankChange,
 }) => {
-  
   // For multi-rank perks, consider them selected if rank > 0
   // For single-rank perks, use the boolean selected state
   const totalRanks = data.totalRanks
@@ -36,16 +36,16 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
   const handleNodeClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    
+
     const totalRanks = data.totalRanks || 1
-    
+
     if (totalRanks > 1) {
       // Multi-rank perk: cycle through ranks
       const currentRank = data.currentRank || 0
       const maxRank = data.totalRanks || 1
       // Cycle: 0 (unselected) -> 1 -> ... -> maxRank -> 0
       const nextRank = currentRank >= maxRank ? 0 : currentRank + 1
-      
+
       // Update the rank (this will also handle perk selection in the adapter)
       if (onRankChange) {
         onRankChange(data.edid, nextRank)
@@ -71,6 +71,18 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
       transition: 'all 0.2s ease',
       backgroundColor: 'hsl(var(--background))',
       color: 'hsl(var(--foreground))',
+    }
+
+    // Special styling for perks without position data (default positioned)
+    if (data.hasNoPosition) {
+      return {
+        ...baseStyle,
+        borderColor: '#ef4444', // Red border for default positioned perks
+        borderStyle: 'dashed',
+        backgroundColor: 'rgba(239, 68, 68, 0.1)', // Light red background
+        color: 'hsl(var(--foreground))',
+        boxShadow: '0 0 0 1px rgba(239, 68, 68, 0.3)',
+      }
     }
 
     if (isSelected) {
@@ -137,11 +149,13 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
           <h4 className="font-semibold text-sm">{data.name}</h4>
           <div className="text-sm text-muted-foreground">{description}</div>
           {/* Minimum skill level requirement */}
-          {typeof data.ranks[0]?.prerequisites?.skillLevel?.level === 'number' && data.ranks[0].prerequisites.skillLevel.level > 0 && (
-            <div className="text-xs text-blue-700 font-medium pt-1">
-              Min. Level: {data.ranks[0].prerequisites.skillLevel.level}
-            </div>
-          )}
+          {typeof data.ranks[0]?.prerequisites?.skillLevel?.level ===
+            'number' &&
+            data.ranks[0].prerequisites.skillLevel.level > 0 && (
+              <div className="text-xs text-blue-700 font-medium pt-1">
+                Min. Level: {data.ranks[0].prerequisites.skillLevel.level}
+              </div>
+            )}
           {totalRanks > 1 && (
             <div className="text-xs text-muted-foreground pt-2 border-t">
               <strong>Ranks:</strong> {data.currentRank || 0}/{totalRanks}
