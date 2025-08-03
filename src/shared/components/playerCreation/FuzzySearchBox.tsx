@@ -1,9 +1,9 @@
 // Shared FuzzySearchBox component for all features (migrated from features/religions/components/FuzzySearchBox.tsx)
-import React, { useState, useRef, useEffect } from 'react'
-import { Search, Plus, ChevronDown, X } from 'lucide-react'
+import { Z_INDEX } from '@/lib/constants'
 import { Button } from '@/shared/ui/ui/button'
 import { Input } from '@/shared/ui/ui/input'
-import { Z_INDEX } from '@/lib/constants'
+import { ChevronDown, Plus, Search } from 'lucide-react'
+import React, { useEffect, useRef, useState } from 'react'
 import type { SearchCategory, SearchOption } from './types'
 
 interface FuzzySearchBoxProps {
@@ -54,14 +54,28 @@ export function FuzzySearchBox({
     selectedCategory || singleCategory
       ? (selectedCategory || singleCategory)!.options.filter(
           option =>
-            (option.label && typeof option.label === 'string' && option.label.toLowerCase().includes(searchQuery.toLowerCase())) ||
-            (option.description && typeof option.description === 'string' && option.description.toLowerCase().includes(searchQuery.toLowerCase()))
+            (option.label &&
+              typeof option.label === 'string' &&
+              option.label.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (option.description &&
+              typeof option.description === 'string' &&
+              option.description
+                .toLowerCase()
+                .includes(searchQuery.toLowerCase()))
         )
       : categories.flatMap(category =>
           category.options.filter(
             option =>
-              (option.label && typeof option.label === 'string' && option.label.toLowerCase().includes(searchQuery.toLowerCase())) ||
-              (option.description && typeof option.description === 'string' && option.description.toLowerCase().includes(searchQuery.toLowerCase()))
+              (option.label &&
+                typeof option.label === 'string' &&
+                option.label
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase())) ||
+              (option.description &&
+                typeof option.description === 'string' &&
+                option.description
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase()))
           )
         )
 
@@ -126,7 +140,10 @@ export function FuzzySearchBox({
   const hasCustomQuery =
     searchQuery.trim() &&
     !filteredOptions.some(
-      option => option.label && typeof option.label === 'string' && option.label.toLowerCase() === searchQuery.toLowerCase()
+      option =>
+        option.label &&
+        typeof option.label === 'string' &&
+        option.label.toLowerCase() === searchQuery.toLowerCase()
     )
 
   return (
@@ -176,7 +193,7 @@ export function FuzzySearchBox({
       {isOpen && (
         <div
           className="absolute top-full left-0 right-0 mt-1 dropdown-enhanced rounded-lg max-h-96 overflow-y-auto"
-          style={{ zIndex: Z_INDEX.AUTOCOMPLETE }}
+          style={{ zIndex: Z_INDEX.AUTOCOMPLETE + 10 }}
         >
           {/* Category Selection - only show if multiple categories and no category selected */}
           {showCategorySelection && (

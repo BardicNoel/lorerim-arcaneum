@@ -1,5 +1,6 @@
 import { useSearchData } from '@/features/search/adapters/useSearchData'
 import type { SearchResult } from '@/features/search/model/SearchModel'
+import { Z_INDEX } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
@@ -221,8 +222,14 @@ export function GlobalSearch({
 
       {/* Search Modal */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm">
-          <div className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg">
+        <div
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm"
+          style={{ zIndex: Z_INDEX.MODAL }}
+        >
+          <div
+            className="fixed left-[50%] top-[50%] grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg"
+            style={{ zIndex: Z_INDEX.MODAL + 1 }}
+          >
             {/* Search Input */}
             <div className="flex items-center gap-2">
               <Search className="h-4 w-4 text-muted-foreground" />
