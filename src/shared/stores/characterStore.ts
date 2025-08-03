@@ -1,6 +1,6 @@
+import type { AttributeType } from '@/features/attributes/types'
 import { DEFAULT_BUILD, type BuildState } from '@/shared/types/build'
 import { create } from 'zustand'
-import type { AttributeType } from '@/features/attributes/types'
 
 interface CharacterStore {
   build: BuildState
@@ -22,23 +22,28 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
     })),
   setBuild: build => set({ build }),
   resetBuild: () => set({ build: DEFAULT_BUILD }),
-  
+
   // NEW: Attribute assignment methods
   setAttributeAssignment: (level: number, attribute: AttributeType) => {
     set(state => {
-      const currentAssignments = { ...state.build.attributeAssignments.assignments }
+      const currentAssignments = {
+        ...state.build.attributeAssignments.assignments,
+      }
       const currentTotals = { ...state.build.attributeAssignments }
-      
+
       // Remove previous assignment for this level if it exists
       const previousAssignment = currentAssignments[level]
       if (previousAssignment) {
-        currentTotals[previousAssignment] = Math.max(0, currentTotals[previousAssignment] - 1)
+        currentTotals[previousAssignment] = Math.max(
+          0,
+          currentTotals[previousAssignment] - 5
+        )
       }
-      
-      // Add new assignment
+
+      // Add new assignment (5 points per level)
       currentAssignments[level] = attribute
-      currentTotals[attribute] += 1
-      
+      currentTotals[attribute] += 5
+
       return {
         build: {
           ...state.build,
@@ -51,18 +56,20 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
       }
     })
   },
-  
+
   clearAttributeAssignment: (level: number) => {
     set(state => {
-      const currentAssignments = { ...state.build.attributeAssignments.assignments }
+      const currentAssignments = {
+        ...state.build.attributeAssignments.assignments,
+      }
       const currentTotals = { ...state.build.attributeAssignments }
-      
+
       const assignment = currentAssignments[level]
       if (assignment) {
-        currentTotals[assignment] = Math.max(0, currentTotals[assignment] - 1)
+        currentTotals[assignment] = Math.max(0, currentTotals[assignment] - 5)
         delete currentAssignments[level]
       }
-      
+
       return {
         build: {
           ...state.build,
@@ -75,7 +82,7 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
       }
     })
   },
-  
+
   clearAllAttributeAssignments: () => {
     set(state => ({
       build: {
@@ -90,7 +97,7 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
       },
     }))
   },
-  
+
   updateAttributeLevel: (level: number) => {
     set(state => ({
       build: {
