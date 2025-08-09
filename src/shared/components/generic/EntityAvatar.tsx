@@ -52,9 +52,20 @@ const entityAvatarMaps: Record<EntityType, Record<string, string>> = {
     // Add destiny avatars as they become available
   },
   birthsign: {
-    Apprentice: 'apprentice.svg',
-    // Add more birthsign avatars as they become available
-    // Current birthsigns: Warrior, Lady, Lord, Steed, Mage, Apprentice, Atronach, Ritual, Blessed Fire, Dead Horde, Thief, Lover, Shadow, Moonshadow, Tower, Serpent, Serpent's Curse
+    // Case-sensitive filenames must match assets in public/assets/sign-avatar/
+    Warrior: 'Warrior.svg',
+    Lady: 'Lady.svg',
+    Lord: 'Lord.svg',
+    Steed: 'Steed.svg',
+    Mage: 'Mage.svg',
+    Apprentice: 'Apprentice.svg',
+    Atronach: 'Atronach.svg',
+    Ritual: 'Ritual.svg',
+    Thief: 'Thief.svg',
+    Lover: 'Lover.svg',
+    Shadow: 'Shadow.svg',
+    Tower: 'Tower.svg',
+    Serpent: 'Serpent.svg',
   },
 }
 
