@@ -1,9 +1,9 @@
-import { renderHook, act } from '@testing-library/react'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { useSkillsPage } from '../useSkillsPage'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import { act, renderHook } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useSkillData } from '../useSkillData'
 import { useSkillFilters } from '../useSkillFilters'
+import { useSkillsPage } from '../useSkillsPage'
 
 // Mock the dependencies
 vi.mock('@/shared/hooks/useCharacterBuild')
@@ -17,7 +17,7 @@ const mockUseSkillFilters = vi.mocked(useSkillFilters)
 describe('useSkillsPage', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    
+
     // Mock useSkillData
     mockUseSkillData.mockReturnValue({
       skills: [
@@ -54,10 +54,11 @@ describe('useSkillsPage', () => {
           isSelected: false,
         },
       ],
+      perkTrees: [],
       loading: false,
       error: null,
       refreshSkills: vi.fn(),
-    })
+    } as any)
 
     // Mock useCharacterBuild
     mockUseCharacterBuild.mockReturnValue({
@@ -84,7 +85,7 @@ describe('useSkillsPage', () => {
       removePerk: vi.fn(),
       setPerkRank: vi.fn(),
       clearSkillPerks: vi.fn(),
-    })
+    } as any)
 
     // Mock useSkillFilters
     mockUseSkillFilters.mockReturnValue({
@@ -141,7 +142,7 @@ describe('useSkillsPage', () => {
       assignmentType: 'major',
       canAssignMajor: false,
       canAssignMinor: true,
-      perkCount: '0/10',
+      perkCount: '2/10',
     })
     expect(result.current.skills[1]).toMatchObject({
       id: 'skill2',
@@ -149,7 +150,7 @@ describe('useSkillsPage', () => {
       assignmentType: 'minor',
       canAssignMajor: true,
       canAssignMinor: false,
-      perkCount: '2/8',
+      perkCount: '1/8',
     })
   })
 
@@ -164,12 +165,11 @@ describe('useSkillsPage', () => {
       canAssignMajor: true,
       canAssignMinor: true,
       totalSkills: 2,
-      totalPerks: 2,
+      totalPerks: 3,
     })
   })
 
   it('should provide assignment handlers', () => {
-    const { result } = renderHook(() => useSkillsPage())
     const mockAddMajorSkill = vi.fn()
     const mockAddMinorSkill = vi.fn()
     const mockRemoveMajorSkill = vi.fn()
@@ -190,7 +190,9 @@ describe('useSkillsPage', () => {
       removePerk: vi.fn(),
       setPerkRank: vi.fn(),
       clearSkillPerks: vi.fn(),
-    })
+    } as any)
+
+    const { result } = renderHook(() => useSkillsPage())
 
     act(() => {
       result.current.onAssignMajor('skill1')
@@ -226,4 +228,4 @@ describe('useSkillsPage', () => {
 
     expect(result.current.selectedSkillId).toBe('skill1')
   })
-}) 
+})

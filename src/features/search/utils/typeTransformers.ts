@@ -77,17 +77,26 @@ export function applySearchHighlights(
 export function transformRaceData(result: SearchResult): TransformedRaceData {
   const originalData = result.item.originalData
 
-  return applySearchHighlights(
+  const base = applySearchHighlights(
     {
       id: result.item.id,
       name: result.item.name,
       description: result.item.description,
       originalData,
-      // Add race-specific fields from originalData
       ...originalData,
     },
     result.highlights
   )
+
+  // Provide props expected by RaceCard
+  ;(base as any).item = {
+    id: result.item.id,
+    name: result.item.name,
+    description: result.item.description,
+    category: (originalData && (originalData as any).category) || result.item.category,
+  }
+  ;(base as any).originalRace = originalData
+  return base
 }
 
 // Transform birthsign data
@@ -96,17 +105,34 @@ export function transformBirthsignData(
 ): TransformedBirthsignData {
   const originalData = result.item.originalData
 
-  return applySearchHighlights(
+  const base = applySearchHighlights(
     {
       id: result.item.id,
       name: result.item.name,
       description: result.item.description,
       originalData,
-      // Add birthsign-specific fields from originalData
       ...originalData,
     },
     result.highlights
   )
+
+  const group = (originalData && (originalData as any).group) || 'Other'
+  // Provide props expected by BirthsignCard
+  ;(base as any).birthsign = {
+    name: result.item.name,
+    group,
+    description: result.item.description || '',
+    powers: (originalData && (originalData as any).powers) || [],
+    stat_modifications:
+      (originalData && (originalData as any).stat_modifications) || [],
+  }
+  ;(base as any).item = {
+    id: result.item.id,
+    name: result.item.name,
+    description: result.item.description,
+    category: result.item.category,
+  }
+  return base
 }
 
 // Transform skill data

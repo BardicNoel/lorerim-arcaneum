@@ -1,4 +1,5 @@
-import { describe, expect, it, vi } from 'vitest'
+import { usePerkTreesStore } from '@/shared/stores/perkTreesStore'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import {
   calculateAllSkillLevels,
   calculateMinimumSkillLevel,
@@ -90,16 +91,19 @@ const mockPerkTreesData = [
   },
 ]
 
-// Mock fetch for perk trees data
-vi.stubGlobal(
-  'fetch',
-  vi.fn(() =>
-    Promise.resolve({
-      ok: true,
-      json: () => Promise.resolve(mockPerkTreesData),
-    })
-  )
-)
+beforeEach(() => {
+  // Seed the zustand store with mock perk trees data expected by skillLevels.ts
+  usePerkTreesStore.setState({
+    data: mockPerkTreesData as any,
+    loading: false,
+    error: null,
+  })
+})
+
+afterEach(() => {
+  // Reset store after each test to avoid cross-test contamination
+  usePerkTreesStore.setState({ data: [], loading: false, error: null })
+})
 
 describe('skillLevels', () => {
   describe('calculateMinimumSkillLevel', () => {

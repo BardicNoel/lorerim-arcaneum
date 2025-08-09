@@ -7,6 +7,7 @@ interface TypeSpecificSearchResultsProps {
   viewMode?: 'card' | 'accordion' | 'grid'
   renderMode?: 'grouped' | 'unified' | 'type-defaults'
   className?: string
+  onResultSelect?: (result: SearchResult) => void
 }
 
 export function TypeSpecificSearchResults({
@@ -14,6 +15,7 @@ export function TypeSpecificSearchResults({
   viewMode = 'card',
   renderMode = 'grouped',
   className,
+  onResultSelect,
 }: TypeSpecificSearchResultsProps) {
   const { renderSearchResult } = useTypeSpecificRenderers()
 
@@ -36,8 +38,8 @@ export function TypeSpecificSearchResults({
                   {renderSearchResult(
                     result,
                     viewMode,
-                    false, // No selection needed
-                    () => {} // No selection handler needed
+                    false,
+                    onResultSelect ? () => onResultSelect(result) : undefined
                   )}
                 </div>
               ))}
@@ -68,8 +70,8 @@ export function TypeSpecificSearchResults({
                     {renderSearchResult(
                       result,
                       defaultViewMode,
-                      false, // No selection needed
-                      () => {} // No selection handler needed
+                      false,
+                      onResultSelect ? () => onResultSelect(result) : undefined
                     )}
                   </div>
                 ))}
@@ -88,8 +90,8 @@ export function TypeSpecificSearchResults({
                 {renderSearchResult(
                   result,
                   viewMode,
-                  false, // No selection needed
-                  () => {} // No selection handler needed
+                  false,
+                  onResultSelect ? () => onResultSelect(result) : undefined
                 )}
               </div>
             ))}

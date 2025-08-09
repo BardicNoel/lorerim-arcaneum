@@ -1,13 +1,6 @@
-import { Z_INDEX } from '@/lib/constants'
+import { ResponsivePanel } from '@/shared/components/generic/ResponsivePanel'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import { Badge } from '@/shared/ui/ui/badge'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from '@/shared/ui/ui/sheet'
 import { H3 } from '@/shared/ui/ui/typography'
 import type { Race } from '../../types'
 import { CategoryBadge, RaceAvatar } from '../atomic'
@@ -27,24 +20,18 @@ export function RaceDetailsSheet({
   if (!race) return null
 
   return (
-    <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent
-        side="right"
-        className="w-[400px] sm:w-[700px] lg:w-[800px] max-w-[800px] p-6 overflow-y-auto bg-background"
-        style={{
-          maxWidth: '800px',
-          zIndex: Z_INDEX.DRAWER,
-          background: 'hsl(var(--card))',
-          backdropFilter: 'none',
-        }}
-      >
-        <SheetHeader className="mb-6">
+    <ResponsivePanel
+      open={isOpen}
+      onOpenChange={onOpenChange}
+      side="right"
+      className="w-[400px] sm:w-[700px] lg:w-[800px] max-w-[800px] p-0 overflow-y-auto bg-background"
+    >
+      <div className="p-6">
+        <div className="mb-6">
           <div className="flex items-start gap-4">
             <RaceAvatar raceName={race.name} size="4xl" />
             <div className="flex-1">
-              <SheetTitle className="text-2xl font-bold mb-2">
-                {race.name}
-              </SheetTitle>
+              <h2 className="text-2xl font-bold mb-2">{race.name}</h2>
               <div className="flex items-center gap-2 mb-2">
                 <CategoryBadge
                   category={race.category as 'Human' | 'Elf' | 'Beast'}
@@ -56,12 +43,12 @@ export function RaceDetailsSheet({
                   itemName={race.name}
                 />
               </div>
-              <SheetDescription className="text-sm leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 {race.description}
-              </SheetDescription>
+              </p>
             </div>
           </div>
-        </SheetHeader>
+        </div>
 
         <div className="space-y-6">
           {/* Starting Stats */}
@@ -126,7 +113,7 @@ export function RaceDetailsSheet({
             </div>
           )}
         </div>
-      </SheetContent>
-    </Sheet>
+      </div>
+    </ResponsivePanel>
   )
 }
