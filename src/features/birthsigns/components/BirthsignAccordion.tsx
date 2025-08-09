@@ -45,7 +45,11 @@ export function BirthsignAccordion({
             itemName={item.name}
           />
         )}
-        <BirthsignAvatar birthsignName={originalBirthsign.name} size="md" />
+        <BirthsignAvatar
+          birthsignName={originalBirthsign.name}
+          group={originalBirthsign.group}
+          size="2xl"
+        />
         <H3 className="text-primary font-semibold">{originalBirthsign.name}</H3>
         <div className="flex items-center gap-3 ml-auto">
           {originalBirthsign.group && (

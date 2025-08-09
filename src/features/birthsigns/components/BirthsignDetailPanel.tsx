@@ -38,7 +38,11 @@ export function BirthsignDetailPanel({
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
-        <BirthsignAvatar birthsignName={birthsign.name} size="lg" />
+        <BirthsignAvatar
+          birthsignName={birthsign.name}
+          group={birthsign.group}
+          size="3xl"
+        />
         <div>
           <h2 className="text-2xl font-bold">{birthsign.name}</h2>
           <p className="text-muted-foreground">{birthsign.group} Birthsign</p>

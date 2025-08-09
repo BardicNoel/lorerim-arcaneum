@@ -52,7 +52,11 @@ export function BirthsignCard({
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <BirthsignAvatar birthsignName={birthsign.name} size="md" />
+            <BirthsignAvatar
+              birthsignName={birthsign.name}
+              group={birthsign.group}
+              size="2xl"
+            />
             <h3 className="font-semibold text-lg">{birthsign.name}</h3>
           </div>
           <Badge variant="secondary" className={cn('text-xs', groupColor)}>

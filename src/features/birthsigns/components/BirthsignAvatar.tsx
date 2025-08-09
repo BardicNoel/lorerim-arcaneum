@@ -1,9 +1,12 @@
 import React from 'react'
 import { EntityAvatar } from '@/shared/components/generic'
+import { cn } from '@/lib/utils'
+import { birthsignGroupStyles } from '../config/birthsignConfig'
 
 interface BirthsignAvatarProps {
   birthsignName: string
-  size?: 'sm' | 'md' | 'lg' | 'xl'
+  group?: string
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
   className?: string
 }
 
@@ -13,15 +16,24 @@ interface BirthsignAvatarProps {
  */
 export function BirthsignAvatar({
   birthsignName,
-  size = 'md',
+  group,
+  size = '2xl',
   className,
 }: BirthsignAvatarProps) {
+  const groupStyle = group ? birthsignGroupStyles[group] : undefined
+  const borderColorClass = groupStyle?.text || 'text-foreground'
+
   return (
     <EntityAvatar
       entityName={birthsignName}
       entityType="birthsign"
       size={size}
-      className={className}
+      className={cn(
+        // Solid circle background with colored outline using currentColor
+        'border-2 border-current p-1 rounded-full bg-background dark:bg-input/30 shadow-sm',
+        borderColorClass,
+        className
+      )}
     />
   )
 }
