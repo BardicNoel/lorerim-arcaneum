@@ -108,11 +108,14 @@ export function EntityAvatar({
   }
 
   // Return image avatar
+  // Neutral background; icon itself will invert in dark mode for contrast
+  const containerBgClass = 'bg-muted'
+
   return (
     <div
       className={cn(
         'rounded-full overflow-hidden flex items-center justify-center',
-        'bg-muted dark:bg-white',
+        containerBgClass,
         sizeClasses[size],
         className
       )}
@@ -122,7 +125,7 @@ export function EntityAvatar({
           `assets/${entityType === 'birthsign' ? 'sign-avatar' : `${entityType}-avatar`}/${avatarFileName}`
         )}
         alt={`${entityName} avatar`}
-        className="w-full h-full object-contain dark:brightness-0"
+        className="w-full h-full object-contain dark:invert"
         onError={() => setImageError(true)}
         loading="lazy"
       />

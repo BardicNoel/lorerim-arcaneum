@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
+import '@testing-library/jest-dom/vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { BuildPageSkillCard } from '../BuildPageSkillCard'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { useSkillsQuickSelector } from '../../../adapters/useSkillsQuickSelector'
@@ -134,7 +135,7 @@ describe('BuildPageSkillCard', () => {
     render(<BuildPageSkillCard />)
     
     // Check that One-Handed (major skill) is not in the "Other Perked Skills" section
-    const otherPerkedSection = screen.getByText('Other Perked Skills')
+    const [otherPerkedSection] = screen.getAllByText('Other Perked Skills')
     expect(otherPerkedSection).toBeInTheDocument()
     
     // One-Handed should not appear in the other perked skills list
@@ -150,7 +151,7 @@ describe('BuildPageSkillCard', () => {
     render(<BuildPageSkillCard />)
     
     // Check that Two-Handed (minor skill) is not in the "Other Perked Skills" section
-    const otherPerkedSection = screen.getByText('Other Perked Skills')
+    const [otherPerkedSection] = screen.getAllByText('Other Perked Skills')
     expect(otherPerkedSection).toBeInTheDocument()
     
     // Two-Handed should not appear in the other perked skills list

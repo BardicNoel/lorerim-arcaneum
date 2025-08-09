@@ -238,9 +238,9 @@ describe('SpellSearchCard', () => {
     )
 
     // Find and click the first header (which should trigger expansion)
-    const headers = screen.getAllByRole('button')
-    const firstHeader = headers[0]
-    fireEvent.click(firstHeader)
+    // Click the accordion header
+    const headerButton = screen.getByRole('button', { name: /fireball/i })
+    fireEvent.click(headerButton)
 
     expect(onToggle).toHaveBeenCalledTimes(1)
   })
@@ -255,14 +255,13 @@ describe('SpellSearchCard', () => {
     )
 
     // When expanded, we should see the effects section
-    const effectsSections = screen.getAllByText('Effects')
-    expect(effectsSections.length).toBeGreaterThan(0)
+    expect(screen.getByText('Effects')).toBeDefined()
     
     // Should show the effect name
     expect(screen.getByText('Fire Damage')).toBeDefined()
     
     // Should show statistics section
-    expect(screen.getByText('Statistics')).toBeDefined()
+    expect(screen.getAllByText('Statistics')[0]).toBeDefined()
     
     // Should show magicka cost
     expect(screen.getByText('50 MP')).toBeDefined()
@@ -280,7 +279,7 @@ describe('SpellSearchCard', () => {
     // When not expanded, we should not see the effects section
     // Note: The component might still render effects in some cases due to the way it's structured
     // Let's check for the specific expanded content instead
-    expect(screen.queryByText('Statistics')).toBeNull()
+    expect(screen.queryAllByText('Statistics').length).toBe(0)
     expect(screen.queryByText('50 MP')).toBeNull()
   })
 
@@ -299,7 +298,7 @@ describe('SpellSearchCard', () => {
       )
 
       // All view modes should show the same detailed content
-      expect(screen.getByText('Effects')).toBeDefined()
+      expect(screen.getAllByText('Effects')[0]).toBeDefined()
       expect(screen.getByText('Fire Damage')).toBeDefined()
       expect(screen.getByText('Statistics')).toBeDefined()
       expect(screen.getByText('50 MP')).toBeDefined()
