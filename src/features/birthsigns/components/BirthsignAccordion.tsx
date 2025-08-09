@@ -1,14 +1,14 @@
 import { cn } from '@/lib/utils'
 import { AccordionCard } from '@/shared/components/generic/AccordionCard'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
 import { H3 } from '@/shared/ui/ui/typography'
 import { Star } from 'lucide-react'
+import { getBirthsignGroupStyle } from '../config/birthsignConfig'
 import type { Birthsign } from '../types'
 import { BirthsignAvatar } from './BirthsignAvatar'
-import { FormattedText } from '@/shared/components/generic/FormattedText'
-import { getBirthsignGroupStyle } from '../config/birthsignConfig'
 
 interface BirthsignAccordionProps {
   item: PlayerCreationItem & { originalBirthsign: Birthsign }
@@ -45,11 +45,7 @@ export function BirthsignAccordion({
             itemName={item.name}
           />
         )}
-        <BirthsignAvatar
-          birthsignName={originalBirthsign.name}
-          group={originalBirthsign.group}
-          size="2xl"
-        />
+        <BirthsignAvatar birthsignName={originalBirthsign.name} size="2xl" />
         <H3 className="text-primary font-semibold">{originalBirthsign.name}</H3>
         <div className="flex items-center gap-3 ml-auto">
           {originalBirthsign.group && (

@@ -1,12 +1,11 @@
-import React from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
-import { Badge } from '@/shared/ui/ui/badge'
-import { MarkdownText } from '@/shared/components/MarkdownText'
 import { cn } from '@/lib/utils'
-import type { Birthsign } from '../types'
+import { MarkdownText } from '@/shared/components/MarkdownText'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
-import { parseDescription, getUserFriendlyStat } from '../utils/dataTransform'
+import { Badge } from '@/shared/ui/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
+import type { Birthsign } from '../types'
+import { getUserFriendlyStat, parseDescription } from '../utils/dataTransform'
 import { BirthsignAvatar } from './BirthsignAvatar'
 
 interface BirthsignDetailPanelProps {
@@ -38,11 +37,7 @@ export function BirthsignDetailPanel({
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
-        <BirthsignAvatar
-          birthsignName={birthsign.name}
-          group={birthsign.group}
-          size="3xl"
-        />
+        <BirthsignAvatar birthsignName={birthsign.name} size="3xl" />
         <div>
           <h2 className="text-2xl font-bold">{birthsign.name}</h2>
           <p className="text-muted-foreground">{birthsign.group} Birthsign</p>

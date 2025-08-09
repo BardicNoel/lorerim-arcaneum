@@ -108,7 +108,8 @@ export function EntityAvatar({
     return (
       <div
         className={cn(
-          'bg-muted rounded-full flex items-center justify-center font-bold text-muted-foreground',
+          // White circular background with black text in both light and dark modes
+          'bg-white dark:bg-white text-black dark:text-black rounded-full flex items-center justify-center font-bold',
           sizeClasses[size],
           className
         )}
@@ -121,8 +122,8 @@ export function EntityAvatar({
   }
 
   // Return image avatar
-  // Neutral background; icon itself will invert in dark mode for contrast
-  const containerBgClass = 'bg-muted'
+  // White circular background across themes; keep icon strokes black (no dark invert)
+  const containerBgClass = 'bg-white dark:bg-white'
 
   return (
     <div
@@ -138,7 +139,7 @@ export function EntityAvatar({
           `assets/${entityType === 'birthsign' ? 'sign-avatar' : `${entityType}-avatar`}/${avatarFileName}`
         )}
         alt={`${entityName} avatar`}
-        className={cn('w-full h-full object-contain dark:invert', imageClassName)}
+        className={cn('w-full h-full object-contain', imageClassName)}
         onError={() => setImageError(true)}
         loading="lazy"
       />
