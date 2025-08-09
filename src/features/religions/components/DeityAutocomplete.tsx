@@ -3,6 +3,7 @@ import {
   GenericAutocomplete,
   type AutocompleteOption,
 } from '@/shared/components/generic'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Star } from 'lucide-react'
 import { useMemo, useState } from 'react'
@@ -88,9 +89,10 @@ export function DeityAutocomplete({
           {option.badge}
         </div>
         {option.description && (
-          <p className="text-sm text-muted-foreground line-clamp-2 mb-1">
-            {option.description}
-          </p>
+          <FormattedText
+            text={option.description}
+            className="text-sm text-muted-foreground line-clamp-2 mb-1"
+          />
         )}
         {option.metadata?.favoredRaces &&
           option.metadata.favoredRaces.length > 0 && (

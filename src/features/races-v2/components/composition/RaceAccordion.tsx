@@ -1,9 +1,10 @@
 import { cn } from '@/lib/utils'
 import { AccordionCard } from '@/shared/components/generic/AccordionCard'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
-import { H3, P } from '@/shared/ui/ui/typography'
+import { H3 } from '@/shared/ui/ui/typography'
 import type { Race } from '../../types'
 import { RaceAvatar } from '../atomic'
 import { RaceEffectsDisplay } from './RaceEffectsDisplay'
@@ -68,18 +69,20 @@ export function RaceAccordion({
 
       <AccordionCard.Summary>
         <div className="line-clamp-2">
-          <P className="text-sm text-muted-foreground">
-            {item.summary || item.description}
-          </P>
+          <FormattedText
+            text={item.summary || item.description}
+            className="text-sm text-muted-foreground line-clamp-2"
+          />
         </div>
       </AccordionCard.Summary>
 
       <AccordionCard.Details>
         {/* Full Description */}
         <div>
-          <P className="text-sm text-muted-foreground leading-relaxed">
-            {item.description}
-          </P>
+          <FormattedText
+            text={item.description}
+            className="text-sm text-muted-foreground leading-relaxed"
+          />
         </div>
 
         {/* Starting Attributes */}

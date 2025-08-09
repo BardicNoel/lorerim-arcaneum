@@ -1,3 +1,4 @@
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { SelectionCardShell } from '@/shared/components/ui'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Badge } from '@/shared/ui/ui/badge'
@@ -192,9 +193,11 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
                 <ChevronRight className="h-4 w-4 text-muted-foreground" />
               </div>
 
-              <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
-                {skill.description}
-              </p>
+              <FormattedText
+                text={skill.description}
+                className="text-xs text-muted-foreground line-clamp-2 mb-3"
+                as="p"
+              />
 
               <div className="flex items-center gap-2 flex-wrap">
                 <SkillLevelBadge level={skillLevel} size="sm" />

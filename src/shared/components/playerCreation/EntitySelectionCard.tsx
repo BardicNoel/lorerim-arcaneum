@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
@@ -81,9 +82,11 @@ export function EntitySelectionCard({
           <div>
             <CardTitle className="text-lg">{title}</CardTitle>
             {description && (
-              <p className="text-sm text-muted-foreground mt-1">
-                {description}
-              </p>
+              <FormattedText
+                text={description}
+                className="text-sm text-muted-foreground mt-1"
+                as="p"
+              />
             )}
           </div>
           {onNavigateToPage && (
@@ -155,9 +158,11 @@ export function EntitySelectionCard({
                   <div className="flex flex-col items-start">
                     <span className="font-medium">{entity.name}</span>
                     {entity.description && (
-                      <span className="text-xs text-muted-foreground line-clamp-2">
-                        {entity.description}
-                      </span>
+                      <FormattedText
+                        text={entity.description}
+                        className="text-xs text-muted-foreground line-clamp-2"
+                        as="span"
+                      />
                     )}
                   </div>
                 </DropdownMenuItem>
