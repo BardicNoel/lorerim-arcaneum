@@ -26,6 +26,7 @@ interface EntityAvatarProps {
   entityType: EntityType
   size?: AvatarSize
   className?: string
+  imageClassName?: string
 }
 
 // Avatar file mapping for different entity types
@@ -96,6 +97,7 @@ export function EntityAvatar({
   entityType,
   size = 'md',
   className,
+  imageClassName,
 }: EntityAvatarProps) {
   const avatarMap = entityAvatarMaps[entityType]
   const avatarFileName = avatarMap[entityName]
@@ -136,7 +138,7 @@ export function EntityAvatar({
           `assets/${entityType === 'birthsign' ? 'sign-avatar' : `${entityType}-avatar`}/${avatarFileName}`
         )}
         alt={`${entityName} avatar`}
-        className="w-full h-full object-contain dark:invert"
+        className={cn('w-full h-full object-contain dark:invert', imageClassName)}
         onError={() => setImageError(true)}
         loading="lazy"
       />

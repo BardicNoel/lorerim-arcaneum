@@ -1,7 +1,6 @@
 import React from 'react'
 import { EntityAvatar } from '@/shared/components/generic'
 import { cn } from '@/lib/utils'
-import { birthsignGroupStyles } from '../config/birthsignConfig'
 
 interface BirthsignAvatarProps {
   birthsignName: string
@@ -20,19 +19,19 @@ export function BirthsignAvatar({
   size = '2xl',
   className,
 }: BirthsignAvatarProps) {
-  const groupStyle = group ? birthsignGroupStyles[group] : undefined
-  const borderColorClass = groupStyle?.text || 'text-foreground'
-
   return (
     <EntityAvatar
       entityName={birthsignName}
       entityType="birthsign"
       size={size}
       className={cn(
-        // Solid circle background with colored outline using currentColor
-        'border-2 border-current p-1 rounded-full bg-background dark:bg-input/30 shadow-sm',
-        borderColorClass,
+        // Solid circle background and high-contrast ring that adapts to theme
+        'rounded-full bg-background dark:bg-input/30 shadow-sm border-2 border-black dark:border-white p-[2px]',
         className
+      )}
+      imageClassName={cn(
+        // Scale icon to be very close to the ring
+        'scale-110'
       )}
     />
   )
