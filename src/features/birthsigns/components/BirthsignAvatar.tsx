@@ -21,6 +21,7 @@ export function BirthsignAvatar({
       entityType="birthsign"
       size={size}
       className={className}
+      imageClassName="scale-125"
     />
   )
 }
