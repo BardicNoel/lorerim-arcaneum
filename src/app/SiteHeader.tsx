@@ -6,11 +6,15 @@ import { Menu } from 'lucide-react'
 interface SiteHeaderProps {
   sidebarCollapsed: boolean
   onToggleSidebar: () => void
+  isMobile?: boolean
+  MobileDrawerTrigger?: React.ComponentType
 }
 
 export function SiteHeader({
   sidebarCollapsed,
   onToggleSidebar,
+  isMobile = false,
+  MobileDrawerTrigger,
 }: SiteHeaderProps) {
   return (
     <header
@@ -21,13 +25,19 @@ export function SiteHeader({
         backgroundImage: 'none',
       }}
     >
-      <button
-        onClick={onToggleSidebar}
-        aria-label={sidebarCollapsed ? 'Open sidebar' : 'Close sidebar'}
-        className="flex items-center justify-center w-10 h-10 rounded transition-all duration-200 ease-in-out hover:bg-skyrim-gold/15 hover:shadow-md hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-skyrim-gold/50 focus:ring-offset-1 mr-2"
-      >
-        <Menu className="w-5 h-5 text-skyrim-gold transition-transform duration-200 group-hover:rotate-12" />
-      </button>
+      {isMobile && MobileDrawerTrigger ? (
+        <div className="mr-2">
+          <MobileDrawerTrigger />
+        </div>
+      ) : (
+        <button
+          onClick={onToggleSidebar}
+          aria-label={sidebarCollapsed ? 'Open sidebar' : 'Close sidebar'}
+          className="flex items-center justify-center w-10 h-10 rounded transition-all duration-200 ease-in-out hover:bg-skyrim-gold/15 hover:shadow-md hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-skyrim-gold/50 focus:ring-offset-1 mr-2"
+        >
+          <Menu className="w-5 h-5 text-skyrim-gold transition-transform duration-200 group-hover:rotate-12" />
+        </button>
+      )}
       <span className="text-skyrim-gold font-bold text-base tracking-tight select-none">
         Lorerim Arcaneum
       </span>
