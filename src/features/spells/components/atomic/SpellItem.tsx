@@ -1,19 +1,18 @@
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Separator } from '@/shared/ui/ui/separator'
-import { 
-  BookOpen, 
-  Zap, 
-  Clock, 
-  Target, 
-  Sparkles,
-  Flame,
-  Snowflake,
-  Bolt,
-  Heart,
-  Ghost,
+import {
+  BookOpen,
+  Clock,
   Eye,
-  Shield
+  Flame,
+  Ghost,
+  Heart,
+  Shield,
+  Sparkles,
+  Target,
+  Zap,
 } from 'lucide-react'
 import type { SpellWithComputed } from '../../types'
 
@@ -26,39 +25,44 @@ interface SpellItemProps {
 }
 
 const schoolIcons = {
-  'Destruction': Flame,
-  'Restoration': Heart,
-  'Conjuration': Ghost,
-  'Illusion': Eye,
-  'Alteration': Shield,
-  '': Sparkles
+  Destruction: Flame,
+  Restoration: Heart,
+  Conjuration: Ghost,
+  Illusion: Eye,
+  Alteration: Shield,
+  '': Sparkles,
 }
 
 const levelColors = {
-  'Novice': 'bg-green-100 text-green-800',
-  'Apprentice': 'bg-blue-100 text-blue-800',
-  'Adept': 'bg-purple-100 text-purple-800',
-  'Expert': 'bg-orange-100 text-orange-800',
-  'Master': 'bg-red-100 text-red-800'
+  Novice: 'bg-green-100 text-green-800',
+  Apprentice: 'bg-blue-100 text-blue-800',
+  Adept: 'bg-purple-100 text-purple-800',
+  Expert: 'bg-orange-100 text-orange-800',
+  Master: 'bg-red-100 text-red-800',
 }
 
-export function SpellItem({ 
-  spell, 
-  variant = 'default', 
-  showEffects = true, 
+export function SpellItem({
+  spell,
+  variant = 'default',
+  showEffects = true,
   showTags = true,
-  className = ''
+  className = '',
 }: SpellItemProps) {
-  const SchoolIcon = schoolIcons[spell.school as keyof typeof schoolIcons] || Sparkles
+  const SchoolIcon =
+    schoolIcons[spell.school as keyof typeof schoolIcons] || Sparkles
 
   if (variant === 'compact') {
     return (
-      <div className={`flex items-center justify-between p-3 border rounded-lg ${className}`}>
+      <div
+        className={`flex items-center justify-between p-3 border rounded-lg ${className}`}
+      >
         <div className="flex items-center gap-3">
           <SchoolIcon className="w-5 h-5 text-muted-foreground" />
           <div>
             <h4 className="font-medium text-sm">{spell.name}</h4>
-            <p className="text-xs text-muted-foreground">{spell.school} • {spell.level}</p>
+            <p className="text-xs text-muted-foreground">
+              {spell.school} • {spell.level}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -83,13 +87,16 @@ export function SpellItem({
             <SchoolIcon className="w-5 h-5 text-muted-foreground" />
             <CardTitle className="text-lg">{spell.name}</CardTitle>
           </div>
-          <Badge 
-            className={levelColors[spell.level as keyof typeof levelColors] || 'bg-gray-100 text-gray-800'}
+          <Badge
+            className={
+              levelColors[spell.level as keyof typeof levelColors] ||
+              'bg-gray-100 text-gray-800'
+            }
           >
             {spell.level}
           </Badge>
         </div>
-        
+
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <BookOpen className="w-4 h-4" />
@@ -116,7 +123,11 @@ export function SpellItem({
 
       <CardContent className="space-y-3">
         {spell.description && (
-          <p className="text-sm text-muted-foreground">{spell.description}</p>
+          <FormattedText
+            text={spell.description}
+            className="text-sm text-muted-foreground"
+            as="p"
+          />
         )}
 
         {showEffects && spell.hasEffects && (
@@ -125,7 +136,11 @@ export function SpellItem({
             {spell.effects.map((effect, index) => (
               <div key={index} className="text-sm bg-muted/50 p-2 rounded">
                 <div className="font-medium">{effect.name}</div>
-                <p className="text-muted-foreground">{effect.description}</p>
+                <FormattedText
+                  text={effect.description}
+                  className="text-muted-foreground"
+                  as="p"
+                />
                 <div className="flex gap-4 mt-1 text-xs">
                   {effect.magnitude > 0 && (
                     <span>Magnitude: {effect.magnitude}</span>
@@ -133,9 +148,7 @@ export function SpellItem({
                   {effect.duration > 0 && (
                     <span>Duration: {effect.duration}s</span>
                   )}
-                  {effect.area > 0 && (
-                    <span>Area: {effect.area}ft</span>
-                  )}
+                  {effect.area > 0 && <span>Area: {effect.area}ft</span>}
                 </div>
               </div>
             ))}
@@ -181,4 +194,4 @@ export function SpellItem({
       </CardContent>
     </Card>
   )
-} 
+}

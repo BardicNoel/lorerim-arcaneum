@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
-import { ChevronDown, ChevronRight, Plus, Minus, Circle } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
+import { ChevronDown, ChevronRight, Plus } from 'lucide-react'
+import { useState } from 'react'
 import type { RecipeWithComputed } from '../../types'
 
 interface RecipeAccordionProps {
@@ -76,7 +76,9 @@ function RecipeAccordionItem({
   }
 
   // Helper function to format ingredient with count
-  const formatIngredientWithCount = (ingredient: any): { name: string; count: number } => {
+  const formatIngredientWithCount = (
+    ingredient: any
+  ): { name: string; count: number } => {
     if (typeof ingredient === 'string') {
       return { name: ingredient, count: 1 }
     }
@@ -106,7 +108,9 @@ function RecipeAccordionItem({
               )}
             </Button>
             <div className="flex-1 min-w-0">
-              <h3 className="font-medium truncate">{renderText(recipe.name)}</h3>
+              <h3 className="font-medium truncate">
+                {renderText(recipe.name)}
+              </h3>
               <p className="text-sm text-muted-foreground truncate">
                 {renderText(recipe.output)}
               </p>
@@ -126,26 +130,32 @@ function RecipeAccordionItem({
           </div>
         </div>
       </CardHeader>
-      
+
       {isExpanded && (
         <CardContent className="pt-0">
           <div className="space-y-3">
             {recipe.description && (
               <div>
-                <p className="text-sm text-muted-foreground">
-                  {renderText(recipe.description)}
-                </p>
+                <FormattedText
+                  text={renderText(recipe.description)}
+                  className="text-sm text-muted-foreground"
+                  as="p"
+                />
               </div>
             )}
-            
+
             {showIngredients && recipe.ingredients.length > 0 && (
               <div>
                 <div className="text-sm font-medium mb-2">Ingredients</div>
                 <div className="space-y-2">
                   {recipe.ingredients.map((ingredient, index) => {
-                    const { name, count } = formatIngredientWithCount(ingredient)
+                    const { name, count } =
+                      formatIngredientWithCount(ingredient)
                     return (
-                      <div key={index} className="flex items-center justify-between p-2 bg-muted/30 rounded-lg">
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 bg-muted/30 rounded-lg"
+                      >
                         <span className="text-sm">{name}</span>
                         <span className="font-medium text-sm">×{count}</span>
                       </div>
@@ -154,40 +164,43 @@ function RecipeAccordionItem({
                 </div>
               </div>
             )}
-            
+
             {showEffects && recipe.effects.length > 0 && (
               <div>
                 <div className="text-sm font-medium mb-3">Effects</div>
                 <div className="space-y-3">
-                                     {recipe.effects.map((effect, index) => (
-                     <div
-                       key={index}
-                       className="p-3 bg-muted/50 rounded-lg border border-border"
-                     >
-                       <div className="flex items-start gap-3">
-                         {getEffectIcon(effect)}
-                         <div className="flex-1">
-                           <div className="font-medium text-sm mb-1">
-                             {renderText(effect.name)}
-                           </div>
-                           {effect.description && (
-                             <div className="text-sm text-muted-foreground">
-                               {renderText(effect.description)}
-                             </div>
-                           )}
-                         </div>
-                       </div>
-                     </div>
-                   ))}
+                  {recipe.effects.map((effect, index) => (
+                    <div
+                      key={index}
+                      className="p-3 bg-muted/50 rounded-lg border border-border"
+                    >
+                      <div className="flex items-start gap-3">
+                        {getEffectIcon(effect)}
+                        <div className="flex-1">
+                          <div className="font-medium text-sm mb-1">
+                            {renderText(effect.name)}
+                          </div>
+                          {effect.description && (
+                            <div className="text-sm text-muted-foreground">
+                              <FormattedText
+                                text={renderText(effect.description)}
+                                className="text-sm text-muted-foreground"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
-            
+
             <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t">
               <span>Total Magnitude: {recipe.totalMagnitude}</span>
               <span>Max Duration: {recipe.maxDuration}s</span>
             </div>
-            
+
             <Button
               variant="outline"
               size="sm"
@@ -239,7 +252,7 @@ export function RecipeAccordion({
 
   return (
     <div className={`space-y-2 ${className || ''}`}>
-      {recipes.map((recipe) => (
+      {recipes.map(recipe => (
         <RecipeAccordionItem
           key={recipe.name}
           recipe={recipe}
@@ -253,4 +266,4 @@ export function RecipeAccordion({
       ))}
     </div>
   )
-} 
+}
