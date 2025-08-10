@@ -1,9 +1,8 @@
-import React from 'react'
 import { EntityAvatar } from '@/shared/components/generic'
 
 interface BirthsignAvatarProps {
   birthsignName: string
-  size?: 'sm' | 'md' | 'lg' | 'xl'
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
   className?: string
 }
 
@@ -22,6 +21,7 @@ export function BirthsignAvatar({
       entityType="birthsign"
       size={size}
       className={className}
+      imageClassName="scale-125"
     />
   )
 }

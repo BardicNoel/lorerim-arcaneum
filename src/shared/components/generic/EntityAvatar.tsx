@@ -26,6 +26,7 @@ interface EntityAvatarProps {
   entityType: EntityType
   size?: AvatarSize
   className?: string
+  imageClassName?: string
 }
 
 // Avatar file mapping for different entity types
@@ -52,9 +53,20 @@ const entityAvatarMaps: Record<EntityType, Record<string, string>> = {
     // Add destiny avatars as they become available
   },
   birthsign: {
-    Apprentice: 'apprentice.svg',
-    // Add more birthsign avatars as they become available
-    // Current birthsigns: Warrior, Lady, Lord, Steed, Mage, Apprentice, Atronach, Ritual, Blessed Fire, Dead Horde, Thief, Lover, Shadow, Moonshadow, Tower, Serpent, Serpent's Curse
+    // Case-sensitive filenames must match assets in public/assets/sign-avatar/
+    Warrior: 'Warrior.svg',
+    Lady: 'Lady.svg',
+    Lord: 'Lord.svg',
+    Steed: 'Steed.svg',
+    Mage: 'Mage.svg',
+    Apprentice: 'Apprentice.svg',
+    Atronach: 'Atronach.svg',
+    Ritual: 'Ritual.svg',
+    Thief: 'Thief.svg',
+    Lover: 'Lover.svg',
+    Shadow: 'Shadow.svg',
+    Tower: 'Tower.svg',
+    Serpent: 'Serpent.svg',
   },
 }
 
@@ -85,6 +97,7 @@ export function EntityAvatar({
   entityType,
   size = 'md',
   className,
+  imageClassName,
 }: EntityAvatarProps) {
   const avatarMap = entityAvatarMaps[entityType]
   const avatarFileName = avatarMap[entityName]
@@ -95,7 +108,8 @@ export function EntityAvatar({
     return (
       <div
         className={cn(
-          'bg-muted rounded-full flex items-center justify-center font-bold text-muted-foreground',
+          // White circular background with black text in both light and dark modes
+          'bg-white dark:bg-white text-black dark:text-black rounded-full flex items-center justify-center font-bold',
           sizeClasses[size],
           className
         )}
@@ -108,8 +122,8 @@ export function EntityAvatar({
   }
 
   // Return image avatar
-  // Neutral background; icon itself will invert in dark mode for contrast
-  const containerBgClass = 'bg-muted'
+  // White circular background across themes; keep icon strokes black (no dark invert)
+  const containerBgClass = 'bg-white dark:bg-white'
 
   return (
     <div
@@ -125,7 +139,7 @@ export function EntityAvatar({
           `assets/${entityType === 'birthsign' ? 'sign-avatar' : `${entityType}-avatar`}/${avatarFileName}`
         )}
         alt={`${entityName} avatar`}
-        className="w-full h-full object-contain dark:invert"
+        className={cn('w-full h-full object-contain', imageClassName)}
         onError={() => setImageError(true)}
         loading="lazy"
       />
