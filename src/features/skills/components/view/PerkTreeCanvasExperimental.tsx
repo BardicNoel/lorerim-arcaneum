@@ -175,6 +175,40 @@ function canvasToAvifPosition(
   }
 }
 
+/**
+ * Calculate a default position for perks without any position data
+ * Places them in a grid pattern to avoid overlap
+ */
+function calculateDefaultPosition(
+  perkIndex: number,
+  totalPerks: number,
+  config: typeof ENHANCED_GRID_CONFIG
+): CanvasPosition {
+  // Calculate grid dimensions for default positioning
+  const gridSize = Math.ceil(Math.sqrt(totalPerks))
+  const row = Math.floor(perkIndex / gridSize)
+  const col = perkIndex % gridSize
+
+  // Position in a grid pattern starting from top-left
+  const x =
+    col * (config.cellWidth + config.gridGap) +
+    config.padding +
+    config.cellWidth / 2
+  const y =
+    row * (config.cellHeight + config.gridGap) +
+    config.padding +
+    config.cellHeight / 2
+
+  return {
+    x,
+    y,
+    gridX: col,
+    gridY: row,
+    horizontal: 0,
+    vertical: 0,
+  }
+}
+
 export function PerkTreeCanvasExperimental({
   tree,
   onTogglePerk,
@@ -218,6 +252,12 @@ export function PerkTreeCanvasExperimental({
     }
 
     console.log('Loading saved positions for tree:', validatedTree.treeId)
+    console.log('Tree perks count:', validatedTree.perks.length)
+    console.log(
+      'Tree perks:',
+      validatedTree.perks.map(p => ({ edid: p.edid, name: p.name }))
+    )
+
     setIsLoadingPositions(true)
     loadSavedTreePositions(validatedTree.treeId)
       .then(savedData => {
@@ -229,6 +269,11 @@ export function PerkTreeCanvasExperimental({
           const loadedPositions = loadTreePositions(
             validatedTree.treeId,
             savedData
+          )
+          console.log('Loaded positions count:', loadedPositions.size)
+          console.log(
+            'Loaded positions keys:',
+            Array.from(loadedPositions.keys())
           )
           setSavedPositions(loadedPositions)
         } else {
@@ -250,43 +295,134 @@ export function PerkTreeCanvasExperimental({
     [onTogglePerk, onRankChange]
   )
 
-  // Calculate node positions using AVIF grid system with mirroring
+  // Calculate node positions using saved positions and fallback to AVIF or default
   const nodePositions = useMemo(() => {
     if (!validatedTree || isLoadingPositions)
       return new Map<string, CanvasPosition>()
 
     const positions = new Map<string, CanvasPosition>()
 
-    // Extract all positions and calculate grid bounds
+    // Extract all positions and calculate grid bounds for AVIF positioning
     const allPositions = validatedTree.perks
       .map(perk => perk.position)
       .filter((pos): pos is NonNullable<typeof pos> => pos !== undefined)
 
-    const bounds = calculateGridBounds(allPositions)
-    setGridBounds(bounds) // Store bounds for later use
+    let bounds = { minX: 0, maxX: 0, minY: 0, maxY: 0 }
+    if (allPositions.length > 0) {
+      bounds = calculateGridBounds(allPositions)
+    }
 
-    // Position each node - use saved positions if available, otherwise calculate from AVIF
+    // Track perks without positional data for default positioning
+    let perksWithoutPosition = 0
+
+    // Position each node
     validatedTree.perks.forEach(perk => {
-      if (perk.position) {
-        const savedPos = savedPositions.get(perk.edid)
-
-        if (savedPos) {
-          // Use saved position
-          positions.set(perk.edid, savedPos)
-        } else {
-          // Calculate new position using AVIF algorithm
-          const canvasPos = avifToCanvasPositionMirrored(
-            perk.position,
-            bounds,
-            ENHANCED_GRID_CONFIG
-          )
-          positions.set(perk.edid, canvasPos)
-        }
+      // First, try to use saved position from positional file
+      const savedPos = savedPositions.get(perk.edid)
+      if (savedPos) {
+        positions.set(perk.edid, savedPos)
+        return
       }
+
+      // Second, try to use embedded AVIF position
+      if (perk.position) {
+        const canvasPos = avifToCanvasPositionMirrored(
+          perk.position,
+          bounds,
+          ENHANCED_GRID_CONFIG
+        )
+        positions.set(perk.edid, canvasPos)
+        return
+      }
+
+      // Finally, use default position for perks without any position data
+      const defaultPos = calculateDefaultPosition(
+        perksWithoutPosition,
+        validatedTree.perks.length,
+        ENHANCED_GRID_CONFIG
+      )
+      positions.set(perk.edid, defaultPos)
+      perksWithoutPosition++
     })
 
     return positions
   }, [validatedTree, savedPositions, isLoadingPositions])
+
+  // Calculate positioning statistics for debug display
+  const positioningStats = useMemo(() => {
+    if (!validatedTree) return { saved: 0, avif: 0, default: 0, total: 0 }
+
+    let saved = 0
+    let avif = 0
+    let defaultCount = 0
+
+    // Debug: Check for Trapper perk specifically
+    const trapperPerk = validatedTree.perks.find(
+      p => p.edid === 'LoreRimTrapper_Rank1'
+    )
+    const poisonedClampsPerk = validatedTree.perks.find(
+      p => p.edid === 'LoreRimTrapper_Rank2'
+    )
+    const saltOnWoundPerk = validatedTree.perks.find(
+      p => p.edid === 'LoreRimTrapper_Rank3'
+    )
+
+    if (trapperPerk) {
+      console.log('Found Trapper perk:', trapperPerk)
+      const trapperSavedPos = savedPositions.get('LoreRimTrapper_Rank1')
+      console.log('Trapper saved position:', trapperSavedPos)
+      console.log('Trapper embedded position:', trapperPerk.position)
+      console.log('Trapper connections:', trapperPerk.connections)
+    } else {
+      console.log('Trapper perk NOT found in tree!')
+    }
+
+    if (poisonedClampsPerk) {
+      console.log('Found Poisoned Clamps perk:', poisonedClampsPerk)
+      const poisonedClampsSavedPos = savedPositions.get('LoreRimTrapper_Rank2')
+      console.log('Poisoned Clamps saved position:', poisonedClampsSavedPos)
+      console.log(
+        'Poisoned Clamps embedded position:',
+        poisonedClampsPerk.position
+      )
+      console.log(
+        'Poisoned Clamps connections:',
+        poisonedClampsPerk.connections
+      )
+    } else {
+      console.log('Poisoned Clamps perk NOT found in tree!')
+    }
+
+    if (saltOnWoundPerk) {
+      console.log('Found Salt on the Wound perk:', saltOnWoundPerk)
+      const saltOnWoundSavedPos = savedPositions.get('LoreRimTrapper_Rank3')
+      console.log('Salt on the Wound saved position:', saltOnWoundSavedPos)
+      console.log(
+        'Salt on the Wound embedded position:',
+        saltOnWoundPerk.position
+      )
+    } else {
+      console.log('Salt on the Wound perk NOT found in tree!')
+    }
+
+    validatedTree.perks.forEach(perk => {
+      const savedPos = savedPositions.get(perk.edid)
+      if (savedPos) {
+        saved++
+      } else if (perk.position) {
+        avif++
+      } else {
+        defaultCount++
+      }
+    })
+
+    return {
+      saved,
+      avif,
+      default: defaultCount,
+      total: validatedTree.perks.length,
+    }
+  }, [validatedTree, savedPositions])
 
   // Create React Flow nodes
   const initialNodes: Node[] = useMemo(() => {
@@ -298,28 +434,67 @@ export function PerkTreeCanvasExperimental({
       const hasChildren = perk.connections?.children?.length > 0 || false
       const isRoot = perk.connections?.parents?.length === 0 || false
 
+      // Check if this perk has no position data (will be draggable)
+      const hasNoPosition = !savedPositions.get(perkId) && !perk.position
+
+      // Debug: Check Trapper-related perks
+      if (perkId.includes('LoreRimTrapper')) {
+        console.log(`Node ${perkId} position:`, position)
+        console.log(`Node ${perkId} hasChildren:`, hasChildren)
+        console.log(`Node ${perkId} isRoot:`, isRoot)
+        console.log(`Node ${perkId} hasNoPosition:`, hasNoPosition)
+      }
+
       return {
         id: perkId,
         type: 'perkNode',
         position: { x: position.x, y: position.y },
-        draggable: isEditMode, // Only draggable in edit mode
+        draggable: isEditMode || hasNoPosition, // Draggable in edit mode or if no position
         data: {
           ...perk,
           selected: false, // Will be updated via useEffect
           hasChildren,
           isRoot,
+          hasNoPosition, // Flag for styling
         } as PerkNodeData,
       }
     })
 
+    console.log('Total nodes created:', nodes.length)
+    console.log(
+      'Trapper-related nodes:',
+      nodes.filter(n => n.id.includes('LoreRimTrapper'))
+    )
+
     return nodes
-  }, [validatedTree, nodePositions, isEditMode, isLoadingPositions])
+  }, [
+    validatedTree,
+    nodePositions,
+    isEditMode,
+    isLoadingPositions,
+    savedPositions,
+  ])
 
   // Create React Flow edges from connections array
   const initialEdges: Edge[] = useMemo(() => {
     if (!validatedTree) return []
 
     const edges: Edge[] = []
+
+    // Debug: Check Trapper connections specifically
+    const trapperPerk = validatedTree.perks.find(
+      p => p.edid === 'LoreRimTrapper_Rank1'
+    )
+    if (trapperPerk) {
+      console.log(
+        'Trapper children connections:',
+        trapperPerk.connections?.children
+      )
+      trapperPerk.connections?.children?.forEach(childId => {
+        const childExists = validatedTree.perks.some(p => p.edid === childId)
+        console.log(`Trapper child ${childId} exists:`, childExists)
+      })
+    }
 
     validatedTree.perks.forEach(perk => {
       const perkId = perk.edid
@@ -347,6 +522,12 @@ export function PerkTreeCanvasExperimental({
         })
       }
     })
+
+    console.log('Total edges created:', edges.length)
+    console.log(
+      'Edge connections:',
+      edges.map(e => `${e.source} -> ${e.target}`)
+    )
 
     return edges
   }, [validatedTree])
@@ -530,6 +711,24 @@ export function PerkTreeCanvasExperimental({
               <div className="flex items-center gap-2 px-3 py-1 text-xs text-blue-600">
                 <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
                 Loading positions...
+              </div>
+            )}
+
+            {/* Debug Counters */}
+            {!isLoadingPositions && positioningStats.total > 0 && (
+              <div className="flex items-center gap-3 px-3 py-1 text-xs bg-muted/30 rounded border">
+                <span className="text-green-600">
+                  Saved: {positioningStats.saved}
+                </span>
+                <span className="text-blue-600">
+                  AVIF: {positioningStats.avif}
+                </span>
+                <span className="text-red-600">
+                  Default: {positioningStats.default}
+                </span>
+                <span className="text-muted-foreground">
+                  Total: {positioningStats.total}
+                </span>
               </div>
             )}
 
