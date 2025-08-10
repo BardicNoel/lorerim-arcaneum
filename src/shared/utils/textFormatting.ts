@@ -18,6 +18,11 @@ export interface FormattedTextSegment {
 
 const memoCache = new Map<string, FormattedTextSegment[]>()
 
+// Clear cache when patterns change (for development)
+export function clearTextFormattingCache() {
+  memoCache.clear()
+}
+
 export function parseFormattedText(
   text: string,
   options: TextFormattingOptions = {}
@@ -51,13 +56,13 @@ export function parseFormattedText(
               })
             }
             let matchedText = match[0]
+            const className =
+              typeof patternObj.className === 'function'
+                ? patternObj.className(match[0]) // Pass original match for className
+                : patternObj.className
             if (patternObj.transform) {
               matchedText = patternObj.transform(matchedText)
             }
-            const className =
-              typeof patternObj.className === 'function'
-                ? patternObj.className(matchedText)
-                : patternObj.className
             newSegments.push({
               text: matchedText,
               className,

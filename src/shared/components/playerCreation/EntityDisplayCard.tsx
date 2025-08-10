@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
@@ -187,9 +188,11 @@ export function EntityDisplayCard({
               </Badge>
             )}
             {entity.description && (
-              <p className="text-sm text-muted-foreground mt-2">
-                {entity.description}
-              </p>
+              <FormattedText
+                text={entity.description}
+                className="text-sm text-muted-foreground mt-2"
+                as="p"
+              />
             )}
           </div>
         </div>

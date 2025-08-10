@@ -1,15 +1,14 @@
-import React from 'react'
-import { Card, CardHeader, CardTitle, CardContent } from '@/shared/ui/ui/card'
-import { Button } from '@/shared/ui/ui/button'
-import { Badge } from '@/shared/ui/ui/badge'
-import { ScrollArea } from '@/shared/ui/ui/scroll-area'
-import { DestinyBreadcrumbTrail } from '../components/atomic/DestinyBreadcrumbTrail'
-import { DestinyPossiblePathsList } from '../components/composition/DestinyPossiblePathsList'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import { Button } from '@/shared/ui/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
+import { ScrollArea } from '@/shared/ui/ui/scroll-area'
+import { AlertCircle, ExternalLink, RotateCcw } from 'lucide-react'
+import React from 'react'
 import { useDestinyNodes } from '../adapters/useDestinyNodes'
 import { useDestinyPath } from '../adapters/useDestinyPath'
 import { useDestinyPossiblePaths } from '../adapters/useDestinyPossiblePaths'
-import { ExternalLink, RotateCcw, AlertCircle } from 'lucide-react'
+import { DestinyBreadcrumbTrail } from '../components/atomic/DestinyBreadcrumbTrail'
+import { DestinyPossiblePathsList } from '../components/composition/DestinyPossiblePathsList'
 import type { DestinyNode } from '../types'
 
 interface BuildPageDestinyCardProps {
@@ -155,9 +154,11 @@ const BuildPageDestinyCard: React.FC<BuildPageDestinyCardProps> = ({
                             {node.name}
                           </h5>
                           {node.description && (
-                            <p className="text-xs text-muted-foreground mt-1">
-                              {node.description}
-                            </p>
+                            <FormattedText
+                              text={node.description}
+                              className="text-xs text-muted-foreground mt-1"
+                              as="p"
+                            />
                           )}
                         </div>
                       </div>

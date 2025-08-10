@@ -1,9 +1,10 @@
 import { Z_INDEX } from '@/lib/constants'
+import { cn } from '@/lib/utils'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { Button } from '@/shared/ui/ui/button'
 import { Input } from '@/shared/ui/ui/input'
 import { ChevronDown, Search, X } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
-import { cn } from '@/lib/utils'
 
 export interface AutocompleteOption {
   id: string
@@ -133,9 +134,10 @@ export function GenericAutocomplete({
           {option.badge && <div className="flex-shrink-0">{option.badge}</div>}
         </div>
         {option.description && (
-          <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
-            {option.description}
-          </p>
+          <FormattedText
+            text={option.description}
+            className="text-sm text-muted-foreground line-clamp-2 mt-1"
+          />
         )}
       </div>
     </div>

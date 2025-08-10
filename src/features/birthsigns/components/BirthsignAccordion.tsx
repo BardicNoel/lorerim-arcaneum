@@ -112,9 +112,10 @@ export function BirthsignAccordion({
                     <span className="font-medium text-sm">{power.name}</span>
                   </div>
                   <div className="border-t border-border my-2" />
-                  <div className="text-sm text-muted-foreground">
-                    {power.description}
-                  </div>
+                  <FormattedText
+                    text={power.description}
+                    className="text-sm text-muted-foreground"
+                  />
                 </div>
               ))}
             </div>
@@ -163,9 +164,10 @@ export function BirthsignAccordion({
                   </div>
                   <div className="border-t border-border my-2" />
                   <div className="text-sm font-medium">{effect.stat}</div>
-                  <div className="text-sm text-muted-foreground">
-                    {effect.description}
-                  </div>
+                  <FormattedText
+                    text={effect.description}
+                    className="text-sm text-muted-foreground"
+                  />
                 </div>
               ))}
               {originalBirthsign.mastery_effects?.map((effect, index) => (
@@ -179,9 +181,10 @@ export function BirthsignAccordion({
                   </div>
                   <div className="border-t border-border my-2" />
                   <div className="text-sm font-medium">{effect.stat}</div>
-                  <div className="text-sm text-muted-foreground">
-                    {effect.description}
-                  </div>
+                  <FormattedText
+                    text={effect.description}
+                    className="text-sm text-muted-foreground"
+                  />
                 </div>
               ))}
             </div>
