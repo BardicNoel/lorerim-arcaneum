@@ -1,32 +1,29 @@
-import React from 'react'
-import { Badge } from '@/shared/ui/ui/badge'
-import { H3, H4, P, Small } from '@/shared/ui/ui/typography'
-import { MarkdownText } from '@/shared/components/MarkdownText'
-import {
-  Shield,
-  Zap,
-  Heart,
-  Brain,
-  Target,
-  Flame,
-  Droplets,
-  Skull,
-  Sword,
-  BookOpen,
-  Eye,
-  Hand,
-  ChevronDown,
-  ChevronRight,
-  Plus,
-  Minus,
-  Circle,
-  Star,
-} from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
-import type { Religion } from '../types'
-import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import { AccordionCard } from '@/shared/components/generic/AccordionCard'
+import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
+import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
+import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
+import { Badge } from '@/shared/ui/ui/badge'
+import { H3, P } from '@/shared/ui/ui/typography'
+import {
+  BookOpen,
+  Brain,
+  Circle,
+  Droplets,
+  Eye,
+  Flame,
+  Hand,
+  Heart,
+  Minus,
+  Plus,
+  Shield,
+  Star,
+  Sword,
+  Target,
+  Zap,
+} from 'lucide-react'
+import React from 'react'
+import type { Religion } from '../types'
 
 /**
  * Component to format any description with highlighted values in angle brackets
@@ -363,7 +360,8 @@ export function renderReligionHeader(
         )}
 
         {/* Favored Races badges */}
-        {originalReligion?.favoredRaces &&
+        {shouldShowFavoredRaces() &&
+          originalReligion?.favoredRaces &&
           originalReligion.favoredRaces.length > 0 && (
             <div className="flex items-center gap-1">
               {originalReligion.favoredRaces.map((race, index) => (
@@ -437,15 +435,16 @@ export function renderReligionCollapsedContent(
             <span className="font-medium">{effect.name}</span>
           </div>
         ))}
-        {originalReligion?.favoredRaces?.slice(0, 2).map((race, index) => (
-          <div
-            key={`race-${index}`}
-            className="flex items-center gap-1 px-2 py-1 bg-muted/50 rounded text-xs"
-          >
-            <Star className="h-3 w-3 text-skyrim-gold" />
-            <span className="font-medium">{race}</span>
-          </div>
-        ))}
+        {shouldShowFavoredRaces() &&
+          originalReligion?.favoredRaces?.slice(0, 2).map((race, index) => (
+            <div
+              key={`race-${index}`}
+              className="flex items-center gap-1 px-2 py-1 bg-muted/50 rounded text-xs"
+            >
+              <Star className="h-3 w-3 text-skyrim-gold" />
+              <span className="font-medium">{race}</span>
+            </div>
+          ))}
       </div>
     </div>
   )
@@ -486,7 +485,8 @@ export function renderReligionExpandedContent(
       </div>
 
       {/* Favored Races */}
-      {originalReligion?.favoredRaces &&
+      {shouldShowFavoredRaces() &&
+        originalReligion?.favoredRaces &&
         originalReligion.favoredRaces.length > 0 && (
           <div>
             <h5 className="text-lg font-medium text-foreground mb-3">
@@ -799,7 +799,8 @@ export function ReligionAccordion({
             {item.category}
           </Badge>
         )}
-        {showFavoredRaces &&
+        {shouldShowFavoredRaces() &&
+          showFavoredRaces &&
           originalReligion &&
           Array.isArray(originalReligion.favoredRaces) &&
           originalReligion.favoredRaces.length > 0 && (
@@ -839,7 +840,8 @@ export function ReligionAccordion({
               <span className="font-medium">{effect.name}</span>
             </div>
           ))}
-          {showFavoredRaces &&
+          {shouldShowFavoredRaces() &&
+            showFavoredRaces &&
             originalReligion?.favoredRaces?.slice(0, 2).map((race, index) => (
               <div
                 key={`race-${index}`}
@@ -862,7 +864,8 @@ export function ReligionAccordion({
           </div>
         )}
         {/* Favored Races */}
-        {showFavoredRaces &&
+        {shouldShowFavoredRaces() &&
+          showFavoredRaces &&
           Array.isArray(originalReligion?.favoredRaces) &&
           originalReligion.favoredRaces.length > 0 && (
             <div>

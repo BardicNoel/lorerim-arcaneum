@@ -1,5 +1,6 @@
-import { useMemo } from 'react'
+import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
 import Fuse from 'fuse.js'
+import { useMemo } from 'react'
 import type { Religion } from '../types'
 
 interface SearchableReligion {
@@ -27,7 +28,7 @@ export function useFuzzySearch(religions: Religion[], searchQuery: string) {
       name: religion.name,
       description: religion.tenet?.description || '',
       type: religion.type,
-      favoredRaces: religion.favoredRaces || [],
+      favoredRaces: shouldShowFavoredRaces() ? religion.favoredRaces || [] : [],
       tenetEffects:
         religion.tenet?.effects?.map(
           effect => `${effect.effectName} ${effect.effectDescription}`
@@ -58,7 +59,9 @@ export function useFuzzySearch(religions: Religion[], searchQuery: string) {
         { name: 'blessingEffects', weight: 0.2 },
         { name: 'followerPowers', weight: 0.15 },
         { name: 'devoteePowers', weight: 0.15 },
-        { name: 'favoredRaces', weight: 0.1 },
+        ...(shouldShowFavoredRaces()
+          ? [{ name: 'favoredRaces', weight: 0.1 }]
+          : []),
         { name: 'type', weight: 0.1 },
       ],
       threshold: 0.3, // Lower threshold = more strict matching

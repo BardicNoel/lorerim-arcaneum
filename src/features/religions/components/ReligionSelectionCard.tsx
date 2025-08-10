@@ -1,13 +1,13 @@
-import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { SelectionCardShell } from '@/shared/components/ui'
+import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import { religionToPlayerCreationItem } from '@/shared/utils'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useReligionData } from '../hooks/useReligionData'
 import { findReligionById } from '../utils/religionFilters'
 import { DeityAutocomplete } from './DeityAutocomplete'
 import { ReligionAccordion } from './ReligionAccordion'
-import { religionToPlayerCreationItem } from '@/shared/utils'
-import type { Religion } from '../types'
 
 interface ReligionSelectionCardProps {
   className?: string
@@ -115,7 +115,7 @@ export function ReligionSelectionCard({
         showBlessings={false}
         showTenets={true}
         showBoons={true}
-        showFavoredRaces={true}
+        showFavoredRaces={shouldShowFavoredRaces()}
       />
     </SelectionCardShell>
   )

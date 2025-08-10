@@ -31,6 +31,7 @@ import {
 import { useMemo, useState } from 'react'
 import { ReligionAccordion } from '../components/ReligionAccordion'
 
+import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
 import { useReligions } from '@/shared/stores'
 import { religionToPlayerCreationItem } from '@/shared/utils'
 
@@ -51,7 +52,9 @@ export function AccordionReligionsPage() {
   const [showBlessings, setShowBlessings] = useState(true)
   const [showTenets, setShowTenets] = useState(true)
   const [showBoons, setShowBoons] = useState(true)
-  const [showFavoredRaces, setShowFavoredRaces] = useState(true)
+  const [showFavoredRaces, setShowFavoredRaces] = useState(
+    shouldShowFavoredRaces()
+  )
 
   // Convert religions to PlayerCreationItem format for consolidated view
   const religionItems: PlayerCreationItem[] = useMemo(() => {
@@ -86,18 +89,22 @@ export function AccordionReligionsPage() {
           description: `Religions from ${pantheon} pantheon`,
         })),
       },
-      {
-        id: 'favored-races',
-        name: 'Favored Races',
-        placeholder: 'Search by favored race...',
-        options: allTags.map(tag => ({
-          id: `race-${tag}`,
-          label: tag,
-          value: tag,
-          category: 'Favored Races',
-          description: `Religions that favor ${tag}`,
-        })),
-      },
+      ...(shouldShowFavoredRaces()
+        ? [
+            {
+              id: 'favored-races',
+              name: 'Favored Races',
+              placeholder: 'Search by favored race...',
+              options: allTags.map(tag => ({
+                id: `race-${tag}`,
+                label: tag,
+                value: tag,
+                category: 'Favored Races',
+                description: `Religions that favor ${tag}`,
+              })),
+            },
+          ]
+        : []),
     ]
   }
 
@@ -401,7 +408,7 @@ export function AccordionReligionsPage() {
           </div>
 
           {/* Data Visibility Controls */}
-          <ControlGrid columns={4}>
+          <ControlGrid columns={shouldShowFavoredRaces() ? 4 : 3}>
             <SwitchCard
               title="Blessings"
               description="Deity blessings and effects"
@@ -423,12 +430,14 @@ export function AccordionReligionsPage() {
               onCheckedChange={setShowBoons}
             />
 
-            <SwitchCard
-              title="Favored Races"
-              description="Races favored by this deity"
-              checked={showFavoredRaces}
-              onCheckedChange={setShowFavoredRaces}
-            />
+            {shouldShowFavoredRaces() && (
+              <SwitchCard
+                title="Favored Races"
+                description="Races favored by this deity"
+                checked={showFavoredRaces}
+                onCheckedChange={setShowFavoredRaces}
+              />
+            )}
           </ControlGrid>
         </DisplayCustomizeTools>
       )}

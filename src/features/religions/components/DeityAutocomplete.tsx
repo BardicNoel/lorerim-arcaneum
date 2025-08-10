@@ -4,6 +4,7 @@ import {
   type AutocompleteOption,
 } from '@/shared/components/generic'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
+import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Star } from 'lucide-react'
 import { useMemo, useState } from 'react'
@@ -94,7 +95,8 @@ export function DeityAutocomplete({
             className="text-sm text-muted-foreground line-clamp-2 mb-1"
           />
         )}
-        {option.metadata?.favoredRaces &&
+        {shouldShowFavoredRaces() &&
+          option.metadata?.favoredRaces &&
           option.metadata.favoredRaces.length > 0 && (
             <div className="flex items-center gap-1">
               <Star className="h-3 w-3 text-skyrim-gold" />

@@ -2,6 +2,7 @@ import type { Birthsign } from '@/features/birthsigns/types'
 import type { Religion } from '@/features/religions/types'
 import type { Trait } from '@/features/traits/types'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
+import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
 import type { DestinyNode } from '@/shared/data/schemas'
 
 /**
@@ -15,7 +16,7 @@ export function religionToPlayerCreationItem(
     id: `religion-${religion.name.toLowerCase().replace(/\s+/g, '-')}`,
     name: religion.name,
     description: religion.tenet?.description || '',
-    tags: religion.favoredRaces || [],
+    tags: shouldShowFavoredRaces() ? religion.favoredRaces || [] : [],
     summary: religion.tenet?.description || '',
     effects: [
       // Include tenet effects
