@@ -1,8 +1,9 @@
 import { GenericAccordionCard } from '@/shared/components/generic'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Button } from '@/shared/ui/ui/button'
-import { H3, P } from '@/shared/ui/ui/typography'
+import { H3 } from '@/shared/ui/ui/typography'
 import { ExternalLink, Heart, Shield, Star, Zap } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import type { Birthsign } from '../types'
@@ -220,7 +221,7 @@ export function BirthsignCard({
       <div className="space-y-3 px-4 pb-4">
         {/* Description */}
         <div>
-          <P className="text-sm text-muted-foreground">{displaySummary}</P>
+          <FormattedText text={displaySummary} />
         </div>
 
         {/* Quick effects preview */}

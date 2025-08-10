@@ -1,7 +1,8 @@
 import { ResponsivePanel } from '@/shared/components/generic'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import { Separator } from '@/shared/ui/ui/separator'
-import { H2, H3, P } from '@/shared/ui/ui/typography'
+import { H2, H3 } from '@/shared/ui/ui/typography'
 import type { Birthsign } from '../types'
 import { BirthsignAvatar } from './BirthsignAvatar'
 import { BirthsignEffectsDisplay } from './BirthsignEffectsDisplay'
@@ -44,9 +45,7 @@ export function BirthsignDetailsSheet({
                   itemName={birthsign.name}
                 />
               </div>
-              <P className="text-sm text-muted-foreground leading-relaxed">
-                {birthsign.description}
-              </P>
+              <FormattedText text={birthsign.description} />
             </div>
           </div>
         </div>

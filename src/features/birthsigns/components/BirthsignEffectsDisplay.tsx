@@ -1,7 +1,8 @@
 import { cn } from '@/lib/utils'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
-import { H4, P } from '@/shared/ui/ui/typography'
+import { H4 } from '@/shared/ui/ui/typography'
 import { Shield, Star, Zap } from 'lucide-react'
 import type { Birthsign } from '../types'
 
@@ -95,9 +96,7 @@ export function BirthsignEffectsDisplay({
                     <span className="font-medium text-sm">{power.name}</span>
                   </div>
                   <div className="border-t border-border my-2" />
-                  <P className="text-sm text-muted-foreground">
-                    {power.description}
-                  </P>
+                  <FormattedText text={power.description} />
                   {(power.magnitude || power.duration) && (
                     <div className="grid grid-cols-2 gap-4 text-sm mt-2">
                       {power.magnitude && (
@@ -141,9 +140,7 @@ export function BirthsignEffectsDisplay({
                       {effect.stat}
                     </span>
                   </div>
-                  <P className="text-sm text-muted-foreground">
-                    {effect.description}
-                  </P>
+                  <FormattedText text={effect.description} />
                   <p className="text-xs text-muted-foreground mt-1">
                     <strong>Condition:</strong> {effect.condition}
                   </p>
@@ -171,9 +168,7 @@ export function BirthsignEffectsDisplay({
                   <div className="text-sm font-medium capitalize">
                     {effect.stat}
                   </div>
-                  <P className="text-sm text-muted-foreground">
-                    {effect.description}
-                  </P>
+                  <FormattedText text={effect.description} />
                   {effect.condition && (
                     <p className="text-xs text-muted-foreground mt-1">
                       <strong>Requirement:</strong> {effect.condition}
