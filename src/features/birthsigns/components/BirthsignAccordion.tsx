@@ -1,14 +1,14 @@
 import { cn } from '@/lib/utils'
 import { AccordionCard } from '@/shared/components/generic/AccordionCard'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
 import { H3 } from '@/shared/ui/ui/typography'
 import { Star } from 'lucide-react'
+import { getBirthsignGroupStyle } from '../config/birthsignConfig'
 import type { Birthsign } from '../types'
 import { BirthsignAvatar } from './BirthsignAvatar'
-import { FormattedText } from '@/shared/components/generic/FormattedText'
-import { getBirthsignGroupStyle } from '../config/birthsignConfig'
 
 interface BirthsignAccordionProps {
   item: PlayerCreationItem & { originalBirthsign: Birthsign }
@@ -112,9 +112,10 @@ export function BirthsignAccordion({
                     <span className="font-medium text-sm">{power.name}</span>
                   </div>
                   <div className="border-t border-border my-2" />
-                  <div className="text-sm text-muted-foreground">
-                    {power.description}
-                  </div>
+                  <FormattedText
+                    text={power.description}
+                    className="text-sm text-muted-foreground"
+                  />
                 </div>
               ))}
             </div>
@@ -163,9 +164,10 @@ export function BirthsignAccordion({
                   </div>
                   <div className="border-t border-border my-2" />
                   <div className="text-sm font-medium">{effect.stat}</div>
-                  <div className="text-sm text-muted-foreground">
-                    {effect.description}
-                  </div>
+                  <FormattedText
+                    text={effect.description}
+                    className="text-sm text-muted-foreground"
+                  />
                 </div>
               ))}
               {originalBirthsign.mastery_effects?.map((effect, index) => (
@@ -179,9 +181,10 @@ export function BirthsignAccordion({
                   </div>
                   <div className="border-t border-border my-2" />
                   <div className="text-sm font-medium">{effect.stat}</div>
-                  <div className="text-sm text-muted-foreground">
-                    {effect.description}
-                  </div>
+                  <FormattedText
+                    text={effect.description}
+                    className="text-sm text-muted-foreground"
+                  />
                 </div>
               ))}
             </div>

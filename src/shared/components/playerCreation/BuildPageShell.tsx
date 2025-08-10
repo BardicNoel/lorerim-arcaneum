@@ -1,3 +1,4 @@
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import React from 'react'
 
 interface BuildPageShellProps {
@@ -20,9 +21,11 @@ export const BuildPageShell = ({
           <div>
             <h1 className="text-3xl font-bold">{title}</h1>
             {description && (
-              <p className="text-muted-foreground mt-2 max-w-4xl">
-                {description}
-              </p>
+              <FormattedText
+                text={description}
+                className="text-muted-foreground mt-2 max-w-4xl"
+                as="p"
+              />
             )}
           </div>
         </div>

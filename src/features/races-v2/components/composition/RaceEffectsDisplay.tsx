@@ -1,6 +1,6 @@
-import React from 'react'
 import { cn } from '@/lib/utils'
-import { H5, P } from '@/shared/ui/ui/typography'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
+import { H5 } from '@/shared/ui/ui/typography'
 import { Star } from 'lucide-react'
 
 interface Effect {
@@ -32,8 +32,10 @@ export function RaceEffectsDisplay({
 
   return (
     <div className={cn('space-y-3', className)}>
-      {title && <H5 className="text-lg font-medium text-foreground">{title}</H5>}
-      
+      {title && (
+        <H5 className="text-lg font-medium text-foreground">{title}</H5>
+      )}
+
       {compact ? (
         // Compact view - just the effects list
         <div className="flex flex-wrap gap-2">
@@ -66,9 +68,10 @@ export function RaceEffectsDisplay({
                 <div className="flex-1 min-w-0">
                   <h6 className="font-medium text-sm">{effect.name}</h6>
                   {showDescriptions && effect.description && (
-                    <P className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                      {effect.description}
-                    </P>
+                    <FormattedText
+                      text={effect.description}
+                      className="text-xs text-muted-foreground mt-1 leading-relaxed"
+                    />
                   )}
                 </div>
               </div>
@@ -83,4 +86,4 @@ export function RaceEffectsDisplay({
       )}
     </div>
   )
-} 
+}

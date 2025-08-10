@@ -1,7 +1,7 @@
-import React from 'react'
 import { AccordionCard } from '@/shared/components/generic/AccordionCard'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { Badge } from '@/shared/ui/ui/badge'
-import { Flame, Heart, Ghost, Eye, Shield, Sparkles } from 'lucide-react'
+import { Eye, Flame, Ghost, Heart, Shield, Sparkles } from 'lucide-react'
 import type { SpellWithComputed } from '../../types'
 
 interface SpellAccordionCardProps {
@@ -13,20 +13,20 @@ interface SpellAccordionCardProps {
 }
 
 const schoolIcons = {
-  'Destruction': Flame,
-  'Restoration': Heart,
-  'Conjuration': Ghost,
-  'Illusion': Eye,
-  'Alteration': Shield,
-  '': Sparkles
+  Destruction: Flame,
+  Restoration: Heart,
+  Conjuration: Ghost,
+  Illusion: Eye,
+  Alteration: Shield,
+  '': Sparkles,
 }
 
 const levelColors = {
-  'Novice': 'bg-green-100 text-green-800 border-green-200',
-  'Apprentice': 'bg-blue-100 text-blue-800 border-blue-200',
-  'Adept': 'bg-purple-100 text-purple-800 border-purple-200',
-  'Expert': 'bg-orange-100 text-orange-800 border-orange-200',
-  'Master': 'bg-red-100 text-red-800 border-red-200'
+  Novice: 'bg-green-100 text-green-800 border-green-200',
+  Apprentice: 'bg-blue-100 text-blue-800 border-blue-200',
+  Adept: 'bg-purple-100 text-purple-800 border-purple-200',
+  Expert: 'bg-orange-100 text-orange-800 border-orange-200',
+  Master: 'bg-red-100 text-red-800 border-red-200',
 }
 
 export function SpellAccordionCard({
@@ -36,7 +36,8 @@ export function SpellAccordionCard({
   onToggle,
   disableHover = false,
 }: SpellAccordionCardProps) {
-  const SchoolIcon = schoolIcons[spell.school as keyof typeof schoolIcons] || Sparkles
+  const SchoolIcon =
+    schoolIcons[spell.school as keyof typeof schoolIcons] || Sparkles
 
   const handleToggle = () => {
     onToggle?.()
@@ -98,12 +99,18 @@ export function SpellAccordionCard({
             </div>
             <Badge
               variant="secondary"
-              className={levelColors[spell.level as keyof typeof levelColors] || ''}
+              className={
+                levelColors[spell.level as keyof typeof levelColors] || ''
+              }
             >
               {spell.level}
             </Badge>
           </div>
-          <p className="text-sm text-muted-foreground mb-3">{spell.description}</p>
+          <FormattedText
+            text={spell.description}
+            className="text-sm text-muted-foreground mb-3"
+            as="p"
+          />
         </div>
       </AccordionCard.Summary>
 
@@ -112,7 +119,9 @@ export function SpellAccordionCard({
           {/* Effects Section */}
           {spell.hasEffects && (
             <div>
-              <h5 className="text-lg font-medium text-foreground mb-3">Effects</h5>
+              <h5 className="text-lg font-medium text-foreground mb-3">
+                Effects
+              </h5>
               <div className="space-y-2">
                 {spell.effects.map((effect, index) => (
                   <div key={index} className="bg-muted/50 rounded-lg p-3">
@@ -124,9 +133,15 @@ export function SpellAccordionCard({
                         </Badge>
                       )}
                     </div>
-                    <p className="text-sm text-muted-foreground">{effect.description}</p>
+                    <FormattedText
+                      text={effect.description}
+                      className="text-sm text-muted-foreground"
+                      as="p"
+                    />
                     <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
-                      {effect.duration > 0 && <span>Duration: {effect.duration}s</span>}
+                      {effect.duration > 0 && (
+                        <span>Duration: {effect.duration}s</span>
+                      )}
                       {effect.area > 0 && <span>Area: {effect.area}ft</span>}
                     </div>
                   </div>
@@ -137,7 +152,9 @@ export function SpellAccordionCard({
 
           {/* Statistics Section */}
           <div>
-            <h5 className="text-lg font-medium text-foreground mb-3">Statistics</h5>
+            <h5 className="text-lg font-medium text-foreground mb-3">
+              Statistics
+            </h5>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Magicka Cost:</span>
@@ -145,7 +162,9 @@ export function SpellAccordionCard({
               </div>
               {spell.totalMagnitude > 0 && (
                 <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Total Magnitude:</span>
+                  <span className="text-muted-foreground">
+                    Total Magnitude:
+                  </span>
                   <span className="font-medium">{spell.totalMagnitude}</span>
                 </div>
               )}
@@ -167,7 +186,9 @@ export function SpellAccordionCard({
           {/* Additional Information */}
           {(spell.tome || spell.vendors?.length) && (
             <div>
-              <h5 className="text-lg font-medium text-foreground mb-3">Additional Info</h5>
+              <h5 className="text-lg font-medium text-foreground mb-3">
+                Additional Info
+              </h5>
               <div className="space-y-2 text-sm">
                 {spell.tome && (
                   <div className="flex items-center gap-2">

@@ -3,6 +3,7 @@ import {
   GenericAutocomplete,
   type AutocompleteOption,
 } from '@/shared/components/generic'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { Badge } from '@/shared/ui/ui/badge'
 import { useMemo, useState } from 'react'
 import { useFuzzySearch } from '../../hooks/useFuzzySearch'
@@ -67,9 +68,10 @@ export function RaceAutocomplete({
           {option.badge && <div className="flex-shrink-0">{option.badge}</div>}
         </div>
         {option.description && (
-          <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
-            {option.description}
-          </p>
+          <FormattedText
+            text={option.description}
+            className="text-sm text-muted-foreground line-clamp-2 mt-1"
+          />
         )}
       </div>
     </div>
