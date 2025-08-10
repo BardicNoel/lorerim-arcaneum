@@ -1,9 +1,10 @@
 import type { Birthsign } from '@/features/birthsigns/types'
+import type { RecipeWithComputed } from '@/features/cookbook/types'
 import type { DestinyNode } from '@/features/destiny/types'
 import type { PerkReferenceNode } from '@/features/perk-references/types'
 import type { SpellWithComputed } from '@/features/spells/types'
-import type { RecipeWithComputed } from '@/features/cookbook/types'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
+import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
 import type { Race, Religion, Skill, Trait } from '@/shared/data/schemas'
 import type {
   SearchableItem,
@@ -92,7 +93,7 @@ export function transformReligionsToSearchable(
       religion.type || '',
       religion.pantheon || '',
       ...(religion.tags || []),
-      ...(religion.favoredRaces || []),
+      ...(shouldShowFavoredRaces() ? religion.favoredRaces || [] : []),
       ...(religion.worshipRestrictions || []),
       ...(religion.tenet?.effects?.map(effect => effect.effectName) || []),
       ...(religion.blessing?.effects?.map(effect => effect.effectName) || []),
@@ -249,8 +250,10 @@ export function transformRecipesToSearchable(
       recipe.difficulty || '',
       recipe.type || '', // Keep the original type in searchable text for filtering
       ...recipe.tags,
-      ...recipe.ingredients.map(ingredient => 
-        typeof ingredient === 'string' ? ingredient : ingredient.name || ingredient.item || ''
+      ...recipe.ingredients.map(ingredient =>
+        typeof ingredient === 'string'
+          ? ingredient
+          : ingredient.name || ingredient.item || ''
       ),
       ...recipe.effects.map(effect => effect.name),
       ...recipe.effects.map(effect => effect.description),

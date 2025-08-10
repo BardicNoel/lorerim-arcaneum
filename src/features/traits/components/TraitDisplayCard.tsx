@@ -1,11 +1,8 @@
-import {
-  EntityDisplayCard,
-  type EntityDetail,
-} from '@/shared/components/playerCreation'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
+import { EntityDisplayCard } from '@/shared/components/playerCreation'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Badge } from '@/shared/ui/ui/badge'
 import { useNavigate } from 'react-router-dom'
-import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { useTraits } from '../hooks/useTraits'
 
 interface TraitDisplayCardProps {
@@ -83,7 +80,7 @@ export function TraitDisplayCard({ className }: TraitDisplayCardProps) {
                           : 'bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300'
                       }`}
                     >
-                      {effect.type}
+                      <FormattedText text={effect.type} className="text-xs" />
                     </div>
                   ))}
 

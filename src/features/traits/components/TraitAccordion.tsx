@@ -1,29 +1,23 @@
 import { cn } from '@/lib/utils'
 import { AccordionCard } from '@/shared/components/generic/AccordionCard'
-import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
-import { Badge } from '@/shared/ui/ui/badge'
-import { Button } from '@/shared/ui/ui/button'
-import { H3, P } from '@/shared/ui/ui/typography'
-import { Heart, Shield, Star, Zap } from 'lucide-react'
-import type { Trait } from '@/shared/data/schemas'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
+import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
+import type { Trait } from '@/shared/data/schemas'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import { Button } from '@/shared/ui/ui/button'
+import { H3 } from '@/shared/ui/ui/typography'
+import { Zap } from 'lucide-react'
 import { useEffect } from 'react'
 
 interface TraitAccordionProps {
   item: PlayerCreationItem & { originalTrait: Trait }
-  isExpanded?: boolean
-  onToggle?: () => void
   className?: string
-  showToggle?: boolean
   allTraitIds?: string[] // Add this prop to pass all valid trait IDs
   disableHover?: boolean
 }
 
 export function TraitAccordion({
   item,
-  isExpanded = false,
-  onToggle,
   className,
   allTraitIds,
   disableHover = false,
@@ -100,10 +94,10 @@ export function TraitAccordion({
 
   return (
     <AccordionCard
-      expanded={isExpanded}
-      onToggle={onToggle}
+      expanded={true}
       className={cn(className, getCardTheming())}
       disableHover={disableHover}
+      hideChevron={true}
     >
       <AccordionCard.Header>
         <div className="flex items-center gap-2">
@@ -114,10 +108,7 @@ export function TraitAccordion({
       <AccordionCard.Summary>
         <FormattedText
           text={item.description}
-          className={cn(
-            'text-base text-muted-foreground',
-            isExpanded ? '' : 'line-clamp-2'
-          )}
+          className="text-base text-muted-foreground"
         />
       </AccordionCard.Summary>
       <AccordionCard.Footer>

@@ -1,3 +1,4 @@
+import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
 import type { Religion } from '@/shared/data/schemas'
 import { getDataUrl } from '@/shared/utils/baseUrl'
 import { create } from 'zustand'
@@ -52,7 +53,7 @@ export const useReligionsStore = create<ReligionsStore>((set, get) => ({
           type: deity.type || pantheon.type, // Ensure type field exists
           tags: [
             pantheon.type,
-            ...(deity.favoredRaces || []),
+            ...(shouldShowFavoredRaces() ? deity.favoredRaces || [] : []),
             ...(deity.tags || []),
           ].filter(Boolean),
         }))

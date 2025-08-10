@@ -33,7 +33,7 @@ export function BirthsignAutocomplete({
       label: birthsign.name,
       description: birthsign.description,
       category: birthsign.group,
-      icon: <BirthsignAvatar birthsignName={birthsign.name} size="sm" />,
+      icon: <BirthsignAvatar birthsignName={birthsign.name} size="md" />,
       badge: birthsign.group && (
         <Badge
           variant="outline"

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
 import { cn } from '@/lib/utils'
+import React, { useState } from 'react'
 
 /**
  * Compound AccordionCard component with slottable Header, Summary, Footer, and Details.
@@ -21,12 +21,14 @@ export function AccordionCard({
   expanded,
   onToggle,
   disableHover = false,
+  hideChevron = false,
 }: {
   children: React.ReactNode
   className?: string
   expanded?: boolean
   onToggle?: () => void
   disableHover?: boolean
+  hideChevron?: boolean
 }) {
   // Find slots by type
   let header, summary, footer, details
@@ -58,6 +60,7 @@ export function AccordionCard({
         React.cloneElement(header, {
           onClick: handleToggle,
           expanded: isExpanded,
+          hideChevron,
         })}
       {/* Main content area (takes available space) */}
       <div className="flex-1">
@@ -76,11 +79,13 @@ AccordionCard.Header = function Header({
   className,
   onClick,
   expanded,
+  hideChevron = false,
 }: {
   children: React.ReactNode
   className?: string
   onClick?: () => void
   expanded?: boolean
+  hideChevron?: boolean
 }) {
   const handleClick = () => {
     onClick?.()
@@ -105,23 +110,29 @@ AccordionCard.Header = function Header({
       }}
     >
       {children}
-      <span
-        className={cn(
-          'ml-auto transition-transform duration-200 text-muted-foreground',
-          expanded ? 'rotate-180' : ''
-        )}
-      >
-        <svg
-          className="h-4 w-4"
-          viewBox="0 0 20 20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          aria-hidden="true"
+      {!hideChevron && (
+        <span
+          className={cn(
+            'ml-auto transition-transform duration-200 text-muted-foreground',
+            expanded ? 'rotate-180' : ''
+          )}
         >
-          <path d="M6 8l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </span>
+          <svg
+            className="h-4 w-4"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            aria-hidden="true"
+          >
+            <path
+              d="M6 8l4 4 4-4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+      )}
     </div>
   )
 }

@@ -16,14 +16,13 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/ui/dropdown-menu'
 import { traitToPlayerCreationItem } from '@/shared/utils'
-import { ChevronDown, Grid3X3, List, X } from 'lucide-react'
+import { ChevronDown, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { TraitAccordion } from '../components/TraitAccordion'
 import { useFuzzySearch } from '../hooks'
 import { getAllCategories, getAllTags } from '../utils'
 
 type SortOption = 'alphabetical' | 'category' | 'effect-count'
-type ViewMode = 'list' | 'grid'
 
 export function AccordionTraitsPage() {
   // Use the new cache-based hook - no infinite loops!
@@ -32,8 +31,6 @@ export function AccordionTraitsPage() {
 
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
-  const [viewMode, setViewMode] = useState<ViewMode>('grid')
-  const [expandedTraits, setExpandedTraits] = useState<Set<string>>(new Set())
 
   // Memoize the trait items to prevent unnecessary re-renders
   const traitItems = useMemo(
@@ -205,51 +202,6 @@ export function AccordionTraitsPage() {
     }
   })
 
-  // Handle accordion expansion
-  const handleTraitToggle = (traitId: string) => {
-    const newExpanded = new Set(expandedTraits)
-
-    if (viewMode === 'grid') {
-      // In grid mode, expand/collapse all items in the same row
-      const columns = 3 // Match the grid columns
-      const itemIndex = sortedDisplayItems.findIndex(
-        item => item.id === traitId
-      )
-      const rowIndex = Math.floor(itemIndex / columns)
-      const rowStartIndex = rowIndex * columns
-      const rowEndIndex = Math.min(
-        rowStartIndex + columns,
-        sortedDisplayItems.length
-      )
-
-      // Check if any item in the row is currently expanded
-      const isRowExpanded = sortedDisplayItems
-        .slice(rowStartIndex, rowEndIndex)
-        .some(item => newExpanded.has(item.id))
-
-      if (isRowExpanded) {
-        // Collapse all items in the row
-        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
-          newExpanded.delete(item.id)
-        })
-      } else {
-        // Expand all items in the row
-        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
-          newExpanded.add(item.id)
-        })
-      }
-    } else {
-      // In list mode, toggle individual items
-      if (newExpanded.has(traitId)) {
-        newExpanded.delete(traitId)
-      } else {
-        newExpanded.add(traitId)
-      }
-    }
-
-    setExpandedTraits(newExpanded)
-  }
-
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -320,28 +272,6 @@ export function AccordionTraitsPage() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-
-        {/* View Mode Toggle */}
-        <div className="flex items-center gap-1 p-1 bg-muted rounded-lg">
-          <Button
-            variant={viewMode === 'list' ? 'default' : 'ghost'}
-            size="sm"
-            onClick={() => setViewMode('list')}
-            className="h-8 px-3"
-            title="List view"
-          >
-            <List className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={viewMode === 'grid' ? 'default' : 'ghost'}
-            size="sm"
-            onClick={() => setViewMode('grid')}
-            className="h-8 px-3"
-            title="Grid view"
-          >
-            <Grid3X3 className="h-4 w-4" />
-          </Button>
-        </div>
       </div>
 
       {/* Selected Tags */}
@@ -376,40 +306,18 @@ export function AccordionTraitsPage() {
         )}
       </div>
 
-      {/* Trait Grid/List */}
-      {viewMode === 'grid' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
-          {sortedDisplayItems.map(item => {
-            const isExpanded = expandedTraits.has(item.id)
-            return (
-              <TraitAccordion
-                key={item.id}
-                item={item}
-                isExpanded={isExpanded}
-                onToggle={() => handleTraitToggle(item.id)}
-                className="w-full"
-                allTraitIds={allValidTraitIds}
-              />
-            )
-          })}
-        </div>
-      ) : (
-        <div className="flex flex-col gap-4 w-full mt-6">
-          {sortedDisplayItems.map(item => {
-            const isExpanded = expandedTraits.has(item.id)
-            return (
-              <TraitAccordion
-                key={item.id}
-                item={item}
-                isExpanded={isExpanded}
-                onToggle={() => handleTraitToggle(item.id)}
-                className="w-full"
-                allTraitIds={allValidTraitIds}
-              />
-            )
-          })}
-        </div>
-      )}
+      {/* Trait Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
+        {sortedDisplayItems.map(item => (
+          <TraitAccordion
+            key={item.id}
+            item={item}
+            isExpanded={true}
+            className="w-full"
+            allTraitIds={allValidTraitIds}
+          />
+        ))}
+      </div>
 
       {sortedDisplayItems.length === 0 && (
         <div className="text-center py-12">

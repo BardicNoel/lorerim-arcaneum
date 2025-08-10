@@ -1,5 +1,6 @@
 import { ReligionAccordion } from '@/features/religions/components/ReligionAccordion'
 import type { Religion as FeatureReligion } from '@/features/religions/types'
+import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
 import type { Religion as SharedReligion } from '@/shared/data/schemas'
 import { useReligionsStore } from '@/shared/stores/religionsStore'
 import type { SearchableItem } from '../../model/SearchModel'
@@ -113,7 +114,7 @@ export function ReligionSearchCard({
         showBlessings={true}
         showTenets={true}
         showBoons={true}
-        showFavoredRaces={true}
+        showFavoredRaces={shouldShowFavoredRaces()}
         disableHover={false} // Enable hover for better UX
         showToggle={false}
       />
