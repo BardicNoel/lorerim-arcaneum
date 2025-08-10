@@ -20,12 +20,7 @@ export function RaceDetailsSheet({
   if (!race) return null
 
   return (
-    <ResponsivePanel
-      open={isOpen}
-      onOpenChange={onOpenChange}
-      side="right"
-      className="w-[400px] sm:w-[700px] lg:w-[800px] max-w-[800px] p-0 overflow-y-auto bg-background"
-    >
+    <ResponsivePanel open={isOpen} onOpenChange={onOpenChange} side="right">
       <div className="p-6">
         <div className="mb-6">
           <div className="flex items-start gap-4">
