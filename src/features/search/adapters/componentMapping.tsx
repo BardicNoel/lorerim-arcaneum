@@ -1,5 +1,4 @@
 import React from 'react'
-import type { SearchResult } from '../model/SearchModel'
 import type { ViewMode } from '../model/TypeSpecificComponents'
 
 // Import type-specific components
@@ -7,7 +6,6 @@ import { RaceAccordion } from '@/features/races-v2/components/composition/RaceAc
 import { RaceCard } from '@/features/races-v2/components/composition/RaceCard'
 import { RaceDetailView } from '@/features/races-v2/views/RaceDetailView'
 
-import { BirthsignAccordion } from '@/features/birthsigns/components/BirthsignAccordion'
 import { BirthsignCard } from '@/features/birthsigns/components/BirthsignCard'
 import { BirthsignDetailPanel } from '@/features/birthsigns/components/BirthsignDetailPanel'
 
@@ -26,17 +24,17 @@ import { PerkTreeGrid } from '@/features/skills/components/composition/PerkTreeG
 
 import { PerkReferenceAccordion } from '@/features/perk-references/components/composition/PerkReferenceAccordion'
 
-import { SpellSearchCard } from '@/features/search/components/type-specific/SpellSearchCard'
 import { SpellDetailView } from '@/features/search/components/type-specific/SpellDetailView'
+import { SpellSearchCard } from '@/features/search/components/type-specific/SpellSearchCard'
 
 import { RecipeAccordion } from '@/features/cookbook/components/composition/RecipeAccordion'
 
 // Import wrapper components
-import { 
-  PerkReferenceSearchWrapper, 
-  RecipeSearchWrapper, 
-  FallbackCard, 
-  FallbackDetail 
+import {
+  FallbackCard,
+  FallbackDetail,
+  PerkReferenceSearchWrapper,
+  RecipeSearchWrapper,
 } from './wrappers'
 
 // Component mapping by type and view mode
@@ -53,7 +51,7 @@ const COMPONENT_MAP: Record<
   },
   birthsign: {
     card: BirthsignCard,
-    accordion: BirthsignAccordion,
+    accordion: BirthsignCard,
     grid: BirthsignCard,
     detail: BirthsignDetailPanel,
     compact: BirthsignCard,
@@ -121,8 +119,7 @@ export function getComponentForType(
   type: string,
   viewMode: ViewMode
 ): React.ComponentType<any> {
-
-  console.log("getComponentForType", type, viewMode)
+  console.log('getComponentForType', type, viewMode)
   const typeComponents = COMPONENT_MAP[type]
   if (!typeComponents) {
     return FallbackCard
