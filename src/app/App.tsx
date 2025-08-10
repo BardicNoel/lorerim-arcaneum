@@ -11,7 +11,7 @@ import { SidebarMenuItem } from '@/shared/ui/sidebar/SidebarMenuItem'
 import { SidebarRail } from '@/shared/ui/sidebar/SidebarRail'
 import { P } from '@/shared/ui/ui/typography'
 import { Home } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { HashRouter, useNavigate } from 'react-router-dom'
 import { AppRouter } from './router'
 import { SiteHeader } from './SiteHeader'
@@ -30,11 +30,11 @@ const navSections = [
     ],
   },
   {
-    label: "Docs",
+    label: 'Docs',
     items: [
       { to: '/spells', label: 'Spells' },
       { to: '/cookbook', label: 'Food and Alcohol' },
-    ]
+    ],
   },
 
   // {
@@ -73,9 +73,24 @@ const navSections = [
   // },
 ]
 
-function AppSidebar({ collapsed }: { collapsed: boolean }) {
+function AppSidebar({
+  collapsed,
+  onNavigate,
+}: {
+  collapsed: boolean
+  onNavigate: (isMobile: boolean) => void
+}) {
   const navigate = useNavigate()
   const currentPath = window.location.hash.replace(/^#\/?/, '/')
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   // Custom navigation that preserves build parameters
   const navigateWithBuild = (to: string) => {
@@ -91,6 +106,9 @@ function AppSidebar({ collapsed }: { collapsed: boolean }) {
       // No build parameter, just navigate normally
       navigate(to)
     }
+
+    // Close sidebar after navigation (only on mobile)
+    onNavigate(isMobile)
   }
 
   return (
@@ -156,7 +174,7 @@ function AppSidebar({ collapsed }: { collapsed: boolean }) {
 
 // Component that uses URL sync inside Router context
 function AppContent() {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true)
 
   // Initialize URL sync for build state (now inside Router context)
   useURLSync()
@@ -174,7 +192,14 @@ function AppContent() {
           }`}
           style={{ zIndex: Z_INDEX.SIDEBAR }}
         >
-          <AppSidebar collapsed={sidebarCollapsed} />
+          <AppSidebar
+            collapsed={sidebarCollapsed}
+            onNavigate={isMobile => {
+              if (isMobile) {
+                setSidebarCollapsed(true)
+              }
+            }}
+          />
         </div>
         <main className={`flex-1  transition-all duration-300 ease-in-out`}>
           <AppRouter />
