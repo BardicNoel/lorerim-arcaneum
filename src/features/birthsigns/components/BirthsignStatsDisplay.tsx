@@ -32,19 +32,19 @@ export function BirthsignStatsDisplay({
         {hasStatModifications && (
           <div>
             <H4 className="text-sm font-medium mb-2">Attributes</H4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 gap-2">
               {birthsign.stat_modifications.map((stat, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-2 rounded-lg border bg-muted/30"
+                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
                 >
-                  <span className="text-sm font-medium capitalize">
-                    {stat.stat}
+                  <span className="text-sm font-medium capitalize flex-1 min-w-0 mr-3">
+                    {stat.stat.replace(/_/g, ' ')}
                   </span>
                   <Badge
                     variant="outline"
                     className={cn(
-                      'text-xs',
+                      'text-xs flex-shrink-0',
                       stat.type === 'bonus'
                         ? 'bg-green-100 text-green-800 border-green-200'
                         : 'bg-red-100 text-red-800 border-red-200'
@@ -64,18 +64,18 @@ export function BirthsignStatsDisplay({
         {hasSkillBonuses && (
           <div>
             <H4 className="text-sm font-medium mb-2">Skill Bonuses</H4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 gap-2">
               {birthsign.skill_bonuses.map((skill, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-2 rounded-lg border bg-muted/30"
+                  className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
                 >
-                  <span className="text-sm font-medium capitalize">
-                    {skill.stat}
+                  <span className="text-sm font-medium capitalize flex-1 min-w-0 mr-3">
+                    {skill.stat.replace(/_/g, ' ')}
                   </span>
                   <Badge
                     variant="outline"
-                    className="bg-blue-100 text-blue-800 border-blue-200 text-xs"
+                    className="bg-blue-100 text-blue-800 border-blue-200 text-xs flex-shrink-0"
                   >
                     +{skill.value}
                     {skill.value_type === 'percentage' ? '%' : ''}
