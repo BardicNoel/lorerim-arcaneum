@@ -1,11 +1,10 @@
-import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { SelectionCardShell } from '@/shared/components/ui'
-import { useState } from 'react'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import { birthsignToPlayerCreationItem } from '@/shared/utils'
 import { useNavigate } from 'react-router-dom'
 import { useBirthsignData } from '../hooks/useBirthsignData'
 import type { Birthsign } from '../types'
-import { birthsignToPlayerCreationItem } from '@/shared/utils'
-import { BirthsignAccordion, BirthsignAutocomplete } from './'
+import { BirthsignAutocomplete, BirthsignCard } from './'
 
 interface BirthsignSelectionCardProps {
   className?: string
@@ -17,7 +16,6 @@ export function BirthsignSelectionCard({
   const { birthsigns, loading, error } = useBirthsignData()
   const { build, setStone } = useCharacterBuild()
   const navigate = useNavigate()
-  const [isExpanded, setIsExpanded] = useState(true)
 
   // Find the selected birthsign
   const selectedBirthsign = build.stone
@@ -34,10 +32,6 @@ export function BirthsignSelectionCard({
 
   const handleNavigateToBirthsignPage = () => {
     navigate('/birth-signs')
-  }
-
-  const handleToggleExpanded = () => {
-    setIsExpanded(!isExpanded)
   }
 
   // If no birthsign is selected, show the autocomplete
@@ -78,13 +72,12 @@ export function BirthsignSelectionCard({
         placeholder={`Birth Sign: Select a birthsign (${selectedBirthsign.name})`}
         className="w-full"
       />
-      <BirthsignAccordion
+      <BirthsignCard
         item={birthsignItem}
-        isExpanded={isExpanded}
-        onToggle={handleToggleExpanded}
+        originalBirthsign={selectedBirthsign}
+        isExpanded={true}
         className="border-0 shadow-none"
-        showAddToBuild={false}
-        disableHover={true}
+        showToggle={false}
       />
     </SelectionCardShell>
   )

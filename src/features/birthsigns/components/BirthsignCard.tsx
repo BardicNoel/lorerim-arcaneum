@@ -1,4 +1,4 @@
-import { GenericAccordionCard } from '@/shared/components/generic'
+import { cn } from '@/lib/utils'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
@@ -7,7 +7,11 @@ import { H3 } from '@/shared/ui/ui/typography'
 import { ExternalLink, Heart, Shield, Star, Zap } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import type { Birthsign } from '../types'
-import { BirthsignAvatar, BirthsignEffectsDisplay } from './'
+import {
+  BirthsignAvatar,
+  BirthsignEffectsDisplay,
+  BirthsignStatsDisplay,
+} from './'
 
 interface BirthsignCardProps {
   item?: PlayerCreationItem
@@ -119,10 +123,11 @@ export function BirthsignCard({
   const allEffects = getAllEffects()
 
   const cardContent = (
-    <GenericAccordionCard
-      isExpanded={isExpanded}
-      onToggle={onToggle || (() => {})}
-      className={className}
+    <div
+      className={cn(
+        'rounded-lg border bg-background shadow-sm transition-all',
+        className
+      )}
     >
       {/* Header Content */}
       <div className="flex items-start justify-between p-4">
@@ -217,7 +222,7 @@ export function BirthsignCard({
         </div>
       </div>
 
-      {/* Collapsed Content */}
+      {/* Content - Always show both collapsed and expanded content when isExpanded is true */}
       <div className="space-y-3 px-4 pb-4">
         {/* Description */}
         <div>
@@ -231,7 +236,23 @@ export function BirthsignCard({
           compact={true}
         />
       </div>
-    </GenericAccordionCard>
+
+      {/* Show expanded content when isExpanded is true */}
+      {isExpanded && (
+        <div className="space-y-4 px-4 pb-4">
+          {/* Detailed Stat Modifications */}
+          {originalBirthsign && (
+            <BirthsignStatsDisplay birthsign={originalBirthsign} />
+          )}
+
+          {/* Detailed Effects */}
+          <BirthsignEffectsDisplay
+            birthsign={originalBirthsign}
+            title="Special Effects"
+          />
+        </div>
+      )}
+    </div>
   )
 
   // Wrap in clickable div if onClick is provided
