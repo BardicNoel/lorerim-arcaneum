@@ -23,6 +23,9 @@ export function clearTextFormattingCache() {
   memoCache.clear()
 }
 
+// Clear cache on module load to ensure fresh patterns
+clearTextFormattingCache()
+
 export function parseFormattedText(
   text: string,
   options: TextFormattingOptions = {}
