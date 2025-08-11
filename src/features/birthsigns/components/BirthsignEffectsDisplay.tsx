@@ -98,17 +98,21 @@ export function BirthsignEffectsDisplay({
                   <div className="border-t border-border my-2" />
                   <FormattedText text={power.description} />
                   {(power.magnitude || power.duration) && (
-                    <div className="grid grid-cols-2 gap-4 text-sm mt-2">
+                    <div className="space-y-2 text-sm mt-2">
                       {power.magnitude && (
-                        <div>
-                          <span className="font-medium">Magnitude:</span>{' '}
-                          {power.magnitude}
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium min-w-[80px]">
+                            Magnitude:
+                          </span>
+                          <span>{power.magnitude}</span>
                         </div>
                       )}
                       {power.duration && (
-                        <div>
-                          <span className="font-medium">Duration:</span>{' '}
-                          {power.duration}s
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium min-w-[80px]">
+                            Duration:
+                          </span>
+                          <span>{power.duration}s</span>
                         </div>
                       )}
                     </div>

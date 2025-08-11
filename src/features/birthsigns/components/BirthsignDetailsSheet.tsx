@@ -22,12 +22,7 @@ export function BirthsignDetailsSheet({
   if (!birthsign) return null
 
   return (
-    <ResponsivePanel
-      open={isOpen}
-      onOpenChange={onOpenChange}
-      side="right"
-      className="w-[400px] sm:w-[700px] lg:w-[800px] max-w-[800px] p-0 overflow-y-auto bg-background"
-    >
+    <ResponsivePanel open={isOpen} onOpenChange={onOpenChange} side="right">
       <div className="p-6">
         {/* Header */}
         <div className="mb-6">
@@ -65,12 +60,14 @@ export function BirthsignDetailsSheet({
           {/* Game Information */}
           <div className="space-y-4">
             <H3 className="text-lg font-semibold">Game Information</H3>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="font-medium">EDID:</span> {birthsign.edid}
+            <div className="space-y-2 text-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+                <span className="font-medium min-w-[60px]">EDID:</span>
+                <span className="break-all">{birthsign.edid}</span>
               </div>
-              <div>
-                <span className="font-medium">Form ID:</span> {birthsign.formid}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+                <span className="font-medium min-w-[60px]">Form ID:</span>
+                <span className="break-all">{birthsign.formid}</span>
               </div>
             </div>
           </div>

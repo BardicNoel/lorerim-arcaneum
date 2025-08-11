@@ -29,6 +29,12 @@ export const Z_INDEX = {
   // Sticky elements
   STICKY: 40,
 
+  // Canvas and flow elements
+  BACKGROUND: 1,
+  DEFAULT: 10,
+  SELECTED: 20,
+  CANVAS: 5,
+
   // Notifications and alerts
   NOTIFICATION: 300,
   TOAST: 350,

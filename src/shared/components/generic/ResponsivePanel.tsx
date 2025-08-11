@@ -27,6 +27,13 @@ interface ResponsivePanelProps {
  * ResponsivePanel
  * Renders a side sheet on desktop and a full-width drawer on mobile.
  * Keeps a uniform API for consumers.
+ *
+ * Default sizing:
+ * - Mobile: Full width/height drawer
+ * - Small screens (sm): 800px width
+ * - Large screens (lg): 800px width (max-width: 800px)
+ *
+ * Note: Uses !important classes to override base Sheet component max-width constraints.
  */
 export function ResponsivePanel({
   open,
@@ -60,7 +67,7 @@ export function ResponsivePanel({
     'flex flex-col',
     isMobile
       ? 'inset-0 top-0 left-0 right-0 bottom-0 h-[100dvh] max-h-[100dvh] w-[100vw] p-0 rounded-none border-0 overflow-hidden'
-      : '',
+      : 'w-[450px] sm:w-[800px] lg:w-[800px] sm:!max-w-[800px] lg:!max-w-[800px] p-0 overflow-y-auto bg-background',
     className
   )
 

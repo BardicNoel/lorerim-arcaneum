@@ -129,6 +129,7 @@ export interface PerkNodeData extends PerkNode {
   selected?: boolean
   currentRank?: number
   hasChildren?: boolean
+  hasNoPosition?: boolean
 }
 
 export interface PerkPlan {
