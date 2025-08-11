@@ -384,7 +384,7 @@ export function ReligionsPage() {
       <ReligionSheet
         religion={selectedReligion}
         isOpen={isSheetOpen}
-        onClose={() => setIsSheetOpen(false)}
+        onOpenChange={setIsSheetOpen}
       />
     </BuildPageShell>
   )

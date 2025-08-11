@@ -1,13 +1,6 @@
-import { Button } from '@/shared/ui/ui/button'
-import { ScrollArea } from '@/shared/ui/ui/scroll-area'
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from '@/shared/ui/ui/sheet'
-import { H4, P } from '@/shared/ui/ui/typography'
+import { ResponsivePanel } from '@/shared/components/generic/ResponsivePanel'
+import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
+import { H3, P } from '@/shared/ui/ui/typography'
 import {
   BookOpen,
   Brain,
@@ -31,7 +24,7 @@ import { ReligionAvatar, ReligionCategoryBadge } from './atomic'
 interface ReligionSheetProps {
   religion: Religion | null
   isOpen: boolean
-  onClose: () => void
+  onOpenChange: (open: boolean) => void
 }
 
 // Enhanced icon mapping for religion effects
@@ -156,7 +149,7 @@ function FormattedBlessingDescription({
 export function ReligionSheet({
   religion,
   isOpen,
-  onClose,
+  onOpenChange,
 }: ReligionSheetProps) {
   if (!religion) return null
 
@@ -167,293 +160,278 @@ export function ReligionSheet({
   }
 
   return (
-    <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className="w-full sm:max-w-2xl overflow-hidden">
-        <SheetHeader className="pb-4">
-          <div className="flex items-center gap-3">
-            <ReligionAvatar religionName={religion.name} size="3xl" />
-            <div className="flex-1 min-w-0">
-              <SheetTitle className="text-2xl font-bold text-primary">
-                {religion.name}
-              </SheetTitle>
-              {religion.type && (
-                <ReligionCategoryBadge
-                  category={religion.type}
-                  size="md"
-                  className="mt-2"
+    <ResponsivePanel open={isOpen} onOpenChange={onOpenChange} side="right">
+      <div className="p-6">
+        <div className="mb-6">
+          <div className="flex items-start gap-4">
+            <ReligionAvatar religionName={religion.name} size="4xl" />
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold mb-2">{religion.name}</h2>
+              <div className="flex items-center gap-2 mb-2">
+                {religion.type && (
+                  <ReligionCategoryBadge category={religion.type} size="sm" />
+                )}
+                <AddToBuildSwitchSimple
+                  itemId={religion.name}
+                  itemType="religion"
+                  itemName={religion.name}
                 />
-              )}
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {religion.tenet?.description ||
+                  'A divine faith with unique blessings and tenets.'}
+              </p>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="h-8 w-8 p-0"
-            >
-              <X className="h-4 w-4" />
-            </Button>
           </div>
-        </SheetHeader>
+        </div>
 
-        <ScrollArea className="flex-1 pr-4">
-          <div className="space-y-6">
-            {/* Favored Races */}
-            {religion.favoredRaces && religion.favoredRaces.length > 0 && (
+        <div className="space-y-6">
+          {/* Favored Races */}
+          {religion.favoredRaces && religion.favoredRaces.length > 0 && (
+            <div>
+              <H3 className="text-lg font-semibold mb-3">Favored Races</H3>
+              <div className="flex flex-wrap gap-2">
+                {religion.favoredRaces.map((race, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 px-3 py-2 bg-muted/50 rounded-lg border border-border"
+                  >
+                    <Star className="h-4 w-4 text-skyrim-gold" />
+                    <span className="text-sm font-medium">{race}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Worship Restrictions */}
+          {religion.worshipRestrictions &&
+            religion.worshipRestrictions.length > 0 && (
               <div>
-                <H4 className="text-lg font-semibold mb-3">Favored Races</H4>
-                <div className="flex flex-wrap gap-2">
-                  {religion.favoredRaces.map((race, index) => (
+                <H3 className="text-lg font-semibold mb-3">
+                  Worship Restrictions
+                </H3>
+                <div className="space-y-2">
+                  {religion.worshipRestrictions.map((restriction, index) => (
                     <div
                       key={index}
-                      className="flex items-center gap-2 px-3 py-2 bg-muted/50 rounded-lg border border-border"
+                      className="p-3 bg-muted/30 rounded-lg border border-border"
                     >
-                      <Star className="h-4 w-4 text-skyrim-gold" />
-                      <span className="text-sm font-medium">{race}</span>
+                      <div className="flex items-start gap-2">
+                        <X className="h-4 w-4 text-red-500 mt-0.5" />
+                        <P className="text-sm text-muted-foreground">
+                          {restriction}
+                        </P>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Worship Restrictions */}
-            {religion.worshipRestrictions &&
-              religion.worshipRestrictions.length > 0 && (
-                <div>
-                  <H4 className="text-lg font-semibold mb-3">
-                    Worship Restrictions
-                  </H4>
-                  <div className="space-y-2">
-                    {religion.worshipRestrictions.map((restriction, index) => (
-                      <div
-                        key={index}
-                        className="p-3 bg-muted/30 rounded-lg border border-border"
-                      >
-                        <div className="flex items-start gap-2">
-                          <X className="h-4 w-4 text-red-500 mt-0.5" />
-                          <P className="text-sm text-muted-foreground">
-                            {restriction}
-                          </P>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-            {/* Blessing Details */}
-            {religion.blessing && religion.blessing.effects.length > 0 && (
-              <div>
-                <H4 className="text-lg font-semibold mb-3">
-                  Blessing of {religion.name}
-                </H4>
-                <div className="space-y-3">
-                  {religion.blessing.effects
-                    .filter(
-                      effect =>
-                        effect.effectType !== '1' && effect.effectType !== '3'
-                    )
-                    .map((effect, index) => (
-                      <div
-                        key={index}
-                        className="p-4 bg-muted/50 rounded-lg border border-border"
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className="flex items-center gap-2">
-                            <Heart className="h-4 w-4 text-red-500" />
-                            {effect.effectType &&
-                              getEffectIcon(effect.effectType)}
-                          </div>
-                          <div className="flex-1">
-                            <P className="font-medium text-sm mb-2">
-                              {effect.effectName}
-                            </P>
-                            <FormattedBlessingDescription
-                              description={effect.effectDescription}
-                              magnitude={effect.magnitude}
-                              duration={effect.duration}
-                              area={effect.area}
-                            />
-                            {effect.duration > 0 && (
-                              <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
-                                <Clock className="h-3 w-3" />
-                                <span>
-                                  Lasts for {formatDuration(effect.duration)}
-                                </span>
-                              </div>
-                            )}
-                            <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
-                              {effect.area > 0 && (
-                                <div className="flex items-center gap-1">
-                                  <Target className="h-3 w-3" />
-                                  <span>Area: {effect.area}</span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                </div>
-              </div>
-            )}
-
-            {/* Tenet Effects */}
-            {religion.tenet?.effects && religion.tenet.effects.length > 0 && (
-              <div>
-                <H4 className="text-lg font-semibold mb-3">
-                  Tenets of {religion.name}
-                </H4>
-                <div className="space-y-3">
-                  {religion.tenet.effects.map((effect, index) => {
-                    // Split the effect description by periods to create separate tenets
-                    const tenetSentences = effect.effectDescription
-                      .split('.')
-                      .filter(sentence => sentence.trim().length > 0)
-
-                    return tenetSentences.map((tenet, tenetIndex) => (
-                      <div
-                        key={`${index}-${tenetIndex}`}
-                        className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border"
-                      >
+          {/* Blessing Details */}
+          {religion.blessing && religion.blessing.effects.length > 0 && (
+            <div>
+              <H3 className="text-lg font-semibold mb-3">
+                Blessing of {religion.name}
+              </H3>
+              <div className="space-y-3">
+                {religion.blessing.effects
+                  .filter(
+                    effect =>
+                      effect.effectType !== '1' && effect.effectType !== '3'
+                  )
+                  .map((effect, index) => (
+                    <div
+                      key={index}
+                      className="p-4 bg-muted/50 rounded-lg border border-border"
+                    >
+                      <div className="flex items-start gap-3">
                         <div className="flex items-center gap-2">
-                          <Shield className="h-4 w-4 text-blue-500" />
-                          {effect.targetAttribute &&
-                            getEffectIcon(effect.targetAttribute)}
+                          <Heart className="h-4 w-4 text-red-500" />
+                          {effect.effectType &&
+                            getEffectIcon(effect.effectType)}
                         </div>
                         <div className="flex-1">
-                          <P className="text-sm text-muted-foreground">
-                            {tenet.trim() + '.'}
+                          <P className="font-medium text-sm mb-2">
+                            {effect.effectName}
                           </P>
+                          <FormattedBlessingDescription
+                            description={effect.effectDescription}
+                            magnitude={effect.magnitude}
+                            duration={effect.duration}
+                            area={effect.area}
+                          />
+                          {effect.duration > 0 && (
+                            <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
+                              <Clock className="h-3 w-3" />
+                              <span>
+                                Lasts for {formatDuration(effect.duration)}
+                              </span>
+                            </div>
+                          )}
+                          <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
+                            {effect.area > 0 && (
+                              <div className="flex items-center gap-1">
+                                <Target className="h-3 w-3" />
+                                <span>Area: {effect.area}</span>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    ))
-                  })}
-                </div>
+                    </div>
+                  ))}
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Boons Section - Follower and Devotee Powers */}
-            {(religion.boon1 || religion.boon2) && (
-              <div>
-                <H4 className="text-lg font-semibold mb-3">
-                  Boons of {religion.name}
-                </H4>
-                <div className="space-y-4">
-                  {/* Follower Power (Boon 1) */}
-                  {religion.boon1 && religion.boon1.effects.length > 0 && (
-                    <div>
-                      <H4 className="text-md font-medium mb-2">
-                        Follower Boon
-                      </H4>
-                      <div className="space-y-3">
-                        {religion.boon1.effects.map((effect, index) => (
-                          <div
-                            key={index}
-                            className="p-4 bg-muted/50 rounded-lg border border-border"
-                          >
-                            <div className="flex items-start gap-3">
-                              <div className="flex items-center gap-2">
-                                <Zap className="h-4 w-4 text-yellow-500" />
-                                {effect.effectType &&
-                                  getEffectIcon(effect.effectType)}
-                              </div>
-                              <div className="flex-1">
-                                <P className="font-medium text-sm mb-2">
-                                  {effect.effectName}
-                                </P>
-                                <FormattedBlessingDescription
-                                  description={effect.effectDescription}
-                                  magnitude={effect.magnitude}
-                                  duration={effect.duration}
-                                  area={effect.area}
-                                />
-                                {effect.duration > 0 && (
-                                  <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
-                                    <Clock className="h-3 w-3" />
-                                    <span>
-                                      Lasts for{' '}
-                                      {formatDuration(effect.duration)}
-                                    </span>
+          {/* Tenet Effects */}
+          {religion.tenet?.effects && religion.tenet.effects.length > 0 && (
+            <div>
+              <H3 className="text-lg font-semibold mb-3">
+                Tenets of {religion.name}
+              </H3>
+              <div className="space-y-3">
+                {religion.tenet.effects.map((effect, index) => {
+                  // Split the effect description by periods to create separate tenets
+                  const tenetSentences = effect.effectDescription
+                    .split('.')
+                    .filter(sentence => sentence.trim().length > 0)
+
+                  return tenetSentences.map((tenet, tenetIndex) => (
+                    <div
+                      key={`${index}-${tenetIndex}`}
+                      className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Shield className="h-4 w-4 text-blue-500" />
+                        {effect.targetAttribute &&
+                          getEffectIcon(effect.targetAttribute)}
+                      </div>
+                      <div className="flex-1">
+                        <P className="text-sm text-muted-foreground">
+                          {tenet.trim() + '.'}
+                        </P>
+                      </div>
+                    </div>
+                  ))
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Boons Section - Follower and Devotee Powers */}
+          {(religion.boon1 || religion.boon2) && (
+            <div>
+              <H3 className="text-lg font-semibold mb-3">
+                Boons of {religion.name}
+              </H3>
+              <div className="space-y-4">
+                {/* Follower Power (Boon 1) */}
+                {religion.boon1 && religion.boon1.effects.length > 0 && (
+                  <div>
+                    <H3 className="text-md font-medium mb-2">Follower Boon</H3>
+                    <div className="space-y-3">
+                      {religion.boon1.effects.map((effect, index) => (
+                        <div
+                          key={index}
+                          className="p-4 bg-muted/50 rounded-lg border border-border"
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="flex items-center gap-2">
+                              <Zap className="h-4 w-4 text-yellow-500" />
+                              {effect.effectType &&
+                                getEffectIcon(effect.effectType)}
+                            </div>
+                            <div className="flex-1">
+                              <P className="font-medium text-sm mb-2">
+                                {effect.effectName}
+                              </P>
+                              <FormattedBlessingDescription
+                                description={effect.effectDescription}
+                                magnitude={effect.magnitude}
+                                duration={effect.duration}
+                                area={effect.area}
+                              />
+                              {effect.duration > 0 && (
+                                <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
+                                  <Clock className="h-3 w-3" />
+                                  <span>
+                                    Lasts for {formatDuration(effect.duration)}
+                                  </span>
+                                </div>
+                              )}
+                              <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
+                                {effect.area > 0 && (
+                                  <div className="flex items-center gap-1">
+                                    <Target className="h-3 w-3" />
+                                    <span>Area: {effect.area}</span>
                                   </div>
                                 )}
-                                <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
-                                  {effect.area > 0 && (
-                                    <div className="flex items-center gap-1">
-                                      <Target className="h-3 w-3" />
-                                      <span>Area: {effect.area}</span>
-                                    </div>
-                                  )}
-                                </div>
                               </div>
                             </div>
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
-                  )}
+                  </div>
+                )}
 
-                  {/* Devotee Power (Boon 2) */}
-                  {religion.boon2 && religion.boon2.effects.length > 0 && (
-                    <div>
-                      <H4 className="text-md font-medium mb-2">Devotee Boon</H4>
-                      <div className="space-y-3">
-                        {religion.boon2.effects.map((effect, index) => (
-                          <div
-                            key={index}
-                            className="p-4 bg-muted/50 rounded-lg border border-border"
-                          >
-                            <div className="flex items-start gap-3">
-                              <div className="flex items-center gap-2">
-                                <BookOpen className="h-4 w-4 text-purple-500" />
-                                {effect.effectType &&
-                                  getEffectIcon(effect.effectType)}
-                              </div>
-                              <div className="flex-1">
-                                <P className="font-medium text-sm mb-2">
-                                  {effect.effectName}
-                                </P>
-                                <FormattedBlessingDescription
-                                  description={effect.effectDescription}
-                                  magnitude={effect.magnitude}
-                                  duration={effect.duration}
-                                  area={effect.area}
-                                />
-                                {effect.duration > 0 && (
-                                  <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
-                                    <Clock className="h-3 w-3" />
-                                    <span>
-                                      Lasts for{' '}
-                                      {formatDuration(effect.duration)}
-                                    </span>
+                {/* Devotee Power (Boon 2) */}
+                {religion.boon2 && religion.boon2.effects.length > 0 && (
+                  <div>
+                    <H3 className="text-md font-medium mb-2">Devotee Boon</H3>
+                    <div className="space-y-3">
+                      {religion.boon2.effects.map((effect, index) => (
+                        <div
+                          key={index}
+                          className="p-4 bg-muted/50 rounded-lg border border-border"
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="flex items-center gap-2">
+                              <BookOpen className="h-4 w-4 text-purple-500" />
+                              {effect.effectType &&
+                                getEffectIcon(effect.effectType)}
+                            </div>
+                            <div className="flex-1">
+                              <P className="font-medium text-sm mb-2">
+                                {effect.effectName}
+                              </P>
+                              <FormattedBlessingDescription
+                                description={effect.effectDescription}
+                                magnitude={effect.magnitude}
+                                duration={effect.duration}
+                                area={effect.area}
+                              />
+                              {effect.duration > 0 && (
+                                <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
+                                  <Clock className="h-3 w-3" />
+                                  <span>
+                                    Lasts for {formatDuration(effect.duration)}
+                                  </span>
+                                </div>
+                              )}
+                              <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
+                                {effect.area > 0 && (
+                                  <div className="flex items-center gap-1">
+                                    <Target className="h-3 w-3" />
+                                    <span>Area: {effect.area}</span>
                                   </div>
                                 )}
-                                <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
-                                  {effect.area > 0 && (
-                                    <div className="flex items-center gap-1">
-                                      <Target className="h-3 w-3" />
-                                      <span>Area: {effect.area}</span>
-                                    </div>
-                                  )}
-                                </div>
                               </div>
                             </div>
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </ScrollArea>
-
-        <SheetFooter className="pt-4 border-t">
-          <Button onClick={onClose} className="w-full">
-            Close
-          </Button>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+            </div>
+          )}
+        </div>
+      </div>
+    </ResponsivePanel>
   )
 }
