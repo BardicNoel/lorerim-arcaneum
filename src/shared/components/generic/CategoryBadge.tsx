@@ -1,6 +1,5 @@
-import React from 'react'
-import { Badge } from '@/shared/ui/ui/badge'
 import { cn } from '@/lib/utils'
+import { Badge } from '@/shared/ui/ui/badge'
 
 /**
  * Entity type definitions for category styling
@@ -37,8 +36,12 @@ const categoryStyles: Record<EntityType, Record<string, string>> = {
       'bg-orange-100 text-orange-800 border-orange-200 hover:bg-orange-200',
   },
   religion: {
-    // Add religion categories as they become available
-    // Example: 'Divine': 'bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-200'
+    Divine:
+      'bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-200',
+    Daedric: 'bg-red-100 text-red-800 border-red-200 hover:bg-red-200',
+    Tribunal: 'bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-200',
+    Ancestor:
+      'bg-orange-100 text-orange-800 border-orange-200 hover:bg-orange-200',
   },
   trait: {
     // Add trait categories as they become available
