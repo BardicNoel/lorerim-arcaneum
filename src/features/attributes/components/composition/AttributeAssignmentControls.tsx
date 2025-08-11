@@ -101,7 +101,7 @@ export function AttributeAssignmentControls({
           Character Level: {derivedLevel} (derived from {totalAssigned} attribute points)
         </div>
         
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {/* Health */}
           <div className="flex flex-col items-center p-3 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200 dark:border-red-800">
             <div className="font-medium text-red-700 dark:text-red-300 mb-3">Health</div>
