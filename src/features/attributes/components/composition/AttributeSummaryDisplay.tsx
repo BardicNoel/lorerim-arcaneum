@@ -34,7 +34,7 @@ export function AttributeSummaryDisplay({
           </div>
         )}
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="flex flex-col items-center p-3 bg-muted/50 rounded">
             <div className="text-sm text-muted-foreground">Health</div>
             <div className="font-medium text-lg">
@@ -89,7 +89,7 @@ export function AttributeSummaryDisplay({
             <p className="font-medium mb-1">
               Base Stats from {selectedRace.name}:
             </p>
-            <div className="grid grid-cols-3 gap-2 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
               <div className="text-center">
                 <div className="font-medium">Health</div>
                 <div className="text-muted-foreground">
@@ -153,7 +153,7 @@ export function AttributeSummaryDisplay({
       </div>
 
       {showRatios && (
-        <div className="grid grid-cols-3 gap-2 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
           <div className="text-center p-2 bg-muted rounded">
             <div className="font-medium">Health</div>
             <div className="text-muted-foreground">
