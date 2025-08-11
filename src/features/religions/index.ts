@@ -1,18 +1,18 @@
-export { AccordionReligionsPage } from './pages/AccordionReligionsPage'
 export {
+  DeityAutocomplete,
   ReligionAccordion,
   ReligionSelectionCard,
-  DeityAutocomplete,
 } from './components'
+export { ReligionsPage } from './pages/ReligionsPage'
 export type {
   Religion,
-  ReligionPantheon,
   ReligionEffect,
+  ReligionPantheon,
   ReligionSpell,
   ReligionTenet,
 } from './types'
 export type {
+  DeityOption,
   ReligionSelection,
   ReligionSelectionState,
-  DeityOption,
 } from './types/selection'

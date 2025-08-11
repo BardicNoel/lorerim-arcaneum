@@ -3,7 +3,7 @@ import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Button } from '@/shared/ui/ui/button'
 import { H3 } from '@/shared/ui/ui/typography'
-import { ChevronRight, ExternalLink, Heart, Shield, Star } from 'lucide-react'
+import { ExternalLink, Heart, Shield, Star } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { Religion } from '../types'
@@ -43,7 +43,7 @@ export function ReligionCard({
   const handleOpenDetails = (e: React.MouseEvent) => {
     e.stopPropagation()
     if (onOpenDetails) {
-      onOpenDetails(originalReligion?.id || item?.id || '')
+      onOpenDetails(originalReligion?.name || item?.id || '')
     }
   }
 
@@ -75,7 +75,7 @@ export function ReligionCard({
         .slice(0, 4)
         .map(tenet => ({
           id: tenet.trim(),
-          title: tenet.trim().split(' ').slice(0, 3).join(' ') + '...',
+          title: tenet.trim(),
           short: tenet.trim(),
           full: tenet.trim(),
         }))
@@ -88,7 +88,19 @@ export function ReligionCard({
         'hover:shadow-md hover:border-primary/50 hover:scale-[1.02] transition-all duration-200',
         className
       )}
-      onClick={onClick}
+      onClick={e => {
+        console.log('ReligionCard clicked, onOpenDetails:', !!onOpenDetails)
+        // Call the parent's onClick if provided
+        if (onClick) {
+          onClick()
+        }
+        // Also open details if onOpenDetails is provided
+        if (onOpenDetails) {
+          const id = originalReligion?.name || item?.id || ''
+          console.log('Calling onOpenDetails with id:', id)
+          onOpenDetails(id)
+        }
+      }}
     >
       {/* Header Row */}
       <div className="flex items-start gap-3 mb-3">
@@ -113,7 +125,7 @@ export function ReligionCard({
         {showToggle && (
           <div onClick={e => e.stopPropagation()}>
             <AddToBuildSwitchSimple
-              itemId={originalReligion?.id || item?.id || ''}
+              itemId={originalReligion?.name || item?.id || ''}
               itemType="religion"
               itemName={displayName}
             />
@@ -153,6 +165,15 @@ export function ReligionCard({
           )}
       </div>
 
+      {/* Description Row */}
+      {displayDescription && (
+        <div className="mb-3">
+          <div className="text-sm text-muted-foreground leading-relaxed">
+            {displayDescription}
+          </div>
+        </div>
+      )}
+
       {/* Key Ability Row */}
       <div className="mb-3">
         <div className="flex items-center gap-2 px-3 py-2 bg-muted/30 rounded-lg">
@@ -164,20 +185,21 @@ export function ReligionCard({
       {/* Tenets Row */}
       {tenets.length > 0 && (
         <div className="mb-3">
-          <div className="flex flex-wrap gap-2">
+          <div className="space-y-1">
             {tenets.slice(0, 4).map((tenet, index) => (
               <div
                 key={index}
-                className="flex items-center gap-1 px-2 py-1 bg-muted/50 rounded-full text-xs font-medium"
-                title={tenet.short}
+                className="flex items-start gap-2 p-2 bg-muted/30 rounded-lg text-xs"
               >
-                <Shield className="h-3 w-3 text-blue-500" />
-                {tenet.title}
+                <Shield className="h-3 w-3 text-blue-500 mt-0.5 flex-shrink-0" />
+                <span className="text-muted-foreground leading-relaxed">
+                  {tenet.title}
+                </span>
               </div>
             ))}
             {tenets.length > 4 && (
-              <div className="px-2 py-1 bg-muted/50 rounded-full text-xs font-medium">
-                +{tenets.length - 4}
+              <div className="px-2 py-1 bg-muted/50 rounded-full text-xs font-medium text-center">
+                +{tenets.length - 4} more tenets
               </div>
             )}
           </div>
@@ -185,18 +207,8 @@ export function ReligionCard({
       )}
 
       {/* Actions Row */}
-      <div className="flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleOpenDetails}
-          className="flex-1"
-        >
-          <ChevronRight className="h-4 w-4 mr-1" />
-          Details
-        </Button>
-
-        {showViewAllButton && (
+      {showViewAllButton && (
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
@@ -204,8 +216,8 @@ export function ReligionCard({
           >
             <ExternalLink className="h-4 w-4" />
           </Button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }
