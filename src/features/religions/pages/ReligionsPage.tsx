@@ -6,7 +6,7 @@ import type {
   SearchOption,
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
-import { ControlGrid, DisplayCustomizeTools } from '@/shared/components/ui'
+import { ControlGrid } from '@/shared/components/ui'
 import { Button } from '@/shared/ui/ui/button'
 import {
   DropdownMenu,
@@ -14,7 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/ui/dropdown-menu'
-import { Switch } from '@/shared/ui/ui/switch'
+
 import { ChevronDown, Grid3X3, List, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { ReligionCard, ReligionSheet } from '../components/composition'
@@ -37,14 +37,6 @@ export function ReligionsPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
-
-  // Data visibility controls
-  const [showBlessings, setShowBlessings] = useState(true)
-  const [showTenets, setShowTenets] = useState(true)
-  const [showBoons, setShowBoons] = useState(true)
-  const [showFavoredRaces, setShowFavoredRaces] = useState(
-    shouldShowFavoredRaces()
-  )
 
   // Convert religions to PlayerCreationItem format for consolidated view
   const religionItems: PlayerCreationItem[] = useMemo(() => {
@@ -342,54 +334,6 @@ export function ReligionsPage() {
             ))}
           </div>
         )}
-
-        {/* Display Customize Tools */}
-        <DisplayCustomizeTools>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Switch
-                checked={showBlessings}
-                onCheckedChange={setShowBlessings}
-                id="show-blessings"
-              />
-              <label htmlFor="show-blessings" className="text-sm">
-                Show Blessings
-              </label>
-            </div>
-            <div className="flex items-center gap-2">
-              <Switch
-                checked={showTenets}
-                onCheckedChange={setShowTenets}
-                id="show-tenets"
-              />
-              <label htmlFor="show-tenets" className="text-sm">
-                Show Tenets
-              </label>
-            </div>
-            <div className="flex items-center gap-2">
-              <Switch
-                checked={showBoons}
-                onCheckedChange={setShowBoons}
-                id="show-boons"
-              />
-              <label htmlFor="show-boons" className="text-sm">
-                Show Boons
-              </label>
-            </div>
-            {shouldShowFavoredRaces() && (
-              <div className="flex items-center gap-2">
-                <Switch
-                  checked={showFavoredRaces}
-                  onCheckedChange={setShowFavoredRaces}
-                  id="show-favored-races"
-                />
-                <label htmlFor="show-favored-races" className="text-sm">
-                  Show Favored Races
-                </label>
-              </div>
-            )}
-          </div>
-        </DisplayCustomizeTools>
 
         {/* Results */}
         <div className="space-y-4">
