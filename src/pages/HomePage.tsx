@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from '@/shared/ui/ui/card'
 import { H1, Lead } from '@/shared/ui/ui/typography'
-import { ArrowRight, FileText, Search, Sparkles, User } from 'lucide-react'
+import { ArrowRight, FileText, Search, Sparkles, User, ExternalLink, Settings, Users, Sword, RotateCcw, BookOpen, UserCheck } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 export default function HomePage() {
@@ -18,8 +18,65 @@ export default function HomePage() {
     navigate('/build')
   }
 
+  const externalTools = [
+    {
+      name: 'GigaPlanner',
+      description: 'Advanced build planner with detailed skill trees and optimization',
+      url: 'https://multidyls.github.io/GigaPlanner',
+      icon: <Settings className="h-5 w-5 text-primary" />,
+      category: 'Build Planning',
+      author: 'Multidyls'
+    },
+    {
+      name: 'Alchemy Calculator',
+      description: 'Comprehensive alchemy crafting and ingredient database',
+      url: '#', // Placeholder - need actual URL
+      icon: <Sparkles className="h-5 w-5 text-primary" />,
+      category: 'Crafting',
+      author: 'Community'
+    },
+    {
+      name: 'Spell Sheet Generator',
+      description: 'Create and manage your spell collection with detailed stats',
+      url: '#', // Placeholder - need actual URL
+      icon: <BookOpen className="h-5 w-5 text-primary" />,
+      category: 'Spells',
+      author: 'Community'
+    },
+    {
+      name: 'Discord Build Community',
+      description: 'Join discussions, share builds, and get feedback from the community',
+      url: '#', // Placeholder - need actual Discord invite
+      icon: <Users className="h-5 w-5 text-primary" />,
+      category: 'Community',
+      author: 'Lorerim Community'
+    },
+    {
+      name: 'Weapons Discussion Hub',
+      description: 'Deep dive into weapon mechanics, damage calculations, and optimization',
+      url: '#', // Placeholder - need actual URL
+      icon: <Sword className="h-5 w-5 text-primary" />,
+      category: 'Combat',
+      author: 'Community'
+    },
+    {
+      name: 'Spin Wheel Tool',
+      description: 'Random build generator and challenge creator for fun playthroughs',
+      url: '#', // Placeholder - need actual URL
+      icon: <RotateCcw className="h-5 w-5 text-primary" />,
+      category: 'Fun',
+      author: 'Community'
+    }
+  ]
+
+  const handleExternalLink = (url: string) => {
+    if (url !== '#') {
+      window.open(url, '_blank', 'noopener,noreferrer')
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
       <div className="container mx-auto px-4 py-8 space-y-12">
         {/* Hero Section */}
         <div className="text-left space-y-6">
@@ -76,17 +133,17 @@ export default function HomePage() {
             </Card>
 
             <div className="grid grid-cols-2 gap-3">
-              <Card
-                className="hover:shadow-md transition-shadow cursor-pointer bg-card"
-                onClick={() => navigate('/build/race')}
-              >
-                <CardContent className="p-4 text-center">
-                  <div className="text-2xl mb-2">👤</div>
-                  <div className="font-medium text-sm text-card-foreground">
-                    Races
-                  </div>
-                </CardContent>
-              </Card>
+                             <Card
+                 className="hover:shadow-md transition-shadow cursor-pointer bg-card"
+                 onClick={() => navigate('/build/race')}
+               >
+                 <CardContent className="p-4 text-center">
+                   <UserCheck className="h-8 w-8 mx-auto mb-2 text-primary" />
+                   <div className="font-medium text-sm text-card-foreground">
+                     Races
+                   </div>
+                 </CardContent>
+               </Card>
 
               <Card
                 className="hover:shadow-md transition-shadow cursor-pointer bg-card"
@@ -196,6 +253,69 @@ export default function HomePage() {
                 </CardContent>
               </Card>
             </div>
+          </div>
+        </div>
+
+                 {/* Favorite Tools Section */}
+         <div className="space-y-6">
+           <div className="text-center">
+             <h2 className="text-2xl font-bold flex items-center justify-center gap-2 mb-2 text-foreground">
+                               <Settings className="h-6 w-6 text-primary" />
+               Favorite Tools
+             </h2>
+             <p className="text-muted-foreground">
+               Discover the best external tools and resources for Lorerim theorycrafting
+             </p>
+           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {externalTools.map((tool, index) => (
+              <Card
+                key={index}
+                className={`hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/30 cursor-pointer group bg-card ${
+                  tool.url === '#' ? 'opacity-60 cursor-not-allowed' : ''
+                }`}
+                onClick={() => handleExternalLink(tool.url)}
+              >
+                                 <CardHeader className="pb-3">
+                   <div className="flex items-center justify-between">
+                     <div className="flex items-center gap-2">
+                       {tool.icon}
+                       <CardTitle className="text-lg group-hover:text-primary transition-colors text-card-foreground">
+                         {tool.name}
+                       </CardTitle>
+                     </div>
+                     {tool.url !== '#' && (
+                       <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                     )}
+                   </div>
+                   <div className="flex items-center gap-2">
+                     <div className="text-xs font-medium text-primary/80 bg-primary/10 px-2 py-1 rounded-full">
+                       {tool.category}
+                     </div>
+                     <div className="text-xs text-muted-foreground">
+                       by {tool.author}
+                     </div>
+                   </div>
+                 </CardHeader>
+                <CardContent className="pt-0">
+                  <CardDescription className="text-muted-foreground">
+                    {tool.description}
+                  </CardDescription>
+                  {tool.url === '#' && (
+                    <p className="text-xs text-muted-foreground mt-2 italic">
+                      Coming soon...
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="text-center pt-4">
+            <p className="text-sm text-muted-foreground">
+              💡 <strong>Pro tip:</strong> Use these tools alongside Arcaneum for the ultimate theorycrafting experience
+            </p>
           </div>
         </div>
 

@@ -316,7 +316,7 @@ function AppContent() {
         {!isMobile && (
           <div
             className={`transition-all duration-300 ease-in-out ${
-              sidebarCollapsed ? 'w-0' : 'w-64'
+              sidebarCollapsed ? 'w-0 overflow-hidden' : 'w-64'
             }`}
             style={{ zIndex: Z_INDEX.SIDEBAR }}
           >
@@ -330,7 +330,7 @@ function AppContent() {
             />
           </div>
         )}
-        <main className={`flex-1  transition-all duration-300 ease-in-out`}>
+        <main className={`flex-1 transition-all duration-300 ease-in-out min-w-0`}>
           <AppRouter />
         </main>
       </div>

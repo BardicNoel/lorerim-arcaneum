@@ -13,7 +13,7 @@ export function SearchPageLayout({
   children,
 }: SearchPageLayoutProps) {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
       {/* Header */}
       <div className="border-b border-border bg-card/50">
         <div className="container mx-auto px-4 py-6">
