@@ -40,21 +40,21 @@
     },
     {
       "perkId": "REQ_Speech_Masquerade1",
-      "x": 381.30697369831773,
-      "y": 356.9092817765146,
-      "gridX": 1,
+      "x": 292.5147276046032,
+      "y": 298.306399354663,
+      "gridX": 3,
       "gridY": 1,
       "horizontal": -1,
-      "vertical": 0.8969760592171535
+      "vertical": 1
     },
     {
       "perkId": "REQ_Speech_Leadership",
-      "x": 259.1028377617854,
-      "y": 491.93092794876964,
-      "gridX": 0,
-      "gridY": 2,
+      "x": 401.1704315117288,
+      "y": 511.4652220893869,
+      "gridX": 2,
+      "gridY": 0,
       "horizontal": 1,
-      "vertical": -0.6023024017076788
+      "vertical": -0.04884073631289614
     },
     {
       "perkId": "REQ_Speech_LoreOfTheThuum",
@@ -130,15 +130,87 @@
     },
     {
       "perkId": "Feat_Perk_Skill_Speechcraft_WarCry",
-      "x": 126.06984147222056,
-      "y": 569.1366038299685,
-      "gridX": 0,
-      "gridY": 2,
+      "x": 193.55194850344378,
+      "y": 469.6892882050082,
+      "gridX": 3,
+      "gridY": 0,
+      "horizontal": 0.12896102993112435,
+      "vertical": 1
+    },
+    {
+      "perkId": "BOOB_BoozyBardPerk",
+      "x": -426.82255351470553,
+      "y": 603.6232617188564,
+      "gridX": 5,
+      "gridY": 0,
+      "horizontal": 1,
+      "vertical": -1
+    },
+    {
+      "perkId": "BOOB_SkaldPerk",
+      "x": -30.22563828060015,
+      "y": 417.0879730469478,
+      "gridX": 4,
+      "gridY": 1,
+      "horizontal": -0.995487234387997,
+      "vertical": -1
+    },
+    {
+      "perkId": "BOOB_BattleMusePerk",
+      "x": -47.375237889744994,
+      "y": 716.6376738281144,
+      "gridX": 4,
+      "gridY": -1,
+      "horizontal": -0.6524952422051001,
+      "vertical": -0.8879224609371477
+    },
+    {
+      "perkId": "BOOB_StandingOvationPerk",
+      "x": -217.27285273353868,
+      "y": 595.8802191406626,
+      "gridX": 5,
+      "gridY": 0,
       "horizontal": -1,
+      "vertical": -1
+    },
+    {
+      "perkId": "BOOB_WindborneMelodyPerk",
+      "x": -34.36082578048661,
+      "y": 593.4647113280919,
+      "gridX": 4,
+      "gridY": 0,
+      "horizontal": -0.9127834843902679,
+      "vertical": -1
+    },
+    {
+      "perkId": "BOOB_SymphonyofStormsPerk",
+      "x": -145.0720605462909,
+      "y": 262.0213738282956,
+      "gridX": 4,
+      "gridY": 1,
+      "horizontal": 1,
+      "vertical": 1
+    },
+    {
+      "perkId": "BOOB_SongOfPowerPerk",
+      "x": -198.93090585865787,
+      "y": 446.63767382811443,
+      "gridX": 4,
+      "gridY": 0,
+      "horizontal": 1,
+      "vertical": 1
+    },
+    {
+      "perkId": "BOOB_EtherealEchoPerk",
+      "x": 84.01193437549273,
+      "y": 263.1575558594733,
+      "gridX": 3,
+      "gridY": 1,
+      "horizontal": 1,
       "vertical": 1
     }
   ],
   "version": "1.0.0",
-  "createdAt": "2025-07-26T21:05:56.365Z",
-  "updatedAt": "2025-07-26T21:05:56.365Z"
+  "createdAt": "2025-08-11T01:54:10.065Z",
+  "updatedAt": "2025-08-11T01:54:10.065Z"
 }
