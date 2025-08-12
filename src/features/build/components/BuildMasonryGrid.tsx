@@ -66,6 +66,7 @@ export function BuildMasonryGrid({
         result.push(
           <div
             key={card.id}
+            id={card.id}
             style={{
               width: '100%',
               marginBottom: `${gap}px`,
@@ -116,6 +117,7 @@ export function BuildMasonryGrid({
         masonryColumns[shortestColumn].push(
           <div
             key={card.id}
+            id={card.id}
             style={{
               width: '100%',
               marginBottom: `${gap}px`,
