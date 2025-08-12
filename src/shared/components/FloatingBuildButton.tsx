@@ -3,7 +3,6 @@ import { Copy, ExternalLink, Trash2, User } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCharacterBuild } from '../hooks/useCharacterBuild'
-import { Badge } from '../ui/ui/badge'
 import { Button } from '../ui/ui/button'
 import {
   Sheet,
@@ -14,29 +13,27 @@ import {
   SheetTrigger,
 } from '../ui/ui/sheet'
 
+// Import build components
+import { BasicInfoCard, BuildSummaryCard } from '@/features/build/components'
+import { AttributeAssignmentCard } from '@/features/attributes'
+import { BirthsignSelectionCard } from '@/features/birthsigns'
+import BuildPageDestinyCard from '@/features/destiny/views/BuildPageDestinyCard'
+import { RaceSelectionCard } from '@/features/races-v2'
+import { ReligionSelectionCard } from '@/features/religions/components'
+import { BuildPageSkillCard } from '@/features/skills/components'
+import { TraitSelectionCard } from '@/features/traits/components'
+
 export const FloatingBuildButton = () => {
   const {
     build,
     resetBuild,
     getSummary,
-    getRegularTraitLimit,
-    getBonusTraitLimit,
+    setBuildName,
+    setBuildNotes,
   } = useCharacterBuild()
   const navigate = useNavigate()
   const summary = getSummary()
   const [isOpen, setIsOpen] = useState(false)
-
-  // Check if build has any content
-  const hasBuildContent =
-    build.name ||
-    build.race ||
-    build.traits.regular.length > 0 ||
-    build.traits.bonus.length > 0 ||
-    build.stone ||
-    build.religion ||
-    build.skills.major.length > 0 ||
-    build.skills.minor.length > 0 ||
-    build.equipment.length > 0
 
   const handleCopyURL = () => {
     navigator.clipboard.writeText(window.location.href)
@@ -53,14 +50,21 @@ export const FloatingBuildButton = () => {
     }
   }
 
-  const handleNavigate = (path: string) => {
+  const handleNavigateToBuild = () => {
     setIsOpen(false)
-    navigate(path)
+    navigate('/build')
   }
 
-  const regularLimit = getRegularTraitLimit()
-  const bonusLimit = getBonusTraitLimit()
-  const totalTraitLimit = regularLimit + bonusLimit
+  const handleJumpToSection = (sectionId: string) => {
+    setIsOpen(false)
+    navigate(`/build#${sectionId}`)
+    
+    // Smooth scroll to section after navigation
+    setTimeout(() => {
+      const element = document.getElementById(sectionId)
+      element?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
+  }
 
   return (
     <div
@@ -82,247 +86,139 @@ export const FloatingBuildButton = () => {
             <User className="h-5 w-5" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="right" className="w-[400px] sm:w-[540px] p-6">
-          <SheetHeader>
-            <SheetTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
-              {hasBuildContent ? summary.name : 'Character Build'}
-            </SheetTitle>
-            <SheetDescription>
-              {hasBuildContent
-                ? 'Your current character build status'
-                : 'Create and manage your character build'}
-            </SheetDescription>
-          </SheetHeader>
+        <SheetContent 
+          side="right" 
+          className="w-[450px] sm:w-[800px] lg:w-[800px] sm:!max-w-[800px] lg:!max-w-[800px] p-0"
+        >
+          <div className="flex flex-col h-full">
+            {/* Header */}
+            <SheetHeader className="p-6 pb-4 border-b">
+              <SheetTitle className="flex items-center gap-2">
+                <User className="h-5 w-5" />
+                {summary.name || 'Character Build'}
+              </SheetTitle>
+              <SheetDescription>
+                Quick reference and editing for your character build
+              </SheetDescription>
+            </SheetHeader>
 
-          <div className="mt-6 space-y-6">
-            {hasBuildContent ? (
-              <>
-                {/* Race */}
-                {build.race && (
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-medium text-muted-foreground">
-                      Race
-                    </h3>
-                    <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                      <span className="font-medium">{summary.race}</span>
-                      <Badge variant="secondary" className="bg-blue-500">
-                        Selected
-                      </Badge>
-                    </div>
-                  </div>
-                )}
-
-                {/* Birth Sign */}
-                {build.stone && (
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-medium text-muted-foreground">
-                      Birth Sign
-                    </h3>
-                    <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                      <span className="font-medium">{summary.stone}</span>
-                      <Badge variant="secondary" className="bg-purple-500">
-                        Selected
-                      </Badge>
-                    </div>
-                  </div>
-                )}
-
-                {/* Religion */}
-                {build.religion && (
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-medium text-muted-foreground">
-                      Religion
-                    </h3>
-                    <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                      <span className="font-medium">{summary.religion}</span>
-                      <Badge variant="secondary" className="bg-orange-500">
-                        Selected
-                      </Badge>
-                    </div>
-                  </div>
-                )}
-
-                {/* Traits */}
-                {(build.traits.regular.length > 0 ||
-                  build.traits.bonus.length > 0) && (
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-medium text-muted-foreground">
-                      Traits (
-                      {build.traits.regular.length + build.traits.bonus.length}/
-                      {totalTraitLimit})
-                    </h3>
-                    <div className="space-y-2">
-                      {/* Starting Traits */}
-                      {build.traits.regular.map(traitId => (
-                        <div
-                          key={`regular-${traitId}`}
-                          className="flex items-center gap-2 text-xs"
-                        >
-                          <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                          <span className="text-muted-foreground">
-                            Starting
-                          </span>
-                        </div>
-                      ))}
-                      {/* Late Game Traits */}
-                      {build.traits.bonus.map(traitId => (
-                        <div
-                          key={`bonus-${traitId}`}
-                          className="flex items-center gap-2 text-xs"
-                        >
-                          <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                          <span className="text-muted-foreground">
-                            Late Game
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Skills */}
-                {(build.skills.major.length > 0 ||
-                  build.skills.minor.length > 0) && (
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-medium text-muted-foreground">
-                      Skills
-                    </h3>
-                    <div className="space-y-2">
-                      {build.skills.major.length > 0 && (
-                        <div className="p-3 bg-muted/50 rounded-lg">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="font-medium">Major Skills</span>
-                            <Badge variant="outline">
-                              {build.skills.major.length}
-                            </Badge>
-                          </div>
-                          <div className="flex flex-wrap gap-1">
-                            {build.skills.major.map(skill => (
-                              <Badge
-                                key={skill}
-                                variant="secondary"
-                                className="bg-red-500 text-xs"
-                              >
-                                {skill}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      {build.skills.minor.length > 0 && (
-                        <div className="p-3 bg-muted/50 rounded-lg">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="font-medium">Minor Skills</span>
-                            <Badge variant="outline">
-                              {build.skills.minor.length}
-                            </Badge>
-                          </div>
-                          <div className="flex flex-wrap gap-1">
-                            {build.skills.minor.map(skill => (
-                              <Badge
-                                key={skill}
-                                variant="secondary"
-                                className="bg-blue-500 text-xs"
-                              >
-                                {skill}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Equipment */}
-                {build.equipment.length > 0 && (
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-medium text-muted-foreground">
-                      Equipment ({build.equipment.length})
-                    </h3>
-                    <div className="space-y-2">
-                      {build.equipment.map(equipment => (
-                        <div
-                          key={equipment}
-                          className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
-                        >
-                          <span className="font-medium">{equipment}</span>
-                          <Badge variant="secondary" className="bg-gray-500">
-                            Equipped
-                          </Badge>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </>
-            ) : (
-              /* Empty State */
-              <div className="text-center py-8">
-                <User className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">No Character Build</h3>
-                <p className="text-muted-foreground mb-6">
-                  Start building your character by selecting a race, traits, and
-                  other options.
-                </p>
+            {/* Scrollable Content */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              {/* Basic Info */}
+              <BasicInfoCard
+                name={build.name}
+                notes={build.notes}
+                onNameChange={setBuildName}
+                onNotesChange={setBuildNotes}
+                className="mb-0"
+              />
+              
+              {/* Selection Cards - Single Column */}
+              <div className="space-y-6">
+                <RaceSelectionCard />
+                <BirthsignSelectionCard />
+                <TraitSelectionCard />
+                <ReligionSelectionCard />
               </div>
-            )}
-          </div>
+              
+              {/* Full-width Cards */}
+              <AttributeAssignmentCard 
+                showControls={true}
+                showSummary={true}
+                compact={false}
+              />
+              <BuildPageSkillCard />
+              <BuildPageDestinyCard navigate={navigate} />
+              <BuildSummaryCard build={build} />
+            </div>
 
-          {/* Actions */}
-          <div className="mt-8 space-y-3">
-            {hasBuildContent ? (
-              <>
-                <Button
-                  onClick={() => handleNavigate('/build')}
-                  className="w-full"
+            {/* Footer Actions */}
+            <div className="p-6 pt-4 border-t bg-muted/50">
+              <div className="flex flex-wrap gap-2">
+                <Button 
+                  onClick={handleNavigateToBuild} 
+                  className="flex-1"
                 >
                   <ExternalLink className="w-4 h-4 mr-2" />
-                  Edit Build
+                  Full Build Page
                 </Button>
                 <Button
                   variant="outline"
                   onClick={handleCopyURL}
-                  className="w-full"
                 >
                   <Copy className="w-4 h-4 mr-2" />
-                  Copy Share URL
+                  Share
                 </Button>
                 <Button
                   variant="destructive"
                   onClick={handleResetBuild}
-                  className="w-full"
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
-                  Reset Build
+                  Reset
                 </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  onClick={() => handleNavigate('/build')}
-                  className="w-full"
-                >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  Create Character Build
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => handleNavigate('/race')}
-                  className="w-full"
-                >
-                  Browse Races
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => handleNavigate('/traits')}
-                  className="w-full"
-                >
-                  Browse Traits
-                </Button>
-              </>
-            )}
+              </div>
+              
+              {/* Quick Navigation */}
+              <div className="mt-4 pt-4 border-t">
+                <p className="text-sm text-muted-foreground mb-2">Quick Navigation:</p>
+                <div className="flex flex-wrap gap-1">
+                  {!build.race && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleJumpToSection('race')}
+                    >
+                      Race
+                    </Button>
+                  )}
+                  {!build.stone && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleJumpToSection('birthsign')}
+                    >
+                      Birthsign
+                    </Button>
+                  )}
+                  {(build.traits.regular.length === 0 && build.traits.bonus.length === 0) && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleJumpToSection('traits')}
+                    >
+                      Traits
+                    </Button>
+                  )}
+                  {!build.religion && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleJumpToSection('religion')}
+                    >
+                      Religion
+                    </Button>
+                  )}
+                  {(build.skills.major.length === 0 && build.skills.minor.length === 0) && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleJumpToSection('skills')}
+                    >
+                      Skills
+                    </Button>
+                  )}
+                  {build.destinyPath.length === 0 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleJumpToSection('destiny')}
+                    >
+                      Destiny
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </SheetContent>
       </Sheet>
