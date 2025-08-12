@@ -2560,8 +2560,7 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Restoration_Mastery_075_ExpertRestoration",
-            "REQ_Restoration_Heliomancy_025_Heliomancy"
+            "REQ_Restoration_Mastery_075_ExpertRestoration"
           ],
           "children": []
         },
@@ -3008,8 +3007,7 @@
             "REQ_Restoration_Mastery_000_NoviceRestoration"
           ],
           "children": [
-            "REQ_Restoration_Heliomancy_075_ScorchingLight",
-            "REQ_Restoration_Mastery_100_MasterRestoration"
+            "REQ_Restoration_Heliomancy_075_ScorchingLight"
           ]
         },
         "isRoot": false,
@@ -4052,8 +4050,7 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Conjuration_Mastery_075_ExpertConjuration",
-            "REQ_Conjuration_SoulMagic_025_SoulMagic"
+            "REQ_Conjuration_Mastery_075_ExpertConjuration"
           ],
           "children": []
         },
@@ -4798,8 +4795,7 @@
             "REQ_Conjuration_Mastery_050_AdeptConjuration"
           ],
           "children": [
-            "REQ_Conjuration_SoulMagic_075_Necropotence",
-            "REQ_Conjuration_Mastery_100_MasterConjuration"
+            "REQ_Conjuration_SoulMagic_075_Necropotence"
           ]
         },
         "isRoot": false,
@@ -5957,8 +5953,7 @@
         "totalRanks": 2,
         "connections": {
           "parents": [
-            "REQ_Speech_SilverTongue",
-            "Feat_Perk_Skill_Speechcraft_WarCry"
+            "REQ_Speech_SilverTongue"
           ],
           "children": []
         },
@@ -6357,9 +6352,7 @@
           "parents": [
             "REQ_Speech_SilverTongue"
           ],
-          "children": [
-            "REQ_Speech_Masquerade1"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -6367,6 +6360,305 @@
           "y": 1,
           "horizontal": 0.5,
           "vertical": 0.5
+        }
+      },
+      {
+        "edid": "BOOB_BoozyBardPerk",
+        "name": "Boozy Bard",
+        "globalFormId": "0xFEA5A801",
+        "ranks": [
+          {
+            "rank": 1,
+            "edid": "BOOB_BoozyBardPerk",
+            "name": "Boozy Bard",
+            "globalFormId": "0xFEA5A801",
+            "description": {
+              "base": "Alcohol makes the music flow sweeter! Alcoholic drinks no longer have negative effects, and performing under the influence enhances both your musical powers and the damage of your bardic weapons.",
+              "subtext": ""
+            },
+            "prerequisites": {
+              "skillLevel": {
+                "skill": "Speech",
+                "level": 25
+              }
+            }
+          }
+        ],
+        "totalRanks": 1,
+        "connections": {
+          "parents": [
+            "BOOB_BattleMusePerk"
+          ],
+          "children": []
+        },
+        "isRoot": false,
+        "position": {
+          "x": -1,
+          "y": -1,
+          "horizontal": 0,
+          "vertical": 0
+        }
+      },
+      {
+        "edid": "BOOB_SkaldPerk",
+        "name": "Skald",
+        "globalFormId": "0xFEA59809",
+        "ranks": [
+          {
+            "rank": 1,
+            "edid": "BOOB_SkaldPerk",
+            "name": "Skald",
+            "globalFormId": "0xFEA59809",
+            "description": {
+              "base": "Continuously playing instruments during combat now grants additional benefits. Drums bolster your allies, while the Lute and Flute weakens your enemies' defenses.",
+              "subtext": ""
+            },
+            "prerequisites": {
+              "skillLevel": {
+                "skill": "Speech",
+                "level": 50
+              }
+            }
+          }
+        ],
+        "totalRanks": 1,
+        "connections": {
+          "parents": [
+            "BOOB_WindborneMelodyPerk"
+          ],
+          "children": [
+            "BOOB_SymphonyofStormsPerk",
+            "BOOB_EtherealEchoPerk"
+          ]
+        },
+        "isRoot": false,
+        "position": {
+          "x": 0,
+          "y": 0.5,
+          "horizontal": 0,
+          "vertical": 0
+        }
+      },
+      {
+        "edid": "BOOB_BattleMusePerk",
+        "name": "Battle Muse",
+        "globalFormId": "0xFEA5980C",
+        "ranks": [
+          {
+            "rank": 1,
+            "edid": "BOOB_BattleMusePerk",
+            "name": "Battle Muse",
+            "globalFormId": "0xFEA5980C",
+            "description": {
+              "base": "Your mastery of musical instruments turns the tide of battle: drums inspire your allies, the flute soothes your foes, and the lute stirs chaos among your enemies. The likelihood of these effects depends on your skill with the instrument.",
+              "subtext": ""
+            },
+            "prerequisites": {}
+          }
+        ],
+        "totalRanks": 1,
+        "connections": {
+          "parents": [],
+          "children": [
+            "BOOB_BoozyBardPerk",
+            "BOOB_StandingOvationPerk",
+            "BOOB_WindborneMelodyPerk"
+          ]
+        },
+        "isRoot": true,
+        "position": {
+          "x": -2,
+          "y": 0,
+          "horizontal": 0,
+          "vertical": 0
+        }
+      },
+      {
+        "edid": "BOOB_StandingOvationPerk",
+        "name": "Standing Ovation",
+        "globalFormId": "0xFEA59818",
+        "ranks": [
+          {
+            "rank": 1,
+            "edid": "BOOB_StandingOvationPerk",
+            "name": "Standing Ovation",
+            "globalFormId": "0xFEA59818",
+            "description": {
+              "base": "Your captivating performances leave the crowd in awe. The bonuses received from playing for a crowd at the inns are now doubled and last twice as long.",
+              "subtext": ""
+            },
+            "prerequisites": {
+              "skillLevel": {
+                "skill": "Speech",
+                "level": 25
+              }
+            }
+          }
+        ],
+        "totalRanks": 1,
+        "connections": {
+          "parents": [
+            "BOOB_BattleMusePerk"
+          ],
+          "children": []
+        },
+        "isRoot": false,
+        "position": {
+          "x": -1,
+          "y": 0,
+          "horizontal": 0,
+          "vertical": 0
+        }
+      },
+      {
+        "edid": "BOOB_WindborneMelodyPerk",
+        "name": "Windborne Melody",
+        "globalFormId": "0xFEA59819",
+        "ranks": [
+          {
+            "rank": 1,
+            "edid": "BOOB_WindborneMelodyPerk",
+            "name": "Windborne Melody",
+            "globalFormId": "0xFEA59819",
+            "description": {
+              "base": "Your music flows as freely as the wind. Playing an instrument no longer slows your movement.",
+              "subtext": ""
+            },
+            "prerequisites": {
+              "skillLevel": {
+                "skill": "Speech",
+                "level": 25
+              }
+            }
+          }
+        ],
+        "totalRanks": 1,
+        "connections": {
+          "parents": [
+            "BOOB_BattleMusePerk"
+          ],
+          "children": [
+            "BOOB_SkaldPerk",
+            "BOOB_SongOfPowerPerk"
+          ]
+        },
+        "isRoot": false,
+        "position": {
+          "x": -1,
+          "y": 1,
+          "horizontal": 0,
+          "vertical": 0
+        }
+      },
+      {
+        "edid": "BOOB_SymphonyofStormsPerk",
+        "name": "Symphony of Storms",
+        "globalFormId": "0xFEA59820",
+        "ranks": [
+          {
+            "rank": 1,
+            "edid": "BOOB_SymphonyofStormsPerk",
+            "name": "Symphony of Storms",
+            "globalFormId": "0xFEA59820",
+            "description": {
+              "base": "The bard's mastery over their instrument echoes through the heavens. The deep and powerful resonance of your music calls forth elemental storms, with each instrument summoning its own fury.",
+              "subtext": ""
+            },
+            "prerequisites": {
+              "skillLevel": {
+                "skill": "Speech",
+                "level": 75
+              }
+            }
+          }
+        ],
+        "totalRanks": 1,
+        "connections": {
+          "parents": [
+            "BOOB_SkaldPerk"
+          ],
+          "children": []
+        },
+        "isRoot": false,
+        "position": {
+          "x": 1,
+          "y": 0,
+          "horizontal": 0,
+          "vertical": 0
+        }
+      },
+      {
+        "edid": "BOOB_SongOfPowerPerk",
+        "name": "Song of Power",
+        "globalFormId": "0xFEA59836",
+        "ranks": [
+          {
+            "rank": 1,
+            "edid": "BOOB_SongOfPowerPerk",
+            "name": "Song of Power",
+            "globalFormId": "0xFEA59836",
+            "description": {
+              "base": "Your music builds to a powerful crescendo, periodically unleashing a forceful shockwave that knocks enemies back.",
+              "subtext": ""
+            },
+            "prerequisites": {
+              "skillLevel": {
+                "skill": "Speech",
+                "level": 50
+              }
+            }
+          }
+        ],
+        "totalRanks": 1,
+        "connections": {
+          "parents": [
+            "BOOB_WindborneMelodyPerk"
+          ],
+          "children": []
+        },
+        "isRoot": false,
+        "position": {
+          "x": 0,
+          "y": 1.5,
+          "horizontal": 0,
+          "vertical": 0
+        }
+      },
+      {
+        "edid": "BOOB_EtherealEchoPerk",
+        "name": "Ethereal Echo",
+        "globalFormId": "0xFEA59839",
+        "ranks": [
+          {
+            "rank": 1,
+            "edid": "BOOB_EtherealEchoPerk",
+            "name": "Ethereal Echo",
+            "globalFormId": "0xFEA59839",
+            "description": {
+              "base": "Consuming Ectoplasm before playing an instrument transforms music into a weapon against the undead: the drum scorches nearby undead with sunlit fury, the flute sends them fleeing in terror, and the lute banishes lesser Daedra to the void.",
+              "subtext": ""
+            },
+            "prerequisites": {
+              "skillLevel": {
+                "skill": "Speech",
+                "level": 75
+              }
+            }
+          }
+        ],
+        "totalRanks": 1,
+        "connections": {
+          "parents": [
+            "BOOB_SkaldPerk"
+          ],
+          "children": []
+        },
+        "isRoot": false,
+        "position": {
+          "x": 1,
+          "y": 1,
+          "horizontal": 0,
+          "vertical": 0
         }
       }
     ]
@@ -8724,8 +9016,7 @@
         "totalRanks": 1,
         "connections": {
           "parents": [
-            "REQ_Pickpocket_70_Misdirection",
-            "ORD_Pic40_DeathsEmperor_Perk_40_OrdASISExclude"
+            "REQ_Pickpocket_70_Misdirection"
           ],
           "children": []
         },
@@ -9121,8 +9412,7 @@
             "REQ_Pickpocket_50_NightThief"
           ],
           "children": [
-            "ORD_Pic90_Mutiny_Perk_90_OrdASISExclude",
-            "REQ_Pickpocket_100_PerfectTouch"
+            "ORD_Pic90_Mutiny_Perk_90_OrdASISExclude"
           ]
         },
         "isRoot": false,
@@ -9321,8 +9611,7 @@
         "connections": {
           "parents": [
             "REQ_Evasion_CombatReflexes",
-            "REQ_Evasion_WindWalker",
-            "ORD_Lia20_AnnoyingMosquitoes_Perk_20"
+            "REQ_Evasion_WindWalker"
           ],
           "children": []
         },
@@ -9663,9 +9952,7 @@
           "parents": [
             "Feat_Perk_Skill_Evasion_Athletics1"
           ],
-          "children": [
-            "REQ_Evasion_MeteoricReflexes"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {
@@ -11239,8 +11526,7 @@
         "connections": {
           "parents": [
             "REQ_Marksmanship_PowerShot",
-            "REQ_Marksmanship_PenetratingShot",
-            "ORD_Arc90_LionsArrow_Perk_90_OrdASISExclude"
+            "REQ_Marksmanship_PenetratingShot"
           ],
           "children": []
         },
@@ -11704,9 +11990,7 @@
             "REQ_Marksmanship_PowerShot",
             "REQ_Marksmanship_PenetratingShot"
           ],
-          "children": [
-            "REQ_Marksmanship_StunningPrecision"
-          ]
+          "children": []
         },
         "isRoot": false,
         "position": {

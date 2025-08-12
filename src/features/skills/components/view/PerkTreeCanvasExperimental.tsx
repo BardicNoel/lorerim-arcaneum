@@ -127,6 +127,7 @@ function avifToCanvasPositionMirrored(
 
 /**
  * Convert canvas pixel coordinates back to AVIF grid coordinates
+ * This reverses the mirroring applied in avifToCanvasPositionMirrored
  */
 function canvasToAvifPosition(
   pixelX: number,
@@ -165,13 +166,19 @@ function canvasToAvifPosition(
   const horizontal = Math.max(-1, Math.min(1, offsetX / maxOffsetX))
   const vertical = Math.max(-1, Math.min(1, offsetY / maxOffsetY))
 
+  // Reverse the mirroring: convert back to original AVIF coordinates
+  const originalGridX = bounds.maxX - gridX + bounds.minX
+  const originalGridY = bounds.maxY - gridY + bounds.minY
+  const originalHorizontal = -horizontal // Reverse horizontal flip
+  const originalVertical = -vertical // Reverse vertical flip
+
   return {
     x: pixelX,
     y: pixelY,
-    gridX,
-    gridY,
-    horizontal,
-    vertical,
+    gridX: originalGridX,
+    gridY: originalGridY,
+    horizontal: originalHorizontal,
+    vertical: originalVertical,
   }
 }
 
@@ -311,6 +318,9 @@ export function PerkTreeCanvasExperimental({
     if (allPositions.length > 0) {
       bounds = calculateGridBounds(allPositions)
     }
+
+    // Set grid bounds for drag functionality
+    setGridBounds(bounds)
 
     // Track perks without positional data for default positioning
     let perksWithoutPosition = 0
@@ -611,23 +621,11 @@ export function PerkTreeCanvasExperimental({
   const handleSavePositions = useCallback(() => {
     if (!validatedTree) return
 
-    const positionsToSave = new Map<string, CanvasPosition>()
-
-    // Combine AVIF positions with any saved positions
-    validatedTree.perks.forEach(perk => {
-      const savedPos = savedPositions.get(perk.edid)
-      const avifPos = nodePositions.get(perk.edid)
-
-      if (savedPos) {
-        positionsToSave.set(perk.edid, savedPos)
-      } else if (avifPos) {
-        positionsToSave.set(perk.edid, avifPos)
-      }
-    })
-
-    const savedData = saveTreePositions(validatedTree, positionsToSave)
+    // Use the current nodePositions which already includes dragged positions
+    // nodePositions prioritizes savedPositions (dragged) over original AVIF positions
+    const savedData = saveTreePositions(validatedTree, nodePositions)
     downloadPositionsAsJson(savedData)
-  }, [validatedTree, savedPositions, nodePositions])
+  }, [validatedTree, nodePositions])
 
   // Load positions from JSON file
   const handleLoadPositions = useCallback(
