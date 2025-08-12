@@ -13,6 +13,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>('system')
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('dark')
+  const [isInitialized, setIsInitialized] = useState(false)
 
   useEffect(() => {
     // Load theme from localStorage on mount
@@ -20,11 +21,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (savedTheme && ['light', 'dark', 'system'].includes(savedTheme)) {
       setTheme(savedTheme)
     }
+    setIsInitialized(true)
   }, [])
 
   useEffect(() => {
-    // Save theme to localStorage
-    localStorage.setItem('theme', theme)
+    // Only save to localStorage after initialization and when theme actually changes
+    if (isInitialized) {
+      localStorage.setItem('theme', theme)
+    }
 
     // Determine resolved theme
     let resolved: 'light' | 'dark'
@@ -45,7 +49,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } else {
       root.classList.remove('dark')
     }
-  }, [theme])
+  }, [theme, isInitialized])
 
   useEffect(() => {
     // Listen for system theme changes
