@@ -12,8 +12,8 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
         ref={ref}
         data-collapsed={collapsed ? '' : undefined}
         className={cn(
-          'flex flex-col bg-card border-r border-skyrim-gold/20 h-[calc(100vh-3rem)] sticky top-12 transition-all duration-300',
-          collapsed ? 'w-0 overflow-hidden' : 'w-64',
+          'flex flex-col bg-card border-r border-skyrim-gold/20 h-[calc(100vh-3rem)] sticky top-12 transition-all duration-300 ease-in-out',
+          collapsed ? 'w-0 overflow-hidden opacity-0' : 'w-64 opacity-100',
           className
         )}
         {...props}
