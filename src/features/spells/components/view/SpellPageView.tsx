@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
-import { useSpellData, useSpellState } from '../adapters'
-import { SpellGrid, SpellList } from '../components'
+import { useSpellData, useSpellState } from '../../adapters'
+import { SpellGrid, SpellList } from '../composition'
 import type { SearchOption, SelectedTag, SearchCategory } from '@/shared/components/playerCreation/types'
 import { ChevronDown } from 'lucide-react'
 

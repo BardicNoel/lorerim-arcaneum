@@ -1,4 +1,4 @@
-import { SpellAccordionCard } from '../atomic/SpellAccordionCard'
+import { SpellCard } from './SpellCard'
 import type { SpellWithComputed } from '../../types'
 
 interface SpellListProps {
@@ -31,11 +31,12 @@ export function SpellList({
   return (
     <div className={`space-y-4 ${className}`}>
       {spells.map((spell, index) => (
-        <SpellAccordionCard
+        <SpellCard
           key={`${spell.name}-${spell.editorId}-${index}`}
           spell={spell}
           isExpanded={expandedCards.has(`${spell.name}-${spell.editorId}-${index}`)}
           onToggle={() => onToggleExpansion?.(`${spell.name}-${spell.editorId}-${index}`)}
+          compact={variant === 'compact'}
         />
       ))}
     </div>

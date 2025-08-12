@@ -8,8 +8,8 @@ import {
   X
 } from 'lucide-react'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
-import { useSpellData, useSpellState, useSpellFilters, useSpellComputed } from '../adapters'
-import { SpellGrid, SpellList } from '../components'
+import { useSpellData, useSpellState, useSpellFilters, useSpellComputed } from '../../adapters'
+import { SpellGrid, SpellList } from '../composition'
 import type { SearchCategory, SearchOption, SelectedTag } from '@/shared/components/playerCreation/types'
 
 export function SpellReferenceView() {

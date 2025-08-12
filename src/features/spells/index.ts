@@ -8,7 +8,7 @@ export * from './adapters'
 export * from './components'
 
 // View layer
-export * from './views'
+export * from './components/view'
 
 // Page layer
 export * from './pages'
