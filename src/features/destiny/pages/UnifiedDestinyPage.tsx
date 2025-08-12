@@ -18,7 +18,7 @@ import { DestinyAccordionList } from '../components/composition/DestinyAccordion
 import { DestinyCard } from '../components/composition/DestinyCard'
 import { DestinyDetailPanel } from '../components/composition/DestinyDetailPanel'
 import { DestinyFilters } from '../components/composition/DestinyFilters'
-import { DestinyPathBuilder } from '../components/composition/DestinyPathBuilder'
+import { DestinyResponsivePathBuilder } from '../components/composition/DestinyResponsivePathBuilder'
 import type { DestinyNode } from '../types'
 
 export function UnifiedDestinyPage() {
@@ -211,7 +211,7 @@ export function UnifiedDestinyPage() {
           </TabsContent>
 
           <TabsContent value="path" className="space-y-4">
-            <DestinyPathBuilder
+            <DestinyResponsivePathBuilder
               onPathChange={handlePathChange}
               onPathComplete={handlePathComplete}
             />
