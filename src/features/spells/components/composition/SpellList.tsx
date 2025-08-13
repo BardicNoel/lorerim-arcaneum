@@ -7,8 +7,6 @@ interface SpellListProps {
   showEffects?: boolean
   showTags?: boolean
   className?: string
-  expandedCards?: Set<string>
-  onToggleExpansion?: (spellId: string) => void
   onSpellClick?: (spell: SpellWithComputed) => void
 }
 
@@ -18,8 +16,6 @@ export function SpellList({
   showEffects = true,
   showTags = true,
   className = '',
-  expandedCards = new Set(),
-  onToggleExpansion,
   onSpellClick
 }: SpellListProps) {
   if (spells.length === 0) {
@@ -36,8 +32,6 @@ export function SpellList({
         <SpellCard
           key={`${spell.name}-${spell.editorId}-${index}`}
           spell={spell}
-          isExpanded={expandedCards.has(`${spell.name}-${spell.editorId}-${index}`)}
-          onToggle={() => onToggleExpansion?.(`${spell.name}-${spell.editorId}-${index}`)}
           onClick={() => onSpellClick?.(spell)}
           compact={variant === 'compact'}
         />

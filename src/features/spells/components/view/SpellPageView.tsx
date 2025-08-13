@@ -25,28 +25,12 @@ export function SpellPageView() {
   // Ensure spells is always an array
   const safeSpells = Array.isArray(spells) ? spells : []
   
-  // State for tracking expanded cards
-  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set())
-  
   // State for detail sheet
   const [selectedSpell, setSelectedSpell] = useState<SpellWithComputed | null>(null)
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
   
   // State for sorting
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
-  
-  // Toggle expanded state for a card
-  const toggleCardExpansion = (spellId: string) => {
-    setExpandedCards(prev => {
-      const newSet = new Set(prev)
-      if (newSet.has(spellId)) {
-        newSet.delete(spellId)
-      } else {
-        newSet.add(spellId)
-      }
-      return newSet
-    })
-  }
   
   // Handle spell click to open detail sheet
   const handleSpellClick = (spell: SpellWithComputed) => {
@@ -352,8 +336,6 @@ export function SpellPageView() {
                 spells={sortedSpells} 
                 variant="default"
                 columns={3}
-                expandedCards={expandedCards}
-                onToggleExpansion={toggleCardExpansion}
                 onSpellClick={handleSpellClick}
               />
             )}
@@ -362,8 +344,6 @@ export function SpellPageView() {
               <SpellList 
                 spells={sortedSpells} 
                 variant="default"
-                expandedCards={expandedCards}
-                onToggleExpansion={toggleCardExpansion}
                 onSpellClick={handleSpellClick}
               />
             )}
