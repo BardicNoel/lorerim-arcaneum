@@ -7,46 +7,14 @@ import {
   Zap, 
   Clock, 
   Target, 
-  Sparkles,
-  Flame,
-  Snowflake,
-  Bolt,
-  Heart,
-  Ghost,
-  Eye,
-  Shield
+  Sparkles
 } from 'lucide-react'
 import type { SearchResult } from '../../model/SearchModel'
 import type { SpellWithComputed } from '@/features/spells/types'
+import { schoolIcons, schoolColors, levelColors } from '../../../spells/config/spellConfig'
 
 interface SpellDetailViewProps {
   result: SearchResult
-}
-
-const schoolIcons = {
-  'Destruction': Flame,
-  'Restoration': Heart,
-  'Conjuration': Ghost,
-  'Alteration': Shield,
-  'Illusion': Eye,
-  'Mysticism': Sparkles,
-}
-
-const schoolColors = {
-  'Destruction': 'bg-red-500/20 text-red-700 border-red-500/30',
-  'Restoration': 'bg-green-500/20 text-green-700 border-green-500/30',
-  'Conjuration': 'bg-purple-500/20 text-purple-700 border-purple-500/30',
-  'Alteration': 'bg-blue-500/20 text-blue-700 border-blue-500/30',
-  'Illusion': 'bg-pink-500/20 text-pink-700 border-pink-500/30',
-  'Mysticism': 'bg-yellow-500/20 text-yellow-700 border-yellow-500/30',
-}
-
-const levelColors = {
-  'Novice': 'bg-gray-500/20 text-gray-700 border-gray-500/30',
-  'Apprentice': 'bg-blue-500/20 text-blue-700 border-blue-500/30',
-  'Adept': 'bg-green-500/20 text-green-700 border-green-500/30',
-  'Expert': 'bg-purple-500/20 text-purple-700 border-purple-500/30',
-  'Master': 'bg-red-500/20 text-red-700 border-red-500/30',
 }
 
 export const SpellDetailView: React.FC<SpellDetailViewProps> = ({ result }) => {

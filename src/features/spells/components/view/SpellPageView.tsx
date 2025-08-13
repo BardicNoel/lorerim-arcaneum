@@ -6,16 +6,9 @@ import { SpellDetailsSheet } from '../SpellDetailsSheet'
 import type { SearchOption, SelectedTag, SearchCategory } from '@/shared/components/playerCreation/types'
 import type { SpellWithComputed } from '../../types'
 import { ChevronDown } from 'lucide-react'
+import { levelOrder } from '../../config/spellConfig'
 
 type SortOption = 'alphabetical' | 'school' | 'level'
-
-const levelOrder = {
-  'Novice': 1,
-  'Apprentice': 2,
-  'Adept': 3,
-  'Expert': 4,
-  'Master': 5
-}
 
 export function SpellPageView() {
   // Adapters
