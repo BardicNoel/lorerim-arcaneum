@@ -50,30 +50,25 @@ export function SpellEffectsDisplay({
         compact ? 'text-sm' : 'text-base'
       )}>
         {displayEffects.map((effect, index) => (
-          <div key={index} className="flex items-start gap-2">
-            <div className="flex-1">
-              <div className="font-medium text-foreground">
-                {effect.name}
+          <div key={index} className="p-2 rounded bg-muted border text-sm">
+            {!compact && effect.description && (
+              <div className="text-muted-foreground">
+                {effect.description}
               </div>
-              {!compact && effect.description && (
-                <div className="text-sm text-muted-foreground mt-1">
-                  {effect.description}
-                </div>
-              )}
-              {!compact && (
-                <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
-                  {effect.magnitude > 0 && (
-                    <span>Magnitude: {effect.magnitude}</span>
-                  )}
-                  {effect.duration > 0 && (
-                    <span>Duration: {effect.duration}s</span>
-                  )}
-                  {effect.area > 0 && (
-                    <span>Area: {effect.area}ft</span>
-                  )}
-                </div>
-              )}
-            </div>
+            )}
+            {!compact && (
+              <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
+                {effect.magnitude > 0 && (
+                  <span>Magnitude: {effect.magnitude}</span>
+                )}
+                {effect.duration > 0 && (
+                  <span>Duration: {effect.duration}s</span>
+                )}
+                {effect.area > 0 && (
+                  <span>Area: {effect.area}ft</span>
+                )}
+              </div>
+            )}
           </div>
         ))}
         

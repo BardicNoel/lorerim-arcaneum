@@ -2,7 +2,9 @@ import { useState, useEffect, useMemo } from 'react'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import { useSpellData, useSpellState } from '../../adapters'
 import { SpellGrid, SpellList } from '../composition'
+import { SpellDetailsSheet } from '../SpellDetailsSheet'
 import type { SearchOption, SelectedTag, SearchCategory } from '@/shared/components/playerCreation/types'
+import type { SpellWithComputed } from '../../types'
 import { ChevronDown } from 'lucide-react'
 
 type SortOption = 'alphabetical' | 'school' | 'level'
@@ -26,6 +28,10 @@ export function SpellPageView() {
   // State for tracking expanded cards
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set())
   
+  // State for detail sheet
+  const [selectedSpell, setSelectedSpell] = useState<SpellWithComputed | null>(null)
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false)
+  
   // State for sorting
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
   
@@ -40,6 +46,12 @@ export function SpellPageView() {
       }
       return newSet
     })
+  }
+  
+  // Handle spell click to open detail sheet
+  const handleSpellClick = (spell: SpellWithComputed) => {
+    setSelectedSpell(spell)
+    setIsDetailsOpen(true)
   }
   
   // Generate search categories directly in the component
@@ -161,7 +173,7 @@ export function SpellPageView() {
             spell.school.toLowerCase().includes(searchText) ||
             spell.level.toLowerCase().includes(searchText) ||
             spell.effects.some(effect => 
-              effect.name.toLowerCase().includes(searchText)
+              effect.description.toLowerCase().includes(searchText)
             )
           )
         default:
@@ -342,6 +354,7 @@ export function SpellPageView() {
                 columns={3}
                 expandedCards={expandedCards}
                 onToggleExpansion={toggleCardExpansion}
+                onSpellClick={handleSpellClick}
               />
             )}
             
@@ -351,11 +364,19 @@ export function SpellPageView() {
                 variant="default"
                 expandedCards={expandedCards}
                 onToggleExpansion={toggleCardExpansion}
+                onSpellClick={handleSpellClick}
               />
             )}
           </>
         )}
       </div>
+
+      {/* Spell Details Sheet */}
+      <SpellDetailsSheet
+        spell={selectedSpell}
+        isOpen={isDetailsOpen}
+        onOpenChange={setIsDetailsOpen}
+      />
     </div>
   )
 }

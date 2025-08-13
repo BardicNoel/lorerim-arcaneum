@@ -134,8 +134,7 @@ export function SpellItem({
           <div className="space-y-2">
             <h5 className="text-sm font-medium">Effects</h5>
             {spell.effects.map((effect, index) => (
-              <div key={index} className="text-sm bg-muted/50 p-2 rounded">
-                <div className="font-medium">{effect.name}</div>
+              <div key={index} className="p-2 rounded bg-muted border text-sm">
                 <FormattedText
                   text={effect.description}
                   className="text-muted-foreground"

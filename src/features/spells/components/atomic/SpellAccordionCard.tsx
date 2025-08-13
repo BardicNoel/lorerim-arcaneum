@@ -124,21 +124,19 @@ export function SpellAccordionCard({
               </h5>
               <div className="space-y-2">
                 {spell.effects.map((effect, index) => (
-                  <div key={index} className="bg-muted/50 rounded-lg p-3">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium text-sm">{effect.name}</span>
-                      {effect.magnitude > 0 && (
-                        <Badge variant="outline" className="text-xs">
-                          {effect.magnitude}
-                        </Badge>
-                      )}
-                    </div>
+                  <div
+                    key={index}
+                    className="p-2 rounded bg-muted border text-sm"
+                  >
                     <FormattedText
                       text={effect.description}
-                      className="text-sm text-muted-foreground"
+                      className="text-muted-foreground mb-2"
                       as="p"
                     />
-                    <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
+                    <div className="flex gap-4 text-xs text-muted-foreground">
+                      {effect.magnitude > 0 && (
+                        <span>Magnitude: {effect.magnitude}</span>
+                      )}
                       {effect.duration > 0 && (
                         <span>Duration: {effect.duration}s</span>
                       )}

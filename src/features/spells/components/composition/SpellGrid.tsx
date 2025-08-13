@@ -10,6 +10,7 @@ interface SpellGridProps {
   className?: string
   expandedCards?: Set<string>
   onToggleExpansion?: (spellId: string) => void
+  onSpellClick?: (spell: SpellWithComputed) => void
 }
 
 const gridColumns = {
@@ -27,7 +28,8 @@ export function SpellGrid({
   columns = 3,
   className = '',
   expandedCards = new Set(),
-  onToggleExpansion
+  onToggleExpansion,
+  onSpellClick
 }: SpellGridProps) {
   if (spells.length === 0) {
     return (
@@ -45,6 +47,7 @@ export function SpellGrid({
           spell={spell}
           isExpanded={expandedCards.has(`${spell.name}-${spell.editorId}-${index}`)}
           onToggle={() => onToggleExpansion?.(`${spell.name}-${spell.editorId}-${index}`)}
+          onClick={() => onSpellClick?.(spell)}
           compact={variant === 'compact'}
         />
       ))}

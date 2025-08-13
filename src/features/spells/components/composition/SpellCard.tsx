@@ -8,8 +8,6 @@ import {
   SpellSchoolBadge,
   SpellLevelBadge,
   SpellCostBadge,
-  SpellStatsDisplay,
-  SpellEffectsDisplay,
   SpellTagsDisplay,
 } from '../atomic'
 
@@ -17,6 +15,7 @@ interface SpellCardProps {
   spell: SpellWithComputed
   isExpanded?: boolean
   onToggle?: () => void
+  onClick?: () => void
   className?: string
   // Context-specific properties
   compact?: boolean
@@ -26,6 +25,7 @@ export function SpellCard({
   spell,
   isExpanded = false,
   onToggle,
+  onClick,
   className,
   compact = false,
 }: SpellCardProps) {
@@ -38,11 +38,12 @@ export function SpellCard({
   }
 
   return (
-    <GenericAccordionCard
-      isExpanded={isExpanded}
-      onToggle={onToggle || (() => {})}
-      className={cn("p-6", className)}
-    >
+    <div onClick={onClick} className={cn("cursor-pointer", className)}>
+      <GenericAccordionCard
+        isExpanded={isExpanded}
+        onToggle={onToggle || (() => {})}
+        className="p-6"
+      >
       {/* Header Content */}
       <div className="flex items-start justify-between">
         {/* Left side: Icon + Name + Badges */}
@@ -103,13 +104,6 @@ export function SpellCard({
         <div className="line-clamp-2">
           <Muted className="text-sm">{spell.description}</Muted>
         </div>
-
-        {/* Quick effects preview */}
-        <SpellEffectsDisplay
-          effects={spell.effects}
-          maxDisplay={2}
-          compact={true}
-        />
       </div>
 
       {/* Expanded Content */}
@@ -122,11 +116,32 @@ export function SpellCard({
         </div>
 
         {/* Spell Effects */}
-        <SpellEffectsDisplay
-          effects={spell.effects}
-          title="Spell Effects"
-          maxDisplay={5}
-        />
+        {spell.effects && spell.effects.length > 0 && (
+          <div>
+            <Small className="text-muted-foreground mb-2">Effects</Small>
+            <div className="space-y-2">
+              {spell.effects.map((effect, index) => (
+                <div
+                  key={index}
+                  className="p-2 rounded bg-muted border text-sm"
+                >
+                  <div className="text-muted-foreground">
+                    {effect.description}
+                  </div>
+                  <div className="flex gap-4 text-xs text-muted-foreground mt-1">
+                    {effect.magnitude > 0 && (
+                      <span>Magnitude: {effect.magnitude}</span>
+                    )}
+                    {effect.duration > 0 && (
+                      <span>Duration: {effect.duration}s</span>
+                    )}
+                    {effect.area > 0 && <span>Area: {effect.area}ft</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Spell Tags */}
         {spell.tags && spell.tags.length > 0 && (
@@ -175,5 +190,6 @@ export function SpellCard({
         )}
       </div>
     </GenericAccordionCard>
+    </div>
   )
 }

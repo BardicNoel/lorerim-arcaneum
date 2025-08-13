@@ -153,10 +153,9 @@ export const SpellDetailView: React.FC<SpellDetailViewProps> = ({ result }) => {
               <h3 className="font-semibold mb-2">Effects</h3>
               <div className="space-y-2">
                 {spellData.effects.map((effect, index) => (
-                  <div key={index} className="p-3 bg-muted/50 rounded-lg">
-                    <h4 className="font-medium text-sm">{effect.name}</h4>
+                  <div key={index} className="p-2 rounded bg-muted border text-sm">
                     {effect.description && (
-                      <p className="text-xs text-muted-foreground mt-1">{effect.description}</p>
+                      <p className="text-muted-foreground">{effect.description}</p>
                     )}
                   </div>
                 ))}
