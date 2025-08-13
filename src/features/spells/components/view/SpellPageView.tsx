@@ -1,19 +1,14 @@
 import { useState, useEffect, useMemo } from 'react'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
-import { useSpellData, useSpellState } from '../adapters'
-import { SpellGrid, SpellList } from '../components'
+import { useSpellData, useSpellState } from '../../adapters'
+import { SpellGrid, SpellList } from '../composition'
+import { SpellDetailsSheet } from '../SpellDetailsSheet'
 import type { SearchOption, SelectedTag, SearchCategory } from '@/shared/components/playerCreation/types'
+import type { SpellWithComputed } from '../../types'
 import { ChevronDown } from 'lucide-react'
+import { levelOrder } from '../../config/spellConfig'
 
 type SortOption = 'alphabetical' | 'school' | 'level'
-
-const levelOrder = {
-  'Novice': 1,
-  'Apprentice': 2,
-  'Adept': 3,
-  'Expert': 4,
-  'Master': 5
-}
 
 export function SpellPageView() {
   // Adapters
@@ -23,23 +18,17 @@ export function SpellPageView() {
   // Ensure spells is always an array
   const safeSpells = Array.isArray(spells) ? spells : []
   
-  // State for tracking expanded cards
-  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set())
+  // State for detail sheet
+  const [selectedSpell, setSelectedSpell] = useState<SpellWithComputed | null>(null)
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false)
   
   // State for sorting
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
   
-  // Toggle expanded state for a card
-  const toggleCardExpansion = (spellId: string) => {
-    setExpandedCards(prev => {
-      const newSet = new Set(prev)
-      if (newSet.has(spellId)) {
-        newSet.delete(spellId)
-      } else {
-        newSet.add(spellId)
-      }
-      return newSet
-    })
+  // Handle spell click to open detail sheet
+  const handleSpellClick = (spell: SpellWithComputed) => {
+    setSelectedSpell(spell)
+    setIsDetailsOpen(true)
   }
   
   // Generate search categories directly in the component
@@ -161,7 +150,7 @@ export function SpellPageView() {
             spell.school.toLowerCase().includes(searchText) ||
             spell.level.toLowerCase().includes(searchText) ||
             spell.effects.some(effect => 
-              effect.name.toLowerCase().includes(searchText)
+              effect.description.toLowerCase().includes(searchText)
             )
           )
         default:
@@ -340,8 +329,7 @@ export function SpellPageView() {
                 spells={sortedSpells} 
                 variant="default"
                 columns={3}
-                expandedCards={expandedCards}
-                onToggleExpansion={toggleCardExpansion}
+                onSpellClick={handleSpellClick}
               />
             )}
             
@@ -349,13 +337,19 @@ export function SpellPageView() {
               <SpellList 
                 spells={sortedSpells} 
                 variant="default"
-                expandedCards={expandedCards}
-                onToggleExpansion={toggleCardExpansion}
+                onSpellClick={handleSpellClick}
               />
             )}
           </>
         )}
       </div>
+
+      {/* Spell Details Sheet */}
+      <SpellDetailsSheet
+        spell={selectedSpell}
+        isOpen={isDetailsOpen}
+        onOpenChange={setIsDetailsOpen}
+      />
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { BuildPageShell } from '@/shared/components/playerCreation'
-import { SpellPageView } from '../views/SpellPageView'
+import { SpellPageView } from '../components/view/SpellPageView'
 
 export function SpellsPage() {
   return (

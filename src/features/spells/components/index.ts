@@ -5,6 +5,4 @@ export * from './atomic'
 export * from './composition'
 
 // View components
-export { SpellResultsDisplay } from './SpellResultsDisplay'
-export { ViewModeToggle } from './ViewModeToggle'
-export { SelectedTagsDisplay } from './SelectedTagsDisplay' 
+export * from './view' 
