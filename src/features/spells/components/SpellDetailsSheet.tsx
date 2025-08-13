@@ -101,15 +101,41 @@ export function SpellDetailsSheet({
           <div>
             <H3 className="text-lg font-semibold mb-3">Effects</H3>
             <div className="space-y-2">
-              {spell.effects.map((effect, index) => (
+              {spell.effects
+                .filter((effect, index, self) => {
+                  // Get the base name (remove Single/Dual suffix)
+                  const baseName = effect.name.replace(/\s*\(Single\)|\s*\(Dual\)/i, '')
+                  
+                  // Find the first occurrence with the same base name and stats
+                  const firstIndex = self.findIndex(e => {
+                    const eBaseName = e.name.replace(/\s*\(Single\)|\s*\(Dual\)/i, '')
+                    return eBaseName === baseName && 
+                           e.magnitude === effect.magnitude && 
+                           e.duration === effect.duration
+                  })
+                  
+                  // Only show the first occurrence
+                  return index === firstIndex
+                })
+                .map((effect, index) => (
                 <div
                   key={index}
                   className="p-3 rounded bg-muted border"
                 >
-                  <FormattedText
-                    text={effect.description}
-                    className="text-sm text-muted-foreground mb-2"
-                  />
+                  {/* Effect Name */}
+                  <div className="font-medium text-foreground mb-2">
+                    {effect.name}
+                  </div>
+                  
+                  {/* Effect Description (if available) */}
+                  {effect.description && (
+                    <FormattedText
+                      text={effect.description}
+                      className="text-sm text-muted-foreground mb-2"
+                    />
+                  )}
+                  
+                  {/* Effect Stats */}
                   <div className="flex gap-4 text-xs text-muted-foreground">
                     {effect.magnitude > 0 && (
                       <span>Magnitude: {effect.magnitude}</span>

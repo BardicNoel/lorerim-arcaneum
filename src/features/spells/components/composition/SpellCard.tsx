@@ -58,12 +58,14 @@ export function SpellCard({
         </div>
       </div>
 
-      {/* Effects: Always visible */}
-      {spell.effects && spell.effects.length > 0 && (
+      {/* Effects: Only show effects with descriptions */}
+      {spell.effects && spell.effects.filter(effect => effect.description).length > 0 && (
         <div>
           <Small className="text-muted-foreground mb-2">Effects</Small>
           <div className="space-y-2">
-            {spell.effects.map((effect, index) => (
+            {spell.effects
+              .filter(effect => effect.description)
+              .map((effect, index) => (
               <div
                 key={index}
                 className="p-2 rounded bg-muted border text-sm"
