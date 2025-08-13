@@ -85,11 +85,12 @@ export default function HomePage() {
               Lorerim Arcaneum
             </H1>
           </div>
-          <Lead className="text-xl md:text-2xl text-muted-foreground">
-            Your theorycrafting playground and reference hub for Lorerim
-            players. Build characters, explore mechanics, and dive deep into the
-            lore.
-          </Lead>
+                     <Lead className="text-xl md:text-2xl text-muted-foreground">
+             A growing collection of Lorerim tools and resources. Build characters, explore mechanics, and contribute to the community.
+           </Lead>
+           <p className="text-sm text-muted-foreground mt-2">
+             Big thanks to Biggie Boss
+           </p>
         </div>
 
         {/* Character Build Status */}
