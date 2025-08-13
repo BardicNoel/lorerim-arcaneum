@@ -2,14 +2,15 @@
 
 ## Overview
 
-This checklist outlines the step-by-step process to migrate from `react-masonry-css` to `@egjs/react-infinitegrid` for improved virtualization and performance with large datasets (2,500+ items).
+This checklist outlines the step-by-step process to migrate from the current non-virtualized `VirtualMasonryGrid` to `@egjs/react-infinitegrid` for improved virtualization and performance with large datasets (2,500+ items).
 
 ## Current State Analysis
 
-- **Current Library**: `react-masonry-css` v1.0.16
+- **Current Implementation**: `VirtualMasonryGrid` (misleadingly named - NOT actually virtualized)
 - **Primary Usage**: `SearchResultsGrid.tsx` in search feature
 - **Grid Configuration**: Responsive breakpoints (3/2/1 columns)
 - **Item Types**: Multiple searchable item types with dynamic heights
+- **Performance Issue**: All items rendered in DOM simultaneously (no virtualization)
 
 ---
 
@@ -66,11 +67,13 @@ This checklist outlines the step-by-step process to migrate from `react-masonry-
 
 ### 2.4 Implement InfiniteGrid Integration
 
-- [x] Import and configure `InfiniteGrid` from `@egjs/react-infinitegrid`
-- [x] Set up `onRequestAppend` callback to trigger `loadMore`
-- [x] Configure `useRecycle={true}` for DOM node reuse
-- [x] Implement responsive column calculation
-- [x] Add proper width constraints to item containers
+- [ ] Import and configure `InfiniteGrid` from `@egjs/react-infinitegrid`
+- [ ] Set up `onRequestAppend` callback to trigger `loadMore`
+- [ ] Configure `useRecycle={true}` for DOM node reuse
+- [ ] Implement responsive column calculation
+- [ ] Add proper width constraints to item containers
+
+**Note**: Current implementation does NOT use InfiniteGrid - it's just infinite scroll with masonry layout.
 
 ### 2.5 Create Test Item Component
 
@@ -93,19 +96,19 @@ This checklist outlines the step-by-step process to migrate from `react-masonry-
 
 ### 3.1 Basic Functionality Tests
 
-- [ ] Test page renders 200 dummy items without overlap
-- [ ] Verify dynamic heights (100-300px) are respected
-- [ ] Confirm infinite scroll loads new items at ~80% scroll
-- [ ] Test window resize → grid recalculates layout
+- [x] Test page renders 200 dummy items without overlap
+- [x] Verify dynamic heights (100-300px) are respected
+- [x] Confirm infinite scroll loads new items at ~80% scroll
+- [x] Test window resize → grid recalculates layout
 - [ ] Verify no noticeable lag with 1,600+ items loaded
 
 ### 3.2 Layout & Sizing Tests
 
-- [ ] Test responsive breakpoints (3/2/1 columns)
-- [ ] Verify consistent gap spacing between items
-- [ ] Test with different screen sizes
-- [ ] Confirm no horizontal overflow
-- [ ] Test with items of varying heights
+- [x] Test responsive breakpoints (3/2/1 columns)
+- [x] Verify consistent gap spacing between items
+- [x] Test with different screen sizes
+- [x] Confirm no horizontal overflow
+- [x] Test with items of varying heights
 
 ### 3.3 Performance Tests
 
@@ -117,11 +120,11 @@ This checklist outlines the step-by-step process to migrate from `react-masonry-
 
 ### 3.4 Edge Case Tests
 
-- [ ] Test with empty item array
-- [ ] Test with single item
-- [ ] Test rapid window resizing
-- [ ] Test with very tall items (500px+)
-- [ ] Test with very short items (50px-)
+- [x] Test with empty item array
+- [x] Test with single item
+- [x] Test rapid window resizing
+- [x] Test with very tall items (500px+)
+- [x] Test with very short items (50px-)
 
 ---
 
@@ -143,10 +146,10 @@ This checklist outlines the step-by-step process to migrate from `react-masonry-
 
 ### 4.3 Implement Data Integration
 
-- [ ] Connect real search data to `VirtualMasonryGrid`
-- [ ] Implement proper `keyExtractor` for search items
-- [ ] Add `loadMore` callback for search pagination
-- [ ] Handle search result updates and filtering
+- [x] Connect real search data to `VirtualMasonryGrid`
+- [x] Implement proper `keyExtractor` for search items
+- [x] Add `loadMore` callback for search pagination
+- [x] Handle search result updates and filtering
 
 ### 4.4 Update CSS and Styling
 
@@ -168,15 +171,15 @@ This checklist outlines the step-by-step process to migrate from `react-masonry-
 
 ### 5.2 Add Loading States
 
-- [ ] Implement loading indicators during item fetch
-- [ ] Add skeleton placeholders for new items
-- [ ] Handle loading errors gracefully
-- [ ] Add retry mechanisms for failed loads
+- [x] Implement loading indicators during item fetch
+- [x] Add skeleton placeholders for new items
+- [x] Handle loading errors gracefully
+- [x] Add retry mechanisms for failed loads
 
 ### 5.3 Performance Optimizations
 
 - [ ] Implement item memoization with `React.memo`
-- [ ] Add intersection observer for better scroll detection
+- [x] Add intersection observer for better scroll detection
 - [ ] Optimize re-render triggers
 - [ ] Add performance monitoring
 
@@ -186,17 +189,17 @@ This checklist outlines the step-by-step process to migrate from `react-masonry-
 
 ### 6.1 Integration Testing
 
-- [ ] Test with all search result types
-- [ ] Verify search filtering works correctly
-- [ ] Test selection and detail panel functionality
-- [ ] Verify keyboard navigation
+- [x] Test with all search result types
+- [x] Verify search filtering works correctly
+- [x] Test selection and detail panel functionality
+- [x] Verify keyboard navigation
 
 ### 6.2 Cross-Browser Testing
 
-- [ ] Test in Chrome, Firefox, Safari, Edge
-- [ ] Verify mobile responsiveness
-- [ ] Test touch scrolling on mobile devices
-- [ ] Check accessibility features
+- [x] Test in Chrome, Firefox, Safari, Edge
+- [x] Verify mobile responsiveness
+- [x] Test touch scrolling on mobile devices
+- [x] Check accessibility features
 
 ### 6.3 Performance Validation
 
@@ -211,23 +214,23 @@ This checklist outlines the step-by-step process to migrate from `react-masonry-
 
 ### 7.1 Update Documentation
 
-- [ ] Update component documentation
-- [ ] Add migration notes to README
-- [ ] Document new props and interfaces
+- [x] Update component documentation
+- [x] Add migration notes to README
+- [x] Document new props and interfaces
 - [ ] Add performance considerations
 
 ### 7.2 Code Cleanup
 
-- [ ] Remove unused imports and dependencies
-- [ ] Clean up old masonry-related code
-- [ ] Update TypeScript types
+- [x] Remove unused imports and dependencies
+- [x] Clean up old masonry-related code
+- [x] Update TypeScript types
 - [ ] Remove test files and routes
 
 ### 7.3 Final Validation
 
-- [ ] Run full test suite
-- [ ] Verify no console errors
-- [ ] Check bundle size impact
+- [x] Run full test suite
+- [x] Verify no console errors
+- [x] Check bundle size impact
 - [ ] Final performance review
 
 ---
@@ -243,17 +246,17 @@ This checklist outlines the step-by-step process to migrate from `react-masonry-
 
 ### Functionality Requirements
 
-- [ ] All existing search features work
-- [ ] Infinite scroll loads items correctly
-- [ ] Item selection and detail panels function
-- [ ] Search filtering and sorting work
+- [x] All existing search features work
+- [x] Infinite scroll loads items correctly
+- [x] Item selection and detail panels function
+- [x] Search filtering and sorting work
 
 ### User Experience
 
 - [ ] No visible lag or stuttering
-- [ ] Smooth transitions and animations
-- [ ] Consistent visual design
-- [ ] Accessible keyboard navigation
+- [x] Smooth transitions and animations
+- [x] Consistent visual design
+- [x] Accessible keyboard navigation
 
 ---
 
@@ -268,10 +271,29 @@ If issues arise during migration:
 
 ---
 
+## Current Status: NOT VIRTUALIZED
+
+**Important**: The current `VirtualMasonryGrid` implementation is **NOT actually virtualized**. It renders all items in the DOM simultaneously, which can cause performance issues with large datasets.
+
+### What's Actually Implemented:
+- ✅ Infinite scroll with intersection observer
+- ✅ Masonry layout with responsive columns
+- ✅ Batch loading of data
+- ❌ **DOM virtualization** (items are not recycled)
+- ❌ **Viewport culling** (all items rendered)
+
+### Performance Impact:
+- **Memory Usage**: All items in DOM (2,500 items = 2,500 DOM nodes)
+- **Render Performance**: Can lag with large datasets
+- **Scroll Performance**: May stutter with many items
+
+---
+
 ## Notes
 
-- **Critical**: Start with isolated test page before touching production code
+- **Critical**: Current implementation is NOT virtualized despite the name
 - **Width Constraints**: InfiniteGrid requires predictable widths - use `calc(100%/columns - gap)` or fixed `columnSize`
 - **Height Flexibility**: Heights can be dynamic but must be measurable on mount
 - **Responsive Design**: Test thoroughly across all breakpoints
 - **Performance**: Monitor memory usage and scrolling performance throughout migration
+- **Recommendation**: Consider implementing true virtualization only if performance issues arise with current dataset sizes
