@@ -1,8 +1,12 @@
-import { ReligionAccordion } from '@/features/religions/components/ReligionAccordion'
+import {
+  ReligionCard,
+  ReligionSheet,
+} from '@/features/religions/components/composition'
 import type { Religion as FeatureReligion } from '@/features/religions/types'
-import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
+import { mapSharedReligionToFeatureReligion } from '@/features/religions/utils/religionMapper'
 import type { Religion as SharedReligion } from '@/shared/data/schemas'
 import { useReligionsStore } from '@/shared/stores/religionsStore'
+import { useState } from 'react'
 import type { SearchableItem } from '../../model/SearchModel'
 import { findItemInStore } from '../../utils/storeLookup'
 
@@ -22,6 +26,9 @@ export function ReligionSearchCard({
   viewMode = 'grid',
 }: ReligionSearchCardProps) {
   const religions = useReligionsStore(state => state.data)
+  const [selectedReligion, setSelectedReligion] =
+    useState<FeatureReligion | null>(null)
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
 
   // Find the full religion record from the store
   const fullReligion = findItemInStore(religions, item.originalData) as
@@ -44,79 +51,27 @@ export function ReligionSearchCard({
   }
 
   // Convert the shared Religion type to the feature Religion type
-  const religionAsFeatureReligion: FeatureReligion = {
-    name: fullReligion.name,
-    type: fullReligion.type || fullReligion.pantheon || 'Unknown',
-    blessing: {
-      spellId: fullReligion.blessing?.spellId || '',
-      spellName: fullReligion.blessing?.spellName || '',
-      effects: fullReligion.blessing?.effects || [],
-    },
-    boon1: {
-      spellId: fullReligion.boon1?.spellId || '',
-      spellName: fullReligion.boon1?.spellName || '',
-      effects: fullReligion.boon1?.effects || [],
-    },
-    boon2: {
-      spellId: fullReligion.boon2?.spellId || '',
-      spellName: fullReligion.boon2?.spellName || '',
-      effects: fullReligion.boon2?.effects || [],
-    },
-    tenet: {
-      spellId: fullReligion.tenet?.spellId || '',
-      spellName: fullReligion.tenet?.spellName || '',
-      header: fullReligion.tenet?.header || '',
-      description: fullReligion.tenet?.description || '',
-      effects: fullReligion.tenet?.effects || [],
-    },
-    favoredRaces: fullReligion.favoredRaces || [],
-    worshipRestrictions: fullReligion.worshipRestrictions || [],
+  const religionAsFeatureReligion: FeatureReligion =
+    mapSharedReligionToFeatureReligion(fullReligion)
+
+  const handleOpenDetails = (id: string) => {
+    setSelectedReligion(religionAsFeatureReligion)
+    setIsSheetOpen(true)
   }
 
-  // Convert the religion to PlayerCreationItem format for ReligionAccordion
-  const religionAsPlayerCreationItem = {
-    id: fullReligion.id || fullReligion.name,
-    name: fullReligion.name,
-    description: fullReligion.tenet?.description || '',
-    category: fullReligion.type || fullReligion.pantheon || '',
-    tags: fullReligion.favoredRaces || fullReligion.tags || [],
-    type: 'religion' as const,
-    summary: fullReligion.tenet?.description || '',
-    effects: [
-      // Include tenet effects
-      ...(fullReligion.tenet?.effects?.map(effect => ({
-        type: 'positive' as const,
-        name: effect.effectName,
-        description: effect.effectDescription,
-        value: effect.magnitude,
-        target: effect.targetAttribute || '',
-      })) || []),
-      // Include blessing effects if available
-      ...(fullReligion.blessing?.effects?.map(effect => ({
-        type: 'positive' as const,
-        name: effect.effectName,
-        description: effect.effectDescription,
-        value: effect.magnitude,
-        target: effect.targetAttribute || '',
-      })) || []),
-    ],
-  }
-
-  // Render the existing ReligionAccordion with the full religion data
+  // Render the new ReligionCard with the full religion data
   return (
     <div className={className}>
-      <ReligionAccordion
-        item={religionAsPlayerCreationItem}
+      <ReligionCard
         originalReligion={religionAsFeatureReligion}
-        isExpanded={isExpanded}
-        onToggle={onToggle}
         className="w-full"
-        showBlessings={true}
-        showTenets={true}
-        showBoons={true}
-        showFavoredRaces={shouldShowFavoredRaces()}
-        disableHover={false} // Enable hover for better UX
-        showToggle={false}
+        onOpenDetails={handleOpenDetails}
+        showToggle={true}
+      />
+      <ReligionSheet
+        religion={selectedReligion}
+        isOpen={isSheetOpen}
+        onClose={() => setIsSheetOpen(false)}
       />
     </div>
   )

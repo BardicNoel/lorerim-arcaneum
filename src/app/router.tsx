@@ -3,7 +3,7 @@ import { CookbookPage } from '@/features/cookbook/pages'
 import { UnifiedDestinyPage } from '@/features/destiny'
 import { RacesMVADemoPage } from '@/features/races-v2'
 import { RacePageView } from '@/features/races-v2/views/RacePageView'
-import { AccordionReligionsPage } from '@/features/religions/pages/AccordionReligionsPage'
+import { ReligionsPage } from '@/features/religions/pages/ReligionsPage'
 import { SimpleSearchPage } from '@/features/search'
 import { VirtualMasonryDemoPage } from '@/features/search/pages/VirtualMasonryDemoPage'
 import { SkillsPage } from '@/features/skills'
@@ -32,7 +32,7 @@ export const AppRouter = () => {
         <Route path="race" element={<RacePageView />} />
         <Route path="birth-signs" element={<AccordionBirthsignsPage />} />
         <Route path="traits" element={<AccordionTraitsPage />} />
-        <Route path="religions" element={<AccordionReligionsPage />} />
+        <Route path="religions" element={<ReligionsPage />} />
         <Route path="destiny" element={<UnifiedDestinyPage />} />
         <Route path="perks" element={<SkillsPage />} />
       </Route>
