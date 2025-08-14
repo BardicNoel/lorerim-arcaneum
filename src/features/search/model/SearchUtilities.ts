@@ -80,29 +80,68 @@ export function transformTraitsToSearchable(traits: Trait[]): SearchableItem[] {
 export function transformReligionsToSearchable(
   religions: Religion[]
 ): SearchableItem[] {
-  return religions.map(religion => ({
-    id: `religion-${religion.id || religion.name}`,
-    type: 'religion' as const,
-    name: religion.name,
-    description: religion.tenet?.description || '',
-    category: religion.type || religion.pantheon || '',
-    tags: religion.tags || [],
-    searchableText: [
-      religion.name,
-      religion.tenet?.description || '',
-      religion.type || '',
-      religion.pantheon || '',
-      ...(religion.tags || []),
-      ...(shouldShowFavoredRaces() ? religion.favoredRaces || [] : []),
-      ...(religion.worshipRestrictions || []),
-      ...(religion.tenet?.effects?.map(effect => effect.effectName) || []),
-      ...(religion.blessing?.effects?.map(effect => effect.effectName) || []),
-      ...(religion.boon1?.effects?.map(effect => effect.effectName) || []),
-      ...(religion.boon2?.effects?.map(effect => effect.effectName) || []),
-    ],
-    originalData: religion,
-    url: `/religions`,
-  }))
+  const searchableItems: SearchableItem[] = []
+
+  religions.forEach(religion => {
+    // Add the main religion
+    searchableItems.push({
+      id: `religion-${religion.id || religion.name}`,
+      type: 'religion' as const,
+      name: religion.name,
+      description: religion.tenet?.description || '',
+      category: religion.type || religion.pantheon || '',
+      tags: religion.tags || [],
+      searchableText: [
+        religion.name,
+        religion.tenet?.description || '',
+        religion.type || '',
+        religion.pantheon || '',
+        ...(religion.tags || []),
+        ...(shouldShowFavoredRaces() ? religion.favoredRaces || [] : []),
+        ...(religion.worshipRestrictions || []),
+        ...(religion.tenet?.effects?.map(effect => effect.effectName) || []),
+        ...(religion.blessing?.effects?.map(effect => effect.effectName) || []),
+        ...(religion.boon1?.effects?.map(effect => effect.effectName) || []),
+        ...(religion.boon2?.effects?.map(effect => effect.effectName) || []),
+      ],
+      originalData: religion,
+      url: `/religions`,
+    })
+
+    // Add blessing if it exists
+    if (religion.blessing && religion.blessing.effects.length > 0) {
+      searchableItems.push({
+        id: `blessing-${religion.id || religion.name}`,
+        type: 'blessing' as const,
+        name: `Blessing of ${religion.name}`,
+        description: religion.blessing.effects[0]?.effectDescription || '',
+        category: 'Blessing',
+        tags: religion.tags || [],
+        searchableText: [
+          `Blessing of ${religion.name}`,
+          religion.name,
+          religion.blessing.effects[0]?.effectDescription || '',
+          religion.blessing.effects[0]?.effectName || '',
+          ...(religion.blessing.effects?.map(effect => effect.effectName) ||
+            []),
+          ...(religion.blessing.effects?.map(
+            effect => effect.effectDescription
+          ) || []),
+          ...(religion.tags || []),
+          'blessing',
+          'divine',
+          'worship',
+        ],
+        originalData: {
+          ...religion,
+          blessingOnly: true, // Flag to indicate this is blessing-only data
+        },
+        url: `/religions?tab=blessings`,
+      })
+    }
+  })
+
+  return searchableItems
 }
 
 export function transformBirthsignsToSearchable(

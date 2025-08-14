@@ -14,10 +14,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/ui/dropdown-menu'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
 
 import { ChevronDown, Grid3X3, List, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { ReligionCard, ReligionSheet } from '../components/composition'
+import {
+  BlessingCard,
+  BlessingSheet,
+  ReligionCard,
+  ReligionSheet,
+} from '../components/composition'
 import type { Religion as FeatureReligion } from '../types'
 import { mapSharedReligionToFeatureReligion } from '../utils/religionMapper'
 
@@ -27,6 +33,7 @@ import { religionToPlayerCreationItem } from '@/shared/utils'
 
 type SortOption = 'alphabetical' | 'divine-type'
 type ViewMode = 'list' | 'grid'
+type TabType = 'religions' | 'blessings'
 
 export function ReligionsPage() {
   // Use the data cache hook instead of manual fetch
@@ -34,9 +41,13 @@ export function ReligionsPage() {
 
   const [selectedReligion, setSelectedReligion] =
     useState<FeatureReligion | null>(null)
-  const [isSheetOpen, setIsSheetOpen] = useState(false)
+  const [selectedBlessing, setSelectedBlessing] =
+    useState<FeatureReligion | null>(null)
+  const [isReligionSheetOpen, setIsReligionSheetOpen] = useState(false)
+  const [isBlessingSheetOpen, setIsBlessingSheetOpen] = useState(false)
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
+  const [activeTab, setActiveTab] = useState<TabType>('religions')
 
   // Convert religions to PlayerCreationItem format for consolidated view
   const religionItems: PlayerCreationItem[] = useMemo(() => {
@@ -47,6 +58,13 @@ export function ReligionsPage() {
   const featureReligions: FeatureReligion[] = useMemo(() => {
     return (religions || []).map(mapSharedReligionToFeatureReligion)
   }, [religions])
+
+  // Filter religions that have blessings
+  const religionsWithBlessings = useMemo(() => {
+    return featureReligions.filter(
+      religion => religion.blessing && religion.blessing.effects.length > 0
+    )
+  }, [featureReligions])
 
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
@@ -210,15 +228,20 @@ export function ReligionsPage() {
     setSelectedTags(prev => prev.filter(tag => tag.id !== tagId))
   }
 
-  const handleOpenDetails = (id: string) => {
-    console.log('handleOpenDetails called with id:', id)
+  const handleReligionClick = (id: string) => {
+    console.log('handleReligionClick called with id:', id)
     const religion = featureReligions.find(r => r.name === id)
     console.log('Found religion:', religion)
     if (religion) {
       setSelectedReligion(religion)
-      setIsSheetOpen(true)
-      console.log('Sheet should now be open')
+      setIsReligionSheetOpen(true)
+      console.log('Religion sheet should now be open')
     }
+  }
+
+  const handleBlessingClick = (religion: FeatureReligion) => {
+    setSelectedBlessing(religion)
+    setIsBlessingSheetOpen(true)
   }
 
   if (loading) {
@@ -335,56 +358,118 @@ export function ReligionsPage() {
           </div>
         )}
 
-        {/* Results */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-muted-foreground">
-              {filteredReligions.length} religion
-              {filteredReligions.length !== 1 ? 's' : ''} found
-            </div>
-          </div>
+        {/* Tabs */}
+        <Tabs
+          value={activeTab}
+          onValueChange={value => setActiveTab(value as TabType)}
+        >
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="religions">
+              Religions ({filteredReligions.length})
+            </TabsTrigger>
+            <TabsTrigger value="blessings">
+              Blessings ({religionsWithBlessings.length})
+            </TabsTrigger>
+          </TabsList>
 
-          {/* Religion Cards Grid/List */}
-          <div
-            className={
-              viewMode === 'grid'
-                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
-                : 'space-y-4'
-            }
-          >
-            {filteredReligions.map(religion => (
-              <ReligionCard
-                key={religion.name}
-                originalReligion={religion}
-                onOpenDetails={handleOpenDetails}
-                showToggle={true}
-                className={viewMode === 'list' ? 'w-full' : 'h-full'}
-              />
-            ))}
-          </div>
-
-          {filteredReligions.length === 0 && (
-            <div className="text-center py-12">
-              <div className="text-lg text-muted-foreground">
-                No religions found matching your criteria
+          <TabsContent value="religions" className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-muted-foreground">
+                {filteredReligions.length} religion
+                {filteredReligions.length !== 1 ? 's' : ''} found
               </div>
-              <Button
-                variant="outline"
-                onClick={() => setSelectedTags([])}
-                className="mt-4"
-              >
-                Clear filters
-              </Button>
             </div>
-          )}
-        </div>
+
+            {/* Religion Cards Grid/List */}
+            <div
+              className={
+                viewMode === 'grid'
+                  ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
+                  : 'space-y-4'
+              }
+            >
+              {filteredReligions.map(religion => (
+                <ReligionCard
+                  key={religion.name}
+                  originalReligion={religion}
+                  onOpenDetails={handleReligionClick}
+                  showToggle={true}
+                  className={viewMode === 'list' ? 'w-full' : 'h-full'}
+                />
+              ))}
+            </div>
+
+            {filteredReligions.length === 0 && (
+              <div className="text-center py-12">
+                <div className="text-lg text-muted-foreground">
+                  No religions found matching your criteria
+                </div>
+                <Button
+                  variant="outline"
+                  onClick={() => setSelectedTags([])}
+                  className="mt-4"
+                >
+                  Clear filters
+                </Button>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="blessings" className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-muted-foreground">
+                {religionsWithBlessings.length} blessing
+                {religionsWithBlessings.length !== 1 ? 's' : ''} found
+              </div>
+            </div>
+
+            {/* Blessing Cards Grid/List */}
+            <div
+              className={
+                viewMode === 'grid'
+                  ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
+                  : 'space-y-4'
+              }
+            >
+              {religionsWithBlessings.map(religion => (
+                <BlessingCard
+                  key={religion.name}
+                  religion={religion}
+                  onClick={() => handleBlessingClick(religion)}
+                  showToggle={false}
+                  className={viewMode === 'list' ? 'w-full' : 'h-full'}
+                />
+              ))}
+            </div>
+
+            {religionsWithBlessings.length === 0 && (
+              <div className="text-center py-12">
+                <div className="text-lg text-muted-foreground">
+                  No blessings found matching your criteria
+                </div>
+                <Button
+                  variant="outline"
+                  onClick={() => setSelectedTags([])}
+                  className="mt-4"
+                >
+                  Clear filters
+                </Button>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
       </div>
 
-      {/* Religion Detail Sheet */}
+      {/* Sheets */}
       <ReligionSheet
         religion={selectedReligion}
-        isOpen={isSheetOpen}
-        onOpenChange={setIsSheetOpen}
+        isOpen={isReligionSheetOpen}
+        onOpenChange={setIsReligionSheetOpen}
+      />
+      <BlessingSheet
+        religion={selectedBlessing}
+        isOpen={isBlessingSheetOpen}
+        onOpenChange={setIsBlessingSheetOpen}
       />
     </BuildPageShell>
   )

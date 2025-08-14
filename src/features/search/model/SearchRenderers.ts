@@ -1,6 +1,5 @@
-import React from 'react'
-import type { SearchResultRenderer } from './SearchModel'
 import { SearchResultCard, SearchResultDetail } from '../components/atomic'
+import type { SearchResultRenderer } from './SearchModel'
 
 // Import type-specific components
 // Note: These will be imported dynamically to avoid circular dependencies
@@ -27,6 +26,12 @@ export const SEARCH_RESULT_RENDERERS: Record<string, SearchResultRenderer> = {
   },
   religion: {
     type: 'religion',
+    cardComponent: SearchResultCard,
+    detailComponent: SearchResultDetail,
+    compactComponent: SearchResultCard,
+  },
+  blessing: {
+    type: 'blessing',
     cardComponent: SearchResultCard,
     detailComponent: SearchResultDetail,
     compactComponent: SearchResultCard,

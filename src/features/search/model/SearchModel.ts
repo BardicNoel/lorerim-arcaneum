@@ -5,6 +5,7 @@ export interface SearchableItem {
     | 'race'
     | 'trait'
     | 'religion'
+    | 'blessing'
     | 'birthsign'
     | 'destiny'
     | 'perk'

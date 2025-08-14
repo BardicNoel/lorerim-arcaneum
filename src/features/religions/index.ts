@@ -1,9 +1,17 @@
 export {
+  BlessingCard,
+  BlessingSheet,
   DeityAutocomplete,
+  DevoteeCard,
+  DevoteeSheet,
+  FollowerCard,
+  FollowerSheet,
   ReligionAccordion,
+  ReligionCard,
   ReligionSelectionCard,
+  ReligionSheet,
 } from './components'
-export { ReligionsPage } from './pages/ReligionsPage'
+export { ReligionsPage, TabbedReligionsPage } from './pages'
 export type {
   Religion,
   ReligionEffect,
