@@ -152,6 +152,9 @@ export function GlobalSearch({
       case 'perk-reference':
         navigate(`/perk-references`)
         break
+      case 'enchantment':
+        navigate(`/enchantments?selected=${result.item.id.replace('enchantment-', '')}`)
+        break
     }
 
     setIsOpen(false)
@@ -176,6 +179,8 @@ export function GlobalSearch({
         return '🔧'
       case 'perk-reference':
         return '📖'
+      case 'enchantment':
+        return '🔮'
       default:
         return '📄'
     }
@@ -199,6 +204,8 @@ export function GlobalSearch({
         return 'Perk Tree'
       case 'perk-reference':
         return 'Perk Reference'
+      case 'enchantment':
+        return 'Enchantment'
       default:
         return 'Item'
     }

@@ -3,6 +3,7 @@ import type { RecipeWithComputed } from '@/features/cookbook/types'
 import type { DestinyNode } from '@/features/destiny/types'
 import type { PerkReferenceNode } from '@/features/perk-references/types'
 import type { SpellWithComputed } from '@/features/spells/types'
+import type { EnchantmentWithComputed } from '@/features/enchantments/types'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
 import type { Race, Religion, Skill, Trait } from '@/shared/data/schemas'
@@ -361,5 +362,32 @@ export function createSearchHighlights(
     snippet: match.value,
     startIndex: match.indices[0]?.[0] || 0,
     endIndex: match.indices[0]?.[1] || 0,
+  }))
+}
+
+export function transformEnchantmentsToSearchable(
+  enchantments: EnchantmentWithComputed[]
+): SearchableItem[] {
+  return enchantments.map(enchantment => ({
+    id: `enchantment-${enchantment.baseEnchantmentId}`,
+    type: 'enchantment' as const,
+    name: enchantment.name,
+    description: enchantment.effects.map(effect => effect.name).join(', '),
+    category: enchantment.category,
+    tags: [
+      enchantment.targetType,
+      ...enchantment.foundOnItems.map(item => item.type),
+      ...enchantment.tags,
+    ],
+    searchableText: [
+      enchantment.name,
+      ...enchantment.effects.map(effect => `${effect.name} ${effect.description}`),
+      ...enchantment.foundOnItems.map(item => `${item.name} ${item.type}`),
+      enchantment.category,
+      enchantment.plugin,
+      enchantment.searchableText,
+    ],
+    originalData: enchantment,
+    url: `/enchantments`,
   }))
 }
