@@ -37,9 +37,11 @@ export function VirtualItem<T>({
       }
     }
 
-    // Measure immediately and then with a small delay to ensure DOM is fully rendered
-    measureHeight()
-    const timeoutId = setTimeout(measureHeight, 10)
+    // For initial load, be more conservative with measurements to prevent layout thrashing
+    // Start with a longer delay to allow DOM to settle
+    const timeoutId1 = setTimeout(measureHeight, 50)  // First measurement after 50ms
+    const timeoutId2 = setTimeout(measureHeight, 150) // Second measurement after 150ms
+    const timeoutId3 = setTimeout(measureHeight, 300) // Final measurement after 300ms
 
     // Set up ResizeObserver for dynamic changes with throttling
     const observer = new ResizeObserver(() => {
@@ -54,13 +56,15 @@ export function VirtualItem<T>({
       resizeTimeoutRef.current = setTimeout(() => {
         measureHeight()
         resizeTimeoutRef.current = null
-      }, 16) // ~60fps
+      }, 32) // ~30fps for better performance
     })
 
     observer.observe(elementRef.current)
 
     return () => {
-      clearTimeout(timeoutId)
+      clearTimeout(timeoutId1)
+      clearTimeout(timeoutId2)
+      clearTimeout(timeoutId3)
       if (resizeTimeoutRef.current) {
         clearTimeout(resizeTimeoutRef.current)
       }

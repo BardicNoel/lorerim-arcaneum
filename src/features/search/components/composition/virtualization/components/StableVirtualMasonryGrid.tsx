@@ -30,7 +30,7 @@ export function StableVirtualMasonryGrid<T>({
   maxColumnWidth,
   className = '',
   overscan = 5,
-  estimatedItemHeight = 200,
+  estimatedItemHeight = 400,
   showPerformanceMetrics = false,
 }: StableVirtualMasonryGridProps<T>) {
 
@@ -136,6 +136,8 @@ export function StableVirtualMasonryGrid<T>({
       </div>
     )
   }
+
+
 
   return (
     <div className={className}>

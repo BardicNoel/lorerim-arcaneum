@@ -49,7 +49,7 @@ export class MultiColumnVirtualizer<T> {
     this.positionCache.clear()
     this.heightMeasurer.clear()
 
-    // Distribute items evenly across columns initially to prevent all items going to the same column
+    // Place all items initially with estimated heights, but use a better distribution strategy
     this.items.forEach((item, index) => {
       const itemKey = this.keyExtractor(item)
       
@@ -66,6 +66,7 @@ export class MultiColumnVirtualizer<T> {
       this.heightMeasurer.setInitialHeight(itemKey, this.config.estimatedItemHeight)
     })
     
+    console.log(`[initializeLayout] Placed all ${this.items.length} items initially`)
     console.log(`[initializeLayout] Final column heights:`, this.positionCache.getColumnHeights())
   }
 
@@ -75,16 +76,6 @@ export class MultiColumnVirtualizer<T> {
     // Get current position before update
     const oldPosition = this.positionCache.getPosition(itemKey)
     
-    // DEBUG: Log height updates (throttled)
-    if (Math.random() < 0.1) { // Only log 10% of height updates to avoid spam
-      console.log(`[MultiColumnVirtualizer] Height update for ${itemKey}:`, {
-        oldHeight: oldPosition?.height,
-        newHeight: height,
-        oldColumn: oldPosition?.column,
-        oldTop: oldPosition?.top
-      })
-    }
-
     // Update height measurer immediately
     this.heightMeasurer.updateHeight(itemKey, height)
     
@@ -93,11 +84,14 @@ export class MultiColumnVirtualizer<T> {
     
     // Get new position after update
     const newPosition = this.positionCache.getPosition(itemKey)
-    if (Math.random() < 0.1) { // Only log 10% of after-update logs
-      console.log(`[MultiColumnVirtualizer] After update:`, {
+    if (Math.random() < 0.05) { // Only log 5% of updates to reduce spam
+      console.log(`[MultiColumnVirtualizer] Height update for ${itemKey}:`, {
+        oldHeight: oldPosition?.height,
+        newHeight: height,
+        oldColumn: oldPosition?.column,
         newColumn: newPosition?.column,
-        newTop: newPosition?.top,
-        columnHeights: this.positionCache.getColumnHeights()
+        oldTop: oldPosition?.top,
+        newTop: newPosition?.top
       })
     }
   }
@@ -114,15 +108,6 @@ export class MultiColumnVirtualizer<T> {
     const visibleStart = Math.max(0, scrollTop - this.config.overscan * 100)
     const visibleEnd = scrollTop + viewportHeight + this.config.overscan * 100
 
-    // DEBUG: Log visible range calculation
-    console.log(`[getVisibleItems] Range:`, {
-      scrollTop,
-      viewportHeight,
-      visibleStart,
-      visibleEnd,
-      totalItems: this.items.length
-    })
-
     // Find items in visible range
     for (let i = 0; i < this.items.length; i++) {
       const item = this.items[i]
@@ -136,30 +121,12 @@ export class MultiColumnVirtualizer<T> {
         // Check if item is in visible range
         if (itemBottom >= visibleStart && itemTop <= visibleEnd) {
           result.push({ item, position, key })
-          
-          // DEBUG: Log visible item details
-          console.log(`[getVisibleItems] Visible item:`, {
-            key,
-            index: position.index,
-            column: position.column,
-            top: position.top,
-            height: position.height,
-            bottom: itemBottom
-          })
         }
       }
     }
 
     // DEBUG: Log final result
     console.log(`[getVisibleItems] Found ${result.length} visible items`)
-    
-    // Check for column distribution
-    const columnCounts = result.reduce((acc, { position }) => {
-      acc[position.column] = (acc[position.column] || 0) + 1
-      return acc
-    }, {} as Record<number, number>)
-    
-    console.log(`[getVisibleItems] Column distribution:`, columnCounts)
 
     return result
   }
