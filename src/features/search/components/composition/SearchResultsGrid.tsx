@@ -58,13 +58,7 @@ export function SearchResultsGrid({
     <div className={className}>
       {/* View Mode Toggle */}
       {onViewModeChange && (
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">
-              {items.length} result{items.length !== 1 ? 's' : ''} found
-            </span>
-          </div>
-
+        <div className="flex items-center justify-end mb-4">
           <div className="flex items-center gap-2">
             <Button
               variant={viewMode === 'grid' ? 'default' : 'outline'}
