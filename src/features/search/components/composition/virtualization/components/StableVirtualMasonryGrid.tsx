@@ -3,6 +3,8 @@ import { useMultiColumnVirtualization } from '../hooks/useMultiColumnVirtualizat
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll'
 import { VirtualItem } from './VirtualItem'
 import type { MasonryVirtualizerConfig } from '../types/virtualization'
+import { getQuickEstimate } from '../utils/heightEstimator'
+import type { SearchableItem } from '../../../model/SearchModel'
 
 export interface StableVirtualMasonryGridProps<T> {
   items: T[]
@@ -17,6 +19,7 @@ export interface StableVirtualMasonryGridProps<T> {
   overscan?: number
   estimatedItemHeight?: number
   showPerformanceMetrics?: boolean
+  useDynamicHeightEstimation?: boolean
 }
 
 export function StableVirtualMasonryGrid<T>({
@@ -32,16 +35,46 @@ export function StableVirtualMasonryGrid<T>({
   overscan = 5,
   estimatedItemHeight = 400,
   showPerformanceMetrics = false,
+  useDynamicHeightEstimation = true,
 }: StableVirtualMasonryGridProps<T>) {
+
+  // Calculate dynamic estimated height if enabled
+  const dynamicEstimatedHeight = useMemo(() => {
+    if (!useDynamicHeightEstimation || items.length === 0) {
+      return estimatedItemHeight
+    }
+    
+    // For SearchableItem types, use dynamic estimation
+    if (items[0] && typeof items[0] === 'object' && 'type' in items[0]) {
+      const searchableItems = items as unknown as SearchableItem[]
+      const heights = searchableItems.map(item => getQuickEstimate(item))
+      const averageHeight = heights.reduce((sum, height) => sum + height, 0) / heights.length
+      const result = Math.round(averageHeight)
+      
+      // Debug logging for height estimation
+      if (showPerformanceMetrics) {
+        console.log('[DynamicHeightEstimation]', {
+          itemCount: items.length,
+          heights: heights.slice(0, 5), // Show first 5 heights
+          averageHeight: result,
+          originalEstimate: estimatedItemHeight
+        })
+      }
+      
+      return result
+    }
+    
+    return estimatedItemHeight
+  }, [items, useDynamicHeightEstimation, estimatedItemHeight, showPerformanceMetrics])
 
   // Virtualization configuration (memoized to prevent unnecessary re-initialization)
   const config: MasonryVirtualizerConfig = useMemo(() => ({
     columns,
     gap,
     overscan,
-    estimatedItemHeight,
+    estimatedItemHeight: dynamicEstimatedHeight,
     containerWidth: 0, // Will be set by the hook
-  }), [columns, gap, overscan, estimatedItemHeight])
+  }), [columns, gap, overscan, dynamicEstimatedHeight])
 
   // Use the improved virtualization hook
   const {
@@ -136,6 +169,7 @@ export function StableVirtualMasonryGrid<T>({
           <>
             <div>Column Heights: {stats.columnHeights?.join(', ')}</div>
             <div>Height Measurements: {stats.heightMeasurements?.totalMeasurements || 0}</div>
+
             <div>Debug: First 5 visible items positions</div>
             {visibleItems.slice(0, 5).map(({ item, position, key }) => (
               <div key={key} className="text-xs">

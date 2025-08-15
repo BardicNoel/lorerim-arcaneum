@@ -1,6 +1,6 @@
 import { Button } from '@/shared/ui/ui/button'
 import { LayoutGrid, List } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import type { SearchableItem } from '../../model/SearchModel'
 import { SearchCard } from '../atomic/SearchCard'
 import { VirtualMasonryGrid } from './VirtualMasonryGrid'
@@ -19,14 +19,29 @@ export function SearchResultsGrid({
   onViewModeChange,
 }: SearchResultsGridProps) {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
+  
+  // Progressive loading state
+  const [displayedItems, setDisplayedItems] = useState<SearchableItem[]>([])
+  const [hasMore, setHasMore] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+  
+  const INITIAL_BATCH_SIZE = 50
+  const BATCH_SIZE = 50
+
+  // Initialize progressive loading when items change
+  useEffect(() => {
+    const initialItems = items.slice(0, INITIAL_BATCH_SIZE)
+    setDisplayedItems(initialItems)
+    setHasMore(items.length > INITIAL_BATCH_SIZE)
+  }, [items])
 
   // Auto-expand all items when in grid view
   useEffect(() => {
     if (viewMode === 'grid') {
-      const allItemIds = new Set(items.map(item => item.id))
+      const allItemIds = new Set(displayedItems.map(item => item.id))
       setExpandedItems(allItemIds)
     }
-  }, [viewMode, items])
+  }, [viewMode, displayedItems])
 
   // Handle accordion expansion
   const handleItemToggle = (itemId: string) => {
@@ -45,6 +60,23 @@ export function SearchResultsGrid({
 
     setExpandedItems(newExpanded)
   }
+
+  // Load more items function
+  const loadMore = useCallback(async () => {
+    if (isLoading || !hasMore) return
+
+    setIsLoading(true)
+    
+    // Simulate async loading (in real implementation, this might be an API call)
+    await new Promise(resolve => setTimeout(resolve, 100))
+    
+    const currentCount = displayedItems.length
+    const nextBatch = items.slice(currentCount, currentCount + BATCH_SIZE)
+    
+    setDisplayedItems(prev => [...prev, ...nextBatch])
+    setHasMore(currentCount + BATCH_SIZE < items.length)
+    setIsLoading(false)
+  }, [isLoading, hasMore, displayedItems.length, items])
 
   if (items.length === 0) {
     return (
@@ -84,25 +116,40 @@ export function SearchResultsGrid({
 
       {/* Results Section */}
       {viewMode === 'grid' ? (
-        <VirtualMasonryGrid
-          key={`grid-${items.length}-${items[0]?.id || 'empty'}`}
-          items={items}
-          keyExtractor={item => item.id}
-          renderItem={item => (
-            <SearchCard
-              item={item}
-              isExpanded={true}
-              onToggle={() => {}} // No-op in grid view
-              viewMode="grid"
-            />
+        <>
+          <VirtualMasonryGrid
+            key={`grid-${displayedItems.length}-${displayedItems[0]?.id || 'empty'}`}
+            items={displayedItems}
+            keyExtractor={item => item.id}
+            renderItem={item => (
+              <SearchCard
+                item={item}
+                isExpanded={true}
+                onToggle={() => {}} // No-op in grid view
+                viewMode="grid"
+              />
+            )}
+            loadMore={loadMore}
+            hasMore={hasMore}
+            columns={3}
+            gap={16}
+            maxColumnWidth={400}
+            useDynamicHeightEstimation={true}
+          />
+          
+          {/* Loading indicator for grid view */}
+          {isLoading && (
+            <div className="text-center py-4 mt-4">
+              <div className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                Loading more items... ({displayedItems.length}/{items.length})
+              </div>
+            </div>
           )}
-          columns={3}
-          gap={16}
-          maxColumnWidth={400}
-        />
+        </>
       ) : (
         <div className="space-y-2">
-          {items.map(item => {
+          {displayedItems.map(item => {
             const isExpanded = expandedItems.has(item.id)
 
             return (
@@ -115,6 +162,20 @@ export function SearchResultsGrid({
               />
             )
           })}
+          
+          {/* Load more button for list view */}
+          {hasMore && (
+            <div className="text-center py-4">
+              <Button
+                onClick={loadMore}
+                disabled={isLoading}
+                variant="outline"
+                size="sm"
+              >
+                {isLoading ? 'Loading...' : `Load More (${displayedItems.length}/${items.length})`}
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </div>
