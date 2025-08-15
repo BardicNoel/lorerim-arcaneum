@@ -85,6 +85,7 @@ export function SearchResultsGrid({
       {/* Results Section */}
       {viewMode === 'grid' ? (
         <VirtualMasonryGrid
+          key={`grid-${items.length}-${items[0]?.id || 'empty'}`}
           items={items}
           keyExtractor={item => item.id}
           renderItem={item => (

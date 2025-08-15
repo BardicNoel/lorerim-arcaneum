@@ -103,6 +103,18 @@ export function useMultiColumnVirtualization<T>(
     virtualizerRef.current?.updateConfig(newConfig)
   }, [])
 
+  // Reset virtualization state
+  const reset = useCallback(() => {
+    virtualizerRef.current?.reset()
+  }, [])
+
+  // Scroll to top
+  const scrollToTop = useCallback(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = 0
+    }
+  }, [])
+
   return {
     // Refs
     containerRef,
@@ -115,6 +127,8 @@ export function useMultiColumnVirtualization<T>(
     handleScroll,
     measureItemHeight,
     updateConfig,
+    reset,
+    scrollToTop,
     
     // Getters
     getVisibleItems,

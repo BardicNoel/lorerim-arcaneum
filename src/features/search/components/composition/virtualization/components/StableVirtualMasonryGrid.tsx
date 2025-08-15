@@ -53,10 +53,29 @@ export function StableVirtualMasonryGrid<T>({
     getVisibleItems,
     getTotalHeight,
     getPerformanceStats,
+    reset,
+    scrollToTop,
   } = useMultiColumnVirtualization(items, keyExtractor, config)
 
   // Get visible items for rendering
   const [visibleItems, setVisibleItems] = useState<Array<{ item: T; position: any; key: string }>>([])
+
+  // Track previous items to detect changes
+  const prevItemsRef = useRef<T[]>([])
+  
+  // Reset virtualization when items change (e.g., filters change)
+  useEffect(() => {
+    const itemsChanged = items.length !== prevItemsRef.current.length || 
+      items.some((item, index) => keyExtractor(item) !== keyExtractor(prevItemsRef.current[index]))
+    
+    if (itemsChanged && prevItemsRef.current.length > 0) {
+      console.log('[StableVirtualMasonryGrid] Items changed, resetting virtualization')
+      reset()
+      scrollToTop()
+    }
+    
+    prevItemsRef.current = items
+  }, [items, keyExtractor, reset, scrollToTop])
 
   // Update visible items when they change or when scroll position changes
   useEffect(() => {
@@ -129,6 +148,11 @@ export function StableVirtualMasonryGrid<T>({
     )
   }
 
+  // Create a key that changes when items change to force re-render
+  const containerKey = useMemo(() => {
+    return items.length > 0 ? `${items.length}-${keyExtractor(items[0])}` : 'empty'
+  }, [items, keyExtractor])
+
   if (items.length === 0) {
     return (
       <div className={`text-center py-12 ${className}`}>
@@ -137,8 +161,6 @@ export function StableVirtualMasonryGrid<T>({
     )
   }
 
-
-
   return (
     <div className={className}>
       {/* Performance Metrics */}
@@ -146,6 +168,7 @@ export function StableVirtualMasonryGrid<T>({
 
       {/* Virtual Scroll Container */}
       <div
+        key={containerKey}
         ref={containerRef}
         className="relative overflow-auto"
         style={{ 

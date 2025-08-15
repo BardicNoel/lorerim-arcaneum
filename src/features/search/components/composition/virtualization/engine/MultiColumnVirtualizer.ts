@@ -236,4 +236,11 @@ export class MultiColumnVirtualizer<T> {
     this.heightMeasurer.destroy()
     this.responsiveManager.destroy()
   }
+
+  public reset(): void {
+    // Clear all cached data and reinitialize
+    this.positionCache.clear()
+    this.heightMeasurer.clear()
+    this.initializeLayout()
+  }
 }
