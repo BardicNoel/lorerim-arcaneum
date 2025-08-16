@@ -1,4 +1,4 @@
-import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
+import { SkillAvatar } from '../atomic/SkillAvatar'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import React from 'react'
@@ -48,12 +48,11 @@ export function UnifiedSkillCard({
     >
       <CardHeader className="pb-3">
         <div className="flex items-center gap-3">
-          <EntityAvatar
-            entityName={skill.name}
-            entityType="skill"
-            size="2xl"
-            className="flex-shrink-0"
-          />
+                  <SkillAvatar
+          skillName={skill.name}
+          size="2xl"
+          className="flex-shrink-0"
+        />
           <div className="flex-1">
             <CardTitle className="text-lg font-bold">{skill.name}</CardTitle>
             <p className="text-sm text-muted-foreground line-clamp-2">

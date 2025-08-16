@@ -1,4 +1,4 @@
-import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
+import { SkillAvatar } from '../atomic/SkillAvatar'
 import { SelectionCardShell } from '@/shared/components/ui'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
@@ -64,9 +64,8 @@ export function SkillSelectionCard({ className }: SkillSelectionCardProps) {
                   key={skill.edid}
                   className="flex items-start gap-3 p-3 border rounded-lg bg-yellow-50/50 border-yellow-500 shadow-yellow-500/20"
                 >
-                  <EntityAvatar
-                    entityName={skill.name}
-                    entityType="skill"
+                  <SkillAvatar
+                    skillName={skill.name}
                     size="2xl"
                     className="flex-shrink-0"
                   />
@@ -121,9 +120,8 @@ export function SkillSelectionCard({ className }: SkillSelectionCardProps) {
                   key={skill.edid}
                   className="flex items-start gap-3 p-3 border rounded-lg bg-gray-50/50 border-gray-300 shadow-gray-300/20"
                 >
-                  <EntityAvatar
-                    entityName={skill.name}
-                    entityType="skill"
+                  <SkillAvatar
+                    skillName={skill.name}
                     size="2xl"
                     className="flex-shrink-0"
                   />

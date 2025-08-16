@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 import { GenericAccordionCard } from '@/shared/components/generic'
-import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
+import { SkillAvatar } from '../atomic/SkillAvatar'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
@@ -111,9 +111,8 @@ export function SkillAccordion({
               onSelect?.()
             }}
           >
-            <EntityAvatar
-              entityName={item.name}
-              entityType="skill"
+            <SkillAvatar
+              skillName={item.name}
               size="sm"
               className="flex-shrink-0"
             />

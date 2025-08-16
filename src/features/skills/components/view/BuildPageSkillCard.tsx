@@ -1,4 +1,4 @@
-import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
+import { SkillAvatar } from '../atomic/SkillAvatar'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { SelectionCardShell } from '@/shared/components/ui'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
@@ -188,9 +188,8 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
           <div className="flex items-start justify-between">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-2">
-                <EntityAvatar
-                  entityName={skill.name}
-                  entityType="skill"
+                <SkillAvatar
+                  skillName={skill.name}
                   size="2xl"
                   className="flex-shrink-0"
                 />

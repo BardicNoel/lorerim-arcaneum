@@ -1,5 +1,5 @@
 import { Z_INDEX } from '@/lib/constants'
-import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
+import { SkillAvatar } from '../atomic/SkillAvatar'
 import { AutocompleteSearch } from '@/shared/components/playerCreation/AutocompleteSearch'
 import type {
   SearchCategory,
@@ -120,12 +120,11 @@ export function PerkTreeView({
                 <div className="flex-1">
                   <div className="flex items-center gap-3">
                     {skillName && (
-                      <EntityAvatar
-                        entityName={skillName}
-                        entityType="skill"
-                        size="lg"
-                        className="flex-shrink-0"
-                      />
+                              <SkillAvatar
+          skillName={skillName}
+          size="lg"
+          className="flex-shrink-0"
+        />
                     )}
                     <div>
                       <DrawerTitle className="text-lg font-semibold">

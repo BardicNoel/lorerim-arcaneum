@@ -6,6 +6,7 @@ export { SkillPerkCountBadge } from './SkillPerkCountBadge'
 export { SkillLevelBadge } from './SkillLevelBadge'
 export { LoadingView } from './LoadingView'
 export { ErrorView } from './ErrorView'
+export { SkillAvatar } from './SkillAvatar'
 
 // Perk-related atomic components
 export { PerkTreeHeader } from './PerkTreeHeader' 
