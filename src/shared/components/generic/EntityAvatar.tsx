@@ -1,17 +1,5 @@
 import { cn } from '@/lib/utils'
-import { getDataUrl } from '@/shared/utils/baseUrl'
 import React from 'react'
-
-/**
- * Entity type definitions for avatar mapping
- */
-export type EntityType =
-  | 'race'
-  | 'religion'
-  | 'trait'
-  | 'destiny'
-  | 'birthsign'
-  | 'skill'
 
 /**
  * Avatar size options
@@ -19,82 +7,24 @@ export type EntityType =
 export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
 
 /**
- * Centralized avatar management for all entity types.
- * Provides consistent avatar display with fallback behavior.
+ * Pure presentation component for entity avatars.
+ * Handles styling, sizing, and fallback behavior.
+ * Feature layers are responsible for providing the correct image source.
  *
- * @param entityName - The name of the entity
- * @param entityType - The type of entity (race, religion, trait, destiny)
+ * @param imgSrc - The source URL for the avatar image
+ * @param alt - Alt text for the image
  * @param size - The size of the avatar
- * @param className - Additional CSS classes
+ * @param className - Additional CSS classes for the container
+ * @param imageClassName - Additional CSS classes for the image
+ * @param showBorder - Whether to show a border around the avatar (useful for skills)
  */
 interface EntityAvatarProps {
-  entityName: string
-  entityType: EntityType
+  imgSrc?: string
+  alt: string
   size?: AvatarSize
   className?: string
   imageClassName?: string
-}
-
-// Avatar file mapping for different entity types
-const entityAvatarMaps: Record<EntityType, Record<string, string>> = {
-  race: {
-    Altmer: 'altmer.svg',
-    Argonian: 'argonian.svg',
-    Bosmer: 'woodelf.svg',
-    Breton: 'breton.svg',
-    Dunmer: 'dunmer.svg',
-    Imperial: 'imperial.svg',
-    Khajiit: 'khajit.svg',
-    Nord: 'nord.svg',
-    Orsimer: 'orc.svg',
-    Redguard: 'redguard.svg',
-  },
-  religion: {
-    // Add religion avatars as they become available
-  },
-  trait: {
-    // Add trait avatars as they become available
-  },
-  destiny: {
-    // Add destiny avatars as they become available
-  },
-  birthsign: {
-    // Case-sensitive filenames must match assets in public/assets/sign-avatar/
-    Warrior: 'Warrior.svg',
-    Lady: 'Lady.svg',
-    Lord: 'Lord.svg',
-    Steed: 'Steed.svg',
-    Mage: 'Mage.svg',
-    Apprentice: 'Apprentice.svg',
-    Atronach: 'Atronach.svg',
-    Ritual: 'Ritual.svg',
-    Thief: 'Thief.svg',
-    Lover: 'Lover.svg',
-    Shadow: 'Shadow.svg',
-    Tower: 'Tower.svg',
-    Serpent: 'Serpent.svg',
-  },
-  skill: {
-    // Case-sensitive filenames must match assets in public/assets/skills/
-    Alchemy: 'alchemy.svg',
-    Alteration: 'alteration.svg',
-    Block: 'block.svg',
-    Conjuration: 'conjuration.svg',
-    Destruction: 'destruction.svg',
-    Enchanting: 'enchanting.svg',
-    Evasion: 'evasion.svg',
-    Finesse: 'finesse.svg',
-    'Heavy Armor': 'heavyarmor.svg',
-    Illusion: 'illusion.svg',
-    Marksman: 'marksman.svg',
-    'One-handed': 'one-handed.svg',
-    Restoration: 'restoration.svg',
-    Smithing: 'smithing.svg',
-    Sneak: 'sneak.svg',
-    Speech: 'speech.svg',
-    'Two-handed': 'two-handed.svg',
-    Wayfarer: 'wayfarer.svg',
-  },
+  showBorder?: boolean
 }
 
 // Size classes for consistent sizing
@@ -120,18 +50,17 @@ const textSizeClasses: Record<AvatarSize, string> = {
 }
 
 export function EntityAvatar({
-  entityName,
-  entityType,
+  imgSrc,
+  alt,
   size = 'md',
   className,
   imageClassName,
+  showBorder = false,
 }: EntityAvatarProps) {
-  const avatarMap = entityAvatarMaps[entityType]
-  const avatarFileName = avatarMap[entityName]
   const [imageError, setImageError] = React.useState(false)
 
   // Fallback to first letter avatar if no image or error
-  if (!avatarFileName || imageError) {
+  if (!imgSrc || imageError) {
     return (
       <div
         className={cn(
@@ -141,9 +70,7 @@ export function EntityAvatar({
           className
         )}
       >
-        <span className={cn(textSizeClasses[size])}>
-          {entityName.charAt(0)}
-        </span>
+        <span className={cn(textSizeClasses[size])}>{alt.charAt(0)}</span>
       </div>
     )
   }
@@ -161,16 +88,14 @@ export function EntityAvatar({
         className
       )}
     >
-      {entityType === 'skill' && (
+      {showBorder && (
         <div className="absolute inset-0 rounded-full border-2 border-black dark:border-white pointer-events-none" />
       )}
       <img
-        src={getDataUrl(
-          `assets/${entityType === 'birthsign' ? 'sign-avatar' : entityType === 'skill' ? 'skills' : `${entityType}-avatar`}/${avatarFileName}`
-        )}
-        alt={`${entityName} avatar`}
+        src={imgSrc}
+        alt={alt}
         className={cn(
-          entityType === 'skill'
+          showBorder
             ? 'w-3/4 h-3/4 object-contain'
             : 'w-full h-full object-contain',
           imageClassName

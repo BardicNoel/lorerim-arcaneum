@@ -1,8 +1,8 @@
 import { cn } from '@/lib/utils'
-import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { RotateCcw, X } from 'lucide-react'
+import { SkillAvatar } from './SkillAvatar'
 
 // Pure presentational component for perk tree header
 interface PerkTreeHeaderProps {
@@ -32,9 +32,8 @@ export function PerkTreeHeader({
       )}
     >
       <div className="flex items-center gap-4">
-        <EntityAvatar
-          entityName={skillName}
-          entityType="skill"
+        <SkillAvatar
+          skillName={skillName}
           size="lg"
           className="flex-shrink-0"
         />

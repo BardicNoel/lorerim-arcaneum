@@ -1,4 +1,5 @@
 import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
+import { getDataUrl } from '@/shared/utils/baseUrl'
 
 interface ReligionAvatarProps {
   religionName: string
@@ -6,19 +7,30 @@ interface ReligionAvatarProps {
   className?: string
 }
 
+// Religion avatar file mapping
+const religionAvatarMap: Record<string, string> = {
+  // Add religion avatars as they become available
+  // Example: 'Akatosh': 'akatosh.svg',
+}
+
 /**
  * Religion-specific avatar component that uses the generic EntityAvatar.
- * This maintains consistency with other entity avatars while providing religion-specific functionality.
+ * Handles religion-specific image source logic.
  */
 export function ReligionAvatar({
   religionName,
   size = '2xl',
   className,
 }: ReligionAvatarProps) {
+  const avatarFileName = religionAvatarMap[religionName]
+  const imgSrc = avatarFileName 
+    ? getDataUrl(`assets/religion-avatar/${avatarFileName}`)
+    : undefined
+
   return (
     <EntityAvatar
-      entityName={religionName}
-      entityType="religion"
+      imgSrc={imgSrc}
+      alt={religionName}
       size={size}
       className={className}
     />

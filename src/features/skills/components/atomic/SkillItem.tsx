@@ -1,10 +1,10 @@
 import { cn } from '@/lib/utils'
-import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
 import { Button } from '@/shared/ui/ui/button'
 import {
   SkillAssignmentBadge,
   SkillCategoryBadge,
   SkillPerkCountBadge,
+  SkillAvatar,
 } from './index'
 import { SkillLevelBadge } from './SkillLevelBadge'
 
@@ -58,9 +58,8 @@ export function SkillItem({
     >
       <div className="flex justify-between items-start mb-2">
         <div className="flex items-center gap-3">
-          <EntityAvatar
-            entityName={name}
-            entityType="skill"
+          <SkillAvatar
+            skillName={name}
             size="2xl"
             className="flex-shrink-0"
           />

@@ -1,6 +1,6 @@
 import type { Skill } from '@/features/skills/types'
 import { cn } from '@/lib/utils'
-import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
+import { SkillAvatar } from '../atomic/SkillAvatar'
 import {
   SelectionCard,
   type SelectionOption,
@@ -135,9 +135,8 @@ export function SkillCard({
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <EntityAvatar
-                entityName={skill.name}
-                entityType="skill"
+              <SkillAvatar
+                skillName={skill.name}
                 size="2xl"
                 className="flex-shrink-0"
               />
