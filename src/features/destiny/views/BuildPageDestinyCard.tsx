@@ -176,7 +176,7 @@ const BuildPageDestinyCard: React.FC<BuildPageDestinyCardProps> = ({
                     ? 'Choose Your Starting Point'
                     : 'Continue Your Path'}
                 </h4>
-                <ScrollArea className="h-[200px]">
+                <ScrollArea className="h-[400px]">
                   <div className="p-2">
                     <DestinyPossiblePathsList
                       possiblePaths={possiblePaths}
