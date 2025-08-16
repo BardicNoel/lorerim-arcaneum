@@ -1,6 +1,7 @@
-import React from 'react'
+import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
+import React from 'react'
 import type { DetailSkill } from '../../adapters'
 import { SkillLevelBadge } from '../atomic/SkillLevelBadge'
 
@@ -46,24 +47,34 @@ export function UnifiedSkillCard({
       onClick={handleCardClick}
     >
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-bold">{skill.name}</CardTitle>
-        <p className="text-sm text-muted-foreground line-clamp-2">
-          {skill.description}
-        </p>
+        <div className="flex items-center gap-3">
+          <EntityAvatar
+            entityName={skill.name}
+            entityType="skill"
+            size="2xl"
+            className="flex-shrink-0"
+          />
+          <div className="flex-1">
+            <CardTitle className="text-lg font-bold">{skill.name}</CardTitle>
+            <p className="text-sm text-muted-foreground line-clamp-2">
+              {skill.description}
+            </p>
+          </div>
+        </div>
       </CardHeader>
 
       <CardContent className="pt-0 space-y-3">
         {/* Skill Level and Perks Count */}
         <div className="flex items-center justify-between text-sm text-muted-foreground">
           {/* Skill Level Badge */}
-          {skill.level > 0 && (
-            <SkillLevelBadge level={skill.level} />
-          )}
-          
+          {skill.level > 0 && <SkillLevelBadge level={skill.level} />}
+
           {/* Perks Count */}
           {skill.totalPerks > 0 && (
             <div className="flex items-center gap-1">
-              <span>⭐ {skill.selectedPerksCount}/{skill.totalPerks} Perks</span>
+              <span>
+                ⭐ {skill.selectedPerksCount}/{skill.totalPerks} Perks
+              </span>
             </div>
           )}
         </div>
@@ -99,4 +110,4 @@ export function UnifiedSkillCard({
       </CardContent>
     </Card>
   )
-} 
+}

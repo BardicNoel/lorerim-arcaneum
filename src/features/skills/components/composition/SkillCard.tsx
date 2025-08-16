@@ -1,19 +1,10 @@
 import type { Skill } from '@/features/skills/types'
 import { cn } from '@/lib/utils'
+import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
 import {
   SelectionCard,
   type SelectionOption,
 } from '@/shared/components/ui/SelectionCard'
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/shared/ui/ui/drawer'
-import { ToggleGroup, ToggleGroupItem } from '@/shared/ui/ui/toggle-group'
 
 export type SkillLevel = 'major' | 'minor' | 'none'
 
@@ -143,20 +134,25 @@ export function SkillCard({
       <div className="space-y-2">
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <h3
-              className={cn(
-                'font-semibold text-sm leading-tight',
-                theming.title
-              )}
-            >
-              {skill.name}
-            </h3>
+            <div className="flex items-center gap-2 mb-1">
+              <EntityAvatar
+                entityName={skill.name}
+                entityType="skill"
+                size="2xl"
+                className="flex-shrink-0"
+              />
+              <h3
+                className={cn(
+                  'font-semibold text-sm leading-tight',
+                  theming.title
+                )}
+              >
+                {skill.name}
+              </h3>
+            </div>
             {!compact && (
               <p
-                className={cn(
-                  'text-xs mt-1 line-clamp-2',
-                  theming.description
-                )}
+                className={cn('text-xs mt-1 line-clamp-2', theming.description)}
               >
                 {skill.description}
               </p>
@@ -179,4 +175,4 @@ export function SkillCard({
       </div>
     </SelectionCard>
   )
-} 
+}

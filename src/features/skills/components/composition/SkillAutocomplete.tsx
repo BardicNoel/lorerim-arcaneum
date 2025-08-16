@@ -2,6 +2,7 @@ import {
   GenericAutocomplete,
   type AutocompleteOption,
 } from '@/shared/components/generic'
+import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { Badge } from '@/shared/ui/ui/badge'
 import { useMemo, useState } from 'react'
@@ -74,6 +75,12 @@ export function SkillAutocomplete({
   // Custom renderer for skill options
   const renderSkillOption = (option: AutocompleteOption, isActive: boolean) => (
     <div className="flex items-start gap-3">
+      <EntityAvatar
+        entityName={option.label}
+        entityType="skill"
+        size="sm"
+        className="flex-shrink-0"
+      />
       <div className="flex-1 min-w-0">
         <div className="font-medium truncate">{option.label}</div>
         <div className="flex items-center gap-2 mt-1">

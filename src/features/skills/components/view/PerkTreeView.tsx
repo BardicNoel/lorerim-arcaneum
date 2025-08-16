@@ -1,6 +1,5 @@
-import { PerkTreeCanvasII } from './PerkTreeCanvasII'
-import type { PerkTree } from '../../types'
 import { Z_INDEX } from '@/lib/constants'
+import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
 import { AutocompleteSearch } from '@/shared/components/playerCreation/AutocompleteSearch'
 import type {
   SearchCategory,
@@ -21,6 +20,8 @@ import { useCallback, useMemo } from 'react'
 import * as DrawerPrimitive from 'vaul'
 import type { DetailSkill } from '../../adapters'
 import { usePerkData } from '../../adapters'
+import type { PerkTree } from '../../types'
+import { PerkTreeCanvasII } from './PerkTreeCanvasII'
 
 export interface PerkTreeViewProps {
   selectedSkill: string | null
@@ -117,12 +118,24 @@ export function PerkTreeView({
             <DrawerHeader className="border-b">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <DrawerTitle className="text-lg font-semibold">
-                    {skillName ? `${skillName} Perk Tree` : 'Perk Tree'}
-                  </DrawerTitle>
-                  <DrawerDescription>
-                    Select perks to add to your character build
-                  </DrawerDescription>
+                  <div className="flex items-center gap-3">
+                    {skillName && (
+                      <EntityAvatar
+                        entityName={skillName}
+                        entityType="skill"
+                        size="lg"
+                        className="flex-shrink-0"
+                      />
+                    )}
+                    <div>
+                      <DrawerTitle className="text-lg font-semibold">
+                        {skillName ? `${skillName} Perk Tree` : 'Perk Tree'}
+                      </DrawerTitle>
+                      <DrawerDescription>
+                        Select perks to add to your character build
+                      </DrawerDescription>
+                    </div>
+                  </div>
                 </div>
                 <Button
                   variant="ghost"
@@ -186,4 +199,4 @@ export function PerkTreeView({
       </DrawerPortal>
     </Drawer>
   )
-} 
+}
