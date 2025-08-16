@@ -111,18 +111,6 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
     metaTags: skill.metaTags || [],
   })
 
-  // Get skills that are assigned but don't have perks yet
-  const assignedSkillsWithoutPerks = useMemo(() => {
-    const majorSkillIds = selectedMajorSkills.map(s => s.id)
-    const minorSkillIds = selectedMinorSkills.map(s => s.id)
-    const allAssignedIds = [...majorSkillIds, ...minorSkillIds]
-
-    return allSkills.filter(skill => {
-      const selectedPerks = getSkillPerks(skill.id)
-      return allAssignedIds.includes(skill.id) && selectedPerks.length === 0
-    })
-  }, [allSkills, selectedMajorSkills, selectedMinorSkills, getSkillPerks])
-
   // Transform skills for the perk tree drawer
   const drawerSkills: DetailSkill[] = allSkills.map(skill => {
     const selectedPerks = getSkillPerks(skill.id)
@@ -146,10 +134,7 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
   const { selectedPerkTree, loading: perkLoading } =
     usePerkData(selectedSkillId)
 
-  const renderSkillCard = (
-    skill: any,
-    type: 'major' | 'minor' | 'perked' | 'assigned'
-  ) => {
+  const renderSkillCard = (skill: any, type: 'major' | 'minor' | 'perked') => {
     const skillLevel = getSkillLevel(skill.id || skill.edid)
     const selectedPerks = getSkillPerks(skill.id || skill.edid)
     const totalPerks = skill.totalPerks || 0
@@ -171,10 +156,6 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
       case 'perked':
         cardClasses += 'bg-blue-50/50 border-blue-500 shadow-blue-500/20'
         badgeClasses += 'bg-blue-100 text-blue-800 border-blue-300'
-        break
-      case 'assigned':
-        cardClasses += 'bg-orange-50/50 border-orange-500 shadow-orange-500/20'
-        badgeClasses += 'bg-orange-100 text-orange-800 border-orange-300'
         break
     }
 
@@ -386,20 +367,6 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
               </div>
             )}
           </div>
-
-          {/* Assigned Skills Without Perks */}
-          {assignedSkillsWithoutPerks.length > 0 && (
-            <div className="space-y-4">
-              <h4 className="text-md font-medium text-foreground">
-                Assigned Skills (No Perks)
-              </h4>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                {assignedSkillsWithoutPerks.map(skill =>
-                  renderSkillCard(skill, 'assigned')
-                )}
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Instructions */}
