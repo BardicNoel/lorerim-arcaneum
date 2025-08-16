@@ -25,19 +25,22 @@ export class DerivedStatsCalculator {
     build: BuildState,
     dataSources: DataSources
   ): BaseAttributes {
-    const base = { health: 100, stamina: 100, magicka: 100 }
+    // Start with race starting stats (or defaults if no race selected)
+    let base = { health: 100, stamina: 100, magicka: 100 }
 
-    // Add race starting stats
+    // Override with race starting stats
     if (build.race && dataSources.races) {
       const race = dataSources.races.find((r: any) => r.edid === build.race)
       if (race?.startingStats) {
-        base.health += race.startingStats.health || 0
-        base.stamina += race.startingStats.stamina || 0
-        base.magicka += race.startingStats.magicka || 0
+        base = {
+          health: race.startingStats.health || 100,
+          stamina: race.startingStats.stamina || 100,
+          magicka: race.startingStats.magicka || 100,
+        }
       }
     }
 
-    // Add attribute assignments (5 points per level)
+    // Add attribute assignments (points from character level)
     base.health += build.attributeAssignments.health || 0
     base.stamina += build.attributeAssignments.stamina || 0
     base.magicka += build.attributeAssignments.magicka || 0
