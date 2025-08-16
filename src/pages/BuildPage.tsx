@@ -22,7 +22,6 @@ import { useTraitLimits } from '@/features/build/hooks'
 import { BuildPageShell } from '@/shared/components/playerCreation'
 // NEW: Import attribute assignment card
 import { AttributeAssignmentCard } from '@/features/attributes'
-import { DerivedStatsCard } from '@/features/derived-stats'
 
 export function BuildPage() {
   const { build, setBuildName, setBuildNotes, resetBuild } = useCharacterBuild()
@@ -71,11 +70,6 @@ export function BuildPage() {
     {
       id: 'attributes',
       component: <AttributeAssignmentCard />,
-      size: 'full',
-    },
-    {
-      id: 'derived-stats',
-      component: <DerivedStatsCard />,
       size: 'full',
     },
     {

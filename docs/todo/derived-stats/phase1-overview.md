@@ -15,24 +15,25 @@ Phase 1 implements the core derived stats system with basic data sources (race +
 
 ### Task Matrix
 
-| Task                                                   | Description                 | Status          | Duration | Dependencies       | Files Created                               | Notes                     |
-| ------------------------------------------------------ | --------------------------- | --------------- | -------- | ------------------ | ------------------------------------------- | ------------------------- |
-| [Task 01](./phase1-task-01-types-and-interfaces.md)    | Core Types and Interfaces   | ✅ **COMPLETE** | 30 min   | None               | `src/features/derived-stats/types/index.ts` | Foundation types created  |
-| [Task 02](./phase1-task-02-configuration.md)           | Derived Stats Configuration | ✅ **COMPLETE** | 45 min   | Task 01            | `src/features/derived-stats/config/`        | 11 stat definitions       |
-| [Task 03](./phase1-task-03-calculation-engine.md)      | Calculation Engine          | ✅ **COMPLETE** | 1 hour   | Tasks 01-02        | `src/features/derived-stats/model/`         | Math formulas             |
-| [Task 04](./phase1-task-04-calculation-hook.md)        | React Calculation Hook      | ✅ **COMPLETE** | 45 min   | Tasks 01-03        | `src/features/derived-stats/adapters/`      | Real-time updates         |
-| [Task 05](./phase1-task-05-base-attributes-display.md) | Base Attributes Display     | ✅ **COMPLETE** | 30 min   | Task 01            | `src/features/derived-stats/views/`         | Health/Stamina/Magicka UI |
-| [Task 06](./phase1-task-06-derived-stats-table.md)     | Derived Stats Table         | ✅ **COMPLETE** | 45 min   | Tasks 01, 05       | `src/features/derived-stats/views/`         | 11 stats table            |
-| [Task 07](./phase1-task-07-main-card.md)               | Main Derived Stats Card     | ✅ **COMPLETE** | 30 min   | Tasks 01, 04-06    | `src/features/derived-stats/views/`         | Combined component        |
-| [Task 08](./phase1-task-08-feature-integration.md)     | Feature Integration         | ✅ **COMPLETE** | 30 min   | All previous tasks | `src/features/derived-stats/index.ts`       | Build page integration    |
+| Task                                                   | Description                 | Status          | Duration | Dependencies       | Files Created                               | Notes                          |
+| ------------------------------------------------------ | --------------------------- | --------------- | -------- | ------------------ | ------------------------------------------- | ------------------------------ |
+| [Task 01](./phase1-task-01-types-and-interfaces.md)    | Core Types and Interfaces   | ✅ **COMPLETE** | 30 min   | None               | `src/features/derived-stats/types/index.ts` | Foundation types created       |
+| [Task 02](./phase1-task-02-configuration.md)           | Derived Stats Configuration | ✅ **COMPLETE** | 45 min   | Task 01            | `src/features/derived-stats/config/`        | 11 stat definitions            |
+| [Task 03](./phase1-task-03-calculation-engine.md)      | Calculation Engine          | ✅ **COMPLETE** | 1 hour   | Tasks 01-02        | `src/features/derived-stats/model/`         | Math formulas                  |
+| [Task 04](./phase1-task-04-calculation-hook.md)        | React Calculation Hook      | ✅ **COMPLETE** | 45 min   | Tasks 01-03        | `src/features/derived-stats/adapters/`      | Real-time updates              |
+| [Task 05](./phase1-task-05-base-attributes-display.md) | Base Attributes Display     | ✅ **COMPLETE** | 30 min   | Task 01            | `src/features/derived-stats/views/`         | Health/Stamina/Magicka UI      |
+| [Task 06](./phase1-task-06-derived-stats-table.md)     | Derived Stats Table         | ✅ **COMPLETE** | 45 min   | Tasks 01, 05       | `src/features/derived-stats/views/`         | 11 stats table                 |
+| [Task 07](./phase1-task-07-main-card.md)               | Main Derived Stats Card     | ✅ **COMPLETE** | 30 min   | Tasks 01, 04-06    | `src/features/derived-stats/views/`         | Combined component             |
+| [Task 08](./phase1-task-08-feature-integration.md)     | Feature Integration         | ✅ **COMPLETE** | 30 min   | All previous tasks | `src/features/derived-stats/index.ts`       | Build page integration         |
+| [Task 09](./phase1-task-09-grid-integration.md)        | Grid Layout Integration     | ✅ **COMPLETE** | 30 min   | Task 08            | Modified `AttributeAssignmentCard.tsx`      | Integrated into attribute card |
 
-**Total Phase 1 Time**: ~4.5 hours
+**Total Phase 1 Time**: ~5 hours
 
 ### Progress Summary
 
-- **Completed**: 8/8 tasks (100%)
-- **In Progress**: 0/8 tasks (0%)
-- **Pending**: 0/8 tasks (0%)
+- **Completed**: 9/9 tasks (100%)
+- **In Progress**: 0/9 tasks (0%)
+- **Pending**: 0/9 tasks (0%)
 - **Estimated Time Remaining**: 0 minutes
 
 🎉 **PHASE 1 COMPLETE!**
