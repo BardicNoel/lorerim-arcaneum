@@ -1,5 +1,6 @@
 import { PerkTreeCanvasII } from '@/features/skills/components/view/PerkTreeCanvasII'
 import { Z_INDEX } from '@/lib/constants'
+import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
 import { AutocompleteSearch } from '@/shared/components/playerCreation/AutocompleteSearch'
 import type {
   SearchCategory,
@@ -149,19 +150,29 @@ export function SkillPerkTreeDrawer({
                     placeholder="Search skills..."
                   />
                 </div>
-                <div>
-                  <DrawerTitle className="text-xl">
-                    {skillName || perkTree?.treeName || 'Skill Perks'}
-                  </DrawerTitle>
-                  <DrawerDescription className="flex items-center gap-2">
-                    <span>{selectedPerks.length} perks selected</span>
-                    {skills.find(s => s.id === selectedSkill)?.level && (
-                      <span className="text-blue-600 font-medium">
-                        • Min: Level{' '}
-                        {skills.find(s => s.id === selectedSkill)?.level}
-                      </span>
-                    )}
-                  </DrawerDescription>
+                <div className="flex items-center gap-3">
+                  {skillName && (
+                    <EntityAvatar
+                      entityName={skillName}
+                      entityType="skill"
+                      size="lg"
+                      className="flex-shrink-0"
+                    />
+                  )}
+                  <div>
+                    <DrawerTitle className="text-xl">
+                      {skillName || perkTree?.treeName || 'Skill Perks'}
+                    </DrawerTitle>
+                    <DrawerDescription className="flex items-center gap-2">
+                      <span>{selectedPerks.length} perks selected</span>
+                      {skills.find(s => s.id === selectedSkill)?.level && (
+                        <span className="text-blue-600 font-medium">
+                          • Min: Level{' '}
+                          {skills.find(s => s.id === selectedSkill)?.level}
+                        </span>
+                      )}
+                    </DrawerDescription>
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-2">

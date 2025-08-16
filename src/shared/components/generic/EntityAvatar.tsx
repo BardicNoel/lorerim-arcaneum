@@ -5,7 +5,13 @@ import React from 'react'
 /**
  * Entity type definitions for avatar mapping
  */
-export type EntityType = 'race' | 'religion' | 'trait' | 'destiny' | 'birthsign'
+export type EntityType =
+  | 'race'
+  | 'religion'
+  | 'trait'
+  | 'destiny'
+  | 'birthsign'
+  | 'skill'
 
 /**
  * Avatar size options
@@ -68,6 +74,27 @@ const entityAvatarMaps: Record<EntityType, Record<string, string>> = {
     Tower: 'Tower.svg',
     Serpent: 'Serpent.svg',
   },
+  skill: {
+    // Case-sensitive filenames must match assets in public/assets/skills/
+    Alchemy: 'alchemy.svg',
+    Alteration: 'alteration.svg',
+    Block: 'block.svg',
+    Conjuration: 'conjuration.svg',
+    Destruction: 'destruction.svg',
+    Enchanting: 'enchanting.svg',
+    Evasion: 'evasion.svg',
+    Finesse: 'finesse.svg',
+    'Heavy Armor': 'heavyarmor.svg',
+    Illusion: 'illusion.svg',
+    Marksman: 'marksman.svg',
+    'One-handed': 'one-handed.svg',
+    Restoration: 'restoration.svg',
+    Smithing: 'smithing.svg',
+    Sneak: 'sneak.svg',
+    Speech: 'speech.svg',
+    'Two-handed': 'two-handed.svg',
+    Wayfarer: 'wayfarer.svg',
+  },
 }
 
 // Size classes for consistent sizing
@@ -128,18 +155,26 @@ export function EntityAvatar({
   return (
     <div
       className={cn(
-        'rounded-full overflow-hidden flex items-center justify-center',
+        'rounded-full flex items-center justify-center relative',
         containerBgClass,
         sizeClasses[size],
         className
       )}
     >
+      {entityType === 'skill' && (
+        <div className="absolute inset-0 rounded-full border-2 border-black dark:border-white pointer-events-none" />
+      )}
       <img
         src={getDataUrl(
-          `assets/${entityType === 'birthsign' ? 'sign-avatar' : `${entityType}-avatar`}/${avatarFileName}`
+          `assets/${entityType === 'birthsign' ? 'sign-avatar' : entityType === 'skill' ? 'skills' : `${entityType}-avatar`}/${avatarFileName}`
         )}
         alt={`${entityName} avatar`}
-        className={cn('w-full h-full object-contain', imageClassName)}
+        className={cn(
+          entityType === 'skill'
+            ? 'w-3/4 h-3/4 object-contain'
+            : 'w-full h-full object-contain',
+          imageClassName
+        )}
         onError={() => setImageError(true)}
         loading="lazy"
       />

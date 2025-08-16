@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils'
 import { GenericAccordionCard } from '@/shared/components/generic'
+import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
@@ -110,6 +111,12 @@ export function SkillAccordion({
               onSelect?.()
             }}
           >
+            <EntityAvatar
+              entityName={item.name}
+              entityType="skill"
+              size="sm"
+              className="flex-shrink-0"
+            />
             <span className="text-lg">{categoryIcon}</span>
             <H3 className="text-base font-semibold">{item.name}</H3>
             <AddToBuildSwitchSimple

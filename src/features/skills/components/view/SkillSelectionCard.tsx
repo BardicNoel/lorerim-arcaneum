@@ -1,27 +1,25 @@
-import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import { EntityAvatar } from '@/shared/components/generic/EntityAvatar'
 import { SelectionCardShell } from '@/shared/components/ui'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useSkillsQuickSelector } from '../../adapters'
-import type { QuickSelectorSkill } from '../../adapters'
 import { SkillAutocomplete } from '../composition/SkillAutocomplete'
-import { FormattedText } from '@/shared/components/generic/FormattedText'
 
 interface SkillSelectionCardProps {
   className?: string
 }
 
 export function SkillSelectionCard({ className }: SkillSelectionCardProps) {
-  const { 
-    selectedMajorSkills, 
-    selectedMinorSkills, 
+  const {
+    selectedMajorSkills,
+    selectedMinorSkills,
     availableSkills,
     handleMajorSkillSelect,
     handleMinorSkillSelect,
     handleMajorSkillRemove,
-    handleMinorSkillRemove
+    handleMinorSkillRemove,
   } = useSkillsQuickSelector()
   const navigate = useNavigate()
 
@@ -61,11 +59,17 @@ export function SkillSelectionCard({ className }: SkillSelectionCardProps) {
           {/* Major Skills List */}
           {selectedMajorSkills.length > 0 && (
             <div className="space-y-2">
-              {selectedMajorSkills.map((skill) => (
+              {selectedMajorSkills.map(skill => (
                 <div
                   key={skill.edid}
                   className="flex items-start gap-3 p-3 border rounded-lg bg-yellow-50/50 border-yellow-500 shadow-yellow-500/20"
                 >
+                  <EntityAvatar
+                    entityName={skill.name}
+                    entityType="skill"
+                    size="2xl"
+                    className="flex-shrink-0"
+                  />
                   <div className="flex-1 min-w-0">
                     <h5 className="font-medium text-sm text-foreground">
                       {skill.name}
@@ -112,11 +116,17 @@ export function SkillSelectionCard({ className }: SkillSelectionCardProps) {
           {/* Minor Skills List */}
           {selectedMinorSkills.length > 0 && (
             <div className="space-y-2">
-              {selectedMinorSkills.map((skill) => (
+              {selectedMinorSkills.map(skill => (
                 <div
                   key={skill.edid}
                   className="flex items-start gap-3 p-3 border rounded-lg bg-gray-50/50 border-gray-300 shadow-gray-300/20"
                 >
+                  <EntityAvatar
+                    entityName={skill.name}
+                    entityType="skill"
+                    size="2xl"
+                    className="flex-shrink-0"
+                  />
                   <div className="flex-1 min-w-0">
                     <h5 className="font-medium text-sm text-foreground">
                       {skill.name}
@@ -141,4 +151,4 @@ export function SkillSelectionCard({ className }: SkillSelectionCardProps) {
       </div>
     </SelectionCardShell>
   )
-} 
+}
