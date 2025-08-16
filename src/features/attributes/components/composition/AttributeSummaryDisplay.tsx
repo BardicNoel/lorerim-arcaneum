@@ -82,37 +82,6 @@ export function AttributeSummaryDisplay({
       <H5 className="text-lg font-medium text-foreground">
         Attribute Assignments
       </H5>
-
-      {selectedRace && selectedRace.startingStats && (
-        <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-          <div className="text-sm text-blue-800 dark:text-blue-200">
-            <p className="font-medium mb-1">
-              Base Stats from {selectedRace.name}:
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-              <div className="text-center">
-                <div className="font-medium">Health</div>
-                <div className="text-muted-foreground">
-                  {selectedRace.startingStats.health}
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="font-medium">Stamina</div>
-                <div className="text-muted-foreground">
-                  {selectedRace.startingStats.stamina}
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="font-medium">Magicka</div>
-                <div className="text-muted-foreground">
-                  {selectedRace.startingStats.magicka}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="space-y-3">
         <AttributeStatBar
           value={displayData.health.total}
