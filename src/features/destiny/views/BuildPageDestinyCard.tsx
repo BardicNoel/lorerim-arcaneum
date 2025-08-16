@@ -1,3 +1,4 @@
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Button } from '@/shared/ui/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
@@ -49,7 +50,7 @@ const BuildPageDestinyCard: React.FC<BuildPageDestinyCardProps> = ({
   // Handle path changes
   const handlePathChange = (path: DestinyNode[]) => {
     const pathIds = path.map(node => node.id)
-    setDestinyPath(pathIds)
+    setDestinyPath(pathIds as string[])
   }
 
   // Handle path selection
@@ -176,7 +177,7 @@ const BuildPageDestinyCard: React.FC<BuildPageDestinyCardProps> = ({
                     ? 'Choose Your Starting Point'
                     : 'Continue Your Path'}
                 </h4>
-                <ScrollArea className="h-[200px]">
+                <ScrollArea className="h-[400px]">
                   <div className="p-2">
                     <DestinyPossiblePathsList
                       possiblePaths={possiblePaths}
