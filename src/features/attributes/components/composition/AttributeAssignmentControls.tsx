@@ -1,9 +1,9 @@
-import React from 'react'
 import { cn } from '@/lib/utils'
+import { useTheme } from '@/shared/context/ThemeContext'
 import { Button } from '@/shared/ui/ui/button'
 import { Input } from '@/shared/ui/ui/input'
 import { H5 } from '@/shared/ui/ui/typography'
-import { RotateCcw, Plus, Minus } from 'lucide-react'
+import { Minus, Plus, RotateCcw } from 'lucide-react'
 import type { AttributeType } from '../../types'
 
 interface AttributeAssignmentControlsProps {
@@ -25,6 +25,8 @@ export function AttributeAssignmentControls({
   onUpdateAttributeLevel,
   className,
 }: AttributeAssignmentControlsProps) {
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === 'dark'
   // Calculate current totals
   const getAttributeTotal = (attribute: AttributeType) => {
     return Object.values(assignments).filter(a => a === attribute).length
@@ -38,7 +40,10 @@ export function AttributeAssignmentControls({
   // Derive level from total attributes (level = total + 1, since level 1 has no assignment)
   const derivedLevel = totalAssigned + 1
 
-  const handleAttributeChange = (attribute: AttributeType, newValue: number) => {
+  const handleAttributeChange = (
+    attribute: AttributeType,
+    newValue: number
+  ) => {
     const currentTotal = getAttributeTotal(attribute)
     const difference = newValue - currentTotal
 
@@ -77,11 +82,13 @@ export function AttributeAssignmentControls({
       handleAttributeChange(attribute, currentTotal - 1)
     }
   }
-  
+
   return (
     <div className={cn('space-y-4', className)}>
       <div className="flex items-center justify-between">
-        <H5 className="text-lg font-medium text-foreground">Attribute Points</H5>
+        <H5 className="text-lg font-medium text-foreground">
+          Attribute Points
+        </H5>
         <div className="flex gap-2">
           <Button
             variant="outline"
@@ -98,13 +105,24 @@ export function AttributeAssignmentControls({
       {/* Level Display with Integrated Controls */}
       <div className="p-3 bg-muted/30 rounded-lg border">
         <div className="text-sm text-muted-foreground mb-3">
-          Character Level: {derivedLevel} (derived from {totalAssigned} attribute points)
+          Character Level: {derivedLevel} (derived from {totalAssigned}{' '}
+          attribute points)
         </div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {/* Health */}
-          <div className="flex flex-col items-center p-3 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200 dark:border-red-800">
-            <div className="font-medium text-red-700 dark:text-red-300 mb-3">Health</div>
+          <div
+            className="flex flex-col items-center p-3 rounded-lg border border-red-200 dark:border-red-800"
+            style={{ backgroundColor: 'hsl(var(--muted) / 0.3)' }}
+          >
+            <div
+              className={cn(
+                'font-medium mb-3',
+                isDark ? 'text-red-200' : 'text-red-500'
+              )}
+            >
+              Health
+            </div>
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
@@ -118,13 +136,16 @@ export function AttributeAssignmentControls({
               <Input
                 type="number"
                 value={healthTotal}
-                onChange={(e) => {
+                onChange={e => {
                   const newValue = parseInt(e.target.value) || 0
                   if (newValue >= 0) {
                     handleAttributeChange('health', newValue)
                   }
                 }}
-                className="w-16 text-center text-lg font-bold text-red-700 dark:text-red-300 bg-white dark:bg-gray-800 border-red-300 dark:border-red-600 focus:border-red-500 focus:ring-red-500"
+                className={cn(
+                  'w-16 text-center text-lg font-bold border-red-300 focus:border-red-500 focus:ring-red-500',
+                  isDark ? 'text-red-300 border-red-600' : 'text-red-700'
+                )}
                 min={0}
               />
               <Button
@@ -139,8 +160,18 @@ export function AttributeAssignmentControls({
           </div>
 
           {/* Stamina */}
-          <div className="flex flex-col items-center p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
-            <div className="font-medium text-green-700 dark:text-green-300 mb-3">Stamina</div>
+          <div
+            className="flex flex-col items-center p-3 rounded-lg border border-green-200 dark:border-green-800"
+            style={{ backgroundColor: 'hsl(var(--muted) / 0.3)' }}
+          >
+            <div
+              className={cn(
+                'font-medium mb-3',
+                isDark ? 'text-green-200' : 'text-green-500'
+              )}
+            >
+              Stamina
+            </div>
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
@@ -154,13 +185,16 @@ export function AttributeAssignmentControls({
               <Input
                 type="number"
                 value={staminaTotal}
-                onChange={(e) => {
+                onChange={e => {
                   const newValue = parseInt(e.target.value) || 0
                   if (newValue >= 0) {
                     handleAttributeChange('stamina', newValue)
                   }
                 }}
-                className="w-16 text-center text-lg font-bold text-green-700 dark:text-green-300 bg-white dark:bg-gray-800 border-green-300 dark:border-green-600 focus:border-green-500 focus:ring-green-500"
+                className={cn(
+                  'w-16 text-center text-lg font-bold border-green-300 focus:border-green-500 focus:ring-green-500',
+                  isDark ? 'text-green-300 border-green-600' : 'text-green-700'
+                )}
                 min={0}
               />
               <Button
@@ -175,8 +209,18 @@ export function AttributeAssignmentControls({
           </div>
 
           {/* Magicka */}
-          <div className="flex flex-col items-center p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-            <div className="font-medium text-blue-700 dark:text-blue-300 mb-3">Magicka</div>
+          <div
+            className="flex flex-col items-center p-3 rounded-lg border border-blue-200 dark:border-blue-800"
+            style={{ backgroundColor: 'hsl(var(--muted) / 0.3)' }}
+          >
+            <div
+              className={cn(
+                'font-medium mb-3',
+                isDark ? 'text-blue-200' : 'text-blue-500'
+              )}
+            >
+              Magicka
+            </div>
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
@@ -190,13 +234,16 @@ export function AttributeAssignmentControls({
               <Input
                 type="number"
                 value={magickaTotal}
-                onChange={(e) => {
+                onChange={e => {
                   const newValue = parseInt(e.target.value) || 0
                   if (newValue >= 0) {
                     handleAttributeChange('magicka', newValue)
                   }
                 }}
-                className="w-16 text-center text-lg font-bold text-blue-700 dark:text-blue-300 bg-white dark:bg-gray-800 border-blue-300 dark:border-blue-600 focus:border-blue-500 focus:ring-blue-500"
+                className={cn(
+                  'w-16 text-center text-lg font-bold border-blue-300 focus:border-blue-500 focus:ring-blue-500',
+                  isDark ? 'text-blue-300 border-blue-600' : 'text-blue-700'
+                )}
                 min={0}
               />
               <Button
@@ -211,8 +258,6 @@ export function AttributeAssignmentControls({
           </div>
         </div>
       </div>
-
-    
     </div>
   )
-} 
+}
