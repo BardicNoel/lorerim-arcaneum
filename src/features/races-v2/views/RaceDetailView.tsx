@@ -1,14 +1,16 @@
-import React from 'react'
 import { cn } from '@/lib/utils'
-import { useRaceDetail, useRaceData } from '../adapters'
-import { RaceCard, RaceStatsDisplay, RaceEffectsDisplay, RaceKeywordsDisplay } from '../components/composition'
-import { RaceAvatar, CategoryBadge } from '../components/atomic'
-import { Button } from '@/shared/ui/ui/button'
 import { Badge } from '@/shared/ui/ui/badge'
+import { Button } from '@/shared/ui/ui/button'
 import { H1, H2, H3, P } from '@/shared/ui/ui/typography'
 import { ArrowLeft, ExternalLink, Star, Users } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import type { Race } from '../types'
+import { useRaceData, useRaceDetail } from '../adapters'
+import { CategoryBadge, RaceAvatar } from '../components/atomic'
+import {
+  RaceEffectsDisplay,
+  RaceKeywordsDisplay,
+  RaceStatsDisplay,
+} from '../components/composition'
 
 interface RaceDetailViewProps {
   raceId: string
@@ -17,8 +19,11 @@ interface RaceDetailViewProps {
 
 export function RaceDetailView({ raceId, className }: RaceDetailViewProps) {
   const navigate = useNavigate()
-  const { race, isLoading, error, relatedRaces } = useRaceDetail(raceId)
   const { races } = useRaceData()
+  const { race, isLoading, error, relatedRaces } = useRaceDetail({
+    raceId,
+    allRaces: races,
+  })
 
   if (isLoading) {
     return (
@@ -71,7 +76,7 @@ export function RaceDetailView({ raceId, className }: RaceDetailViewProps) {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Races
         </Button>
-        
+
         <div className="flex items-start gap-6">
           <RaceAvatar raceName={race.name} size="xl" />
           <div className="flex-1">
@@ -119,7 +124,7 @@ export function RaceDetailView({ raceId, className }: RaceDetailViewProps) {
               <RaceEffectsDisplay
                 effects={race.racialSpells.map(spell => ({
                   name: spell.name,
-                  description: spell.description
+                  description: spell.description,
                 }))}
                 title="Racial Spells"
                 showDescriptions={true}
@@ -142,13 +147,15 @@ export function RaceDetailView({ raceId, className }: RaceDetailViewProps) {
 
           {/* Additional Information */}
           <div className="bg-card border rounded-lg p-6">
-            <H2 className="text-xl font-semibold mb-4">Additional Information</H2>
+            <H2 className="text-xl font-semibold mb-4">
+              Additional Information
+            </H2>
             <div className="space-y-4">
               <div>
                 <H3 className="text-lg font-medium mb-2">Description</H3>
                 <P className="text-muted-foreground">{race.description}</P>
               </div>
-              
+
               {race.racialSpells.length > 0 && (
                 <div>
                   <H3 className="text-lg font-medium mb-2">Racial Spells</H3>
@@ -156,7 +163,9 @@ export function RaceDetailView({ raceId, className }: RaceDetailViewProps) {
                     {race.racialSpells.map((spell, index) => (
                       <div key={index} className="p-3 bg-muted/50 rounded">
                         <div className="font-medium">{spell.name}</div>
-                        <div className="text-sm text-muted-foreground">{spell.description}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {spell.description}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -199,15 +208,23 @@ export function RaceDetailView({ raceId, className }: RaceDetailViewProps) {
               </div>
               <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">Magicka:</span>
-                <span className="font-medium">{race.startingStats.magicka}</span>
+                <span className="font-medium">
+                  {race.startingStats.magicka}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">Stamina:</span>
-                <span className="font-medium">{race.startingStats.stamina}</span>
+                <span className="font-medium">
+                  {race.startingStats.stamina}
+                </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">Carry Weight:</span>
-                <span className="font-medium">{race.startingStats.carryWeight}</span>
+                <span className="text-sm text-muted-foreground">
+                  Carry Weight:
+                </span>
+                <span className="font-medium">
+                  {race.startingStats.carryWeight}
+                </span>
               </div>
             </div>
           </div>
@@ -217,7 +234,7 @@ export function RaceDetailView({ raceId, className }: RaceDetailViewProps) {
             <div className="bg-card border rounded-lg p-4">
               <H3 className="text-lg font-semibold mb-3">Related Races</H3>
               <div className="space-y-2">
-                {relatedRaces.slice(0, 3).map((relatedRace) => (
+                {relatedRaces.slice(0, 3).map(relatedRace => (
                   <Button
                     key={relatedRace.edid}
                     variant="ghost"
@@ -228,8 +245,12 @@ export function RaceDetailView({ raceId, className }: RaceDetailViewProps) {
                     <div className="flex items-center gap-2">
                       <RaceAvatar raceName={relatedRace.name} size="sm" />
                       <div>
-                        <div className="font-medium text-sm">{relatedRace.name}</div>
-                        <div className="text-xs text-muted-foreground">{relatedRace.category}</div>
+                        <div className="font-medium text-sm">
+                          {relatedRace.name}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {relatedRace.category}
+                        </div>
                       </div>
                     </div>
                   </Button>
@@ -241,4 +262,4 @@ export function RaceDetailView({ raceId, className }: RaceDetailViewProps) {
       </div>
     </div>
   )
-} 
+}
