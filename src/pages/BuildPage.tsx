@@ -45,47 +45,47 @@ export function BuildPage() {
           onNotesChange={setBuildNotes}
         />
       ),
-      size: 'full',
+      size: 'full' as const,
     },
     {
       id: 'race',
       component: <RaceSelectionCard />,
-      size: 'half',
+      size: 'half' as const,
     },
     {
       id: 'birthsign',
       component: <BirthsignSelectionCard />,
-      size: 'half',
+      size: 'half' as const,
     },
     {
       id: 'trait',
       component: <TraitSelectionCard />,
-      size: 'half',
+      size: 'half' as const,
     },
     {
       id: 'religion',
       component: <ReligionSelectionCard />,
-      size: 'half',
+      size: 'half' as const,
     },
     {
       id: 'attributes',
       component: <AttributeAssignmentCard />,
-      size: 'full',
+      size: 'full' as const,
     },
     {
       id: 'skills',
       component: <BuildPageSkillCard />,
-      size: 'full',
+      size: 'full' as const,
     },
     {
       id: 'destiny',
       component: <BuildPageDestinyCard navigate={navigate} />,
-      size: 'full',
+      size: 'full' as const,
     },
     {
       id: 'summary',
       component: <BuildSummaryCard build={build} />,
-      size: 'full',
+      size: 'full' as const,
     },
   ]
 
