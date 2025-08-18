@@ -16,13 +16,27 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/ui/dropdown-menu'
 import { traitToPlayerCreationItem } from '@/shared/utils'
-import { ChevronDown, X } from 'lucide-react'
+import { ChevronDown, Grid3X3, List, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { TraitAccordion } from '../components/TraitAccordion'
 import { useFuzzySearch } from '../hooks'
 import { getAllCategories, getAllTags } from '../utils'
 
 type SortOption = 'alphabetical' | 'category' | 'effect-count'
+type ViewMode = 'grid' | 'list'
+
+const getSortLabel = (sortBy: SortOption) => {
+  switch (sortBy) {
+    case 'alphabetical':
+      return 'A-Z'
+    case 'category':
+      return 'Category'
+    case 'effect-count':
+      return 'Effect Count'
+    default:
+      return 'A-Z'
+  }
+}
 
 export function AccordionTraitsPage() {
   // Use the new cache-based hook - no infinite loops!
@@ -31,6 +45,7 @@ export function AccordionTraitsPage() {
 
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
+  const [viewMode, setViewMode] = useState<ViewMode>('grid')
 
   // Memoize the trait items to prevent unnecessary re-renders
   const traitItems = useMemo(
@@ -234,7 +249,7 @@ export function AccordionTraitsPage() {
       title="Traits"
       description="Choose your character's traits. Traits provide unique abilities and modifiers that will shape your character's capabilities throughout their journey."
     >
-      {/* Custom MultiAutocompleteSearch with FuzzySearchBox for keywords */}
+      {/* 1. Search Bar Section */}
       <div className="flex items-center gap-4 mb-4">
         <div className="flex-1">
           <CustomMultiAutocompleteSearch
@@ -243,38 +258,61 @@ export function AccordionTraitsPage() {
             onCustomSearch={handleTagSelect}
           />
         </div>
-
-        {/* Sort Options */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-2"
-            >
-              <ChevronDown className="h-4 w-4" />
-              {sortBy === 'alphabetical'
-                ? 'A-Z'
-                : sortBy === 'category'
-                  ? 'Category'
-                  : 'Count'}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setSortBy('alphabetical')}>
-              Alphabetical
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setSortBy('category')}>
-              Category
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setSortBy('effect-count')}>
-              Effect Count
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
 
-      {/* Selected Tags */}
+      {/* 2. View Controls Section */}
+      <div className="flex items-center justify-between mb-4">
+        {/* Left: View Mode Toggle */}
+        <div className="flex items-center gap-2">
+          <Button
+            variant={viewMode === 'grid' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setViewMode('grid')}
+            className="flex items-center gap-2"
+          >
+            <Grid3X3 className="h-4 w-4" />
+            Grid
+          </Button>
+          <Button
+            variant={viewMode === 'list' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setViewMode('list')}
+            className="flex items-center gap-2"
+          >
+            <List className="h-4 w-4" />
+            List
+          </Button>
+        </div>
+
+        {/* Right: Sort Options */}
+        <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                Sort: {getSortLabel(sortBy)}
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setSortBy('alphabetical')}>
+                Alphabetical
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setSortBy('category')}>
+                Category
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setSortBy('effect-count')}>
+                Effect Count
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+
+      {/* 3. Selected Tags Section */}
       <div className="my-4">
         {selectedTags.length > 0 && (
           <div className="flex flex-wrap gap-2 items-center">
@@ -306,18 +344,32 @@ export function AccordionTraitsPage() {
         )}
       </div>
 
-      {/* Trait Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
-        {sortedDisplayItems.map(item => (
-          <TraitAccordion
-            key={item.id}
-            item={item}
-            isExpanded={true}
-            className="w-full"
-            allTraitIds={allValidTraitIds}
-          />
-        ))}
-      </div>
+      {/* 4. Content Area */}
+      {viewMode === 'grid' ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
+          {sortedDisplayItems.map(item => (
+            <TraitAccordion
+              key={item.id}
+              item={item}
+              isExpanded={true}
+              className="w-full"
+              allTraitIds={allValidTraitIds}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col gap-4 w-full mt-6">
+          {sortedDisplayItems.map(item => (
+            <TraitAccordion
+              key={item.id}
+              item={item}
+              isExpanded={true}
+              className="w-full"
+              allTraitIds={allValidTraitIds}
+            />
+          ))}
+        </div>
+      )}
 
       {sortedDisplayItems.length === 0 && (
         <div className="text-center py-12">

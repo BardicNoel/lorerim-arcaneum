@@ -6,7 +6,6 @@ import type {
   SearchOption,
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
-import { ControlGrid } from '@/shared/components/ui'
 import { Button } from '@/shared/ui/ui/button'
 import {
   DropdownMenu,
@@ -49,15 +48,15 @@ export function ReligionsPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [activeTab, setActiveTab] = useState<TabType>('religions')
 
-  // Convert religions to PlayerCreationItem format for consolidated view
-  const religionItems: PlayerCreationItem[] = useMemo(() => {
-    return (religions || []).map(religionToPlayerCreationItem)
-  }, [religions])
-
   // Convert religions to feature format for ReligionCard
   const featureReligions: FeatureReligion[] = useMemo(() => {
     return (religions || []).map(mapSharedReligionToFeatureReligion)
   }, [religions])
+
+  // Convert religions to PlayerCreationItem format for consolidated view
+  const religionItems: PlayerCreationItem[] = useMemo(() => {
+    return featureReligions.map(religionToPlayerCreationItem)
+  }, [featureReligions])
 
   // Filter religions that have blessings
   const religionsWithBlessings = useMemo(() => {
@@ -159,7 +158,11 @@ export function ReligionsPage() {
       filtered = filtered.filter(religion => {
         return selectedTags.every(tag => {
           if (tag.category === 'Pantheons') {
-            return religion.pantheon === tag.value
+            // Use the original religion data for pantheon filtering
+            const originalReligion = religions?.find(
+              r => r.name === religion.name
+            )
+            return originalReligion?.pantheon === tag.value
           }
           if (tag.category === 'Favored Races') {
             return religion.favoredRaces?.includes(tag.value)
@@ -203,7 +206,7 @@ export function ReligionsPage() {
     })
 
     return filtered
-  }, [featureReligions, selectedTags, sortBy])
+  }, [featureReligions, selectedTags, sortBy, religions])
 
   const handleTagSelect = (optionOrTag: SearchOption | string) => {
     const newTag: SelectedTag =
@@ -244,6 +247,17 @@ export function ReligionsPage() {
     setIsBlessingSheetOpen(true)
   }
 
+  const getSortLabel = (sort: SortOption) => {
+    switch (sort) {
+      case 'alphabetical':
+        return 'A-Z'
+      case 'divine-type':
+        return 'Type'
+      default:
+        return 'A-Z'
+    }
+  }
+
   if (loading) {
     return (
       <BuildPageShell>
@@ -267,66 +281,17 @@ export function ReligionsPage() {
   }
 
   return (
-    <BuildPageShell>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-primary">Religions</h1>
-            <p className="text-muted-foreground">
-              Choose your character's faith and divine blessings
-            </p>
-          </div>
-        </div>
-
-        {/* Controls */}
-        <ControlGrid>
-          {/* Search */}
-          <div className="flex-1">
-            <CustomMultiAutocompleteSearch
-              categories={generateSearchCategories()}
-              onSelect={handleTagSelect}
-              onCustomSearch={handleTagSelect}
-            />
-          </div>
-
-          {/* View Controls */}
-          <div className="flex items-center gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
-                  Sort: {sortBy === 'alphabetical' ? 'A-Z' : 'Type'}
-                  <ChevronDown className="ml-2 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setSortBy('alphabetical')}>
-                  Alphabetical (A-Z)
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy('divine-type')}>
-                  Religion Type
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <div className="flex items-center gap-1 border rounded-md p-1">
-              <Button
-                variant={viewMode === 'grid' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('grid')}
-              >
-                <Grid3X3 className="h-4 w-4" />
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('list')}
-              >
-                <List className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </ControlGrid>
+    <BuildPageShell
+      title="Religions"
+      description="Choose your character's faith and divine blessings"
+    >
+      {/* Search and Filters */}
+      <div className="space-y-4">
+        <CustomMultiAutocompleteSearch
+          categories={generateSearchCategories()}
+          onSelect={handleTagSelect}
+          onCustomSearch={handleTagSelect}
+        />
 
         {/* Selected Tags */}
         {selectedTags.length > 0 && (
@@ -357,7 +322,59 @@ export function ReligionsPage() {
             ))}
           </div>
         )}
+      </div>
 
+      {/* View Controls */}
+      <div className="flex items-center justify-between mb-4">
+        {/* Left: View Mode Toggle */}
+        <div className="flex items-center gap-2">
+          <Button
+            variant={viewMode === 'grid' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setViewMode('grid')}
+            className="flex items-center gap-2"
+          >
+            <Grid3X3 className="h-4 w-4" />
+            Grid
+          </Button>
+          <Button
+            variant={viewMode === 'list' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setViewMode('list')}
+            className="flex items-center gap-2"
+          >
+            <List className="h-4 w-4" />
+            List
+          </Button>
+        </div>
+
+        {/* Right: Sort Options */}
+        <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                Sort: {getSortLabel(sortBy)}
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={() => setSortBy('alphabetical')}>
+                Alphabetical (A-Z)
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setSortBy('divine-type')}>
+                Religion Type
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="mt-6">
         {/* Tabs */}
         <Tabs
           value={activeTab}

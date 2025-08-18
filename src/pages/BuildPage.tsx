@@ -15,7 +15,6 @@ import {
   BuildControls,
   BuildMasonryGrid,
   BuildResetConfirmDialog,
-  BuildSummaryCard,
   TraitLimitConfigCard,
 } from '@/features/build/components'
 import { useTraitLimits } from '@/features/build/hooks'
@@ -32,8 +31,8 @@ export function BuildPage() {
   const navigate = useNavigate()
 
   // Define build cards for masonry layout
-  // Layout: Basic Info | Race+Birthsign | Traits+Religion | Attributes | Skills | Destiny | Summary
-  // Full-width cards: Basic Info, Attributes, Skills, Destiny, Summary
+  // Layout: Basic Info | Race+Birthsign | Traits+Religion | Attributes | Skills | Destiny
+  // Full-width cards: Basic Info, Attributes, Skills, Destiny
   const buildCards = [
     {
       id: 'basic-info',
@@ -82,15 +81,13 @@ export function BuildPage() {
       component: <BuildPageDestinyCard navigate={navigate} />,
       size: 'full' as const,
     },
-    {
-      id: 'summary',
-      component: <BuildSummaryCard build={build} />,
-      size: 'full' as const,
-    },
   ]
 
   return (
-    <BuildPageShell title="Character Builder">
+    <BuildPageShell
+      title="Character Builder"
+      description="Create and customize your character build. Choose your race, birthsign, traits, religion, attributes, skills, and destiny to create the perfect character for your playstyle."
+    >
       {/* Build Controls Area */}
       <BuildControls onReset={() => setShowConfirm(true)} build={build} />
 

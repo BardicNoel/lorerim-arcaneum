@@ -1,0 +1,376 @@
+# 🔍 Immediate Search Filtering Pattern
+
+## Overview
+
+This pattern provides **immediate filtering** as users type, with optional **tag-based filtering** for persistent filters. The system supports both simple text search and complex multi-category filtering with debouncing for performance.
+
+---
+
+## 🏗️ Basic Flow: Type → Get Results
+
+### 1. **Input Capture**
+
+```typescript
+// User types → Immediate state update
+const handleInputChange = (value: string) => {
+  setSearchQuery(value) // Updates local state immediately
+  setIsOpen(true) // Shows dropdown/options
+  setActiveIndex(-1) // Resets selection
+}
+```
+
+### 2. **Debounced Processing**
+
+```typescript
+// Debounced search to prevent excessive filtering
+useEffect(() => {
+  const timeoutId = setTimeout(() => {
+    if (searchQuery.trim()) {
+      // Perform actual search/filtering
+      const results = performSearch(searchQuery)
+      setFilteredResults(results)
+    } else {
+      // Show all items when query is empty
+      setFilteredResults(allItems)
+    }
+  }, 300) // 300ms debounce delay
+
+  return () => clearTimeout(timeoutId)
+}, [searchQuery, allItems])
+```
+
+### 3. **Reactive Filtering**
+
+```typescript
+// Filter results based on search query
+const filteredItems = useMemo(() => {
+  if (!searchQuery.trim()) return allItems
+
+  const query = searchQuery.toLowerCase()
+  return allItems.filter(
+    item =>
+      item.name.toLowerCase().includes(query) ||
+      item.description.toLowerCase().includes(query) ||
+      item.tags.some(tag => tag.toLowerCase().includes(query))
+  )
+}, [allItems, searchQuery])
+```
+
+---
+
+## 🏷️ Optional Tag-Based Filtering
+
+### **Tag State Management**
+
+```typescript
+interface SelectedTag {
+  id: string
+  label: string
+  value: string
+  category: string
+}
+
+const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
+```
+
+### **Tag Addition Flow**
+
+```typescript
+const handleTagSelect = (optionOrTag: SearchOption | string) => {
+  let tag: SelectedTag
+
+  if (typeof optionOrTag === 'string') {
+    // Custom search input
+    tag = {
+      id: `custom-${optionOrTag}`,
+      label: optionOrTag,
+      value: optionOrTag,
+      category: 'Fuzzy Search',
+    }
+  } else {
+    // Autocomplete option
+    tag = {
+      id: `${optionOrTag.category}-${optionOrTag.id}`,
+      label: optionOrTag.label,
+      value: optionOrTag.value,
+      category: optionOrTag.category,
+    }
+  }
+
+  // Prevent duplicates
+  if (
+    !selectedTags.some(
+      t => t.value === tag.value && t.category === tag.category
+    )
+  ) {
+    setSelectedTags(prev => [...prev, tag])
+  }
+}
+```
+
+### **Tag Removal**
+
+```typescript
+const handleTagRemove = (tagId: string) => {
+  setSelectedTags(prev => prev.filter(tag => tag.id !== tagId))
+}
+
+const handleClearAllTags = () => {
+  setSelectedTags([])
+}
+```
+
+---
+
+## 🔄 **Multi-Layer Filtering Chain**
+
+### **1. Tag-Based Pre-Filtering**
+
+```typescript
+const filteredWithTags = allItems.filter(item => {
+  if (selectedTags.length === 0) return true
+
+  return selectedTags.every(tag => {
+    switch (tag.category) {
+      case 'Fuzzy Search':
+        return true // Handled by fuzzy search later
+      case 'Categories':
+        return item.category === tag.value
+      case 'Tags':
+        return item.tags.includes(tag.value)
+      default:
+        return true
+    }
+  })
+})
+```
+
+### **2. Fuzzy Search on Pre-Filtered Results**
+
+```typescript
+const fuzzySearchQuery = selectedTags
+  .filter(tag => tag.category === 'Fuzzy Search')
+  .map(tag => tag.value)
+  .join(' ')
+
+const { filteredItems } = useFuzzySearch(filteredWithTags, fuzzySearchQuery)
+```
+
+---
+
+## 🎯 **Required Hook Pattern**
+
+### **Filter Hook Structure**
+
+```typescript
+export function useFeatureFilters<T>(items: T[]) {
+  // State
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const [sortBy, setSortBy] = useState<string>('name')
+
+  // Search categories
+  const searchCategories = useMemo(
+    (): SearchCategory[] => [
+      {
+        id: 'fuzzy-search',
+        name: 'Fuzzy Search',
+        placeholder: 'Search by name, description, or tags...',
+        options: [], // Dynamic based on data
+      },
+      // Feature-specific categories...
+    ],
+    [items]
+  )
+
+  // Tag management
+  const handleTagSelect = useCallback((optionOrTag: SearchOption | string) => {
+    // Implementation from above
+  }, [])
+
+  const handleTagRemove = useCallback((tagId: string) => {
+    setSelectedTags(prev => prev.filter(tag => tag.id !== tagId))
+  }, [])
+
+  const handleClearAllTags = useCallback(() => {
+    setSelectedTags([])
+  }, [])
+
+  // Filtering logic
+  const filteredItems = useMemo(() => {
+    // Multi-layer filtering implementation
+  }, [items, selectedTags, searchQuery])
+
+  // Sorting
+  const sortedItems = useMemo(() => {
+    // Sorting implementation
+  }, [filteredItems, sortBy])
+
+  return {
+    // State
+    searchQuery,
+    selectedTags,
+    viewMode,
+    sortBy,
+
+    // Handlers
+    setSearchQuery,
+    handleTagSelect,
+    handleTagRemove,
+    handleClearAllTags,
+    setViewMode,
+    setSortBy,
+
+    // Data
+    searchCategories,
+    filteredItems: sortedItems,
+  }
+}
+```
+
+---
+
+## 🎨 **UI Components**
+
+### **Search Input with Debouncing**
+
+```typescript
+export function DebouncedSearchInput({
+  value,
+  onChange,
+  placeholder = 'Search...',
+  className = '',
+}: DebouncedSearchInputProps) {
+  const [localValue, setLocalValue] = useState(value)
+
+  // Debounced update to parent
+  const debouncedOnChange = useCallback(
+    (() => {
+      let timeoutId: NodeJS.Timeout
+      return (newValue: string) => {
+        clearTimeout(timeoutId)
+        timeoutId = setTimeout(() => {
+          onChange(newValue)
+        }, 300)
+      }
+    })(),
+    [onChange]
+  )
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value
+    setLocalValue(newValue) // Immediate local update
+    debouncedOnChange(newValue) // Debounced parent update
+  }
+
+  return (
+    <div className={`relative ${className}`}>
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+      <Input
+        type="text"
+        placeholder={placeholder}
+        value={localValue}
+        onChange={handleChange}
+        className="pl-10"
+      />
+    </div>
+  )
+}
+```
+
+### **Tag Chips Display**
+
+```typescript
+export function TagChips({
+  tags,
+  onRemove,
+  onClearAll,
+}: TagChipsProps) {
+  if (tags.length === 0) return null
+
+  return (
+    <div className="flex flex-wrap gap-2 items-center">
+      {/* Clear All Button */}
+      <button
+        onClick={onClearAll}
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors duration-200 border border-border/50 hover:border-border cursor-pointer group"
+        title="Clear all filters"
+      >
+        <X className="h-3.5 w-3.5 group-hover:scale-110 transition-transform duration-200" />
+        Clear All
+      </button>
+
+      {/* Individual Tags */}
+      {tags.map(tag => (
+        <span
+          key={tag.id}
+          className="inline-flex items-center px-3 py-1.5 rounded-full bg-skyrim-gold/20 border border-skyrim-gold/30 text-sm font-medium text-skyrim-gold hover:bg-skyrim-gold/30 transition-colors duration-200 cursor-pointer group"
+          onClick={() => onRemove(tag.id)}
+          title="Click to remove"
+        >
+          {tag.label}
+          <span className="ml-2 text-skyrim-gold/70 group-hover:text-skyrim-gold transition-colors duration-200">
+            ×
+          </span>
+        </span>
+      ))}
+    </div>
+  )
+}
+```
+
+---
+
+## 📋 **Implementation Checklist**
+
+### **Required Components**
+
+- [ ] **Debounced search input** with immediate local state updates
+- [ ] **Tag state management** with add/remove/clear functionality
+- [ ] **Multi-layer filtering** (tags → fuzzy search → sorting)
+- [ ] **Search categories** for autocomplete options
+- [ ] **Tag chips display** with Skyrim gold theming
+- [ ] **Clear all functionality** for resetting filters
+
+### **Performance Optimizations**
+
+- [ ] **React.useMemo** for expensive filtering operations
+- [ ] **300ms debouncing** for search input
+- [ ] **Pre-filtering** to reduce dataset before fuzzy search
+- [ ] **Callback memoization** with useCallback
+
+### **User Experience**
+
+- [ ] **Immediate visual feedback** on typing
+- [ ] **Persistent tag filters** that survive search changes
+- [ ] **Keyboard navigation** support
+- [ ] **Accessible** with proper ARIA labels
+- [ ] **Mobile responsive** design
+
+---
+
+## 🚫 **Prohibited Patterns**
+
+- **No debouncing**: Don't skip debouncing for performance
+- **Blocking UI**: Don't freeze the UI during filtering
+- **Complex state**: Don't over-engineer the state management
+- **Inconsistent theming**: Don't deviate from Skyrim gold theme for tags
+- **Missing error handling**: Don't ignore edge cases in filtering logic
+
+---
+
+## ✅ **Success Criteria**
+
+1. **Immediate Response**: Users see results update as they type
+2. **Smooth Performance**: No lag or freezing during filtering
+3. **Persistent Filters**: Tags remain active when search query changes
+4. **Clear Visual Feedback**: Tags are clearly visible and removable
+5. **Consistent UX**: Same pattern across all feature pages
+
+This pattern provides a **smooth, responsive search experience** with optional persistent filtering through tags, ensuring users can quickly find what they're looking for while maintaining complex filter combinations.
+description:
+globs:
+alwaysApply: false
+
+---

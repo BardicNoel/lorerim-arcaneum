@@ -9,13 +9,33 @@ import type {
 
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Button } from '@/shared/ui/ui/button'
-import { Grid3X3, List, X } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/ui/ui/dropdown-menu'
+import { ChevronDown, Grid3X3, List, X } from 'lucide-react'
 import { useState } from 'react'
 import { useRaceData, useRaceFilters, useRaceState } from '../adapters'
 import { RaceCardSimple, RaceDetailsSheet } from '../components/composition'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { Race } from '../types'
 import { raceToPlayerCreationItem } from '../utils/raceToPlayerCreationItem'
+
+type SortOption = 'name' | 'category' | 'health' | 'magicka' | 'stamina'
+
+const sortOptions = [
+  { value: 'name', label: 'Name' },
+  { value: 'category', label: 'Category' },
+  { value: 'health', label: 'Health' },
+  { value: 'magicka', label: 'Magicka' },
+  { value: 'stamina', label: 'Stamina' },
+]
+
+const getSortLabel = (sortBy: SortOption) => {
+  return sortOptions.find(option => option.value === sortBy)?.label || 'Name'
+}
 
 export function RacePageView() {
   const { build } = useCharacterBuild()
@@ -25,6 +45,9 @@ export function RacePageView() {
   const { filteredRaces } = useRaceFilters({
     races,
   })
+
+  // Sort state
+  const [sortBy, setSortBy] = useState<SortOption>('name')
 
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
@@ -161,8 +184,26 @@ export function RacePageView() {
     fuzzySearchQuery
   )
 
+  // Sort the filtered races
+  const sortedRaces = fuzzyFilteredRaces.sort((a, b) => {
+    switch (sortBy) {
+      case 'name':
+        return a.name.localeCompare(b.name)
+      case 'category':
+        return a.category.localeCompare(b.category)
+      case 'health':
+        return b.startingStats.health - a.startingStats.health
+      case 'magicka':
+        return b.startingStats.magicka - a.startingStats.magicka
+      case 'stamina':
+        return b.startingStats.stamina - a.startingStats.stamina
+      default:
+        return 0
+    }
+  })
+
   // Convert to PlayerCreationItem format, but include originalRace for details
-  const displayItems = fuzzyFilteredRaces.map(race => {
+  const displayItems = sortedRaces.map(race => {
     const item = raceToPlayerCreationItem(race)
     return { ...item, originalRace: race }
   })
@@ -208,7 +249,7 @@ export function RacePageView() {
       title="Races"
       description="Choose your character's race. Each race has unique abilities, starting attributes, and racial traits that will shape your journey through Tamriel."
     >
-      {/* Custom MultiAutocompleteSearch with FuzzySearchBox for keywords */}
+      {/* 1. Search Bar Section */}
       <div className="flex items-center gap-4 mb-4">
         <div className="flex-1">
           <CustomMultiAutocompleteSearch
@@ -217,31 +258,60 @@ export function RacePageView() {
             onCustomSearch={handleTagSelect}
           />
         </div>
+      </div>
 
-        {/* View Mode Toggle */}
-        <div className="flex border rounded-lg p-1 bg-muted">
+      {/* 2. View Controls Section */}
+      <div className="flex items-center justify-between mb-4">
+        {/* Left: View Mode Toggle */}
+        <div className="flex items-center gap-2">
           <Button
-            variant={viewMode === 'list' ? 'default' : 'ghost'}
-            size="sm"
-            onClick={() => setViewMode('list')}
-            className="h-8 px-3"
-            title="List view"
-          >
-            <List className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={viewMode === 'grid' ? 'default' : 'ghost'}
+            variant={viewMode === 'grid' ? 'default' : 'outline'}
             size="sm"
             onClick={() => setViewMode('grid')}
-            className="h-8 px-3"
-            title="Grid view"
+            className="flex items-center gap-2"
           >
             <Grid3X3 className="h-4 w-4" />
+            Grid
           </Button>
+          <Button
+            variant={viewMode === 'list' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setViewMode('list')}
+            className="flex items-center gap-2"
+          >
+            <List className="h-4 w-4" />
+            List
+          </Button>
+        </div>
+
+        {/* Right: Sort Options */}
+        <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                Sort: {getSortLabel(sortBy)}
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {sortOptions.map(option => (
+                <DropdownMenuItem
+                  key={option.value}
+                  onClick={() => setSortBy(option.value as SortOption)}
+                >
+                  {option.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
-      {/* Selected Tags */}
+      {/* 3. Selected Tags Section */}
       <div className="my-4">
         {selectedTags.length > 0 && (
           <div className="flex flex-wrap gap-2 items-center">
@@ -273,8 +343,9 @@ export function RacePageView() {
         )}
       </div>
 
+      {/* 4. Content Area */}
       {viewMode === 'grid' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
           {displayItems.map(item => {
             const isSelected = build.race === item.originalRace?.edid
 
@@ -293,7 +364,7 @@ export function RacePageView() {
           })}
         </div>
       ) : (
-        <div className="flex flex-col gap-4 w-full">
+        <div className="flex flex-col gap-4 w-full mt-6">
           {displayItems.map(item => {
             const isSelected = build.race === item.originalRace?.edid
 

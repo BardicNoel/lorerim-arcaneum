@@ -1,10 +1,7 @@
-import { Badge } from '@/shared/ui/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
-import { Separator } from '@/shared/ui/ui/separator'
 import { useState } from 'react'
 import type { SkillsPageSkill, SkillSummary } from '../../adapters'
 import { ErrorView, LoadingView } from '../atomic'
-import { SkillFilters, SkillGrid, SkillSearch } from '../composition'
+import { SkillGrid } from '../composition'
 import { SkillPerkTreeDrawer } from './SkillPerkTreeDrawer'
 
 // High-level view component that consumes adapters
@@ -58,81 +55,26 @@ export function SkillsPageView({
 
   // Transform skills to the format expected by SkillPerkTreeDrawer
   const drawerSkills = skills.map(skill => ({
-    edid: skill.id,
+    id: skill.id,
     name: skill.name,
     category: skill.category,
     description: skill.description,
-    scaling: '', // Default value since SkillsPageSkill doesn't have this
-    keyAbilities: [], // Default value since SkillsPageSkill doesn't have this
-    metaTags: [], // Default value since SkillsPageSkill doesn't have this
+    keyAbilities: skill.keyAbilities || [],
+    metaTags: skill.metaTags || [],
+    assignmentType: skill.assignmentType,
+    canAssignMajor: skill.canAssignMajor,
+    canAssignMinor: skill.canAssignMinor,
+    level: skill.level,
     totalPerks: skill.totalPerks,
-    selectedPerks: skill.selectedPerksCount,
-    level: skill.level, // Add minimum skill level
+    selectedPerksCount: skill.selectedPerksCount,
+    selectedPerks: skill.selectedPerks || [],
+    isSelected: skill.isSelected || false,
     isMajor: skill.assignmentType === 'major',
     isMinor: skill.assignmentType === 'minor',
   }))
 
   return (
     <div className="space-y-6">
-
-      {/* Build Summary Card */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span>Build Summary</span>
-            <div className="flex gap-2">
-              <Badge
-                variant="outline"
-                className="bg-yellow-50 text-yellow-800 border-yellow-300"
-              >
-                {skillSummary.majorCount}/{skillSummary.majorLimit} Major
-              </Badge>
-              <Badge
-                variant="outline"
-                className="bg-gray-50 text-gray-800 border-gray-300"
-              >
-                {skillSummary.minorCount}/{skillSummary.minorLimit} Minor
-              </Badge>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <div>
-              <p className="text-muted-foreground">Total Skills</p>
-              <p className="font-semibold">{skillSummary.totalSkills}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Selected Perks</p>
-              <p className="font-semibold">{skillSummary.totalPerks}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Perk Ranks</p>
-              <p className="font-semibold">{skillSummary.totalPerkRanks}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Available Major</p>
-              <p className="font-semibold text-yellow-600">
-                {skillSummary.majorLimit - skillSummary.majorCount}
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Search and Filters */}
-      <div className="space-y-4">
-        <SkillSearch query={searchQuery} onQueryChange={onSearchChange} />
-
-        <SkillFilters
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onCategorySelect={onCategorySelect}
-        />
-      </div>
-
-      <Separator />
-
       {/* Skills Grid */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
@@ -174,27 +116,25 @@ export function SkillsPageView({
       />
 
       {/* Assignment Instructions */}
-      <Card className="bg-muted/50">
-        <CardContent className="pt-6">
-          <h3 className="font-semibold mb-2">How to Assign Skills</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div>
-              <p className="text-muted-foreground">Major Skills (0-3)</p>
-              <p>
-                Your primary skills that level up faster and start at a higher
-                level.
-              </p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Minor Skills (0-6)</p>
-              <p>
-                Secondary skills that provide additional benefits and
-                customization.
-              </p>
-            </div>
+      <div className="p-6 bg-muted/50 rounded-lg">
+        <h3 className="font-semibold mb-2">How to Assign Skills</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div>
+            <p className="text-muted-foreground">Major Skills (0-3)</p>
+            <p>
+              Your primary skills that level up faster and start at a higher
+              level.
+            </p>
           </div>
-        </CardContent>
-      </Card>
+          <div>
+            <p className="text-muted-foreground">Minor Skills (0-6)</p>
+            <p>
+              Secondary skills that provide additional benefits and
+              customization.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

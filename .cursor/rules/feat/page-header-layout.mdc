@@ -1,0 +1,325 @@
+# 🎯 Page Header Layout Standards
+
+## 📋 **Mandatory Header Structure**
+
+All feature pages **MUST** follow this consistent header layout pattern:
+
+```tsx
+<BuildPageShell
+  title="Page Title"
+  description="Page description with context and purpose."
+>
+  {/* 1. Search Bar Section */}
+  <div className="flex items-center gap-4 mb-4">
+    <div className="flex-1">
+      <CustomMultiAutocompleteSearch
+        categories={searchCategories}
+        onSelect={handleSearchSelect}
+        onCustomSearch={handleCustomSearch}
+      />
+    </div>
+  </div>
+
+  {/* 2. View Controls Section */}
+  <div className="flex items-center justify-between mb-4">
+    {/* Left: View Mode Toggle */}
+    <div className="flex items-center gap-2">
+      <Button
+        variant={viewMode === 'grid' ? 'default' : 'outline'}
+        size="sm"
+        onClick={() => setViewMode('grid')}
+        className="flex items-center gap-2"
+      >
+        <Grid3X3 className="h-4 w-4" />
+        Grid
+      </Button>
+      <Button
+        variant={viewMode === 'list' ? 'default' : 'outline'}
+        size="sm"
+        onClick={() => setViewMode('list')}
+        className="flex items-center gap-2"
+      >
+        <List className="h-4 w-4" />
+        List
+      </Button>
+    </div>
+
+    {/* Right: Sort Options */}
+    <div className="flex items-center gap-2">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-2"
+          >
+            Sort: {getSortLabel(sortBy)}
+            <ChevronDown className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {sortOptions.map(option => (
+            <DropdownMenuItem
+              key={option.value}
+              onClick={() => setSort(option.value)}
+            >
+              {option.label}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  </div>
+
+  {/* 3. Selected Tags Section */}
+  <div className="my-4">
+    {selectedTags.length > 0 && (
+      <div className="flex flex-wrap gap-2 items-center">
+        {/* Clear All Button */}
+        <button
+          onClick={handleClearAll}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors duration-200 border border-border/50 hover:border-border cursor-pointer group"
+          title="Clear all filters"
+        >
+          <X className="h-3.5 w-3.5 group-hover:scale-110 transition-transform duration-200" />
+          Clear All
+        </button>
+
+        {/* Individual Tags */}
+        {selectedTags.map(tag => (
+          <span
+            key={tag.id}
+            className="inline-flex items-center px-3 py-1.5 rounded-full bg-skyrim-gold/20 border border-skyrim-gold/30 text-sm font-medium text-skyrim-gold hover:bg-skyrim-gold/30 transition-colors duration-200 cursor-pointer group"
+            onClick={() => removeTag(tag.id)}
+            title="Click to remove"
+          >
+            {tag.label}
+            <span className="ml-2 text-skyrim-gold/70 group-hover:text-skyrim-gold transition-colors duration-200">
+              ×
+            </span>
+          </span>
+        ))}
+      </div>
+    )}
+  </div>
+
+  {/* 4. Content Area */}
+  {viewMode === 'grid' ? (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
+      {/* Grid content */}
+    </div>
+  ) : (
+    <div className="flex flex-col gap-4 w-full mt-6">{/* List content */}</div>
+  )}
+</BuildPageShell>
+```
+
+## 🎨 **Required Styling Standards**
+
+### **1. Spacing & Layout**
+
+- **Container**: `container mx-auto p-6 space-y-6`
+- **Search section**: `mb-4` bottom margin
+- **Controls section**: `mb-4` bottom margin
+- **Tags section**: `my-4` vertical margin
+- **Content area**: `mt-6` top margin
+
+### **2. Flex Layouts**
+
+- **Search bar**: `flex items-center gap-4`
+- **View controls**: `flex items-center justify-between`
+- **Button groups**: `flex items-center gap-2`
+- **Tags**: `flex flex-wrap gap-2 items-center`
+
+### **3. Responsive Design**
+
+- **Search bars**: `flex-1 min-w-[300px]` for fuzzy search
+- **Category search**: `flex-shrink-0 min-w-[200px] max-w-[300px]`
+- **Grid**: `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
+- **Flex wrap**: `flex-wrap` for mobile adaptation
+
+### **4. Interactive States**
+
+- **Button variants**: `default` for active, `outline` for inactive
+- **Hover effects**: `hover:shadow-lg transition-shadow`
+- **Tag styling**: Skyrim gold theme with hover states
+- **Transitions**: `transition-colors duration-200`
+
+## 🔧 **Required Hook Pattern**
+
+All feature pages **MUST** implement a filter hook following this pattern:
+
+```tsx
+// src/features/<feature>/hooks/use<Feature>Filters.ts
+export function use<Feature>Filters(data: <Feature>[]) {
+  const [state, dispatch] = useReducer(filterReducer, initialState)
+
+  // 1. Search Categories
+  const searchCategories: SearchCategory[] = useMemo(() => [
+    {
+      id: 'fuzzy-search',
+      name: 'Fuzzy Search',
+      placeholder: 'Search by name, description, or abilities...',
+      options: [],
+    },
+    // Feature-specific categories...
+  ], [data])
+
+  // 2. Filtering Logic
+  const filteredData = useMemo(() => {
+    // Implementation specific to feature
+  }, [data, state.selectedTags])
+
+  // 3. Sorting Logic
+  const sortedData = useMemo(() => {
+    // Implementation specific to feature
+  }, [filteredData, state.sortBy])
+
+  // 4. Handlers
+  const addTag = useCallback((tag: SelectedTag) => {
+    dispatch({ type: 'ADD_TAG', payload: tag })
+  }, [])
+
+  const removeTag = useCallback((tagId: string) => {
+    dispatch({ type: 'REMOVE_TAG', payload: tagId })
+  }, [])
+
+  const setSort = useCallback((sortBy: SortOption) => {
+    dispatch({ type: 'SET_SORT', payload: sortBy })
+  }, [])
+
+  const setViewMode = useCallback((viewMode: ViewMode) => {
+    dispatch({ type: 'SET_VIEW_MODE', payload: viewMode })
+  }, [])
+
+  return {
+    ...state,
+    addTag,
+    removeTag,
+    setSort,
+    setViewMode,
+    searchCategories,
+    filteredData,
+    sortedData,
+  }
+}
+```
+
+## 📦 **Required Components**
+
+### **1. Shared Components (Already Available)**
+
+- `BuildPageShell` - Page container with title/description
+- `CustomMultiAutocompleteSearch` - Multi-category search
+- `FuzzySearchBox` - General text search
+- `AutocompleteSearch` - Category-specific search
+
+### **2. Required Icons**
+
+```tsx
+import { ChevronDown, Grid3X3, List, X, Search, Plus } from 'lucide-react'
+```
+
+### **3. Required UI Components**
+
+```tsx
+import { Button } from '@/shared/ui/ui/button'
+import { Input } from '@/shared/ui/ui/input'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/ui/ui/dropdown-menu'
+```
+
+## 🚫 **Prohibited Patterns**
+
+- **Inconsistent spacing**: Don't use different margin/padding values
+- **Custom search layouts**: Don't create new search bar patterns
+- **Different tag styling**: Don't deviate from Skyrim gold theme
+- **Missing view controls**: Don't omit grid/list toggle or sort options
+- **Hardcoded categories**: Don't hardcode search categories in components
+
+## ✅ **Implementation Checklist**
+
+For each new feature page:
+
+- [ ] Uses `BuildPageShell` with title and description
+- [ ] Implements search bar section with `CustomMultiAutocompleteSearch`
+- [ ] Includes view controls with grid/list toggle and sort dropdown
+- [ ] Shows selected tags with clear all functionality
+- [ ] Uses consistent spacing (`mb-4`, `gap-4`, `gap-2`)
+- [ ] Implements responsive grid/list layout
+- [ ] Uses Skyrim gold theme for tags
+- [ ] Creates feature-specific filter hook
+- [ ] Follows reducer pattern for state management
+- [ ] Includes proper TypeScript types
+
+## 💡 **Quick Implementation Template**
+
+```tsx
+// 1. Create filter hook
+const {
+  selectedTags,
+  sortBy,
+  viewMode,
+  addTag,
+  removeTag,
+  setSort,
+  setViewMode,
+  searchCategories,
+  sortedData,
+} = use<Feature>Filters(data)
+
+// 2. Use standard header structure
+<BuildPageShell title="Title" description="Description">
+  {/* Copy header structure from above */}
+</BuildPageShell>
+```
+
+## 🎯 **Feature-Specific Customization**
+
+### **Allowed Customizations**
+
+- **Search categories**: Feature-specific filter options
+- **Sort options**: Custom sorting logic per feature
+- **Content rendering**: Grid/list item components
+- **Filter logic**: Feature-specific filtering rules
+
+### **Required Consistency**
+
+- **Layout structure**: Must follow exact header pattern
+- **Styling**: Must use consistent spacing and colors
+- **Component usage**: Must use shared components
+- **State management**: Must follow reducer pattern
+
+## 🔍 **Validation Rules**
+
+### **Layout Validation**
+
+- ✅ Search bar takes full width with `flex-1`
+- ✅ View controls use `justify-between`
+- ✅ Tags section shows only when tags exist
+- ✅ Content area uses responsive grid/list
+
+### **Styling Validation**
+
+- ✅ Consistent spacing (`mb-4`, `gap-4`, `gap-2`)
+- ✅ Skyrim gold theme for tags (`bg-skyrim-gold/20`)
+- ✅ Proper button variants (`default`/`outline`)
+- ✅ Responsive breakpoints (`md:`, `lg:`)
+
+### **Functionality Validation**
+
+- ✅ Search categories are dynamic
+- ✅ Sort options are configurable
+- ✅ View mode toggles work
+- ✅ Tags can be added/removed
+
+This ensures **visual consistency** and **functional parity** across all feature pages while allowing for feature-specific customization of search categories and filtering logic.
+description:
+globs:
+alwaysApply: false
+
+---

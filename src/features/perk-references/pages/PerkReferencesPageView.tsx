@@ -1,21 +1,22 @@
-import { cn } from '@/lib/utils'
 import { BuildPageShell } from '@/shared/components/playerCreation'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
-import type {
-  SearchCategory,
-  SearchOption,
-  SelectedTag,
-} from '@/shared/components/playerCreation/types'
+import type { SearchCategory } from '@/shared/components/playerCreation/types'
 import { AccordionGrid } from '@/shared/components/ui'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Button } from '@/shared/ui/ui/button'
-import { ArrowLeft, Grid3X3, List, X } from 'lucide-react'
-import { useState, useMemo } from 'react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/ui/ui/dropdown-menu'
+import { ArrowLeft, ChevronDown, Grid3X3, List, X } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { usePerkReferencesData } from '../adapters/usePerkReferencesData'
+import { usePerkReferencesFilters } from '../adapters/usePerkReferencesFilters'
 import { PerkReferenceAccordionCard } from '../components/atomic/PerkReferenceAccordionCard'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
-import type { PerkReferenceNode } from '../types'
 import { perkToPlayerCreationItem } from '../utils/perkToPlayerCreationItem'
 
 export function PerkReferencesPageView() {
@@ -24,12 +25,27 @@ export function PerkReferencesPageView() {
 
   const { allPerks, loading, error } = usePerkReferencesData()
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list')
+  const [sortBy, setSortBy] = useState<'alphabetical' | 'skill-tree' | 'level'>(
+    'alphabetical'
+  )
 
-  // Generate enhanced search categories for autocomplete
-  const generateSearchCategories = (): SearchCategory[] => {
+  // Use the existing filters hook
+  const {
+    selectedTags,
+    searchQuery,
+    onTagSelect,
+    onTagRemove,
+    onClearTags,
+    onSearchChange,
+  } = usePerkReferencesFilters()
+
+  // Generate search categories for autocomplete
+  const searchCategories: SearchCategory[] = useMemo(() => {
     const allSkillTrees = [...new Set(allPerks.map(perk => perk.skillTreeName))]
     const allTags = [...new Set(allPerks.flatMap(perk => perk.tags))]
-    const allMinLevels = [...new Set(allPerks.map(perk => perk.minLevel || 0))].sort((a, b) => a - b)
+    const allMinLevels = [
+      ...new Set(allPerks.map(perk => perk.minLevel || 0)),
+    ].sort((a, b) => a - b)
 
     return [
       {
@@ -69,89 +85,39 @@ export function PerkReferencesPageView() {
         })),
       },
     ]
-  }
+  }, [allPerks])
 
-  const searchCategories = generateSearchCategories()
-
-  // --- Custom tag/filter state for fuzzy search ---
-  const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
-
-  // Add a tag (from autocomplete or custom input)
-  const handleTagSelect = (optionOrTag: SearchOption | string) => {
-    let tag: SelectedTag
-    if (typeof optionOrTag === 'string') {
-      tag = {
-        id: `custom-${optionOrTag}`,
-        label: optionOrTag,
-        value: optionOrTag,
-        category: 'Fuzzy Search',
-      }
-    } else {
-      tag = {
-        id: `${optionOrTag.category}-${optionOrTag.id}`,
-        label: optionOrTag.label,
-        value: optionOrTag.value,
-        category: optionOrTag.category,
-      }
-    }
-    // Prevent duplicate tags
-    if (
-      !selectedTags.some(
-        t => t.value === tag.value && t.category === tag.category
-      )
-    ) {
-      setSelectedTags(prev => [...prev, tag])
-    }
-  }
-
-  // Remove a tag
-  const handleTagRemove = (tagId: string) => {
-    setSelectedTags(prev => prev.filter(tag => tag.id !== tagId))
-  }
-
-  // Apply all filters to perks
-  const filteredPerksWithTags = allPerks.filter((perk: PerkReferenceNode) => {
-    // If no tags are selected, show all perks
-    if (selectedTags.length === 0) return true
-
-    // Check each selected tag
-    return selectedTags.every(tag => {
-      switch (tag.category) {
-        case 'Fuzzy Search':
-          // For fuzzy search, we'll handle this separately
-          return true
-
-        case 'Skill Trees':
-          // Filter by skill tree
-          return perk.skillTreeName === tag.value
-
-        case 'Minimum Level':
-          // Filter by minimum level
-          const level = parseInt(tag.value)
-          return !isNaN(level) && (perk.minLevel || 0) >= level
-
-        default:
-          return true
-      }
-    })
-  })
-
-  // Apply fuzzy search to the filtered perks
-  const fuzzySearchQuery = selectedTags
-    .filter(tag => tag.category === 'Fuzzy Search')
-    .map(tag => tag.value)
-    .join(' ')
-
-  const { filteredPerks: fuzzyFilteredPerks } = useFuzzySearch(
-    filteredPerksWithTags as PerkReferenceNode[],
-    fuzzySearchQuery
-  )
+  // Apply fuzzy search
+  const { filteredPerks } = useFuzzySearch(allPerks, searchQuery)
 
   // Convert to PlayerCreationItem format
-  const displayItems = fuzzyFilteredPerks.map(perk => {
+  const displayItems = filteredPerks.map(perk => {
     const item = perkToPlayerCreationItem(perk, build)
     return { ...item, originalPerk: perk }
   })
+
+  // Sort the display items
+  const sortedDisplayItems = useMemo(() => {
+    const sorted = [...displayItems]
+    switch (sortBy) {
+      case 'alphabetical':
+        return sorted.sort((a, b) => a.name.localeCompare(b.name))
+      case 'skill-tree':
+        return sorted.sort((a, b) => {
+          const aTree = a.originalPerk.skillTreeName
+          const bTree = b.originalPerk.skillTreeName
+          return aTree.localeCompare(bTree) || a.name.localeCompare(b.name)
+        })
+      case 'level':
+        return sorted.sort((a, b) => {
+          const aLevel = a.originalPerk.minLevel || 0
+          const bLevel = b.originalPerk.minLevel || 0
+          return aLevel - bLevel || a.name.localeCompare(b.name)
+        })
+      default:
+        return sorted
+    }
+  }, [displayItems, sortBy])
 
   // Handle accordion expansion
   const [expandedPerks, setExpandedPerks] = useState<Set<string>>(new Set())
@@ -162,24 +128,27 @@ export function PerkReferencesPageView() {
     if (viewMode === 'grid') {
       // In grid mode, expand/collapse all items in the same row
       const columns = 3 // Match the AccordionGrid columns prop
-      const itemIndex = displayItems.findIndex(item => item.id === perkId)
+      const itemIndex = sortedDisplayItems.findIndex(item => item.id === perkId)
       const rowIndex = Math.floor(itemIndex / columns)
       const rowStartIndex = rowIndex * columns
-      const rowEndIndex = Math.min(rowStartIndex + columns, displayItems.length)
+      const rowEndIndex = Math.min(
+        rowStartIndex + columns,
+        sortedDisplayItems.length
+      )
 
       // Check if any item in the row is currently expanded
-      const isRowExpanded = displayItems
+      const isRowExpanded = sortedDisplayItems
         .slice(rowStartIndex, rowEndIndex)
         .some(item => newExpanded.has(item.id))
 
       if (isRowExpanded) {
         // Collapse all items in the row
-        displayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
+        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
           newExpanded.delete(item.id)
         })
       } else {
         // Expand all items in the row
-        displayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
+        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
           newExpanded.add(item.id)
         })
       }
@@ -195,140 +164,164 @@ export function PerkReferencesPageView() {
     setExpandedPerks(newExpanded)
   }
 
-  // Clear all tags
-  const handleClearTags = () => {
-    setSelectedTags([])
-  }
-
   // Handle view mode change
   const handleViewModeChange = (mode: 'grid' | 'list') => {
     setViewMode(mode)
     setExpandedPerks(new Set()) // Reset expansion when changing view mode
   }
 
+  // Get sort label
+  const getSortLabel = (sort: string) => {
+    switch (sort) {
+      case 'alphabetical':
+        return 'Alphabetical (A-Z)'
+      case 'skill-tree':
+        return 'Skill Tree'
+      case 'level':
+        return 'Level'
+      default:
+        return 'Alphabetical (A-Z)'
+    }
+  }
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading perk data...</p>
+      <BuildPageShell>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-lg">Loading perk data...</div>
         </div>
-      </div>
+      </BuildPageShell>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-destructive mb-4">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
-          >
-            Retry
-          </button>
+      <BuildPageShell>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-lg text-red-500">
+            Error loading perk data: {error}
+          </div>
         </div>
-      </div>
+      </BuildPageShell>
     )
   }
 
   return (
-    <BuildPageShell
-      title="Perk References"
-      description="Browse and search all available perks. Find the perfect abilities for your character build."
-    >
-      <div className="space-y-6">
-        {/* Header with back button */}
-        <div className="flex items-center gap-4">
+    <BuildPageShell title="Perk References">
+      {/* Header with back button */}
+      <div className="flex items-center gap-4 mb-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </Button>
+      </div>
+
+      {/* 1. Search Bar Section */}
+      <div className="flex items-center gap-4 mb-4">
+        <div className="flex-1">
+          <CustomMultiAutocompleteSearch
+            categories={searchCategories}
+            onSelect={onTagSelect}
+            onCustomSearch={onSearchChange}
+          />
+        </div>
+      </div>
+
+      {/* 2. View Controls Section */}
+      <div className="flex items-center justify-between mb-4">
+        {/* Left: View Mode Toggle */}
+        <div className="flex items-center gap-2">
           <Button
-            variant="ghost"
+            variant={viewMode === 'grid' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => navigate(-1)}
+            onClick={() => handleViewModeChange('grid')}
             className="flex items-center gap-2"
           >
-            <ArrowLeft className="h-4 w-4" />
-            Back
+            <Grid3X3 className="h-4 w-4" />
+            Grid
+          </Button>
+          <Button
+            variant={viewMode === 'list' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => handleViewModeChange('list')}
+            className="flex items-center gap-2"
+          >
+            <List className="h-4 w-4" />
+            List
           </Button>
         </div>
 
-        {/* Search and Filters Section */}
-        <div className="space-y-4">
-          {/* Custom MultiAutocompleteSearch */}
-          <CustomMultiAutocompleteSearch
-            categories={searchCategories}
-            onSelect={handleTagSelect}
-            onCustomSearch={handleTagSelect}
-            className="w-full"
-          />
-
-          {/* Selected Tags */}
-          {selectedTags.length > 0 && (
-            <div className="flex flex-wrap gap-2 items-center">
-              {/* Clear All Button */}
-              <button
-                onClick={handleClearTags}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors duration-200 border border-border/50 hover:border-border cursor-pointer group"
-                title="Clear all filters"
+        {/* Right: Sort Options */}
+        <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2"
               >
-                <svg className="h-3.5 w-3.5 group-hover:scale-110 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-                Clear All
-              </button>
+                Sort: {getSortLabel(sortBy)}
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setSortBy('alphabetical')}>
+                Alphabetical (A-Z)
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setSortBy('skill-tree')}>
+                Skill Tree
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setSortBy('level')}>
+                Level
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
 
-              {/* Individual Tags */}
-              {selectedTags.map(tag => (
-                <span
-                  key={tag.id}
-                  className="inline-flex items-center px-3 py-1.5 rounded-full bg-skyrim-gold/20 border border-skyrim-gold/30 text-sm font-medium text-skyrim-gold hover:bg-skyrim-gold/30 transition-colors duration-200 cursor-pointer group"
-                  onClick={() => handleTagRemove(tag.id)}
-                  title="Click to remove"
-                >
-                  {tag.label}
-                  <span className="ml-2 text-skyrim-gold/70 group-hover:text-skyrim-gold transition-colors duration-200">
-                    ×
-                  </span>
+      {/* 3. Selected Tags Section */}
+      <div className="my-4">
+        {selectedTags.length > 0 && (
+          <div className="flex flex-wrap gap-2 items-center">
+            {/* Clear All Button */}
+            <button
+              onClick={onClearTags}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors duration-200 border border-border/50 hover:border-border cursor-pointer group"
+              title="Clear all filters"
+            >
+              <X className="h-3.5 w-3.5 group-hover:scale-110 transition-transform duration-200" />
+              Clear All
+            </button>
+
+            {/* Individual Tags */}
+            {selectedTags.map(tag => (
+              <span
+                key={tag.id}
+                className="inline-flex items-center px-3 py-1.5 rounded-full bg-skyrim-gold/20 border border-skyrim-gold/30 text-sm font-medium text-skyrim-gold hover:bg-skyrim-gold/30 transition-colors duration-200 cursor-pointer group"
+                onClick={() => onTagRemove(tag.id)}
+                title="Click to remove"
+              >
+                {tag.label}
+                <span className="ml-2 text-skyrim-gold/70 group-hover:text-skyrim-gold transition-colors duration-200">
+                  ×
                 </span>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* View Mode Toggle */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">
-              {displayItems.length} perk{displayItems.length !== 1 ? 's' : ''} found
-            </span>
+              </span>
+            ))}
           </div>
+        )}
+      </div>
 
-          <div className="flex items-center gap-2">
-            <Button
-              variant={viewMode === 'grid' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => handleViewModeChange('grid')}
-              className="flex items-center gap-2"
-            >
-              <Grid3X3 className="h-4 w-4" />
-              Grid
-            </Button>
-            <Button
-              variant={viewMode === 'list' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => handleViewModeChange('list')}
-              className="flex items-center gap-2"
-            >
-              <List className="h-4 w-4" />
-              List
-            </Button>
-          </div>
-        </div>
-
+      {/* 4. Content Area */}
+      <div className="mt-6">
         {/* Results Section */}
         {viewMode === 'grid' ? (
           <AccordionGrid columns={3} gap="md">
-            {displayItems.map((item) => (
+            {sortedDisplayItems.map(item => (
               <PerkReferenceAccordionCard
                 key={item.id}
                 item={item}
@@ -340,7 +333,7 @@ export function PerkReferencesPageView() {
           </AccordionGrid>
         ) : (
           <div className="space-y-2">
-            {displayItems.map((item) => (
+            {sortedDisplayItems.map(item => (
               <PerkReferenceAccordionCard
                 key={item.id}
                 item={item}
@@ -354,4 +347,4 @@ export function PerkReferencesPageView() {
       </div>
     </BuildPageShell>
   )
-} 
+}
