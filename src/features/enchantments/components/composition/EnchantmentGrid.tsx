@@ -9,16 +9,17 @@ interface EnchantmentGridProps {
   enchantments?: EnchantmentWithComputed[]
   loading?: boolean
   emptyMessage?: string
+  onEnchantmentClick?: (enchantment: EnchantmentWithComputed) => void
 }
 
 export const EnchantmentGrid = React.memo<EnchantmentGridProps>(({
   className,
   enchantments: propEnchantments,
   loading: propLoading,
-  emptyMessage = "No enchantments found"
+  emptyMessage = "No enchantments found",
+  onEnchantmentClick
 }) => {
   const { data: storeEnchantments, loading: storeLoading, viewState } = useEnchantmentsStore()
-  const { selectEnchantment } = useEnchantmentsStore()
   
   const loading = propLoading ?? storeLoading
   const enchantments = propEnchantments ?? storeEnchantments
@@ -65,12 +66,12 @@ export const EnchantmentGrid = React.memo<EnchantmentGridProps>(({
   }, [enchantments, sortBy, sortOrder])
   
   const handleCardClick = (enchantment: EnchantmentWithComputed) => {
-    selectEnchantment(enchantment.baseEnchantmentId)
+    onEnchantmentClick?.(enchantment)
   }
   
   if (loading) {
     return (
-      <div className={cn('grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4', className)}>
+      <div className={cn('grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4', className)}>
         {Array.from({ length: 8 }).map((_, index) => (
           <div
             key={index}
@@ -103,10 +104,10 @@ export const EnchantmentGrid = React.memo<EnchantmentGridProps>(({
     <div className={cn(
       'grid gap-4',
       'grid-cols-1',
-      'sm:grid-cols-2', 
+      'md:grid-cols-2', 
       'lg:grid-cols-3',
-      'xl:grid-cols-4',
-      '2xl:grid-cols-5',
+      'xl:grid-cols-3',
+      '2xl:grid-cols-4',
       className
     )}>
       {sortedEnchantments.map((enchantment) => (

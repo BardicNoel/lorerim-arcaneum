@@ -85,15 +85,7 @@ export const EnchantmentSearchCard = React.memo<EnchantmentSearchCardProps>(({
           </div>
         )}
         
-        {/* Items */}
-        <div className="mb-4">
-          <ItemList
-            items={enchantment.foundOnItems}
-            title={`Found on ${enchantment.itemCount} items`}
-            maxItems={5}
-            showType={true}
-          />
-        </div>
+
         
         {/* Worn Restrictions */}
         {enchantment.wornRestrictions.length > 0 && (

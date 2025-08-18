@@ -39,7 +39,7 @@ export const EnchantmentGridCard = React.memo<EnchantmentGridCardProps>(({
       <CardContent className="p-4">
         {/* Header */}
         <div className="flex items-start justify-between gap-2 mb-3">
-          <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+          <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
             {enchantment.name}
           </h3>
           <div className="flex gap-1 flex-shrink-0">
@@ -51,48 +51,23 @@ export const EnchantmentGridCard = React.memo<EnchantmentGridCardProps>(({
           </div>
         </div>
         
-        {/* Category */}
-        <div className="mb-3">
-          <EnchantmentBadge
-            type="category"
-            value={enchantment.category}
-            size="sm"
-            variant="outline"
-          />
-        </div>
-        
         {/* Effects Preview */}
         {enchantment.hasEffects && (
           <div className="mb-3">
             <EffectsList
               effects={enchantment.effects}
-              title={`Effects (${enchantment.effectCount})`}
+              title="Effects"
               compact={true}
-              showDescriptions={false}
+              showDescriptions={true}
               maxDisplay={2}
             />
           </div>
         )}
         
-        {/* Items Preview */}
-        <div className="mb-3">
-          <ItemList
-            items={enchantment.foundOnItems}
-            title={`Found on ${enchantment.itemCount} items`}
-            maxItems={3}
-            compact={true}
-            showType={false}
-          />
-        </div>
+
       </CardContent>
       
-      {/* Footer */}
-      <CardFooter className="p-4 pt-0">
-        <div className="flex items-center justify-between text-xs text-muted-foreground w-full">
-          <span className="truncate">{enchantment.plugin}</span>
-          <span className="flex-shrink-0">{enchantment.itemCount} items</span>
-        </div>
-      </CardFooter>
+
     </Card>
   )
 })

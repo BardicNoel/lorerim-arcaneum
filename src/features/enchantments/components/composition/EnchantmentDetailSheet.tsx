@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
-import { cn } from '@/lib/utils'
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/shared/ui/ui/sheet'
+import React from 'react'
+import { ResponsivePanel } from '@/shared/components/generic/ResponsivePanel'
 import { Button } from '@/shared/ui/ui/button'
 import { X, ChevronLeft, ChevronRight, Copy, Share2 } from 'lucide-react'
 import { EnchantmentBadge } from '../atomic/EnchantmentBadge'
@@ -10,23 +9,21 @@ import { useEnchantmentsStore } from '@/shared/stores'
 import type { EnchantmentWithComputed } from '../../types'
 
 interface EnchantmentDetailSheetProps {
+  enchantment: EnchantmentWithComputed | null
   open: boolean
   onOpenChange: (open: boolean) => void
-  enchantmentId?: string
   className?: string
 }
 
 export const EnchantmentDetailSheet = React.memo<EnchantmentDetailSheetProps>(({
+  enchantment,
   open,
   onOpenChange,
-  enchantmentId,
   className
 }) => {
-  const { data: enchantments, selectedEnchantment, selectEnchantment, clearSelection } = useEnchantmentsStore()
+  const { data: enchantments } = useEnchantmentsStore()
   
-  const currentEnchantment = enchantmentId 
-    ? enchantments.find(e => e.baseEnchantmentId === enchantmentId)
-    : selectedEnchantment
+  const currentEnchantment = enchantment
   
   const currentIndex = currentEnchantment 
     ? enchantments.findIndex(e => e.baseEnchantmentId === currentEnchantment.baseEnchantmentId)
@@ -38,19 +35,22 @@ export const EnchantmentDetailSheet = React.memo<EnchantmentDetailSheetProps>(({
   const handlePrevious = () => {
     if (hasPrevious && currentEnchantment) {
       const prevEnchantment = enchantments[currentIndex - 1]
-      selectEnchantment(prevEnchantment.baseEnchantmentId)
+      // This would need to be handled by the parent component
+      // For now, we'll just close the sheet
+      onOpenChange(false)
     }
   }
   
   const handleNext = () => {
     if (hasNext && currentEnchantment) {
       const nextEnchantment = enchantments[currentIndex + 1]
-      selectEnchantment(nextEnchantment.baseEnchantmentId)
+      // This would need to be handled by the parent component
+      // For now, we'll just close the sheet
+      onOpenChange(false)
     }
   }
   
   const handleClose = () => {
-    clearSelection()
     onOpenChange(false)
   }
   
@@ -67,90 +67,58 @@ export const EnchantmentDetailSheet = React.memo<EnchantmentDetailSheetProps>(({
     }
   }
   
-  // Keyboard navigation
-  useEffect(() => {
-    if (!open) return
-    
-    const handleKeyDown = (event: KeyboardEvent) => {
-      switch (event.key) {
-        case 'Escape':
-          handleClose()
-          break
-        case 'ArrowLeft':
-          if (hasPrevious) {
-            event.preventDefault()
-            handlePrevious()
-          }
-          break
-        case 'ArrowRight':
-          if (hasNext) {
-            event.preventDefault()
-            handleNext()
-          }
-          break
-      }
-    }
-    
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [open, hasPrevious, hasNext])
+
   
   if (!currentEnchantment) {
     return null
   }
   
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent 
-        side="right" 
-        className={cn("w-full sm:max-w-2xl overflow-y-auto", className)}
-      >
-        <SheetHeader className="flex-shrink-0">
-          <div className="flex items-center justify-between">
-            <SheetTitle className="text-xl font-semibold">
-              {currentEnchantment.name}
-            </SheetTitle>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleClose}
-              className="h-8 w-8 p-0"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+    <ResponsivePanel open={open} onOpenChange={onOpenChange} side="right">
+      <div className="p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold">{currentEnchantment.name}</h2>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleClose}
+            className="h-8 w-8 p-0"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+        
+        {/* Navigation Controls */}
+        <div className="flex items-center justify-between mb-6">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handlePrevious}
+            disabled={!hasPrevious}
+            className="flex items-center gap-2"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Previous
+          </Button>
+          
+          <div className="text-sm text-muted-foreground">
+            {currentIndex + 1} of {enchantments.length}
           </div>
           
-          {/* Navigation Controls */}
-          <div className="flex items-center justify-between mt-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handlePrevious}
-              disabled={!hasPrevious}
-              className="flex items-center gap-2"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              Previous
-            </Button>
-            
-            <div className="text-sm text-muted-foreground">
-              {currentIndex + 1} of {enchantments.length}
-            </div>
-            
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleNext}
-              disabled={!hasNext}
-              className="flex items-center gap-2"
-            >
-              Next
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </SheetHeader>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleNext}
+            disabled={!hasNext}
+            className="flex items-center gap-2"
+          >
+            Next
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
         
-        <div className="flex-1 space-y-6 mt-6">
+        <div className="space-y-6">
           {/* Badges */}
           <div className="flex flex-wrap gap-2">
             <EnchantmentBadge
@@ -249,7 +217,7 @@ export const EnchantmentDetailSheet = React.memo<EnchantmentDetailSheetProps>(({
             </Button>
           </div>
         </div>
-      </SheetContent>
-    </Sheet>
+      </div>
+    </ResponsivePanel>
   )
 })

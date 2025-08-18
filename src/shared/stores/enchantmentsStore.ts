@@ -33,9 +33,11 @@ interface EnchantmentsStore {
   setFilters: (filters: Partial<EnchantmentFilters>) => void
   search: (query: string) => EnchantmentWithComputed[]
   selectEnchantment: (enchantmentId: string | null) => void
+  clearSelection: () => void
   clearSearch: () => void
 
   // Computed
+  get selectedEnchantment(): EnchantmentWithComputed | undefined
   getById: (id: string) => EnchantmentWithComputed | undefined
   getByBaseEnchantmentId: (baseEnchantmentId: string) => EnchantmentWithComputed | undefined
   getByCategory: (category: string) => EnchantmentWithComputed[]
@@ -196,6 +198,15 @@ export const useEnchantmentsStore = create<EnchantmentsStore>((set, get) => ({
     }), false, 'selectEnchantment')
   },
 
+  clearSelection: () => {
+    set(state => ({
+      viewState: {
+        ...state.viewState,
+        selectedEnchantment: null
+      }
+    }), false, 'clearSelection')
+  },
+
   clearSearch: () => {
     set({
       searchResults: [],
@@ -204,6 +215,13 @@ export const useEnchantmentsStore = create<EnchantmentsStore>((set, get) => ({
   },
 
   // Computed
+  get selectedEnchantment() {
+    const state = get()
+    return state.viewState.selectedEnchantment 
+      ? state.data.find(enchantment => enchantment.baseEnchantmentId === state.viewState.selectedEnchantment)
+      : undefined
+  },
+
   getById: (id: string) => {
     const state = get()
     return state.data.find(enchantment => enchantment.baseEnchantmentId === id)

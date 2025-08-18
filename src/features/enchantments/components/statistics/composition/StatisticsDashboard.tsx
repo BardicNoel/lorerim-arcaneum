@@ -113,15 +113,7 @@ export function StatisticsDashboard({ className }: StatisticsDashboardProps) {
         />
       </div>
 
-      {/* Plugin Distribution */}
-      <div className="grid grid-cols-1 gap-6">
-        <CategoryBreakdown
-          title="Plugin Sources"
-          description="Distribution of enchantments by plugin/DLC source"
-          data={chartData.pluginData}
-          total={statistics.totalEnchantments}
-        />
-      </div>
+
 
       {/* Summary Section */}
       <div className="bg-muted/50 rounded-lg p-6">
@@ -130,7 +122,7 @@ export function StatisticsDashboard({ className }: StatisticsDashboardProps) {
           <div>
             <div className="font-medium">Data Coverage</div>
             <div className="text-muted-foreground">
-              {statistics.totalEnchantments} enchantments across {Object.keys(statistics.pluginSources).length} sources
+              {statistics.totalEnchantments} enchantments available
             </div>
           </div>
           <div>

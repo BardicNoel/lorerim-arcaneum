@@ -1,6 +1,8 @@
 import React from 'react'
 import { cn } from '@/lib/utils'
 import { Sparkles } from 'lucide-react'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
+import { getGameTextFormattingOptions } from '@/shared/utils/gameTextFormatting'
 import type { EnchantmentEffect } from '../../types'
 
 interface EffectDisplayProps {
@@ -26,14 +28,13 @@ export const EffectDisplay = React.memo<EffectDisplayProps>(({
       </div>
       
       {showDescription && (
-        <p
-          className={cn(
-            'text-sm text-muted-foreground pl-5',
-            compact ? 'line-clamp-2' : ''
-          )}
-        >
-          {effect.description}
-        </p>
+        <div className="pl-5">
+          <FormattedText
+            text={effect.description}
+            options={getGameTextFormattingOptions()}
+            className="text-sm text-muted-foreground"
+          />
+        </div>
       )}
     </div>
   )
@@ -73,11 +74,6 @@ export const EffectsList = React.memo<EffectsListProps>(({
         <h4 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
           <Sparkles className="h-4 w-4" />
           {title}
-          {effects.length > 1 && (
-            <span className="text-xs text-muted-foreground/70">
-              ({effects.length})
-            </span>
-          )}
         </h4>
       )}
       

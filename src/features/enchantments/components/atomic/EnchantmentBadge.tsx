@@ -41,6 +41,15 @@ const badgeIcons = {
   }
 }
 
+const displayNames = {
+  category: {},
+  targetType: {
+    touch: 'Weapon',
+    self: 'Armor'
+  },
+  itemType: {}
+}
+
 const sizeClasses = {
   sm: 'px-2 py-0.5 text-xs',
   md: 'px-2.5 py-0.5 text-xs',
@@ -56,9 +65,11 @@ export const EnchantmentBadge = React.memo<EnchantmentBadgeProps>(({
 }) => {
   const colors = badgeColors[type] as Record<string, string>
   const icons = badgeIcons[type] as Record<string, string>
+  const names = displayNames[type] as Record<string, string>
   
   const badgeStyle = colors[value] || 'bg-gray-100 text-gray-800 border-gray-200'
   const icon = icons[value] || '📋'
+  const displayName = names[value] || value
   
   if (variant === 'outline') {
     return (
@@ -71,7 +82,7 @@ export const EnchantmentBadge = React.memo<EnchantmentBadgeProps>(({
         )}
       >
         <span>{icon}</span>
-        <span>{value}</span>
+        <span>{displayName}</span>
       </Badge>
     )
   }
@@ -86,7 +97,7 @@ export const EnchantmentBadge = React.memo<EnchantmentBadgeProps>(({
       )}
     >
       <span>{icon}</span>
-      <span>{value}</span>
+      <span>{displayName}</span>
     </span>
   )
 })

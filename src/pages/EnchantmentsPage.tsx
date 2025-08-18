@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { H1, H2 } from '@/shared/ui/ui/typography'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
@@ -8,21 +8,22 @@ import {
 } from '@/features/enchantments/components/composition'
 import { StatisticsDashboard } from '@/features/enchantments/components/statistics/composition/StatisticsDashboard'
 import { EnchantmentsDataInitializer } from '@/features/enchantments/components/EnchantmentsDataInitializer'
-import { useEnchantmentDetail } from '@/features/enchantments/hooks/useEnchantmentDetail'
 import { useSearchParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import type { EnchantmentWithComputed } from '@/features/enchantments/types'
 
 export default function EnchantmentsPage() {
-  const { selectedEnchantment, openDetail, closeDetail, isOpen } = useEnchantmentDetail()
+  const [selectedEnchantment, setSelectedEnchantment] = useState<EnchantmentWithComputed | null>(null)
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
   const [searchParams] = useSearchParams()
 
   // Handle URL parameter for pre-selected enchantment
   useEffect(() => {
     const selectedId = searchParams.get('selected')
     if (selectedId) {
-      openDetail(selectedId)
+      // This will be handled by the grid component
+      // We'll need to pass this down to trigger the sheet
     }
-  }, [searchParams, openDetail])
+  }, [searchParams])
 
   return (
     <div className="bg-background min-h-screen">
@@ -30,13 +31,9 @@ export default function EnchantmentsPage() {
       
       {/* Detail Sheet */}
       <EnchantmentDetailSheet
-        open={isOpen}
-        onOpenChange={(open) => {
-          if (!open) {
-            closeDetail()
-          }
-        }}
-        enchantmentId={selectedEnchantment}
+        enchantment={selectedEnchantment}
+        open={isSheetOpen}
+        onOpenChange={setIsSheetOpen}
       />
       
       <div className="container mx-auto px-4 py-8 space-y-8">
@@ -60,104 +57,15 @@ export default function EnchantmentsPage() {
           </TabsList>
           
           <TabsContent value="enchantments">
-            {/* Main Enchantment Content */}
-            <div className="space-y-6">
-              {/* Information Section */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="border-skyrim-gold/20">
-                  <CardHeader>
-                    <CardTitle className="text-skyrim-gold flex items-center gap-2">
-                      🎯 Target Types
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div>
-                      <H2 className="text-lg font-semibold text-skyrim-gold">Touch</H2>
-                      <p className="text-sm text-muted-foreground">
-                        Enchantments that affect targets when touched, typically found on weapons.
-                      </p>
-                    </div>
-                    <div>
-                      <H2 className="text-lg font-semibold text-skyrim-gold">Self</H2>
-                      <p className="text-sm text-muted-foreground">
-                        Enchantments that affect the wearer, typically found on armor and accessories.
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-skyrim-gold/20">
-                  <CardHeader>
-                    <CardTitle className="text-skyrim-gold flex items-center gap-2">
-                      📋 Categories
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div>
-                      <H2 className="text-lg font-semibold text-skyrim-gold">Standard Enchantments</H2>
-                      <p className="text-sm text-muted-foreground">
-                        Common enchantments available throughout the world.
-                      </p>
-                    </div>
-                    <div>
-                      <H2 className="text-lg font-semibold text-skyrim-gold">Unique Enchantments</H2>
-                      <p className="text-sm text-muted-foreground">
-                        Special enchantments found on specific items or locations.
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Usage Instructions */}
-              <Card className="border-skyrim-gold/20">
-                <CardHeader>
-                  <CardTitle className="text-skyrim-gold flex items-center gap-2">
-                    💡 How to Use
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="text-center space-y-2">
-                      <div className="text-2xl">🔍</div>
-                      <H2 className="text-lg font-semibold">Search & Filter</H2>
-                      <p className="text-sm text-muted-foreground">
-                        Use the search bar and filters to find specific enchantments by name, category, or effects.
-                      </p>
-                    </div>
-                    <div className="text-center space-y-2">
-                      <div className="text-2xl">📱</div>
-                      <H2 className="text-lg font-semibold">Browse Grid</H2>
-                      <p className="text-sm text-muted-foreground">
-                        Click on any enchantment card to view detailed information in a modal sheet.
-                      </p>
-                    </div>
-                    <div className="text-center space-y-2">
-                      <div className="text-2xl">🌐</div>
-                      <H2 className="text-lg font-semibold">Global Search</H2>
-                      <p className="text-sm text-muted-foreground">
-                        Use the global search bar to find enchantments from anywhere in the application.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Enchantment Grid */}
-              <Card className="border-skyrim-gold/20">
-                <CardHeader>
-                  <CardTitle className="text-skyrim-gold flex items-center gap-2">
-                    ⚡ Enchantment Collection
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <EnchantmentGridContainer
-                    showFilters={true}
-                    className="mt-4"
-                  />
-                </CardContent>
-              </Card>
-            </div>
+            {/* Enchantment Collection */}
+            <EnchantmentGridContainer
+              showFilters={true}
+              className="mt-4"
+              onEnchantmentClick={(enchantment) => {
+                setSelectedEnchantment(enchantment)
+                setIsSheetOpen(true)
+              }}
+            />
           </TabsContent>
           
           <TabsContent value="statistics">

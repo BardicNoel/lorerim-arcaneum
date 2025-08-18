@@ -3,15 +3,18 @@ import { cn } from '@/lib/utils'
 import { EnchantmentGrid } from './EnchantmentGrid'
 import { FilterControls } from './FilterControls'
 import { useEnchantmentFilters } from '../../hooks/useEnchantmentFilters'
+import type { EnchantmentWithComputed } from '../../types'
 
 interface EnchantmentGridContainerProps {
   className?: string
   showFilters?: boolean
+  onEnchantmentClick?: (enchantment: EnchantmentWithComputed) => void
 }
 
 export const EnchantmentGridContainer: React.FC<EnchantmentGridContainerProps> = ({
   className,
-  showFilters = true
+  showFilters = true,
+  onEnchantmentClick
 }) => {
   const { filteredEnchantments, totalCount, filteredCount } = useEnchantmentFilters()
   
@@ -31,6 +34,7 @@ export const EnchantmentGridContainer: React.FC<EnchantmentGridContainerProps> =
       <EnchantmentGrid
         enchantments={filteredEnchantments}
         loading={false}
+        onEnchantmentClick={onEnchantmentClick}
       />
     </div>
   )
