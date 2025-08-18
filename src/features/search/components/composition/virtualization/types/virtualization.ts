@@ -5,11 +5,22 @@ export interface ItemPosition {
   index: number
 }
 
+export interface PreMeasurementConfig {
+  enabled: boolean
+  maxItemsToMeasure: number
+  showLoadingScreen: boolean
+  showProgress: boolean
+}
+
 export interface VirtualizationState {
   visibleRange: { start: number; end: number }
   scrollTop: number
   containerHeight: number
   itemPositions: Map<string, ItemPosition>
+  isPreMeasuring: boolean
+  preMeasuredHeights: Map<string, number>
+  preMeasurementProgress: number
+  preMeasurementError: string | null
 }
 
 export interface MasonryVirtualizerConfig {
@@ -25,6 +36,7 @@ export interface MasonryVirtualizerConfig {
     maxColumnWidth?: number
     gap?: number
   }>
+  preMeasurement?: PreMeasurementConfig
 }
 
 export interface VirtualizationMetrics {

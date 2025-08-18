@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import type { 
   MasonryVirtualizerConfig, 
@@ -8,6 +8,7 @@ import type {
 } from '../types/virtualization'
 import { MasonryVirtualizer } from '../engine/MasonryVirtualizer'
 import { debounce, throttle } from '../utils/performanceUtils'
+import { usePreMeasurement } from './usePreMeasurement'
 
 /**
  * Hook for masonry virtualization
@@ -15,7 +16,8 @@ import { debounce, throttle } from '../utils/performanceUtils'
 export function useMasonryVirtualizer<T>(
   items: T[],
   keyExtractor: (item: T) => string,
-  config: Partial<MasonryVirtualizerConfig> = {}
+  config: Partial<MasonryVirtualizerConfig> = {},
+  renderItem?: (item: T) => React.ReactNode
 ) {
   const containerRef = useRef<HTMLDivElement>(null)
   const virtualizerRef = useRef<MasonryVirtualizer | null>(null)
@@ -24,7 +26,11 @@ export function useMasonryVirtualizer<T>(
     visibleRange: { start: 0, end: 0 },
     scrollTop: 0,
     containerHeight: 0,
-    itemPositions: new Map()
+    itemPositions: new Map(),
+    isPreMeasuring: false,
+    preMeasuredHeights: new Map(),
+    preMeasurementProgress: 0,
+    preMeasurementError: null
   })
   
   const [metrics, setMetrics] = useState<VirtualizationMetrics>({
@@ -46,13 +52,34 @@ export function useMasonryVirtualizer<T>(
     ...config
   }
 
+  // Pre-measurement hook
+  const preMeasurementConfig = config.preMeasurement || {
+    enabled: true,
+    maxItemsToMeasure: 20,
+    showLoadingScreen: true,
+    showProgress: true
+  }
+
+  // Memoize the pre-measurement config to prevent infinite re-renders
+  const preMeasurementConfigMemo = useMemo(() => ({
+    maxItemsToMeasure: preMeasurementConfig.maxItemsToMeasure,
+    columnWidth: containerWidth || 300, // fallback
+    renderItem: renderItem || (() => null),
+    keyExtractor
+  }), [preMeasurementConfig.maxItemsToMeasure, containerWidth, renderItem, keyExtractor])
+
+  const { isMeasuring, measuredHeights, progress, error } = usePreMeasurement(
+    items,
+    preMeasurementConfigMemo
+  )
+
   // Initialize virtualizer
   useEffect(() => {
     if (!containerRef.current) return
 
     virtualizerRef.current = new MasonryVirtualizer(
       defaultConfig,
-      containerRef,
+      containerRef as React.RefObject<HTMLElement>,
       keyExtractor
     )
 
@@ -69,6 +96,24 @@ export function useMasonryVirtualizer<T>(
   useEffect(() => {
     virtualizerRef.current?.initialize(items)
   }, [items])
+
+  // Update virtualizer with measured heights
+  useEffect(() => {
+    if (virtualizerRef.current && measuredHeights.size > 0) {
+      virtualizerRef.current.setPreMeasuredHeights(measuredHeights)
+    }
+  }, [measuredHeights])
+
+  // Update state with pre-measurement info
+  useEffect(() => {
+    setState(prev => ({
+      ...prev,
+      isPreMeasuring: isMeasuring,
+      preMeasuredHeights: measuredHeights,
+      preMeasurementProgress: progress,
+      preMeasurementError: error
+    }))
+  }, [isMeasuring, measuredHeights, progress, error])
 
   // Handle container resize
   const handleResize = useCallback(
@@ -114,13 +159,22 @@ export function useMasonryVirtualizer<T>(
 
   // Get visible items
   const getVisibleItems = useCallback(() => {
-    if (!virtualizerRef.current || !containerRef.current) return []
+    // Don't return visible items during pre-measurement
+    if (isMeasuring && preMeasurementConfig.enabled) {
+      return []
+    }
+    
+    if (!virtualizerRef.current || !containerRef.current) {
+      return []
+    }
 
     const scrollTop = containerRef.current.scrollTop
     const containerHeight = containerRef.current.clientHeight
 
-    return virtualizerRef.current.getVisibleItems(scrollTop, containerHeight)
-  }, [])
+    const visibleItems = virtualizerRef.current.getVisibleItems(scrollTop, containerHeight)
+    
+    return visibleItems
+  }, [isMeasuring, preMeasurementConfig.enabled])
 
   // Update configuration
   const updateConfig = useCallback((newConfig: Partial<MasonryVirtualizerConfig>) => {
@@ -150,6 +204,11 @@ export function useMasonryVirtualizer<T>(
     state,
     metrics,
     containerWidth,
+    
+    // Pre-measurement state
+    isPreMeasuring: isMeasuring,
+    preMeasurementProgress: progress,
+    preMeasurementError: error,
     
     // Actions
     handleScroll,

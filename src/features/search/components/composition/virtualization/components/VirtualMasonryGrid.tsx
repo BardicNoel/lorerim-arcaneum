@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 import { useMasonryVirtualizer } from '../hooks/useMasonryVirtualizer'
 import { VirtualItem } from './VirtualItem'
-import type { MasonryVirtualizerConfig } from '../types/virtualization'
+import { VirtualizationLoadingScreen } from './VirtualizationLoadingScreen'
+import type { MasonryVirtualizerConfig, PreMeasurementConfig } from '../types/virtualization'
 
 export interface VirtualMasonryGridProps<T> {
   items: T[]
@@ -16,6 +17,7 @@ export interface VirtualMasonryGridProps<T> {
   overscan?: number
   estimatedItemHeight?: number
   showPerformanceMetrics?: boolean
+  preMeasurement?: PreMeasurementConfig
 }
 
 export function VirtualMasonryGrid<T>({
@@ -31,6 +33,12 @@ export function VirtualMasonryGrid<T>({
   overscan = 5,
   estimatedItemHeight = 200,
   showPerformanceMetrics = false,
+  preMeasurement = {
+    enabled: true,
+    maxItemsToMeasure: 20,
+    showLoadingScreen: true,
+    showProgress: true
+  },
 }: VirtualMasonryGridProps<T>) {
   const containerRef = useRef<HTMLDivElement>(null)
   const loadMoreTriggerRef = useRef<HTMLDivElement>(null)
@@ -41,6 +49,7 @@ export function VirtualMasonryGrid<T>({
     gap,
     overscan,
     estimatedItemHeight,
+    preMeasurement,
   }
 
   // Use virtualization hook
@@ -53,7 +62,10 @@ export function VirtualMasonryGrid<T>({
     getVisibleItems,
     getTotalHeight,
     getPerformanceStats,
-  } = useMasonryVirtualizer(items, keyExtractor, config)
+    isPreMeasuring,
+    preMeasurementProgress,
+    preMeasurementError,
+  } = useMasonryVirtualizer(items, keyExtractor, config, renderItem)
 
   // Get visible items for rendering
   const visibleItems = getVisibleItems()
@@ -84,6 +96,16 @@ export function VirtualMasonryGrid<T>({
     },
     [measureItemHeight]
   )
+
+  // Log rendering state
+  useEffect(() => {
+    console.log('📱 [Grid] Rendering virtual container', {
+      isPreMeasuring,
+      opacity: isPreMeasuring ? 0 : 1,
+      visibleItemsCount: visibleItems.length,
+      totalHeight: getTotalHeight()
+    })
+  }, [isPreMeasuring, visibleItems.length, getTotalHeight])
 
   // Render individual item with height measurement
   const renderVirtualItem = useCallback(
@@ -119,6 +141,36 @@ export function VirtualMasonryGrid<T>({
     )
   }
 
+  // Show loading screen during pre-measurement
+  if (isPreMeasuring && preMeasurement.showLoadingScreen) {
+    return (
+      <VirtualizationLoadingScreen
+        message="Measuring content layout for optimal performance..."
+        showProgress={preMeasurement.showProgress}
+        progress={preMeasurementProgress}
+        totalItems={Math.min(items.length, preMeasurement.maxItemsToMeasure)}
+      />
+    )
+  }
+
+  // Show error if pre-measurement failed
+  if (preMeasurementError) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px] bg-destructive/10 rounded-lg">
+        <div className="text-center">
+          <p className="text-destructive mb-2">Pre-measurement failed</p>
+          <p className="text-sm text-muted-foreground">{preMeasurementError}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   if (items.length === 0) {
     return (
       <div className={`text-center py-12 ${className}`}>
@@ -135,10 +187,14 @@ export function VirtualMasonryGrid<T>({
       {/* Virtual Scroll Container */}
       <div
         ref={virtualContainerRef}
-        className="relative overflow-auto"
-        style={{ height: '100vh' }}
+        className="relative overflow-auto transition-opacity duration-300"
+        style={{ 
+          height: '100vh',
+          opacity: isPreMeasuring ? 0 : 1
+        }}
         onScroll={handleScroll}
       >
+        
         {/* Virtual Content */}
         <div
           style={{
@@ -148,9 +204,9 @@ export function VirtualMasonryGrid<T>({
           }}
         >
           {/* Render visible items */}
-          {visibleItems.map(({ item, position, key }) =>
-            renderVirtualItem({ item, position, key })
-          )}
+          {visibleItems.map(({ item, position, key }) => {
+            return renderVirtualItem({ item, position, key })
+          })}
 
           {/* Load more trigger */}
           {hasMore && (

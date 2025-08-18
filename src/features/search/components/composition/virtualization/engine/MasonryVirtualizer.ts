@@ -4,7 +4,8 @@ import type {
   MasonryVirtualizerConfig, 
   VirtualizationState, 
   VirtualizationMetrics,
-  ItemPosition 
+  ItemPosition,
+  PreMeasurementConfig
 } from '../types/virtualization'
 import { HeightMeasurer } from './HeightMeasurer'
 import { PositionCache } from './PositionCache'
@@ -24,6 +25,8 @@ export class MasonryVirtualizer {
   private keyExtractor: (item: any) => string
   private onStateChange?: (state: VirtualizationState) => void
   private onMetricsChange?: (metrics: VirtualizationMetrics) => void
+  private preMeasuredHeights: Map<string, number> = new Map()
+  private preMeasurementConfig: PreMeasurementConfig
 
   constructor(
     config: MasonryVirtualizerConfig,
@@ -36,6 +39,14 @@ export class MasonryVirtualizer {
     this.heightMeasurer = new HeightMeasurer()
     this.positionCache = new PositionCache(config.columns, config.gap)
     this.performanceMonitor = new PerformanceMonitor()
+    
+    // Initialize pre-measurement config
+    this.preMeasurementConfig = config.preMeasurement || {
+      enabled: true,
+      maxItemsToMeasure: 20,
+      showLoadingScreen: true,
+      showProgress: true
+    }
   }
 
   /**
@@ -117,7 +128,7 @@ export class MasonryVirtualizer {
   private recalculatePositions(): void {
     const itemsWithHeights = this.items.map((item, index) => {
       const key = this.keyExtractor(item)
-      const height = this.heightMeasurer.estimateHeight(key, this.config.estimatedItemHeight)
+      const height = this.getItemHeight(key)
       return { key, height }
     })
 
@@ -241,12 +252,55 @@ export class MasonryVirtualizer {
   }
 
   /**
+   * Set pre-measured heights from offscreen measurement
+   */
+  setPreMeasuredHeights(heights: Map<string, number>): void {
+    this.preMeasuredHeights = heights
+    this.recalculatePositionsWithPreMeasuredHeights()
+  }
+
+  /**
+   * Get item height with pre-measured fallback
+   */
+  getItemHeight(itemKey: string): number {
+    // Use pre-measured height if available
+    if (this.preMeasuredHeights.has(itemKey)) {
+      return this.preMeasuredHeights.get(itemKey)!
+    }
+    
+    // Fall back to estimation for items beyond pre-measured set
+    return this.heightMeasurer.estimateHeight(itemKey, this.config.estimatedItemHeight)
+  }
+
+  /**
+   * Recalculate positions using pre-measured heights
+   */
+  private recalculatePositionsWithPreMeasuredHeights(): void {
+    const itemsWithHeights = this.items.map((item, index) => {
+      const key = this.keyExtractor(item)
+      const height = this.getItemHeight(key)
+      return { key, height }
+    })
+
+    this.positionCache.calculatePositions(itemsWithHeights)
+    this.updateState()
+  }
+
+  /**
+   * Get pre-measurement config
+   */
+  getPreMeasurementConfig(): PreMeasurementConfig {
+    return this.preMeasurementConfig
+  }
+
+  /**
    * Cleanup resources
    */
   destroy(): void {
     this.heightMeasurer.clear()
     this.positionCache.clear()
     this.performanceMonitor.reset()
+    this.preMeasuredHeights.clear()
   }
 
   /**

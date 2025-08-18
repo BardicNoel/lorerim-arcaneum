@@ -11,7 +11,11 @@ export function useMultiColumnVirtualization<T>(
     visibleRange: { start: 0, end: 0 },
     scrollTop: 0,
     containerHeight: 0,
-    itemPositions: new Map()
+    itemPositions: new Map(),
+    isPreMeasuring: false,
+    preMeasuredHeights: new Map(),
+    preMeasurementProgress: 0,
+    preMeasurementError: null
   })
 
   const [containerWidth, setContainerWidth] = useState(0)

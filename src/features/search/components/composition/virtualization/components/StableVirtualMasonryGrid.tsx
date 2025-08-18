@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react'
-import { useMultiColumnVirtualization } from '../hooks/useMultiColumnVirtualization'
+import { useMasonryVirtualizer } from '../hooks/useMasonryVirtualizer'
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll'
 import { VirtualItem } from './VirtualItem'
-import type { MasonryVirtualizerConfig } from '../types/virtualization'
+import type { MasonryVirtualizerConfig, PreMeasurementConfig } from '../types/virtualization'
 import { getQuickEstimate } from '../utils/heightEstimator'
-import type { SearchableItem } from '../../../model/SearchModel'
 
 export interface StableVirtualMasonryGridProps<T> {
   items: T[]
@@ -20,6 +19,7 @@ export interface StableVirtualMasonryGridProps<T> {
   estimatedItemHeight?: number
   showPerformanceMetrics?: boolean
   useDynamicHeightEstimation?: boolean
+  preMeasurement?: PreMeasurementConfig
 }
 
 export function StableVirtualMasonryGrid<T>({
@@ -36,6 +36,7 @@ export function StableVirtualMasonryGrid<T>({
   estimatedItemHeight = 400,
   showPerformanceMetrics = false,
   useDynamicHeightEstimation = true,
+  preMeasurement,
 }: StableVirtualMasonryGridProps<T>) {
 
   // Calculate dynamic estimated height if enabled
@@ -44,10 +45,9 @@ export function StableVirtualMasonryGrid<T>({
       return estimatedItemHeight
     }
     
-    // For SearchableItem types, use dynamic estimation
+    // For items with type property, use dynamic estimation
     if (items[0] && typeof items[0] === 'object' && 'type' in items[0]) {
-      const searchableItems = items as unknown as SearchableItem[]
-      const heights = searchableItems.map(item => getQuickEstimate(item))
+      const heights = items.map(item => getQuickEstimate(item as any))
       const averageHeight = heights.reduce((sum, height) => sum + height, 0) / heights.length
       const result = Math.round(averageHeight)
       
@@ -74,21 +74,24 @@ export function StableVirtualMasonryGrid<T>({
     overscan,
     estimatedItemHeight: dynamicEstimatedHeight,
     containerWidth: 0, // Will be set by the hook
-  }), [columns, gap, overscan, dynamicEstimatedHeight])
+    preMeasurement,
+  }), [columns, gap, overscan, dynamicEstimatedHeight, preMeasurement])
 
   // Use the improved virtualization hook
   const {
     containerRef,
     state,
+    metrics,
     containerWidth,
     handleScroll,
     measureItemHeight,
     getVisibleItems,
     getTotalHeight,
     getPerformanceStats,
-    reset,
-    scrollToTop,
-  } = useMultiColumnVirtualization(items, keyExtractor, config)
+    isPreMeasuring,
+    preMeasurementProgress,
+    preMeasurementError,
+  } = useMasonryVirtualizer(items, keyExtractor, config, renderItem)
 
   // Get visible items for rendering
   const [visibleItems, setVisibleItems] = useState<Array<{ item: T; position: any; key: string }>>([])
@@ -103,12 +106,12 @@ export function StableVirtualMasonryGrid<T>({
     
     if (itemsChanged && prevItemsRef.current.length > 0) {
       console.log('[StableVirtualMasonryGrid] Items changed, resetting virtualization')
-      reset()
-      scrollToTop()
+      // Note: useMasonryVirtualizer doesn't have reset/scrollToTop methods
+      // The virtualization will handle item changes automatically
     }
     
     prevItemsRef.current = items
-  }, [items, keyExtractor, reset, scrollToTop])
+  }, [items, keyExtractor])
 
   // Update visible items when they change or when scroll position changes
   useEffect(() => {
@@ -167,8 +170,11 @@ export function StableVirtualMasonryGrid<T>({
         )}
         {stats && (
           <>
-            <div>Column Heights: {stats.columnHeights?.join(', ')}</div>
-            <div>Height Measurements: {stats.heightMeasurements?.totalMeasurements || 0}</div>
+            <div>Height Measurements: {stats.heightMeasurer?.totalMeasurements || 0}</div>
+            <div>Stable Measurements: {stats.heightMeasurer?.stableMeasurements || 0}</div>
+            <div>Average Height: {stats.heightMeasurer?.averageHeight?.toFixed(0) || 0}</div>
+            <div>Total Positions: {stats.positionCache?.totalPositions || 0}</div>
+            <div>Total Height: {stats.positionCache?.totalHeight?.toFixed(0) || 0}</div>
 
             <div>Debug: First 5 visible items positions</div>
             {visibleItems.slice(0, 5).map(({ item, position, key }) => (

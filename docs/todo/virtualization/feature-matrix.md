@@ -9,11 +9,12 @@ This matrix tracks the implementation status of virtualization features across a
 | **Core Virtualization** | P0 | T1, T2 | 🔴 Not Started | None |
 | **Masonry Layout** | P0 | T3, T4 | 🔴 Not Started | T1, T2 |
 | **Height Measurement** | P0 | T2, T5 | 🔴 Not Started | T1 |
+| **Pre-measurement System** | P0 | T11 | 🟢 Completed | T2, T5 |
 | **Infinite Scroll** | P1 | T6 | 🔴 Not Started | T3, T4 |
 | **Responsive Columns** | P1 | T7 | 🔴 Not Started | T3, T4 |
-| **Performance Optimization** | P1 | T8 | 🔴 Not Started | T2-T7 |
-| **Backward Compatibility** | P2 | T9 | 🔴 Not Started | T2-T8 |
-| **Testing & Documentation** | P2 | T10 | 🔴 Not Started | T2-T9 |
+| **Performance Optimization** | P1 | T8 | 🔴 Not Started | T2-T7, T11 |
+| **Backward Compatibility** | P2 | T9 | 🔴 Not Started | T2-T8, T11 |
+| **Testing & Documentation** | P2 | T10 | 🔴 Not Started | T2-T9, T11 |
 
 ## 🎯 Feature Details
 
@@ -37,6 +38,13 @@ This matrix tracks the implementation status of virtualization features across a
 - **Components**: HeightMeasurer, PositionCache
 - **Success Criteria**: Accurate height tracking, position updates
 - **Dependencies**: T1
+
+### Pre-measurement System (P0)
+**Description**: Loading screen + offscreen measurement for first 20 items
+- **Tasks**: T11
+- **Components**: VirtualizationLoadingScreen, usePreMeasurement, PreMeasuredVirtualizer
+- **Success Criteria**: No layout jumps, stable initial render, loading UX
+- **Dependencies**: T2, T5
 
 ### Infinite Scroll (P1)
 **Description**: Load more items when scrolling near bottom
@@ -83,6 +91,7 @@ This matrix tracks the implementation status of virtualization features across a
 - [ ] T3: Masonry Layout Engine
 - [ ] T4: Multi-Column Virtualization
 - [ ] T5: Height Measurement System
+- [x] T11: Loading Screen + Pre-measurement System
 
 ### Phase 3: Advanced Features (Week 3)
 - [ ] T6: Infinite Scroll Integration

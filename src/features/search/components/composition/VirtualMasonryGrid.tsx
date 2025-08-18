@@ -1,6 +1,7 @@
 // Now use the stable virtualization version
 import React from 'react'
 import { StableVirtualMasonryGrid } from './virtualization'
+import type { PreMeasurementConfig } from './virtualization/types/virtualization'
 
 // Use the stable virtualization props interface
 interface VirtualMasonryGridProps<T> {
@@ -16,6 +17,8 @@ interface VirtualMasonryGridProps<T> {
   overscan?: number
   estimatedItemHeight?: number
   showPerformanceMetrics?: boolean
+  useDynamicHeightEstimation?: boolean
+  preMeasurement?: PreMeasurementConfig
 }
 
 export function VirtualMasonryGrid<T>(props: VirtualMasonryGridProps<T>) {

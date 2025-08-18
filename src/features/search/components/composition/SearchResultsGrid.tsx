@@ -135,6 +135,12 @@ export function SearchResultsGrid({
             gap={16}
             maxColumnWidth={400}
             useDynamicHeightEstimation={true}
+            preMeasurement={{
+              enabled: true,
+              maxItemsToMeasure: 20,
+              showLoadingScreen: true,
+              showProgress: true
+            }}
           />
           
           {/* Loading indicator for grid view */}

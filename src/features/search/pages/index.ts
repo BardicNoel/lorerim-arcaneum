@@ -1,3 +1,5 @@
 export * from './SearchPage'
 export * from './SimpleSearchPage'
 export * from './VirtualizationDemoPage'
+export * from './PreMeasurementDemoPage'
+export * from './PreMeasurementTestPage'

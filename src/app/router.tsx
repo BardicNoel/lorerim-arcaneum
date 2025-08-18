@@ -6,6 +6,8 @@ import { RacePageView } from '@/features/races-v2/views/RacePageView'
 import { ReligionsPage } from '@/features/religions/pages/ReligionsPage'
 import { SimpleSearchPage } from '@/features/search'
 import { VirtualMasonryDemoPage } from '@/features/search/pages/VirtualMasonryDemoPage'
+import { PreMeasurementDemoPage } from '@/features/search/pages/PreMeasurementDemoPage'
+import { PreMeasurementTestPage } from '@/features/search/pages/PreMeasurementTestPage'
 import { SkillsPage } from '@/features/skills'
 import { SkillsPageExperimental } from '@/features/skills/pages/SkillsPageExperimental'
 import { SpellsPage } from '@/features/spells'
@@ -44,6 +46,14 @@ export const AppRouter = () => {
       <Route
         path="/virtual-masonry-demo"
         element={<VirtualMasonryDemoPage />}
+      />
+      <Route
+        path="/pre-measurement-demo"
+        element={<PreMeasurementDemoPage />}
+      />
+      <Route
+        path="/pre-measurement-test"
+        element={<PreMeasurementTestPage />}
       />
       <Route path="/races-mva-demo" element={<RacesMVADemoPage />} />
       <Route path="/skills-mva" element={<SkillsPage />} />
