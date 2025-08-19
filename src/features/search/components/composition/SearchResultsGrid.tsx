@@ -10,6 +10,14 @@ interface SearchResultsGridProps {
   className?: string
   viewMode?: 'list' | 'grid'
   onViewModeChange?: (mode: 'list' | 'grid') => void
+  // Add pagination props
+  onLoadMore?: () => void
+  hasMore?: boolean
+  paginationInfo?: {
+    displayedItems: number
+    totalItems: number
+    hasMore: boolean
+  }
 }
 
 export function SearchResultsGrid({
@@ -17,6 +25,9 @@ export function SearchResultsGrid({
   className,
   viewMode = 'grid',
   onViewModeChange,
+  onLoadMore,
+  hasMore = true,
+  paginationInfo,
 }: SearchResultsGridProps) {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
 
@@ -61,7 +72,18 @@ export function SearchResultsGrid({
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">
-              {items.length} result{items.length !== 1 ? 's' : ''} found
+              {paginationInfo ? (
+                <>
+                  Showing {paginationInfo.displayedItems} of {paginationInfo.totalItems} result{paginationInfo.totalItems !== 1 ? 's' : ''}
+                  {paginationInfo.hasMore && (
+                    <span className="ml-2 text-xs text-muted-foreground">
+                      (Scroll to load more)
+                    </span>
+                  )}
+                </>
+              ) : (
+                `${items.length} result${items.length !== 1 ? 's' : ''} found`
+              )}
             </span>
           </div>
 
@@ -104,6 +126,8 @@ export function SearchResultsGrid({
           columns={3}
           gap={16}
           maxColumnWidth={400}
+          loadMore={onLoadMore}
+          hasMore={hasMore}
         />
       ) : (
         <div className="space-y-2">
@@ -120,6 +144,19 @@ export function SearchResultsGrid({
               />
             )
           })}
+          
+          {/* Load More Button for List View */}
+          {hasMore && onLoadMore && (
+            <div className="flex justify-center pt-4">
+              <Button
+                variant="outline"
+                onClick={onLoadMore}
+                className="w-full max-w-xs"
+              >
+                Load More ({paginationInfo?.displayedItems || 0} of {paginationInfo?.totalItems || 0})
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </div>

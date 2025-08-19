@@ -25,6 +25,7 @@ export function VirtualMasonryGrid<T>({
 }: VirtualMasonryGridProps<T>) {
   const [containerWidth, setContainerWidth] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
+  const loadMoreTriggerRef = useRef<HTMLDivElement>(null)
 
   // Calculate responsive columns based on container width
   const getResponsiveColumns = useCallback(() => {
@@ -50,7 +51,7 @@ export function VirtualMasonryGrid<T>({
 
   // Handle infinite scroll with intersection observer
   useEffect(() => {
-    if (!loadMore || !hasMore) return
+    if (!loadMore || !hasMore || !loadMoreTriggerRef.current) return
 
     const observer = new IntersectionObserver(
       entries => {
@@ -60,17 +61,19 @@ export function VirtualMasonryGrid<T>({
           }
         })
       },
-      { threshold: 0.1 }
+      { 
+        threshold: 0.1,
+        // Use much larger rootMargin to trigger very early - when there are about 20-30 items remaining out of view
+        // This prevents blank spaces from appearing
+        rootMargin: '0px 0px 4000px 0px'
+      }
     )
 
-    // Observe the last item for infinite scroll
-    const lastItem = containerRef.current?.lastElementChild
-    if (lastItem) {
-      observer.observe(lastItem)
-    }
+    // Observe the load more trigger element
+    observer.observe(loadMoreTriggerRef.current)
 
     return () => observer.disconnect()
-  }, [loadMore, hasMore, items.length])
+  }, [loadMore, hasMore])
 
   // Create masonry columns
   const renderMasonryColumns = useCallback(() => {
@@ -129,6 +132,15 @@ export function VirtualMasonryGrid<T>({
       >
         {renderMasonryColumns()}
       </div>
+      
+      {/* Load More Trigger - positioned much earlier to prevent blank spaces */}
+      {hasMore && loadMore && (
+        <div 
+          ref={loadMoreTriggerRef}
+          className="w-full h-16 mt-16"
+          style={{ minHeight: '64px' }}
+        />
+      )}
     </div>
   )
 }

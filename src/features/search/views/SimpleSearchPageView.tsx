@@ -17,13 +17,25 @@ export function SimpleSearchPageView() {
   const { activeFilters, setActiveFilters, clearFilters, addTag, removeTag } =
     useSearchState()
   const { availableFilters, searchResults } = useSearchFilters()
-  const { totalResults } = useSearchComputed()
+  const { 
+    filteredResults, // This now contains the paginated items
+    totalResults, 
+    loadMore, 
+    resetPagination, 
+    paginationInfo, 
+    hasMore 
+  } = useSearchComputed()
 
   // Tag state management
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
 
   // View mode state
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid')
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    resetPagination()
+  }, [activeFilters, resetPagination])
 
   // Sync selectedTags with activeFilters.tags from URL
   useEffect(() => {
@@ -53,74 +65,18 @@ export function SimpleSearchPageView() {
   }, [activeFilters.tags, activeFilters.categories])
 
   // Add a tag (from autocomplete or custom input)
-  const handleTagSelect = (optionOrTag: SearchOption | string) => {
-    let tag: SelectedTag
-    if (typeof optionOrTag === 'string') {
-      tag = {
-        id: `custom-${optionOrTag}`,
-        label: optionOrTag,
-        value: optionOrTag,
-        category: 'Search All',
-      }
-    } else {
-      tag = {
-        id: `${optionOrTag.category}-${optionOrTag.id}`,
-        label: optionOrTag.label,
-        value: optionOrTag.value,
-        category: optionOrTag.category,
-      }
-    }
-
-    // Prevent duplicate tags
-    if (
-      !selectedTags.some(
-        t => t.value === tag.value && t.category === tag.category
-      )
-    ) {
-      setSelectedTags(prev => [...prev, tag])
-
-      // Add to appropriate filter based on category
-      if (tag.category === 'Categories') {
-        setActiveFilters({
-          categories: [...activeFilters.categories, tag.value],
-        })
-      } else if (tag.category === 'Tags') {
-        setActiveFilters({
-          tags: [...activeFilters.tags, tag.value],
-        })
-      } else {
-        // Default to adding as a search tag
-        addTag(tag.value)
-      }
-    }
+  const handleTagSelect = (tag: SelectedTag) => {
+    addTag(tag.value)
+    setSelectedTags(prev => [...prev, tag])
   }
 
   // Remove a tag
   const handleTagRemove = (tagId: string) => {
     const tag = selectedTags.find(t => t.id === tagId)
     if (tag) {
+      removeTag(tag.value)
       setSelectedTags(prev => prev.filter(t => t.id !== tagId))
-
-      // Remove from appropriate filter based on category
-      if (tag.category === 'Categories') {
-        setActiveFilters({
-          categories: activeFilters.categories.filter((c: string) => c !== tag.value),
-        })
-      } else if (tag.category === 'Tags') {
-        setActiveFilters({
-          tags: activeFilters.tags.filter((t: string) => t !== tag.value),
-        })
-      } else {
-        // Default to removing from search tags
-        removeTag(tag.value)
-      }
     }
-  }
-
-  // Clear all filters
-  const handleClearFilters = () => {
-    setSelectedTags([])
-    clearFilters()
   }
 
   // Handle view mode change
@@ -128,47 +84,39 @@ export function SimpleSearchPageView() {
     setViewMode(mode)
   }
 
+  // Handle clear filters
+  const handleClearFilters = () => {
+    clearFilters()
+    setSelectedTags([])
+  }
+
   if (!isReady) {
     return (
-      <SearchPageLayout title="Search" description="Building search index...">
-        <div className="flex items-center justify-center py-12">
-          <div className="text-center">
-            {isIndexing ? (
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-            ) : null}
-            <p className="text-muted-foreground">
-              {isIndexing ? 'Building search index...' : 'Loading search...'}
-            </p>
-          </div>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <p className="text-muted-foreground">
+            {isIndexing ? 'Indexing search data...' : 'Loading...'}
+          </p>
         </div>
-      </SearchPageLayout>
+      </div>
     )
   }
 
   if (error) {
     return (
-      <SearchPageLayout title="Search" description="Error loading search">
-        <div className="flex items-center justify-center py-12">
-          <div className="text-center">
-            <p className="text-destructive mb-4">
-              Failed to load search: {error}
-            </p>
-            <button
-              onClick={() => window.location.reload()}
-              className="text-primary hover:underline"
-            >
-              Try again
-            </button>
-          </div>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <p className="text-destructive">Error loading search data</p>
+          <p className="text-sm text-muted-foreground">{error}</p>
         </div>
-      </SearchPageLayout>
+      </div>
     )
   }
 
-  const title = selectedTags.length > 0 ? `Search Results` : 'Search'
+  const title = 'Search'
   const description =
     selectedTags.length > 0
-      ? `Found ${totalResults} result${totalResults !== 1 ? 's' : ''} for ${selectedTags.length} filter${selectedTags.length !== 1 ? 's' : ''}`
+      ? `Search results for ${selectedTags.length} filter${selectedTags.length !== 1 ? 's' : ''}`
       : 'Search across all skills, races, traits, religions, birthsigns, destiny nodes, and perk references'
 
   return (
@@ -190,9 +138,12 @@ export function SimpleSearchPageView() {
       {/* Results Section */}
       <div className="w-full">
         <SearchResultsGrid
-          items={searchResults.map(result => result.item)}
+          items={filteredResults.map(result => result.item)} // Use filteredResults (paginated) instead of searchResults
           viewMode={viewMode}
           onViewModeChange={handleViewModeChange}
+          onLoadMore={loadMore}
+          hasMore={hasMore}
+          paginationInfo={paginationInfo}
         />
       </div>
     </SearchPageLayout>
