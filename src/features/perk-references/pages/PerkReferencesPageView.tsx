@@ -1,7 +1,6 @@
 import { BuildPageShell } from '@/shared/components/playerCreation'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import type { SearchCategory } from '@/shared/components/playerCreation/types'
-import { AccordionGrid } from '@/shared/components/ui'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Button } from '@/shared/ui/ui/button'
 import {
@@ -10,13 +9,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/ui/dropdown-menu'
-import { ArrowLeft, ChevronDown, Grid3X3, List, X } from 'lucide-react'
+import { ChevronDown, Grid3X3, List, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { usePerkReferencesData } from '../adapters/usePerkReferencesData'
 import { usePerkReferencesFilters } from '../adapters/usePerkReferencesFilters'
-import { PerkReferenceAccordionCard } from '../components/atomic/PerkReferenceAccordionCard'
+import {
+  PerkDetailsSheet,
+  PerkReferenceSimpleCard,
+} from '../components/composition'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
+import type { PerkReferenceNode } from '../types'
 import { perkToPlayerCreationItem } from '../utils/perkToPlayerCreationItem'
 
 export function PerkReferencesPageView() {
@@ -119,55 +122,20 @@ export function PerkReferencesPageView() {
     }
   }, [displayItems, sortBy])
 
-  // Handle accordion expansion
-  const [expandedPerks, setExpandedPerks] = useState<Set<string>>(new Set())
+  // Handle detail sheet state
+  const [selectedPerk, setSelectedPerk] = useState<PerkReferenceNode | null>(
+    null
+  )
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
 
-  const handlePerkToggle = (perkId: string) => {
-    const newExpanded = new Set(expandedPerks)
-
-    if (viewMode === 'grid') {
-      // In grid mode, expand/collapse all items in the same row
-      const columns = 3 // Match the AccordionGrid columns prop
-      const itemIndex = sortedDisplayItems.findIndex(item => item.id === perkId)
-      const rowIndex = Math.floor(itemIndex / columns)
-      const rowStartIndex = rowIndex * columns
-      const rowEndIndex = Math.min(
-        rowStartIndex + columns,
-        sortedDisplayItems.length
-      )
-
-      // Check if any item in the row is currently expanded
-      const isRowExpanded = sortedDisplayItems
-        .slice(rowStartIndex, rowEndIndex)
-        .some(item => newExpanded.has(item.id))
-
-      if (isRowExpanded) {
-        // Collapse all items in the row
-        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
-          newExpanded.delete(item.id)
-        })
-      } else {
-        // Expand all items in the row
-        sortedDisplayItems.slice(rowStartIndex, rowEndIndex).forEach(item => {
-          newExpanded.add(item.id)
-        })
-      }
-    } else {
-      // In list mode, just toggle the single item
-      if (newExpanded.has(perkId)) {
-        newExpanded.delete(perkId)
-      } else {
-        newExpanded.add(perkId)
-      }
-    }
-
-    setExpandedPerks(newExpanded)
+  const handlePerkClick = (perk: PerkReferenceNode) => {
+    setSelectedPerk(perk)
+    setIsSheetOpen(true)
   }
 
   // Handle view mode change
   const handleViewModeChange = (mode: 'grid' | 'list') => {
     setViewMode(mode)
-    setExpandedPerks(new Set()) // Reset expansion when changing view mode
   }
 
   // Get sort label
@@ -208,18 +176,7 @@ export function PerkReferencesPageView() {
 
   return (
     <BuildPageShell title="Perk References">
-      {/* Header with back button */}
-      <div className="flex items-center gap-4 mb-4">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back
-        </Button>
-      </div>
+      {/* Header */}
 
       {/* 1. Search Bar Section */}
       <div className="flex items-center gap-4 mb-4">
@@ -320,31 +277,47 @@ export function PerkReferencesPageView() {
       <div className="mt-6">
         {/* Results Section */}
         {viewMode === 'grid' ? (
-          <AccordionGrid columns={3} gap="md">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {sortedDisplayItems.map(item => (
-              <PerkReferenceAccordionCard
+              <PerkReferenceSimpleCard
                 key={item.id}
                 item={item}
-                isExpanded={expandedPerks.has(item.id)}
-                onToggle={() => handlePerkToggle(item.id)}
+                onClick={() => handlePerkClick(item.originalPerk)}
                 viewMode="grid"
               />
             ))}
-          </AccordionGrid>
+          </div>
         ) : (
           <div className="space-y-2">
             {sortedDisplayItems.map(item => (
-              <PerkReferenceAccordionCard
+              <PerkReferenceSimpleCard
                 key={item.id}
                 item={item}
-                isExpanded={expandedPerks.has(item.id)}
-                onToggle={() => handlePerkToggle(item.id)}
+                onClick={() => handlePerkClick(item.originalPerk)}
                 viewMode="list"
               />
             ))}
           </div>
         )}
+
+        {sortedDisplayItems.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">
+              No perks found matching your criteria.
+            </p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Try adjusting your search or filters.
+            </p>
+          </div>
+        )}
       </div>
+
+      {/* Perk Details Sheet */}
+      <PerkDetailsSheet
+        perk={selectedPerk}
+        isOpen={isSheetOpen}
+        onOpenChange={setIsSheetOpen}
+      />
     </BuildPageShell>
   )
 }
