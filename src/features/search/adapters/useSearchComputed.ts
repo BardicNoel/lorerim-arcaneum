@@ -3,14 +3,24 @@ import type { SearchResult } from '../model/SearchModel'
 import { searchResultToPlayerCreationItem } from '../model/SearchUtilities'
 import { useSearchFilters } from './useSearchFilters'
 import { useSearchState } from './useSearchState'
+import { useSearchPagination } from './useSearchPagination'
 
 export function useSearchComputed() {
   const { searchResults, resultCounts } = useSearchFilters()
   const { viewMode } = useSearchState()
+  
+  // Add pagination
+  const { 
+    displayedItems, 
+    loadMore, 
+    resetPagination, 
+    paginationInfo, 
+    hasMore 
+  } = useSearchPagination(searchResults)
 
   const filteredResults = useMemo(() => {
-    return searchResults // Already filtered by useSearchFilters
-  }, [searchResults])
+    return displayedItems // Use paginated results instead of all results
+  }, [displayedItems])
 
   const sortedResults = useMemo(() => {
     return sortResults(filteredResults, 'relevance')
@@ -21,12 +31,12 @@ export function useSearchComputed() {
   }, [sortedResults])
 
   const totalResults = useMemo(() => {
-    return searchResults.length
+    return searchResults.length // Keep total count for display
   }, [searchResults])
 
   const resultsByType = useMemo(() => {
     const byType: Record<string, SearchResult[]> = {}
-    searchResults.forEach(result => {
+    displayedItems.forEach(result => { // Use paginated results for type grouping
       const type = result.item.type
       if (!byType[type]) {
         byType[type] = []
@@ -34,7 +44,7 @@ export function useSearchComputed() {
       byType[type].push(result)
     })
     return byType
-  }, [searchResults])
+  }, [displayedItems])
 
   return {
     filteredResults,
@@ -43,6 +53,11 @@ export function useSearchComputed() {
     resultCounts,
     totalResults,
     resultsByType,
+    // Add pagination methods and info
+    loadMore,
+    resetPagination,
+    paginationInfo,
+    hasMore
   }
 }
 
