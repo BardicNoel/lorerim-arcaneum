@@ -1,4 +1,5 @@
 export { AccordionCard } from './AccordionCard'
+export { BackToTopButton } from './BackToTopButton'
 export { CategoryBadge } from './CategoryBadge'
 export { ConfigAlert, ConfigInput, GenericConfigCard } from './ConfigCard'
 export { GenericConfirmDialog } from './ConfirmDialog'

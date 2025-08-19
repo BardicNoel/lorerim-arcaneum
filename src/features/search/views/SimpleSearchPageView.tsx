@@ -2,6 +2,7 @@ import type {
   SearchOption,
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
+import { BackToTopButton } from '@/shared/components/generic'
 import { useEffect, useState } from 'react'
 import { useSearchComputed } from '../adapters/useSearchComputed'
 import { useSearchData } from '../adapters/useSearchData'
@@ -120,32 +121,37 @@ export function SimpleSearchPageView() {
       : 'Search across all skills, races, traits, religions, birthsigns, destiny nodes, and perk references'
 
   return (
-    <SearchPageLayout title={title} description={description}>
-      {/* Filters Section */}
-      <div className="mb-6">
-        <SearchFilters
-          activeFilters={activeFilters}
-          onFiltersChange={setActiveFilters}
-          onClearFilters={handleClearFilters}
-          availableFilters={availableFilters}
-          resultCount={totalResults}
-          onTagSelect={handleTagSelect}
-          onTagRemove={handleTagRemove}
-          selectedTags={selectedTags}
-        />
-      </div>
+    <>
+      <SearchPageLayout title={title} description={description}>
+        {/* Filters Section */}
+        <div className="mb-6">
+          <SearchFilters
+            activeFilters={activeFilters}
+            onFiltersChange={setActiveFilters}
+            onClearFilters={handleClearFilters}
+            availableFilters={availableFilters}
+            resultCount={totalResults}
+            onTagSelect={handleTagSelect}
+            onTagRemove={handleTagRemove}
+            selectedTags={selectedTags}
+          />
+        </div>
 
-      {/* Results Section */}
-      <div className="w-full">
-        <SearchResultsGrid
-          items={filteredResults.map(result => result.item)} // Use filteredResults (paginated) instead of searchResults
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
-          onLoadMore={loadMore}
-          hasMore={hasMore}
-          paginationInfo={paginationInfo}
-        />
-      </div>
-    </SearchPageLayout>
+        {/* Results Section */}
+        <div className="w-full">
+          <SearchResultsGrid
+            items={filteredResults.map(result => result.item)} // Use filteredResults (paginated) instead of searchResults
+            viewMode={viewMode}
+            onViewModeChange={handleViewModeChange}
+            onLoadMore={loadMore}
+            hasMore={hasMore}
+            paginationInfo={paginationInfo}
+          />
+        </div>
+      </SearchPageLayout>
+      
+      {/* Back to Top Button */}
+      <BackToTopButton threshold={400} />
+    </>
   )
 }
