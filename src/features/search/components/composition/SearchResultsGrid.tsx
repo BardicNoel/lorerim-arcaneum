@@ -6,18 +6,37 @@ import { SearchCard } from '../atomic/SearchCard'
 import { VirtualMasonryGrid } from './VirtualMasonryGrid'
 
 interface SearchResultsGridProps {
-  items: SearchableItem[]
+  items?: SearchableItem[]
+  results?: SearchableItem[]
   className?: string
   viewMode?: 'list' | 'grid'
   onViewModeChange?: (mode: 'list' | 'grid') => void
+  useTypeSpecificRendering?: boolean
+  renderMode?: string
 }
 
 export function SearchResultsGrid({
   items,
+  results,
   className,
   viewMode = 'grid',
   onViewModeChange,
+  useTypeSpecificRendering,
+  renderMode,
 }: SearchResultsGridProps) {
+  // Use results prop if provided, otherwise fall back to items
+  const actualItems = results || items || []
+  
+  // Debug logging to help identify data flow issues
+  console.log('[SearchResultsGrid] Received props:', {
+    itemsCount: items?.length || 0,
+    resultsCount: results?.length || 0,
+    actualItemsCount: actualItems.length,
+    viewMode,
+    useTypeSpecificRendering,
+    renderMode
+  })
+  
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
   
   // Progressive loading state
@@ -30,10 +49,10 @@ export function SearchResultsGrid({
 
   // Initialize progressive loading when items change
   useEffect(() => {
-    const initialItems = items.slice(0, INITIAL_BATCH_SIZE)
+    const initialItems = actualItems.slice(0, INITIAL_BATCH_SIZE)
     setDisplayedItems(initialItems)
-    setHasMore(items.length > INITIAL_BATCH_SIZE)
-  }, [items])
+    setHasMore(actualItems.length > INITIAL_BATCH_SIZE)
+  }, [actualItems])
 
   // Auto-expand all items when in grid view
   useEffect(() => {
@@ -71,14 +90,14 @@ export function SearchResultsGrid({
     await new Promise(resolve => setTimeout(resolve, 100))
     
     const currentCount = displayedItems.length
-    const nextBatch = items.slice(currentCount, currentCount + BATCH_SIZE)
+    const nextBatch = actualItems.slice(currentCount, currentCount + BATCH_SIZE)
     
     setDisplayedItems(prev => [...prev, ...nextBatch])
-    setHasMore(currentCount + BATCH_SIZE < items.length)
+    setHasMore(currentCount + BATCH_SIZE < actualItems.length)
     setIsLoading(false)
-  }, [isLoading, hasMore, displayedItems.length, items])
+  }, [isLoading, hasMore, displayedItems.length, actualItems])
 
-  if (items.length === 0) {
+  if (actualItems.length === 0) {
     return (
       <div className={`text-center py-12 ${className}`}>
         <p className="text-muted-foreground">No results found</p>
@@ -118,8 +137,8 @@ export function SearchResultsGrid({
       {viewMode === 'grid' ? (
         <>
           <VirtualMasonryGrid
-            key={`grid-${displayedItems.length}-${displayedItems[0]?.id || 'empty'}`}
-            items={displayedItems}
+            key={`grid-${actualItems.length}-${actualItems[0]?.id || 'empty'}`}
+            items={actualItems}
             keyExtractor={item => item.id}
             renderItem={item => (
               <SearchCard
@@ -148,7 +167,7 @@ export function SearchResultsGrid({
             <div className="text-center py-4 mt-4">
               <div className="inline-flex items-center gap-2 text-sm text-muted-foreground">
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
-                Loading more items... ({displayedItems.length}/{items.length})
+                Loading more items... ({displayedItems.length}/{actualItems.length})
               </div>
             </div>
           )}
@@ -178,7 +197,7 @@ export function SearchResultsGrid({
                 variant="outline"
                 size="sm"
               >
-                {isLoading ? 'Loading...' : `Load More (${displayedItems.length}/${items.length})`}
+                {isLoading ? 'Loading...' : `Load More (${displayedItems.length}/${actualItems.length})`}
               </Button>
             </div>
           )}

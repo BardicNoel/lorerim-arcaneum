@@ -94,18 +94,38 @@ export function useMasonryVirtualizer<T>(
 
   // Update items when they change
   useEffect(() => {
+    console.log('🔍 [Virtualizer] Items changed, initializing virtualizer', {
+      itemsCount: items.length,
+      hasVirtualizer: !!virtualizerRef.current,
+      firstItem: items[0] ? keyExtractor(items[0]) : 'none'
+    })
+    
     virtualizerRef.current?.initialize(items)
-  }, [items])
+  }, [items, keyExtractor])
 
   // Update virtualizer with measured heights
   useEffect(() => {
+    console.log('🔍 [Virtualizer] measuredHeights changed', {
+      measuredHeightsSize: measuredHeights.size,
+      hasVirtualizer: !!virtualizerRef.current,
+      firstHeight: Array.from(measuredHeights.entries())[0] || 'none'
+    })
+    
     if (virtualizerRef.current && measuredHeights.size > 0) {
+      console.log('🔍 [Virtualizer] Calling setPreMeasuredHeights')
       virtualizerRef.current.setPreMeasuredHeights(measuredHeights)
     }
   }, [measuredHeights])
 
   // Update state with pre-measurement info
   useEffect(() => {
+    console.log('🔍 [Virtualizer] Updating state with pre-measurement info', {
+      isMeasuring,
+      measuredHeightsSize: measuredHeights.size,
+      progress,
+      error
+    })
+    
     setState(prev => ({
       ...prev,
       isPreMeasuring: isMeasuring,
@@ -159,22 +179,37 @@ export function useMasonryVirtualizer<T>(
 
   // Get visible items
   const getVisibleItems = useCallback(() => {
-    // Don't return visible items during pre-measurement
-    if (isMeasuring && preMeasurementConfig.enabled) {
+    // Only block rendering during the initial pre-measurement pass
+    // Keep showing items on subsequent re-measurements (e.g., width changes)
+    if (preMeasurementConfig.enabled && isMeasuring && measuredHeights.size === 0) {
+      console.log('🔍 [Virtualizer] Blocking rendering during initial pre-measurement')
       return []
     }
     
     if (!virtualizerRef.current || !containerRef.current) {
+      console.log('🔍 [Virtualizer] No virtualizer or container ref')
       return []
     }
 
     const scrollTop = containerRef.current.scrollTop
     const containerHeight = containerRef.current.clientHeight
 
+    console.log('🔍 [Virtualizer] Getting visible items', {
+      scrollTop,
+      containerHeight,
+      isMeasuring,
+      measuredHeightsSize: measuredHeights.size
+    })
+
     const visibleItems = virtualizerRef.current.getVisibleItems(scrollTop, containerHeight)
     
+    console.log('🔍 [Virtualizer] Visible items result', {
+      visibleItemsCount: visibleItems.length,
+      firstItem: visibleItems[0]?.item?.id || 'none'
+    })
+    
     return visibleItems
-  }, [isMeasuring, preMeasurementConfig.enabled])
+  }, [isMeasuring, preMeasurementConfig.enabled, measuredHeights.size])
 
   // Update configuration
   const updateConfig = useCallback((newConfig: Partial<MasonryVirtualizerConfig>) => {

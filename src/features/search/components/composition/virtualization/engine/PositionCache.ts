@@ -92,6 +92,13 @@ export class PositionCache {
     items: Array<{ key: string; height: number }>,
     startIndex: number = 0
   ): void {
+    console.log('🔍 [PositionCache] calculatePositions called', {
+      itemsCount: items.length,
+      startIndex,
+      columns: this.columns,
+      firstItem: items[0] || 'none'
+    })
+    
     // Reset column heights
     this.columnHeights = Array.from({ length: this.columns }, () => 0)
 
@@ -113,6 +120,13 @@ export class PositionCache {
 
     this.totalHeight = Math.max(...this.columnHeights, 0)
     this.dirty = false
+    
+    console.log('🔍 [PositionCache] calculatePositions completed', {
+      totalPositions: this.positions.size,
+      totalHeight: this.totalHeight,
+      columnHeights: this.columnHeights,
+      firstPosition: Array.from(this.positions.entries())[0] || 'none'
+    })
   }
 
   /**
@@ -128,6 +142,15 @@ export class PositionCache {
 
     let startIndex = -1
     let endIndex = -1
+
+    console.log('🔍 [PositionCache] getVisibleRange', {
+      scrollTop,
+      containerHeight,
+      overscan,
+      visibleStart,
+      visibleEnd,
+      totalPositions: this.positions.size
+    })
 
     // Find start index
     for (const [key, position] of this.positions) {
@@ -152,10 +175,19 @@ export class PositionCache {
       endIndex = lastPosition ? lastPosition.index + 1 : 0
     }
 
-    return {
+    const result = {
       start: Math.max(0, startIndex),
       end: Math.max(startIndex + 1, endIndex)
     }
+    
+    console.log('🔍 [PositionCache] getVisibleRange result', {
+      startIndex,
+      endIndex,
+      result,
+      positionsSample: Array.from(this.positions.entries()).slice(0, 3).map(([key, pos]) => ({ key, top: pos.top, height: pos.height }))
+    })
+
+    return result
   }
 
   /**
@@ -169,13 +201,30 @@ export class PositionCache {
     const { start, end } = this.getVisibleRange(scrollTop, containerHeight, overscan)
     const visibleItems: Array<{ key: string; position: ItemPosition }> = []
 
+    console.log('🔍 [PositionCache] getVisibleItems', {
+      scrollTop,
+      containerHeight,
+      overscan,
+      visibleRange: { start, end },
+      totalPositions: this.positions.size,
+      columnHeights: this.columnHeights
+    })
+
     for (const [key, position] of this.positions) {
       if (position.index >= start && position.index < end) {
         visibleItems.push({ key, position })
       }
     }
 
-    return visibleItems.sort((a, b) => a.position.index - b.position.index)
+    const result = visibleItems.sort((a, b) => a.position.index - b.position.index)
+    
+    console.log('🔍 [PositionCache] Visible items found', {
+      count: result.length,
+      firstKey: result[0]?.key || 'none',
+      firstPosition: result[0]?.position || 'none'
+    })
+
+    return result
   }
 
   /**

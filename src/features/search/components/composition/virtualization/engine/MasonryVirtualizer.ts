@@ -143,16 +143,36 @@ export class MasonryVirtualizer {
     position: ItemPosition
     key: string
   }> {
+    console.log('🔍 [MasonryVirtualizer] getVisibleItems called', {
+      scrollTop,
+      containerHeight,
+      itemsCount: this.items.length,
+      positionsCount: this.positionCache['positions'].size,
+      preMeasuredHeightsCount: this.preMeasuredHeights.size
+    })
+
     const visibleItems = this.positionCache.getVisibleItems(
       scrollTop,
       containerHeight,
       this.config.overscan
     )
 
-    return visibleItems.map(({ key, position }) => {
+    console.log('🔍 [MasonryVirtualizer] PositionCache returned', {
+      visibleItemsCount: visibleItems.length,
+      firstVisibleKey: visibleItems[0]?.key || 'none'
+    })
+
+    const result = visibleItems.map(({ key, position }) => {
       const item = this.items.find(item => this.keyExtractor(item) === key)
       return { item, position, key }
     }).filter(result => result.item !== undefined)
+
+    console.log('🔍 [MasonryVirtualizer] Final result', {
+      resultCount: result.length,
+      firstItemId: result[0]?.item?.id || 'none'
+    })
+
+    return result
   }
 
   /**
@@ -180,12 +200,30 @@ export class MasonryVirtualizer {
       const containerElement = this.containerRef.current
       if (!containerElement) return
 
+      const scrollTop = containerElement.scrollTop
+      const containerHeight = containerElement.clientHeight
+      
+      const visibleRange = this.positionCache.getVisibleRange(scrollTop, containerHeight, this.config.overscan)
+      
+      console.log('🔍 [MasonryVirtualizer] updateState (no state provided)', {
+        scrollTop,
+        containerHeight,
+        visibleRange,
+        positionsCount: this.positionCache['positions'].size
+      })
+      
       state = {
-        visibleRange: { start: 0, end: 0 },
-        scrollTop: 0,
-        containerHeight: containerElement.clientHeight,
+        visibleRange,
+        scrollTop,
+        containerHeight,
         itemPositions: new Map(this.positionCache['positions'])
       }
+    } else {
+      console.log('🔍 [MasonryVirtualizer] updateState (state provided)', {
+        visibleRange: state.visibleRange,
+        scrollTop: state.scrollTop,
+        containerHeight: state.containerHeight
+      })
     }
 
     this.onStateChange?.(state)
@@ -255,6 +293,11 @@ export class MasonryVirtualizer {
    * Set pre-measured heights from offscreen measurement
    */
   setPreMeasuredHeights(heights: Map<string, number>): void {
+    console.log('🔍 [MasonryVirtualizer] setPreMeasuredHeights called', {
+      heightsCount: heights.size,
+      firstHeight: Array.from(heights.entries())[0] || 'none'
+    })
+    
     this.preMeasuredHeights = heights
     this.recalculatePositionsWithPreMeasuredHeights()
   }
@@ -276,14 +319,26 @@ export class MasonryVirtualizer {
    * Recalculate positions using pre-measured heights
    */
   private recalculatePositionsWithPreMeasuredHeights(): void {
+    console.log('🔍 [MasonryVirtualizer] recalculatePositionsWithPreMeasuredHeights called', {
+      itemsCount: this.items.length
+    })
+    
     const itemsWithHeights = this.items.map((item, index) => {
       const key = this.keyExtractor(item)
       const height = this.getItemHeight(key)
       return { key, height }
     })
 
+    console.log('🔍 [MasonryVirtualizer] Items with heights', {
+      count: itemsWithHeights.length,
+      firstItem: itemsWithHeights[0] || 'none',
+      heights: itemsWithHeights.slice(0, 5).map(item => ({ key: item.key, height: item.height }))
+    })
+
     this.positionCache.calculatePositions(itemsWithHeights)
     this.updateState()
+    
+    console.log('🔍 [MasonryVirtualizer] Recalculation completed')
   }
 
   /**
