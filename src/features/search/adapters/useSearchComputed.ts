@@ -2,12 +2,18 @@ import { useMemo } from 'react'
 import type { SearchResult } from '../model/SearchModel'
 import { searchResultToPlayerCreationItem } from '../model/SearchUtilities'
 import { useSearchFilters } from './useSearchFilters'
-import { useSearchState } from './useSearchState'
+import { useSearchState } from '../hooks/useSearchState'
 import { useSearchPagination } from './useSearchPagination'
 
 export function useSearchComputed() {
   const { searchResults, resultCounts } = useSearchFilters()
   const { viewMode } = useSearchState()
+  
+  // Debug logging for search results
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🔍 useSearchComputed - searchResults:', searchResults.length)
+    console.log('🔍 useSearchComputed - searchResults sample:', searchResults.slice(0, 3))
+  }
   
   // Add pagination
   const { 
@@ -18,6 +24,11 @@ export function useSearchComputed() {
     hasMore 
   } = useSearchPagination(searchResults)
 
+  // Debug logging for displayedItems
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🔍 useSearchComputed - displayedItems:', displayedItems.length)
+  }
+
   const filteredResults = useMemo(() => {
     return displayedItems // Use paginated results instead of all results
   }, [displayedItems])
@@ -27,7 +38,15 @@ export function useSearchComputed() {
   }, [filteredResults])
 
   const playerCreationItems = useMemo(() => {
-    return sortedResults.map(searchResultToPlayerCreationItem)
+    const items = sortedResults.map(searchResultToPlayerCreationItem)
+    
+    // Debug logging for playerCreationItems
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔍 useSearchComputed - playerCreationItems:', items.length)
+      console.log('🔍 useSearchComputed - playerCreationItems sample:', items.slice(0, 2))
+    }
+    
+    return items
   }, [sortedResults])
 
   const totalResults = useMemo(() => {

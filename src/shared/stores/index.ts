@@ -9,6 +9,9 @@ export { useSkillsStore } from './skillsStore'
 export { useSpellsStore } from './spellsStore'
 export { useTraitsStore } from './traitsStore'
 
+// Export global search store
+export { useGlobalSearchStore } from './globalSearchStore'
+
 // Export convenience hooks (matches old useDataCache API)
 export {
   useBirthsigns,
@@ -36,6 +39,9 @@ export {
   getGlobalLoadingState,
   loadAllData,
 } from './dataUtils'
+
+// Export DataInitializer component
+export { DataInitializer } from './DataInitializer'
 
 // Re-export character store
 export { useCharacterStore } from './characterStore'

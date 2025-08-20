@@ -28,18 +28,18 @@ export class SearchDataProvider {
   // Configure Fuse.js options for better tag-based searching
   private fuseOptions: IFuseOptions<SearchableItem> = {
     keys: [
-      { name: 'name', weight: 0.8 },
-      { name: 'description', weight: 0.6 },
-      { name: 'category', weight: 0.4 },
-      { name: 'tags', weight: 0.5 },
-      { name: 'searchableText', weight: 0.3 },
+      { name: 'name', weight: 1.0 }, // Increased weight for exact name matches
+      { name: 'description', weight: 0.4 }, // Reduced weight to prioritize names
+      { name: 'category', weight: 0.3 },
+      { name: 'tags', weight: 0.4 },
+      { name: 'searchableText', weight: 0.2 }, // Reduced weight
     ],
-    threshold: 0.6, // More permissive threshold for better recall
+    threshold: 0.8, // More permissive threshold for better recall (was 0.6)
     includeMatches: true,
     includeScore: true,
-    minMatchCharLength: 2,
+    minMatchCharLength: 1, // Allow single character matches
     ignoreLocation: true,
-    useExtendedSearch: false, // Disable extended search for simple text matching
+    useExtendedSearch: true, // Enable extended search for AND/OR operators
     findAllMatches: true,
   }
 
@@ -218,25 +218,70 @@ export class SearchDataProvider {
       return []
     }
 
-    // Perform search on all items first
+    // Check if this is an extended search query (contains operators)
+    const isExtendedSearch = query.includes(' | ') || query.includes(' & ') || query.includes('!')
+    
+    // First, look for exact matches to boost them (skip for extended search)
+    const exactMatches = isExtendedSearch ? [] : this.allSearchableItems.filter(item => 
+      item.name.toLowerCase() === query.toLowerCase()
+    )
+
+    // Perform fuzzy search on all items
     const fuseResults = this.searchIndex.search(query)
 
-    // Apply filters to search results
-    let filteredResults = fuseResults
-
-    if (filters) {
-      filteredResults = fuseResults.filter(fuseResult => {
-        const item = fuseResult.item
-        return this.applyFilters([item], filters).length > 0
-      })
+    // Debug logging for search issues
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🔍 Search for "${query}" returned ${fuseResults.length} fuzzy results + ${exactMatches.length} exact matches`)
+      
+      // Special logging for problematic search terms
+      if (query.toLowerCase() === 'altmer' || query.toLowerCase().includes('altmer')) {
+        console.log('🧝 Altmer search debug:', {
+          query,
+          exactMatches: exactMatches.map(m => m.name),
+          fuzzyResults: fuseResults.length,
+          topFuzzyResults: fuseResults.slice(0, 3).map(r => ({ 
+            name: r.item.name, 
+            type: r.item.type,
+            score: r.score?.toFixed(3),
+            category: r.item.category
+          }))
+        })
+      }
     }
 
-    // Transform Fuse results to SearchResult format
-    const results = filteredResults.map(fuseResult => ({
-      item: fuseResult.item,
-      score: fuseResult.score || 0,
-      matches: [...(fuseResult.matches || [])],
-      highlights: createSearchHighlights([...(fuseResult.matches || [])]),
+    // Combine exact matches (perfect score) with fuzzy results, avoiding duplicates
+    const exactMatchIds = new Set(exactMatches.map(item => item.id))
+    const combinedResults = [
+      // Exact matches first with perfect score
+      ...exactMatches.map(item => ({ item, score: 0, matches: [] })),
+      // Fuzzy results that aren't already exact matches
+      ...fuseResults.filter(result => !exactMatchIds.has(result.item.id))
+    ]
+
+    // Apply filters to search results
+    let filteredResults = combinedResults
+
+    if (filters) {
+      const beforeFilterCount = combinedResults.length
+      filteredResults = combinedResults.filter(result => {
+        const item = result.item
+        return this.applyFilters([item], filters).length > 0
+      })
+      const afterFilterCount = filteredResults.length
+      
+      // Debug logging for filter issues
+      if (process.env.NODE_ENV === 'development' && beforeFilterCount !== afterFilterCount) {
+        console.log(`🔍 Filter debug: ${beforeFilterCount} results before filtering, ${afterFilterCount} after filtering`)
+        console.log('🔍 Filter debug - filters:', filters)
+      }
+    }
+
+    // Transform results to SearchResult format
+    const results = filteredResults.map(result => ({
+      item: result.item,
+      score: result.score || 0,
+      matches: [...(result.matches || [])],
+      highlights: createSearchHighlights([...(result.matches || [])]),
     }))
 
     return results

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useSearchData } from './useSearchData'
-import { useSearchState } from './useSearchState'
+import { useSearchState } from '../hooks/useSearchState'
 
 export function useSearchFilters() {
   const { search, getAvailableFilters, isReady, getSearchableItems } =
@@ -14,6 +14,11 @@ export function useSearchFilters() {
 
   const searchResults = useMemo(() => {
     if (!isReady) return []
+
+    // Debug logging for activeFilters changes
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔍 useSearchFilters - activeFilters changed:', activeFilters)
+    }
 
     // If no filters are applied, show all items
     const hasFilters =
@@ -33,8 +38,8 @@ export function useSearchFilters() {
       }))
     }
 
-    // Create a search query from tags for freeform search
-    const searchQuery = activeFilters.tags.join(' ')
+    // Create a search query from tags using OR operator for inclusive fuzzy search
+    const searchQuery = activeFilters.tags.join(' | ')
 
     // Create filters without the search terms (tags will be handled separately)
     const searchFilters = {
@@ -45,6 +50,12 @@ export function useSearchFilters() {
     // If we have type/category filters but no search query, use a wildcard query
     // to ensure the search function processes the filters
     const finalQuery = searchQuery || '*'
+
+    // Debug logging for search parameters
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔍 Search debug - query:', finalQuery)
+      console.log('🔍 Search debug - filters:', searchFilters)
+    }
 
     return search(finalQuery, searchFilters)
   }, [isReady, search, activeFilters, getSearchableItems])
