@@ -46,8 +46,8 @@ export function BirthsignStatsDisplay({
                     className={cn(
                       'text-xs flex-shrink-0',
                       stat.type === 'bonus'
-                        ? 'bg-green-100 text-green-800 border-green-200'
-                        : 'bg-red-100 text-red-800 border-red-200'
+                        ? 'bg-green-200 text-green-800 border-green-300'
+                        : 'bg-red-200 text-red-800 border-red-300'
                     )}
                   >
                     {stat.type === 'bonus' ? '+' : '-'}
@@ -75,7 +75,7 @@ export function BirthsignStatsDisplay({
                   </span>
                   <Badge
                     variant="outline"
-                    className="bg-blue-100 text-blue-800 border-blue-200 text-xs flex-shrink-0"
+                    className="bg-blue-200 text-blue-800 border-blue-300 text-xs flex-shrink-0"
                   >
                     +{skill.value}
                     {skill.value_type === 'percentage' ? '%' : ''}

@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  darkMode: "class",
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
@@ -34,8 +33,8 @@ export default {
         ring: "hsl(var(--ring))",
         skyrim: {
           gold: "#d4af37",
-          dark: "#1e1e1e",
-        },
+          dark: "#1e1e1e"
+        }
       },
       keyframes: {
         "accordion-down": {

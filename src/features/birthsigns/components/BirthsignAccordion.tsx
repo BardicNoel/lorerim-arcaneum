@@ -52,8 +52,11 @@ export function BirthsignAccordion({
             <Badge
               variant="outline"
               className={cn(
-                getBirthsignGroupStyle(originalBirthsign.group) ||
-                  'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200',
+                (() => {
+                  const style = getBirthsignGroupStyle(originalBirthsign.group)
+                  return `${style.background} ${style.text} ${style.border} ${style.hover}`
+                })() ||
+                  'bg-gray-100 dark:bg-gray-900/20 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-800 hover:bg-gray-200 dark:hover:bg-gray-900/30',
                 'text-xs font-medium transition-colors'
               )}
             >

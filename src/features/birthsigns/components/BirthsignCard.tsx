@@ -6,6 +6,7 @@ import { Button } from '@/shared/ui/ui/button'
 import { H3, H5 } from '@/shared/ui/ui/typography'
 import { ExternalLink, Heart, Shield, Star, Zap } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { getBirthsignGroupStyle } from '../config/birthsignConfig'
 import type { Birthsign } from '../types'
 import { BirthsignAvatar } from './'
 
@@ -103,16 +104,22 @@ export function BirthsignCard({
 
   // Get pill styling based on group
   const getGroupPillStyle = (group: string) => {
-    const groupLower = group.toLowerCase()
-    if (groupLower === 'warrior') {
-      return 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800'
-    } else if (groupLower === 'mage') {
-      return 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800'
-    } else if (groupLower === 'thief') {
-      return 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800'
+    const style = getBirthsignGroupStyle(group)
+    return `${style.background} ${style.text} ${style.border}`
+  }
+
+  // Get stat pill styling based on stat type
+  const getStatPillStyle = (statType: 'health' | 'magicka' | 'stamina') => {
+    switch (statType) {
+      case 'health':
+        return 'bg-red-200 text-red-800 border-red-300'
+      case 'magicka':
+        return 'bg-blue-200 text-blue-800 border-blue-300'
+      case 'stamina':
+        return 'bg-green-200 text-green-800 border-green-300'
+      default:
+        return 'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30'
     }
-    // Default fallback
-    return 'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30'
   }
 
   const statMods = getStatModifications()
@@ -147,7 +154,9 @@ export function BirthsignCard({
                 statMods.stamina !== 0) && (
                 <div className="flex gap-1">
                   {statMods.health !== 0 && (
-                    <div className="flex items-center gap-1 px-2 py-1 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 rounded-full text-xs font-medium">
+                    <div
+                      className={`flex items-center gap-1 px-2 py-1 border rounded-full text-xs font-medium ${getStatPillStyle('health')}`}
+                    >
                       <Heart className="h-3 w-3" />
                       <span>
                         {statMods.health > 0 ? '+' : ''}
@@ -156,7 +165,9 @@ export function BirthsignCard({
                     </div>
                   )}
                   {statMods.magicka !== 0 && (
-                    <div className="flex items-center gap-1 px-2 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 rounded-full text-xs font-medium">
+                    <div
+                      className={`flex items-center gap-1 px-2 py-1 border rounded-full text-xs font-medium ${getStatPillStyle('magicka')}`}
+                    >
                       <Zap className="h-3 w-3" />
                       <span>
                         {statMods.magicka > 0 ? '+' : ''}
@@ -165,7 +176,9 @@ export function BirthsignCard({
                     </div>
                   )}
                   {statMods.stamina !== 0 && (
-                    <div className="flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800 rounded-full text-xs font-medium">
+                    <div
+                      className={`flex items-center gap-1 px-2 py-1 border rounded-full text-xs font-medium ${getStatPillStyle('stamina')}`}
+                    >
                       <Shield className="h-3 w-3" />
                       <span>
                         {statMods.stamina > 0 ? '+' : ''}
@@ -242,7 +255,7 @@ export function BirthsignCard({
               .map((effect, index) => (
                 <div
                   key={`conditional-${index}`}
-                  className="flex items-center gap-1 px-2 py-1 bg-purple-100 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 rounded-full text-xs font-medium"
+                  className="flex items-center gap-1 px-2 py-1 bg-purple-200 text-purple-800 border border-purple-300 rounded-full text-xs font-medium"
                 >
                   <Shield className="h-3 w-3" />
                   {effect.stat}
@@ -253,7 +266,7 @@ export function BirthsignCard({
               .map((effect, index) => (
                 <div
                   key={`mastery-${index}`}
-                  className="flex items-center gap-1 px-2 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 rounded-full text-xs font-medium"
+                  className="flex items-center gap-1 px-2 py-1 bg-blue-200 text-blue-800 border border-blue-300 rounded-full text-xs font-medium"
                 >
                   <Star className="h-3 w-3" />
                   {effect.stat}

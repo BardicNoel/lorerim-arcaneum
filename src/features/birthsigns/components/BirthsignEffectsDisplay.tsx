@@ -136,7 +136,7 @@ export function BirthsignEffectsDisplay({
                   <div className="flex items-center gap-2 mb-1">
                     <Badge
                       variant="outline"
-                      className="text-xs bg-purple-100 text-purple-800 border-purple-200"
+                      className="text-xs bg-purple-200 text-purple-800 border-purple-300"
                     >
                       Conditional
                     </Badge>
