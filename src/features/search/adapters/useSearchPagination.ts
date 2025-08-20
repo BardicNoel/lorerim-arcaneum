@@ -4,17 +4,24 @@ import type { SearchResult } from '../model/SearchModel'
 const ITEMS_PER_PAGE = 50
 
 export function useSearchPagination(searchResults: SearchResult[]) {
-  const [displayedItems, setDisplayedItems] = useState<SearchResult[]>([])
   const [currentPage, setCurrentPage] = useState(1)
 
-  // Calculate how many items should be displayed
-  const itemsToShow = currentPage * ITEMS_PER_PAGE
+  // Calculate displayed items directly from search results and current page
+  const displayedItems = useMemo(() => {
+    const itemsToShow = currentPage * ITEMS_PER_PAGE
+    return searchResults.slice(0, itemsToShow)
+  }, [searchResults, currentPage])
 
-  // Update displayed items when search results or page changes
+  // Reset to page 1 when search results change
   useEffect(() => {
-    const newDisplayedItems = searchResults.slice(0, itemsToShow)
-    setDisplayedItems(newDisplayedItems)
-  }, [searchResults, itemsToShow])
+    setCurrentPage(1)
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔍 useSearchPagination - search results changed, resetting to page 1')
+      console.log('🔍 useSearchPagination - searchResults:', searchResults.length)
+      console.log('🔍 useSearchPagination - displayedItems:', displayedItems.length)
+    }
+  }, [searchResults])
 
   // Check if there are more items to load
   const hasMore = useMemo(() => {
@@ -28,10 +35,9 @@ export function useSearchPagination(searchResults: SearchResult[]) {
     }
   }, [hasMore])
 
-  // Reset pagination when search results change
+  // Manual reset function
   const resetPagination = useCallback(() => {
     setCurrentPage(1)
-    setDisplayedItems([])
   }, [])
 
   // Get pagination info

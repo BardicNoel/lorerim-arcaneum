@@ -39,7 +39,7 @@ export class SearchDataProvider {
     includeScore: true,
     minMatchCharLength: 1, // Allow single character matches
     ignoreLocation: true,
-    useExtendedSearch: false, // Disable extended search for simple text matching
+    useExtendedSearch: true, // Enable extended search for AND/OR operators
     findAllMatches: true,
   }
 
@@ -218,8 +218,11 @@ export class SearchDataProvider {
       return []
     }
 
-    // First, look for exact matches to boost them
-    const exactMatches = this.allSearchableItems.filter(item => 
+    // Check if this is an extended search query (contains operators)
+    const isExtendedSearch = query.includes(' | ') || query.includes(' & ') || query.includes('!')
+    
+    // First, look for exact matches to boost them (skip for extended search)
+    const exactMatches = isExtendedSearch ? [] : this.allSearchableItems.filter(item => 
       item.name.toLowerCase() === query.toLowerCase()
     )
 
@@ -259,10 +262,18 @@ export class SearchDataProvider {
     let filteredResults = combinedResults
 
     if (filters) {
+      const beforeFilterCount = combinedResults.length
       filteredResults = combinedResults.filter(result => {
         const item = result.item
         return this.applyFilters([item], filters).length > 0
       })
+      const afterFilterCount = filteredResults.length
+      
+      // Debug logging for filter issues
+      if (process.env.NODE_ENV === 'development' && beforeFilterCount !== afterFilterCount) {
+        console.log(`🔍 Filter debug: ${beforeFilterCount} results before filtering, ${afterFilterCount} after filtering`)
+        console.log('🔍 Filter debug - filters:', filters)
+      }
     }
 
     // Transform results to SearchResult format
