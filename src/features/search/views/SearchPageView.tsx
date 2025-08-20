@@ -4,16 +4,13 @@ import {
   PlayerCreationItemsSection,
 } from '@/shared/components/playerCreation'
 import type {
-  SearchOption,
-  SelectedTag,
   PlayerCreationItem,
 } from '@/shared/components/playerCreation/types'
-import type { SearchFilters, SearchResult } from '../model/SearchModel'
-import { useEffect, useState } from 'react'
+import type { SearchResult } from '../model/SearchModel'
 import { useSearchComputed } from '../adapters/useSearchComputed'
 import { useSearchData } from '../adapters/useSearchData'
 import { useSearchFilters } from '../adapters/useSearchFilters'
-import { useSearchState } from '../adapters/useSearchState'
+import { useSearchState } from '../hooks/useSearchState'
 import { SearchPageLayout } from '../components/SearchPageLayout'
 import { SearchFilters as SearchFiltersComponent } from '../components/composition/SearchFilters'
 import { SearchResultsGrid } from '../components/composition/SearchResultsGrid'
@@ -22,123 +19,19 @@ export function SearchPageView() {
   const { isReady, isIndexing, error } = useSearchData()
   const {
     activeFilters,
-    setActiveFilters,
-    clearFilters,
+    selectedTags,
     viewMode,
-    setViewMode,
-    addTag,
-    removeTag,
+    setActiveFilters,
+    handleTagSelect,
+    handleTagRemove,
+    handleClearFilters,
+    handleViewModeChange,
   } = useSearchState()
   const { availableFilters } = useSearchFilters()
   const { playerCreationItems, totalResults } = useSearchComputed()
   
   // Type the playerCreationItems to include originalSearchResult
   const typedPlayerCreationItems = playerCreationItems as (PlayerCreationItem & { originalSearchResult: SearchResult })[]
-
-  // Tag state management
-  const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
-
-  // Sync selectedTags with activeFilters.tags from URL
-  useEffect(() => {
-    const urlTags: SelectedTag[] = []
-
-    // Add tags from URL
-    activeFilters.tags.forEach(tag => {
-      urlTags.push({
-        id: `custom-${tag}`,
-        label: tag,
-        value: tag,
-        category: 'Search All',
-      })
-    })
-
-    // Add category filters from URL
-    activeFilters.categories.forEach(category => {
-      urlTags.push({
-        id: `category-${category}`,
-        label: category,
-        value: category,
-        category: 'Categories',
-      })
-    })
-
-    setSelectedTags(urlTags)
-  }, [activeFilters.tags, activeFilters.categories])
-
-  // Add a tag (from autocomplete or custom input)
-  const handleTagSelect = (optionOrTag: SearchOption | string) => {
-    let tag: SelectedTag
-    if (typeof optionOrTag === 'string') {
-      tag = {
-        id: `custom-${optionOrTag}`,
-        label: optionOrTag,
-        value: optionOrTag,
-        category: 'Search All',
-      }
-    } else {
-      tag = {
-        id: `${optionOrTag.category}-${optionOrTag.id}`,
-        label: optionOrTag.label,
-        value: optionOrTag.value,
-        category: optionOrTag.category,
-      }
-    }
-
-    // Prevent duplicate tags
-    if (
-      !selectedTags.some(
-        t => t.value === tag.value && t.category === tag.category
-      )
-    ) {
-      setSelectedTags(prev => [...prev, tag])
-
-      // Add to appropriate filter based on category
-      if (tag.category === 'Categories') {
-        setActiveFilters({
-          ...activeFilters,
-          categories: [...activeFilters.categories, tag.value],
-        })
-      } else if (tag.category === 'Tags') {
-        setActiveFilters({
-          ...activeFilters,
-          tags: [...activeFilters.tags, tag.value],
-        })
-      } else {
-        // Default to adding as a search tag
-        addTag(tag.value)
-      }
-    }
-  }
-
-  // Remove a tag
-  const handleTagRemove = (tagId: string) => {
-    const tag = selectedTags.find(t => t.id === tagId)
-    if (tag) {
-      setSelectedTags(prev => prev.filter(t => t.id !== tagId))
-
-      // Remove from appropriate filter based on category
-      if (tag.category === 'Categories') {
-        setActiveFilters({
-          ...activeFilters,
-          categories: activeFilters.categories.filter((c: string) => c !== tag.value),
-        })
-      } else if (tag.category === 'Tags') {
-        setActiveFilters({
-          ...activeFilters,
-          tags: activeFilters.tags.filter((t: string) => t !== tag.value),
-        })
-      } else {
-        // Default to removing from search tags
-        removeTag(tag.value)
-      }
-    }
-  }
-
-  // Clear all filters
-  const handleClearFilters = () => {
-    setSelectedTags([])
-    clearFilters()
-  }
 
   if (!isReady) {
     return (
@@ -191,7 +84,7 @@ export function SearchPageView() {
         viewMode={viewMode}
         onTagSelect={() => {}} // Handled by SearchFilters
         onTagRemove={() => {}} // Handled by SearchFilters
-        onViewModeChange={setViewMode}
+        onViewModeChange={handleViewModeChange}
       >
         <SearchFiltersComponent
           activeFilters={activeFilters}

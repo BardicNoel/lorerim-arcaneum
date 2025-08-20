@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import type { SearchResult } from '../model/SearchModel'
 import { searchResultToPlayerCreationItem } from '../model/SearchUtilities'
 import { useSearchFilters } from './useSearchFilters'
-import { useSearchState } from './useSearchState'
+import { useSearchState } from '../hooks/useSearchState'
 import { useSearchPagination } from './useSearchPagination'
 
 export function useSearchComputed() {

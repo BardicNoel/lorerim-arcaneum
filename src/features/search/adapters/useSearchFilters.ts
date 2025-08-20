@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useSearchData } from './useSearchData'
-import { useSearchState } from './useSearchState'
+import { useSearchState } from '../hooks/useSearchState'
 
 export function useSearchFilters() {
   const { search, getAvailableFilters, isReady, getSearchableItems } =
