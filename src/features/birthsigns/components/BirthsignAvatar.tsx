@@ -35,17 +35,21 @@ export function BirthsignAvatar({
   className,
 }: BirthsignAvatarProps) {
   const avatarFileName = birthsignAvatarMap[birthsignName]
-  const imgSrc = avatarFileName 
+  const imgSrc = avatarFileName
     ? getDataUrl(`assets/sign-avatar/${avatarFileName}`)
     : undefined
 
   return (
-    <EntityAvatar
-      imgSrc={imgSrc}
-      alt={birthsignName}
-      size={size}
-      className={className}
-      imageClassName="scale-125"
-    />
+    <div className="relative">
+      <EntityAvatar
+        imgSrc={imgSrc}
+        alt={birthsignName}
+        size={size}
+        className={className}
+        imageClassName="scale-[160%]"
+        showBorder={false}
+      />
+      <div className="absolute inset-0 rounded-full border-2 border-black dark:border-white pointer-events-none z-10" />
+    </div>
   )
 }
