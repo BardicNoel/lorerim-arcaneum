@@ -14,9 +14,9 @@ interface BirthsignDetailPanelProps {
 }
 
 const effectTypeColors: Record<string, string> = {
-  bonus: 'bg-green-100 text-green-800 border-green-200',
-  penalty: 'bg-red-100 text-red-800 border-red-200',
-  conditional: 'bg-purple-100 text-purple-800 border-purple-200',
+  bonus: 'bg-green-200 text-green-800 border-green-300',
+  penalty: 'bg-red-200 text-red-800 border-red-300',
+  conditional: 'bg-purple-200 text-purple-800 border-purple-300',
 }
 
 export function BirthsignDetailPanel({
@@ -224,7 +224,7 @@ export function BirthsignDetailPanel({
                         <div className="flex items-center gap-2 mb-1">
                           <Badge
                             variant="outline"
-                            className="text-xs bg-purple-100 text-purple-800 border-purple-200"
+                            className="text-xs bg-purple-200 text-purple-800 border-purple-300"
                           >
                             Conditional
                           </Badge>
@@ -257,7 +257,7 @@ export function BirthsignDetailPanel({
                         <div className="flex items-center gap-2 mb-1">
                           <Badge
                             variant="outline"
-                            className="text-xs bg-blue-100 text-blue-800 border-blue-200"
+                            className="text-xs bg-blue-200 text-blue-800 border-blue-300"
                           >
                             Mastery
                           </Badge>
