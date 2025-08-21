@@ -15,6 +15,7 @@ interface PerkNodeProps {
     selected?: boolean
     currentRank?: number
     hasNoPosition?: boolean
+    currentSkillLevel?: number // Current total skill level
   }
   selected?: boolean
   onTogglePerk?: (perkId: string) => void
@@ -148,6 +149,7 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
         <div className="space-y-2">
           <h4 className="font-semibold text-sm">{data.name}</h4>
           <div className="text-sm text-muted-foreground">{description}</div>
+
           {/* Minimum skill level requirement */}
           {typeof data.ranks[0]?.prerequisites?.skillLevel?.level ===
             'number' &&

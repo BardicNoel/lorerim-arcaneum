@@ -47,12 +47,88 @@ interface PerkTree {
 }
 
 import { usePerkTreesStore } from '@/shared/stores/perkTreesStore'
+import { useRacesStore } from '@/shared/stores/racesStore'
+import type { BuildState } from '@/shared/types/build'
 
 /**
  * Get perk trees data from the centralized store
  */
 function getPerkTreesData(): PerkTree[] {
   return usePerkTreesStore.getState().data
+}
+
+/**
+ * Get races data from the centralized store
+ */
+function getRacesData() {
+  return useRacesStore.getState().data
+}
+
+/**
+ * Calculate the starting skill level for a given skill
+ * Formula: 0 + Race Bonus + Major Skill Bonus (+10) + Minor Skill Bonus (+5)
+ * @param skillId - The skill ID (e.g., 'AVSmithing')
+ * @param build - The current character build state
+ * @returns The starting skill level
+ */
+export function calculateStartingSkillLevel(
+  skillId: string,
+  build: BuildState
+): number {
+  let startingLevel = 0
+
+  // Add race bonus if race is selected
+  if (build.race) {
+    const races = getRacesData()
+    const selectedRace = races.find(race => race.edid === build.race)
+
+    if (selectedRace?.skillBonuses) {
+      const raceBonus = selectedRace.skillBonuses.find(
+        bonus => bonus.skill === skillId
+      )
+      if (raceBonus) {
+        startingLevel += raceBonus.bonus
+      }
+    }
+  }
+
+  // Add major skill bonus (+10) - prioritize major over minor
+  if (build.skills.major.includes(skillId)) {
+    startingLevel += 10
+  }
+  // Add minor skill bonus (+5) only if not already a major skill
+  else if (build.skills.minor.includes(skillId)) {
+    startingLevel += 5
+  }
+
+  return startingLevel
+}
+
+/**
+ * Calculate the total skill level for a given skill
+ * Formula: starting level + levels from perks
+ * @param skillId - The skill ID (e.g., 'AVSmithing')
+ * @param build - The current character build state
+ * @returns The total skill level
+ */
+export function calculateTotalSkillLevel(
+  skillId: string,
+  build: BuildState
+): number {
+  // Get starting level
+  const startingLevel = calculateStartingSkillLevel(skillId, build)
+
+  // Get levels from perks
+  const selectedPerks = build.perks?.selected?.[skillId] || []
+  const perkRanks = build.perks?.ranks || {}
+
+  const perkLevels = calculateMinimumSkillLevel(
+    skillId,
+    selectedPerks,
+    perkRanks
+  )
+
+  return startingLevel + perkLevels
 }
 
 /**

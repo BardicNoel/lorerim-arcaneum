@@ -1,7 +1,10 @@
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { useCallback, useMemo, useState } from 'react'
 import type { UnifiedSkill } from '../types'
-import { calculateMinimumSkillLevel } from '../utils/skillLevels'
+import {
+  calculateMinimumSkillLevel,
+  calculateStartingSkillLevel,
+} from '../utils/skillLevels'
 import { usePerkData } from './usePerkData'
 import { useSkillData } from './useSkillData'
 import { useSkillFilters } from './useSkillFilters'
@@ -11,6 +14,8 @@ export interface SkillsPageSkill extends UnifiedSkill {
   canAssignMajor: boolean
   canAssignMinor: boolean
   perkCount: string
+  startingLevel: number
+  minLevel: number
 }
 
 export interface SkillSummary {
@@ -64,17 +69,21 @@ export function useSkillsPage() {
       const selectedPerksCount = selectedPerks.length
       const totalPerks = skill.totalPerks ?? 0
 
-      // Calculate minimum skill level based on selected perks
-      const skillLevel = calculateMinimumSkillLevel(
+      // Calculate separate level components
+      const startingLevel = calculateStartingSkillLevel(skill.id, build)
+      const minLevel = calculateMinimumSkillLevel(
         skill.id,
         selectedPerks,
         build.perks?.ranks || {}
       )
+      const totalLevel = startingLevel + minLevel
 
       return {
         ...skill,
         selectedPerksCount, // Update the selected perks count
-        level: skillLevel, // Update the skill level
+        level: totalLevel, // Total skill level (starting + min level)
+        startingLevel, // Starting level (race bonus + major/minor bonuses)
+        minLevel, // Minimum level required by selected perks
         assignmentType: build.skills.major.includes(skill.id)
           ? ('major' as const)
           : build.skills.minor.includes(skill.id)
@@ -91,10 +100,7 @@ export function useSkillsPage() {
     })
   }, [
     filteredSkills,
-    build.skills.major,
-    build.skills.minor,
-    build.perks?.selected,
-    build.perks?.ranks,
+    build, // Include full build object for starting skill level calculations
   ])
 
   // Compute skill summary
