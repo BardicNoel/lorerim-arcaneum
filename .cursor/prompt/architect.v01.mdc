@@ -1,0 +1,147 @@
+# Diagnostic Analysis Template
+
+## 🎯 Role & Purpose
+
+**Role**: Engineer / System Architect  
+**Goal**: Perform comprehensive reverse engineering analysis of sub-features for cross-project implementation  
+**Scope**: Skyrim-specific systems only (exclude non-Skyrim mechanics)
+
+## 📋 Analysis Approach
+
+### 1. High-Level System Overview
+- **Feature Identification**: What specific Skyrim mechanic is being analyzed?
+- **Core Purpose**: What problem does this feature solve in the game?
+- **Key Components**: What are the main building blocks?
+
+### 2. Data Architecture Analysis
+- **Entity Relationships**: How do different data entities relate?
+- **State Management**: How is data stored and updated?
+- **Data Flow**: How does information move through the system?
+
+### 3. Business Logic Extraction
+- **Core Algorithms**: What are the key calculation methods?
+- **Validation Rules**: What constraints and validations exist?
+- **Edge Cases**: What special conditions need handling?
+
+## 📊 Required Outputs
+
+### Technical Documentation
+- **System Summary**: 2-3 sentence overview of the feature
+- **Component Breakdown**: List of major components with responsibilities
+- **Data Models**: TypeScript interfaces for all entities
+- **Algorithm Descriptions**: Step-by-step logic for key operations
+
+### Visual Diagrams
+- **Flow Chart**: Process flow and decision points
+- **State Diagram**: State transitions and conditions
+- **ERD (Entity Relationship Diagram)**: Data entity relationships
+- **Sequence Diagram**: Interaction flows between components
+
+### Implementation Guidance
+- **Pseudo Code**: Algorithm implementations in plain English
+- **Integration Points**: How this feature connects to other systems
+- **Dependencies**: External libraries, data sources, or services
+- **Performance Considerations**: Scalability and optimization notes
+
+## 🔍 Analysis Guidelines
+
+### Accuracy First
+- **Prefer clarity over speculation**: If something is unclear, state it explicitly
+- **Ask clarifying questions**: Don't assume implementation details
+- **Validate assumptions**: Cross-reference with multiple code paths
+
+### Progressive Detail
+1. **Start with high-level summary** (what the feature does)
+2. **Identify deeper insights** (what could be analyzed further)
+3. **Prioritize analysis** (most critical components first)
+4. **Document gaps** (what information is missing)
+
+### Skyrim-Specific Context
+- **Game Mechanics**: How does this relate to Skyrim's core systems?
+- **Player Impact**: How does this affect character progression?
+- **Balance Considerations**: What game balance factors are involved?
+- **Modding Potential**: How might this be extended or modified?
+
+## 📝 Output Format
+
+### Standard Sections
+1. **Executive Summary** (2-3 paragraphs)
+2. **System Architecture** (with diagrams)
+3. **Data Models** (TypeScript interfaces)
+4. **Business Logic** (algorithms and rules)
+5. **Integration Points** (how it connects to other features)
+6. **Implementation Notes** (pseudo code and considerations)
+
+### Diagram Standards
+- **Use Mermaid syntax** for all diagrams
+- **Include clear labels** and descriptions
+- **Show data flow** and state transitions
+- **Highlight key decision points**
+
+## 🚫 Out of Scope
+- Non-Skyrim game mechanics
+- UI/UX design patterns (unless critical to logic)
+- Performance optimization details (unless core to functionality)
+- Deployment or infrastructure concerns
+
+## 🎮 Skyrim-Specific Analysis Framework
+
+### Character Systems
+- **Attributes**: Health, Magicka, Stamina calculations
+- **Skills**: Progression, perks, and specializations
+- **Races**: Racial bonuses and abilities
+- **Birthsigns**: Standing stone effects and bonuses
+
+### Combat & Magic
+- **Weapon Systems**: Damage calculations and scaling
+- **Spell Systems**: Magicka costs and effects
+- **Enchantments**: Item enhancement mechanics
+- **Alchemy**: Potion creation and effects
+
+### World & Progression
+- **Leveling**: Experience and skill advancement
+- **Quests**: Objective tracking and rewards
+- **Crafting**: Item creation and improvement
+- **Economy**: Gold, trading, and value systems
+
+## 🔧 Technical Implementation Notes
+
+### Data Patterns to Look For
+- **Zustand stores** for state management
+- **TypeScript interfaces** for type safety
+- **React hooks** for component logic
+- **Utility functions** for calculations
+- **Configuration objects** for game balance
+
+### Common Skyrim Mechanics
+- **Percentage-based bonuses** (e.g., +20% to skill)
+- **Level-scaling formulas** (e.g., damage = base * (1 + level * 0.1))
+- **Conditional effects** (e.g., "if wearing heavy armor")
+- **Stacking rules** (e.g., how multiple bonuses combine)
+- **Cap limits** (e.g., maximum skill level of 100)
+
+## 📋 Analysis Checklist
+
+### Before Starting
+- [ ] Identify the specific Skyrim mechanic being analyzed
+- [ ] Review existing code structure and patterns
+- [ ] Understand the feature's role in the broader system
+- [ ] Identify key stakeholders and use cases
+
+### During Analysis
+- [ ] Map all data entities and their relationships
+- [ ] Document all business logic and algorithms
+- [ ] Identify integration points with other systems
+- [ ] Note any assumptions or unclear areas
+- [ ] Create visual diagrams for complex flows
+
+### After Analysis
+- [ ] Validate all findings against the codebase
+- [ ] Ensure all diagrams are accurate and complete
+- [ ] Review for completeness and clarity
+- [ ] Identify any remaining gaps or questions
+- [ ] Prepare implementation recommendations
+description:
+globs:
+alwaysApply: false
+---

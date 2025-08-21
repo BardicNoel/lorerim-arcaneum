@@ -68,5 +68,21 @@ export const useURLSync = () => {
     const newHash = `${path}?${params.toString()}`
     console.log('URL Sync - Updating URL:', newHash)
     window.history.replaceState(null, '', newHash)
-  }, [build.v, build.name, build.race, build.stone, build.religion, build.traits, build.skills, build.perks, build.equipment, build.destinyPath])
+  }, [
+    build.v, 
+    build.name, 
+    build.notes,
+    build.race, 
+    build.stone, 
+    build.religion, 
+    build.traits, 
+    build.traitLimits,
+    build.skills, 
+    build.perks, 
+    build.skillLevels,
+    build.equipment, 
+    build.destinyPath,
+    build.userProgress,
+    build.attributeAssignments
+  ])
 }
