@@ -4,7 +4,13 @@ export interface HydratedBuildData {
   race: { name: string; effects?: string }
   birthSign: { name: string; effects: string }
   traits: Array<{ name: string; effects: string; type: 'regular' | 'bonus' }>
-  religion: { name: string; effects: string }
+  religion: { 
+    name: string; 
+    effects: string;
+    tenets?: string;
+    followerBoon?: string;
+    devoteeBoon?: string;
+  }
   skills: {
     major: Array<{ name: string; level?: number }>
     minor: Array<{ name: string; level?: number }>
