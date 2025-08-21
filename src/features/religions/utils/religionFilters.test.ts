@@ -116,4 +116,40 @@ describe('religionFilters', () => {
 
     expect(found).toBeUndefined()
   })
+
+  it('should handle undefined religions array', () => {
+    const found = findReligionById(undefined, 'akatosh')
+    expect(found).toBeUndefined()
+  })
+
+  it('should handle null religions array', () => {
+    const found = findReligionById(null, 'akatosh')
+    expect(found).toBeUndefined()
+  })
+
+  it('should handle undefined id', () => {
+    const religions = [mockReligion]
+    const found = findReligionById(religions, undefined as any)
+    expect(found).toBeUndefined()
+  })
+
+  it('should return empty array for undefined religions in getDeityOptions', () => {
+    const deityOptions = getDeityOptions(undefined)
+    expect(deityOptions).toEqual([])
+  })
+
+  it('should return empty array for null religions in getDeityOptions', () => {
+    const deityOptions = getDeityOptions(null)
+    expect(deityOptions).toEqual([])
+  })
+
+  it('should return empty array for undefined religions in getBlessingOptions', () => {
+    const blessingOptions = getBlessingOptions(undefined)
+    expect(blessingOptions).toEqual([])
+  })
+
+  it('should return empty array for null religions in getBlessingOptions', () => {
+    const blessingOptions = getBlessingOptions(null)
+    expect(blessingOptions).toEqual([])
+  })
 })

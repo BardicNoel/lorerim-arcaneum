@@ -1,15 +1,15 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react'
+import { cn } from '@/lib/utils'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { Input } from '@/shared/ui/ui/input'
-import { ChevronDown, Search, Star, X, Zap } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { ChevronDown, Search, X, Zap } from 'lucide-react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
-import { getBlessingOptions } from '../utils/religionFilters'
 import type { Religion } from '../types'
+import { getBlessingOptions } from '../utils/religionFilters'
 
 interface BlessingAutocompleteProps {
-  religions: Religion[]
+  religions: Religion[] | undefined | null
   selectedBlessingId: string | null
   onBlessingSelect: (blessingId: string | null) => void
   placeholder?: string
@@ -40,7 +40,9 @@ export function BlessingAutocomplete({
   // Use fuzzy search
   const { filteredReligions } = useFuzzySearch(religions, searchQuery)
   const filteredBlessingOptions = useMemo(() => {
-    if (!searchQuery.trim()) return blessingOptions
+    if (!searchQuery.trim()) {
+      return blessingOptions
+    }
     return getBlessingOptions(filteredReligions)
   }, [filteredReligions, blessingOptions, searchQuery])
 

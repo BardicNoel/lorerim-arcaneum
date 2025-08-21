@@ -10,6 +10,7 @@ export {
   ReligionCard,
   ReligionSelectionCard,
   ReligionSheet,
+  FavoriteBlessingSelectionCard,
 } from './components'
 export { ReligionsPage, TabbedReligionsPage } from './pages'
 export type {

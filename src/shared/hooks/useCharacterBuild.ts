@@ -174,6 +174,11 @@ export function useCharacterBuild() {
     updateBuild({ religion: religionId })
   }
 
+  // Favorite blessing management
+  const setFavoriteBlessing = (blessingId: string | null) => {
+    updateBuild({ favoriteBlessing: blessingId })
+  }
+
   // Equipment management
   const addEquipment = (equipmentId: string) => {
     const equipment = build?.equipment ?? []
@@ -489,6 +494,9 @@ export function useCharacterBuild() {
 
     // Religion management - Simplified
     setReligion,
+
+    // Favorite blessing management
+    setFavoriteBlessing,
 
     // Equipment management
     addEquipment,

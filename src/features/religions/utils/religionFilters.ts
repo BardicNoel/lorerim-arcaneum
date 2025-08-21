@@ -1,5 +1,6 @@
 import type { Religion } from '../types'
-import type { DeityOption, BlessingOption } from '../types/selection'
+import type { BlessingOption, DeityOption } from '../types/selection'
+import { mapSharedReligionToFeatureReligion } from './religionMapper'
 
 /**
  * Transform a Religion into a DeityOption for deity selection
@@ -47,30 +48,49 @@ export function religionToBlessingOption(religion: Religion): BlessingOption {
 /**
  * Get all deity options from religions
  */
-export function getDeityOptions(religions: Religion[]): DeityOption[] {
+export function getDeityOptions(
+  religions: Religion[] | undefined | null
+): DeityOption[] {
+  if (!religions) return []
   return religions.map(religionToDeityOption)
 }
 
 /**
  * Get all blessing options from religions
  */
-export function getBlessingOptions(religions: Religion[]): BlessingOption[] {
-  return religions
-    .filter(religion =>
-      religion.blessing?.effects?.some(
-        effect => effect.effectType !== '1' && effect.effectType !== '3'
-      )
+export function getBlessingOptions(
+  religions: Religion[] | undefined | null
+): BlessingOption[] {
+  if (!religions || religions.length === 0) {
+    return []
+  }
+
+  // Transform to feature format like the religion page does
+  const featureReligions = religions.map(mapSharedReligionToFeatureReligion)
+
+  // Use the same filter as the religion page - filter out effects with type "1" and "3"
+  const religionsWithBlessings = featureReligions.filter(religion => {
+    if (!religion.blessing || !religion.blessing.effects) return false
+
+    // Filter out effects with type "1" and "3" (same as religion page)
+    const validEffects = religion.blessing.effects.filter(
+      effect => effect.effectType !== '1' && effect.effectType !== '3'
     )
-    .map(religionToBlessingOption)
+
+    return validEffects.length > 0
+  })
+
+  return religionsWithBlessings.map(religionToBlessingOption)
 }
 
 /**
  * Find a religion by ID
  */
 export function findReligionById(
-  religions: Religion[],
+  religions: Religion[] | undefined | null,
   id: string
 ): Religion | undefined {
+  if (!religions || !id) return undefined
   return religions.find(
     religion => religion.name.toLowerCase().replace(/\s+/g, '-') === id
   )

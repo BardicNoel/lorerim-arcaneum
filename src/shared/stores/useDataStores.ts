@@ -63,7 +63,7 @@ export function useReligions() {
   const { data, loading, error } = useReligionsStore()
 
   return {
-    data: data.length > 0 ? data : null,
+    data: data, // Return data directly, let components handle empty arrays
     loading,
     error,
   }
