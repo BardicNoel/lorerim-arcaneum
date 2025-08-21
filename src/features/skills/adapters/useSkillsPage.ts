@@ -1,7 +1,7 @@
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { useCallback, useMemo, useState } from 'react'
 import type { UnifiedSkill } from '../types'
-import { calculateMinimumSkillLevel } from '../utils/skillLevels'
+import { calculateTotalSkillLevel } from '../utils/skillLevels'
 import { usePerkData } from './usePerkData'
 import { useSkillData } from './useSkillData'
 import { useSkillFilters } from './useSkillFilters'
@@ -64,12 +64,8 @@ export function useSkillsPage() {
       const selectedPerksCount = selectedPerks.length
       const totalPerks = skill.totalPerks ?? 0
 
-      // Calculate minimum skill level based on selected perks
-      const skillLevel = calculateMinimumSkillLevel(
-        skill.id,
-        selectedPerks,
-        build.perks?.ranks || {}
-      )
+      // Calculate total skill level (starting + perk levels)
+      const skillLevel = calculateTotalSkillLevel(skill.id, build)
 
       return {
         ...skill,
@@ -91,10 +87,7 @@ export function useSkillsPage() {
     })
   }, [
     filteredSkills,
-    build.skills.major,
-    build.skills.minor,
-    build.perks?.selected,
-    build.perks?.ranks,
+    build, // Include full build object for starting skill level calculations
   ])
 
   // Compute skill summary

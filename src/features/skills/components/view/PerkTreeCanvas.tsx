@@ -28,6 +28,7 @@ interface PerkTreeCanvasProps {
   onTogglePerk: (perkId: string) => void
   onRankChange?: (perkId: string, newRank: number) => void
   selectedPerks: PerkNodeType[]
+  currentSkillLevel?: number // Current total skill level for this skill tree
 }
 
 // Simplified tree node structure
@@ -484,6 +485,7 @@ export function PerkTreeCanvas({
   onTogglePerk,
   onRankChange,
   selectedPerks,
+  currentSkillLevel,
 }: PerkTreeCanvasProps) {
   // React Flow instance
   const [reactFlowInstance, setReactFlowInstance] =
@@ -540,12 +542,13 @@ export function PerkTreeCanvas({
           selected: false, // Will be updated via useEffect
           hasChildren: hasChildren,
           isRoot: isRoot,
+          currentSkillLevel: currentSkillLevel, // Pass current skill level to each node
         } as PerkNodeData,
       }
     })
 
     return nodes
-  }, [validatedTree, nodePositions])
+  }, [validatedTree, nodePositions, currentSkillLevel])
 
   // Create React Flow edges from connections array
   const initialEdges: Edge[] = useMemo(() => {

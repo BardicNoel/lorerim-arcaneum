@@ -1,8 +1,11 @@
 import { usePerkTreesStore } from '@/shared/stores/perkTreesStore'
+import { useRacesStore } from '@/shared/stores/racesStore'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import {
   calculateAllSkillLevels,
   calculateMinimumSkillLevel,
+  calculateStartingSkillLevel,
+  calculateTotalSkillLevel,
 } from '../skillLevels'
 
 // Mock perk trees data for testing
@@ -91,10 +94,45 @@ const mockPerkTreesData = [
   },
 ]
 
+// Mock race data for testing
+const mockRacesData = [
+  {
+    edid: 'HighElfRace',
+    name: 'Altmer',
+    skillBonuses: [
+      { skill: 'Alteration', bonus: 15 },
+      { skill: 'Conjuration', bonus: 10 },
+      { skill: 'Destruction', bonus: 10 },
+      { skill: 'Illusion', bonus: 10 },
+      { skill: 'Restoration', bonus: 10 },
+      { skill: 'Enchanting', bonus: 10 },
+    ],
+  },
+  {
+    edid: 'ImperialRace',
+    name: 'Imperial',
+    skillBonuses: [
+      { skill: 'One-Handed', bonus: 10 },
+      { skill: 'Block', bonus: 10 },
+      { skill: 'Heavy Armor', bonus: 10 },
+      { skill: 'Speechcraft', bonus: 15 },
+      { skill: 'Destruction', bonus: 10 },
+      { skill: 'Restoration', bonus: 10 },
+    ],
+  },
+]
+
 beforeEach(() => {
   // Seed the zustand store with mock perk trees data expected by skillLevels.ts
   usePerkTreesStore.setState({
     data: mockPerkTreesData as any,
+    loading: false,
+    error: null,
+  })
+
+  // Seed the zustand store with mock races data
+  useRacesStore.setState({
+    data: mockRacesData as any,
     loading: false,
     error: null,
   })
@@ -103,9 +141,128 @@ beforeEach(() => {
 afterEach(() => {
   // Reset store after each test to avoid cross-test contamination
   usePerkTreesStore.setState({ data: [], loading: false, error: null })
+  useRacesStore.setState({ data: [], loading: false, error: null })
 })
 
 describe('skillLevels', () => {
+  describe('calculateStartingSkillLevel', () => {
+    it('should calculate correct starting level for Altmer with major skill', () => {
+      const build = {
+        race: 'HighElfRace',
+        skills: { major: ['Alteration'], minor: [] },
+      } as any
+      const result = calculateStartingSkillLevel('Alteration', build)
+      expect(result).toBe(25) // 0 + 15 (race) + 10 (major)
+    })
+
+    it('should calculate correct starting level for Imperial with minor skill', () => {
+      const build = {
+        race: 'ImperialRace',
+        skills: { major: [], minor: ['One-Handed'] },
+      } as any
+      const result = calculateStartingSkillLevel('One-Handed', build)
+      expect(result).toBe(15) // 0 + 10 (race) + 5 (minor)
+    })
+
+    it('should handle no race selected, major skill', () => {
+      const build = {
+        race: null,
+        skills: { major: ['One-Handed'], minor: [] },
+      } as any
+      const result = calculateStartingSkillLevel('One-Handed', build)
+      expect(result).toBe(10) // 0 + 0 + 10 (major)
+    })
+
+    it('should handle no race selected, minor skill', () => {
+      const build = {
+        race: null,
+        skills: { major: [], minor: ['Alteration'] },
+      } as any
+      const result = calculateStartingSkillLevel('Alteration', build)
+      expect(result).toBe(5) // 0 + 0 + 5 (minor)
+    })
+
+    it('should handle no race selected, unassigned skill', () => {
+      const build = {
+        race: null,
+        skills: { major: [], minor: [] },
+      } as any
+      const result = calculateStartingSkillLevel('Alteration', build)
+      expect(result).toBe(0) // 0 + 0 + 0
+    })
+
+    it('should handle race with no bonus for skill', () => {
+      const build = {
+        race: 'HighElfRace',
+        skills: { major: ['One-Handed'], minor: [] },
+      } as any
+      const result = calculateStartingSkillLevel('One-Handed', build)
+      expect(result).toBe(10) // 0 + 0 + 10 (major)
+    })
+
+    it('should prioritize major over minor skill assignment', () => {
+      const build = {
+        race: 'HighElfRace',
+        skills: { major: ['Alteration'], minor: ['Alteration'] },
+      } as any
+      const result = calculateStartingSkillLevel('Alteration', build)
+      expect(result).toBe(25) // 0 + 15 (race) + 10 (major) - should not double count
+    })
+  })
+
+  describe('calculateTotalSkillLevel', () => {
+    it('should combine starting level with perk levels', () => {
+      const build = {
+        race: 'HighElfRace',
+        skills: { major: ['AVSmithing'], minor: [] },
+        perks: {
+          selected: { AVSmithing: ['REQ_Smithing_DwarvenSmithing'] },
+          ranks: {},
+        },
+      } as any
+      const result = calculateTotalSkillLevel('AVSmithing', build)
+      expect(result).toBe(35) // 10 (starting) + 25 (perk requirement)
+    })
+
+    it('should return starting level when no perks selected', () => {
+      const build = {
+        race: 'HighElfRace',
+        skills: { major: ['Alteration'], minor: [] },
+        perks: { selected: {}, ranks: {} },
+      } as any
+      const result = calculateTotalSkillLevel('Alteration', build)
+      expect(result).toBe(25) // 25 (starting) + 0 (no perks)
+    })
+
+    it('should handle no race and no perks', () => {
+      const build = {
+        race: null,
+        skills: { major: ['One-Handed'], minor: [] },
+        perks: { selected: {}, ranks: {} },
+      } as any
+      const result = calculateTotalSkillLevel('One-Handed', build)
+      expect(result).toBe(10) // 10 (starting) + 0 (no perks)
+    })
+
+    it('should handle multiple perks with different requirements', () => {
+      const build = {
+        race: 'HighElfRace',
+        skills: { major: ['AVSmithing'], minor: [] },
+        perks: {
+          selected: {
+            AVSmithing: [
+              'REQ_Smithing_DwarvenSmithing',
+              'REQ_Smithing_OrcishSmithing',
+            ],
+          },
+          ranks: {},
+        },
+      } as any
+      const result = calculateTotalSkillLevel('AVSmithing', build)
+      expect(result).toBe(60) // 10 (starting) + 50 (highest perk requirement)
+    })
+  })
+
   describe('calculateMinimumSkillLevel', () => {
     it('should return 0 when no perks are selected', () => {
       const result = calculateMinimumSkillLevel('AVSmithing', [], {})

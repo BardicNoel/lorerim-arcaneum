@@ -45,6 +45,7 @@ interface PerkTreeCanvasIIProps {
   onTogglePerk: (perkId: string) => void
   onRankChange?: (perkId: string, newRank: number) => void
   selectedPerks: PerkNodeType[]
+  currentSkillLevel?: number // Current total skill level for this skill tree
 }
 
 export function PerkTreeCanvasII({
@@ -52,6 +53,7 @@ export function PerkTreeCanvasII({
   onTogglePerk,
   onRankChange,
   selectedPerks,
+  currentSkillLevel,
 }: PerkTreeCanvasIIProps) {
   const [reactFlowInstance, setReactFlowInstance] =
     React.useState<ReactFlowInstance | null>(null)
@@ -194,6 +196,7 @@ export function PerkTreeCanvasII({
           currentRank: (selectedPerk as PerkNodeData)?.currentRank || 0,
           hasChildren: hasChildren,
           isRoot: isRoot,
+          currentSkillLevel: currentSkillLevel, // Pass current skill level to each node
           onTogglePerk,
           onRankChange,
         } as PerkNodeData & {
@@ -202,7 +205,14 @@ export function PerkTreeCanvasII({
         },
       }
     })
-  }, [validatedTree, layoutNodes, selectedPerks, onTogglePerk, onRankChange])
+  }, [
+    validatedTree,
+    layoutNodes,
+    selectedPerks,
+    onTogglePerk,
+    onRankChange,
+    currentSkillLevel,
+  ])
   const initialEdges: Edge[] = useMemo(() => {
     if (!validatedTree) return []
     const edges: Edge[] = []

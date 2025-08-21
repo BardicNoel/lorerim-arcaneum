@@ -1,0 +1,10 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+
+Break this analysis into actionable tasks
+create a summary file, and then create a file for each task in a dir "tasks" which is a sibling to the summary file.
+
+Prompt for the root-dir to write tasks in if not specified in this prompt

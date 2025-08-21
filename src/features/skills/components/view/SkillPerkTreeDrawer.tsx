@@ -1,11 +1,11 @@
 import { PerkTreeCanvasII } from '@/features/skills/components/view/PerkTreeCanvasII'
 import { Z_INDEX } from '@/lib/constants'
-import { SkillAvatar } from '../atomic/SkillAvatar'
 import { AutocompleteSearch } from '@/shared/components/playerCreation/AutocompleteSearch'
 import type {
   SearchCategory,
   SearchOption,
 } from '@/shared/components/playerCreation/types'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Button } from '@/shared/ui/ui/button'
 import {
   Drawer,
@@ -22,6 +22,7 @@ import * as DrawerPrimitive from 'vaul'
 import type { DetailSkill } from '../../adapters'
 import { usePerkData } from '../../adapters'
 import type { PerkTree } from '../../types'
+import { SkillAvatar } from '../atomic/SkillAvatar'
 
 export interface SkillPerkTreeDrawerProps {
   open: boolean
@@ -60,6 +61,12 @@ export function SkillPerkTreeDrawer({
     handlePerkRankChange,
     handleResetPerks,
   } = usePerkData(selectedSkill)
+
+  // Get current skill level from character build
+  const { getSkillLevel } = useCharacterBuild()
+  const currentSkillLevel = selectedSkill
+    ? getSkillLevel(selectedSkill)
+    : undefined
 
   // Convert selected perk IDs to PerkNode objects for the canvas
   const selectedPerkNodes = React.useMemo(() => {
@@ -152,11 +159,11 @@ export function SkillPerkTreeDrawer({
                 </div>
                 <div className="flex items-center gap-3">
                   {skillName && (
-                            <SkillAvatar
-          skillName={skillName}
-          size="lg"
-          className="flex-shrink-0"
-        />
+                    <SkillAvatar
+                      skillName={skillName}
+                      size="lg"
+                      className="flex-shrink-0"
+                    />
                   )}
                   <div>
                     <DrawerTitle className="text-xl">
@@ -204,6 +211,7 @@ export function SkillPerkTreeDrawer({
                   onTogglePerk={handleTogglePerk}
                   onRankChange={handleRankChange}
                   selectedPerks={selectedPerkNodes}
+                  currentSkillLevel={currentSkillLevel}
                 />
               ) : (
                 <div className="flex items-center justify-center h-full">

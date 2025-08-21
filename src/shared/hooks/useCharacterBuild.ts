@@ -1,4 +1,8 @@
-import { calculateAllSkillLevels } from '@/features/skills/utils/skillLevels'
+import {
+  calculateAllSkillLevels,
+  calculateStartingSkillLevel,
+  calculateTotalSkillLevel,
+} from '@/features/skills/utils/skillLevels'
 import { useCharacterStore } from '@/shared/stores/characterStore'
 
 export function useCharacterBuild() {
@@ -322,7 +326,13 @@ export function useCharacterBuild() {
   }
 
   const getSkillLevel = (skillId: string) => {
-    return build?.skillLevels?.[skillId] ?? 0
+    if (!build) return 0
+    return calculateTotalSkillLevel(skillId, build)
+  }
+
+  const getStartingSkillLevel = (skillId: string) => {
+    if (!build) return 0
+    return calculateStartingSkillLevel(skillId, build)
   }
 
   // Clear all selections
@@ -472,6 +482,7 @@ export function useCharacterBuild() {
     getSkillPerks,
     getPerkRank,
     getSkillLevel,
+    getStartingSkillLevel,
 
     // Trait management
     addTrait,

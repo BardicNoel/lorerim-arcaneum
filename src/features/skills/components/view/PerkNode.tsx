@@ -15,6 +15,7 @@ interface PerkNodeProps {
     selected?: boolean
     currentRank?: number
     hasNoPosition?: boolean
+    currentSkillLevel?: number // Current total skill level
   }
   selected?: boolean
   onTogglePerk?: (perkId: string) => void
@@ -127,14 +128,28 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
           {/* Only show target handle if this node is not a root (has prerequisites) */}
           {!data.isRoot && <Handle type="target" position={Position.Bottom} />}
 
-          <div className="font-medium">{data.name}</div>
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <div className="font-medium">{data.name}</div>
 
-          {/* Show rank info for multi-rank perks */}
-          {totalRanks > 1 && (
-            <div className="text-xs text-muted-foreground mt-1">
-              {data.currentRank || 0}/{totalRanks} ranks
+              {/* Show rank info for multi-rank perks */}
+              {totalRanks > 1 && (
+                <div className="text-xs text-muted-foreground mt-1">
+                  {data.currentRank || 0}/{totalRanks} ranks
+                </div>
+              )}
             </div>
-          )}
+
+            {/* Show current total skill level on the right */}
+            {typeof data.currentSkillLevel === 'number' && (
+              <div className="text-right ml-2">
+                <div className="text-lg font-bold text-blue-600">
+                  {data.currentSkillLevel}
+                </div>
+                <div className="text-xs text-muted-foreground">Total</div>
+              </div>
+            )}
+          </div>
 
           {/* Only show source handle if this node has children (is not terminal) */}
           {data.hasChildren && <Handle type="source" position={Position.Top} />}
@@ -148,14 +163,44 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
         <div className="space-y-2">
           <h4 className="font-semibold text-sm">{data.name}</h4>
           <div className="text-sm text-muted-foreground">{description}</div>
-          {/* Minimum skill level requirement */}
-          {typeof data.ranks[0]?.prerequisites?.skillLevel?.level ===
-            'number' &&
-            data.ranks[0].prerequisites.skillLevel.level > 0 && (
-              <div className="text-xs text-blue-700 font-medium pt-1">
-                Min. Level: {data.ranks[0].prerequisites.skillLevel.level}
+
+          {/* Skill level information */}
+          <div className="flex items-center justify-between pt-2 border-t">
+            {/* Minimum skill level requirement */}
+            {typeof data.ranks[0]?.prerequisites?.skillLevel?.level ===
+              'number' &&
+              data.ranks[0].prerequisites.skillLevel.level > 0 && (
+                <div className="text-xs text-blue-700 font-medium">
+                  Min. Level: {data.ranks[0].prerequisites.skillLevel.level}
+                </div>
+              )}
+
+            {/* Current total skill level */}
+            {typeof data.currentSkillLevel === 'number' && (
+              <div className="text-right">
+                <div className="text-sm font-bold text-blue-600">
+                  Total Level: {data.currentSkillLevel}
+                </div>
+                {typeof data.ranks[0]?.prerequisites?.skillLevel?.level ===
+                  'number' &&
+                  data.ranks[0].prerequisites.skillLevel.level > 0 && (
+                    <div
+                      className={`text-xs ${
+                        data.currentSkillLevel >=
+                        data.ranks[0].prerequisites.skillLevel.level
+                          ? 'text-green-600'
+                          : 'text-red-600'
+                      }`}
+                    >
+                      {data.currentSkillLevel >=
+                      data.ranks[0].prerequisites.skillLevel.level
+                        ? '✓ Requirement Met'
+                        : '✗ Requirement Not Met'}
+                    </div>
+                  )}
               </div>
             )}
+          </div>
           {totalRanks > 1 && (
             <div className="text-xs text-muted-foreground pt-2 border-t">
               <strong>Ranks:</strong> {data.currentRank || 0}/{totalRanks}
