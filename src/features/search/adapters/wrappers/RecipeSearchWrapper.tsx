@@ -15,13 +15,11 @@ export const RecipeSearchWrapper: React.FC<{
   
   // Check if recipeData has the required properties
   if (!recipeData || !recipeData.name) {
-    console.error('RecipeSearchWrapper - Invalid recipe data:', recipeData)
     return <FallbackCard result={result} isSelected={isSelected} onClick={onClick} />
   }
   
   // Transform raw recipe data to RecipeWithComputed
   const recipeWithComputed = RecipeModel.addComputedProperties(recipeData)
-  console.log("Recipe Card rendered")
   return (
     <RecipeCard
       recipe={recipeWithComputed}

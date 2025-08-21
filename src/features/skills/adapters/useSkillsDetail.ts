@@ -81,7 +81,6 @@ export function useSkillsDetail() {
 
   const handleResetPerks = () => {
     // The PerkTreeView component handles the actual reset
-    console.log('Reset perks for skill:', selectedSkillId)
   }
 
   return {

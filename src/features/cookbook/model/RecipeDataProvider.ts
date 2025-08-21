@@ -40,38 +40,28 @@ export class RecipeDataProvider {
       // Expected structure: { "food": {...}, "alcohol": {...}, "dev": {...} }
       const allRecipes: any[] = []
       
-      console.log('RecipeDataProvider: Raw data keys:', Object.keys(rawData))
-      
       // Add food recipes if they exist
       if (rawData.food && Array.isArray(rawData.food)) {
-        console.log('RecipeDataProvider: Found', rawData.food.length, 'food recipes')
         allRecipes.push(...rawData.food)
       } else if (rawData.food && typeof rawData.food === 'object') {
-        console.log('RecipeDataProvider: Food section is an object, checking for recipes property')
         if (rawData.food.recipes && Array.isArray(rawData.food.recipes)) {
-          console.log('RecipeDataProvider: Found', rawData.food.recipes.length, 'food recipes in recipes property')
           allRecipes.push(...rawData.food.recipes)
         }
       }
       
       // Add alcohol recipes if they exist
       if (rawData.alcohol && Array.isArray(rawData.alcohol)) {
-        console.log('RecipeDataProvider: Found', rawData.alcohol.length, 'alcohol recipes')
         allRecipes.push(...rawData.alcohol)
       } else if (rawData.alcohol && typeof rawData.alcohol === 'object') {
-        console.log('RecipeDataProvider: Alcohol section is an object, checking for recipes property')
         if (rawData.alcohol.recipes && Array.isArray(rawData.alcohol.recipes)) {
-          console.log('RecipeDataProvider: Found', rawData.alcohol.recipes.length, 'alcohol recipes in recipes property')
           allRecipes.push(...rawData.alcohol.recipes)
         }
       }
       
       // If no recipes found in expected structure, try fallback
       if (allRecipes.length === 0) {
-        console.log('RecipeDataProvider: No recipes found in food/alcohol sections, trying fallback')
         const fallbackData = rawData.food?.recipes || rawData.recipes || rawData
         if (Array.isArray(fallbackData)) {
-          console.log('RecipeDataProvider: Found', fallbackData.length, 'recipes in fallback data')
           allRecipes.push(...fallbackData)
         }
       }
@@ -101,11 +91,8 @@ export class RecipeDataProvider {
       this.cache = recipes
       this.lastFetch = Date.now()
 
-      console.log(`RecipeDataProvider: Loaded ${validCount} valid recipes, ${invalidCount} invalid recipes`)
-
       return recipes
     } catch (error) {
-      console.error('RecipeDataProvider: Error loading recipes:', error)
       throw error
     }
   }
@@ -114,9 +101,7 @@ export class RecipeDataProvider {
    * Get recipe data with statistics
    */
   async getRecipeData(): Promise<RecipeDataResponse> {
-    console.log('RecipeDataProvider: getRecipeData called')
     const recipes = await this.loadRecipes()
-    console.log('RecipeDataProvider: Getting statistics for', recipes.length, 'recipes')
     const stats = RecipeModel.getStatistics(recipes)
     
     const result = {
@@ -127,14 +112,6 @@ export class RecipeDataProvider {
       ingredients: RecipeModel.getUniqueIngredients(recipes),
       lastUpdated: new Date().toISOString()
     }
-    
-    console.log('RecipeDataProvider: getRecipeData result:', {
-      recipesCount: result.recipes.length,
-      totalCount: result.totalCount,
-      categories: result.categories,
-      effects: result.effects,
-      ingredients: result.ingredients
-    })
     
     return result
   }
@@ -202,7 +179,6 @@ export class RecipeDataProvider {
   clearCache(): void {
     this.cache = null
     this.lastFetch = 0
-    console.log('RecipeDataProvider: Cache cleared')
   }
 
   /**

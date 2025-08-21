@@ -78,18 +78,12 @@ export function PerkTreeCanvasII({
       return
     }
 
-    console.log('Loading saved positions for tree:', validatedTree.treeId)
     setIsLoadingPositions(true)
     loadSavedTreePositions(validatedTree.treeId)
       .then(positions => {
-        console.log(
-          'Loaded saved positions:',
-          positions ? 'Found' : 'Not found'
-        )
         setSavedPositions(positions)
       })
       .catch(error => {
-        console.warn('Failed to load saved positions:', error)
         setSavedPositions(null)
       })
       .finally(() => {
@@ -128,15 +122,8 @@ export function PerkTreeCanvasII({
   const layoutNodes = useMemo(() => {
     if (!validatedTree) return []
 
-    console.log('Layout decision:', {
-      hasSavedPositions: !!savedPositions,
-      isLoadingPositions,
-      treeId: validatedTree.treeId,
-    })
-
     if (savedPositions && !isLoadingPositions) {
       // Use the new positioned tree plotter
-      console.log('Using preset positions for tree:', validatedTree.treeId)
       const positions = plotPositionedTree(
         validatedTree,
         savedPositions,
@@ -153,10 +140,6 @@ export function PerkTreeCanvasII({
       }))
     } else {
       // Fall back to original layout algorithm
-      console.log(
-        'Using fallback layout algorithm for tree:',
-        validatedTree.treeId
-      )
       const perkRecords = convertToPerkRecords(validatedTree)
       return layoutPerkTree(perkRecords, layoutConfig)
     }

@@ -403,7 +403,6 @@ export function handleValidationError(
 // Cache management utilities
 export function clearValidationCache(): void {
   validationCache.clear()
-  console.log('Validation cache cleared')
 }
 
 export function getValidationCacheStats(): {

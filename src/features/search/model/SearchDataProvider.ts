@@ -149,7 +149,6 @@ export class SearchDataProvider {
         !spells?.length ||
         !enchantments?.length
       ) {
-        console.log('Stores not loaded yet, cannot build search index')
         throw new Error(
           'Store data not available - stores must be loaded before building search index'
         )
@@ -239,25 +238,7 @@ export class SearchDataProvider {
     // Perform fuzzy search on all items
     const fuseResults = this.searchIndex.search(query)
 
-    // Debug logging for search issues
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`🔍 Search for "${query}" returned ${fuseResults.length} fuzzy results + ${exactMatches.length} exact matches`)
-      
-      // Special logging for problematic search terms
-      if (query.toLowerCase() === 'altmer' || query.toLowerCase().includes('altmer')) {
-        console.log('🧝 Altmer search debug:', {
-          query,
-          exactMatches: exactMatches.map(m => m.name),
-          fuzzyResults: fuseResults.length,
-          topFuzzyResults: fuseResults.slice(0, 3).map(r => ({ 
-            name: r.item.name, 
-            type: r.item.type,
-            score: r.score?.toFixed(3),
-            category: r.item.category
-          }))
-        })
-      }
-    }
+
 
     // Combine exact matches (perfect score) with fuzzy results, avoiding duplicates
     const exactMatchIds = new Set(exactMatches.map(item => item.id))
@@ -279,11 +260,7 @@ export class SearchDataProvider {
       })
       const afterFilterCount = filteredResults.length
       
-      // Debug logging for filter issues
-      if (process.env.NODE_ENV === 'development' && beforeFilterCount !== afterFilterCount) {
-        console.log(`🔍 Filter debug: ${beforeFilterCount} results before filtering, ${afterFilterCount} after filtering`)
-        console.log('🔍 Filter debug - filters:', filters)
-      }
+
     }
 
     // Transform results to SearchResult format

@@ -44,14 +44,7 @@ export function SkillPerkTreeDrawer({
   onSkillSelect,
   onReset,
 }: SkillPerkTreeDrawerProps) {
-  // Debug logging
-  console.log('SkillPerkTreeDrawer props:', {
-    open,
-    selectedSkill,
-    skillName,
-    perkTree: perkTree ? 'Found' : 'Not found',
-    skillsCount: skills.length,
-  })
+
   // Use perk data adapter
   const {
     selectedPerks,
@@ -128,7 +121,7 @@ export function SkillPerkTreeDrawer({
       shouldScaleBackground={false}
       dismissible={true}
     >
-      {console.log('Drawer render - open:', open)}
+
       <DrawerPortal>
         <DrawerOverlay />
         <DrawerPrimitive.Content
@@ -139,7 +132,7 @@ export function SkillPerkTreeDrawer({
             zIndex: Z_INDEX.DRAWER,
           }}
         >
-          {console.log('Drawer content render - zIndex:', Z_INDEX.DRAWER)}
+
           <DrawerHeader className="border-b">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">

@@ -190,12 +190,10 @@ export function useSkillsPage() {
         // Remove perk
         const newSelected = currentSelected.filter(id => id !== perkId)
         // Update build state (you'll need to implement this)
-        console.log('Remove perk:', perkId, 'from skill:', selectedSkill.id)
       } else {
         // Add perk
         const newSelected = [...currentSelected, perkId]
         // Update build state (you'll need to implement this)
-        console.log('Add perk:', perkId, 'to skill:', selectedSkill.id)
       }
     },
     [selectedSkill, build.perks?.selected]
@@ -210,14 +208,6 @@ export function useSkillsPage() {
       const newRanks = { ...currentRanks, [perkId]: rank }
 
       // Update build state (you'll need to implement this)
-      console.log(
-        'Update perk rank:',
-        perkId,
-        'to',
-        rank,
-        'for skill:',
-        selectedSkill.id
-      )
     },
     [selectedSkill, build.perks?.ranks]
   )

@@ -62,14 +62,6 @@ export function useSpellComputed(
   // Ensure spells is always an array
   const safeSpells = Array.isArray(spells) ? spells : []
 
-  // Debug logging
-  console.log('useSpellComputed Debug:', {
-    spellsLength: spells?.length || 0,
-    safeSpellsLength: safeSpells.length,
-    enableSearchCategories,
-    isArray: Array.isArray(spells)
-  })
-
   // Statistics
   const statistics = useMemo(() => {
     if (!enableStatistics) {
@@ -91,24 +83,12 @@ export function useSpellComputed(
 
   // Search categories generation (new)
   const searchCategories = useMemo((): SearchCategory[] => {
-    console.log('Generating search categories:', {
-      enableSearchCategories,
-      safeSpellsLength: safeSpells.length,
-      safeSpells: safeSpells.slice(0, 2) // Log first 2 spells for debugging
-    })
-    
     if (!enableSearchCategories || safeSpells.length === 0) {
-      console.log('Returning empty search categories')
       return []
     }
 
     const allSchools = [...new Set(safeSpells.map(spell => spell.school))]
     const allLevels = [...new Set(safeSpells.map(spell => spell.level))]
-    
-    console.log('Extracted categories:', {
-      schools: allSchools,
-      levels: allLevels
-    })
     
     const categories = [
       {
@@ -142,12 +122,6 @@ export function useSpellComputed(
         })),
       },
     ]
-    
-    console.log('Generated categories:', categories.map(cat => ({
-      id: cat.id,
-      name: cat.name,
-      optionsCount: cat.options.length
-    })))
     
     return categories
   }, [safeSpells, enableSearchCategories])
