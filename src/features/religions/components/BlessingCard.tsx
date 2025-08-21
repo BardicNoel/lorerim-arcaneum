@@ -5,6 +5,7 @@ import { H3, P } from '@/shared/ui/ui/typography'
 import { Clock, Target } from 'lucide-react'
 import type { Religion } from '../types'
 import { ReligionAvatar } from './atomic/ReligionAvatar'
+import { sanitizeEffectName, sanitizeEffectDescription } from '../utils/stringSanitizer'
 
 interface BlessingCardProps {
   religion: Religion
@@ -44,8 +45,8 @@ function FormattedBlessingDescription({
 }) {
   if (!description) return null
 
-  // Replace placeholders with actual values inline
-  let formatted = description
+  // First, sanitize the description to handle underscores and other formatting issues
+  let formatted = sanitizeEffectDescription(description)
     .replace(/<mag>/g, magnitude.toString())
     .replace(/<magnitude>/g, magnitude.toString())
     .replace(/<dur>/g, duration.toString())
@@ -125,7 +126,7 @@ export function BlessingCard({
               className="flex items-start gap-2 p-2 bg-muted/30 rounded-lg"
             >
               <div className="flex-1">
-                <P className="font-medium text-sm mb-1">{effect.effectName}</P>
+                <P className="font-medium text-sm mb-1">{sanitizeEffectName(effect.effectName)}</P>
                 <FormattedBlessingDescription
                   description={effect.effectDescription}
                   magnitude={effect.magnitude}
