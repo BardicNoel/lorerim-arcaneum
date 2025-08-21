@@ -95,7 +95,16 @@ export const useBlessingsStore = create<BlessingsStore>((set, get) => ({
               pantheon: pantheon.type,
               blessingName: deity.blessing.spellName || `Blessing of ${deity.name}`,
               blessingDescription: validEffects.map((e: any) => e.effectDescription).join(' '),
-              effects: validEffects,
+              effects: validEffects.map((effect: any) => ({
+                name: effect.effectName,
+                description: effect.effectDescription,
+                magnitude: effect.magnitude,
+                duration: effect.duration,
+                area: effect.area,
+                effectType: effect.effectType,
+                targetAttribute: effect.targetAttribute,
+                keywords: effect.keywords || [],
+              })),
               tags: [
                 pantheon.type,
                 ...(shouldShowFavoredRaces() ? deity.favoredRaces || [] : []),

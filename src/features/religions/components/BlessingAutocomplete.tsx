@@ -1,10 +1,11 @@
+import { Z_INDEX } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import type { BlessingData } from '@/shared/stores/blessingsStore'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { Input } from '@/shared/ui/ui/input'
 import { ChevronDown, Search, X, Zap } from 'lucide-react'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import type { BlessingData } from '@/shared/stores/blessingsStore'
 
 interface BlessingAutocompleteProps {
   blessings: BlessingData[] | undefined | null
@@ -34,7 +35,7 @@ export function BlessingAutocomplete({
     if (!blessings || !searchQuery.trim()) {
       return blessings || []
     }
-    
+
     const lowerQuery = searchQuery.toLowerCase()
     return blessings.filter(
       blessing =>
@@ -90,9 +91,7 @@ export function BlessingAutocomplete({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault()
-      setActiveIndex(prev =>
-        Math.min(prev + 1, filteredBlessings.length - 1)
-      )
+      setActiveIndex(prev => Math.min(prev + 1, filteredBlessings.length - 1))
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
       setActiveIndex(prev => Math.max(prev - 1, -1))
@@ -165,27 +164,27 @@ export function BlessingAutocomplete({
           onFocus={handleInputFocus}
           onKeyDown={handleKeyDown}
           disabled={disabled}
-          className="pl-10 pr-10"
+          className="pl-10 pr-20"
         />
         {searchQuery && (
           <Button
             variant="ghost"
             size="sm"
             onClick={clearSearch}
-            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
+            className="absolute right-8 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-muted"
           >
-            <X className="h-3 w-3" />
+            <X className="h-4 w-4" />
           </Button>
         )}
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setIsOpen(!isOpen)}
-          className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
+          className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
         >
           <ChevronDown
             className={cn(
-              'h-3 w-3 transition-transform',
+              'h-4 w-4 transition-transform',
               isOpen && 'rotate-180'
             )}
           />
@@ -193,20 +192,27 @@ export function BlessingAutocomplete({
       </div>
 
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-background border border-border rounded-md shadow-lg max-h-60 overflow-y-auto">
-          {filteredBlessings.length === 0 ? (
-            <div className="p-3 text-sm text-muted-foreground text-center">
-              No blessing found.
-            </div>
-          ) : (
-            <div className="py-1">
-              {filteredBlessings.map((blessing, index) => (
+        <div
+          className={cn(
+            'absolute top-full left-0 right-0 mt-1 dropdown-enhanced rounded-lg overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/30 max-h-60'
+          )}
+          style={{ zIndex: Z_INDEX.AUTOCOMPLETE + 10 }}
+        >
+          <div className="p-2">
+            {filteredBlessings.length === 0 ? (
+              <div className="px-2 py-4 text-center text-muted-foreground text-sm">
+                No blessing found.
+              </div>
+            ) : (
+              filteredBlessings.map((blessing, index) => (
                 <button
                   key={blessing.id}
                   onClick={() => handleBlessingSelect(blessing.id)}
                   className={cn(
-                    'w-full text-left p-3 hover:bg-muted/50 transition-colors',
-                    index === activeIndex && 'bg-muted/50'
+                    'w-full text-left px-3 py-3 rounded-lg text-sm transition-all duration-200 cursor-pointer',
+                    index === activeIndex
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'hover:bg-muted/60 hover:shadow-sm active:bg-muted/80 active:scale-[0.98]'
                   )}
                 >
                   <div className="flex items-center gap-2 mb-1">
@@ -249,9 +255,9 @@ export function BlessingAutocomplete({
                     </div>
                   )}
                 </button>
-              ))}
-            </div>
-          )}
+              ))
+            )}
+          </div>
         </div>
       )}
     </div>
