@@ -68,62 +68,72 @@ export const useBlessingsStore = create<BlessingsStore>((set, get) => ({
       }
 
       const rawData = await response.json()
-      
+
       // Transform and filter for blessings only
-      const blessings: BlessingData[] = rawData.flatMap((pantheon: any) =>
-        pantheon.deities
-          .map((deity: any) => {
-            // Check if this deity has valid blessing effects
-            if (!deity.blessing?.effects || deity.blessing.effects.length === 0) {
-              return null
-            }
+      const blessings: BlessingData[] = rawData.flatMap(
+        (pantheon: any) =>
+          pantheon.deities
+            .map((deity: any) => {
+              // Check if this deity has valid blessing effects
+              if (
+                !deity.blessing?.effects ||
+                deity.blessing.effects.length === 0
+              ) {
+                return null
+              }
 
-            // Filter out UI effects (type "1" and "3")
-            const validEffects = deity.blessing.effects.filter(
-              (effect: any) => effect.effectType !== '1' && effect.effectType !== '3'
-            )
+              // Filter out UI effects (type "1" and "3")
+              const validEffects = deity.blessing.effects.filter(
+                (effect: any) =>
+                  effect.effectType !== '1' && effect.effectType !== '3'
+              )
 
-            // Only include if there are valid gameplay effects
-            if (validEffects.length === 0) {
-              return null
-            }
+              // Only include if there are valid gameplay effects
+              if (validEffects.length === 0) {
+                return null
+              }
 
-            return {
-              id: deity.id || deity.name,
-              name: deity.name,
-              type: deity.type || pantheon.type,
-              pantheon: pantheon.type,
-              blessingName: deity.blessing.spellName || `Blessing of ${deity.name}`,
-              blessingDescription: validEffects.map((e: any) => e.effectDescription).join(' '),
-              effects: validEffects.map((effect: any) => ({
-                name: effect.effectName,
-                description: effect.effectDescription,
-                magnitude: effect.magnitude,
-                duration: effect.duration,
-                area: effect.area,
-                effectType: effect.effectType,
-                targetAttribute: effect.targetAttribute,
-                keywords: effect.keywords || [],
-              })),
-              tags: [
-                pantheon.type,
-                ...(shouldShowFavoredRaces() ? deity.favoredRaces || [] : []),
-                ...(deity.tags || []),
-              ].filter(Boolean),
-              originalReligion: {
-                ...deity,
+              return {
                 id: deity.id || deity.name,
-                pantheon: pantheon.type,
+                name: deity.name,
                 type: deity.type || pantheon.type,
+                pantheon: pantheon.type,
+                blessingName:
+                  deity.blessing.spellName || `Blessing of ${deity.name}`,
+                blessingDescription: validEffects
+                  .map((e: any) => e.effectDescription)
+                  .join(' '),
+                effects: validEffects.map((effect: any) => ({
+                  name: effect.effectName,
+                  description: effect.effectDescription,
+                  magnitude: effect.magnitude,
+                  duration: effect.duration,
+                  area: effect.area,
+                  effectType: effect.effectType,
+                  targetAttribute: effect.targetAttribute,
+                  keywords: effect.keywords || [],
+                })),
                 tags: [
                   pantheon.type,
                   ...(shouldShowFavoredRaces() ? deity.favoredRaces || [] : []),
                   ...(deity.tags || []),
                 ].filter(Boolean),
-              },
-            }
-          })
-          .filter(Boolean) // Remove null entries
+                originalReligion: {
+                  ...deity,
+                  id: deity.id || deity.name,
+                  pantheon: pantheon.type,
+                  type: deity.type || pantheon.type,
+                  tags: [
+                    pantheon.type,
+                    ...(shouldShowFavoredRaces()
+                      ? deity.favoredRaces || []
+                      : []),
+                    ...(deity.tags || []),
+                  ].filter(Boolean),
+                },
+              }
+            })
+            .filter(Boolean) // Remove null entries
       )
 
       set({
