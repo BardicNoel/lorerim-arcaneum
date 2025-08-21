@@ -5,7 +5,7 @@ import { Button } from '@/shared/ui/ui/button'
 import { cn } from '@/lib/utils'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
-import { Zap } from 'lucide-react'
+import { Dna } from 'lucide-react'
 
 interface TraitCardProps {
   item: PlayerCreationItem
@@ -77,8 +77,8 @@ export function TraitCard({ item }: TraitCardProps) {
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-skyrim-gold/20 flex items-center justify-center">
-              <Zap className="h-4 w-4 text-skyrim-gold" />
+            <div className="w-16 h-16 rounded-full bg-skyrim-gold/20 flex items-center justify-center">
+              <Dna className="h-8 w-8 text-skyrim-gold" />
             </div>
             <h3 className="font-semibold text-lg">{item.name}</h3>
           </div>
