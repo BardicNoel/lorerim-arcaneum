@@ -5,6 +5,7 @@ import { useRacesStore } from '../stores/racesStore'
 import { useReligionsStore } from '../stores/religionsStore'
 import { useSkillsStore } from '../stores/skillsStore'
 import { useTraitsStore } from '../stores/traitsStore'
+import { useBlessingsStore } from '../stores/blessingsStore'
 import type { BuildState } from '../types/build'
 import type { HydratedBuildData } from '../types/discordExport'
 
@@ -239,6 +240,49 @@ function resolveReligion(religionId: string | null): {
     },
     { name: 'Unknown Religion', effects: 'No effects' },
     'religion'
+  )
+}
+
+/**
+ * Resolve favorite blessing data from EDID
+ */
+function resolveFavoriteBlessing(blessingId: string | null): {
+  name: string
+  effects: string
+  source: string
+} {
+  if (!blessingId) return { name: 'Not selected', effects: 'No effects', source: 'None' }
+
+  return safeResolve(
+    () => {
+      const blessings = useBlessingsStore.getState().data
+
+      // Check if data is loaded
+      if (blessings.length === 0) {
+        throw new Error(
+          'Blessings data not loaded yet. Please wait a moment and try again.'
+        )
+      }
+
+      // Try to find blessing by ID
+      const blessing = blessings.find(b => b.id === blessingId)
+
+      if (!blessing) return { name: 'Unknown Blessing', effects: 'No effects', source: 'Unknown' }
+
+      // Format effects as a summary
+      const effectsSummary = blessing.effects
+        .slice(0, 2) // Show first 2 effects
+        .map(effect => effect.name)
+        .join(', ')
+
+      return {
+        name: blessing.blessingName,
+        effects: formatForDiscord(effectsSummary || 'No effects'),
+        source: blessing.name,
+      }
+    },
+    { name: 'Unknown Blessing', effects: 'No effects', source: 'Unknown' },
+    'favorite blessing'
   )
 }
 
@@ -495,6 +539,7 @@ export function hydrateBuildData(build: BuildState): HydratedBuildData {
   const race = resolveRace(build.race)
   const birthSign = resolveBirthSign(build.stone)
   const religion = resolveReligion(build.religion)
+  const favoriteBlessing = resolveFavoriteBlessing(build.favoriteBlessing)
   const traits = resolveTraits(build.traits.regular, build.traits.bonus)
   const skills = resolveSkills(
     build.skills.major,
@@ -525,6 +570,7 @@ export function hydrateBuildData(build: BuildState): HydratedBuildData {
     birthSign,
     traits,
     religion,
+    favoriteBlessing,
     skills,
     perks,
     destinyPath,

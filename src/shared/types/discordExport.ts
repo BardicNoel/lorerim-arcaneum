@@ -11,6 +11,11 @@ export interface HydratedBuildData {
     followerBoon?: string;
     devoteeBoon?: string;
   }
+  favoriteBlessing: { 
+    name: string; 
+    effects: string;
+    source: string;
+  }
   skills: {
     major: Array<{ name: string; level?: number }>
     minor: Array<{ name: string; level?: number }>
