@@ -35,15 +35,18 @@ export function FormattedText({
     const lineClampClasses = className.match(/line-clamp-\d+/g) || []
     const otherClasses = className.replace(/line-clamp-\d+/g, '').trim()
 
+    // Use span instead of div when Component is 'p' to avoid invalid HTML
+    const LineClampContainer = Component === 'p' ? 'span' : 'div'
+
     return (
       <Component className={otherClasses}>
-        <div className={`${lineClampClasses.join(' ')} overflow-hidden`}>
+        <LineClampContainer className={`${lineClampClasses.join(' ')} overflow-hidden`}>
           {segments.map(segment => (
             <span key={segment.key} className={segment.className}>
               {segment.text}
             </span>
           ))}
-        </div>
+        </LineClampContainer>
       </Component>
     )
   }
