@@ -5,7 +5,7 @@ export function useReligionData() {
   const { data: religions, loading, error } = useReligions()
 
   return {
-    religions: religions || [],
+    religions: religions || [], // Convert null/undefined to empty array for consistency
     loading,
     error,
   }

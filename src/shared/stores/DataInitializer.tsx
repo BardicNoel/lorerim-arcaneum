@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   useBirthsignsStore,
+  useBlessingsStore,
   useDestinyNodesStore,
   usePerkTreesStore,
   useRacesStore,
@@ -26,6 +27,7 @@ export function DataInitializer({
 
   // Use selectors to get only the load functions
   const birthsignsLoad = useBirthsignsStore(state => state.load)
+  const blessingsLoad = useBlessingsStore(state => state.load)
   const destinyNodesLoad = useDestinyNodesStore(state => state.load)
   const perkTreesLoad = usePerkTreesStore(state => state.load)
   const racesLoad = useRacesStore(state => state.load)
@@ -45,6 +47,7 @@ export function DataInitializer({
       // Load all data in parallel
       await Promise.all([
         birthsignsLoad(),
+        blessingsLoad(),
         destinyNodesLoad(),
         perkTreesLoad(),
         racesLoad(),
@@ -64,6 +67,7 @@ export function DataInitializer({
     }
   }, [
     birthsignsLoad,
+    blessingsLoad,
     destinyNodesLoad,
     perkTreesLoad,
     racesLoad,

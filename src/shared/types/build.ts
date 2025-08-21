@@ -5,6 +5,7 @@ export interface BuildState {
   race: string | null // EDID
   stone: string | null // EDID
   religion: string | null // EDID of followed deity
+  favoriteBlessing: string | null // EDID of favorite blessing source (can be different from religion)
   traits: {
     regular: string[] // Array of EDIDs
     bonus: string[] // Array of EDIDs (requires game completion)
@@ -44,6 +45,7 @@ export const DEFAULT_BUILD: BuildState = {
   race: null,
   stone: null,
   religion: null,
+  favoriteBlessing: null,
   traits: {
     regular: [],
     bonus: [],

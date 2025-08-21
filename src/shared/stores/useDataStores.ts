@@ -2,6 +2,7 @@
 // These provide the same API as the old useDataCache.ts
 
 import { useBirthsignsStore } from './birthsignsStore'
+import { useBlessingsStore } from './blessingsStore'
 import { useDestinyNodesStore } from './destinyNodesStore'
 import { usePerkTreesStore } from './perkTreesStore'
 import { useRacesStore } from './racesStore'
@@ -63,7 +64,20 @@ export function useReligions() {
   const { data, loading, error } = useReligionsStore()
 
   return {
-    data: data.length > 0 ? data : null,
+    data: data, // Return data directly, let components handle empty arrays
+    loading,
+    error,
+  }
+}
+
+/**
+ * Hook for accessing blessings data
+ */
+export function useBlessings() {
+  const { data, loading, error } = useBlessingsStore()
+
+  return {
+    data: data, // Return data directly, let components handle empty arrays
     loading,
     error,
   }
@@ -150,6 +164,14 @@ export function useReligionsSync() {
   const { data } = useReligionsStore()
   if (data.length === 0) {
     throw new Error('Religions data not loaded. Call loadAllData() first.')
+  }
+  return data
+}
+
+export function useBlessingsSync() {
+  const { data } = useBlessingsStore()
+  if (data.length === 0) {
+    throw new Error('Blessings data not loaded. Call loadAllData() first.')
   }
   return data
 }

@@ -19,7 +19,7 @@ import { AttributeAssignmentCard } from '@/features/attributes'
 import { BirthsignSelectionCard } from '@/features/birthsigns'
 import BuildPageDestinyCard from '@/features/destiny/views/BuildPageDestinyCard'
 import { RaceSelectionCard } from '@/features/races-v2'
-import { ReligionSelectionCard } from '@/features/religions/components'
+import { ReligionSelectionCard, FavoriteBlessingSelectionCard } from '@/features/religions/components'
 import { BuildPageSkillCard } from '@/features/skills/components'
 import { TraitSelectionCard } from '@/features/traits/components'
 
@@ -119,6 +119,7 @@ export const FloatingBuildButton = () => {
                 <BirthsignSelectionCard />
                 <TraitSelectionCard />
                 <ReligionSelectionCard />
+                <FavoriteBlessingSelectionCard />
               </div>
               
               {/* Full-width Cards */}
@@ -196,6 +197,15 @@ export const FloatingBuildButton = () => {
                       onClick={() => handleJumpToSection('religion')}
                     >
                       Religion
+                    </Button>
+                  )}
+                  {!build.favoriteBlessing && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleJumpToSection('favorite-blessing')}
+                    >
+                      Favorite Blessing
                     </Button>
                   )}
                   {(build.skills.major.length === 0 && build.skills.minor.length === 0) && (

@@ -13,7 +13,7 @@ import type { Religion } from '../types'
 import { getDeityOptions } from '../utils/religionFilters'
 
 interface DeityAutocompleteProps {
-  religions: Religion[]
+  religions: Religion[] | undefined | null
   selectedDeityId: string | null
   onDeitySelect: (deityId: string | null) => void
   placeholder?: string
