@@ -6,7 +6,7 @@ import type { Trait } from '@/shared/data/schemas'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Button } from '@/shared/ui/ui/button'
 import { H3 } from '@/shared/ui/ui/typography'
-import { Zap } from 'lucide-react'
+import { Dna } from 'lucide-react'
 import { useEffect } from 'react'
 
 interface TraitAccordionProps {
@@ -100,8 +100,10 @@ export function TraitAccordion({
       hideChevron={true}
     >
       <AccordionCard.Header>
-        <div className="flex items-center gap-2">
-          <Zap className="h-4 w-4 text-black" />
+        <div className="flex items-center gap-3">
+          <div className="w-16 h-16 rounded-full bg-skyrim-gold/20 flex items-center justify-center">
+            <Dna className="h-8 w-8 text-skyrim-gold" />
+          </div>
           <H3 className="text-primary font-semibold">{item.name}</H3>
         </div>
       </AccordionCard.Header>
