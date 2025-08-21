@@ -24,6 +24,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:local": "vite --config vite.config.local.ts",
     "build": "tsc && vite build",
     "deploy": "vite build && gh-pages -d dist",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",

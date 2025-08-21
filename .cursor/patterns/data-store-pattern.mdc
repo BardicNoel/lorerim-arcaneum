@@ -1,0 +1,361 @@
+# Data Store Pattern
+
+## 🎯 Purpose
+Standardize the implementation of Zustand stores for data loading, caching, and state management across the Lorerim Arcaneum application.
+
+---
+
+## ✅ Core Pattern Structure
+
+### 📦 Required Imports
+```typescript
+import type { [DataType] } from '@/features/[feature]/types' // or @/shared/data/schemas
+import { getDataUrl } from '@/shared/utils/baseUrl'
+import { create } from 'zustand'
+```
+
+### 🏗 Interface Definition
+```typescript
+interface [Feature]Store {
+  // Data
+  data: [DataType][]
+
+  // Loading states
+  loading: boolean
+  error: string | null
+
+  // Actions
+  load: () => Promise<void>
+
+  // Computed
+  getById: (id: string) => [DataType] | undefined
+  search: (query: string) => [DataType][]
+}
+```
+
+### 🔧 Store Implementation
+```typescript
+export const use[Feature]Store = create<[Feature]Store>((set, get) => ({
+  // Initial state
+  data: [],
+  loading: false,
+  error: null,
+
+  // Actions
+  load: async () => {
+    const state = get()
+
+    // Return if already loaded
+    if (state.data.length > 0) {
+      return
+    }
+
+    set({ loading: true, error: null })
+
+    try {
+      const response = await fetch(getDataUrl('data/[filename].json'))
+      if (!response.ok) {
+        throw new Error(`Failed to fetch [feature] data: ${response.status}`)
+      }
+
+      const rawData = await response.json()
+      const [items] = rawData.[items].map((item: any) => ({
+        ...item,
+        id: item.id || item.edid || item.name.toLowerCase().replace(/\s+/g, '-'),
+        tags: [
+          item.category,
+          ...(item.tags || []),
+          // Add other tag sources as needed
+        ].filter((tag): tag is string => Boolean(tag)),
+      }))
+
+      set({
+        data: [items],
+        loading: false,
+      })
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : 'Failed to load [feature]',
+        loading: false,
+      })
+    }
+  },
+
+  // Computed
+  getById: (id: string) => {
+    const state = get()
+    return state.data.find(item => item.id === id)
+  },
+
+  search: (query: string) => {
+    const state = get()
+    const lowerQuery = query.toLowerCase()
+    return state.data.filter(
+      item =>
+        item.name.toLowerCase().includes(lowerQuery) ||
+        item.description?.toLowerCase().includes(lowerQuery) ||
+        item.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
+    )
+  },
+}))
+```
+
+---
+
+## 🔑 Key Requirements
+
+### 1. **Data URL Handling**
+- ✅ **ALWAYS** use `getDataUrl()` from `@/shared/utils/baseUrl`
+- ❌ **NEVER** use direct paths like `/data/filename.json`
+- ✅ **ALWAYS** pass relative path: `getDataUrl('data/filename.json')`
+
+### 2. **Loading State Management**
+- ✅ **ALWAYS** implement `loading: boolean` and `error: string | null`
+- ✅ **ALWAYS** set loading to `true` before fetch, `false` after
+- ✅ **ALWAYS** clear error before new load attempt
+- ✅ **ALWAYS** handle fetch errors and set error message
+
+### 3. **Caching Strategy**
+- ✅ **ALWAYS** check if data is already loaded before fetching
+- ✅ **ALWAYS** return early if `state.data.length > 0`
+
+### 4. **Data Transformation**
+- ✅ **ALWAYS** normalize IDs: `item.id || item.edid || item.name.toLowerCase().replace(/\s+/g, '-')`
+- ✅ **ALWAYS** generate tags array for search functionality
+- ✅ **ALWAYS** filter out falsy tags: `.filter((tag): tag is string => Boolean(tag))`
+
+### 5. **Computed Methods**
+- ✅ **ALWAYS** implement `getById(id: string)` for item lookup
+- ✅ **ALWAYS** implement `search(query: string)` for text search
+- ✅ **ALWAYS** use case-insensitive search with `.toLowerCase()`
+
+---
+
+## 📋 Implementation Checklist
+
+### Pre-Implementation
+- [ ] Data file exists in `public/data/`
+- [ ] TypeScript types defined in feature or shared schemas
+- [ ] Store file follows naming: `[feature]Store.ts`
+
+### Implementation
+- [ ] Import `getDataUrl` from `@/shared/utils/baseUrl`
+- [ ] Define store interface with required fields
+- [ ] Implement `load()` method with proper error handling
+- [ ] Implement `getById()` and `search()` methods
+- [ ] Add data transformation and ID normalization
+- [ ] Generate tags array for search functionality
+
+### Post-Implementation
+- [ ] Test data loading in development
+- [ ] Test data loading in production build
+- [ ] Verify search functionality works
+- [ ] Verify error handling works
+- [ ] Test with actual data file
+
+---
+
+## 🚨 Anti-Patterns to Avoid
+
+### ❌ Wrong Data URL Pattern
+```typescript
+// WRONG - Direct path
+const response = await fetch('/data/filename.json')
+
+// CORRECT - Using getDataUrl
+const response = await fetch(getDataUrl('data/filename.json'))
+```
+
+### ❌ Missing Error Handling
+```typescript
+// WRONG - No error handling
+const response = await fetch(getDataUrl('data/filename.json'))
+const data = await response.json()
+
+// CORRECT - With error handling
+const response = await fetch(getDataUrl('data/filename.json'))
+if (!response.ok) {
+  throw new Error(`Failed to fetch data: ${response.status}`)
+}
+const data = await response.json()
+```
+
+### ❌ No Loading State Management
+```typescript
+// WRONG - No loading states
+load: async () => {
+  const data = await fetch(getDataUrl('data/filename.json'))
+  set({ data })
+}
+
+// CORRECT - With loading states
+load: async () => {
+  set({ loading: true, error: null })
+  try {
+    const data = await fetch(getDataUrl('data/filename.json'))
+    set({ data, loading: false })
+  } catch (error) {
+    set({ error: error.message, loading: false })
+  }
+}
+```
+
+### ❌ No Caching Check
+```typescript
+// WRONG - Always fetches
+load: async () => {
+  const data = await fetch(getDataUrl('data/filename.json'))
+  set({ data })
+}
+
+// CORRECT - Checks if already loaded
+load: async () => {
+  const state = get()
+  if (state.data.length > 0) {
+    return
+  }
+  // ... fetch logic
+}
+```
+
+---
+
+## 📊 Examples from Codebase
+
+### ✅ Birthsigns Store
+```typescript
+// src/shared/stores/birthsignsStore.ts
+import { getDataUrl } from '@/shared/utils/baseUrl'
+
+load: async () => {
+  const state = get()
+  if (state.data.length > 0) return
+  
+  set({ loading: true, error: null })
+  
+  try {
+    const response = await fetch(getDataUrl('data/birthsigns.json'))
+    if (!response.ok) {
+      throw new Error(`Failed to fetch birthsigns data: ${response.status}`)
+    }
+    // ... data transformation
+  } catch (error) {
+    set({ error: error.message, loading: false })
+  }
+}
+```
+
+### ✅ Races Store
+```typescript
+// src/shared/stores/racesStore.ts
+import { getDataUrl } from '@/shared/utils/baseUrl'
+
+load: async () => {
+  const state = get()
+  if (state.data.length > 0) return
+  
+  set({ loading: true, error: null })
+  
+  try {
+    const response = await fetch(getDataUrl('data/playable-races.json'))
+    if (!response.ok) {
+      throw new Error(`Failed to fetch races data: ${response.status}`)
+    }
+    // ... data transformation
+  } catch (error) {
+    set({ error: error.message, loading: false })
+  }
+}
+```
+
+### ✅ Skills Store
+```typescript
+// src/shared/stores/skillsStore.ts
+import { getDataUrl } from '@/shared/utils/baseUrl'
+
+load: async () => {
+  const state = get()
+  if (state.data.length > 0) return
+  
+  set({ loading: true, error: null })
+  
+  try {
+    const response = await fetch(getDataUrl('data/skills.json'))
+    if (!response.ok) {
+      throw new Error(`Failed to fetch skills data: ${response.status}`)
+    }
+    // ... data transformation
+  } catch (error) {
+    set({ error: error.message, loading: false })
+  }
+}
+```
+
+---
+
+## 🔄 Migration Guide
+
+### For Existing Stores
+1. **Add getDataUrl import**
+   ```typescript
+   import { getDataUrl } from '@/shared/utils/baseUrl'
+   ```
+
+2. **Update fetch calls**
+   ```typescript
+   // Before
+   const response = await fetch('/data/filename.json')
+   
+   // After
+   const response = await fetch(getDataUrl('data/filename.json'))
+   ```
+
+3. **Add caching check**
+   ```typescript
+   load: async () => {
+     const state = get()
+     if (state.data.length > 0) {
+       return
+     }
+     // ... rest of load logic
+   }
+   ```
+
+4. **Add proper error handling**
+   ```typescript
+   try {
+     const response = await fetch(getDataUrl('data/filename.json'))
+     if (!response.ok) {
+       throw new Error(`Failed to fetch data: ${response.status}`)
+     }
+     // ... success logic
+   } catch (error) {
+     set({ error: error.message, loading: false })
+   }
+   ```
+
+---
+
+## 📞 Quick Reference
+
+### Required Fields
+- `data: [DataType][]`
+- `loading: boolean`
+- `error: string | null`
+
+### Required Methods
+- `load(): Promise<void>`
+- `getById(id: string): [DataType] | undefined`
+- `search(query: string): [DataType][]`
+
+### Required Imports
+- `getDataUrl` from `@/shared/utils/baseUrl`
+- `create` from `zustand`
+- Type definitions from feature or shared schemas
+
+### File Location
+- `src/shared/stores/[feature]Store.ts`
+
+---
+
+*This pattern ensures consistent, reliable, and maintainable data loading across the application.*

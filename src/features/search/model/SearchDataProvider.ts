@@ -9,6 +9,7 @@ import {
   createSearchHighlights,
   transformBirthsignsToSearchable,
   transformDestinyNodesToSearchable,
+  transformEnchantmentsToSearchable,
   transformPerkReferencesToSearchable,
   transformPerkTreesToSearchable,
   transformRacesToSearchable,
@@ -85,6 +86,7 @@ export class SearchDataProvider {
   transformPerkReferencesToSearchable = transformPerkReferencesToSearchable
   transformRecipesToSearchable = transformRecipesToSearchable
   transformSpellsToSearchable = transformSpellsToSearchable
+  transformEnchantmentsToSearchable = transformEnchantmentsToSearchable
 
   async buildSearchIndex(): Promise<void> {
     if (this.isIndexing) return
@@ -113,6 +115,8 @@ export class SearchDataProvider {
 
       // Import spell data provider
       const { SpellDataProvider } = await import('@/features/spells/model/SpellDataProvider')
+      // Import enchantment data provider
+      const { EnchantmentDataProvider } = await import('@/features/enchantments/model/EnchantmentDataProvider')
 
       // Get data from all stores
       const skills = useSkillsStore.getState().data
@@ -128,6 +132,10 @@ export class SearchDataProvider {
       const spellDataProvider = SpellDataProvider.getInstance()
       const spells = await spellDataProvider.loadSpells()
 
+      // Get enchantment data
+      const enchantmentDataProvider = EnchantmentDataProvider.getInstance()
+      const enchantments = await enchantmentDataProvider.loadEnchantments()
+
       // Check if stores have data
       if (
         !skills?.length ||
@@ -138,7 +146,8 @@ export class SearchDataProvider {
         !destinyNodes?.length ||
         !perkTrees?.length ||
         !recipes?.length ||
-        !spells?.length
+        !spells?.length ||
+        !enchantments?.length
       ) {
         console.log('Stores not loaded yet, cannot build search index')
         throw new Error(
@@ -157,6 +166,7 @@ export class SearchDataProvider {
         ...transformPerkTreesToSearchable(perkTrees),
         ...transformRecipesToSearchable(recipes),
         ...transformSpellsToSearchable(spells),
+        ...transformEnchantmentsToSearchable(enchantments),
       ]
 
       this.allSearchableItems = searchableItems

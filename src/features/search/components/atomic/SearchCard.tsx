@@ -9,6 +9,7 @@ import { SkillSearchCard } from '../type-specific/SkillSearchCard'
 import { TraitSearchCard } from '../type-specific/TraitSearchCard'
 import { SpellSearchCard } from '../type-specific/SpellSearchCard'
 import { RecipeSearchCard } from '../type-specific/RecipeSearchCard'
+import { EnchantmentSearchCard } from '../type-specific/EnchantmentSearchCard'
 import { DefaultSearchCard } from './DefaultSearchCard'
 
 interface SearchCardProps {
@@ -130,6 +131,17 @@ export function SearchCard({
     case 'recipe':
       return (
         <RecipeSearchCard
+          item={item}
+          className={className}
+          isExpanded={isExpanded}
+          onToggle={onToggle}
+          viewMode={viewMode}
+        />
+      )
+
+    case 'enchantment':
+      return (
+        <EnchantmentSearchCard
           item={item}
           className={className}
           isExpanded={isExpanded}
