@@ -9,11 +9,7 @@ export function useSearchComputed() {
   const { searchResults, resultCounts } = useSearchFilters()
   const { viewMode } = useSearchState()
   
-  // Debug logging for search results
-  if (process.env.NODE_ENV === 'development') {
-    console.log('🔍 useSearchComputed - searchResults:', searchResults.length)
-    console.log('🔍 useSearchComputed - searchResults sample:', searchResults.slice(0, 3))
-  }
+
   
   // Add pagination
   const { 
@@ -24,10 +20,7 @@ export function useSearchComputed() {
     hasMore 
   } = useSearchPagination(searchResults)
 
-  // Debug logging for displayedItems
-  if (process.env.NODE_ENV === 'development') {
-    console.log('🔍 useSearchComputed - displayedItems:', displayedItems.length)
-  }
+
 
   const filteredResults = useMemo(() => {
     return displayedItems // Use paginated results instead of all results
@@ -39,13 +32,6 @@ export function useSearchComputed() {
 
   const playerCreationItems = useMemo(() => {
     const items = sortedResults.map(searchResultToPlayerCreationItem)
-    
-    // Debug logging for playerCreationItems
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🔍 useSearchComputed - playerCreationItems:', items.length)
-      console.log('🔍 useSearchComputed - playerCreationItems sample:', items.slice(0, 2))
-    }
-    
     return items
   }, [sortedResults])
 

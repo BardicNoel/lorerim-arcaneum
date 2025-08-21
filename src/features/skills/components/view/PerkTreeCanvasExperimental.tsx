@@ -258,29 +258,13 @@ export function PerkTreeCanvasExperimental({
       return
     }
 
-    console.log('Loading saved positions for tree:', validatedTree.treeId)
-    console.log('Tree perks count:', validatedTree.perks.length)
-    console.log(
-      'Tree perks:',
-      validatedTree.perks.map(p => ({ edid: p.edid, name: p.name }))
-    )
-
     setIsLoadingPositions(true)
     loadSavedTreePositions(validatedTree.treeId)
       .then(savedData => {
-        console.log(
-          'Loaded saved positions:',
-          savedData ? 'Found' : 'Not found'
-        )
         if (savedData) {
           const loadedPositions = loadTreePositions(
             validatedTree.treeId,
             savedData
-          )
-          console.log('Loaded positions count:', loadedPositions.size)
-          console.log(
-            'Loaded positions keys:',
-            Array.from(loadedPositions.keys())
           )
           setSavedPositions(loadedPositions)
         } else {
@@ -288,7 +272,6 @@ export function PerkTreeCanvasExperimental({
         }
       })
       .catch(error => {
-        console.warn('Failed to load saved positions:', error)
         setSavedPositions(new Map())
       })
       .finally(() => {
@@ -377,43 +360,7 @@ export function PerkTreeCanvasExperimental({
       p => p.edid === 'LoreRimTrapper_Rank3'
     )
 
-    if (trapperPerk) {
-      console.log('Found Trapper perk:', trapperPerk)
-      const trapperSavedPos = savedPositions.get('LoreRimTrapper_Rank1')
-      console.log('Trapper saved position:', trapperSavedPos)
-      console.log('Trapper embedded position:', trapperPerk.position)
-      console.log('Trapper connections:', trapperPerk.connections)
-    } else {
-      console.log('Trapper perk NOT found in tree!')
-    }
 
-    if (poisonedClampsPerk) {
-      console.log('Found Poisoned Clamps perk:', poisonedClampsPerk)
-      const poisonedClampsSavedPos = savedPositions.get('LoreRimTrapper_Rank2')
-      console.log('Poisoned Clamps saved position:', poisonedClampsSavedPos)
-      console.log(
-        'Poisoned Clamps embedded position:',
-        poisonedClampsPerk.position
-      )
-      console.log(
-        'Poisoned Clamps connections:',
-        poisonedClampsPerk.connections
-      )
-    } else {
-      console.log('Poisoned Clamps perk NOT found in tree!')
-    }
-
-    if (saltOnWoundPerk) {
-      console.log('Found Salt on the Wound perk:', saltOnWoundPerk)
-      const saltOnWoundSavedPos = savedPositions.get('LoreRimTrapper_Rank3')
-      console.log('Salt on the Wound saved position:', saltOnWoundSavedPos)
-      console.log(
-        'Salt on the Wound embedded position:',
-        saltOnWoundPerk.position
-      )
-    } else {
-      console.log('Salt on the Wound perk NOT found in tree!')
-    }
 
     validatedTree.perks.forEach(perk => {
       const savedPos = savedPositions.get(perk.edid)
@@ -447,13 +394,7 @@ export function PerkTreeCanvasExperimental({
       // Check if this perk has no position data (will be draggable)
       const hasNoPosition = !savedPositions.get(perkId) && !perk.position
 
-      // Debug: Check Trapper-related perks
-      if (perkId.includes('LoreRimTrapper')) {
-        console.log(`Node ${perkId} position:`, position)
-        console.log(`Node ${perkId} hasChildren:`, hasChildren)
-        console.log(`Node ${perkId} isRoot:`, isRoot)
-        console.log(`Node ${perkId} hasNoPosition:`, hasNoPosition)
-      }
+
 
       return {
         id: perkId,
@@ -470,11 +411,7 @@ export function PerkTreeCanvasExperimental({
       }
     })
 
-    console.log('Total nodes created:', nodes.length)
-    console.log(
-      'Trapper-related nodes:',
-      nodes.filter(n => n.id.includes('LoreRimTrapper'))
-    )
+
 
     return nodes
   }, [
@@ -491,20 +428,7 @@ export function PerkTreeCanvasExperimental({
 
     const edges: Edge[] = []
 
-    // Debug: Check Trapper connections specifically
-    const trapperPerk = validatedTree.perks.find(
-      p => p.edid === 'LoreRimTrapper_Rank1'
-    )
-    if (trapperPerk) {
-      console.log(
-        'Trapper children connections:',
-        trapperPerk.connections?.children
-      )
-      trapperPerk.connections?.children?.forEach(childId => {
-        const childExists = validatedTree.perks.some(p => p.edid === childId)
-        console.log(`Trapper child ${childId} exists:`, childExists)
-      })
-    }
+
 
     validatedTree.perks.forEach(perk => {
       const perkId = perk.edid
@@ -533,11 +457,7 @@ export function PerkTreeCanvasExperimental({
       }
     })
 
-    console.log('Total edges created:', edges.length)
-    console.log(
-      'Edge connections:',
-      edges.map(e => `${e.source} -> ${e.target}`)
-    )
+
 
     return edges
   }, [validatedTree])

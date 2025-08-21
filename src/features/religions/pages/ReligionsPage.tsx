@@ -232,13 +232,10 @@ export function ReligionsPage() {
   }
 
   const handleReligionClick = (id: string) => {
-    console.log('handleReligionClick called with id:', id)
     const religion = featureReligions.find(r => r.name === id)
-    console.log('Found religion:', religion)
     if (religion) {
       setSelectedReligion(religion)
       setIsReligionSheetOpen(true)
-      console.log('Religion sheet should now be open')
     }
   }
 

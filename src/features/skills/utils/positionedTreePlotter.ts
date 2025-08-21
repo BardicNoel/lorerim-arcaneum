@@ -41,21 +41,16 @@ export async function loadSavedTreePositions(
 ): Promise<SavedTreePositions | null> {
   try {
     const url = getDataUrl(`data/perk-positions/${treeId}-positions.json`)
-    console.log('Attempting to load positions from:', url)
 
     const response = await fetch(url)
-    console.log('Response status:', response.status, response.statusText)
 
     if (!response.ok) {
-      console.warn(`No saved positions found for tree ${treeId} at ${url}`)
       return null
     }
 
     const data = await response.json()
-    console.log('Successfully loaded positions for tree:', treeId)
     return data as SavedTreePositions
   } catch (error) {
-    console.warn(`Failed to load saved positions for tree ${treeId}:`, error)
     return null
   }
 }

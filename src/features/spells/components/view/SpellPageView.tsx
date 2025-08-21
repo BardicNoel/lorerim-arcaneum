@@ -33,11 +33,6 @@ export function SpellPageView() {
   
   // Generate search categories directly in the component
   const searchCategories = useMemo((): SearchCategory[] => {
-    console.log('Generating search categories directly:', {
-      safeSpellsLength: safeSpells.length,
-      firstSpell: safeSpells[0]
-    })
-    
     if (safeSpells.length === 0) {
       return []
     }
@@ -45,11 +40,6 @@ export function SpellPageView() {
     // Extract unique schools and levels
     const allSchools = [...new Set(safeSpells.map(spell => spell.school))]
     const allLevels = [...new Set(safeSpells.map(spell => spell.level))]
-    
-    console.log('Extracted categories:', {
-      schools: allSchools,
-      levels: allLevels
-    })
     
     return [
       {
@@ -85,17 +75,7 @@ export function SpellPageView() {
     ]
   }, [safeSpells])
   
-  // Debug logging
-  useEffect(() => {
-    console.log('SpellPageView Debug:', {
-      spellsLength: spells?.length || 0,
-      safeSpellsLength: safeSpells.length,
-      loading,
-      error,
-      searchCategoriesLength: searchCategories?.length || 0,
-      searchCategories
-    })
-  }, [spells, safeSpells, loading, error, searchCategories])
+
   
   // Search setup
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])

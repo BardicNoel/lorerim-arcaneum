@@ -134,11 +134,7 @@ function buildTreeStructure(perks: PerkNodeType[]): Map<string, TreeNode> {
     {} as Record<number, number>
   )
 
-  console.log('Tree structure built:', {
-    totalNodes: treeNodes.size,
-    rootNodes: roots.length,
-    levelDistribution,
-  })
+
 
   return treeNodes
 }
@@ -149,9 +145,6 @@ function calculateNodePositions(perks: PerkNodeType[]) {
 
   if (perks.length === 0) return positions
 
-  console.log('=== STARTING SUBTREE-AWARE NODE POSITIONING ===')
-  console.log(`Total perks to position: ${perks.length}`)
-
   // Build tree structure
   const treeNodes = buildTreeStructure(perks)
 
@@ -159,7 +152,6 @@ function calculateNodePositions(perks: PerkNodeType[]) {
   const maxDepth = Math.max(
     ...Array.from(treeNodes.values()).map(node => node.level)
   )
-  console.log(`Max depth: ${maxDepth}`)
 
   // Node dimensions and spacing
   const nodeWidth = 140
@@ -167,10 +159,6 @@ function calculateNodePositions(perks: PerkNodeType[]) {
   const horizontalSpacing = nodeWidth * 1.5 // 210px - generous spacing
   const verticalSpacing = nodeHeight + 50 // 130px - generous vertical spacing
   const padding = 50
-
-  console.log(
-    `Node dimensions: ${nodeWidth}x${nodeHeight}, spacing: ${horizontalSpacing}px horizontal, ${verticalSpacing}px vertical`
-  )
 
   // Group nodes by level
   const nodesByLevel = new Map<number, string[]>()
@@ -180,11 +168,6 @@ function calculateNodePositions(perks: PerkNodeType[]) {
       nodesByLevel.set(level, [])
     }
     nodesByLevel.get(level)!.push(perkId)
-  })
-
-  console.log('Nodes by level:')
-  nodesByLevel.forEach((nodes, level) => {
-    console.log(`  Level ${level}: ${nodes.length} nodes`)
   })
 
   // Find separate trees (connected components)
@@ -220,9 +203,6 @@ function calculateNodePositions(perks: PerkNodeType[]) {
   }
 
   const connectedComponents = findConnectedComponents()
-  console.log(
-    `Found ${connectedComponents.length} connected components (trees)`
-  )
 
   // Helper function to get all descendants of a node (including the node itself)
   const getSubtreeNodes = (rootId: string): Set<string> => {
@@ -246,18 +226,12 @@ function calculateNodePositions(perks: PerkNodeType[]) {
   // Helper function to move an entire subtree by a given offset
   const moveSubtree = (rootId: string, offsetX: number) => {
     const subtreeNodes = getSubtreeNodes(rootId)
-    console.log(
-      `  Moving subtree rooted at ${rootId} by ${offsetX}px (${subtreeNodes.size} nodes)`
-    )
 
     subtreeNodes.forEach(nodeId => {
       const pos = positions.get(nodeId)
       if (pos) {
         pos.x += offsetX
         positions.set(nodeId, pos)
-        console.log(`    Moved ${nodeId} to x=${pos.x.toFixed(0)}`)
-      } else {
-        console.log(`    Warning: ${nodeId} has no position yet, skipping`)
       }
     })
   }
@@ -266,18 +240,10 @@ function calculateNodePositions(perks: PerkNodeType[]) {
   let currentTreeX = padding
 
   connectedComponents.forEach((component, treeIndex) => {
-    console.log(`\n=== POSITIONING TREE ${treeIndex} ===`)
-    console.log(`Starting X position: ${currentTreeX}`)
-
     // Find root nodes in this component
     const rootNodes = component.filter(perkId => {
       const node = treeNodes.get(perkId)!
       return node.parents.length === 0
-    })
-
-    console.log(`Root nodes in tree ${treeIndex}: ${rootNodes.length}`)
-    rootNodes.forEach(perkId => {
-      console.log(`  Root: ${perkId}`)
     })
 
     if (rootNodes.length === 0) return
@@ -285,17 +251,12 @@ function calculateNodePositions(perks: PerkNodeType[]) {
     // Calculate total width needed for root nodes
     const totalRootWidth =
       rootNodes.length * nodeWidth + (rootNodes.length - 1) * horizontalSpacing
-    console.log(`Total root width: ${totalRootWidth}`)
 
     // Position root nodes for this tree with exact spacing
     let currentX = currentTreeX
     rootNodes.forEach(perkId => {
       const y = (maxDepth - 0) * verticalSpacing + padding
       const x = currentX
-
-      console.log(
-        `Positioning root ${perkId}: x=${x.toFixed(0)}, y=${y.toFixed(0)}`
-      )
 
       positions.set(perkId, { x, y })
       currentX += nodeWidth + horizontalSpacing
@@ -305,14 +266,10 @@ function calculateNodePositions(perks: PerkNodeType[]) {
     const positionedNodes = new Set<string>(rootNodes)
 
     for (let level = 1; level <= maxDepth; level++) {
-      console.log(`\n--- POSITIONING LEVEL ${level} ---`)
-
       const levelNodes = nodesByLevel.get(level) || []
       const treeLevelNodes = levelNodes.filter(perkId =>
         component.includes(perkId)
       )
-
-      console.log(`Level ${level} nodes in this tree: ${treeLevelNodes.length}`)
 
       if (treeLevelNodes.length === 0) continue
 
@@ -323,9 +280,6 @@ function calculateNodePositions(perks: PerkNodeType[]) {
         if (positionedNodes.has(perkId)) return
 
         const node = treeNodes.get(perkId)!
-
-        console.log(`\nCalculating ideal position for ${perkId}:`)
-        console.log(`  Parents: ${node.parents.join(', ')}`)
 
         // Calculate center position based on parents
         if (node.parents.length > 0) {
@@ -340,9 +294,6 @@ function calculateNodePositions(perks: PerkNodeType[]) {
               totalParentX += parentCenterX
               parentPositions.push(parentCenterX)
               validParents++
-              console.log(
-                `    Parent ${parentId}: x=${parentPos.x.toFixed(0)}, centerX=${parentCenterX.toFixed(0)}`
-              )
             }
           })
 
@@ -352,21 +303,15 @@ function calculateNodePositions(perks: PerkNodeType[]) {
             if (validParents === 1) {
               // Single parent: center directly above the parent
               idealX = totalParentX / validParents
-              console.log(
-                `    Single parent: centering directly above at ${idealX.toFixed(0)}`
-              )
             } else {
               // Multiple parents: center at the midpoint between the leftmost and rightmost parent
               const minParentX = Math.min(...parentPositions)
               const maxParentX = Math.max(...parentPositions)
               idealX = (minParentX + maxParentX) / 2
-              console.log(
-                `    Multiple parents: centering at midpoint between ${minParentX.toFixed(0)} and ${maxParentX.toFixed(0)} = ${idealX.toFixed(0)}`
-              )
             }
 
             idealPositions.set(perkId, idealX)
-            console.log(`    Final ideal centerX: ${idealX.toFixed(0)}`)
+
           }
         }
       })
@@ -382,23 +327,13 @@ function calculateNodePositions(perks: PerkNodeType[]) {
           return idealA - idealB
         })
 
-      console.log(`\nSorted nodes by ideal position: ${sortedNodes.join(', ')}`)
-
       // Step 3: Position nodes with guaranteed spacing, moving subtrees as needed
       if (sortedNodes.length > 0) {
-        console.log(
-          `\nPositioning ${sortedNodes.length} nodes with subtree-aware spacing:`
-        )
-
         // Start with the first node at its ideal position
         const firstNode = sortedNodes[0]
         const firstIdealX = idealPositions.get(firstNode)!
         const firstX = firstIdealX - nodeWidth / 2
         const y = (maxDepth - level) * verticalSpacing + padding
-
-        console.log(
-          `  First node ${firstNode}: ideal center=${firstIdealX.toFixed(0)}, x=${firstX.toFixed(0)}`
-        )
         positions.set(firstNode, { x: firstX, y })
         positionedNodes.add(firstNode)
 
@@ -418,10 +353,6 @@ function calculateNodePositions(perks: PerkNodeType[]) {
           // Use the larger of minimum required and ideal position
           const finalX = Math.max(minRequiredX, idealX)
 
-          console.log(
-            `  Node ${currentNode}: ideal=${idealX.toFixed(0)}, min required=${minRequiredX.toFixed(0)}, final=${finalX.toFixed(0)}`
-          )
-
           // Always position the current node first
           positions.set(currentNode, { x: finalX, y })
           positionedNodes.add(currentNode)
@@ -429,9 +360,6 @@ function calculateNodePositions(perks: PerkNodeType[]) {
           // If we had to move the node beyond its ideal position, move its entire subtree
           if (finalX > idealX) {
             const offset = finalX - idealX
-            console.log(
-              `    Moving subtree rooted at ${currentNode} by ${offset.toFixed(0)}px to maintain spacing`
-            )
             moveSubtree(currentNode, offset)
           }
         }
@@ -440,18 +368,6 @@ function calculateNodePositions(perks: PerkNodeType[]) {
 
     // Move to next tree position
     currentTreeX += totalRootWidth + horizontalSpacing * 2
-    console.log(`\nMoving to next tree at X position: ${currentTreeX}`)
-  })
-
-  // Debug: Log final positions
-  console.log('\n=== FINAL POSITIONS ===')
-  treeNodes.forEach((node, perkId) => {
-    const pos = positions.get(perkId)
-    if (pos) {
-      console.log(
-        `${perkId}: x=${pos.x.toFixed(0)}, y=${pos.y.toFixed(0)}, children=${node.children.length}, parents=${node.parents.length}`
-      )
-    }
   })
 
   return positions
@@ -553,15 +469,9 @@ export function PerkTreeCanvas({
 
     const edges: Edge[] = []
 
-    console.log('Creating edges for tree:', validatedTree.treeName)
-    console.log('Total perks:', validatedTree.perks.length)
-
     validatedTree.perks.forEach(perk => {
       const perkId = perk.edid
       const perkName = perk.name
-
-      console.log(`Processing perk: ${perkName} (${perkId})`)
-      console.log('Connections:', perk.connections)
 
       // Handle connections object (new format)
       if (
@@ -569,14 +479,9 @@ export function PerkTreeCanvas({
         perk.connections.children &&
         perk.connections.children.length > 0
       ) {
-        console.log(
-          `Found ${perk.connections.children.length} children for ${perkName}`
-        )
-
         perk.connections.children.forEach((childId: string) => {
           // Skip self-references
           if (childId === perkId) {
-            console.log(`Skipping self-reference for ${perkName}`)
             return
           }
 
@@ -584,9 +489,6 @@ export function PerkTreeCanvas({
           const childExists = validatedTree.perks.some(p => p.edid === childId)
           if (childExists) {
             const childPerk = validatedTree.perks.find(p => p.edid === childId)
-            console.log(
-              `Creating edge: ${perkName} -> ${childPerk?.name} (${childId})`
-            )
 
             edges.push({
               id: `${perkId}-${childId}`,
@@ -599,20 +501,12 @@ export function PerkTreeCanvas({
                 opacity: 0.8,
               },
             })
-          } else {
-            console.log(`Child ${childId} not found in tree for ${perkName}`)
           }
         })
-      } else {
-        console.log(`No connections for ${perkName}`)
       }
     })
 
-    console.log(`Created ${edges.length} edges total`)
-    console.log(
-      'Edge details:',
-      edges.map(e => `${e.source} -> ${e.target}`)
-    )
+
 
     return edges
   }, [validatedTree])

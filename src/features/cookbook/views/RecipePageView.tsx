@@ -34,7 +34,6 @@ export function RecipePageView() {
     try {
       // Check if recipes are loaded
       if (!recipes || recipes.length === 0) {
-        console.warn('No recipes loaded for search categories')
         return []
       }
       
@@ -43,8 +42,6 @@ export function RecipePageView() {
       const allIngredients = availableIngredients || []
       const allEffects = availableEffects || []
       const allCategories = availableCategories || []
-      
-      console.log('Using pre-computed ingredients:', allIngredients.slice(0, 10), `(total: ${allIngredients.length})`)
       
       
 
@@ -94,7 +91,6 @@ export function RecipePageView() {
       
     ]
     } catch (error) {
-      console.error('Error generating search categories:', error)
       return []
     }
   }
@@ -192,7 +188,6 @@ export function RecipePageView() {
   )
 
   const handleRecipeClick = (recipe: RecipeWithComputed) => {
-    console.log('Recipe clicked:', recipe.name)
     // TODO: Implement recipe detail view or modal
   }
 

@@ -15,12 +15,6 @@ export function useSearchPagination(searchResults: SearchResult[]) {
   // Reset to page 1 when search results change
   useEffect(() => {
     setCurrentPage(1)
-    
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🔍 useSearchPagination - search results changed, resetting to page 1')
-      console.log('🔍 useSearchPagination - searchResults:', searchResults.length)
-      console.log('🔍 useSearchPagination - displayedItems:', displayedItems.length)
-    }
   }, [searchResults])
 
   // Check if there are more items to load

@@ -67,9 +67,7 @@ export class SpellDataProvider {
    * Get spell data with statistics
    */
   async getSpellData(): Promise<SpellDataResponse> {
-    console.log('SpellDataProvider: getSpellData called')
     const spells = await this.loadSpells()
-    console.log('SpellDataProvider: Getting statistics for', spells.length, 'spells')
     const stats = SpellModel.getStatistics(spells)
     
     const result = {
@@ -79,13 +77,6 @@ export class SpellDataProvider {
       levels: stats.levels,
       lastUpdated: new Date().toISOString()
     }
-    
-    console.log('SpellDataProvider: getSpellData result:', {
-      spellsCount: result.spells.length,
-      totalCount: result.totalCount,
-      schools: result.schools,
-      levels: result.levels
-    })
     
     return result
   }
@@ -135,7 +126,6 @@ export class SpellDataProvider {
    * Clear the cache
    */
   clearCache(): void {
-    console.log('SpellDataProvider: Clearing cache')
     this.cache = null
     this.lastFetch = 0
   }

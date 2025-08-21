@@ -64,10 +64,8 @@ export class EnchantmentDataProvider {
       this.cache = enchantments
       this.lastFetch = Date.now()
 
-      console.log(`EnchantmentDataProvider: Loaded ${validCount} valid enchantments, ${invalidCount} invalid`)
       return enchantments
     } catch (error) {
-      console.error('EnchantmentDataProvider: Error loading enchantments:', error)
       throw error
     }
   }
@@ -76,9 +74,7 @@ export class EnchantmentDataProvider {
    * Get enchantment data with statistics
    */
   async getEnchantmentData(): Promise<EnchantmentDataResponse> {
-    console.log('EnchantmentDataProvider: getEnchantmentData called')
     const enchantments = await this.loadEnchantments()
-    console.log('EnchantmentDataProvider: Getting statistics for', enchantments.length, 'enchantments')
     const stats = EnchantmentModel.getStatistics(enchantments)
     
     const result = {
@@ -89,14 +85,6 @@ export class EnchantmentDataProvider {
       plugins: stats.plugins,
       lastUpdated: new Date().toISOString()
     }
-    
-    console.log('EnchantmentDataProvider: getEnchantmentData result:', {
-      enchantmentsCount: result.enchantments.length,
-      totalCount: result.totalCount,
-      categories: result.categoryNames,
-      targetTypes: result.targetTypes,
-      plugins: result.plugins
-    })
     
     return result
   }

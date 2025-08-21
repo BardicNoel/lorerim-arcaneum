@@ -89,7 +89,6 @@ export function ReligionCard({
         className
       )}
       onClick={e => {
-        console.log('ReligionCard clicked, onOpenDetails:', !!onOpenDetails)
         // Call the parent's onClick if provided
         if (onClick) {
           onClick()
@@ -97,7 +96,6 @@ export function ReligionCard({
         // Also open details if onOpenDetails is provided
         if (onOpenDetails) {
           const id = originalReligion?.name || item?.id || ''
-          console.log('Calling onOpenDetails with id:', id)
           onOpenDetails(id)
         }
       }}

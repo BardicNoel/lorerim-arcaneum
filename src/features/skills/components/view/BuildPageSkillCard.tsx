@@ -46,7 +46,6 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
   }
 
   const handleSkillClick = (skillId: string) => {
-    console.log('Opening perk tree for skill:', skillId)
     setSelectedSkillId(skillId)
     setPerkTreeOpen(true)
   }

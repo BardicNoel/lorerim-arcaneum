@@ -15,11 +15,6 @@ export function useSearchFilters() {
   const searchResults = useMemo(() => {
     if (!isReady) return []
 
-    // Debug logging for activeFilters changes
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🔍 useSearchFilters - activeFilters changed:', activeFilters)
-    }
-
     // If no filters are applied, show all items
     const hasFilters =
       activeFilters.tags.length > 0 ||
@@ -51,11 +46,7 @@ export function useSearchFilters() {
     // to ensure the search function processes the filters
     const finalQuery = searchQuery || '*'
 
-    // Debug logging for search parameters
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🔍 Search debug - query:', finalQuery)
-      console.log('🔍 Search debug - filters:', searchFilters)
-    }
+
 
     return search(finalQuery, searchFilters)
   }, [isReady, search, activeFilters, getSearchableItems])

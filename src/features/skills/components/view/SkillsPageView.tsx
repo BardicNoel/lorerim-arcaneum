@@ -87,8 +87,6 @@ export function SkillsPageView({
         <SkillGrid
           skills={skills}
           onSkillSelect={skillId => {
-            console.log('Skill selected:', skillId) // Debug log
-            console.log('Setting perkTreeOpen to true') // Debug log
             onSkillSelect(skillId)
             setPerkTreeOpen(true)
           }}
