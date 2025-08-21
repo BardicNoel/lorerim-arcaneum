@@ -48,6 +48,80 @@ vi.mock('@/shared/stores/religionsStore', () => ({
   },
 }))
 
+// Mock the blessings store
+vi.mock('@/shared/stores/blessingsStore', () => ({
+  useBlessingsStore: {
+    getState: vi.fn(() => ({
+      data: [
+        {
+          id: 'Akatosh',
+          name: 'Akatosh',
+          type: 'Divine',
+          pantheon: 'Divine',
+          blessingName: 'Blessing of Akatosh',
+          blessingDescription: 'Divine blessing from Akatosh',
+          effects: [
+            {
+              name: 'Dragon Slayer',
+              description: 'Attacks, spells, scrolls, shouts and enchantments are better against dragons.',
+              magnitude: 25,
+              duration: 300,
+              area: 0,
+              effectType: '2',
+              targetAttribute: null,
+              keywords: ['dragon', 'combat']
+            },
+            {
+              name: 'Time Reset',
+              description: 'Praying to Akatosh resets the cooldown of your most recently used shout and power.',
+              magnitude: 1,
+              duration: 0,
+              area: 0,
+              effectType: '2',
+              targetAttribute: null,
+              keywords: ['prayer', 'cooldown']
+            }
+          ],
+          tags: ['Divine', 'Dragonborn'],
+          originalReligion: {
+            id: 'Akatosh',
+            name: 'Akatosh',
+            type: 'Divine',
+            pantheon: 'Divine',
+          }
+        },
+        {
+          id: 'Mara',
+          name: 'Mara',
+          type: 'Divine',
+          pantheon: 'Divine',
+          blessingName: 'Blessing of Mara',
+          blessingDescription: 'Divine blessing from Mara',
+          effects: [
+            {
+              name: 'Lover\'s Comfort',
+              description: 'Restore health and stamina.',
+              magnitude: 50,
+              duration: 600,
+              area: 0,
+              effectType: '2',
+              targetAttribute: 'health',
+              keywords: ['healing', 'restoration']
+            }
+          ],
+          tags: ['Divine', 'Healing'],
+          originalReligion: {
+            id: 'Mara',
+            name: 'Mara',
+            type: 'Divine',
+            pantheon: 'Divine',
+          }
+        },
+      ],
+    })),
+  },
+}))
+
 describe('buildExportService', () => {
   describe('hydrateBuildData', () => {
     it('should include attribute assignments in hydrated data', () => {
@@ -58,6 +132,7 @@ describe('buildExportService', () => {
         race: null,
         stone: null,
         religion: null,
+        favoriteBlessing: null,
         traits: {
           regular: [],
           bonus: [],
@@ -114,6 +189,7 @@ describe('buildExportService', () => {
         race: null,
         stone: null,
         religion: null,
+        favoriteBlessing: null,
         traits: {
           regular: [],
           bonus: [],
@@ -162,6 +238,7 @@ describe('buildExportService', () => {
         race: null,
         stone: null,
         religion: 'akatosh', // This is the format stored when a religion is selected
+        favoriteBlessing: null,
         traits: {
           regular: [],
           bonus: [],
@@ -210,6 +287,7 @@ describe('buildExportService', () => {
         race: null,
         stone: null,
         religion: 'Akatosh', // This is the original ID format
+        favoriteBlessing: null,
         traits: {
           regular: [],
           bonus: [],
@@ -258,6 +336,7 @@ describe('buildExportService', () => {
         race: null,
         stone: null,
         religion: 'unknown-religion',
+        favoriteBlessing: null,
         traits: {
           regular: [],
           bonus: [],
@@ -293,6 +372,100 @@ describe('buildExportService', () => {
 
       expect(hydratedData.religion.name).toBe('Unknown Religion')
       expect(hydratedData.religion.effects).toBe('No effects')
+    })
+
+    it('should resolve favorite blessing correctly', () => {
+      const mockBuild: BuildState = {
+        v: 1,
+        name: 'Test Character',
+        notes: '',
+        race: null,
+        stone: null,
+        religion: null,
+        favoriteBlessing: 'Akatosh',
+        traits: {
+          regular: [],
+          bonus: [],
+        },
+        traitLimits: {
+          regular: 2,
+          bonus: 1,
+        },
+        skills: {
+          major: [],
+          minor: [],
+        },
+        perks: {
+          selected: {},
+          ranks: {},
+        },
+        skillLevels: {},
+        equipment: [],
+        userProgress: {
+          unlocks: [],
+        },
+        destinyPath: [],
+        attributeAssignments: {
+          health: 0,
+          stamina: 0,
+          magicka: 0,
+          level: 1,
+          assignments: {},
+        },
+      }
+
+      const hydratedData = hydrateBuildData(mockBuild)
+
+      expect(hydratedData.favoriteBlessing.name).toBe('Blessing of Akatosh')
+      expect(hydratedData.favoriteBlessing.effects).toBe('Dragon Slayer, Time Reset')
+      expect(hydratedData.favoriteBlessing.source).toBe('Akatosh')
+    })
+
+    it('should handle missing favorite blessing gracefully', () => {
+      const mockBuild: BuildState = {
+        v: 1,
+        name: 'Test Character',
+        notes: '',
+        race: null,
+        stone: null,
+        religion: null,
+        favoriteBlessing: null,
+        traits: {
+          regular: [],
+          bonus: [],
+        },
+        traitLimits: {
+          regular: 2,
+          bonus: 1,
+        },
+        skills: {
+          major: [],
+          minor: [],
+        },
+        perks: {
+          selected: {},
+          ranks: {},
+        },
+        skillLevels: {},
+        equipment: [],
+        userProgress: {
+          unlocks: [],
+        },
+        destinyPath: [],
+        attributeAssignments: {
+          health: 0,
+          stamina: 0,
+          magicka: 0,
+          level: 1,
+          assignments: {},
+        },
+      }
+
+      const hydratedData = hydrateBuildData(mockBuild)
+
+      expect(hydratedData.favoriteBlessing.name).toBe('Not selected')
+      expect(hydratedData.favoriteBlessing.effects).toBe('No effects')
+      expect(hydratedData.favoriteBlessing.source).toBe('None')
     })
   })
 }) 

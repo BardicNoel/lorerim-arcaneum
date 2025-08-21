@@ -64,6 +64,7 @@ export const useURLSync = () => {
     build.race, 
     build.stone, 
     build.religion, 
+    build.favoriteBlessing,
     build.traits, 
     build.traitLimits,
     build.skills, 

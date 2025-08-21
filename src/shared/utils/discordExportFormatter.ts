@@ -57,6 +57,17 @@ export function formatBuildForDiscordNamesOnly(
   }
   lines.push('')
 
+  // Favorite Blessing
+  lines.push(`__✨ Favorite Blessing__`)
+  lines.push(`${data.favoriteBlessing.name}`)
+  if (data.favoriteBlessing.source !== 'None') {
+    lines.push(`• **Source:** ${data.favoriteBlessing.source}`)
+  }
+  if (data.favoriteBlessing.effects !== 'No effects') {
+    lines.push(`• **Effects:** ${data.favoriteBlessing.effects}`)
+  }
+  lines.push('')
+
   // NEW: Attributes
   lines.push(`__⚔️ Attributes (Level ${data.attributes.level})__`)
   const attributeParts = []
@@ -187,6 +198,17 @@ export function formatBuildForDiscord(
   }
   if (data.religion.devoteeBoon) {
     lines.push(`• **Devotee:** ${data.religion.devoteeBoon}`)
+  }
+  lines.push('')
+
+  // Favorite Blessing
+  lines.push(`__✨ Favorite Blessing__`)
+  lines.push(`${data.favoriteBlessing.name}`)
+  if (data.favoriteBlessing.source !== 'None') {
+    lines.push(`• **Source:** ${data.favoriteBlessing.source}`)
+  }
+  if (data.favoriteBlessing.effects !== 'No effects') {
+    lines.push(`• **Effects:** ${data.favoriteBlessing.effects}`)
   }
   lines.push('')
 

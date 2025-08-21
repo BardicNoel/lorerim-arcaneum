@@ -12,6 +12,7 @@ describe('discordExportFormatter', () => {
         birthSign: { name: 'Warrior', effects: 'Test effects' },
         traits: [],
         religion: { name: 'Akatosh', effects: 'Divine' },
+        favoriteBlessing: { name: 'Blessing of Akatosh', effects: 'Dragon Slayer, Time Reset', source: 'Akatosh' },
         skills: { major: [], minor: [], other: [] },
         perks: [],
         destinyPath: [],
@@ -29,6 +30,10 @@ describe('discordExportFormatter', () => {
 
       expect(result).toContain('__⚔️ Attributes (Level 5)__')
       expect(result).toContain('Health: 15, Stamina: 10, Magicka: 5')
+      expect(result).toContain('__✨ Favorite Blessing__')
+      expect(result).toContain('Blessing of Akatosh')
+      expect(result).toContain('• **Source:** Akatosh')
+      expect(result).toContain('• **Effects:** Dragon Slayer, Time Reset')
     })
 
     it('should handle builds with no attribute points', () => {
@@ -39,6 +44,7 @@ describe('discordExportFormatter', () => {
         birthSign: { name: 'Warrior', effects: 'Test effects' },
         traits: [],
         religion: { name: 'Akatosh', effects: 'Divine' },
+        favoriteBlessing: { name: 'Not selected', effects: 'No effects', source: 'None' },
         skills: { major: [], minor: [], other: [] },
         perks: [],
         destinyPath: [],
@@ -68,6 +74,7 @@ describe('discordExportFormatter', () => {
         birthSign: { name: 'Warrior', effects: 'Test effects' },
         traits: [],
         religion: { name: 'Akatosh', effects: 'Divine' },
+        favoriteBlessing: { name: 'Blessing of Akatosh', effects: 'Dragon Slayer, Time Reset', source: 'Akatosh' },
         skills: { major: [], minor: [], other: [] },
         perks: [],
         destinyPath: [],
@@ -85,6 +92,10 @@ describe('discordExportFormatter', () => {
 
       expect(result).toContain('__⚔️ Attributes (Level 5)__')
       expect(result).toContain('Health: 15, Stamina: 10, Magicka: 5')
+      expect(result).toContain('__✨ Favorite Blessing__')
+      expect(result).toContain('Blessing of Akatosh')
+      expect(result).toContain('• **Source:** Akatosh')
+      expect(result).toContain('• **Effects:** Dragon Slayer, Time Reset')
     })
 
     it('should handle builds with no attribute points', () => {
@@ -95,6 +106,7 @@ describe('discordExportFormatter', () => {
         birthSign: { name: 'Warrior', effects: 'Test effects' },
         traits: [],
         religion: { name: 'Akatosh', effects: 'Divine' },
+        favoriteBlessing: { name: 'Not selected', effects: 'No effects', source: 'None' },
         skills: { major: [], minor: [], other: [] },
         perks: [],
         destinyPath: [],
