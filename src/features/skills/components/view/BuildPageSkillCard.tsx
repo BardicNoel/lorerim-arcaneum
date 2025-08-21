@@ -1,4 +1,3 @@
-import { SkillAvatar } from '../atomic/SkillAvatar'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { SelectionCardShell } from '@/shared/components/ui'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
@@ -14,6 +13,7 @@ import {
   useSkillData,
   useSkillsQuickSelector,
 } from '../../adapters'
+import { SkillAvatar } from '../atomic/SkillAvatar'
 import { SkillLevelBadge } from '../atomic/SkillLevelBadge'
 import { SkillAutocomplete } from '../composition/SkillAutocomplete'
 import { SkillPerkTreeDrawer } from './SkillPerkTreeDrawer'
@@ -135,10 +135,15 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
     usePerkData(selectedSkillId)
 
   const renderSkillCard = (skill: any, type: 'major' | 'minor' | 'perked') => {
-    const skillLevel = getSkillLevel(skill.id || skill.edid)
     const selectedPerks = getSkillPerks(skill.id || skill.edid)
     const totalPerks = skill.totalPerks || 0
     const skillId = skill.id || skill.edid
+
+    // Use minLevel from the skill data if available, otherwise fallback to getSkillLevel
+    const minLevel =
+      skill.minLevel !== undefined
+        ? skill.minLevel
+        : getSkillLevel(skill.id || skill.edid)
 
     // Determine card styling based on type
     let cardClasses = 'cursor-pointer transition-all hover:shadow-md '
@@ -187,7 +192,7 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
               />
 
               <div className="flex items-center gap-2 flex-wrap">
-                <SkillLevelBadge level={skillLevel} size="sm" />
+                <SkillLevelBadge level={minLevel} size="sm" />
                 <Badge variant="outline" className={badgeClasses}>
                   {selectedPerks.length}/{totalPerks} perks
                 </Badge>
@@ -373,8 +378,7 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
         <div className="mt-6 p-4 bg-muted/50 rounded-lg">
           <p className="text-sm text-muted-foreground">
             Click on any skill card to view and manage its perk tree. Skill
-            levels show the minimum level required based on your perk
-            selections.
+            levels show the minimum level required by your selected perks.
           </p>
         </div>
       </SelectionCardShell>

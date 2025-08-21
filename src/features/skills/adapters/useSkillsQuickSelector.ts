@@ -1,6 +1,10 @@
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { useMemo } from 'react'
 import type { UnifiedSkill } from '../types'
+import {
+  calculateMinimumSkillLevel,
+  calculateStartingSkillLevel,
+} from '../utils/skillLevels'
 import { useSkillData } from './useSkillData'
 
 export interface QuickSelectorSkill extends UnifiedSkill {
@@ -8,6 +12,8 @@ export interface QuickSelectorSkill extends UnifiedSkill {
   isMinor: boolean
   canAssignMajor: boolean
   canAssignMinor: boolean
+  startingLevel: number
+  minLevel: number
 }
 
 // Adapter for build page skill selection (QuickSelector view)
@@ -34,6 +40,14 @@ export function useSkillsQuickSelector() {
       const selectedPerks = build.perks?.selected?.[skill.id] || []
       const selectedPerksCount = selectedPerks.length
 
+      // Calculate separate level components
+      const startingLevel = calculateStartingSkillLevel(skill.id, build)
+      const minLevel = calculateMinimumSkillLevel(
+        skill.id,
+        selectedPerks,
+        build.perks?.ranks || {}
+      )
+
       // Assignment limits
       const canAssignMajor = !isMajor && build.skills.major.length < 3
       const canAssignMinor = !isMinor && build.skills.minor.length < 6
@@ -43,11 +57,13 @@ export function useSkillsQuickSelector() {
         isMajor,
         isMinor,
         selectedPerksCount,
+        startingLevel, // Starting level (race bonus + major/minor bonuses)
+        minLevel, // Minimum level required by selected perks
         canAssignMajor,
         canAssignMinor,
       } as QuickSelectorSkill
     })
-  }, [skills, build.skills.major, build.skills.minor, build.perks?.selected])
+  }, [skills, build])
 
   // Get selected skills for display
   const selectedMajorSkills = useMemo(() => {
