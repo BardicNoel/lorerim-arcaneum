@@ -5,3 +5,12 @@ export {
   getUserFriendlyStat,
   parseDescription,
 } from './dataTransform'
+
+export {
+  sanitizeUnderscoreString,
+  sanitizeStatName,
+  sanitizeSkillName,
+  sanitizeEffectName,
+  sanitizeEffectDescription,
+  getUserFriendlyStatEnhanced,
+} from './stringSanitizer'

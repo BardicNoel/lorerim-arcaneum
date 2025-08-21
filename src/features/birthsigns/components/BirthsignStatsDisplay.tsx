@@ -3,6 +3,7 @@ import { Badge } from '@/shared/ui/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { H4 } from '@/shared/ui/ui/typography'
 import type { Birthsign } from '../types'
+import { sanitizeStatName, sanitizeSkillName } from '../utils/stringSanitizer'
 
 interface BirthsignStatsDisplayProps {
   birthsign: Birthsign
@@ -39,7 +40,7 @@ export function BirthsignStatsDisplay({
                   className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
                 >
                   <span className="text-sm font-medium capitalize flex-1 min-w-0 mr-3">
-                    {stat.stat.replace(/_/g, ' ')}
+                    {sanitizeStatName(stat.stat)}
                   </span>
                   <Badge
                     variant="outline"
@@ -71,7 +72,7 @@ export function BirthsignStatsDisplay({
                   className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
                 >
                   <span className="text-sm font-medium capitalize flex-1 min-w-0 mr-3">
-                    {skill.stat.replace(/_/g, ' ')}
+                    {sanitizeSkillName(skill.stat)}
                   </span>
                   <Badge
                     variant="outline"
