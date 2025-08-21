@@ -4,14 +4,15 @@ export {
   DeityAutocomplete,
   DevoteeCard,
   DevoteeSheet,
+  FavoriteBlessingSelectionCard,
   FollowerCard,
   FollowerSheet,
   ReligionAccordion,
   ReligionCard,
   ReligionSelectionCard,
   ReligionSheet,
-  FavoriteBlessingSelectionCard,
 } from './components'
+export { useBlessingData, useFuzzySearch, useReligionData } from './hooks'
 export { ReligionsPage, TabbedReligionsPage } from './pages'
 export type {
   Religion,

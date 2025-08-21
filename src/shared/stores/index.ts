@@ -1,5 +1,6 @@
 // Export all individual data stores
 export { useBirthsignsStore } from './birthsignsStore'
+export { useBlessingsStore } from './blessingsStore'
 export { useDestinyNodesStore } from './destinyNodesStore'
 export { usePerkTreesStore } from './perkTreesStore'
 export { useRacesStore } from './racesStore'
@@ -13,6 +14,8 @@ export { useTraitsStore } from './traitsStore'
 export {
   useBirthsigns,
   useBirthsignsSync,
+  useBlessings,
+  useBlessingsSync,
   useDestinyNodes,
   useDestinyNodesSync,
   usePerkTrees,

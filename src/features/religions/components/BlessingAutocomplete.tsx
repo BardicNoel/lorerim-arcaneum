@@ -4,12 +4,10 @@ import { Button } from '@/shared/ui/ui/button'
 import { Input } from '@/shared/ui/ui/input'
 import { ChevronDown, Search, X, Zap } from 'lucide-react'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { useFuzzySearch } from '../hooks/useFuzzySearch'
-import type { Religion } from '../types'
-import { getBlessingOptions } from '../utils/religionFilters'
+import type { BlessingData } from '@/shared/stores/blessingsStore'
 
 interface BlessingAutocompleteProps {
-  religions: Religion[] | undefined | null
+  blessings: BlessingData[] | undefined | null
   selectedBlessingId: string | null
   onBlessingSelect: (blessingId: string | null) => void
   placeholder?: string
@@ -18,7 +16,7 @@ interface BlessingAutocompleteProps {
 }
 
 export function BlessingAutocomplete({
-  religions,
+  blessings,
   selectedBlessingId,
   onBlessingSelect,
   placeholder = 'Search for a blessing source...',
@@ -31,26 +29,27 @@ export function BlessingAutocomplete({
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Get blessing options
-  const blessingOptions = useMemo(
-    () => getBlessingOptions(religions),
-    [religions]
-  )
-
-  // Use fuzzy search
-  const { filteredReligions } = useFuzzySearch(religions, searchQuery)
-  const filteredBlessingOptions = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return blessingOptions
+  // Filter blessings based on search query
+  const filteredBlessings = useMemo(() => {
+    if (!blessings || !searchQuery.trim()) {
+      return blessings || []
     }
-    return getBlessingOptions(filteredReligions)
-  }, [filteredReligions, blessingOptions, searchQuery])
+    
+    const lowerQuery = searchQuery.toLowerCase()
+    return blessings.filter(
+      blessing =>
+        blessing.name.toLowerCase().includes(lowerQuery) ||
+        blessing.blessingName.toLowerCase().includes(lowerQuery) ||
+        blessing.blessingDescription.toLowerCase().includes(lowerQuery) ||
+        blessing.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
+    )
+  }, [blessings, searchQuery])
 
   // Find selected blessing
   const selectedBlessing = useMemo(() => {
-    if (!selectedBlessingId) return null
-    return blessingOptions.find(blessing => blessing.id === selectedBlessingId)
-  }, [selectedBlessingId, blessingOptions])
+    if (!selectedBlessingId || !blessings) return null
+    return blessings.find(blessing => blessing.id === selectedBlessingId)
+  }, [selectedBlessingId, blessings])
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -92,15 +91,15 @@ export function BlessingAutocomplete({
     if (e.key === 'ArrowDown') {
       e.preventDefault()
       setActiveIndex(prev =>
-        Math.min(prev + 1, filteredBlessingOptions.length - 1)
+        Math.min(prev + 1, filteredBlessings.length - 1)
       )
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
       setActiveIndex(prev => Math.max(prev - 1, -1))
     } else if (e.key === 'Enter') {
       e.preventDefault()
-      if (activeIndex >= 0 && filteredBlessingOptions[activeIndex]) {
-        handleBlessingSelect(filteredBlessingOptions[activeIndex].id)
+      if (activeIndex >= 0 && filteredBlessings[activeIndex]) {
+        handleBlessingSelect(filteredBlessings[activeIndex].id)
       }
     } else if (e.key === 'Escape') {
       setIsOpen(false)
@@ -195,13 +194,13 @@ export function BlessingAutocomplete({
 
       {isOpen && (
         <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-background border border-border rounded-md shadow-lg max-h-60 overflow-y-auto">
-          {filteredBlessingOptions.length === 0 ? (
+          {filteredBlessings.length === 0 ? (
             <div className="p-3 text-sm text-muted-foreground text-center">
               No blessing found.
             </div>
           ) : (
             <div className="py-1">
-              {filteredBlessingOptions.map((blessing, index) => (
+              {filteredBlessings.map((blessing, index) => (
                 <button
                   key={blessing.id}
                   onClick={() => handleBlessingSelect(blessing.id)}

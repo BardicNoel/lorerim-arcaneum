@@ -3,8 +3,7 @@ import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { religionToPlayerCreationItem } from '@/shared/utils'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useReligionData } from '../hooks/useReligionData'
-import { findReligionById } from '../utils/religionFilters'
+import { useBlessingData } from '../hooks/useBlessingData'
 import { BlessingAutocomplete } from './BlessingAutocomplete'
 import { ReligionAccordion } from './ReligionAccordion'
 
@@ -18,11 +17,11 @@ export function FavoriteBlessingSelectionCard({
   const { build, setFavoriteBlessing } = useCharacterBuild()
   const navigate = useNavigate()
   const [isExpanded, setIsExpanded] = useState(true)
-  const { data: religions, loading, error } = useReligionData()
+  const { blessings, loading, error } = useBlessingData()
 
   // Find selected blessing source
   const selectedBlessingSource = build.favoriteBlessing
-    ? findReligionById(religions, build.favoriteBlessing)
+    ? blessings.find(blessing => blessing.id === build.favoriteBlessing)
     : null
 
   const handleNavigateToReligionPage = () => {
@@ -42,7 +41,7 @@ export function FavoriteBlessingSelectionCard({
         className={className}
       >
         <div className="text-sm text-muted-foreground">
-          Loading religions...
+          Loading blessings...
         </div>
       </SelectionCardShell>
     )
@@ -57,7 +56,7 @@ export function FavoriteBlessingSelectionCard({
         className={className}
       >
         <div className="text-sm text-destructive">
-          Error loading religions: {error}
+          Error loading blessings: {error}
         </div>
       </SelectionCardShell>
     )
@@ -77,7 +76,7 @@ export function FavoriteBlessingSelectionCard({
           use most frequently)
         </p>
         <BlessingAutocomplete
-          religions={religions}
+          blessings={blessings}
           selectedBlessingId={build.favoriteBlessing}
           onBlessingSelect={setFavoriteBlessing}
           placeholder="Search for a blessing source..."
@@ -88,7 +87,7 @@ export function FavoriteBlessingSelectionCard({
   }
 
   // If blessing is selected, show the blessing card with integrated autocomplete
-  const blessingItem = religionToPlayerCreationItem(selectedBlessingSource)
+  const blessingItem = religionToPlayerCreationItem(selectedBlessingSource.originalReligion)
 
   return (
     <SelectionCardShell
@@ -98,7 +97,7 @@ export function FavoriteBlessingSelectionCard({
       className={className}
     >
       <BlessingAutocomplete
-        religions={religions}
+        blessings={blessings}
         selectedBlessingId={build.favoriteBlessing}
         onBlessingSelect={setFavoriteBlessing}
         placeholder={`Favorite Blessing: Select a blessing source (${selectedBlessingSource.name})`}
@@ -106,7 +105,7 @@ export function FavoriteBlessingSelectionCard({
       />
       <ReligionAccordion
         item={blessingItem}
-        originalReligion={selectedBlessingSource}
+        originalReligion={selectedBlessingSource.originalReligion}
         isExpanded={isExpanded}
         onToggle={handleToggleExpanded}
         className="border-0 shadow-none"
