@@ -186,6 +186,9 @@ function resolveTraits(
 function resolveReligion(religionId: string | null): {
   name: string
   effects: string
+  tenets?: string
+  followerBoon?: string
+  devoteeBoon?: string
 } {
   if (!religionId) return { name: 'Not selected', effects: 'No effects' }
 
@@ -200,15 +203,38 @@ function resolveReligion(religionId: string | null): {
         )
       }
 
+      // Try to find religion using the same logic as findReligionById
+      // This handles the ID format mismatch between selection and storage
       const religion = religions.find(
-        r => r.id === religionId || r.name === religionId
+        r => 
+          r.id === religionId || 
+          r.name === religionId ||
+          r.name.toLowerCase().replace(/\s+/g, '-') === religionId
       )
 
       if (!religion) return { name: 'Unknown Religion', effects: 'No effects' }
 
+      // Extract tenets from the first tenet effect description
+      const tenets = religion.tenet?.effects?.[0]?.effectDescription || 
+                    religion.tenet?.description || 
+                    undefined
+
+      // Extract follower boon (boon1) from the first effect description
+      const followerBoon = religion.boon1?.effects?.[0]?.effectDescription || 
+                          religion.boon1?.spellName || 
+                          undefined
+
+      // Extract devotee boon (boon2) from the first effect description
+      const devoteeBoon = religion.boon2?.effects?.[0]?.effectDescription || 
+                         religion.boon2?.spellName || 
+                         undefined
+
       return {
         name: religion.name,
         effects: formatForDiscord(religion.type || 'No effects'),
+        tenets: tenets ? formatForDiscord(tenets) : undefined,
+        followerBoon: followerBoon ? formatForDiscord(followerBoon) : undefined,
+        devoteeBoon: devoteeBoon ? formatForDiscord(devoteeBoon) : undefined,
       }
     },
     { name: 'Unknown Religion', effects: 'No effects' },

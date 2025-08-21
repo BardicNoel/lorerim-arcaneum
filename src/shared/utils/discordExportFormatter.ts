@@ -46,6 +46,15 @@ export function formatBuildForDiscordNamesOnly(
   // Religion
   lines.push(`__✝️ Religion__`)
   lines.push(`${data.religion.name}`)
+  if (data.religion.tenets) {
+    lines.push(`• **Tenets:** ${data.religion.tenets}`)
+  }
+  if (data.religion.followerBoon) {
+    lines.push(`• **Follower:** ${data.religion.followerBoon}`)
+  }
+  if (data.religion.devoteeBoon) {
+    lines.push(`• **Devotee:** ${data.religion.devoteeBoon}`)
+  }
   lines.push('')
 
   // NEW: Attributes
@@ -170,6 +179,15 @@ export function formatBuildForDiscord(
   // Religion
   lines.push(`__✝️ Religion__`)
   lines.push(`${data.religion.name}`)
+  if (data.religion.tenets) {
+    lines.push(`• **Tenets:** ${data.religion.tenets}`)
+  }
+  if (data.religion.followerBoon) {
+    lines.push(`• **Follower:** ${data.religion.followerBoon}`)
+  }
+  if (data.religion.devoteeBoon) {
+    lines.push(`• **Devotee:** ${data.religion.devoteeBoon}`)
+  }
   lines.push('')
 
   // NEW: Attributes
