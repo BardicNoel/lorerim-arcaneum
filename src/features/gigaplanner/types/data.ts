@@ -22,11 +22,25 @@ export interface GigaPlannerStandingStone {
   bonus: string;
 }
 
+export interface GigaPlannerBlessing {
+  id: string;
+  name: string;
+  edid: string;
+  shrine: string;
+  follower: string;
+  devotee: string;
+  tenents: string;
+  race: string;
+  starting: string;
+  req: string;
+  category: string; // "Divine", "Daedric", "Elven", "Tribunal", "Yokudan", "Khajiiti", "Miscellaneous"
+}
+
 export interface GigaPlannerData {
   races: GigaPlannerRace[];
   standingStones: GigaPlannerStandingStone[];
+  blessings: GigaPlannerBlessing[];
   perks?: any; // Will be defined later
-  blessings?: any; // Will be defined later
   gameMechanics?: any; // Will be defined later
   presets?: any; // Will be defined later
 }
