@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { DestinyNode } from '../types'
 import { useDestinyNodes } from './useDestinyNodes'
 
@@ -49,10 +49,20 @@ export function useDestinyPath(
 
   const [currentPath, setCurrentPath] = useState<DestinyNode[]>(initialPath)
   const { nodes, rootNodes } = useDestinyNodes()
+  const prevInitialPathRef = useRef<DestinyNode[]>(initialPath)
 
   // Sync internal state with initialPath prop changes
   useEffect(() => {
-    setCurrentPath(initialPath)
+    const prevInitialPath = prevInitialPathRef.current
+    const currentInitialPath = initialPath
+
+    // Only update if the initialPath has actually changed
+    if (
+      JSON.stringify(prevInitialPath) !== JSON.stringify(currentInitialPath)
+    ) {
+      setCurrentPath(currentInitialPath)
+      prevInitialPathRef.current = currentInitialPath
+    }
   }, [initialPath])
 
   // Current node (last in path)

@@ -55,9 +55,7 @@ describe('GigaPlannerDataLoader', () => {
       const result = await loader.loadRaces()
 
       expect(result).toEqual(mockRaces)
-      expect(mockFetch).toHaveBeenCalledWith(
-        '/src/features/gigaplanner/data/races.json'
-      )
+      expect(mockFetch).toHaveBeenCalledWith('/data/gigaplanner/races.json')
     })
 
     it('should cache races data after first load', async () => {
@@ -192,7 +190,7 @@ describe('GigaPlannerDataLoader', () => {
 
       expect(result).toEqual(mockStandingStones)
       expect(mockFetch).toHaveBeenCalledWith(
-        '/src/features/gigaplanner/data/standingStones.json'
+        '/data/gigaplanner/standingStones.json'
       )
     })
 
@@ -288,9 +286,7 @@ describe('GigaPlannerDataLoader', () => {
       const result = await loader.loadBlessings()
 
       expect(result).toEqual(mockBlessings)
-      expect(mockFetch).toHaveBeenCalledWith(
-        '/src/features/gigaplanner/data/blessings.json'
-      )
+      expect(mockFetch).toHaveBeenCalledWith('/data/gigaplanner/blessings.json')
     })
 
     it('should cache blessings data after first load', async () => {
@@ -404,7 +400,7 @@ describe('GigaPlannerDataLoader', () => {
 
       expect(result).toEqual(mockGameMechanics)
       expect(mockFetch).toHaveBeenCalledWith(
-        '/src/features/gigaplanner/data/gameMechanics.json'
+        '/data/gigaplanner/gameMechanics.json'
       )
     })
 
@@ -554,9 +550,7 @@ describe('GigaPlannerDataLoader', () => {
       const result = await loader.loadPresets()
 
       expect(result).toEqual(mockPresets)
-      expect(mockFetch).toHaveBeenCalledWith(
-        '/src/features/gigaplanner/data/presets.json'
-      )
+      expect(mockFetch).toHaveBeenCalledWith('/data/gigaplanner/presets.json')
     })
 
     it('should cache presets data after first load', async () => {
@@ -741,9 +735,7 @@ describe('GigaPlannerDataLoader', () => {
       const result = await loader.loadPerks()
 
       expect(result).toEqual(mockPerks)
-      expect(mockFetch).toHaveBeenCalledWith(
-        '/src/features/gigaplanner/data/perks.json'
-      )
+      expect(mockFetch).toHaveBeenCalledWith('/data/gigaplanner/perks.json')
     })
 
     it('should cache perks data after first load', async () => {

@@ -1,3 +1,4 @@
+import { GigaPlannerToolsButton } from '@/features/gigaplanner/components/GigaPlannerToolsButton'
 import type { BuildState } from '@/shared/types/build'
 import { Button } from '@/shared/ui/ui/button'
 import { RotateCcw } from 'lucide-react'
@@ -6,6 +7,7 @@ import { ExportControls } from './ExportControls'
 interface BuildControlsProps {
   onReset: () => void
   build: BuildState
+  onOpenGigaPlannerTools?: () => void
   className?: string
 }
 
@@ -19,6 +21,7 @@ interface BuildControlsProps {
 export function BuildControls({
   onReset,
   build,
+  onOpenGigaPlannerTools,
   className,
 }: BuildControlsProps) {
   return (
@@ -33,6 +36,9 @@ export function BuildControls({
         Reset Build
       </Button>
       <ExportControls build={build} />
+      {onOpenGigaPlannerTools && (
+        <GigaPlannerToolsButton onClick={onOpenGigaPlannerTools} />
+      )}
     </div>
   )
 }

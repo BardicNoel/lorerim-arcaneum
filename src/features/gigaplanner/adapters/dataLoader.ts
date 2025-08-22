@@ -22,7 +22,7 @@ export class GigaPlannerDataLoader {
     }
 
     try {
-      const response = await fetch('/src/features/gigaplanner/data/races.json')
+      const response = await fetch('/data/gigaplanner/races.json')
       if (!response.ok) {
         throw new Error(
           `Failed to load races data: ${response.status} ${response.statusText}`
@@ -81,9 +81,7 @@ export class GigaPlannerDataLoader {
     }
 
     try {
-      const response = await fetch(
-        '/src/features/gigaplanner/data/standingStones.json'
-      )
+      const response = await fetch('/data/gigaplanner/standingStones.json')
       if (!response.ok) {
         throw new Error(
           `Failed to load standing stones data: ${response.status} ${response.statusText}`
@@ -127,9 +125,7 @@ export class GigaPlannerDataLoader {
     }
 
     try {
-      const response = await fetch(
-        '/src/features/gigaplanner/data/blessings.json'
-      )
+      const response = await fetch('/data/gigaplanner/blessings.json')
       if (!response.ok) {
         throw new Error(
           `Failed to load blessings data: ${response.status} ${response.statusText}`
@@ -173,9 +169,7 @@ export class GigaPlannerDataLoader {
     }
 
     try {
-      const response = await fetch(
-        '/src/features/gigaplanner/data/gameMechanics.json'
-      )
+      const response = await fetch('/data/gigaplanner/gameMechanics.json')
       if (!response.ok) {
         throw new Error(
           `Failed to load game mechanics data: ${response.status} ${response.statusText}`
@@ -249,9 +243,7 @@ export class GigaPlannerDataLoader {
     }
 
     try {
-      const response = await fetch(
-        '/src/features/gigaplanner/data/presets.json'
-      )
+      const response = await fetch('/data/gigaplanner/presets.json')
       if (!response.ok) {
         throw new Error(
           `Failed to load presets data: ${response.status} ${response.statusText}`
@@ -314,7 +306,7 @@ export class GigaPlannerDataLoader {
     }
 
     try {
-      const response = await fetch('/src/features/gigaplanner/data/perks.json')
+      const response = await fetch('/data/gigaplanner/perks.json')
       if (!response.ok) {
         throw new Error(
           `Failed to load perks data: ${response.status} ${response.statusText}`
