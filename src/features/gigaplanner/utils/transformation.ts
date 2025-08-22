@@ -10,18 +10,40 @@ import type { GigaPlannerCharacter } from '../adapters/gigaplannerConverter'
 
 // Types for our application's build state
 export interface BuildState {
+  name?: string
+  notes?: string
   race?: string
   stone?: string
+  religion?: string
   favoriteBlessing?: string
-  attributeAssignments?: {
-    level: number
-    health: number
-    magicka: number
-    stamina: number
+  traits?: {
+    regular: string[]
+    bonus: string[]
   }
-  skillLevels?: Record<string, number>
+  traitLimits?: {
+    regular: number
+    bonus: number
+  }
+  skills?: {
+    major: string[]
+    minor: string[]
+  }
   perks?: {
     selected: Record<string, string[]>
+    ranks: Record<string, number>
+  }
+  skillLevels?: Record<string, number>
+  equipment?: string[]
+  userProgress?: {
+    unlocks: string[]
+  }
+  destinyPath?: string[]
+  attributeAssignments?: {
+    health: number
+    stamina: number
+    magicka: number
+    level: number
+    assignments: Record<number, 'health' | 'stamina' | 'magicka'>
   }
 }
 
@@ -61,10 +83,11 @@ export function transformGigaPlannerToBuildState(
 
     // Transform attribute assignments
     const attributeAssignments = {
-      level: gigaPlannerCharacter.level,
       health: gigaPlannerCharacter.hmsIncreases.health,
-      magicka: gigaPlannerCharacter.hmsIncreases.magicka,
       stamina: gigaPlannerCharacter.hmsIncreases.stamina,
+      magicka: gigaPlannerCharacter.hmsIncreases.magicka,
+      level: gigaPlannerCharacter.level,
+      assignments: {} as Record<number, 'health' | 'stamina' | 'magicka'>,
     }
 
     // Add Oghma choice to attribute assignments if not 'None'
@@ -122,7 +145,13 @@ export function transformGigaPlannerToBuildState(
       attributeAssignments,
       skillLevels:
         Object.keys(skillLevels).length > 0 ? skillLevels : undefined,
-      perks: Object.keys(perks).length > 0 ? { selected: perks } : undefined,
+      perks:
+        Object.keys(perks).length > 0
+          ? {
+              selected: perks,
+              ranks: {}, // Initialize empty ranks
+            }
+          : undefined,
     }
 
     return {

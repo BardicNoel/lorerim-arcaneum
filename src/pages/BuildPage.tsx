@@ -28,7 +28,8 @@ import { BuildPageShell } from '@/shared/components/playerCreation'
 import { AttributeAssignmentCard } from '@/features/attributes'
 
 export function BuildPage() {
-  const { build, setBuildName, setBuildNotes, resetBuild } = useCharacterBuild()
+  const { build, setBuildName, setBuildNotes, resetBuild, updateBuild } =
+    useCharacterBuild()
 
   const [showConfirm, setShowConfirm] = useState(false)
   const [showGigaPlannerTools, setShowGigaPlannerTools] = useState(false)
@@ -38,18 +39,21 @@ export function BuildPage() {
 
   // Handle GigaPlanner import
   const handleGigaPlannerImport = (importedBuildState: BuildState) => {
+    console.log('GigaPlanner import received:', importedBuildState)
+
     // Update the build state with imported data
     updateBuild({
       // Basic info
       name: importedBuildState.name || build.name,
       notes: importedBuildState.notes || build.notes,
 
-      // Race and birthsign
+      // Race and standing stone
       race: importedBuildState.race || build.race,
-      birthsign: importedBuildState.birthsign || build.birthsign,
+      stone: importedBuildState.stone || build.stone,
 
       // Attributes
-      attributes: importedBuildState.attributes || build.attributes,
+      attributeAssignments:
+        importedBuildState.attributeAssignments || build.attributeAssignments,
 
       // Skills
       skills: importedBuildState.skills || build.skills,
@@ -71,6 +75,7 @@ export function BuildPage() {
       destinyPath: importedBuildState.destinyPath || build.destinyPath,
     })
 
+    console.log('Build updated with imported data')
     setShowGigaPlannerTools(false)
   }
 

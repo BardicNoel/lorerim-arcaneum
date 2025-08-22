@@ -90,10 +90,11 @@ describe('Transformation Utilities', () => {
         stone: 'Warrior',
         favoriteBlessing: 'Blessing of Akatosh',
         attributeAssignments: {
-          level: 50,
           health: 11, // 10 + 1 from Oghma choice
-          magicka: 5,
           stamina: 5,
+          magicka: 5,
+          level: 50,
+          assignments: {},
         },
         skillLevels: {
           Smithing: 100,
@@ -130,10 +131,11 @@ describe('Transformation Utilities', () => {
         stone: undefined,
         favoriteBlessing: undefined,
         attributeAssignments: {
-          level: 1,
           health: 0,
-          magicka: 0,
           stamina: 0,
+          magicka: 0,
+          level: 1,
+          assignments: {},
         },
         skillLevels: undefined,
         perks: undefined,

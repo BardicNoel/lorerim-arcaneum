@@ -77,10 +77,11 @@ export class AdvancedGigaPlannerTransformer {
 
       // Transform attribute assignments
       const attributeAssignments = {
-        level: gigaPlannerCharacter.level,
         health: gigaPlannerCharacter.hmsIncreases.health,
-        magicka: gigaPlannerCharacter.hmsIncreases.magicka,
         stamina: gigaPlannerCharacter.hmsIncreases.stamina,
+        magicka: gigaPlannerCharacter.hmsIncreases.magicka,
+        level: gigaPlannerCharacter.level,
+        assignments: {} as Record<number, 'health' | 'stamina' | 'magicka'>,
       }
 
       // Add Oghma choice to attribute assignments if not 'None'
