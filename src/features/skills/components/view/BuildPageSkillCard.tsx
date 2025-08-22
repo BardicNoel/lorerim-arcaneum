@@ -192,6 +192,14 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
 
               <div className="flex items-center gap-2 flex-wrap">
                 <SkillLevelBadge level={minLevel} size="sm" />
+                {skill.startingLevel > 0 && (
+                  <Badge
+                    variant="outline"
+                    className="text-xs bg-green-100 text-green-800 border-green-300"
+                  >
+                    Starting: {skill.startingLevel}
+                  </Badge>
+                )}
                 <Badge variant="outline" className={badgeClasses}>
                   {selectedPerks.length}/{totalPerks} perks
                 </Badge>
@@ -376,8 +384,10 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
         {/* Instructions */}
         <div className="mt-6 p-4 bg-muted/50 rounded-lg">
           <p className="text-sm text-muted-foreground">
-            Click on any skill card to view and manage its perk tree. Skill
-            levels show the minimum level required by your selected perks.
+            Click on any skill card to view and manage its perk tree. Min levels
+            show the minimum level required by your selected perks. Starting
+            levels show your base skill level from race bonuses and major/minor
+            assignments.
           </p>
         </div>
       </SelectionCardShell>

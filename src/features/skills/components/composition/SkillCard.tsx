@@ -1,6 +1,5 @@
 import type { Skill } from '@/features/skills/types'
 import { cn } from '@/lib/utils'
-import { SkillAvatar } from '../atomic/SkillAvatar'
 import {
   SelectionCard,
   type SelectionOption,
@@ -12,7 +11,6 @@ interface SkillCardProps {
   skill: Skill
   skillLevel: SkillLevel
   onSkillLevelChange: (skillId: string, level: SkillLevel) => void
-  compact?: boolean
   showCategory?: boolean
   className?: string
   majorCount?: number
@@ -25,7 +23,6 @@ export function SkillCard({
   skill,
   skillLevel,
   onSkillLevelChange,
-  compact = false,
   showCategory = true,
   className,
   majorCount = 0,
@@ -100,78 +97,16 @@ export function SkillCard({
     },
   ]
 
-  const getCardTheming = (selectedValue: string | undefined) => {
-    if (selectedValue === 'primary') {
-      return {
-        card: 'border-skyrim-gold bg-skyrim-gold/5',
-        title: 'text-skyrim-dark',
-        description: 'text-skyrim-dark/70',
-      }
-    }
-    if (selectedValue === 'secondary') {
-      return {
-        card: 'border-gray-500 bg-gray-500/5',
-        title: 'text-gray-700',
-        description: 'text-gray-600',
-      }
-    }
-    return {
-      card: 'border-gray-200 hover:border-gray-300',
-      title: 'text-gray-900',
-      description: 'text-gray-600',
-    }
-  }
-
-  const theming = getCardTheming(currentSkillLevel)
-
   return (
     <SelectionCard
+      title={skill.name}
+      description={skill.description}
       options={options}
-      value={currentSkillLevel}
+      selectedValue={currentSkillLevel}
       onValueChange={handleLevelChange}
-      className={cn('transition-all duration-200', theming.card, className)}
-    >
-      <div className="space-y-2">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <SkillAvatar
-                skillName={skill.name}
-                size="2xl"
-                className="flex-shrink-0"
-              />
-              <h3
-                className={cn(
-                  'font-semibold text-sm leading-tight',
-                  theming.title
-                )}
-              >
-                {skill.name}
-              </h3>
-            </div>
-            {!compact && (
-              <p
-                className={cn('text-xs mt-1 line-clamp-2', theming.description)}
-              >
-                {skill.description}
-              </p>
-            )}
-          </div>
-          {showCategory && skill.category && (
-            <span className="text-xs text-gray-500 flex-shrink-0">
-              {skill.category}
-            </span>
-          )}
-        </div>
-
-        {!compact && skill.keyAbilities && skill.keyAbilities.length > 0 && (
-          <div className="text-xs text-gray-500">
-            <span className="font-medium">Key abilities:</span>{' '}
-            {skill.keyAbilities.slice(0, 2).join(', ')}
-            {skill.keyAbilities.length > 2 && '...'}
-          </div>
-        )}
-      </div>
-    </SelectionCard>
+      className={cn('transition-all duration-200', className)}
+      showCategory={showCategory}
+      category={skill.category}
+    />
   )
 }

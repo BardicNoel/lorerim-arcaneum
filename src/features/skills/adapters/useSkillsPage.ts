@@ -30,27 +30,33 @@ export interface SkillSummary {
   totalPerkRanks: number
 }
 
-// Adapter for skills page (combines reference + assignment + transformation)
-export function useSkillsPage() {
-  // Get base skill data
-  const {
-    skills,
-    perkTrees: perkTreesData,
-    loading,
-    error,
-    refreshSkills,
-  } = useSkillData()
+// ============================================================================
+// Skills Page Adapter
+// ============================================================================
+// Combines skill data, character build state, and provides calculated levels
+// Handles skill assignment, perk management, and filtering functionality
 
-  // Get character build state
+export function useSkillsPage() {
+  // ============================================================================
+  // Data Sources
+  // ============================================================================
+
+  // Get base skill data from store
+  const { skills, loading, error, refreshSkills } = useSkillData()
+
+  // Get character build state and assignment functions
   const {
     build,
     addMajorSkill,
     addMinorSkill,
     removeMajorSkill,
     removeMinorSkill,
+    addPerk,
+    removePerk,
+    setPerkRank,
   } = useCharacterBuild()
 
-  // Apply filters to skills
+  // Apply search and category filters
   const {
     searchQuery,
     setSearchQuery,
@@ -61,29 +67,27 @@ export function useSkillsPage() {
     clearFilters,
   } = useSkillFilters(skills)
 
-  // Transform skills for skills page display
+  // Transform skills with calculated level properties
   const skillsPageSkills = useMemo(() => {
     return filteredSkills.map(skill => {
-      // Get actual selected perks count from character build store
       const selectedPerks = build.perks?.selected?.[skill.id] || []
       const selectedPerksCount = selectedPerks.length
       const totalPerks = skill.totalPerks ?? 0
 
-      // Calculate separate level components
+      // Calculate level components separately
       const startingLevel = calculateStartingSkillLevel(skill.id, build)
       const minLevel = calculateMinimumSkillLevel(
         skill.id,
         selectedPerks,
         build.perks?.ranks || {}
       )
-      const totalLevel = startingLevel + minLevel
 
       return {
         ...skill,
-        selectedPerksCount, // Update the selected perks count
-        level: totalLevel, // Total skill level (starting + min level)
-        startingLevel, // Starting level (race bonus + major/minor bonuses)
-        minLevel, // Minimum level required by selected perks
+        selectedPerksCount,
+        level: startingLevel + minLevel, // Total skill level
+        startingLevel, // Base level from race + major/minor
+        minLevel, // Minimum level from selected perks
         assignmentType: build.skills.major.includes(skill.id)
           ? ('major' as const)
           : build.skills.minor.includes(skill.id)
@@ -98,13 +102,17 @@ export function useSkillsPage() {
         perkCount: `${selectedPerksCount}/${totalPerks}`,
       } as SkillsPageSkill
     })
-  }, [
-    filteredSkills,
-    build, // Include full build object for starting skill level calculations
-  ])
+  }, [filteredSkills, build])
 
-  // Compute skill summary
-  const skillSummary = useMemo(() => {
+  // ============================================================================
+  // Skill Summary Calculation
+  // ============================================================================
+  const skillSummary = useMemo((): SkillSummary => {
+    const totalSelectedPerks = skillsPageSkills.reduce(
+      (sum, skill) => sum + (skill.selectedPerksCount || 0),
+      0
+    )
+
     return {
       majorCount: build.skills.major.length,
       minorCount: build.skills.minor.length,
@@ -113,15 +121,14 @@ export function useSkillsPage() {
       canAssignMajor: build.skills.major.length < 3,
       canAssignMinor: build.skills.minor.length < 6,
       totalSkills: skillsPageSkills.length,
-      totalPerks: skillsPageSkills.reduce(
-        (sum, skill) => sum + (skill.selectedPerksCount || 0),
-        0
-      ),
-      totalPerkRanks: 0, // Not tracked in this mapping
-    } as SkillSummary
+      totalPerks: totalSelectedPerks,
+      totalPerkRanks: 0, // Perk ranks not currently tracked
+    }
   }, [skillsPageSkills, build.skills.major, build.skills.minor])
 
-  // Assignment handlers
+  // ============================================================================
+  // Action Handlers
+  // ============================================================================
   const handleAssignMajor = useCallback(
     (skillId: string) => {
       addMajorSkill(skillId)
@@ -144,6 +151,10 @@ export function useSkillsPage() {
     [removeMajorSkill, removeMinorSkill]
   )
 
+  // ============================================================================
+  // Skill Selection & Perk Management
+  // ============================================================================
+
   // Skill selection state
   const [selectedSkillId, setSelectedSkillId] = useState<string | null>(null)
 
@@ -158,12 +169,7 @@ export function useSkillsPage() {
   }, [selectedSkillId, skillsPageSkills])
 
   // Use perk data adapter for the selected skill
-  const {
-    selectedPerkTree,
-    loading: perkLoading,
-    error: perkError,
-    handleResetPerks,
-  } = usePerkData(selectedSkillId)
+  const { selectedPerkTree, handleResetPerks } = usePerkData(selectedSkillId)
 
   // Get selected perks for the selected skill
   const selectedPerks = useMemo(() => {
@@ -188,52 +194,49 @@ export function useSkillsPage() {
     (perkId: string) => {
       if (!selectedSkill) return
 
-      // Toggle perk selection
-      const currentSelected = build.perks?.selected?.[selectedSkill.id] || []
-      const isSelected = currentSelected.includes(perkId)
-
+      // Toggle perk selection using the character build functions
+      const isSelected = selectedPerks.includes(perkId)
       if (isSelected) {
-        // Remove perk
-        const newSelected = currentSelected.filter(id => id !== perkId)
-        // Update build state (you'll need to implement this)
+        removePerk(selectedSkill.id, perkId)
       } else {
-        // Add perk
-        const newSelected = [...currentSelected, perkId]
-        // Update build state (you'll need to implement this)
+        addPerk(selectedSkill.id, perkId)
       }
     },
-    [selectedSkill, build.perks?.selected]
+    [selectedSkill, selectedPerks, addPerk, removePerk]
   )
 
   const handlePerkRankChange = useCallback(
     (perkId: string, rank: number) => {
       if (!selectedSkill) return
 
-      // Update perk rank
-      const currentRanks = build.perks?.ranks?.[selectedSkill.id] || {}
-      const newRanks = { ...currentRanks, [perkId]: rank }
-
-      // Update build state (you'll need to implement this)
+      // Update perk rank using the character build function
+      setPerkRank(perkId, rank)
     },
-    [selectedSkill, build.perks?.ranks]
+    [selectedSkill, setPerkRank]
   )
 
+  // ============================================================================
+  // Return Interface
+  // ============================================================================
+
   return {
-    // Data
+    // Skills data with calculated levels
     skills: skillsPageSkills,
     skillSummary,
     selectedSkill,
     selectedSkillId,
+
+    // Perk tree data for selected skill
     perkTree: selectedPerkTree,
     selectedPerks,
     perkRanks,
     availablePerks,
 
-    // State
+    // Loading states
     loading,
     error,
 
-    // Filters
+    // Filter controls
     searchQuery,
     setSearchQuery,
     selectedCategory,
@@ -241,11 +244,13 @@ export function useSkillsPage() {
     categories,
     clearFilters,
 
-    // Actions
+    // Skill assignment actions
     onAssignMajor: handleAssignMajor,
     onAssignMinor: handleAssignMinor,
     onRemoveAssignment: handleRemoveAssignment,
     onSkillSelect: handleSkillSelect,
+
+    // Perk management actions
     onPerkSelect: handlePerkSelect,
     onPerkRankChange: handlePerkRankChange,
     onResetPerks: handleResetPerks,

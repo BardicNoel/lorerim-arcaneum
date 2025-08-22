@@ -1,4 +1,3 @@
-import React from 'react'
 import { cn } from '@/lib/utils'
 import { SkillItem } from '../atomic/SkillItem'
 
@@ -10,7 +9,8 @@ interface Skill {
   category: string
   assignmentType: 'major' | 'minor' | 'none'
   perkCount: string
-  level?: number
+  minLevel?: number
+  startingLevel?: number
   canAssignMajor: boolean
   canAssignMinor: boolean
 }
@@ -25,18 +25,23 @@ interface SkillGridProps {
   className?: string
 }
 
-export function SkillGrid({ 
-  skills, 
-  onSkillSelect, 
+export function SkillGrid({
+  skills,
+  onSkillSelect,
   onAssignMajor,
   onAssignMinor,
   onRemoveAssignment,
-  selectedSkillId, 
-  className 
+  selectedSkillId,
+  className,
 }: SkillGridProps) {
   return (
-    <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4", className)}>
-      {skills.map((skill) => (
+    <div
+      className={cn(
+        'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4',
+        className
+      )}
+    >
+      {skills.map(skill => (
         <SkillItem
           key={skill.id}
           name={skill.name}
@@ -44,15 +49,26 @@ export function SkillGrid({
           category={skill.category}
           assignmentType={skill.assignmentType}
           perkCount={skill.perkCount}
-          level={skill.level}
+          minLevel={skill.minLevel}
+          startingLevel={skill.startingLevel}
           canAssignMajor={skill.canAssignMajor}
           canAssignMinor={skill.canAssignMinor}
           onSelect={() => onSkillSelect(skill.id)}
-          onMajorClick={e => { e.preventDefault(); onAssignMajor(skill.id); }}
-          onMinorClick={e => { e.preventDefault(); onAssignMinor(skill.id); }}
-          className={selectedSkillId === skill.id ? "ring-2 ring-primary bg-primary/5" : ""}
+          onMajorClick={e => {
+            e.preventDefault()
+            onAssignMajor(skill.id)
+          }}
+          onMinorClick={e => {
+            e.preventDefault()
+            onAssignMinor(skill.id)
+          }}
+          className={
+            selectedSkillId === skill.id
+              ? 'ring-2 ring-primary bg-primary/5'
+              : ''
+          }
         />
       ))}
     </div>
   )
-} 
+}
