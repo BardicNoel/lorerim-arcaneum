@@ -1,10 +1,11 @@
 import { cn } from '@/lib/utils'
+import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import {
   SkillAssignmentBadge,
+  SkillAvatar,
   SkillCategoryBadge,
   SkillPerkCountBadge,
-  SkillAvatar,
 } from './index'
 import { SkillLevelBadge } from './SkillLevelBadge'
 
@@ -15,7 +16,8 @@ interface SkillItemProps {
   category: string
   assignmentType: 'major' | 'minor' | 'none'
   perkCount: string
-  level?: number
+  minLevel?: number
+  startingLevel?: number
   onSelect: () => void
   onMajorClick: (e: React.MouseEvent) => void
   onMinorClick: (e: React.MouseEvent) => void
@@ -30,7 +32,8 @@ export function SkillItem({
   category,
   assignmentType,
   perkCount,
-  level,
+  minLevel,
+  startingLevel,
   onSelect,
   onMajorClick,
   onMinorClick,
@@ -58,11 +61,7 @@ export function SkillItem({
     >
       <div className="flex justify-between items-start mb-2">
         <div className="flex items-center gap-3">
-          <SkillAvatar
-            skillName={name}
-            size="2xl"
-            className="flex-shrink-0"
-          />
+          <SkillAvatar skillName={name} size="2xl" className="flex-shrink-0" />
           <h3 className="font-semibold text-lg cursor-pointer">{name}</h3>
         </div>
         <SkillAssignmentBadge type={assignmentType} />
@@ -73,8 +72,16 @@ export function SkillItem({
       <div className="flex gap-2 flex-wrap mb-4">
         <SkillCategoryBadge category={category} />
         <SkillPerkCountBadge count={perkCount} />
-        {typeof level === 'number' && level > 0 && (
-          <SkillLevelBadge level={level} />
+        {typeof minLevel === 'number' && minLevel > 0 && (
+          <SkillLevelBadge level={minLevel} />
+        )}
+        {typeof startingLevel === 'number' && startingLevel > 0 && (
+          <Badge
+            variant="outline"
+            className="text-xs bg-green-100 text-green-800 border-green-300"
+          >
+            Starting: {startingLevel}
+          </Badge>
         )}
       </div>
 

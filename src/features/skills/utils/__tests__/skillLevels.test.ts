@@ -366,3 +366,46 @@ describe('skillLevels', () => {
     })
   })
 })
+
+// Integration test to verify the complete skill level system works correctly
+describe('Skill Level System Integration', () => {
+  it('should correctly calculate starting skill levels for major and minor skills', () => {
+    const build = {
+      race: null, // No race to avoid race bonus complexity in test
+      skills: { major: ['AVSmithing', 'AVAlchemy'], minor: ['AVEnchanting'] },
+      perks: { selected: {}, ranks: {} }, // No perks to avoid perk requirement complexity
+    } as any
+
+    const smithingStarting = calculateStartingSkillLevel('AVSmithing', build)
+    const alchemyStarting = calculateStartingSkillLevel('AVAlchemy', build)
+    const enchantingStarting = calculateStartingSkillLevel(
+      'AVEnchanting',
+      build
+    )
+    const unassignedStarting = calculateStartingSkillLevel('AVOneHanded', build)
+
+    const smithingTotal = calculateTotalSkillLevel('AVSmithing', build)
+    const alchemyTotal = calculateTotalSkillLevel('AVAlchemy', build)
+    const enchantingTotal = calculateTotalSkillLevel('AVEnchanting', build)
+    const unassignedTotal = calculateTotalSkillLevel('AVOneHanded', build)
+
+    // Verify starting levels (no race bonus)
+    expect(smithingStarting).toBe(10) // Major skill gives +10
+    expect(alchemyStarting).toBe(10) // Major skill gives +10
+    expect(enchantingStarting).toBe(5) // Minor skill gives +5
+    expect(unassignedStarting).toBe(0) // Unassigned skill gives +0
+
+    // Verify total levels equal starting levels when no perks are selected
+    expect(smithingTotal).toBe(10) // Starting level only
+    expect(alchemyTotal).toBe(10) // Starting level only
+    expect(enchantingTotal).toBe(5) // Starting level only
+    expect(unassignedTotal).toBe(0) // Starting level only
+
+    // Verify that major skills have higher levels than minor skills
+    expect(smithingStarting).toBeGreaterThan(enchantingStarting)
+    expect(alchemyStarting).toBeGreaterThan(enchantingStarting)
+
+    // Verify that assigned skills have higher levels than unassigned skills
+    expect(enchantingStarting).toBeGreaterThan(unassignedStarting)
+  })
+})

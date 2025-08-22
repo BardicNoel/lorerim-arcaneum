@@ -48,6 +48,7 @@ interface PerkTree {
 
 import { usePerkTreesStore } from '@/shared/stores/perkTreesStore'
 import { useRacesStore } from '@/shared/stores/racesStore'
+import { useSkillsStore } from '@/shared/stores/skillsStore'
 import type { BuildState } from '@/shared/types/build'
 
 /**
@@ -62,6 +63,24 @@ function getPerkTreesData(): PerkTree[] {
  */
 function getRacesData() {
   return useRacesStore.getState().data
+}
+
+/**
+ * Get skill display name from skill ID
+ */
+function getSkillDisplayName(skillId: string): string {
+  const skillsData = useSkillsStore.getState().data
+  const skill = skillsData.find(s => s.edid === skillId)
+  return skill?.name || skillId
+}
+
+/**
+ * Get skill ID from display name
+ */
+function getSkillIdFromDisplayName(displayName: string): string {
+  const skillsData = useSkillsStore.getState().data
+  const skill = skillsData.find(s => s.name === displayName)
+  return skill?.edid || displayName
 }
 
 /**
@@ -83,8 +102,10 @@ export function calculateStartingSkillLevel(
     const selectedRace = races.find(race => race.edid === build.race)
 
     if (selectedRace?.skillBonuses) {
+      // Convert skill ID to display name for race bonus lookup
+      const skillDisplayName = getSkillDisplayName(skillId)
       const raceBonus = selectedRace.skillBonuses.find(
-        bonus => bonus.skill === skillId
+        bonus => bonus.skill === skillDisplayName
       )
       if (raceBonus) {
         startingLevel += raceBonus.bonus
