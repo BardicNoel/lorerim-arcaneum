@@ -118,3 +118,29 @@ export function getBlessingNameFromEdid(edid: string): string | null {
   const entry = Object.entries(BLESSING_NAME_TO_EDID).find(([_, value]) => value === edid);
   return entry ? entry[0] : null;
 }
+
+export const GAME_MECHANICS_NAME_TO_ID: Record<string, number> = {
+  'LoreRim v4': 0,
+  // Future game mechanics will be added here
+  // 'Vanilla': 1,
+  // 'Requiem': 2,
+  // 'Ordinator': 3,
+};
+
+export function getGameMechanicsId(mechanicsName: string): number {
+  return GAME_MECHANICS_NAME_TO_ID[mechanicsName] ?? 0;
+}
+
+export function getGameMechanicsNameFromId(mechanicsId: number): string | null {
+  const entry = Object.entries(GAME_MECHANICS_NAME_TO_ID).find(([_, id]) => id === mechanicsId);
+  return entry ? entry[0] : null;
+}
+
+export function getGameMechanicsIdFromStringId(stringId: string): string | null {
+  // Map from string ID back to name, then to numeric ID
+  const idToNameMap: Record<string, string> = {
+    'lorerim-v4': 'LoreRim v4',
+  };
+  
+  return idToNameMap[stringId] || null;
+}

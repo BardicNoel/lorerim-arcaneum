@@ -5,7 +5,11 @@ import {
   getRaceNameFromEdid,
   STANDING_STONE_NAME_TO_EDID,
   getStandingStoneEdid,
-  getStandingStoneNameFromEdid
+  getStandingStoneNameFromEdid,
+  GAME_MECHANICS_NAME_TO_ID,
+  getGameMechanicsId,
+  getGameMechanicsNameFromId,
+  getGameMechanicsIdFromStringId
 } from '../mappings';
 
 describe('Race EDID Mappings', () => {
@@ -192,6 +196,80 @@ describe('Standing Stone EDID Mappings', () => {
         const stoneName = getStandingStoneNameFromEdid(edid);
         const mappedEdid = getStandingStoneEdid(stoneName!);
         expect(mappedEdid).toBe(edid);
+      }
+    });
+  });
+});
+
+describe('Game Mechanics ID Mappings', () => {
+  describe('GAME_MECHANICS_NAME_TO_ID', () => {
+    it('should contain all expected game mechanics mappings', () => {
+      const expectedMappings = {
+        'LoreRim v4': 0,
+      };
+
+      expect(GAME_MECHANICS_NAME_TO_ID).toEqual(expectedMappings);
+    });
+
+    it('should have 1 game mechanics mapping', () => {
+      expect(Object.keys(GAME_MECHANICS_NAME_TO_ID)).toHaveLength(1);
+    });
+  });
+
+  describe('getGameMechanicsId', () => {
+    it('should return correct ID for known game mechanics names', () => {
+      expect(getGameMechanicsId('LoreRim v4')).toBe(0);
+    });
+
+    it('should return 0 (default) for unknown game mechanics names', () => {
+      expect(getGameMechanicsId('UnknownMechanics')).toBe(0);
+      expect(getGameMechanicsId('')).toBe(0);
+      expect(getGameMechanicsId('lorerim v4')).toBe(0); // Case sensitive
+    });
+  });
+
+  describe('getGameMechanicsNameFromId', () => {
+    it('should return correct game mechanics name for known IDs', () => {
+      expect(getGameMechanicsNameFromId(0)).toBe('LoreRim v4');
+    });
+
+    it('should return null for unknown IDs', () => {
+      expect(getGameMechanicsNameFromId(1)).toBeNull();
+      expect(getGameMechanicsNameFromId(-1)).toBeNull();
+      expect(getGameMechanicsNameFromId(999)).toBeNull();
+    });
+  });
+
+  describe('getGameMechanicsIdFromStringId', () => {
+    it('should return correct name for known string IDs', () => {
+      expect(getGameMechanicsIdFromStringId('lorerim-v4')).toBe('LoreRim v4');
+    });
+
+    it('should return null for unknown string IDs', () => {
+      expect(getGameMechanicsIdFromStringId('unknown-mechanics')).toBeNull();
+      expect(getGameMechanicsIdFromStringId('')).toBeNull();
+      expect(getGameMechanicsIdFromStringId('LoreRim v4')).toBeNull(); // Wrong format
+    });
+  });
+
+  describe('bidirectional mapping consistency', () => {
+    it('should maintain consistency between getGameMechanicsId and getGameMechanicsNameFromId', () => {
+      const mechanicsNames = Object.keys(GAME_MECHANICS_NAME_TO_ID);
+      
+      for (const mechanicsName of mechanicsNames) {
+        const id = getGameMechanicsId(mechanicsName);
+        const mappedMechanicsName = getGameMechanicsNameFromId(id);
+        expect(mappedMechanicsName).toBe(mechanicsName);
+      }
+    });
+
+    it('should maintain consistency in reverse direction', () => {
+      const ids = Object.values(GAME_MECHANICS_NAME_TO_ID);
+      
+      for (const id of ids) {
+        const mechanicsName = getGameMechanicsNameFromId(id);
+        const mappedId = getGameMechanicsId(mechanicsName!);
+        expect(mappedId).toBe(id);
       }
     });
   });

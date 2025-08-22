@@ -36,11 +36,38 @@ export interface GigaPlannerBlessing {
   category: string; // "Divine", "Daedric", "Elven", "Tribunal", "Yokudan", "Khajiiti", "Miscellaneous"
 }
 
+export interface GigaPlannerGameMechanics {
+  id: string;
+  name: string;
+  gameId: number; // The original numeric ID from the source
+  description: string;
+  version: string;
+  initialPerks: number;
+  oghmaData: {
+    perksGiven: number;
+    hmsGiven: [number, number, number]; // [Health, Magicka, Stamina]
+  };
+  leveling: {
+    base: number;
+    mult: number;
+    hmsGiven: [number, number, number]; // [Health, Magicka, Stamina]
+  };
+  derivedAttributes: {
+    attribute: string[];
+    isPercent: boolean[];
+    prefactor: number[];
+    threshold: number[];
+    weight_health: number[];
+    weight_magicka: number[];
+    weight_stamina: number[];
+  };
+}
+
 export interface GigaPlannerData {
   races: GigaPlannerRace[];
   standingStones: GigaPlannerStandingStone[];
   blessings: GigaPlannerBlessing[];
+  gameMechanics: GigaPlannerGameMechanics[];
   perks?: any; // Will be defined later
-  gameMechanics?: any; // Will be defined later
   presets?: any; // Will be defined later
 }

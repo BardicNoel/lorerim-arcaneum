@@ -1,22 +1,27 @@
-import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
-import { GigaPlannerDataLoader } from '../dataLoader';
-import type { GigaPlannerRace, GigaPlannerStandingStone } from '../../types/data';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import type {
+  GigaPlannerBlessing,
+  GigaPlannerGameMechanics,
+  GigaPlannerRace,
+  GigaPlannerStandingStone,
+} from '../../types/data'
+import { GigaPlannerDataLoader } from '../dataLoader'
 
 // Mock fetch globally
-const mockFetch = vi.fn();
-global.fetch = mockFetch;
+const mockFetch = vi.fn()
+global.fetch = mockFetch
 
 describe('GigaPlannerDataLoader', () => {
-  let loader: GigaPlannerDataLoader;
+  let loader: GigaPlannerDataLoader
 
   beforeEach(() => {
-    loader = new GigaPlannerDataLoader();
-    vi.clearAllMocks();
-  });
+    loader = new GigaPlannerDataLoader()
+    vi.clearAllMocks()
+  })
 
   afterEach(() => {
-    loader.clearCache();
-  });
+    loader.clearCache()
+  })
 
   describe('loadRaces', () => {
     const mockRaces: GigaPlannerRace[] = [
@@ -28,60 +33,69 @@ describe('GigaPlannerDataLoader', () => {
         startingCW: 200,
         speedBonus: 0,
         hmsBonus: [0, 0, 0],
-        startingHMSRegen: [0.20, 1.10, 1.60],
+        startingHMSRegen: [0.2, 1.1, 1.6],
         unarmedDam: 32,
-        startingSkills: [0, 0, 0, 0, 10, 0, 10, 10, 10, 0, 0, 15, 0, 0, 0, 10, 0, 0, 1, 0],
+        startingSkills: [
+          0, 0, 0, 0, 10, 0, 10, 10, 10, 0, 0, 15, 0, 0, 0, 10, 0, 0, 1, 0,
+        ],
         description: 'Argonians are the reptilian denizens of Black Marsh...',
-        bonus: '• Waterbreathing: Your Argonian lungs can breathe underwater...',
+        bonus:
+          '• Waterbreathing: Your Argonian lungs can breathe underwater...',
       },
-    ];
+    ]
 
     it('should load races data successfully', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => mockRaces,
-      } as Response);
+      } as Response)
 
-      const result = await loader.loadRaces();
+      const result = await loader.loadRaces()
 
-      expect(result).toEqual(mockRaces);
-      expect(mockFetch).toHaveBeenCalledWith('/src/features/gigaplanner/data/races.json');
-    });
+      expect(result).toEqual(mockRaces)
+      expect(mockFetch).toHaveBeenCalledWith(
+        '/src/features/gigaplanner/data/races.json'
+      )
+    })
 
     it('should cache races data after first load', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => mockRaces,
-      } as Response);
+      } as Response)
 
       // First load
-      await loader.loadRaces();
-      
-      // Second load should use cache
-      const result = await loader.loadRaces();
+      await loader.loadRaces()
 
-      expect(result).toEqual(mockRaces);
-      expect(mockFetch).toHaveBeenCalledTimes(1); // Only called once due to caching
-    });
+      // Second load should use cache
+      const result = await loader.loadRaces()
+
+      expect(result).toEqual(mockRaces)
+      expect(mockFetch).toHaveBeenCalledTimes(1) // Only called once due to caching
+    })
 
     it('should throw error when fetch fails', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 404,
         statusText: 'Not Found',
-      } as Response);
+      } as Response)
 
-      await expect(loader.loadRaces()).rejects.toThrow('Failed to load races data: 404 Not Found');
-    });
+      await expect(loader.loadRaces()).rejects.toThrow(
+        'Failed to load races data: 404 Not Found'
+      )
+    })
 
     it('should throw error when response is not an array', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ races: mockRaces }),
-      } as Response);
+      } as Response)
 
-      await expect(loader.loadRaces()).rejects.toThrow('Races data is not an array');
-    });
+      await expect(loader.loadRaces()).rejects.toThrow(
+        'Races data is not an array'
+      )
+    })
 
     it('should throw error when race data is invalid', async () => {
       const invalidRaces = [
@@ -93,21 +107,26 @@ describe('GigaPlannerDataLoader', () => {
           startingCW: 200,
           speedBonus: 0,
           hmsBonus: [0, 0, 0],
-          startingHMSRegen: [0.20, 1.10, 1.60],
+          startingHMSRegen: [0.2, 1.1, 1.6],
           unarmedDam: 32,
-          startingSkills: [0, 0, 0, 0, 10, 0, 10, 10, 10, 0, 0, 15, 0, 0, 0, 10, 0, 0, 1, 0],
+          startingSkills: [
+            0, 0, 0, 0, 10, 0, 10, 10, 10, 0, 0, 15, 0, 0, 0, 10, 0, 0, 1, 0,
+          ],
           description: 'Argonians are the reptilian denizens of Black Marsh...',
-          bonus: '• Waterbreathing: Your Argonian lungs can breathe underwater...',
+          bonus:
+            '• Waterbreathing: Your Argonian lungs can breathe underwater...',
         },
-      ];
+      ]
 
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => invalidRaces,
-      } as Response);
+      } as Response)
 
-      await expect(loader.loadRaces()).rejects.toThrow('Invalid race data: missing required fields for Argonian');
-    });
+      await expect(loader.loadRaces()).rejects.toThrow(
+        'Invalid race data: missing required fields for Argonian'
+      )
+    })
 
     it('should throw error when startingHMS is invalid', async () => {
       const invalidRaces = [
@@ -115,32 +134,38 @@ describe('GigaPlannerDataLoader', () => {
           ...mockRaces[0],
           startingHMS: [140, 120], // Only 2 numbers instead of 3
         },
-      ];
+      ]
 
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => invalidRaces,
-      } as Response);
+      } as Response)
 
-      await expect(loader.loadRaces()).rejects.toThrow('Invalid race data: startingHMS must be array of 3 numbers for Argonian');
-    });
+      await expect(loader.loadRaces()).rejects.toThrow(
+        'Invalid race data: startingHMS must be array of 3 numbers for Argonian'
+      )
+    })
 
     it('should throw error when startingSkills is invalid', async () => {
       const invalidRaces = [
         {
           ...mockRaces[0],
-          startingSkills: [0, 0, 0, 0, 10, 0, 10, 10, 10, 0, 0, 15, 0, 0, 0, 10, 0, 0, 1], // Only 19 numbers instead of 20
+          startingSkills: [
+            0, 0, 0, 0, 10, 0, 10, 10, 10, 0, 0, 15, 0, 0, 0, 10, 0, 0, 1,
+          ], // Only 19 numbers instead of 20
         },
-      ];
+      ]
 
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => invalidRaces,
-      } as Response);
+      } as Response)
 
-      await expect(loader.loadRaces()).rejects.toThrow('Invalid race data: startingSkills must be array of 20 numbers for Argonian');
-    });
-  });
+      await expect(loader.loadRaces()).rejects.toThrow(
+        'Invalid race data: startingSkills must be array of 20 numbers for Argonian'
+      )
+    })
+  })
 
   describe('loadStandingStones', () => {
     const mockStandingStones: GigaPlannerStandingStone[] = [
@@ -149,57 +174,64 @@ describe('GigaPlannerDataLoader', () => {
         name: 'Warrior',
         edid: 'REQ_Ability_Birthsign_Warrior',
         group: 'The Warrior is the first Guardian Constellation...',
-        description: 'Those under the sign of the Warrior have increased strength and endurance.',
+        description:
+          'Those under the sign of the Warrior have increased strength and endurance.',
         bonus: 'Health increases by 50, all weapons deal 10% more damage...',
       },
-    ];
+    ]
 
     it('should load standing stones data successfully', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => mockStandingStones,
-      } as Response);
+      } as Response)
 
-      const result = await loader.loadStandingStones();
+      const result = await loader.loadStandingStones()
 
-      expect(result).toEqual(mockStandingStones);
-      expect(mockFetch).toHaveBeenCalledWith('/src/features/gigaplanner/data/standingStones.json');
-    });
+      expect(result).toEqual(mockStandingStones)
+      expect(mockFetch).toHaveBeenCalledWith(
+        '/src/features/gigaplanner/data/standingStones.json'
+      )
+    })
 
     it('should cache standing stones data after first load', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => mockStandingStones,
-      } as Response);
+      } as Response)
 
       // First load
-      await loader.loadStandingStones();
-      
-      // Second load should use cache
-      const result = await loader.loadStandingStones();
+      await loader.loadStandingStones()
 
-      expect(result).toEqual(mockStandingStones);
-      expect(mockFetch).toHaveBeenCalledTimes(1); // Only called once due to caching
-    });
+      // Second load should use cache
+      const result = await loader.loadStandingStones()
+
+      expect(result).toEqual(mockStandingStones)
+      expect(mockFetch).toHaveBeenCalledTimes(1) // Only called once due to caching
+    })
 
     it('should throw error when fetch fails', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 404,
         statusText: 'Not Found',
-      } as Response);
+      } as Response)
 
-      await expect(loader.loadStandingStones()).rejects.toThrow('Failed to load standing stones data: 404 Not Found');
-    });
+      await expect(loader.loadStandingStones()).rejects.toThrow(
+        'Failed to load standing stones data: 404 Not Found'
+      )
+    })
 
     it('should throw error when response is not an array', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ standingStones: mockStandingStones }),
-      } as Response);
+      } as Response)
 
-      await expect(loader.loadStandingStones()).rejects.toThrow('Standing stones data is not an array');
-    });
+      await expect(loader.loadStandingStones()).rejects.toThrow(
+        'Standing stones data is not an array'
+      )
+    })
 
     it('should throw error when standing stone data is invalid', async () => {
       const invalidStones = [
@@ -208,19 +240,289 @@ describe('GigaPlannerDataLoader', () => {
           // Missing name
           edid: 'REQ_Ability_Birthsign_Warrior',
           group: 'The Warrior is the first Guardian Constellation...',
-          description: 'Those under the sign of the Warrior have increased strength and endurance.',
+          description:
+            'Those under the sign of the Warrior have increased strength and endurance.',
           bonus: 'Health increases by 50, all weapons deal 10% more damage...',
         },
-      ];
+      ]
 
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => invalidStones,
-      } as Response);
+      } as Response)
 
-      await expect(loader.loadStandingStones()).rejects.toThrow('Invalid standing stone data: missing required fields for unknown');
-    });
-  });
+      await expect(loader.loadStandingStones()).rejects.toThrow(
+        'Invalid standing stone data: missing required fields for unknown'
+      )
+    })
+  })
+
+  describe('loadBlessings', () => {
+    const mockBlessings: GigaPlannerBlessing[] = [
+      {
+        id: 'akatosh',
+        name: 'Akatosh',
+        edid: 'BlessingAkatosh',
+        shrine: 'Dragon Slayer: 15 % magic resistance',
+        follower:
+          'Father of Dragons: Attacks, spells, scrolls, shouts and enchantments are X% better against dragons (based on favor with Akatosh).',
+        devotee:
+          'Turn the Hourglass: Praying to Akatosh resets the cooldown of your most recently used shout and power.',
+        tenents:
+          'Fulfill your destiny by saving Tamriel. Raise your character level. Absorb dragon souls. Never openly break the laws of Skyrim.',
+        race: 'All',
+        starting: 'Breton / Imperial / Khajiit / Nord',
+        req: 'None',
+        category: 'Divine',
+      },
+    ]
+
+    it('should load blessings data successfully', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockBlessings,
+      } as Response)
+
+      const result = await loader.loadBlessings()
+
+      expect(result).toEqual(mockBlessings)
+      expect(mockFetch).toHaveBeenCalledWith(
+        '/src/features/gigaplanner/data/blessings.json'
+      )
+    })
+
+    it('should cache blessings data after first load', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockBlessings,
+      } as Response)
+
+      // First load
+      await loader.loadBlessings()
+
+      // Second load should use cache
+      const result = await loader.loadBlessings()
+
+      expect(result).toEqual(mockBlessings)
+      expect(mockFetch).toHaveBeenCalledTimes(1) // Only called once due to caching
+    })
+
+    it('should throw error when fetch fails', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+        statusText: 'Not Found',
+      } as Response)
+
+      await expect(loader.loadBlessings()).rejects.toThrow(
+        'Failed to load blessings data: 404 Not Found'
+      )
+    })
+
+    it('should throw error when response is not an array', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ blessings: mockBlessings }),
+      } as Response)
+
+      await expect(loader.loadBlessings()).rejects.toThrow(
+        'Blessings data is not an array'
+      )
+    })
+
+    it('should throw error when blessing data is invalid', async () => {
+      const invalidBlessings = [
+        {
+          id: 'akatosh',
+          // Missing name
+          edid: 'BlessingAkatosh',
+          shrine: 'Dragon Slayer: 15 % magic resistance',
+          follower:
+            'Father of Dragons: Attacks, spells, scrolls, shouts and enchantments are X% better against dragons (based on favor with Akatosh).',
+          devotee:
+            'Turn the Hourglass: Praying to Akatosh resets the cooldown of your most recently used shout and power.',
+          tenents:
+            'Fulfill your destiny by saving Tamriel. Raise your character level. Absorb dragon souls. Never openly break the laws of Skyrim.',
+          race: 'All',
+          starting: 'Breton / Imperial / Khajiit / Nord',
+          req: 'None',
+          category: 'Divine',
+        },
+      ]
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => invalidBlessings,
+      } as Response)
+
+      await expect(loader.loadBlessings()).rejects.toThrow(
+        'Invalid blessing data: missing required fields for unknown'
+      )
+    })
+  })
+
+  describe('loadGameMechanics', () => {
+    const mockGameMechanics: GigaPlannerGameMechanics[] = [
+      {
+        id: 'lorerim-v4',
+        name: 'LoreRim v4',
+        gameId: 0,
+        description: 'LoreRim v4 game mechanics with balanced progression, realistic combat, and lore-friendly systems designed for immersive gameplay.',
+        version: '4.0.0',
+        initialPerks: 3,
+        oghmaData: {
+          perksGiven: 3,
+          hmsGiven: [0, 0, 0],
+        },
+        leveling: {
+          base: 30,
+          mult: 0,
+          hmsGiven: [5, 5, 5],
+        },
+        derivedAttributes: {
+          attribute: ['Magic Resist', 'Magicka Regen', 'Disease Resist'],
+          isPercent: [true, true, true],
+          prefactor: [1.0, 8.0, 4.0],
+          threshold: [150, 100, 100],
+          weight_health: [0, 0, 0.4],
+          weight_magicka: [1, 1, 0],
+          weight_stamina: [0, 0, 0.6],
+        },
+      },
+    ]
+
+    it('should load game mechanics data successfully', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockGameMechanics,
+      } as Response)
+
+      const result = await loader.loadGameMechanics()
+
+      expect(result).toEqual(mockGameMechanics)
+      expect(mockFetch).toHaveBeenCalledWith(
+        '/src/features/gigaplanner/data/gameMechanics.json'
+      )
+    })
+
+    it('should cache game mechanics data after first load', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockGameMechanics,
+      } as Response)
+
+      // First load
+      await loader.loadGameMechanics()
+
+      // Second load should use cache
+      const result = await loader.loadGameMechanics()
+
+      expect(result).toEqual(mockGameMechanics)
+      expect(mockFetch).toHaveBeenCalledTimes(1) // Only called once due to caching
+    })
+
+    it('should throw error when fetch fails', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+        statusText: 'Not Found',
+      } as Response)
+
+      await expect(loader.loadGameMechanics()).rejects.toThrow(
+        'Failed to load game mechanics data: 404 Not Found'
+      )
+    })
+
+    it('should throw error when response is not an array', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ gameMechanics: mockGameMechanics }),
+      } as Response)
+
+      await expect(loader.loadGameMechanics()).rejects.toThrow(
+        'Game mechanics data is not an array'
+      )
+    })
+
+    it('should throw error when game mechanics data is invalid', async () => {
+      const invalidGameMechanics = [
+        {
+          id: 'lorerim-v4',
+          // Missing name and gameId
+          description: 'LoreRim v4 game mechanics',
+          version: '4.0.0',
+          initialPerks: 3,
+          oghmaData: {
+            perksGiven: 3,
+            hmsGiven: [0, 0, 0],
+          },
+          leveling: {
+            base: 30,
+            mult: 0,
+            hmsGiven: [5, 5, 5],
+          },
+          derivedAttributes: {
+            attribute: ['Magic Resist'],
+            isPercent: [true],
+            prefactor: [1.0],
+            threshold: [150],
+            weight_health: [0],
+            weight_magicka: [1],
+            weight_stamina: [0],
+          },
+        },
+      ]
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => invalidGameMechanics,
+      } as Response)
+
+      await expect(loader.loadGameMechanics()).rejects.toThrow(
+        'Invalid game mechanics data: missing required fields for unknown'
+      )
+    })
+
+    it('should throw error when derived attributes arrays have inconsistent lengths', async () => {
+      const invalidGameMechanics = [
+        {
+          id: 'lorerim-v4',
+          name: 'LoreRim v4',
+          gameId: 0,
+          description: 'LoreRim v4 game mechanics',
+          version: '4.0.0',
+          initialPerks: 3,
+          oghmaData: {
+            perksGiven: 3,
+            hmsGiven: [0, 0, 0],
+          },
+          leveling: {
+            base: 30,
+            mult: 0,
+            hmsGiven: [5, 5, 5],
+          },
+          derivedAttributes: {
+            attribute: ['Magic Resist', 'Magicka Regen'], // 2 items
+            isPercent: [true], // Only 1 item - inconsistent!
+            prefactor: [1.0, 8.0],
+            threshold: [150, 100],
+            weight_health: [0, 0],
+            weight_magicka: [1, 1],
+            weight_stamina: [0, 0],
+          },
+        },
+      ]
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => invalidGameMechanics,
+      } as Response)
+
+      await expect(loader.loadGameMechanics()).rejects.toThrow(
+        'Invalid game mechanics data: derivedAttributes arrays have inconsistent lengths for LoreRim v4'
+      )
+    })
+  })
 
   describe('loadAllData', () => {
     const mockRaces: GigaPlannerRace[] = [
@@ -232,13 +534,16 @@ describe('GigaPlannerDataLoader', () => {
         startingCW: 200,
         speedBonus: 0,
         hmsBonus: [0, 0, 0],
-        startingHMSRegen: [0.20, 1.10, 1.60],
+        startingHMSRegen: [0.2, 1.1, 1.6],
         unarmedDam: 32,
-        startingSkills: [0, 0, 0, 0, 10, 0, 10, 10, 10, 0, 0, 15, 0, 0, 0, 10, 0, 0, 1, 0],
+        startingSkills: [
+          0, 0, 0, 0, 10, 0, 10, 10, 10, 0, 0, 15, 0, 0, 0, 10, 0, 0, 1, 0,
+        ],
         description: 'Argonians are the reptilian denizens of Black Marsh...',
-        bonus: '• Waterbreathing: Your Argonian lungs can breathe underwater...',
+        bonus:
+          '• Waterbreathing: Your Argonian lungs can breathe underwater...',
       },
-    ];
+    ]
 
     const mockStandingStones: GigaPlannerStandingStone[] = [
       {
@@ -246,10 +551,59 @@ describe('GigaPlannerDataLoader', () => {
         name: 'Warrior',
         edid: 'REQ_Ability_Birthsign_Warrior',
         group: 'The Warrior is the first Guardian Constellation...',
-        description: 'Those under the sign of the Warrior have increased strength and endurance.',
+        description:
+          'Those under the sign of the Warrior have increased strength and endurance.',
         bonus: 'Health increases by 50, all weapons deal 10% more damage...',
       },
-    ];
+    ]
+
+    const mockBlessings: GigaPlannerBlessing[] = [
+      {
+        id: 'akatosh',
+        name: 'Akatosh',
+        edid: 'BlessingAkatosh',
+        shrine: 'Dragon Slayer: 15 % magic resistance',
+        follower:
+          'Father of Dragons: Attacks, spells, scrolls, shouts and enchantments are X% better against dragons (based on favor with Akatosh).',
+        devotee:
+          'Turn the Hourglass: Praying to Akatosh resets the cooldown of your most recently used shout and power.',
+        tenents:
+          'Fulfill your destiny by saving Tamriel. Raise your character level. Absorb dragon souls. Never openly break the laws of Skyrim.',
+        race: 'All',
+        starting: 'Breton / Imperial / Khajiit / Nord',
+        req: 'None',
+        category: 'Divine',
+      },
+    ]
+
+    const mockGameMechanics: GigaPlannerGameMechanics[] = [
+      {
+        id: 'lorerim-v4',
+        name: 'LoreRim v4',
+        gameId: 0,
+        description: 'LoreRim v4 game mechanics',
+        version: '4.0.0',
+        initialPerks: 3,
+        oghmaData: {
+          perksGiven: 3,
+          hmsGiven: [0, 0, 0],
+        },
+        leveling: {
+          base: 30,
+          mult: 0,
+          hmsGiven: [5, 5, 5],
+        },
+        derivedAttributes: {
+          attribute: ['Magic Resist'],
+          isPercent: [true],
+          prefactor: [1.0],
+          threshold: [150],
+          weight_health: [0],
+          weight_magicka: [1],
+          weight_stamina: [0],
+        },
+      },
+    ]
 
     it('should load all data successfully', async () => {
       mockFetch
@@ -260,24 +614,34 @@ describe('GigaPlannerDataLoader', () => {
         .mockResolvedValueOnce({
           ok: true,
           json: async () => mockStandingStones,
-        } as Response);
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockBlessings,
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockGameMechanics,
+        } as Response)
 
-      const result = await loader.loadAllData();
+      const result = await loader.loadAllData()
 
       expect(result).toEqual({
         races: mockRaces,
         standingStones: mockStandingStones,
-      });
-    });
-  });
+        blessings: mockBlessings,
+        gameMechanics: mockGameMechanics,
+      })
+    })
+  })
 
   describe('cache management', () => {
     it('should clear cache', () => {
-      loader.clearCache();
-      const stats = loader.getCacheStats();
-      expect(stats.size).toBe(0);
-      expect(stats.keys).toEqual([]);
-    });
+      loader.clearCache()
+      const stats = loader.getCacheStats()
+      expect(stats.size).toBe(0)
+      expect(stats.keys).toEqual([])
+    })
 
     it('should return cache statistics', async () => {
       const mockRaces: GigaPlannerRace[] = [
@@ -289,13 +653,16 @@ describe('GigaPlannerDataLoader', () => {
           startingCW: 200,
           speedBonus: 0,
           hmsBonus: [0, 0, 0],
-          startingHMSRegen: [0.20, 1.10, 1.60],
+          startingHMSRegen: [0.2, 1.1, 1.6],
           unarmedDam: 32,
-          startingSkills: [0, 0, 0, 0, 10, 0, 10, 10, 10, 0, 0, 15, 0, 0, 0, 10, 0, 0, 1, 0],
+          startingSkills: [
+            0, 0, 0, 0, 10, 0, 10, 10, 10, 0, 0, 15, 0, 0, 0, 10, 0, 0, 1, 0,
+          ],
           description: 'Argonians are the reptilian denizens of Black Marsh...',
-          bonus: '• Waterbreathing: Your Argonian lungs can breathe underwater...',
+          bonus:
+            '• Waterbreathing: Your Argonian lungs can breathe underwater...',
         },
-      ];
+      ]
 
       const mockStandingStones: GigaPlannerStandingStone[] = [
         {
@@ -303,10 +670,30 @@ describe('GigaPlannerDataLoader', () => {
           name: 'Warrior',
           edid: 'REQ_Ability_Birthsign_Warrior',
           group: 'The Warrior is the first Guardian Constellation...',
-          description: 'Those under the sign of the Warrior have increased strength and endurance.',
+          description:
+            'Those under the sign of the Warrior have increased strength and endurance.',
           bonus: 'Health increases by 50, all weapons deal 10% more damage...',
         },
-      ];
+      ]
+
+      const mockBlessings: GigaPlannerBlessing[] = [
+        {
+          id: 'akatosh',
+          name: 'Akatosh',
+          edid: 'BlessingAkatosh',
+          shrine: 'Dragon Slayer: 15 % magic resistance',
+          follower:
+            'Father of Dragons: Attacks, spells, scrolls, shouts and enchantments are X% better against dragons (based on favor with Akatosh).',
+          devotee:
+            'Turn the Hourglass: Praying to Akatosh resets the cooldown of your most recently used shout and power.',
+          tenents:
+            'Fulfill your destiny by saving Tamriel. Raise your character level. Absorb dragon souls. Never openly break the laws of Skyrim.',
+          race: 'All',
+          starting: 'Breton / Imperial / Khajiit / Nord',
+          req: 'None',
+          category: 'Divine',
+        },
+      ]
 
       mockFetch
         .mockResolvedValueOnce({
@@ -316,14 +703,44 @@ describe('GigaPlannerDataLoader', () => {
         .mockResolvedValueOnce({
           ok: true,
           json: async () => mockStandingStones,
-        } as Response);
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockBlessings,
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => [
+            {
+              id: 'lorerim-v4',
+              name: 'LoreRim v4',
+              gameId: 0,
+              description: 'LoreRim v4 game mechanics',
+              version: '4.0.0',
+              initialPerks: 3,
+              oghmaData: { perksGiven: 3, hmsGiven: [0, 0, 0] },
+              leveling: { base: 30, mult: 0, hmsGiven: [5, 5, 5] },
+              derivedAttributes: {
+                attribute: ['Magic Resist'],
+                isPercent: [true],
+                prefactor: [1.0],
+                threshold: [150],
+                weight_health: [0],
+                weight_magicka: [1],
+                weight_stamina: [0],
+              },
+            },
+          ],
+        } as Response)
 
-      await loader.loadRaces();
-      await loader.loadStandingStones();
-      
-      const stats = loader.getCacheStats();
-      expect(stats.size).toBe(2);
-      expect(stats.keys).toEqual(['races', 'standingStones']);
-    });
-  });
-});
+      await loader.loadRaces()
+      await loader.loadStandingStones()
+      await loader.loadBlessings()
+      await loader.loadGameMechanics()
+
+      const stats = loader.getCacheStats()
+      expect(stats.size).toBe(4)
+      expect(stats.keys).toEqual(['races', 'standingStones', 'blessings', 'gameMechanics'])
+    })
+  })
+})
