@@ -14,10 +14,12 @@ import { transformAttributeAssignments, transformAttributeAssignmentsToGigaPlann
 import { transformSkillLevels, transformSkillLevelsToGigaPlanner } from './skillTransform'
 import { transformPerks, transformPerksToGigaPlanner, extractSubclasses, extractTraits } from './perkTransform'
 import { transformTraits, transformTraitsToGigaPlanner } from './traitTransform'
+import { transformDestiny, transformDestinyToGigaPlanner } from './destinyTransform'
 import { useRacesStore } from '@/shared/stores/racesStore'
 import { useBirthsignsStore } from '@/shared/stores/birthsignsStore'
 import { useBlessingsStore } from '@/shared/stores/blessingsStore'
 import { useTraitsStore } from '@/shared/stores/traitsStore'
+import { useDestinyNodesStore } from '@/shared/stores/destinyNodesStore'
 
 // Types for our application's build state
 export interface BuildState {
@@ -104,6 +106,13 @@ export async function transformGigaPlannerToBuildState(
       console.log('🔄 [GigaPlanner Transform] Loading traits data...')
       await traitsStore.load()
     }
+    
+    // Load destiny data if needed
+    const destinyStore = useDestinyNodesStore.getState()
+    if (destinyStore.data.length === 0) {
+      console.log('🔄 [GigaPlanner Transform] Loading destiny data...')
+      await destinyStore.load()
+    }
 
     // Transform race using modular transform
     const raceEdid = transformRace(gigaPlannerCharacter.race)
@@ -146,11 +155,15 @@ export async function transformGigaPlannerToBuildState(
     
     console.log('🔄 [GigaPlanner Transform] Transformed traits:', traits)
 
-    // Extract subclasses from perks (skill 18) - for future use
+    // Extract subclasses from perks (skill 18) and transform to destiny path
     const subclassNames = extractSubclasses(gigaPlannerCharacter.perks)
-    if (subclassNames.length > 0) {
-      console.log('🔄 [GigaPlanner Transform] Found subclasses:', subclassNames)
-    }
+    console.log('🔄 [GigaPlanner Transform] Extracted subclass names:', subclassNames)
+    
+    const destinyPath = subclassNames.length > 0 
+      ? transformDestiny(subclassNames)
+      : []
+    
+    console.log('🔄 [GigaPlanner Transform] Transformed destiny path:', destinyPath)
 
     const buildState: BuildState = {
       race: raceEdid,
@@ -160,6 +173,7 @@ export async function transformGigaPlannerToBuildState(
       skillLevels: Object.keys(skillLevels).length > 0 ? skillLevels : undefined,
       perks: perks || undefined,
       traits,
+      destinyPath,
     }
     
     console.log('🔄 [GigaPlanner Transform] Final build state:', {
@@ -168,6 +182,7 @@ export async function transformGigaPlannerToBuildState(
       favoriteBlessing: buildState.favoriteBlessing,
       perks: buildState.perks,
       traits: buildState.traits,
+      destinyPath: buildState.destinyPath,
       skillLevels: buildState.skillLevels
     })
 
@@ -225,11 +240,17 @@ export function transformBuildStateToGigaPlanner(
     // Transform traits using modular transform
     const traitNames = transformTraitsToGigaPlanner(buildState.traits || { regular: [], bonus: [] })
     
+    // Transform destiny path using modular transform
+    const destinyNames = transformDestinyToGigaPlanner(buildState.destinyPath || [])
+    
     // Add traits as skill 19 perks
     const traitPerks = traitNames.map(name => ({ name, skill: 19 }))
     
-    // Combine regular perks and trait perks
-    const allPerks = [...perks, ...traitPerks]
+    // Add destiny nodes as skill 18 perks
+    const destinyPerks = destinyNames.map(name => ({ name, skill: 18 }))
+    
+    // Combine regular perks, trait perks, and destiny perks
+    const allPerks = [...perks, ...traitPerks, ...destinyPerks]
 
     const gigaPlannerCharacter: GigaPlannerCharacter = {
       level: attributeData.level,

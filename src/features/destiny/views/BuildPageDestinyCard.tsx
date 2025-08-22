@@ -24,8 +24,13 @@ const BuildPageDestinyCard: React.FC<BuildPageDestinyCardProps> = ({
 
   // Convert build.destinyPath (string[]) to DestinyNode[]
   const currentPath = React.useMemo(() => {
+    console.log('🔄 [Destiny Card] Converting destiny path:', {
+      destinyPath: build.destinyPath,
+      nodesCount: nodes.length,
+      sampleNodes: nodes.slice(0, 3).map(n => ({ name: n.name, edid: n.edid, id: n.id }))
+    })
     return build.destinyPath
-      .map(id => nodes.find(n => n.id === id))
+      .map(edid => nodes.find(n => n.edid === edid))
       .filter((n): n is DestinyNode => !!n)
   }, [build.destinyPath, nodes])
 
@@ -49,8 +54,8 @@ const BuildPageDestinyCard: React.FC<BuildPageDestinyCardProps> = ({
 
   // Handle path changes
   const handlePathChange = (path: DestinyNode[]) => {
-    const pathIds = path.map(node => node.id)
-    setDestinyPath(pathIds as string[])
+    const pathEdids = path.map(node => node.edid)
+    setDestinyPath(pathEdids as string[])
   }
 
   // Handle path selection

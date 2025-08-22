@@ -131,9 +131,10 @@ export function BuildPage() {
 
     // Update the build state with imported data
     console.log('🔄 [Build Page] Updating build with converted state:', convertedBuildState)
-    console.log('🔍 [Build Page] Converted race:', convertedBuildState.race)
-    console.log('🔍 [Build Page] Converted stone:', convertedBuildState.stone)
-    console.log('🔍 [Build Page] Converted level:', convertedBuildState.attributeAssignments?.level)
+          console.log('🔍 [Build Page] Converted race:', convertedBuildState.race)
+      console.log('🔍 [Build Page] Converted stone:', convertedBuildState.stone)
+      console.log('🔍 [Build Page] Converted level:', convertedBuildState.attributeAssignments?.level)
+      console.log('🔍 [Build Page] Converted destiny path:', convertedBuildState.destinyPath)
     updateBuild(convertedBuildState)
 
     console.log('✅ [Build Page] Build update completed')
@@ -170,6 +171,7 @@ export function BuildPage() {
       console.log('  - Tried to set stone:', convertedBuildState.stone, '→ Actually set:', build.stone)
       console.log('  - Tried to set level:', convertedBuildState.attributeAssignments?.level, '→ Actually set:', build.attributeAssignments?.level)
       console.log('  - Tried to set blessing:', convertedBuildState.favoriteBlessing, '→ Actually set:', build.favoriteBlessing)
+      console.log('  - Tried to set destiny path:', convertedBuildState.destinyPath, '→ Actually set:', build.destinyPath)
     }, 100)
     
     setShowGigaPlannerTools(false)
