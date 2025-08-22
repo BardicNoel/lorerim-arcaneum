@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { GigaPlannerConverter } from '../adapters/gigaplannerConverter'
-import { AdvancedGigaPlannerTransformer } from '../utils/advancedTransformation'
+import { transformGigaPlannerToBuildState } from '../utils/transformation'
 import type { BuildState } from '../utils/transformation'
 
 export interface GigaPlannerImportState {
@@ -24,8 +24,7 @@ export function useGigaPlannerImport() {
   })
 
   const [converter, setConverter] = useState<GigaPlannerConverter | null>(null)
-  const [transformer, setTransformer] =
-    useState<AdvancedGigaPlannerTransformer | null>(null)
+  const [transformer, setTransformer] = useState<typeof transformGigaPlannerToBuildState | null>(null)
 
   // Initialize the converter and transformer
   const initialize = useCallback(async () => {
@@ -49,20 +48,18 @@ export function useGigaPlannerImport() {
       await newConverter.initialize()
       console.log('✅ [GigaPlanner Import] Converter initialized successfully')
 
-      console.log('🔄 [GigaPlanner Import] Creating AdvancedGigaPlannerTransformer...')
-      // Initialize transformer
-      const newTransformer = new AdvancedGigaPlannerTransformer()
-      console.log('🔄 [GigaPlanner Import] Initializing transformer...')
-      await newTransformer.initialize()
-      console.log('✅ [GigaPlanner Import] Transformer initialized successfully')
+      console.log('🔄 [GigaPlanner Import] Loading transformation function...')
+      // Load the transformation function
+      const { transformGigaPlannerToBuildState } = await import('../utils/transformation')
+      console.log('✅ [GigaPlanner Import] Transformation function loaded successfully')
 
       console.log('🔄 [GigaPlanner Import] Setting converter and transformer...')
       setConverter(newConverter)
-      setTransformer(newTransformer)
+      setTransformer(() => transformGigaPlannerToBuildState)
       setState(prev => ({ ...prev, isLoading: false, success: true }))
       console.log('✅ [GigaPlanner Import] Initialization completed successfully')
       
-      return { converter: newConverter, transformer: newTransformer }
+      return { converter: newConverter, transformer: transformGigaPlannerToBuildState }
     } catch (error) {
       console.log('💥 [GigaPlanner Import] Initialization error:', error)
       console.log('💥 [GigaPlanner Import] Error type:', typeof error)
@@ -153,9 +150,7 @@ export function useGigaPlannerImport() {
 
         // Transform to our BuildState format
         console.log('🔄 [GigaPlanner Import] Starting transformation to BuildState...')
-        const transformResult = await currentTransformer!.transformGigaPlannerToBuildState(
-          decodeResult.character
-        )
+        const transformResult = await currentTransformer!(decodeResult.character)
         console.log('🔀 [GigaPlanner Import] Transform result:', transformResult)
 
         if (!transformResult.success) {

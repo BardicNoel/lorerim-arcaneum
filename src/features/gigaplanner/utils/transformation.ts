@@ -12,10 +12,12 @@ import { transformStone, transformStoneToGigaPlanner } from './stoneTransform'
 import { transformBlessing, transformBlessingToGigaPlanner } from './blessingTransform'
 import { transformAttributeAssignments, transformAttributeAssignmentsToGigaPlanner } from './attributeTransform'
 import { transformSkillLevels, transformSkillLevelsToGigaPlanner } from './skillTransform'
-import { transformPerks, transformPerksToGigaPlanner } from './perkTransform'
+import { transformPerks, transformPerksToGigaPlanner, extractSubclasses, extractTraits } from './perkTransform'
+import { transformTraits, transformTraitsToGigaPlanner } from './traitTransform'
 import { useRacesStore } from '@/shared/stores/racesStore'
 import { useBirthsignsStore } from '@/shared/stores/birthsignsStore'
 import { useBlessingsStore } from '@/shared/stores/blessingsStore'
+import { useTraitsStore } from '@/shared/stores/traitsStore'
 
 // Types for our application's build state
 export interface BuildState {
@@ -95,6 +97,13 @@ export async function transformGigaPlannerToBuildState(
       console.log('🔄 [GigaPlanner Transform] Loading blessing data...')
       await blessingsStore.load()
     }
+    
+    // Load traits data if needed
+    const traitsStore = useTraitsStore.getState()
+    if (traitsStore.data.length === 0) {
+      console.log('🔄 [GigaPlanner Transform] Loading traits data...')
+      await traitsStore.load()
+    }
 
     // Transform race using modular transform
     const raceEdid = transformRace(gigaPlannerCharacter.race)
@@ -127,6 +136,22 @@ export async function transformGigaPlannerToBuildState(
       gigaPlannerCharacter.configuration.perkList
     )
 
+    // Extract traits from perks (skill 19)
+    const traitNames = extractTraits(gigaPlannerCharacter.perks)
+    console.log('🔄 [GigaPlanner Transform] Extracted trait names:', traitNames)
+    
+    const traits = traitNames.length > 0 
+      ? transformTraits(traitNames)
+      : { regular: [], bonus: [] }
+    
+    console.log('🔄 [GigaPlanner Transform] Transformed traits:', traits)
+
+    // Extract subclasses from perks (skill 18) - for future use
+    const subclassNames = extractSubclasses(gigaPlannerCharacter.perks)
+    if (subclassNames.length > 0) {
+      console.log('🔄 [GigaPlanner Transform] Found subclasses:', subclassNames)
+    }
+
     const buildState: BuildState = {
       race: raceEdid,
       stone: stoneEdid,
@@ -134,7 +159,17 @@ export async function transformGigaPlannerToBuildState(
       attributeAssignments,
       skillLevels: Object.keys(skillLevels).length > 0 ? skillLevels : undefined,
       perks: perks || undefined,
+      traits,
     }
+    
+    console.log('🔄 [GigaPlanner Transform] Final build state:', {
+      race: buildState.race,
+      stone: buildState.stone,
+      favoriteBlessing: buildState.favoriteBlessing,
+      perks: buildState.perks,
+      traits: buildState.traits,
+      skillLevels: buildState.skillLevels
+    })
 
     return {
       success: true,
@@ -181,7 +216,20 @@ export function transformBuildStateToGigaPlanner(
       : []
 
     // Transform perks using modular transform
-    const perks = transformPerksToGigaPlanner(buildState.perks || null)
+    const perkNames = transformPerksToGigaPlanner(buildState.perks || null)
+    
+    // Convert perk names back to the expected format with skill numbers
+    // For now, we'll assign them to skill 0 (first skill) since we don't have the original skill mapping
+    const perks = perkNames.map(name => ({ name, skill: 0 }))
+
+    // Transform traits using modular transform
+    const traitNames = transformTraitsToGigaPlanner(buildState.traits || { regular: [], bonus: [] })
+    
+    // Add traits as skill 19 perks
+    const traitPerks = traitNames.map(name => ({ name, skill: 19 }))
+    
+    // Combine regular perks and trait perks
+    const allPerks = [...perks, ...traitPerks]
 
     const gigaPlannerCharacter: GigaPlannerCharacter = {
       level: attributeData.level,
@@ -191,7 +239,7 @@ export function transformBuildStateToGigaPlanner(
       race,
       standingStone,
       blessing,
-      perks,
+      perks: allPerks,
       configuration: {
         perkList: perkListName,
         gameMechanics: gameMechanicsName,

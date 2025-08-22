@@ -25,7 +25,8 @@ export interface GigaPlannerCharacter {
   race: string
   standingStone: string
   blessing: string
-  perks: string[]
+  perks: Array<{ name: string; skill: number | string }>
+  traits?: string[] // Optional traits field
   configuration: {
     perkList: string
     gameMechanics: string
@@ -266,18 +267,50 @@ export class GigaPlannerConverter {
   /**
    * Parse perks from binary data
    */
-  private parsePerks(buildCode: string, perkList: any): string[] {
-    const perks: string[] = []
+  private parsePerks(buildCode: string, perkList: any): Array<{ name: string; skill: number }> {
+    const perks: Array<{ name: string; skill: number }> = []
+    
+    console.log('🔍 [Perk Parser] Starting perk parsing...')
+    console.log('🔍 [Perk Parser] PerkList info:', {
+      name: perkList.name,
+      totalPerks: perkList.perks.length,
+      skillNames: perkList.skillNames
+    })
+    console.log('🔍 [Perk Parser] Build code length:', buildCode.length)
+    console.log('🔍 [Perk Parser] First few bytes:', Array.from(buildCode.slice(0, 10)).map(c => c.charCodeAt(0)))
 
     for (let i = 0; i < perkList.perks.length; i++) {
       const byteIndex = 31 + Math.floor(i / 8)
       const bitOffset = 7 - (i % 8)
-      const hasPerk = (buildCode.charCodeAt(byteIndex) & (1 << bitOffset)) > 0
+      const byteValue = buildCode.charCodeAt(byteIndex)
+      const hasPerk = (byteValue & (1 << bitOffset)) > 0
 
       if (hasPerk) {
-        perks.push(perkList.perks[i].name)
+        const perk = {
+          name: perkList.perks[i].name,
+          skill: perkList.perks[i].skill
+        }
+        perks.push(perk)
+        console.log(`🔍 [Perk Parser] Found perk ${i}:`, {
+          name: perk.name,
+          skill: perk.skill,
+          skillName: perkList.skillNames[perk.skill],
+          byteIndex,
+          bitOffset,
+          byteValue: byteValue.toString(2).padStart(8, '0')
+        })
       }
     }
+
+    console.log('🔍 [Perk Parser] Final results:', {
+      totalFound: perks.length,
+      bySkill: perks.reduce((acc, perk) => {
+        const skillName = perkList.skillNames[perk.skill] || `Skill ${perk.skill}`
+        acc[skillName] = (acc[skillName] || 0) + 1
+        return acc
+      }, {} as Record<string, number>),
+      allPerks: perks.map(p => ({ name: p.name, skill: p.skill, skillName: perkList.skillNames[p.skill] }))
+    })
 
     return perks
   }
