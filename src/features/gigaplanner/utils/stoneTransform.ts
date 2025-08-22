@@ -2,52 +2,53 @@
  * Standing Stone Transformation Utilities
  * 
  * Handles transformation between GigaPlanner standing stone names and our app's EDIDs
+ * Uses the birthsign store data for dynamic mapping instead of hardcoded values
  */
 
+import { useBirthsignsStore } from '@/shared/stores/birthsignsStore'
+
 /**
- * Map GigaPlanner standing stone names to our app's EDIDs
+ * Find standing stone by name (case-insensitive) in the birthsign store
  */
-export function mapStoneNameToEdid(stoneName: string): string | null {
-  const stoneMap: Record<string, string> = {
-    'Warrior': 'WarriorStone',
-    'Mage': 'MageStone',
-    'Thief': 'ThiefStone',
-    'Lady': 'LadyStone',
-    'Steed': 'SteedStone',
-    'Lord': 'LordStone',
-    'Apprentice': 'ApprenticeStone',
-    'Atronach': 'AtronachStone',
-    'Lover': 'LoverStone',
-    'Shadow': 'ShadowStone',
-    'Tower': 'TowerStone',
-    'Ritual': 'RitualStone',
-    'Serpent': 'SerpentStone',
+function findStoneByName(stoneName: string): string | null {
+  const birthsignsStore = useBirthsignsStore.getState()
+  
+  // Ensure birthsign data is loaded
+  if (birthsignsStore.data.length === 0) {
+    console.warn('🔄 [Stone Transform] Birthsign store data not loaded, attempting to load...')
+    birthsignsStore.load().catch(error => {
+      console.error('🔄 [Stone Transform] Failed to load birthsign data:', error)
+    })
+    return null
   }
   
-  return stoneMap[stoneName] || null
+  // Search for standing stone by name (case-insensitive)
+  const foundStone = birthsignsStore.data.find(birthsign => 
+    birthsign.name.toLowerCase() === stoneName.toLowerCase()
+  )
+  
+  return foundStone?.edid || null
 }
 
 /**
- * Map our app's EDIDs to GigaPlanner standing stone names
+ * Find standing stone name by EDID in the birthsign store
  */
-export function mapEdidToStoneName(edid: string): string | null {
-  const reverseStoneMap: Record<string, string> = {
-    'WarriorStone': 'Warrior',
-    'MageStone': 'Mage',
-    'ThiefStone': 'Thief',
-    'LadyStone': 'Lady',
-    'SteedStone': 'Steed',
-    'LordStone': 'Lord',
-    'ApprenticeStone': 'Apprentice',
-    'AtronachStone': 'Atronach',
-    'LoverStone': 'Lover',
-    'ShadowStone': 'Shadow',
-    'TowerStone': 'Tower',
-    'RitualStone': 'Ritual',
-    'SerpentStone': 'Serpent',
+function findStoneNameByEdid(edid: string): string | null {
+  const birthsignsStore = useBirthsignsStore.getState()
+  
+  // Ensure birthsign data is loaded
+  if (birthsignsStore.data.length === 0) {
+    console.warn('🔄 [Stone Transform] Birthsign store data not loaded, attempting to load...')
+    birthsignsStore.load().catch(error => {
+      console.error('🔄 [Stone Transform] Failed to load birthsign data:', error)
+    })
+    return null
   }
   
-  return reverseStoneMap[edid] || null
+  // Find standing stone by EDID
+  const foundStone = birthsignsStore.data.find(birthsign => birthsign.edid === edid)
+  
+  return foundStone?.name || null
 }
 
 /**
@@ -58,12 +59,13 @@ export function transformStone(gigaPlannerStone: string): string | null {
     return null
   }
   
-  const stoneEdid = mapStoneNameToEdid(gigaPlannerStone)
+  const stoneEdid = findStoneByName(gigaPlannerStone)
   
   // Debug logging
   console.log('🔄 [Stone Transform] Stone mapping:', {
     original: gigaPlannerStone,
-    mapped: stoneEdid
+    mapped: stoneEdid,
+    dataLoaded: useBirthsignsStore.getState().data.length > 0
   })
   
   return stoneEdid
@@ -77,6 +79,6 @@ export function transformStoneToGigaPlanner(buildStateStone: string | null): str
     return 'None'
   }
   
-  const stoneName = mapEdidToStoneName(buildStateStone)
+  const stoneName = findStoneNameByEdid(buildStateStone)
   return stoneName || 'None'
 }

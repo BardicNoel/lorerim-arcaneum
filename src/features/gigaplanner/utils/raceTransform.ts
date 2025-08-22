@@ -2,46 +2,53 @@
  * Race Transformation Utilities
  * 
  * Handles transformation between GigaPlanner race names and our app's EDIDs
+ * Uses the race store data for dynamic mapping instead of hardcoded values
  */
 
+import { useRacesStore } from '@/shared/stores/racesStore'
+
 /**
- * Map GigaPlanner race names to our app's EDIDs
+ * Find race by name (case-insensitive) in the race store
  */
-export function mapRaceNameToEdid(raceName: string): string | null {
-  const raceMap: Record<string, string> = {
-    'Altmer': 'HighElfRace',
-    'Argonian': 'ArgonianRace',
-    'Bosmer': 'WoodElfRace',
-    'Breton': 'BretonRace',
-    'Dunmer': 'DarkElfRace',
-    'Imperial': 'ImperialRace',
-    'Khajiit': 'KhajiitRace',
-    'Nord': 'NordRace',
-    'Orc': 'OrcRace',
-    'Redguard': 'RedguardRace',
+function findRaceByName(raceName: string): string | null {
+  const racesStore = useRacesStore.getState()
+  
+  // Ensure race data is loaded
+  if (racesStore.data.length === 0) {
+    console.warn('🔄 [Race Transform] Race store data not loaded, attempting to load...')
+    racesStore.load().catch(error => {
+      console.error('🔄 [Race Transform] Failed to load race data:', error)
+    })
+    return null
   }
   
-  return raceMap[raceName] || null
+  // Search for race by name (case-insensitive)
+  const foundRace = racesStore.data.find(race => 
+    race.name.toLowerCase() === raceName.toLowerCase()
+  )
+  
+  return foundRace?.edid || null
 }
 
 /**
- * Map our app's EDIDs to GigaPlanner race names
+ * Find race name by EDID in the race store
  */
-export function mapEdidToRaceName(edid: string): string | null {
-  const reverseRaceMap: Record<string, string> = {
-    'HighElfRace': 'Altmer',
-    'ArgonianRace': 'Argonian',
-    'WoodElfRace': 'Bosmer',
-    'BretonRace': 'Breton',
-    'DarkElfRace': 'Dunmer',
-    'ImperialRace': 'Imperial',
-    'KhajiitRace': 'Khajiit',
-    'NordRace': 'Nord',
-    'OrcRace': 'Orc',
-    'RedguardRace': 'Redguard',
+function findRaceNameByEdid(edid: string): string | null {
+  const racesStore = useRacesStore.getState()
+  
+  // Ensure race data is loaded
+  if (racesStore.data.length === 0) {
+    console.warn('🔄 [Race Transform] Race store data not loaded, attempting to load...')
+    racesStore.load().catch(error => {
+      console.error('🔄 [Race Transform] Failed to load race data:', error)
+    })
+    return null
   }
   
-  return reverseRaceMap[edid] || null
+  // Find race by EDID
+  const foundRace = racesStore.data.find(race => race.edid === edid)
+  
+  return foundRace?.name || null
 }
 
 /**
@@ -52,12 +59,13 @@ export function transformRace(gigaPlannerRace: string): string | null {
     return null
   }
   
-  const raceEdid = mapRaceNameToEdid(gigaPlannerRace)
+  const raceEdid = findRaceByName(gigaPlannerRace)
   
   // Debug logging
   console.log('🔄 [Race Transform] Race mapping:', {
     original: gigaPlannerRace,
-    mapped: raceEdid
+    mapped: raceEdid,
+    dataLoaded: useRacesStore.getState().data.length > 0
   })
   
   return raceEdid
@@ -71,6 +79,6 @@ export function transformRaceToGigaPlanner(buildStateRace: string | null): strin
     return 'Nord' // Default to Nord if not specified
   }
   
-  const raceName = mapEdidToRaceName(buildStateRace)
+  const raceName = findRaceNameByEdid(buildStateRace)
   return raceName || 'Nord'
 }

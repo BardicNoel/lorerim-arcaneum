@@ -13,6 +13,9 @@ import { transformBlessing, transformBlessingToGigaPlanner } from './blessingTra
 import { transformAttributeAssignments, transformAttributeAssignmentsToGigaPlanner } from './attributeTransform'
 import { transformSkillLevels, transformSkillLevelsToGigaPlanner } from './skillTransform'
 import { transformPerks, transformPerksToGigaPlanner } from './perkTransform'
+import { useRacesStore } from '@/shared/stores/racesStore'
+import { useBirthsignsStore } from '@/shared/stores/birthsignsStore'
+import { useBlessingsStore } from '@/shared/stores/blessingsStore'
 
 // Types for our application's build state
 export interface BuildState {
@@ -63,11 +66,35 @@ export interface TransformationResult<T> {
 /**
  * Transform GigaPlanner character data to our BuildState format
  */
-export function transformGigaPlannerToBuildState(
+export async function transformGigaPlannerToBuildState(
   gigaPlannerCharacter: GigaPlannerCharacter
-): TransformationResult<BuildState> {
+): Promise<TransformationResult<BuildState>> {
   try {
     const warnings: string[] = []
+
+    // Ensure all store data is loaded before transformations
+    console.log('🔄 [GigaPlanner Transform] Ensuring store data is loaded...')
+    
+    // Load race data if needed
+    const racesStore = useRacesStore.getState()
+    if (racesStore.data.length === 0) {
+      console.log('🔄 [GigaPlanner Transform] Loading race data...')
+      await racesStore.load()
+    }
+    
+    // Load birthsign data if needed
+    const birthsignsStore = useBirthsignsStore.getState()
+    if (birthsignsStore.data.length === 0) {
+      console.log('🔄 [GigaPlanner Transform] Loading birthsign data...')
+      await birthsignsStore.load()
+    }
+    
+    // Load blessing data if needed
+    const blessingsStore = useBlessingsStore.getState()
+    if (blessingsStore.data.length === 0) {
+      console.log('🔄 [GigaPlanner Transform] Loading blessing data...')
+      await blessingsStore.load()
+    }
 
     // Transform race using modular transform
     const raceEdid = transformRace(gigaPlannerCharacter.race)

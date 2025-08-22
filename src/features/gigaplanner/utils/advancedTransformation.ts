@@ -51,82 +51,50 @@ export class AdvancedGigaPlannerTransformer {
   /**
    * Transform GigaPlanner character data to our BuildState format with advanced perk mapping
    */
-  transformGigaPlannerToBuildState(
+  async transformGigaPlannerToBuildState(
     gigaPlannerCharacter: GigaPlannerCharacter
-  ): TransformationResult<BuildState> {
+  ): Promise<TransformationResult<BuildState>> {
     try {
       const warnings: string[] = []
 
-      // Transform race
-      const race =
-        gigaPlannerCharacter.race !== 'Unknown'
-          ? gigaPlannerCharacter.race
-          : undefined
+      // Import the modular transform functions
+      const { transformRace } = await import('./raceTransform')
+      const { transformStone } = await import('./stoneTransform')
+      const { transformBlessing } = await import('./blessingTransform')
+      const { transformAttributeAssignments } = await import('./attributeTransform')
+      const { transformSkillLevels } = await import('./skillTransform')
+      const { transformPerks } = await import('./perkTransform')
 
-      // Transform standing stone
-      const stone =
-        gigaPlannerCharacter.standingStone !== 'Unknown'
-          ? gigaPlannerCharacter.standingStone
-          : undefined
-
-      // Transform blessing
-      const favoriteBlessing =
-        gigaPlannerCharacter.blessing !== 'Unknown'
-          ? gigaPlannerCharacter.blessing
-          : undefined
-
-      // Transform attribute assignments
-      const attributeAssignments = {
-        health: gigaPlannerCharacter.hmsIncreases.health,
-        stamina: gigaPlannerCharacter.hmsIncreases.stamina,
-        magicka: gigaPlannerCharacter.hmsIncreases.magicka,
-        level: gigaPlannerCharacter.level,
-        assignments: {} as Record<number, 'health' | 'stamina' | 'magicka'>,
+      // Transform race using modular transform
+      const race = transformRace(gigaPlannerCharacter.race)
+      if (gigaPlannerCharacter.race !== 'Unknown' && !race) {
+        warnings.push(`Unknown race: ${gigaPlannerCharacter.race}`)
       }
 
-      // Add Oghma choice to attribute assignments if not 'None'
-      if (gigaPlannerCharacter.oghmaChoice !== 'None') {
-        const oghmaValue =
-          gigaPlannerCharacter.oghmaChoice === 'Health'
-            ? 1
-            : gigaPlannerCharacter.oghmaChoice === 'Magicka'
-              ? 2
-              : gigaPlannerCharacter.oghmaChoice === 'Stamina'
-                ? 3
-                : 0
-
-        if (oghmaValue > 0) {
-          attributeAssignments[
-            gigaPlannerCharacter.oghmaChoice.toLowerCase() as keyof typeof attributeAssignments
-          ] += oghmaValue
-          warnings.push(
-            `Added Oghma choice (${gigaPlannerCharacter.oghmaChoice}) to attribute assignments`
-          )
-        }
+      // Transform standing stone using modular transform
+      const stone = transformStone(gigaPlannerCharacter.standingStone)
+      if (gigaPlannerCharacter.standingStone !== 'Unknown' && !stone) {
+        warnings.push(`Unknown standing stone: ${gigaPlannerCharacter.standingStone}`)
       }
 
-      // Transform skill levels
-      const skillLevels: Record<string, number> = {}
-      gigaPlannerCharacter.skillLevels.forEach(skill => {
-        if (skill.skill !== 'Level') {
-          // Skip the special 'Level' skill
-          skillLevels[skill.skill] = skill.level
-        }
-      })
+      // Transform blessing using modular transform
+      const favoriteBlessing = transformBlessing(gigaPlannerCharacter.blessing)
 
-      // Transform perks - group by skill using our perk-skill map
-      const perks: Record<string, string[]> = {}
-      gigaPlannerCharacter.perks.forEach(perkName => {
-        const skillName = this.perkSkillMap.get(perkName)
-        if (skillName) {
-          if (!perks[skillName]) {
-            perks[skillName] = []
-          }
-          perks[skillName].push(perkName)
-        } else {
-          warnings.push(`Could not determine skill for perk: ${perkName}`)
-        }
-      })
+      // Transform attribute assignments using modular transform
+      const attributeAssignments = transformAttributeAssignments(
+        gigaPlannerCharacter.hmsIncreases,
+        gigaPlannerCharacter.level,
+        gigaPlannerCharacter.oghmaChoice
+      )
+
+      // Transform skill levels using modular transform
+      const skillLevels = transformSkillLevels(gigaPlannerCharacter.skillLevels)
+
+      // Transform perks using modular transform (but with advanced perk mapping)
+      const perks = transformPerks(
+        gigaPlannerCharacter.perks,
+        gigaPlannerCharacter.configuration.perkList
+      )
 
       const buildState: BuildState = {
         race,
@@ -135,7 +103,7 @@ export class AdvancedGigaPlannerTransformer {
         attributeAssignments,
         skillLevels:
           Object.keys(skillLevels).length > 0 ? skillLevels : undefined,
-        perks: Object.keys(perks).length > 0 ? { selected: perks } : undefined,
+        perks: perks || undefined,
       }
 
       return {
@@ -168,7 +136,10 @@ export class AdvancedGigaPlannerTransformer {
       // Validate required fields
       const validation = this.validateBuildStateForGigaPlanner(buildState)
       if (!validation.success) {
-        return validation
+        return {
+          success: false,
+          error: validation.error || 'Validation failed',
+        }
       }
 
       // Transform race

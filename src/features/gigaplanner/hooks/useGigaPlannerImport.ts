@@ -153,7 +153,7 @@ export function useGigaPlannerImport() {
 
         // Transform to our BuildState format
         console.log('🔄 [GigaPlanner Import] Starting transformation to BuildState...')
-        const transformResult = currentTransformer!.transformGigaPlannerToBuildState(
+        const transformResult = await currentTransformer!.transformGigaPlannerToBuildState(
           decodeResult.character
         )
         console.log('🔀 [GigaPlanner Import] Transform result:', transformResult)
