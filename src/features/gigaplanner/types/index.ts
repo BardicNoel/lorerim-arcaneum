@@ -1,1 +1,1 @@
-export type { GigaPlannerRace, GigaPlannerStandingStone, GigaPlannerBlessing, GigaPlannerGameMechanics, GigaPlannerData } from './data';
+export type { GigaPlannerRace, GigaPlannerStandingStone, GigaPlannerBlessing, GigaPlannerGameMechanics, GigaPlannerPreset, GigaPlannerData } from './data';

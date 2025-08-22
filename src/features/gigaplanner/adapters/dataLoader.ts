@@ -2,6 +2,7 @@ import type {
   GigaPlannerBlessing,
   GigaPlannerData,
   GigaPlannerGameMechanics,
+  GigaPlannerPreset,
   GigaPlannerRace,
   GigaPlannerStandingStone,
 } from '../types/data'
@@ -230,14 +231,80 @@ export class GigaPlannerDataLoader {
   }
 
   /**
-   * Load all GigaPlanner data (races, standing stones, blessings, and game mechanics)
+   * Load presets data from JSON file
+   */
+  async loadPresets(): Promise<GigaPlannerPreset[]> {
+    const cacheKey = 'presets'
+
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey)
+    }
+
+    try {
+      const response = await fetch(
+        '/src/features/gigaplanner/data/presets.json'
+      )
+      if (!response.ok) {
+        throw new Error(
+          `Failed to load presets data: ${response.status} ${response.statusText}`
+        )
+      }
+
+      const presets: GigaPlannerPreset[] = await response.json()
+
+      // Validate the data structure
+      if (!Array.isArray(presets)) {
+        throw new Error('Presets data is not an array')
+      }
+
+      // Basic validation of each preset entry
+      for (const preset of presets) {
+        if (!preset.id || !preset.name || preset.presetId === undefined) {
+          throw new Error(
+            `Invalid preset data: missing required fields for ${preset.name || 'unknown'}`
+          )
+        }
+
+        // Validate reference fields are numbers
+        if (
+          typeof preset.perks !== 'number' ||
+          typeof preset.races !== 'number' ||
+          typeof preset.gameMechanics !== 'number' ||
+          typeof preset.blessings !== 'number'
+        ) {
+          throw new Error(
+            `Invalid preset data: reference fields must be numbers for ${preset.name}`
+          )
+        }
+
+        // Validate version format
+        if (!preset.version || !preset.version.match(/^\d+\.\d+\.\d+$/)) {
+          throw new Error(
+            `Invalid preset data: version must be in format x.y.z for ${preset.name}`
+          )
+        }
+      }
+
+      this.cache.set(cacheKey, presets)
+      return presets
+    } catch (error) {
+      console.error('Error loading presets data:', error)
+      throw new Error(
+        `Failed to load presets data: ${error instanceof Error ? error.message : 'Unknown error'}`
+      )
+    }
+  }
+
+  /**
+   * Load all GigaPlanner data (races, standing stones, blessings, game mechanics, and presets)
    */
   async loadAllData(): Promise<GigaPlannerData> {
-    const [races, standingStones, blessings, gameMechanics] = await Promise.all([
+    const [races, standingStones, blessings, gameMechanics, presets] = await Promise.all([
       this.loadRaces(),
       this.loadStandingStones(),
       this.loadBlessings(),
       this.loadGameMechanics(),
+      this.loadPresets(),
     ])
 
     return {
@@ -245,6 +312,7 @@ export class GigaPlannerDataLoader {
       standingStones,
       blessings,
       gameMechanics,
+      presets,
       // Other data types will be added as they're implemented
     }
   }

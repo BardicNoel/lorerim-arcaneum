@@ -5,6 +5,9 @@ import {
   getGameMechanicsId,
   getGameMechanicsIdFromStringId,
   getGameMechanicsNameFromId,
+  getPresetId,
+  getPresetIdFromStringId,
+  getPresetNameFromId,
   getRaceEdid,
   getRaceNameFromEdid,
   getStandingStoneEdid,
@@ -23,7 +26,8 @@ async function demo() {
     console.log(`✅ Loaded ${allData.races.length} races`)
     console.log(`✅ Loaded ${allData.standingStones.length} standing stones`)
     console.log(`✅ Loaded ${allData.blessings.length} blessings`)
-    console.log(`✅ Loaded ${allData.gameMechanics.length} game mechanics\n`)
+    console.log(`✅ Loaded ${allData.gameMechanics.length} game mechanics`)
+    console.log(`✅ Loaded ${allData.presets.length} presets\n`)
 
     // Display first race
     const firstRace = allData.races[0]
@@ -68,6 +72,21 @@ async function demo() {
     console.log(`  Leveling Base: ${firstGameMechanics.leveling.base}`)
     console.log(`  Derived Attributes Count: ${firstGameMechanics.derivedAttributes.attribute.length}`)
     console.log(`  Description: ${firstGameMechanics.description.substring(0, 100)}...\n`)
+
+    // Display first preset
+    const firstPreset = allData.presets[0]
+    console.log('First preset (LoreRim v3.0.4):')
+    console.log(`  Name: ${firstPreset.name}`)
+    console.log(`  ID: ${firstPreset.id}`)
+    console.log(`  Preset ID: ${firstPreset.presetId}`)
+    console.log(`  Version: ${firstPreset.version}`)
+    console.log(`  Perks Reference: ${firstPreset.perks}`)
+    console.log(`  Races Reference: ${firstPreset.races}`)
+    console.log(`  Game Mechanics Reference: ${firstPreset.gameMechanics}`)
+    console.log(`  Blessings Reference: ${firstPreset.blessings}`)
+    console.log(`  Category: ${firstPreset.category}`)
+    console.log(`  Tags: ${firstPreset.tags?.join(', ')}`)
+    console.log(`  Description: ${firstPreset.description.substring(0, 100)}...\n`)
 
     // Test EDID mappings
     console.log('Testing Race EDID mappings:')
@@ -120,6 +139,14 @@ async function demo() {
     console.log(`  1 -> '${getGameMechanicsNameFromId(1)}'`)
     console.log(`  'lorerim-v4' -> '${getGameMechanicsIdFromStringId('lorerim-v4')}'`)
     console.log(`  'unknown-mechanics' -> '${getGameMechanicsIdFromStringId('unknown-mechanics')}'`)
+
+    console.log('\nTesting Preset ID mappings:')
+    console.log(`  'LoreRim v3.0.4' -> ${getPresetId('LoreRim v3.0.4')}`)
+    console.log(`  'UnknownPreset' -> ${getPresetId('UnknownPreset')}`)
+    console.log(`  0 -> '${getPresetNameFromId(0)}'`)
+    console.log(`  1 -> '${getPresetNameFromId(1)}'`)
+    console.log(`  'lorerim-v3-0-4' -> '${getPresetIdFromStringId('lorerim-v3-0-4')}'`)
+    console.log(`  'unknown-preset' -> '${getPresetIdFromStringId('unknown-preset')}'`)
 
     // Test caching
     console.log('\nTesting caching...')

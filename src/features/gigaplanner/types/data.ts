@@ -63,11 +63,25 @@ export interface GigaPlannerGameMechanics {
   };
 }
 
+export interface GigaPlannerPreset {
+  id: string;
+  name: string;
+  presetId: number; // The original numeric ID from the source
+  description: string;
+  version: string;
+  perks: number; // Reference to perks configuration
+  races: number; // Reference to races configuration
+  gameMechanics: number; // Reference to game mechanics configuration
+  blessings: number; // Reference to blessings configuration
+  category?: string;
+  tags?: string[];
+}
+
 export interface GigaPlannerData {
   races: GigaPlannerRace[];
   standingStones: GigaPlannerStandingStone[];
   blessings: GigaPlannerBlessing[];
   gameMechanics: GigaPlannerGameMechanics[];
+  presets: GigaPlannerPreset[];
   perks?: any; // Will be defined later
-  presets?: any; // Will be defined later
 }

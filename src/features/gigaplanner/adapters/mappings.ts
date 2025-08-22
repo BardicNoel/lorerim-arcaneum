@@ -144,3 +144,29 @@ export function getGameMechanicsIdFromStringId(stringId: string): string | null 
   
   return idToNameMap[stringId] || null;
 }
+
+export const PRESET_NAME_TO_ID: Record<string, number> = {
+  'LoreRim v3.0.4': 0,
+  // Future presets will be added here
+  // 'Vanilla': 1,
+  // 'Requiem': 2,
+  // 'Ordinator': 3,
+};
+
+export function getPresetId(presetName: string): number {
+  return PRESET_NAME_TO_ID[presetName] ?? 0;
+}
+
+export function getPresetNameFromId(presetId: number): string | null {
+  const entry = Object.entries(PRESET_NAME_TO_ID).find(([_, id]) => id === presetId);
+  return entry ? entry[0] : null;
+}
+
+export function getPresetIdFromStringId(stringId: string): string | null {
+  // Map from string ID back to name, then to numeric ID
+  const idToNameMap: Record<string, string> = {
+    'lorerim-v3-0-4': 'LoreRim v3.0.4',
+  };
+  
+  return idToNameMap[stringId] || null;
+}

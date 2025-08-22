@@ -2,6 +2,7 @@ export { GigaPlannerDataLoader } from './dataLoader'
 export {
   BLESSING_NAME_TO_EDID,
   GAME_MECHANICS_NAME_TO_ID,
+  PRESET_NAME_TO_ID,
   RACE_NAME_TO_EDID,
   STANDING_STONE_NAME_TO_EDID,
   getBlessingEdid,
@@ -9,6 +10,9 @@ export {
   getGameMechanicsId,
   getGameMechanicsIdFromStringId,
   getGameMechanicsNameFromId,
+  getPresetId,
+  getPresetIdFromStringId,
+  getPresetNameFromId,
   getRaceEdid,
   getRaceNameFromEdid,
   getStandingStoneEdid,

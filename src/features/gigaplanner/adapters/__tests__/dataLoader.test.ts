@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type {
   GigaPlannerBlessing,
   GigaPlannerGameMechanics,
+  GigaPlannerPreset,
   GigaPlannerRace,
   GigaPlannerStandingStone,
 } from '../../types/data'
@@ -524,6 +525,151 @@ describe('GigaPlannerDataLoader', () => {
     })
   })
 
+  describe('loadPresets', () => {
+    const mockPresets: GigaPlannerPreset[] = [
+      {
+        id: 'lorerim-v3-0-4',
+        name: 'LoreRim v3.0.4',
+        presetId: 0,
+        description: 'LoreRim v3.0.4 preset with balanced progression, lore-friendly mechanics, and comprehensive character building options.',
+        version: '3.0.4',
+        perks: 0,
+        races: 0,
+        gameMechanics: 0,
+        blessings: 0,
+        category: 'balanced',
+        tags: ['lore-friendly', 'balanced', 'immersive', 'comprehensive'],
+      },
+    ]
+
+    it('should load presets data successfully', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockPresets,
+      } as Response)
+
+      const result = await loader.loadPresets()
+
+      expect(result).toEqual(mockPresets)
+      expect(mockFetch).toHaveBeenCalledWith(
+        '/src/features/gigaplanner/data/presets.json'
+      )
+    })
+
+    it('should cache presets data after first load', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockPresets,
+      } as Response)
+
+      // First load
+      await loader.loadPresets()
+
+      // Second load should use cache
+      const result = await loader.loadPresets()
+
+      expect(result).toEqual(mockPresets)
+      expect(mockFetch).toHaveBeenCalledTimes(1) // Only called once due to caching
+    })
+
+    it('should throw error when fetch fails', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+        statusText: 'Not Found',
+      } as Response)
+
+      await expect(loader.loadPresets()).rejects.toThrow(
+        'Failed to load presets data: 404 Not Found'
+      )
+    })
+
+    it('should throw error when response is not an array', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ presets: mockPresets }),
+      } as Response)
+
+      await expect(loader.loadPresets()).rejects.toThrow(
+        'Presets data is not an array'
+      )
+    })
+
+    it('should throw error when preset data is invalid', async () => {
+      const invalidPresets = [
+        {
+          id: 'lorerim-v3-0-4',
+          // Missing name and presetId
+          description: 'LoreRim v3.0.4 preset',
+          version: '3.0.4',
+          perks: 0,
+          races: 0,
+          gameMechanics: 0,
+          blessings: 0,
+        },
+      ]
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => invalidPresets,
+      } as Response)
+
+      await expect(loader.loadPresets()).rejects.toThrow(
+        'Invalid preset data: missing required fields for unknown'
+      )
+    })
+
+    it('should throw error when reference fields are not numbers', async () => {
+      const invalidPresets = [
+        {
+          id: 'lorerim-v3-0-4',
+          name: 'LoreRim v3.0.4',
+          presetId: 0,
+          description: 'LoreRim v3.0.4 preset',
+          version: '3.0.4',
+          perks: '0', // String instead of number
+          races: 0,
+          gameMechanics: 0,
+          blessings: 0,
+        },
+      ]
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => invalidPresets,
+      } as Response)
+
+      await expect(loader.loadPresets()).rejects.toThrow(
+        'Invalid preset data: reference fields must be numbers for LoreRim v3.0.4'
+      )
+    })
+
+    it('should throw error when version format is invalid', async () => {
+      const invalidPresets = [
+        {
+          id: 'lorerim-v3-0-4',
+          name: 'LoreRim v3.0.4',
+          presetId: 0,
+          description: 'LoreRim v3.0.4 preset',
+          version: '3.0', // Invalid format (missing patch version)
+          perks: 0,
+          races: 0,
+          gameMechanics: 0,
+          blessings: 0,
+        },
+      ]
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => invalidPresets,
+      } as Response)
+
+      await expect(loader.loadPresets()).rejects.toThrow(
+        'Invalid preset data: version must be in format x.y.z for LoreRim v3.0.4'
+      )
+    })
+  })
+
   describe('loadAllData', () => {
     const mockRaces: GigaPlannerRace[] = [
       {
@@ -605,6 +751,20 @@ describe('GigaPlannerDataLoader', () => {
       },
     ]
 
+    const mockPresets: GigaPlannerPreset[] = [
+      {
+        id: 'lorerim-v3-0-4',
+        name: 'LoreRim v3.0.4',
+        presetId: 0,
+        description: 'LoreRim v3.0.4 preset',
+        version: '3.0.4',
+        perks: 0,
+        races: 0,
+        gameMechanics: 0,
+        blessings: 0,
+      },
+    ]
+
     it('should load all data successfully', async () => {
       mockFetch
         .mockResolvedValueOnce({
@@ -623,6 +783,10 @@ describe('GigaPlannerDataLoader', () => {
           ok: true,
           json: async () => mockGameMechanics,
         } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPresets,
+        } as Response)
 
       const result = await loader.loadAllData()
 
@@ -631,6 +795,7 @@ describe('GigaPlannerDataLoader', () => {
         standingStones: mockStandingStones,
         blessings: mockBlessings,
         gameMechanics: mockGameMechanics,
+        presets: mockPresets,
       })
     })
   })
@@ -732,15 +897,32 @@ describe('GigaPlannerDataLoader', () => {
             },
           ],
         } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => [
+            {
+              id: 'lorerim-v3-0-4',
+              name: 'LoreRim v3.0.4',
+              presetId: 0,
+              description: 'LoreRim v3.0.4 preset',
+              version: '3.0.4',
+              perks: 0,
+              races: 0,
+              gameMechanics: 0,
+              blessings: 0,
+            },
+          ],
+        } as Response)
 
       await loader.loadRaces()
       await loader.loadStandingStones()
       await loader.loadBlessings()
       await loader.loadGameMechanics()
+      await loader.loadPresets()
 
       const stats = loader.getCacheStats()
-      expect(stats.size).toBe(4)
-      expect(stats.keys).toEqual(['races', 'standingStones', 'blessings', 'gameMechanics'])
+      expect(stats.size).toBe(5)
+      expect(stats.keys).toEqual(['races', 'standingStones', 'blessings', 'gameMechanics', 'presets'])
     })
   })
 })

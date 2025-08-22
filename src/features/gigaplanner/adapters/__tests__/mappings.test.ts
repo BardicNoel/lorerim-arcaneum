@@ -9,7 +9,11 @@ import {
   GAME_MECHANICS_NAME_TO_ID,
   getGameMechanicsId,
   getGameMechanicsNameFromId,
-  getGameMechanicsIdFromStringId
+  getGameMechanicsIdFromStringId,
+  PRESET_NAME_TO_ID,
+  getPresetId,
+  getPresetNameFromId,
+  getPresetIdFromStringId
 } from '../mappings';
 
 describe('Race EDID Mappings', () => {
@@ -269,6 +273,80 @@ describe('Game Mechanics ID Mappings', () => {
       for (const id of ids) {
         const mechanicsName = getGameMechanicsNameFromId(id);
         const mappedId = getGameMechanicsId(mechanicsName!);
+        expect(mappedId).toBe(id);
+      }
+    });
+  });
+});
+
+describe('Preset ID Mappings', () => {
+  describe('PRESET_NAME_TO_ID', () => {
+    it('should contain all expected preset mappings', () => {
+      const expectedMappings = {
+        'LoreRim v3.0.4': 0,
+      };
+
+      expect(PRESET_NAME_TO_ID).toEqual(expectedMappings);
+    });
+
+    it('should have 1 preset mapping', () => {
+      expect(Object.keys(PRESET_NAME_TO_ID)).toHaveLength(1);
+    });
+  });
+
+  describe('getPresetId', () => {
+    it('should return correct ID for known preset names', () => {
+      expect(getPresetId('LoreRim v3.0.4')).toBe(0);
+    });
+
+    it('should return 0 (default) for unknown preset names', () => {
+      expect(getPresetId('UnknownPreset')).toBe(0);
+      expect(getPresetId('')).toBe(0);
+      expect(getPresetId('lorerim v3.0.4')).toBe(0); // Case sensitive
+    });
+  });
+
+  describe('getPresetNameFromId', () => {
+    it('should return correct preset name for known IDs', () => {
+      expect(getPresetNameFromId(0)).toBe('LoreRim v3.0.4');
+    });
+
+    it('should return null for unknown IDs', () => {
+      expect(getPresetNameFromId(1)).toBeNull();
+      expect(getPresetNameFromId(-1)).toBeNull();
+      expect(getPresetNameFromId(999)).toBeNull();
+    });
+  });
+
+  describe('getPresetIdFromStringId', () => {
+    it('should return correct name for known string IDs', () => {
+      expect(getPresetIdFromStringId('lorerim-v3-0-4')).toBe('LoreRim v3.0.4');
+    });
+
+    it('should return null for unknown string IDs', () => {
+      expect(getPresetIdFromStringId('unknown-preset')).toBeNull();
+      expect(getPresetIdFromStringId('')).toBeNull();
+      expect(getPresetIdFromStringId('LoreRim v3.0.4')).toBeNull(); // Wrong format
+    });
+  });
+
+  describe('bidirectional mapping consistency', () => {
+    it('should maintain consistency between getPresetId and getPresetNameFromId', () => {
+      const presetNames = Object.keys(PRESET_NAME_TO_ID);
+      
+      for (const presetName of presetNames) {
+        const id = getPresetId(presetName);
+        const mappedPresetName = getPresetNameFromId(id);
+        expect(mappedPresetName).toBe(presetName);
+      }
+    });
+
+    it('should maintain consistency in reverse direction', () => {
+      const ids = Object.values(PRESET_NAME_TO_ID);
+      
+      for (const id of ids) {
+        const presetName = getPresetNameFromId(id);
+        const mappedId = getPresetId(presetName!);
         expect(mappedId).toBe(id);
       }
     });
