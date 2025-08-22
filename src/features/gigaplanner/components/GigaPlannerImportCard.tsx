@@ -41,18 +41,40 @@ export function GigaPlannerImportCard({
   const handleImportFromUrl = async () => {
     if (!url.trim()) return
 
+    console.log('🚀 [Import Card] Starting URL import:', url.trim())
     const result = await importFromUrl(url.trim())
-    if (result?.buildState && onImport) {
-      onImport(result.buildState)
+    console.log('📥 [Import Card] Import result received:', result)
+    
+    if (result?.buildState) {
+      console.log('✅ [Import Card] BuildState found, calling onImport:', result.buildState)
+      if (onImport) {
+        onImport(result.buildState)
+        console.log('✅ [Import Card] onImport callback executed')
+      } else {
+        console.log('⚠️ [Import Card] No onImport callback provided')
+      }
+    } else {
+      console.log('❌ [Import Card] No buildState in result or result is null')
     }
   }
 
   const handleImportFromBuildCode = async () => {
     if (!buildCode.trim()) return
 
+    console.log('🚀 [Import Card] Starting build code import:', buildCode.trim())
     const result = await importFromBuildCode(buildCode.trim())
-    if (result?.buildState && onImport) {
-      onImport(result.buildState)
+    console.log('📥 [Import Card] Import result received:', result)
+    
+    if (result?.buildState) {
+      console.log('✅ [Import Card] BuildState found, calling onImport:', result.buildState)
+      if (onImport) {
+        onImport(result.buildState)
+        console.log('✅ [Import Card] onImport callback executed')
+      } else {
+        console.log('⚠️ [Import Card] No onImport callback provided')
+      }
+    } else {
+      console.log('❌ [Import Card] No buildState in result or result is null')
     }
   }
 
@@ -104,6 +126,9 @@ export function GigaPlannerImportCard({
                 onChange={e => setUrl(e.target.value)}
                 disabled={isLoading}
               />
+              <div className="text-xs text-muted-foreground">
+                Test URL: https://multidyls.github.io/GigaPlanner/?p=0&b=AgAAAAAPBAEJGQAAAAoACgoKAAAPAAAACgAAAAABAgEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFIQAAAAAAAAAAMAgAAAAAAAAAAAAAA
+              </div>
             </div>
             <Button
               onClick={handleImportFromUrl}

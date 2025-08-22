@@ -16,10 +16,16 @@ interface CharacterStore {
 
 export const useCharacterStore = create<CharacterStore>((set, get) => ({
   build: DEFAULT_BUILD,
-  updateBuild: updates =>
-    set(state => ({
-      build: { ...state.build, ...updates },
-    })),
+  updateBuild: updates => {
+    console.log('📥 [Character Store] Received build updates:', updates)
+    set(state => {
+      const newBuild = { ...state.build, ...updates }
+      console.log('📊 [Character Store] Previous build state:', state.build)
+      console.log('📊 [Character Store] New build state:', newBuild)
+      return { build: newBuild }
+    })
+    console.log('✅ [Character Store] Build state updated successfully')
+  },
   setBuild: build => set({ build }),
   resetBuild: () => set({ build: DEFAULT_BUILD }),
 

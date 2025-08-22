@@ -185,8 +185,13 @@ export class GigaPlannerConverter {
     const perkList = this.data.perks.find(
       (p: any) => p.perkListId === perkListId
     )
+    console.log('🔍 [Converter] Looking for perkListId:', perkListId)
+    console.log('🔍 [Converter] Looking for gameMechanicsId:', gameMechanicsId)
+    console.log('🔍 [Converter] Available perk lists:', this.data.perks.map((p: any) => ({ id: p.perkListId, name: p.name })))
+    console.log('🔍 [Converter] Available game mechanics:', this.data.gameMechanics.map((g: any) => ({ id: g.gameId, name: g.name })))
+    
     const gameMechanics = this.data.gameMechanics.find(
-      (g: any) => g.id === gameMechanicsId
+      (g: any) => g.gameId === gameMechanicsId
     )
 
     if (!perkList) {
