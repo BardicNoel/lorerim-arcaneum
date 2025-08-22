@@ -1,87 +1,112 @@
 export interface GigaPlannerRace {
-  id: string;
-  name: string;
-  edid: string;
-  startingHMS: [number, number, number]; // [Health, Magicka, Stamina]
-  startingCW: number; // Starting carry weight
-  speedBonus: number;
-  hmsBonus: [number, number, number]; // [Health, Magicka, Stamina] bonuses
-  startingHMSRegen: [number, number, number]; // [Health, Magicka, Stamina] regeneration
-  unarmedDam: number;
-  startingSkills: number[]; // Array of 21 skill levels (0-15)
-  description: string;
-  bonus: string;
+  id: string
+  name: string
+  edid: string
+  startingHMS: [number, number, number] // [Health, Magicka, Stamina]
+  startingCW: number // Starting carry weight
+  speedBonus: number
+  hmsBonus: [number, number, number] // [Health, Magicka, Stamina] bonuses
+  startingHMSRegen: [number, number, number] // [Health, Magicka, Stamina] regeneration
+  unarmedDam: number
+  startingSkills: number[] // Array of 21 skill levels (0-15)
+  description: string
+  bonus: string
 }
 
 export interface GigaPlannerStandingStone {
-  id: string;
-  name: string;
-  edid: string;
-  group: string;
-  description: string;
-  bonus: string;
+  id: string
+  name: string
+  edid: string
+  group: string
+  description: string
+  bonus: string
 }
 
 export interface GigaPlannerBlessing {
-  id: string;
-  name: string;
-  edid: string;
-  shrine: string;
-  follower: string;
-  devotee: string;
-  tenents: string;
-  race: string;
-  starting: string;
-  req: string;
-  category: string; // "Divine", "Daedric", "Elven", "Tribunal", "Yokudan", "Khajiiti", "Miscellaneous"
+  id: string
+  name: string
+  edid: string
+  shrine: string
+  follower: string
+  devotee: string
+  tenents: string
+  race: string
+  starting: string
+  req: string
+  category: string // "Divine", "Daedric", "Elven", "Tribunal", "Yokudan", "Khajiiti", "Miscellaneous"
 }
 
 export interface GigaPlannerGameMechanics {
-  id: string;
-  name: string;
-  gameId: number; // The original numeric ID from the source
-  description: string;
-  version: string;
-  initialPerks: number;
+  id: string
+  name: string
+  gameId: number // The original numeric ID from the source
+  description: string
+  version: string
+  initialPerks: number
   oghmaData: {
-    perksGiven: number;
-    hmsGiven: [number, number, number]; // [Health, Magicka, Stamina]
-  };
+    perksGiven: number
+    hmsGiven: [number, number, number] // [Health, Magicka, Stamina]
+  }
   leveling: {
-    base: number;
-    mult: number;
-    hmsGiven: [number, number, number]; // [Health, Magicka, Stamina]
-  };
+    base: number
+    mult: number
+    hmsGiven: [number, number, number] // [Health, Magicka, Stamina]
+  }
   derivedAttributes: {
-    attribute: string[];
-    isPercent: boolean[];
-    prefactor: number[];
-    threshold: number[];
-    weight_health: number[];
-    weight_magicka: number[];
-    weight_stamina: number[];
-  };
+    attribute: string[]
+    isPercent: boolean[]
+    prefactor: number[]
+    threshold: number[]
+    weight_health: number[]
+    weight_magicka: number[]
+    weight_stamina: number[]
+  }
 }
 
 export interface GigaPlannerPreset {
-  id: string;
-  name: string;
-  presetId: number; // The original numeric ID from the source
-  description: string;
-  version: string;
-  perks: number; // Reference to perks configuration
-  races: number; // Reference to races configuration
-  gameMechanics: number; // Reference to game mechanics configuration
-  blessings: number; // Reference to blessings configuration
-  category?: string;
-  tags?: string[];
+  id: string
+  name: string
+  presetId: number // The original numeric ID from the source
+  description: string
+  version: string
+  perks: number // Reference to perks configuration
+  races: number // Reference to races configuration
+  gameMechanics: number // Reference to game mechanics configuration
+  blessings: number // Reference to blessings configuration
+  category?: string
+  tags?: string[]
+}
+
+export interface GigaPlannerPerk {
+  id: string
+  name: string
+  skill: string
+  skillReq: number
+  description: string
+  edid?: string // Our system's EDID
+  rank?: number // For multi-rank perks
+  maxRank?: number // Maximum rank for this perk
+  prerequisites?: string[] // Array of prerequisite perk IDs
+  xPos?: number // Position data from source
+  yPos?: number // Position data from source
+  nextPerk?: number // Next perk in sequence
+}
+
+export interface GigaPlannerPerkList {
+  id: string
+  name: string
+  perkListId: number // The original numeric ID from the source
+  skillNames: string[]
+  perks: GigaPlannerPerk[]
+  version?: string
+  description?: string
 }
 
 export interface GigaPlannerData {
-  races: GigaPlannerRace[];
-  standingStones: GigaPlannerStandingStone[];
-  blessings: GigaPlannerBlessing[];
-  gameMechanics: GigaPlannerGameMechanics[];
-  presets: GigaPlannerPreset[];
-  perks?: any; // Will be defined later
+  races: GigaPlannerRace[]
+  standingStones: GigaPlannerStandingStone[]
+  blessings: GigaPlannerBlessing[]
+  gameMechanics: GigaPlannerGameMechanics[]
+  presets: GigaPlannerPreset[]
+  perks: GigaPlannerPerkList[]
 }

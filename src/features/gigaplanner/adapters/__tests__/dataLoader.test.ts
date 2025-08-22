@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type {
   GigaPlannerBlessing,
   GigaPlannerGameMechanics,
+  GigaPlannerPerkList,
   GigaPlannerPreset,
   GigaPlannerRace,
   GigaPlannerStandingStone,
@@ -368,7 +369,8 @@ describe('GigaPlannerDataLoader', () => {
         id: 'lorerim-v4',
         name: 'LoreRim v4',
         gameId: 0,
-        description: 'LoreRim v4 game mechanics with balanced progression, realistic combat, and lore-friendly systems designed for immersive gameplay.',
+        description:
+          'LoreRim v4 game mechanics with balanced progression, realistic combat, and lore-friendly systems designed for immersive gameplay.',
         version: '4.0.0',
         initialPerks: 3,
         oghmaData: {
@@ -531,7 +533,8 @@ describe('GigaPlannerDataLoader', () => {
         id: 'lorerim-v3-0-4',
         name: 'LoreRim v3.0.4',
         presetId: 0,
-        description: 'LoreRim v3.0.4 preset with balanced progression, lore-friendly mechanics, and comprehensive character building options.',
+        description:
+          'LoreRim v3.0.4 preset with balanced progression, lore-friendly mechanics, and comprehensive character building options.',
         version: '3.0.4',
         perks: 0,
         races: 0,
@@ -670,6 +673,278 @@ describe('GigaPlannerDataLoader', () => {
     })
   })
 
+  describe('loadPerks', () => {
+    const mockPerks: GigaPlannerPerkList[] = [
+      {
+        id: 'lorerim-v4-perks',
+        name: 'LoreRim v4',
+        perkListId: 0,
+        skillNames: [
+          'Smithing',
+          'Heavy Armor',
+          'Block',
+          'Two-Handed',
+          'One-Handed',
+          'Marksman',
+          'Evasion',
+          'Sneak',
+          'Wayfarer',
+          'Finesse',
+          'Speech',
+          'Alchemy',
+          'Illusion',
+          'Conjuration',
+          'Destruction',
+          'Restoration',
+          'Alteration',
+          'Enchanting',
+          'Destiny',
+          'Traits',
+        ],
+        perks: [
+          {
+            id: 'craftsmanship',
+            name: 'Craftsmanship',
+            skill: 'Smithing',
+            skillReq: 40,
+            xPos: 50,
+            yPos: 62.86,
+            prerequisites: [418],
+            nextPerk: -1,
+            description:
+              "You've acquired the basics of craftsmanship and know how to properly use all kinds of tools.",
+          },
+          {
+            id: 'advanced-blacksmithing',
+            name: 'Advanced Blacksmithing',
+            skill: 'Smithing',
+            skillReq: 50,
+            xPos: 50,
+            yPos: 85.71,
+            prerequisites: [-419, -418],
+            nextPerk: -1,
+            description:
+              "You've gained quite some finesse, allowing you to craft plate armor and fine jewelry.",
+          },
+        ],
+        version: '4.0.0',
+        description: 'LoreRim v4 perk system with 502 perks across 20 skills',
+      },
+    ]
+
+    it('should load perks data successfully', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockPerks[0], // Return single object, not array
+      } as Response)
+
+      const result = await loader.loadPerks()
+
+      expect(result).toEqual(mockPerks)
+      expect(mockFetch).toHaveBeenCalledWith(
+        '/src/features/gigaplanner/data/perks.json'
+      )
+    })
+
+    it('should cache perks data after first load', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockPerks[0], // Return single object, not array
+      } as Response)
+
+      // First load
+      await loader.loadPerks()
+
+      // Second load should use cache
+      const result = await loader.loadPerks()
+
+      expect(result).toEqual(mockPerks)
+      expect(mockFetch).toHaveBeenCalledTimes(1) // Only called once due to caching
+    })
+
+    it('should throw error when fetch fails', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+        statusText: 'Not Found',
+      } as Response)
+
+      await expect(loader.loadPerks()).rejects.toThrow(
+        'Failed to load perks data: 404 Not Found'
+      )
+    })
+
+    it('should throw error when response is not an object', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => 'not an object', // String instead of object
+      } as Response)
+
+      await expect(loader.loadPerks()).rejects.toThrow(
+        'Perks data is not an object'
+      )
+    })
+
+    it('should throw error when perks data is invalid', async () => {
+      const invalidPerks = {
+        id: 'lorerim-v4-perks',
+        // Missing name and perkListId
+        skillNames: ['Smithing', 'Heavy Armor'],
+        perks: [],
+        version: '4.0.0',
+        description: 'LoreRim v4 perk system',
+      }
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => invalidPerks,
+      } as Response)
+
+      await expect(loader.loadPerks()).rejects.toThrow(
+        'Invalid perks data: missing required fields'
+      )
+    })
+
+    it('should throw error when skillNames is invalid', async () => {
+      const invalidPerks = {
+        id: 'lorerim-v4-perks',
+        name: 'LoreRim v4',
+        perkListId: 0,
+        skillNames: 'Smithing', // String instead of array
+        perks: [],
+        version: '4.0.0',
+        description: 'LoreRim v4 perk system',
+      }
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => invalidPerks,
+      } as Response)
+
+      await expect(loader.loadPerks()).rejects.toThrow(
+        'Invalid perks data: skillNames must be a non-empty array'
+      )
+    })
+
+    it('should throw error when perks array is invalid', async () => {
+      const invalidPerks = {
+        id: 'lorerim-v4-perks',
+        name: 'LoreRim v4',
+        perkListId: 0,
+        skillNames: ['Smithing', 'Heavy Armor'],
+        perks: 'not an array', // String instead of array
+        version: '4.0.0',
+        description: 'LoreRim v4 perk system',
+      }
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => invalidPerks,
+      } as Response)
+
+      await expect(loader.loadPerks()).rejects.toThrow(
+        'Invalid perks data: perks must be a non-empty array'
+      )
+    })
+
+    it('should throw error when perk data is invalid', async () => {
+      const invalidPerks = {
+        id: 'lorerim-v4-perks',
+        name: 'LoreRim v4',
+        perkListId: 0,
+        skillNames: ['Smithing', 'Heavy Armor'],
+        perks: [
+          {
+            id: 'craftsmanship',
+            // Missing name, skill, skillReq
+            xPos: 50,
+            yPos: 62.86,
+            prerequisites: [418],
+            nextPerk: -1,
+            description: "You've acquired the basics of craftsmanship.",
+          },
+        ],
+        version: '4.0.0',
+        description: 'LoreRim v4 perk system',
+      }
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => invalidPerks,
+      } as Response)
+
+      await expect(loader.loadPerks()).rejects.toThrow(
+        'Invalid perk data: missing required fields for unknown'
+      )
+    })
+
+    it('should throw error when perk skill is not in skillNames', async () => {
+      const invalidPerks = {
+        id: 'lorerim-v4-perks',
+        name: 'LoreRim v4',
+        perkListId: 0,
+        skillNames: ['Smithing', 'Heavy Armor'],
+        perks: [
+          {
+            id: 'craftsmanship',
+            name: 'Craftsmanship',
+            skill: 'UnknownSkill', // Skill not in skillNames
+            skillReq: 40,
+            xPos: 50,
+            yPos: 62.86,
+            prerequisites: [418],
+            nextPerk: -1,
+            description: "You've acquired the basics of craftsmanship.",
+          },
+        ],
+        version: '4.0.0',
+        description: 'LoreRim v4 perk system',
+      }
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => invalidPerks,
+      } as Response)
+
+      await expect(loader.loadPerks()).rejects.toThrow(
+        "Invalid perk data: skill 'UnknownSkill' not found in skillNames for Craftsmanship"
+      )
+    })
+
+    it('should throw error when perk prerequisites is not an array', async () => {
+      const invalidPerks = {
+        id: 'lorerim-v4-perks',
+        name: 'LoreRim v4',
+        perkListId: 0,
+        skillNames: ['Smithing', 'Heavy Armor'],
+        perks: [
+          {
+            id: 'craftsmanship',
+            name: 'Craftsmanship',
+            skill: 'Smithing',
+            skillReq: 40,
+            xPos: 50,
+            yPos: 62.86,
+            prerequisites: 'not an array', // String instead of array
+            nextPerk: -1,
+            description: "You've acquired the basics of craftsmanship.",
+          },
+        ],
+        version: '4.0.0',
+        description: 'LoreRim v4 perk system',
+      }
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => invalidPerks,
+      } as Response)
+
+      await expect(loader.loadPerks()).rejects.toThrow(
+        'Invalid perk data: prerequisites must be an array for Craftsmanship'
+      )
+    })
+  })
+
   describe('loadAllData', () => {
     const mockRaces: GigaPlannerRace[] = [
       {
@@ -766,6 +1041,30 @@ describe('GigaPlannerDataLoader', () => {
     ]
 
     it('should load all data successfully', async () => {
+      const mockPerks: GigaPlannerPerkList[] = [
+        {
+          id: 'lorerim-v4-perks',
+          name: 'LoreRim v4',
+          perkListId: 0,
+          skillNames: ['Smithing', 'Heavy Armor'],
+          perks: [
+            {
+              id: 'craftsmanship',
+              name: 'Craftsmanship',
+              skill: 'Smithing',
+              skillReq: 40,
+              xPos: 50,
+              yPos: 62.86,
+              prerequisites: [418],
+              nextPerk: -1,
+              description: "You've acquired the basics of craftsmanship.",
+            },
+          ],
+          version: '4.0.0',
+          description: 'LoreRim v4 perk system',
+        },
+      ]
+
       mockFetch
         .mockResolvedValueOnce({
           ok: true,
@@ -787,6 +1086,10 @@ describe('GigaPlannerDataLoader', () => {
           ok: true,
           json: async () => mockPresets,
         } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => mockPerks[0], // Return single object, not array
+        } as Response)
 
       const result = await loader.loadAllData()
 
@@ -796,6 +1099,7 @@ describe('GigaPlannerDataLoader', () => {
         blessings: mockBlessings,
         gameMechanics: mockGameMechanics,
         presets: mockPresets,
+        perks: mockPerks,
       })
     })
   })
@@ -913,16 +1217,50 @@ describe('GigaPlannerDataLoader', () => {
             },
           ],
         } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => {
+            return {
+              id: 'lorerim-v4-perks',
+              name: 'LoreRim v4',
+              perkListId: 0,
+              skillNames: ['Smithing', 'Heavy Armor'],
+              perks: [
+                {
+                  id: 'craftsmanship',
+                  name: 'Craftsmanship',
+                  skill: 'Smithing',
+                  skillReq: 40,
+                  xPos: 50,
+                  yPos: 62.86,
+                  prerequisites: [418],
+                  nextPerk: -1,
+                  description: "You've acquired the basics of craftsmanship.",
+                },
+              ],
+              version: '4.0.0',
+              description: 'LoreRim v4 perk system',
+            }
+          },
+        } as Response)
 
       await loader.loadRaces()
       await loader.loadStandingStones()
       await loader.loadBlessings()
       await loader.loadGameMechanics()
       await loader.loadPresets()
+      await loader.loadPerks()
 
       const stats = loader.getCacheStats()
-      expect(stats.size).toBe(5)
-      expect(stats.keys).toEqual(['races', 'standingStones', 'blessings', 'gameMechanics', 'presets'])
+      expect(stats.size).toBe(6)
+      expect(stats.keys).toEqual([
+        'races',
+        'standingStones',
+        'blessings',
+        'gameMechanics',
+        'presets',
+        'perks',
+      ])
     })
   })
 })

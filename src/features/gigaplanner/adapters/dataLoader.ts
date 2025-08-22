@@ -2,6 +2,7 @@ import type {
   GigaPlannerBlessing,
   GigaPlannerData,
   GigaPlannerGameMechanics,
+  GigaPlannerPerkList,
   GigaPlannerPreset,
   GigaPlannerRace,
   GigaPlannerStandingStone,
@@ -190,14 +191,21 @@ export class GigaPlannerDataLoader {
 
       // Basic validation of each game mechanics entry
       for (const mechanics of gameMechanics) {
-        if (!mechanics.id || !mechanics.name || mechanics.gameId === undefined) {
+        if (
+          !mechanics.id ||
+          !mechanics.name ||
+          mechanics.gameId === undefined
+        ) {
           throw new Error(
             `Invalid game mechanics data: missing required fields for ${mechanics.name || 'unknown'}`
           )
         }
 
         // Validate derived attributes structure
-        if (!mechanics.derivedAttributes || !mechanics.derivedAttributes.attribute) {
+        if (
+          !mechanics.derivedAttributes ||
+          !mechanics.derivedAttributes.attribute
+        ) {
           throw new Error(
             `Invalid game mechanics data: missing derivedAttributes for ${mechanics.name}`
           )
@@ -296,16 +304,102 @@ export class GigaPlannerDataLoader {
   }
 
   /**
-   * Load all GigaPlanner data (races, standing stones, blessings, game mechanics, and presets)
+   * Load perks data from JSON file
+   */
+  async loadPerks(): Promise<GigaPlannerPerkList[]> {
+    const cacheKey = 'perks'
+
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey)
+    }
+
+    try {
+      const response = await fetch('/src/features/gigaplanner/data/perks.json')
+      if (!response.ok) {
+        throw new Error(
+          `Failed to load perks data: ${response.status} ${response.statusText}`
+        )
+      }
+
+      const perkList: GigaPlannerPerkList = await response.json()
+
+      // Validate the data structure
+      if (!perkList || typeof perkList !== 'object') {
+        throw new Error('Perks data is not an object')
+      }
+
+      // Validate required fields
+      if (!perkList.id || !perkList.name || perkList.perkListId === undefined) {
+        throw new Error('Invalid perks data: missing required fields')
+      }
+
+      // Validate skillNames array
+      if (
+        !Array.isArray(perkList.skillNames) ||
+        perkList.skillNames.length === 0
+      ) {
+        throw new Error(
+          'Invalid perks data: skillNames must be a non-empty array'
+        )
+      }
+
+      // Validate perks array
+      if (!Array.isArray(perkList.perks) || perkList.perks.length === 0) {
+        throw new Error('Invalid perks data: perks must be a non-empty array')
+      }
+
+      // Basic validation of each perk
+      for (const perk of perkList.perks) {
+        if (
+          !perk.id ||
+          !perk.name ||
+          !perk.skill ||
+          perk.skillReq === undefined
+        ) {
+          throw new Error(
+            `Invalid perk data: missing required fields for ${perk.name || 'unknown'}`
+          )
+        }
+
+        // Validate skill is in skillNames
+        if (!perkList.skillNames.includes(perk.skill)) {
+          throw new Error(
+            `Invalid perk data: skill '${perk.skill}' not found in skillNames for ${perk.name}`
+          )
+        }
+
+        // Validate prerequisites array
+        if (!Array.isArray(perk.prerequisites)) {
+          throw new Error(
+            `Invalid perk data: prerequisites must be an array for ${perk.name}`
+          )
+        }
+      }
+
+      // Return as array since our interface expects GigaPlannerPerkList[]
+      this.cache.set(cacheKey, [perkList])
+      return [perkList]
+    } catch (error) {
+      console.error('Error loading perks data:', error)
+      throw new Error(
+        `Failed to load perks data: ${error instanceof Error ? error.message : 'Unknown error'}`
+      )
+    }
+  }
+
+  /**
+   * Load all GigaPlanner data (races, standing stones, blessings, game mechanics, presets, and perks)
    */
   async loadAllData(): Promise<GigaPlannerData> {
-    const [races, standingStones, blessings, gameMechanics, presets] = await Promise.all([
-      this.loadRaces(),
-      this.loadStandingStones(),
-      this.loadBlessings(),
-      this.loadGameMechanics(),
-      this.loadPresets(),
-    ])
+    const [races, standingStones, blessings, gameMechanics, presets, perks] =
+      await Promise.all([
+        this.loadRaces(),
+        this.loadStandingStones(),
+        this.loadBlessings(),
+        this.loadGameMechanics(),
+        this.loadPresets(),
+        this.loadPerks(),
+      ])
 
     return {
       races,
@@ -313,7 +407,7 @@ export class GigaPlannerDataLoader {
       blessings,
       gameMechanics,
       presets,
-      // Other data types will be added as they're implemented
+      perks,
     }
   }
 

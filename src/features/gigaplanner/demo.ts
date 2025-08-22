@@ -5,11 +5,15 @@ import {
   getGameMechanicsId,
   getGameMechanicsIdFromStringId,
   getGameMechanicsNameFromId,
+  getPerkEdid,
+  getPerkNameFromEdid,
   getPresetId,
   getPresetIdFromStringId,
   getPresetNameFromId,
   getRaceEdid,
   getRaceNameFromEdid,
+  getSkillIndex,
+  getSkillName,
   getStandingStoneEdid,
   getStandingStoneNameFromEdid,
 } from './adapters'
@@ -27,7 +31,8 @@ async function demo() {
     console.log(`✅ Loaded ${allData.standingStones.length} standing stones`)
     console.log(`✅ Loaded ${allData.blessings.length} blessings`)
     console.log(`✅ Loaded ${allData.gameMechanics.length} game mechanics`)
-    console.log(`✅ Loaded ${allData.presets.length} presets\n`)
+    console.log(`✅ Loaded ${allData.presets.length} presets`)
+    console.log(`✅ Loaded ${allData.perks.length} perk lists\n`)
 
     // Display first race
     const firstRace = allData.races[0]
@@ -68,10 +73,16 @@ async function demo() {
     console.log(`  Game ID: ${firstGameMechanics.gameId}`)
     console.log(`  Version: ${firstGameMechanics.version}`)
     console.log(`  Initial Perks: ${firstGameMechanics.initialPerks}`)
-    console.log(`  Oghma Perks Given: ${firstGameMechanics.oghmaData.perksGiven}`)
+    console.log(
+      `  Oghma Perks Given: ${firstGameMechanics.oghmaData.perksGiven}`
+    )
     console.log(`  Leveling Base: ${firstGameMechanics.leveling.base}`)
-    console.log(`  Derived Attributes Count: ${firstGameMechanics.derivedAttributes.attribute.length}`)
-    console.log(`  Description: ${firstGameMechanics.description.substring(0, 100)}...\n`)
+    console.log(
+      `  Derived Attributes Count: ${firstGameMechanics.derivedAttributes.attribute.length}`
+    )
+    console.log(
+      `  Description: ${firstGameMechanics.description.substring(0, 100)}...\n`
+    )
 
     // Display first preset
     const firstPreset = allData.presets[0]
@@ -86,7 +97,36 @@ async function demo() {
     console.log(`  Blessings Reference: ${firstPreset.blessings}`)
     console.log(`  Category: ${firstPreset.category}`)
     console.log(`  Tags: ${firstPreset.tags?.join(', ')}`)
-    console.log(`  Description: ${firstPreset.description.substring(0, 100)}...\n`)
+    console.log(
+      `  Description: ${firstPreset.description.substring(0, 100)}...\n`
+    )
+
+    // Display first perk list
+    const firstPerkList = allData.perks[0]
+    console.log('First perk list (LoreRim v4):')
+    console.log(`  Name: ${firstPerkList.name}`)
+    console.log(`  ID: ${firstPerkList.id}`)
+    console.log(`  Perk List ID: ${firstPerkList.perkListId}`)
+    console.log(`  Version: ${firstPerkList.version}`)
+    console.log(`  Skills: ${firstPerkList.skillNames.join(', ')}`)
+    console.log(`  Perks Count: ${firstPerkList.perks.length}`)
+    console.log(
+      `  Description: ${firstPerkList.description?.substring(0, 100)}...\n`
+    )
+
+    // Display first few perks
+    const firstPerk = firstPerkList.perks[0]
+    console.log('First perk (Craftsmanship):')
+    console.log(`  Name: ${firstPerk.name}`)
+    console.log(`  ID: ${firstPerk.id}`)
+    console.log(`  Skill: ${firstPerk.skill}`)
+    console.log(`  Skill Requirement: ${firstPerk.skillReq}`)
+    console.log(`  Position: (${firstPerk.xPos}, ${firstPerk.yPos})`)
+    console.log(`  Prerequisites: [${firstPerk.prerequisites.join(', ')}]`)
+    console.log(`  Next Perk: ${firstPerk.nextPerk}`)
+    console.log(
+      `  Description: ${firstPerk.description.substring(0, 100)}...\n`
+    )
 
     // Test EDID mappings
     console.log('Testing Race EDID mappings:')
@@ -134,19 +174,55 @@ async function demo() {
 
     console.log('\nTesting Game Mechanics ID mappings:')
     console.log(`  'LoreRim v4' -> ${getGameMechanicsId('LoreRim v4')}`)
-    console.log(`  'UnknownMechanics' -> ${getGameMechanicsId('UnknownMechanics')}`)
+    console.log(
+      `  'UnknownMechanics' -> ${getGameMechanicsId('UnknownMechanics')}`
+    )
     console.log(`  0 -> '${getGameMechanicsNameFromId(0)}'`)
     console.log(`  1 -> '${getGameMechanicsNameFromId(1)}'`)
-    console.log(`  'lorerim-v4' -> '${getGameMechanicsIdFromStringId('lorerim-v4')}'`)
-    console.log(`  'unknown-mechanics' -> '${getGameMechanicsIdFromStringId('unknown-mechanics')}'`)
+    console.log(
+      `  'lorerim-v4' -> '${getGameMechanicsIdFromStringId('lorerim-v4')}'`
+    )
+    console.log(
+      `  'unknown-mechanics' -> '${getGameMechanicsIdFromStringId('unknown-mechanics')}'`
+    )
 
     console.log('\nTesting Preset ID mappings:')
     console.log(`  'LoreRim v3.0.4' -> ${getPresetId('LoreRim v3.0.4')}`)
     console.log(`  'UnknownPreset' -> ${getPresetId('UnknownPreset')}`)
     console.log(`  0 -> '${getPresetNameFromId(0)}'`)
     console.log(`  1 -> '${getPresetNameFromId(1)}'`)
-    console.log(`  'lorerim-v3-0-4' -> '${getPresetIdFromStringId('lorerim-v3-0-4')}'`)
-    console.log(`  'unknown-preset' -> '${getPresetIdFromStringId('unknown-preset')}'`)
+    console.log(
+      `  'lorerim-v3-0-4' -> '${getPresetIdFromStringId('lorerim-v3-0-4')}'`
+    )
+    console.log(
+      `  'unknown-preset' -> '${getPresetIdFromStringId('unknown-preset')}'`
+    )
+
+    console.log('\nTesting Perk EDID mappings:')
+    console.log(`  'Craftsmanship' -> '${getPerkEdid('Craftsmanship')}'`)
+    console.log(
+      `  'Advanced Blacksmithing' -> '${getPerkEdid('Advanced Blacksmithing')}'`
+    )
+    console.log(`  'Elven Smithing' -> '${getPerkEdid('Elven Smithing')}'`)
+    console.log(
+      `  'PerkCraftsmanship' -> '${getPerkNameFromEdid('PerkCraftsmanship')}'`
+    )
+    console.log(
+      `  'PerkAdvancedBlacksmithing' -> '${getPerkNameFromEdid('PerkAdvancedBlacksmithing')}'`
+    )
+    console.log(
+      `  'PerkElvenSmithing' -> '${getPerkNameFromEdid('PerkElvenSmithing')}'`
+    )
+    console.log(`  'UnknownPerk' -> '${getPerkNameFromEdid('UnknownPerk')}'`)
+
+    console.log('\nTesting Skill mappings:')
+    console.log(`  Skill index 0 -> '${getSkillName(0)}'`)
+    console.log(`  Skill index 5 -> '${getSkillName(5)}'`)
+    console.log(`  Skill index 19 -> '${getSkillName(19)}'`)
+    console.log(`  'Smithing' -> index ${getSkillIndex('Smithing')}`)
+    console.log(`  'Marksman' -> index ${getSkillIndex('Marksman')}`)
+    console.log(`  'Destruction' -> index ${getSkillIndex('Destruction')}`)
+    console.log(`  'UnknownSkill' -> index ${getSkillIndex('UnknownSkill')}`)
 
     // Test caching
     console.log('\nTesting caching...')
