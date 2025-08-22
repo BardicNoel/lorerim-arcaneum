@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { getBirthsignGroupStyle } from '../config/birthsignConfig'
 import type { Birthsign } from '../types'
 import { BirthsignAvatar } from './'
+import { sanitizeStatName, sanitizeSkillName } from '../utils/stringSanitizer'
 
 interface BirthsignCardProps {
   item?: PlayerCreationItem
@@ -297,7 +298,7 @@ export function BirthsignCard({
                         className="flex items-center justify-between p-2 rounded-lg border bg-muted/30"
                       >
                         <span className="text-sm font-medium capitalize">
-                          {stat.stat}
+                          {sanitizeStatName(stat.stat)}
                         </span>
                         <span
                           className={cn(
@@ -331,7 +332,7 @@ export function BirthsignCard({
                         className="flex items-center justify-between p-2 rounded-lg border bg-muted/30"
                       >
                         <span className="text-sm font-medium capitalize">
-                          {skill.stat}
+                          {sanitizeSkillName(skill.stat)}
                         </span>
                         <span className="font-bold text-green-600">
                           +{skill.value}

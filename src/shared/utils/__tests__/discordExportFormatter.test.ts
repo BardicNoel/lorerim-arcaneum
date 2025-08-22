@@ -3,88 +3,127 @@ import { formatBuildForDiscordNamesOnly, formatBuildForDiscord } from '../discor
 import type { HydratedBuildData } from '@/shared/types/discordExport'
 
 describe('discordExportFormatter', () => {
-  const mockHydratedData: HydratedBuildData = {
-    name: 'Test Character',
-    notes: 'Test notes',
-    race: { name: 'Nord' },
-    birthSign: { name: 'The Warrior', effects: 'Combat bonuses' },
-    traits: [
-      { name: 'Warrior Born', effects: 'Combat skill bonuses', type: 'regular' }
-    ],
-    religion: { name: 'Talos', effects: 'Divine blessings' },
-    skills: {
-      major: [{ name: 'One-Handed', level: 50 }],
-      minor: [{ name: 'Heavy Armor' }],
-      other: []
-    },
-    perks: [
-      {
-        skillName: 'One-Handed',
-        perks: [{ name: 'Armsman', effects: 'Increased damage', rank: 2 }]
-      }
-    ],
-    destinyPath: [{ name: 'Warrior Path', effects: 'Combat mastery' }],
-    tags: ['lorerim', 'nord', 'warrior'],
-    attributes: {
-      level: 7,
-      health: 3,
-      stamina: 2,
-      magicka: 1,
-      totalPoints: 6
-    }
-  }
-
   describe('formatBuildForDiscordNamesOnly', () => {
     it('should include attributes section in names-only format', () => {
-      const formatted = formatBuildForDiscordNamesOnly(mockHydratedData)
-      
-      expect(formatted).toContain('__⚔️ Attributes (Level 7)__')
-      expect(formatted).toContain('Health: 3, Stamina: 2, Magicka: 1')
+      const mockData: HydratedBuildData = {
+        name: 'Test Character',
+        notes: '',
+        race: { name: 'Nord', effects: 'Test effects' },
+        birthSign: { name: 'Warrior', effects: 'Test effects' },
+        traits: [],
+        religion: { name: 'Akatosh', effects: 'Divine' },
+        favoriteBlessing: { name: 'Blessing of Akatosh', effects: 'Dragon Slayer, Time Reset', source: 'Akatosh' },
+        skills: { major: [], minor: [], other: [] },
+        perks: [],
+        destinyPath: [],
+        tags: [],
+        attributes: {
+          level: 5,
+          health: 15,
+          stamina: 10,
+          magicka: 5,
+          totalPoints: 30,
+        },
+      }
+
+      const result = formatBuildForDiscordNamesOnly(mockData)
+
+      expect(result).toContain('__⚔️ Attributes (Level 5)__')
+      expect(result).toContain('Health: 15, Stamina: 10, Magicka: 5')
+      expect(result).toContain('__✨ Favorite Blessing__')
+      expect(result).toContain('Blessing of Akatosh')
+      expect(result).toContain('• **Source:** Akatosh')
+      expect(result).toContain('• **Effects:** Dragon Slayer, Time Reset')
     })
 
     it('should handle builds with no attribute points', () => {
-      const dataWithNoAttributes = {
-        ...mockHydratedData,
+      const mockData: HydratedBuildData = {
+        name: 'Test Character',
+        notes: '',
+        race: { name: 'Nord', effects: 'Test effects' },
+        birthSign: { name: 'Warrior', effects: 'Test effects' },
+        traits: [],
+        religion: { name: 'Akatosh', effects: 'Divine' },
+        favoriteBlessing: { name: 'Not selected', effects: 'No effects', source: 'None' },
+        skills: { major: [], minor: [], other: [] },
+        perks: [],
+        destinyPath: [],
+        tags: [],
         attributes: {
           level: 1,
           health: 0,
           stamina: 0,
           magicka: 0,
-          totalPoints: 0
-        }
+          totalPoints: 0,
+        },
       }
-      
-      const formatted = formatBuildForDiscordNamesOnly(dataWithNoAttributes)
-      
-      expect(formatted).toContain('__⚔️ Attributes (Level 1)__')
-      expect(formatted).toContain('No attribute points assigned')
+
+      const result = formatBuildForDiscordNamesOnly(mockData)
+
+      expect(result).toContain('__⚔️ Attributes (Level 1)__')
+      expect(result).toContain('No attribute points assigned')
     })
   })
 
   describe('formatBuildForDiscord', () => {
     it('should include attributes section in full format', () => {
-      const formatted = formatBuildForDiscord(mockHydratedData)
-      
-      expect(formatted).toContain('__⚔️ Attributes (Level 7)__')
-      expect(formatted).toContain('Health: 3, Stamina: 2, Magicka: 1')
+      const mockData: HydratedBuildData = {
+        name: 'Test Character',
+        notes: '',
+        race: { name: 'Nord', effects: 'Test effects' },
+        birthSign: { name: 'Warrior', effects: 'Test effects' },
+        traits: [],
+        religion: { name: 'Akatosh', effects: 'Divine' },
+        favoriteBlessing: { name: 'Blessing of Akatosh', effects: 'Dragon Slayer, Time Reset', source: 'Akatosh' },
+        skills: { major: [], minor: [], other: [] },
+        perks: [],
+        destinyPath: [],
+        tags: [],
+        attributes: {
+          level: 5,
+          health: 15,
+          stamina: 10,
+          magicka: 5,
+          totalPoints: 30,
+        },
+      }
+
+      const result = formatBuildForDiscord(mockData)
+
+      expect(result).toContain('__⚔️ Attributes (Level 5)__')
+      expect(result).toContain('Health: 15, Stamina: 10, Magicka: 5')
+      expect(result).toContain('__✨ Favorite Blessing__')
+      expect(result).toContain('Blessing of Akatosh')
+      expect(result).toContain('• **Source:** Akatosh')
+      expect(result).toContain('• **Effects:** Dragon Slayer, Time Reset')
     })
 
     it('should handle builds with no attribute points', () => {
-      const dataWithNoAttributes = {
-        ...mockHydratedData,
+      const mockData: HydratedBuildData = {
+        name: 'Test Character',
+        notes: '',
+        race: { name: 'Nord', effects: 'Test effects' },
+        birthSign: { name: 'Warrior', effects: 'Test effects' },
+        traits: [],
+        religion: { name: 'Akatosh', effects: 'Divine' },
+        favoriteBlessing: { name: 'Not selected', effects: 'No effects', source: 'None' },
+        skills: { major: [], minor: [], other: [] },
+        perks: [],
+        destinyPath: [],
+        tags: [],
         attributes: {
           level: 1,
           health: 0,
           stamina: 0,
           magicka: 0,
-          totalPoints: 0
-        }
+          totalPoints: 0,
+        },
       }
-      
-      const formatted = formatBuildForDiscord(dataWithNoAttributes)
-      
-      expect(formatted).toContain('__⚔️ Attributes (Level 1)__')
-      expect(formatted).toContain('No attribute points assigned')
+
+      const result = formatBuildForDiscord(mockData)
+
+      expect(result).toContain('__⚔️ Attributes (Level 1)__')
+      expect(result).toContain('No attribute points assigned')
     })
   })
 }) 

@@ -20,9 +20,10 @@ interface SearchableReligion {
 /**
  * Hook for fuzzy searching through religion data using Fuse.js
  */
-export function useFuzzySearch(religions: Religion[], searchQuery: string) {
+export function useFuzzySearch(religions: Religion[] | undefined | null, searchQuery: string) {
   // Create searchable religion objects
   const searchableReligions = useMemo(() => {
+    if (!religions) return []
     return religions.map(religion => ({
       id: religion.name.toLowerCase().replace(/\s+/g, '-'),
       name: religion.name,

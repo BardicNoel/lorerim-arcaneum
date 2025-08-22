@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { DestinyNode } from '../types'
 import { useDestinyNodes } from './useDestinyNodes'
 
@@ -49,6 +49,11 @@ export function useDestinyPath(
 
   const [currentPath, setCurrentPath] = useState<DestinyNode[]>(initialPath)
   const { nodes, rootNodes } = useDestinyNodes()
+
+  // Sync internal state with initialPath prop changes
+  useEffect(() => {
+    setCurrentPath(initialPath)
+  }, [initialPath])
 
   // Current node (last in path)
   const currentNode = useMemo(() => {

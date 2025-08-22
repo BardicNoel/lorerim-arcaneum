@@ -20,6 +20,7 @@ import {
 import React from 'react'
 import type { Religion } from '../types'
 import { ReligionAvatar, ReligionCategoryBadge } from './atomic'
+import { sanitizeEffectName, sanitizeEffectDescription } from '../utils/stringSanitizer'
 
 interface ReligionSheetProps {
   religion: Religion | null
@@ -80,8 +81,11 @@ function FormattedBlessingDescription({
 }) {
   if (!description) return null
 
-  // First, clean up any existing angle brackets that might interfere
-  let formatted = description.replace(/<[^>]*>/g, '')
+  // First, sanitize the description to handle underscores and other formatting issues
+  let formatted = sanitizeEffectDescription(description)
+
+  // Clean up any existing angle brackets that might interfere
+  formatted = formatted.replace(/<[^>]*>/g, '')
 
   // Replace magnitude placeholders
   formatted = formatted.replace(/<mag>/g, magnitude.toString())
@@ -254,7 +258,7 @@ export function ReligionSheet({
                         </div>
                         <div className="flex-1">
                           <P className="font-medium text-sm mb-2">
-                            {effect.effectName}
+                            {sanitizeEffectName(effect.effectName)}
                           </P>
                           <FormattedBlessingDescription
                             description={effect.effectDescription}

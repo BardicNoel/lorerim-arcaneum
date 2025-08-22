@@ -160,7 +160,6 @@ export function DestinyMobileStepper() {
             onRestart={() => clear()}
             onShare={() => {
               // TODO: Implement share functionality
-              console.log('Share path:', useDestinyStepperStore.getState().toQuery())
             }}
           />
         )}

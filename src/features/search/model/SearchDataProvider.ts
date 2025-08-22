@@ -9,6 +9,7 @@ import {
   createSearchHighlights,
   transformBirthsignsToSearchable,
   transformDestinyNodesToSearchable,
+  transformEnchantmentsToSearchable,
   transformPerkReferencesToSearchable,
   transformPerkTreesToSearchable,
   transformRacesToSearchable,
@@ -28,18 +29,18 @@ export class SearchDataProvider {
   // Configure Fuse.js options for better tag-based searching
   private fuseOptions: IFuseOptions<SearchableItem> = {
     keys: [
-      { name: 'name', weight: 0.8 },
-      { name: 'description', weight: 0.6 },
-      { name: 'category', weight: 0.4 },
-      { name: 'tags', weight: 0.5 },
-      { name: 'searchableText', weight: 0.3 },
+      { name: 'name', weight: 1.0 }, // Increased weight for exact name matches
+      { name: 'description', weight: 0.4 }, // Reduced weight to prioritize names
+      { name: 'category', weight: 0.3 },
+      { name: 'tags', weight: 0.4 },
+      { name: 'searchableText', weight: 0.2 }, // Reduced weight
     ],
-    threshold: 0.6, // More permissive threshold for better recall
+    threshold: 0.8, // More permissive threshold for better recall (was 0.6)
     includeMatches: true,
     includeScore: true,
-    minMatchCharLength: 2,
+    minMatchCharLength: 1, // Allow single character matches
     ignoreLocation: true,
-    useExtendedSearch: false, // Disable extended search for simple text matching
+    useExtendedSearch: true, // Enable extended search for AND/OR operators
     findAllMatches: true,
   }
 
@@ -85,6 +86,7 @@ export class SearchDataProvider {
   transformPerkReferencesToSearchable = transformPerkReferencesToSearchable
   transformRecipesToSearchable = transformRecipesToSearchable
   transformSpellsToSearchable = transformSpellsToSearchable
+  transformEnchantmentsToSearchable = transformEnchantmentsToSearchable
 
   async buildSearchIndex(): Promise<void> {
     if (this.isIndexing) return
@@ -113,6 +115,8 @@ export class SearchDataProvider {
 
       // Import spell data provider
       const { SpellDataProvider } = await import('@/features/spells/model/SpellDataProvider')
+      // Import enchantment data provider
+      const { EnchantmentDataProvider } = await import('@/features/enchantments/model/EnchantmentDataProvider')
 
       // Get data from all stores
       const skills = useSkillsStore.getState().data
@@ -128,6 +132,10 @@ export class SearchDataProvider {
       const spellDataProvider = SpellDataProvider.getInstance()
       const spells = await spellDataProvider.loadSpells()
 
+      // Get enchantment data
+      const enchantmentDataProvider = EnchantmentDataProvider.getInstance()
+      const enchantments = await enchantmentDataProvider.loadEnchantments()
+
       // Check if stores have data
       if (
         !skills?.length ||
@@ -138,9 +146,9 @@ export class SearchDataProvider {
         !destinyNodes?.length ||
         !perkTrees?.length ||
         !recipes?.length ||
-        !spells?.length
+        !spells?.length ||
+        !enchantments?.length
       ) {
-        console.log('Stores not loaded yet, cannot build search index')
         throw new Error(
           'Store data not available - stores must be loaded before building search index'
         )
@@ -157,6 +165,7 @@ export class SearchDataProvider {
         ...transformPerkTreesToSearchable(perkTrees),
         ...transformRecipesToSearchable(recipes),
         ...transformSpellsToSearchable(spells),
+        ...transformEnchantmentsToSearchable(enchantments),
       ]
 
       this.allSearchableItems = searchableItems
@@ -218,25 +227,48 @@ export class SearchDataProvider {
       return []
     }
 
-    // Perform search on all items first
+    // Check if this is an extended search query (contains operators)
+    const isExtendedSearch = query.includes(' | ') || query.includes(' & ') || query.includes('!')
+    
+    // First, look for exact matches to boost them (skip for extended search)
+    const exactMatches = isExtendedSearch ? [] : this.allSearchableItems.filter(item => 
+      item.name.toLowerCase() === query.toLowerCase()
+    )
+
+    // Perform fuzzy search on all items
     const fuseResults = this.searchIndex.search(query)
 
+
+
+    // Combine exact matches (perfect score) with fuzzy results, avoiding duplicates
+    const exactMatchIds = new Set(exactMatches.map(item => item.id))
+    const combinedResults = [
+      // Exact matches first with perfect score
+      ...exactMatches.map(item => ({ item, score: 0, matches: [] })),
+      // Fuzzy results that aren't already exact matches
+      ...fuseResults.filter(result => !exactMatchIds.has(result.item.id))
+    ]
+
     // Apply filters to search results
-    let filteredResults = fuseResults
+    let filteredResults = combinedResults
 
     if (filters) {
-      filteredResults = fuseResults.filter(fuseResult => {
-        const item = fuseResult.item
+      const beforeFilterCount = combinedResults.length
+      filteredResults = combinedResults.filter(result => {
+        const item = result.item
         return this.applyFilters([item], filters).length > 0
       })
+      const afterFilterCount = filteredResults.length
+      
+
     }
 
-    // Transform Fuse results to SearchResult format
-    const results = filteredResults.map(fuseResult => ({
-      item: fuseResult.item,
-      score: fuseResult.score || 0,
-      matches: [...(fuseResult.matches || [])],
-      highlights: createSearchHighlights([...(fuseResult.matches || [])]),
+    // Transform results to SearchResult format
+    const results = filteredResults.map(result => ({
+      item: result.item,
+      score: result.score || 0,
+      matches: [...(result.matches || [])],
+      highlights: createSearchHighlights([...(result.matches || [])]),
     }))
 
     return results

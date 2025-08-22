@@ -21,7 +21,6 @@ export function useCharacterBuild() {
 
   // Skill management functions
   const addMajorSkill = (skillId: string) => {
-    console.log('addMajorSkill called:', { skillId })
     const currentMajorSkills = majorSkills ?? []
     const currentMinorSkills = minorSkills ?? []
 
@@ -33,14 +32,9 @@ export function useCharacterBuild() {
         major: [...currentMajorSkills, skillId],
         minor: newMinorSkills,
       }
-      console.log('addMajorSkill - updating build with new skills:', newSkills)
       updateBuild({
         skills: newSkills,
       })
-    } else {
-      console.log(
-        'addMajorSkill - skill already major or limit reached, skipping'
-      )
     }
   }
 
@@ -178,6 +172,11 @@ export function useCharacterBuild() {
     updateBuild({ religion: religionId })
   }
 
+  // Favorite blessing management
+  const setFavoriteBlessing = (blessingId: string | null) => {
+    updateBuild({ favoriteBlessing: blessingId })
+  }
+
   // Equipment management
   const addEquipment = (equipmentId: string) => {
     const equipment = build?.equipment ?? []
@@ -212,7 +211,6 @@ export function useCharacterBuild() {
 
   // Perk management functions
   const addPerk = (skillId: string, perkId: string) => {
-    console.log('addPerk called:', { skillId, perkId })
     const currentPerks = build?.perks?.selected ?? {}
     const skillPerks = currentPerks[skillId] ?? []
 
@@ -228,15 +226,10 @@ export function useCharacterBuild() {
       // Calculate new skill levels based on updated perks
       const newSkillLevels = calculateAllSkillLevels(newPerks)
 
-      console.log('addPerk - updating build with new perks:', newPerks)
-      console.log('addPerk - calculated skill levels:', newSkillLevels)
-
       updateBuild({
         perks: newPerks,
         skillLevels: newSkillLevels,
       })
-    } else {
-      console.log('addPerk - perk already selected, skipping')
     }
   }
 
@@ -264,7 +257,6 @@ export function useCharacterBuild() {
   }
 
   const setPerkRank = (perkId: string, rank: number) => {
-    console.log('setPerkRank called:', { perkId, rank })
     const currentRanks = build?.perks?.ranks ?? {}
 
     const newPerks = {
@@ -277,9 +269,6 @@ export function useCharacterBuild() {
 
     // Calculate new skill levels based on updated perks
     const newSkillLevels = calculateAllSkillLevels(newPerks)
-
-    console.log('setPerkRank - updating build with new ranks:', newPerks)
-    console.log('setPerkRank - calculated skill levels:', newSkillLevels)
 
     updateBuild({
       perks: newPerks,
@@ -500,6 +489,9 @@ export function useCharacterBuild() {
 
     // Religion management - Simplified
     setReligion,
+
+    // Favorite blessing management
+    setFavoriteBlessing,
 
     // Equipment management
     addEquipment,

@@ -43,13 +43,7 @@ export function AccordionBirthsignsPage() {
     sortedDisplayItems,
   } = useBirthsignFilters(birthsigns)
 
-  // Debug logging
-  useEffect(() => {
-    console.log('birthsigns', birthsigns)
-    console.log('sortedDisplayItems', sortedDisplayItems)
-    console.log('displayItems', displayItems)
-    console.log('filteredBirthsigns', filteredBirthsigns)
-  }, [birthsigns, sortedDisplayItems, displayItems, filteredBirthsigns])
+
 
   // State for details sheet
   const [selectedBirthsign, setSelectedBirthsign] = useState<Birthsign | null>(

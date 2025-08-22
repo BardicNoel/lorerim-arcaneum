@@ -75,7 +75,11 @@ export const useReligionsStore = create<ReligionsStore>((set, get) => ({
   // Computed
   getById: (id: string) => {
     const state = get()
-    return state.data.find(religion => religion.id === id)
+    return state.data.find(religion => 
+      religion.id === id || 
+      religion.name === id ||
+      religion.name.toLowerCase().replace(/\s+/g, '-') === id
+    )
   },
 
   search: (query: string) => {

@@ -1,15 +1,14 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react'
+import { Z_INDEX } from '@/lib/constants'
+import { cn } from '@/lib/utils'
+import type { BlessingData } from '@/shared/stores/blessingsStore'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { Input } from '@/shared/ui/ui/input'
-import { ChevronDown, Search, Star, X, Zap } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { useFuzzySearch } from '../hooks/useFuzzySearch'
-import { getBlessingOptions } from '../utils/religionFilters'
-import type { Religion } from '../types'
+import { ChevronDown, Search, X, Zap } from 'lucide-react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 interface BlessingAutocompleteProps {
-  religions: Religion[]
+  blessings: BlessingData[] | undefined | null
   selectedBlessingId: string | null
   onBlessingSelect: (blessingId: string | null) => void
   placeholder?: string
@@ -18,7 +17,7 @@ interface BlessingAutocompleteProps {
 }
 
 export function BlessingAutocomplete({
-  religions,
+  blessings,
   selectedBlessingId,
   onBlessingSelect,
   placeholder = 'Search for a blessing source...',
@@ -31,24 +30,27 @@ export function BlessingAutocomplete({
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Get blessing options
-  const blessingOptions = useMemo(
-    () => getBlessingOptions(religions),
-    [religions]
-  )
+  // Filter blessings based on search query
+  const filteredBlessings = useMemo(() => {
+    if (!blessings || !searchQuery.trim()) {
+      return blessings || []
+    }
 
-  // Use fuzzy search
-  const { filteredReligions } = useFuzzySearch(religions, searchQuery)
-  const filteredBlessingOptions = useMemo(() => {
-    if (!searchQuery.trim()) return blessingOptions
-    return getBlessingOptions(filteredReligions)
-  }, [filteredReligions, blessingOptions, searchQuery])
+    const lowerQuery = searchQuery.toLowerCase()
+    return blessings.filter(
+      blessing =>
+        blessing.name.toLowerCase().includes(lowerQuery) ||
+        blessing.blessingName.toLowerCase().includes(lowerQuery) ||
+        blessing.blessingDescription.toLowerCase().includes(lowerQuery) ||
+        blessing.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
+    )
+  }, [blessings, searchQuery])
 
   // Find selected blessing
   const selectedBlessing = useMemo(() => {
-    if (!selectedBlessingId) return null
-    return blessingOptions.find(blessing => blessing.id === selectedBlessingId)
-  }, [selectedBlessingId, blessingOptions])
+    if (!selectedBlessingId || !blessings) return null
+    return blessings.find(blessing => blessing.id === selectedBlessingId)
+  }, [selectedBlessingId, blessings])
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -89,16 +91,14 @@ export function BlessingAutocomplete({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault()
-      setActiveIndex(prev =>
-        Math.min(prev + 1, filteredBlessingOptions.length - 1)
-      )
+      setActiveIndex(prev => Math.min(prev + 1, filteredBlessings.length - 1))
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
       setActiveIndex(prev => Math.max(prev - 1, -1))
     } else if (e.key === 'Enter') {
       e.preventDefault()
-      if (activeIndex >= 0 && filteredBlessingOptions[activeIndex]) {
-        handleBlessingSelect(filteredBlessingOptions[activeIndex].id)
+      if (activeIndex >= 0 && filteredBlessings[activeIndex]) {
+        handleBlessingSelect(filteredBlessings[activeIndex].id)
       }
     } else if (e.key === 'Escape') {
       setIsOpen(false)
@@ -164,27 +164,27 @@ export function BlessingAutocomplete({
           onFocus={handleInputFocus}
           onKeyDown={handleKeyDown}
           disabled={disabled}
-          className="pl-10 pr-10"
+          className="pl-10 pr-20"
         />
         {searchQuery && (
           <Button
             variant="ghost"
             size="sm"
             onClick={clearSearch}
-            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
+            className="absolute right-8 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-muted"
           >
-            <X className="h-3 w-3" />
+            <X className="h-4 w-4" />
           </Button>
         )}
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setIsOpen(!isOpen)}
-          className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
+          className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
         >
           <ChevronDown
             className={cn(
-              'h-3 w-3 transition-transform',
+              'h-4 w-4 transition-transform',
               isOpen && 'rotate-180'
             )}
           />
@@ -192,20 +192,27 @@ export function BlessingAutocomplete({
       </div>
 
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-background border border-border rounded-md shadow-lg max-h-60 overflow-y-auto">
-          {filteredBlessingOptions.length === 0 ? (
-            <div className="p-3 text-sm text-muted-foreground text-center">
-              No blessing found.
-            </div>
-          ) : (
-            <div className="py-1">
-              {filteredBlessingOptions.map((blessing, index) => (
+        <div
+          className={cn(
+            'absolute top-full left-0 right-0 mt-1 dropdown-enhanced rounded-lg overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/30 max-h-60'
+          )}
+          style={{ zIndex: Z_INDEX.AUTOCOMPLETE + 10 }}
+        >
+          <div className="p-2">
+            {filteredBlessings.length === 0 ? (
+              <div className="px-2 py-4 text-center text-muted-foreground text-sm">
+                No blessing found.
+              </div>
+            ) : (
+              filteredBlessings.map((blessing, index) => (
                 <button
                   key={blessing.id}
                   onClick={() => handleBlessingSelect(blessing.id)}
                   className={cn(
-                    'w-full text-left p-3 hover:bg-muted/50 transition-colors',
-                    index === activeIndex && 'bg-muted/50'
+                    'w-full text-left px-3 py-3 rounded-lg text-sm transition-all duration-200 cursor-pointer',
+                    index === activeIndex
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'hover:bg-muted/60 hover:shadow-sm active:bg-muted/80 active:scale-[0.98]'
                   )}
                 >
                   <div className="flex items-center gap-2 mb-1">
@@ -248,9 +255,9 @@ export function BlessingAutocomplete({
                     </div>
                   )}
                 </button>
-              ))}
-            </div>
-          )}
+              ))
+            )}
+          </div>
         </div>
       )}
     </div>

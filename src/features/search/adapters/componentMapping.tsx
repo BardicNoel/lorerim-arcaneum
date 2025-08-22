@@ -119,7 +119,6 @@ export function getComponentForType(
   type: string,
   viewMode: ViewMode
 ): React.ComponentType<any> {
-  console.log('getComponentForType', type, viewMode)
   const typeComponents = COMPONENT_MAP[type]
   if (!typeComponents) {
     return FallbackCard

@@ -568,7 +568,7 @@ export function RacesMVADemoPage() {
               <div className="space-y-4">
                 <RaceAutocomplete
                   races={races.slice(0, 5)}
-                  onSelect={race => console.log('Selected:', race.name)}
+                  onSelect={race => {}}
                   placeholder="Search for a race..."
                   className="w-full"
                 />

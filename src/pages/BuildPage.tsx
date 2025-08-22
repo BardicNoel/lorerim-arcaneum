@@ -1,7 +1,7 @@
 import { BirthsignSelectionCard } from '@/features/birthsigns'
 import BuildPageDestinyCard from '@/features/destiny/views/BuildPageDestinyCard'
 import { RaceSelectionCard } from '@/features/races-v2'
-import { ReligionSelectionCard } from '@/features/religions/components'
+import { ReligionSelectionCard, FavoriteBlessingSelectionCard } from '@/features/religions/components'
 import { BuildPageSkillCard } from '@/features/skills/components'
 import { TraitSelectionCard } from '@/features/traits/components'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
@@ -64,6 +64,11 @@ export function BuildPage() {
     {
       id: 'religion',
       component: <ReligionSelectionCard />,
+      size: 'half' as const,
+    },
+    {
+      id: 'favorite-blessing',
+      component: <FavoriteBlessingSelectionCard />,
       size: 'half' as const,
     },
     {

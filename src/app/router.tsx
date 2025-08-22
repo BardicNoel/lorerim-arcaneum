@@ -13,6 +13,7 @@ import { AccordionTraitsPage } from '@/features/traits/pages/AccordionTraitsPage
 import { BuildPage } from '@/pages/BuildPage'
 import CraftingPage from '@/pages/CraftingPage'
 import EquipmentPage from '@/pages/EquipmentPage'
+import EnchantmentsPage from '@/pages/EnchantmentsPage'
 import { CharacterBuildLayout } from '@/shared/components/playerCreation'
 // TODO: Re-implement store test if needed
 // import { StoreTest } from '@/shared/stores/StoreTest'
@@ -50,6 +51,7 @@ export const AppRouter = () => {
       <Route path="/skills-experimental" element={<SkillsPageExperimental />} />
       <Route path="/equipment" element={<EquipmentPage />} />
       <Route path="/crafting" element={<CraftingPage />} />
+      <Route path="/enchantments" element={<EnchantmentsPage />} />
       {/* TODO: Re-implement store test if needed */}
       {/* <Route path="/store-test" element={<StoreTest />} /> */}
 

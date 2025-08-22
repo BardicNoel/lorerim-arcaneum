@@ -9,6 +9,7 @@ import { Star } from 'lucide-react'
 import { getBirthsignGroupStyle } from '../config/birthsignConfig'
 import type { Birthsign } from '../types'
 import { BirthsignAvatar } from './BirthsignAvatar'
+import { sanitizeStatName, sanitizeSkillName } from '../utils/stringSanitizer'
 
 interface BirthsignAccordionProps {
   item: PlayerCreationItem & { originalBirthsign: Birthsign }
@@ -84,7 +85,7 @@ export function BirthsignAccordion({
                   key={index}
                   className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
                 >
-                  <span className="font-medium capitalize">{stat.stat}</span>
+                  <span className="font-medium capitalize">{sanitizeStatName(stat.stat)}</span>
                   <span
                     className={cn(
                       'font-bold',
@@ -137,7 +138,7 @@ export function BirthsignAccordion({
                   className="p-2 rounded bg-muted border text-sm flex items-center justify-between"
                 >
                   <span className="font-medium">
-                    {bonus.stat} +{bonus.value}
+                    {sanitizeSkillName(bonus.stat)} +{bonus.value}
                   </span>
                   <Badge variant="secondary" className="text-xs">
                     Starting Bonus

@@ -2,12 +2,14 @@ import { useMemo } from 'react'
 import type { SearchResult } from '../model/SearchModel'
 import { searchResultToPlayerCreationItem } from '../model/SearchUtilities'
 import { useSearchFilters } from './useSearchFilters'
-import { useSearchState } from './useSearchState'
+import { useSearchState } from '../hooks/useSearchState'
 import { useSearchPagination } from './useSearchPagination'
 
 export function useSearchComputed() {
   const { searchResults, resultCounts } = useSearchFilters()
   const { viewMode } = useSearchState()
+  
+
   
   // Add pagination
   const { 
@@ -18,6 +20,8 @@ export function useSearchComputed() {
     hasMore 
   } = useSearchPagination(searchResults)
 
+
+
   const filteredResults = useMemo(() => {
     return displayedItems // Use paginated results instead of all results
   }, [displayedItems])
@@ -27,7 +31,8 @@ export function useSearchComputed() {
   }, [filteredResults])
 
   const playerCreationItems = useMemo(() => {
-    return sortedResults.map(searchResultToPlayerCreationItem)
+    const items = sortedResults.map(searchResultToPlayerCreationItem)
+    return items
   }, [sortedResults])
 
   const totalResults = useMemo(() => {

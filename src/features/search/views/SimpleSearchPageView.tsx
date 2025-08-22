@@ -1,22 +1,29 @@
 import type {
-  SearchOption,
-  SelectedTag,
+  PlayerCreationItem,
 } from '@/shared/components/playerCreation/types'
 import { BackToTopButton } from '@/shared/components/generic'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useSearchComputed } from '../adapters/useSearchComputed'
 import { useSearchData } from '../adapters/useSearchData'
 import { useSearchFilters } from '../adapters/useSearchFilters'
-import { useSearchState } from '../adapters/useSearchState'
+import { useSearchState } from '../hooks/useSearchState'
 import { SearchPageLayout } from '../components/SearchPageLayout'
 import { SearchFilters } from '../components/composition/SearchFilters'
 import { SearchResultsGrid } from '../components/composition/SearchResultsGrid'
-import type { SearchFilters as SearchFiltersType } from '../model/SearchModel'
+import type { SearchResult } from '../model/SearchModel'
 
 export function SimpleSearchPageView() {
   const { isReady, isIndexing, error } = useSearchData()
-  const { activeFilters, setActiveFilters, clearFilters, addTag, removeTag } =
-    useSearchState()
+  const {
+    activeFilters,
+    selectedTags,
+    viewMode,
+    setActiveFilters,
+    handleTagSelect,
+    handleTagRemove,
+    handleClearFilters,
+    handleViewModeChange,
+  } = useSearchState()
   const { availableFilters, searchResults } = useSearchFilters()
   const { 
     filteredResults, // This now contains the paginated items
@@ -27,97 +34,52 @@ export function SimpleSearchPageView() {
     hasMore 
   } = useSearchComputed()
 
-  // Tag state management
-  const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
-
-  // View mode state
-  const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid')
-
   // Reset pagination when filters change
   useEffect(() => {
     resetPagination()
   }, [activeFilters, resetPagination])
 
-  // Sync selectedTags with activeFilters.tags from URL
-  useEffect(() => {
-    const urlTags: SelectedTag[] = []
-
-    // Add tags from URL
-    activeFilters.tags.forEach(tag => {
-      urlTags.push({
-        id: `custom-${tag}`,
-        label: tag,
-        value: tag,
-        category: 'Search All',
-      })
-    })
-
-    // Add category filters from URL
-    activeFilters.categories.forEach(category => {
-      urlTags.push({
-        id: `category-${category}`,
-        label: category,
-        value: category,
-        category: 'Categories',
-      })
-    })
-
-    setSelectedTags(urlTags)
-  }, [activeFilters.tags, activeFilters.categories])
-
-  // Add a tag (from autocomplete or custom input)
-  const handleTagSelect = (tag: SelectedTag) => {
-    addTag(tag.value)
-    setSelectedTags(prev => [...prev, tag])
-  }
-
-  // Remove a tag
-  const handleTagRemove = (tagId: string) => {
-    const tag = selectedTags.find(t => t.id === tagId)
-    if (tag) {
-      removeTag(tag.value)
-      setSelectedTags(prev => prev.filter(t => t.id !== tagId))
-    }
-  }
-
-  // Handle view mode change
-  const handleViewModeChange = (mode: 'list' | 'grid') => {
-    setViewMode(mode)
-  }
-
-  // Handle clear filters
-  const handleClearFilters = () => {
-    clearFilters()
-    setSelectedTags([])
-  }
-
   if (!isReady) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <p className="text-muted-foreground">
-            {isIndexing ? 'Indexing search data...' : 'Loading...'}
-          </p>
+      <SearchPageLayout title="Search" description="Building search index...">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            {isIndexing ? (
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+            ) : null}
+            <p className="text-muted-foreground">
+              {isIndexing ? 'Building search index...' : 'Loading search...'}
+            </p>
+          </div>
         </div>
-      </div>
+      </SearchPageLayout>
     )
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <p className="text-destructive">Error loading search data</p>
-          <p className="text-sm text-muted-foreground">{error}</p>
+      <SearchPageLayout title="Search" description="Error loading search">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <p className="text-destructive mb-4">
+              Failed to load search: {error}
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="text-primary hover:underline"
+            >
+              Try again
+            </button>
+          </div>
         </div>
-      </div>
+      </SearchPageLayout>
     )
   }
 
-  const title = 'Search'
+  const title = selectedTags.length > 0 ? `Search Results` : 'Search'
   const description =
     selectedTags.length > 0
-      ? `Search results for ${selectedTags.length} filter${selectedTags.length !== 1 ? 's' : ''}`
+      ? `Found ${totalResults} result${totalResults !== 1 ? 's' : ''} for ${selectedTags.length} filter${selectedTags.length !== 1 ? 's' : ''}`
       : 'Search across all skills, races, traits, religions, birthsigns, destiny nodes, and perk references'
 
   return (

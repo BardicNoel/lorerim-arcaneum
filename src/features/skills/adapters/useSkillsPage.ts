@@ -51,6 +51,9 @@ export function useSkillsPage() {
     addMinorSkill,
     removeMajorSkill,
     removeMinorSkill,
+    addPerk,
+    removePerk,
+    setPerkRank,
   } = useCharacterBuild()
 
   // Apply search and category filters
@@ -188,24 +191,28 @@ export function useSkillsPage() {
 
   // Perk selection handlers
   const handlePerkSelect = useCallback(
-    (_perkId: string) => {
+    (perkId: string) => {
       if (!selectedSkill) return
 
-      // Toggle perk selection - implementation would go here
-      // const currentSelected = build.perks?.selected?.[selectedSkill.id] || []
-      // const isSelected = currentSelected.includes(_perkId)
+      // Toggle perk selection using the character build functions
+      const isSelected = selectedPerks.includes(perkId)
+      if (isSelected) {
+        removePerk(selectedSkill.id, perkId)
+      } else {
+        addPerk(selectedSkill.id, perkId)
+      }
     },
-    [selectedSkill, build.perks?.selected]
+    [selectedSkill, selectedPerks, addPerk, removePerk]
   )
 
   const handlePerkRankChange = useCallback(
-    (_perkId: string, _rank: number) => {
+    (perkId: string, rank: number) => {
       if (!selectedSkill) return
 
-      // Update perk rank - implementation would go here
-      // const currentRanks = build.perks?.ranks?.[selectedSkill.id] || {}
+      // Update perk rank using the character build function
+      setPerkRank(perkId, rank)
     },
-    [selectedSkill, build.perks?.ranks]
+    [selectedSkill, setPerkRank]
   )
 
   // ============================================================================
