@@ -23,6 +23,22 @@ interface CharacterFlowNavProps {
 export const CharacterFlowNav = ({ currentPath }: CharacterFlowNavProps) => {
   const navigate = useNavigate()
 
+  // Custom navigation that preserves build parameters
+  const navigateWithBuild = (to: string) => {
+    const currentHash = window.location.hash
+    const [currentPath, paramsString] = currentHash.split('?')
+    const params = new URLSearchParams(paramsString || '')
+    const buildParam = params.get('b')
+
+    if (buildParam) {
+      // Preserve the build parameter when navigating
+      navigate(`${to}?b=${buildParam}`)
+    } else {
+      // No build parameter, just navigate normally
+      navigate(to)
+    }
+  }
+
   // Find current step index
   const currentStepIndex = characterBuildSteps.findIndex(
     step => step.to === currentPath
@@ -33,23 +49,23 @@ export const CharacterFlowNav = ({ currentPath }: CharacterFlowNavProps) => {
   const handleTabChange = (value: string) => {
     const step = characterBuildSteps.find(s => s.value === value)
     if (step) {
-      navigate(step.to)
+      navigateWithBuild(step.to)
     }
   }
 
   const handleTabClick = (step: (typeof characterBuildSteps)[0]) => {
-    navigate(step.to)
+    navigateWithBuild(step.to)
   }
 
   const handlePrevious = () => {
     if (currentStep > 0) {
-      navigate(characterBuildSteps[currentStep - 1].to)
+      navigateWithBuild(characterBuildSteps[currentStep - 1].to)
     }
   }
 
   const handleNext = () => {
     if (currentStep < characterBuildSteps.length - 1) {
-      navigate(characterBuildSteps[currentStep + 1].to)
+      navigateWithBuild(characterBuildSteps[currentStep + 1].to)
     }
   }
 
@@ -66,11 +82,13 @@ export const CharacterFlowNav = ({ currentPath }: CharacterFlowNavProps) => {
         break
       case 'Home':
         event.preventDefault()
-        navigate(characterBuildSteps[0].to)
+        navigateWithBuild(characterBuildSteps[0].to)
         break
       case 'End':
         event.preventDefault()
-        navigate(characterBuildSteps[characterBuildSteps.length - 1].to)
+        navigateWithBuild(
+          characterBuildSteps[characterBuildSteps.length - 1].to
+        )
         break
     }
   }
