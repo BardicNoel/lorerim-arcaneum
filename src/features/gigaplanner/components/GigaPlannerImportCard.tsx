@@ -44,9 +44,12 @@ export function GigaPlannerImportCard({
     console.log('🚀 [Import Card] Starting URL import:', url.trim())
     const result = await importFromUrl(url.trim())
     console.log('📥 [Import Card] Import result received:', result)
-    
+
     if (result?.buildState) {
-      console.log('✅ [Import Card] BuildState found, calling onImport:', result.buildState)
+      console.log(
+        '✅ [Import Card] BuildState found, calling onImport:',
+        result.buildState
+      )
       if (onImport) {
         onImport(result.buildState)
         console.log('✅ [Import Card] onImport callback executed')
@@ -61,12 +64,18 @@ export function GigaPlannerImportCard({
   const handleImportFromBuildCode = async () => {
     if (!buildCode.trim()) return
 
-    console.log('🚀 [Import Card] Starting build code import:', buildCode.trim())
+    console.log(
+      '🚀 [Import Card] Starting build code import:',
+      buildCode.trim()
+    )
     const result = await importFromBuildCode(buildCode.trim())
     console.log('📥 [Import Card] Import result received:', result)
-    
+
     if (result?.buildState) {
-      console.log('✅ [Import Card] BuildState found, calling onImport:', result.buildState)
+      console.log(
+        '✅ [Import Card] BuildState found, calling onImport:',
+        result.buildState
+      )
       if (onImport) {
         onImport(result.buildState)
         console.log('✅ [Import Card] onImport callback executed')
@@ -127,7 +136,7 @@ export function GigaPlannerImportCard({
                 disabled={isLoading}
               />
               <div className="text-xs text-muted-foreground">
-                Test URL: https://multidyls.github.io/GigaPlanner/?p=0&b=AgAAAAAPBAEJGQAAAAoACgoKAAAPAAAACgAAAAABAgEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFIQAAAAAAAAAAMAgAAAAAAAAAAAAAA
+                Example: https://gigaplanner.com?b=AgAAAAAA...
               </div>
             </div>
             <Button
@@ -162,6 +171,9 @@ export function GigaPlannerImportCard({
                 onChange={e => setBuildCode(e.target.value)}
                 disabled={isLoading}
               />
+              <div className="text-xs text-muted-foreground">
+                Example: AgAAAAAA...
+              </div>
             </div>
             <Button
               onClick={handleImportFromBuildCode}
