@@ -1,18 +1,49 @@
 /**
  * Perk Transformation Utilities
- * 
+ *
  * Handles transformation between GigaPlanner perk data and our app's format
+ * Uses the perk trees store data for dynamic mapping instead of hardcoded values
  */
 
+import { usePerkTreesStore } from '@/shared/stores/perkTreesStore'
+
 /**
- * Helper function to find which skill a perk belongs to
- * This uses the skill information already provided by GigaPlanner
+ * Find perk by name (case-insensitive) in the perk trees store
  */
-function findPerkSkill(perkName: string, perkListName: string): string | null {
-  // Since GigaPlanner already provides the skill information,
-  // we don't need to look it up - we just need to use the skill
-  // that was passed in with the perk data
-  return null // This will be handled differently in the main transform function
+function findPerkByName(
+  perkName: string
+): { edid: string; skillTree: string } | null {
+  const perkTreesStore = usePerkTreesStore.getState()
+
+  // Ensure perk trees data is loaded
+  if (perkTreesStore.data.length === 0) {
+    console.warn(
+      '🔄 [Perk Transform] Perk trees store data not loaded, attempting to load...'
+    )
+    perkTreesStore.load().catch(error => {
+      console.error(
+        '🔄 [Perk Transform] Failed to load perk trees data:',
+        error
+      )
+    })
+    return null
+  }
+
+  // Search for perk by name (case-insensitive) across all perk trees
+  for (const tree of perkTreesStore.data) {
+    const foundPerk = tree.perks?.find(
+      perk => perk.name.toLowerCase() === perkName.toLowerCase()
+    )
+
+    if (foundPerk) {
+      return {
+        edid: foundPerk.edid,
+        skillTree: tree.treeId,
+      }
+    }
+  }
+
+  return null
 }
 
 /**
@@ -28,17 +59,22 @@ export function transformPerks(
   console.log('🔄 [Perk Transform] Starting perk transformation...')
   console.log('🔄 [Perk Transform] Input perks:', gigaPlannerPerks)
   console.log('🔄 [Perk Transform] Perk list name:', perkListName)
-  
+
   const perks: Record<string, string[]> = {}
   const warnings: string[] = []
-  
+
   gigaPlannerPerks.forEach((perk, index) => {
     console.log(`🔄 [Perk Transform] Processing perk ${index}:`, {
       name: perk.name,
       skill: perk.skill,
-      skillType: perk.skill === 'Destiny' ? 'subclass' : perk.skill === 'Traits' ? 'trait' : 'regular'
+      skillType:
+        perk.skill === 'Destiny'
+          ? 'subclass'
+          : perk.skill === 'Traits'
+            ? 'trait'
+            : 'regular',
     })
-    
+
     // Check if this is a subclass (Destiny) or trait (Traits)
     if (perk.skill === 'Destiny') {
       // This is a subclass - we'll handle it separately
@@ -49,30 +85,42 @@ export function transformPerks(
       console.log('🔄 [Perk Transform] Found trait:', perk.name)
       return
     }
-    
-    // For regular perks, use the skill name directly from GigaPlanner
-    const perkSkill = typeof perk.skill === 'string' ? perk.skill : null
-    if (perkSkill) {
-      if (!perks[perkSkill]) {
-        perks[perkSkill] = []
+
+    // For regular perks, search for the perk in the perk trees store
+    const foundPerk = findPerkByName(perk.name)
+    if (foundPerk) {
+      if (!perks[foundPerk.skillTree]) {
+        perks[foundPerk.skillTree] = []
       }
-      perks[perkSkill].push(perk.name)
-      console.log(`🔄 [Perk Transform] Added perk to skill ${perkSkill}:`, perk.name)
+
+      perks[foundPerk.skillTree].push(foundPerk.edid)
+      console.log(
+        `🔄 [Perk Transform] Added perk to skill ${foundPerk.skillTree}:`,
+        {
+          originalName: perk.name,
+          foundEdid: foundPerk.edid,
+          skillTree: foundPerk.skillTree,
+        }
+      )
     } else {
-      warnings.push(`Could not determine skill for perk: ${perk.name}`)
-      console.log(`🔄 [Perk Transform] Warning: Could not determine skill for perk: ${perk.name}`)
+      warnings.push(`Could not find perk in store: ${perk.name}`)
+      console.log(
+        `🔄 [Perk Transform] Warning: Could not find perk in store: ${perk.name}`
+      )
     }
   })
 
   // Debug logging
   console.log('🔄 [Perk Transform] Final results:', {
     inputCount: gigaPlannerPerks.length,
-    regularCount: gigaPlannerPerks.filter(p => p.skill !== 'Destiny' && p.skill !== 'Traits').length,
+    regularCount: gigaPlannerPerks.filter(
+      p => p.skill !== 'Destiny' && p.skill !== 'Traits'
+    ).length,
     subclassCount: gigaPlannerPerks.filter(p => p.skill === 'Destiny').length,
     traitCount: gigaPlannerPerks.filter(p => p.skill === 'Traits').length,
     groupedCount: Object.keys(perks).length,
     warnings: warnings.length,
-    groupedPerks: perks
+    groupedPerks: perks,
   })
 
   if (Object.keys(perks).length === 0) {
@@ -117,7 +165,7 @@ export function extractSubclasses(
   const subclasses = gigaPlannerPerks
     .filter(perk => perk.skill === 'Destiny')
     .map(perk => perk.name)
-  
+
   console.log('🔄 [Subclass Extract] Found subclasses:', subclasses)
   return subclasses
 }
@@ -131,7 +179,7 @@ export function extractTraits(
   const traits = gigaPlannerPerks
     .filter(perk => perk.skill === 'Traits')
     .map(perk => perk.name)
-  
+
   console.log('🔄 [Trait Extract] Found traits:', traits)
   return traits
 }

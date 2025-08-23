@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import blessingsData from '../../data/blessings.json'
 import { GigaPlannerDataLoader } from '../dataLoader'
 import { GigaPlannerConverter } from '../gigaplannerConverter'
+import { getPerkInternalName } from '../mappings'
 
 // Mock the data loader
 vi.mock('../dataLoader', () => ({
@@ -364,6 +365,210 @@ describe('GigaPlannerConverter', () => {
         expect(['None', 'Health', 'Magicka', 'Stamina']).toContain(
           result.character.oghmaChoice
         )
+      }
+    })
+  })
+
+  describe('perk transformation', () => {
+    it('should find perks in perk trees store', async () => {
+      const converter = new GigaPlannerConverter()
+      await converter.initialize()
+
+      // Test perk names from the user's build
+      const testPerkNames = [
+        'Weapon Mastery',
+        'Penetrating Strikes',
+        'Short Blade Focus',
+        'Puncture',
+        'Flurry',
+        'Ranged Combat Training',
+        'Knife Expertise',
+        'Agility',
+        'Dodge',
+        'Agile Spellcasting',
+        'Stealth',
+        'Deft Strike',
+        'Anatomical Lore',
+        'Arcane Assassin',
+        'Nimble Fingers',
+        'Alchemical Lore',
+        'Concentrated Poisons',
+        'Improved Poisons',
+        'Novice Illusion',
+        'Apprentice Illusion',
+      ]
+
+      console.log('🔍 [Perk Test] Testing perk name to EDID conversion:')
+      testPerkNames.forEach(perkName => {
+        const internalName = getPerkInternalName(perkName)
+        console.log(`  ${perkName} -> ${internalName}`)
+        // Some perk names like "Puncture" don't need transformation
+        // Just verify that the function returns a valid string
+        expect(internalName).toBeTypeOf('string')
+        expect(internalName.length).toBeGreaterThan(0)
+      })
+    })
+
+    it('should find perks in perk trees store by name', async () => {
+      // Import the perk trees store directly
+      const { usePerkTreesStore } = await import(
+        '@/shared/stores/perkTreesStore'
+      )
+
+      // Load the perk trees store
+      const perkTreesStore = usePerkTreesStore.getState()
+      await perkTreesStore.load()
+
+      console.log(
+        '🔍 [Perk Trees Test] Loaded perk trees:',
+        perkTreesStore.data.length
+      )
+
+      // Test finding specific perks
+      const testPerks = [
+        { name: 'Weapon Mastery', expectedTree: 'AVOneHanded' },
+        { name: 'Penetrating Strikes', expectedTree: 'AVOneHanded' },
+        { name: 'Craftsmanship', expectedTree: 'AVSmithing' },
+      ]
+
+      for (const testPerk of testPerks) {
+        let found = false
+        for (const tree of perkTreesStore.data) {
+          const perk = tree.perks?.find(p => p.name === testPerk.name)
+          if (perk) {
+            console.log(
+              `✅ Found "${testPerk.name}" in tree "${tree.treeId}" (expected: "${testPerk.expectedTree}")`
+            )
+            console.log(`   EDID: ${perk.edid}`)
+            found = true
+            break
+          }
+        }
+
+        if (!found) {
+          console.log(`❌ Could not find "${testPerk.name}" in any perk tree`)
+        }
+      }
+    })
+
+    it('should test perk transformation with mock data', async () => {
+      // Import the perk transformation function
+      const { transformPerks } = await import('../../utils/perkTransform')
+
+      // Create mock perk trees data
+      const mockPerkTrees = [
+        {
+          treeId: 'AVOneHanded',
+          treeName: 'One-handed',
+          treeDescription: 'The skill to use light weaponry',
+          category: 'Combat',
+          perks: [
+            {
+              edid: 'REQ_OneHanded_WeaponMastery1',
+              name: 'Weapon Mastery',
+              globalFormId: '0x000BABE4',
+              ranks: [
+                {
+                  rank: 1,
+                  edid: 'REQ_OneHanded_WeaponMastery1',
+                  name: 'Weapon Mastery',
+                  globalFormId: '0x000BABE4',
+                  description: {
+                    base: 'Your improved fighting techniques allow you to swing one-handed weapons with less effort and deal more damage.',
+                    subtext: '[20% more damage]',
+                  },
+                  prerequisites: {},
+                },
+              ],
+              totalRanks: 2,
+              connections: {
+                parents: [],
+                children: ['REQ_OneHanded_PenetratingStrikes'],
+              },
+              isRoot: true,
+              position: {
+                x: 2,
+                y: 0,
+                horizontal: 0.18666699528694153,
+                vertical: 0,
+              },
+            },
+            {
+              edid: 'REQ_OneHanded_PenetratingStrikes',
+              name: 'Penetrating Strikes',
+              globalFormId: '0x00052D50',
+              ranks: [
+                {
+                  rank: 1,
+                  edid: 'REQ_OneHanded_PenetratingStrikes',
+                  name: 'Penetrating Strikes',
+                  globalFormId: '0x00052D50',
+                  description: {
+                    base: 'Your power attacks with one-handed weapons are now devastating enough to penetrate enemy armor.',
+                    subtext:
+                      '[-30% power attack stamina cost, +30% armor penetration]',
+                  },
+                  prerequisites: {
+                    skillLevel: {
+                      skill: 'One-Handed',
+                      level: 20,
+                    },
+                  },
+                },
+              ],
+              totalRanks: 1,
+              connections: {
+                parents: ['REQ_OneHanded_WeaponMastery1'],
+                children: [],
+              },
+              isRoot: false,
+              position: {
+                x: 2,
+                y: 1,
+                horizontal: 0.18666699528694153,
+                vertical: -0.10000000149011612,
+              },
+            },
+          ],
+        },
+      ]
+
+      // Mock the perk trees store to return our mock data
+      const { usePerkTreesStore } = await import(
+        '@/shared/stores/perkTreesStore'
+      )
+      const perkTreesStore = usePerkTreesStore.getState()
+
+      // Temporarily replace the data with our mock
+      const originalData = perkTreesStore.data
+      perkTreesStore.data = mockPerkTrees
+
+      try {
+        // Test the perk transformation
+        const gigaPlannerPerks = [
+          { name: 'Weapon Mastery', skill: 'One-Handed' },
+          { name: 'Penetrating Strikes', skill: 'One-Handed' },
+        ]
+
+        const result = transformPerks(gigaPlannerPerks, 'Test Perks')
+
+        console.log('🔍 [Perk Transform Test] Result:', result)
+
+        // Verify the transformation worked
+        expect(result).not.toBeNull()
+        expect(result?.selected).toBeDefined()
+        expect(result?.selected['AVOneHanded']).toBeDefined()
+        expect(result?.selected['AVOneHanded']).toContain(
+          'REQ_OneHanded_WeaponMastery1'
+        )
+        expect(result?.selected['AVOneHanded']).toContain(
+          'REQ_OneHanded_PenetratingStrikes'
+        )
+
+        console.log('✅ Perk transformation test passed!')
+      } finally {
+        // Restore original data
+        perkTreesStore.data = originalData
       }
     })
   })

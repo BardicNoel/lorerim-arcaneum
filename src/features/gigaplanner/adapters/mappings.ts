@@ -300,12 +300,157 @@ export const PERK_NAME_TO_EDID: Record<string, string> = {
   "Marksman's Focus": 'PerkMarksmansFocus',
   'Rapid Reload': 'PerkRapidReload',
   'Quick Shot': 'PerkQuickShot',
+  'Knife Expertise': 'PerkKnifeExpertise',
+
+  // Evasion perks
+  Agility: 'PerkAgility',
+  Dodge: 'PerkDodge',
+  'Agile Spellcasting': 'PerkAgileSpellcasting',
+
+  // Sneak perks
+  Stealth: 'PerkStealth',
+  'Deft Strike': 'PerkDeftStrike',
+  'Anatomical Lore': 'PerkAnatomicalLore',
+  'Arcane Assassin': 'PerkArcaneAssassin',
+
+  // Finesse perks
+  'Nimble Fingers': 'PerkNimbleFingers',
+
+  // Alchemy perks
+  'Alchemical Lore': 'PerkAlchemicalLore',
+  'Concentrated Poisons': 'PerkConcentratedPoisons',
+  'Improved Poisons': 'PerkImprovedPoisons',
+
+  // Illusion perks
+  'Novice Illusion': 'PerkNoviceIllusion',
+  'Apprentice Illusion': 'PerkApprenticeIllusion',
 
   // Add more perk mappings as needed
 }
 
 export function getPerkEdid(perkName: string): string {
   return PERK_NAME_TO_EDID[perkName] || perkName
+}
+
+// Map GigaPlanner perk names to internal perk names (without "Perk" prefix)
+export const PERK_NAME_TO_INTERNAL: Record<string, string> = {
+  // Smithing perks
+  Craftsmanship: 'Craftsmanship',
+  'Advanced Blacksmithing': 'AdvancedBlacksmithing',
+  'Arcane Craftsmanship': 'ArcaneCraftsmanship',
+  'Legendary Blacksmithing': 'LegendaryBlacksmithing',
+  'Advanced Light Armors': 'AdvancedLightArmors',
+  'Elven Smithing': 'ElvenSmithing',
+  'Glass Smithing': 'GlassSmithing',
+  'Dwarven Smithing': 'DwarvenSmithing',
+  'Orcish Smithing': 'OrcishSmithing',
+  'Ebony Smithing': 'EbonySmithing',
+  'Daedric Smithing': 'DaedricSmithing',
+  'Draconic Blacksmithing': 'DraconicBlacksmithing',
+
+  // Heavy Armor perks
+  Conditioning: 'Conditioning',
+  'Relentless Onslaught': 'RelentlessOnslaught',
+  'Devastating Tackle': 'DevastatingTackle',
+  'Combat Casting': 'CombatCasting',
+  'Combat Trance': 'CombatTrance',
+  'Combat Meditation': 'CombatMeditation',
+  'Battle Mage': 'BattleMage',
+  'Combat Training': 'CombatTraining',
+  Immovable: 'Immovable',
+  Fortitude: 'Fortitude',
+  'Power of the Combatant': 'PowerOfTheCombatant',
+  Juggernaut: 'Juggernaut',
+  'Mounted Combat': 'MountedCombat',
+
+  // Block perks
+  'Improved Blocking': 'ImprovedBlocking',
+  'Experienced Blocking': 'ExperiencedBlocking',
+  'Torch Combat': 'TorchCombat',
+  'Strong Grip': 'StrongGrip',
+  'Elemental Protection': 'ElementalProtection',
+  'Defensive Stance': 'DefensiveStance',
+  'Powerful Bashes': 'PowerfulBashes',
+  'Shield Strike': 'ShieldStrike',
+  'Overpowering Bashes': 'OverpoweringBashes',
+  'Disarming Bash': 'DisarmingBash',
+  'Unstoppable Charge': 'UnstoppableCharge',
+
+  // Two-Handed perks
+  'Great Weapon Mastery': 'GreatWeaponMastery',
+  'Barbaric Might': 'BarbaricMight',
+  'Quarterstaff Focus': 'QuarterstaffFocus',
+  'Defensive Strike': 'DefensiveStrike',
+  'Hafted Blade Focus': 'HaftedBladeFocus',
+  'Shield Breaker': 'ShieldBreaker',
+  'Longblade Focus': 'LongbladeFocus',
+  Reversal: 'Reversal',
+  'Warhammer Focus': 'WarhammerFocus',
+  Onslaught: 'Onslaught',
+  'Devastating Charge': 'DevastatingCharge',
+  'Devastating Strike': 'DevastatingStrike',
+  'Hyper Armor': 'HyperArmor',
+  'Mighty Strike': 'MightyStrike',
+  Warbringer: 'Warbringer',
+
+  // One-Handed perks
+  'Weapon Mastery': 'WeaponMastery',
+  'Penetrating Strikes': 'PenetratingStrikes',
+  'Short Blade Focus': 'ShortBladeFocus',
+  Puncture: 'Puncture',
+  'War Axe Focus': 'WarAxeFocus',
+  Armsbreaker: 'Armsbreaker',
+  'Mace Focus': 'MaceFocus',
+  'Stunning Blow': 'StunningBlow',
+  'Sword & Spear Focus': 'SwordAndSpearFocus',
+  'Disarming Strike': 'DisarmingStrike',
+  'Powerful Charge': 'PowerfulCharge',
+  'Powerful Strike': 'PowerfulStrike',
+  Flurry: 'Flurry',
+  'Storm of Steel': 'StormOfSteel',
+  'Hand to Hand': 'HandToHand',
+  Grappling: 'Grappling',
+  Takedown: 'Takedown',
+  'Unarmed Defense': 'UnarmedDefense',
+  'Unarmed Stance': 'UnarmedStance',
+  'Armed Spelllcasting': 'ArmedSpellcasting',
+  'Balanced Wielding': 'BalancedWielding',
+
+  // Marksman perks
+  'Ranged Combat Training': 'RangedCombatTraining',
+  Ranger: 'Ranger',
+  'Eagle Eye': 'EagleEye',
+  "Marksman's Focus": 'MarksmansFocus',
+  'Rapid Reload': 'RapidReload',
+  'Quick Shot': 'QuickShot',
+  'Knife Expertise': 'KnifeExpertise',
+
+  // Evasion perks
+  Agility: 'Agility',
+  Dodge: 'Dodge',
+  'Agile Spellcasting': 'AgileSpellcasting',
+
+  // Sneak perks
+  Stealth: 'Stealth',
+  'Deft Strike': 'DeftStrike',
+  'Anatomical Lore': 'AnatomicalLore',
+  'Arcane Assassin': 'ArcaneAssassin',
+
+  // Finesse perks
+  'Nimble Fingers': 'NimbleFingers',
+
+  // Alchemy perks
+  'Alchemical Lore': 'AlchemicalLore',
+  'Concentrated Poisons': 'ConcentratedPoisons',
+  'Improved Poisons': 'ImprovedPoisons',
+
+  // Illusion perks
+  'Novice Illusion': 'NoviceIllusion',
+  'Apprentice Illusion': 'ApprenticeIllusion',
+}
+
+export function getPerkInternalName(perkName: string): string {
+  return PERK_NAME_TO_INTERNAL[perkName] || perkName
 }
 
 export function getPerkNameFromEdid(edid: string): string | null {
