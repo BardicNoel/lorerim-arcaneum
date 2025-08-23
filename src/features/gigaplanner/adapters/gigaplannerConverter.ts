@@ -103,12 +103,12 @@ export class GigaPlannerConverter {
       this.lookupMaps.stoneIdToName[index] = stone.name
     })
 
-    // Blessings
+    // Blessings - simple array of names for index mapping
     this.lookupMaps.blessingNameToId = {}
     this.lookupMaps.blessingIdToName = {}
-    this.data.blessings.forEach((blessing: any, index: number) => {
-      this.lookupMaps.blessingNameToId[blessing.name] = index
-      this.lookupMaps.blessingIdToName[index] = blessing.name
+    this.data.blessings.forEach((blessingName: string, index: number) => {
+      this.lookupMaps.blessingNameToId[blessingName] = index
+      this.lookupMaps.blessingIdToName[index] = blessingName
     })
 
     // Perk Lists (Subclasses)
@@ -188,9 +188,15 @@ export class GigaPlannerConverter {
     )
     console.log('🔍 [Converter] Looking for perkListId:', perkListId)
     console.log('🔍 [Converter] Looking for gameMechanicsId:', gameMechanicsId)
-    console.log('🔍 [Converter] Available perk lists:', this.data.perks.map((p: any) => ({ id: p.perkListId, name: p.name })))
-    console.log('🔍 [Converter] Available game mechanics:', this.data.gameMechanics.map((g: any) => ({ id: g.gameId, name: g.name })))
-    
+    console.log(
+      '🔍 [Converter] Available perk lists:',
+      this.data.perks.map((p: any) => ({ id: p.perkListId, name: p.name }))
+    )
+    console.log(
+      '🔍 [Converter] Available game mechanics:',
+      this.data.gameMechanics.map((g: any) => ({ id: g.gameId, name: g.name }))
+    )
+
     const gameMechanics = this.data.gameMechanics.find(
       (g: any) => g.gameId === gameMechanicsId
     )
@@ -267,17 +273,23 @@ export class GigaPlannerConverter {
   /**
    * Parse perks from binary data
    */
-  private parsePerks(buildCode: string, perkList: any): Array<{ name: string; skill: number }> {
+  private parsePerks(
+    buildCode: string,
+    perkList: any
+  ): Array<{ name: string; skill: number }> {
     const perks: Array<{ name: string; skill: number }> = []
-    
+
     console.log('🔍 [Perk Parser] Starting perk parsing...')
     console.log('🔍 [Perk Parser] PerkList info:', {
       name: perkList.name,
       totalPerks: perkList.perks.length,
-      skillNames: perkList.skillNames
+      skillNames: perkList.skillNames,
     })
     console.log('🔍 [Perk Parser] Build code length:', buildCode.length)
-    console.log('🔍 [Perk Parser] First few bytes:', Array.from(buildCode.slice(0, 10)).map(c => c.charCodeAt(0)))
+    console.log(
+      '🔍 [Perk Parser] First few bytes:',
+      Array.from(buildCode.slice(0, 10)).map(c => c.charCodeAt(0))
+    )
 
     for (let i = 0; i < perkList.perks.length; i++) {
       const byteIndex = 31 + Math.floor(i / 8)
@@ -288,7 +300,7 @@ export class GigaPlannerConverter {
       if (hasPerk) {
         const perk = {
           name: perkList.perks[i].name,
-          skill: perkList.perks[i].skill
+          skill: perkList.perks[i].skill,
         }
         perks.push(perk)
         console.log(`🔍 [Perk Parser] Found perk ${i}:`, {
@@ -297,19 +309,27 @@ export class GigaPlannerConverter {
           skillName: perkList.skillNames[perk.skill],
           byteIndex,
           bitOffset,
-          byteValue: byteValue.toString(2).padStart(8, '0')
+          byteValue: byteValue.toString(2).padStart(8, '0'),
         })
       }
     }
 
     console.log('🔍 [Perk Parser] Final results:', {
       totalFound: perks.length,
-      bySkill: perks.reduce((acc, perk) => {
-        const skillName = perkList.skillNames[perk.skill] || `Skill ${perk.skill}`
-        acc[skillName] = (acc[skillName] || 0) + 1
-        return acc
-      }, {} as Record<string, number>),
-      allPerks: perks.map(p => ({ name: p.name, skill: p.skill, skillName: perkList.skillNames[p.skill] }))
+      bySkill: perks.reduce(
+        (acc, perk) => {
+          const skillName =
+            perkList.skillNames[perk.skill] || `Skill ${perk.skill}`
+          acc[skillName] = (acc[skillName] || 0) + 1
+          return acc
+        },
+        {} as Record<string, number>
+      ),
+      allPerks: perks.map(p => ({
+        name: p.name,
+        skill: p.skill,
+        skillName: perkList.skillNames[p.skill],
+      })),
     })
 
     return perks

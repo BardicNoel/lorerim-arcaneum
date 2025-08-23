@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import blessingsData from '../../data/blessings.json'
 import { GigaPlannerDataLoader } from '../dataLoader'
 import { GigaPlannerConverter } from '../gigaplannerConverter'
 
@@ -61,6 +62,126 @@ describe('GigaPlannerConverter', () => {
     ;(GigaPlannerDataLoader as any).mockImplementation(() => mockDataLoader)
 
     converter = new GigaPlannerConverter()
+  })
+
+  describe('blessing indices debug', () => {
+    it('should show blessing indices for Mephala and Molag Bal', () => {
+      console.log('Total blessings in data:', blessingsData.length)
+
+      // Show first few entries to see what we have
+      console.log('First 10 entries:', blessingsData.slice(0, 10))
+
+      // Show entries around index 20
+      console.log('Entries around index 20:', blessingsData.slice(18, 25))
+
+      // Find the indices
+      const mephalaIndex = blessingsData.findIndex(b => b === 'Mephala')
+      const molagBalIndex = blessingsData.findIndex(b => b === 'Molag Bal')
+
+      console.log(`Mephala index: ${mephalaIndex}`)
+      console.log(`Molag Bal index: ${molagBalIndex}`)
+
+      expect(mephalaIndex).toBeGreaterThan(-1)
+      expect(molagBalIndex).toBeGreaterThan(-1)
+    })
+
+    it('should decode the user build code to check blessing ID', () => {
+      const buildCode =
+        'AgAAAAAUCQAKEgoKCjwPMjwKFApGGQ8UCgoKAAIJFAAAAAAAAAAFkAAQBAAmQWAABgAAAAGRAGAAAAAAAAAAAAAAAAAAAAAAEkECAAAAAAAgAAwgAAAAAAAAAAAAAA'
+
+      // Convert base64url to base64
+      let code = buildCode.replace(/-/g, '+').replace(/_/g, '/')
+
+      // Decode base64 to binary string
+      code = atob(buildCode)
+
+      console.log('Build code length:', code.length)
+      console.log('Version:', code.charCodeAt(0))
+      console.log('PerkListId:', code.charCodeAt(1))
+      console.log('GameMechanicsId:', code.charCodeAt(3))
+      console.log('Level:', code.charCodeAt(5))
+      console.log('Blessing ID (charCodeAt 30):', code.charCodeAt(30))
+
+      // Check what blessing this ID maps to
+      const blessingId = code.charCodeAt(30)
+      if (blessingId < blessingsData.length) {
+        console.log(
+          `Blessing ID ${blessingId} maps to: ${blessingsData[blessingId] || 'Unknown'}`
+        )
+      } else {
+        console.log(
+          `Blessing ID ${blessingId} is out of range (max: ${blessingsData.length - 1})`
+        )
+      }
+    })
+
+    it('should show how to create build code with Mephala blessing', () => {
+      const buildCode =
+        'AgAAAAAUCQAKEgoKCjwPMjwKFApGGQ8UCgoKAAIJFAAAAAAAAAAFkAAQBAAmQWAABgAAAAGRAGAAAAAAAAAAAAAAAAAAAAAAEkECAAAAAAAgAAwgAAAAAAAAAAAAAA'
+
+      // Convert base64url to base64
+      let code = buildCode.replace(/-/g, '+').replace(/_/g, '/')
+
+      // Decode base64 to binary string
+      code = atob(buildCode)
+
+      // Create a new string with Mephala blessing (ID 18 instead of 20)
+      const mephalaCode = code
+        .split('')
+        .map((char, index) => {
+          if (index === 30) {
+            // Change blessing ID from 20 to 18 (Mephala)
+            return String.fromCharCode(18)
+          }
+          return char
+        })
+        .join('')
+
+      // Encode back to base64url
+      const mephalaBuildCode = btoa(mephalaCode)
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '')
+
+      console.log('Original build code:', buildCode)
+      console.log('Mephala build code:', mephalaBuildCode)
+      console.log(
+        'Original blessing ID:',
+        code.charCodeAt(30),
+        '->',
+        blessingsData[code.charCodeAt(30)]
+      )
+      console.log(
+        'Mephala blessing ID:',
+        mephalaCode.charCodeAt(30),
+        '->',
+        blessingsData[mephalaCode.charCodeAt(30)]
+      )
+
+      // Verify the change
+      const verifyCode = atob(
+        mephalaBuildCode.replace(/-/g, '+').replace(/_/g, '/')
+      )
+      console.log(
+        'Verification - blessing ID:',
+        verifyCode.charCodeAt(30),
+        '->',
+        blessingsData[verifyCode.charCodeAt(30)]
+      )
+    })
+
+    it('should check blessing indices around 20', () => {
+      console.log('Checking blessing order around indices 18-22:')
+      for (let i = 16; i <= 24; i++) {
+        if (blessingsData[i]) {
+          console.log(`Index ${i}: ${blessingsData[i]}`)
+        }
+      }
+
+      console.log('\nOriginal GigaPlanner order should be:')
+      console.log('Index 20: Mephala (based on //20 comment in original)')
+      console.log('Index 22: Molag Bal (based on //22 comment in original)')
+    })
   })
 
   describe('initialization', () => {

@@ -1,5 +1,4 @@
 import type {
-  GigaPlannerBlessing,
   GigaPlannerData,
   GigaPlannerGameMechanics,
   GigaPlannerPerkList,
@@ -115,9 +114,9 @@ export class GigaPlannerDataLoader {
   }
 
   /**
-   * Load blessings data from JSON file
+   * Load blessings data - simple array of names for index mapping
    */
-  async loadBlessings(): Promise<GigaPlannerBlessing[]> {
+  async loadBlessings(): Promise<string[]> {
     const cacheKey = 'blessings'
 
     if (this.cache.has(cacheKey)) {
@@ -132,18 +131,18 @@ export class GigaPlannerDataLoader {
         )
       }
 
-      const blessings: GigaPlannerBlessing[] = await response.json()
+      const blessings: string[] = await response.json()
 
       // Validate the data structure
       if (!Array.isArray(blessings)) {
         throw new Error('Blessings data is not an array')
       }
 
-      // Basic validation of each blessing
+      // Basic validation - all entries should be strings
       for (const blessing of blessings) {
-        if (!blessing.id || !blessing.name) {
+        if (typeof blessing !== 'string') {
           throw new Error(
-            `Invalid blessing data: missing required fields for ${blessing.name || 'unknown'}`
+            `Invalid blessing data: all entries must be strings, got ${typeof blessing}`
           )
         }
       }
