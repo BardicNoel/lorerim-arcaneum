@@ -6,11 +6,11 @@
 export function getBaseUrl(): string {
   // In development, use relative paths
   if (import.meta.env.DEV) {
-    return ''
+    return '/'
   }
-  
+
   // In production, use the configured base URL
-  return import.meta.env.BASE_URL || ''
+  return import.meta.env.BASE_URL || '/'
 }
 
 /**
@@ -20,4 +20,4 @@ export function getBaseUrl(): string {
  */
 export function getDataUrl(path: string): string {
   return `${getBaseUrl()}${path}`
-} 
+}

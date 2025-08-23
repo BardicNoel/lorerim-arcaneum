@@ -1,0 +1,15 @@
+[
+  {
+    "id": "lorerim-v3-0-4",
+    "name": "LoreRim v3.0.4",
+    "presetId": 0,
+    "description": "LoreRim v3.0.4 preset with balanced progression, lore-friendly mechanics, and comprehensive character building options.",
+    "version": "3.0.4",
+    "perks": 0,
+    "races": 0,
+    "gameMechanics": 0,
+    "blessings": 0,
+    "category": "balanced",
+    "tags": ["lore-friendly", "balanced", "immersive", "comprehensive"]
+  }
+]

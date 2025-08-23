@@ -16,10 +16,24 @@ interface CharacterStore {
 
 export const useCharacterStore = create<CharacterStore>((set, get) => ({
   build: DEFAULT_BUILD,
-  updateBuild: updates =>
-    set(state => ({
-      build: { ...state.build, ...updates },
-    })),
+  updateBuild: updates => {
+    console.log('📥 [Character Store] Received build updates:', updates)
+    if (updates.destinyPath) {
+      console.log('🎯 [Character Store] Destiny path update detected:', updates.destinyPath)
+    }
+    set(state => {
+      console.log('🔄 [Character Store] Current state before update:', state.build)
+      const newBuild = { ...state.build, ...updates }
+      console.log('📊 [Character Store] Previous build state:', state.build)
+      console.log('📊 [Character Store] New build state:', newBuild)
+      if (newBuild.destinyPath) {
+        console.log('🎯 [Character Store] New destiny path in build:', newBuild.destinyPath)
+      }
+      console.log('🔄 [Character Store] About to return new state:', { build: newBuild })
+      return { build: newBuild }
+    })
+    console.log('✅ [Character Store] Build state updated successfully')
+  },
   setBuild: build => set({ build }),
   resetBuild: () => set({ build: DEFAULT_BUILD }),
 
