@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/lorerim-arcaneum/',
+  base: process.env.NODE_ENV === 'production' ? '/lorerim-arcaneum/' : '/',
   plugins: [react()],
   resolve: {
     alias: {

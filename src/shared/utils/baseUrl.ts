@@ -4,13 +4,13 @@
  * In production (GitHub Pages), use the configured base path
  */
 export function getBaseUrl(): string {
-  // In development, use relative paths
+  // In development, use '/' for public assets
   if (import.meta.env.DEV) {
     return '/'
   }
 
-  // In production, use the configured base URL
-  return import.meta.env.BASE_URL || '/'
+  // In production, use the configured base URL from Vite config
+  return import.meta.env.BASE_URL || '/lorerim-arcaneum/'
 }
 
 /**
