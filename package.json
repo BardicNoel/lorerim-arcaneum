@@ -6,7 +6,7 @@
   "description": "A theorycrafting playground and reference hub for Lorerim players",
   "repository": {
     "type": "git",
-    "url": "https://github.com/<your-org>/lorerim-arcaneum.git"
+    "url": "https://github.com/bardic-noel/lorerim-arcaneum.git"
   },
   "keywords": [
     "lorerim",
