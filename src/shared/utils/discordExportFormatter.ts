@@ -72,13 +72,16 @@ export function formatBuildForDiscordNamesOnly(
   lines.push(`__⚔️ Attributes (Level ${data.attributes.level})__`)
   const attributeParts = []
   if (data.attributes.health > 0) {
-    attributeParts.push(`Health: ${data.attributes.health}`)
+    const healthText = `Health: ${data.attributes.health} (${data.attributes.healthLevels} levels)`
+    attributeParts.push(healthText)
   }
   if (data.attributes.stamina > 0) {
-    attributeParts.push(`Stamina: ${data.attributes.stamina}`)
+    const staminaText = `Stamina: ${data.attributes.stamina} (${data.attributes.staminaLevels} levels)`
+    attributeParts.push(staminaText)
   }
   if (data.attributes.magicka > 0) {
-    attributeParts.push(`Magicka: ${data.attributes.magicka}`)
+    const magickaText = `Magicka: ${data.attributes.magicka} (${data.attributes.magickaLevels} levels)`
+    attributeParts.push(magickaText)
   }
   if (attributeParts.length > 0) {
     lines.push(attributeParts.join(', '))
@@ -216,13 +219,16 @@ export function formatBuildForDiscord(
   lines.push(`__⚔️ Attributes (Level ${data.attributes.level})__`)
   const attributeParts = []
   if (data.attributes.health > 0) {
-    attributeParts.push(`Health: ${data.attributes.health}`)
+    const healthText = `Health: ${data.attributes.health} (${data.attributes.healthLevels} levels)`
+    attributeParts.push(healthText)
   }
   if (data.attributes.stamina > 0) {
-    attributeParts.push(`Stamina: ${data.attributes.stamina}`)
+    const staminaText = `Stamina: ${data.attributes.stamina} (${data.attributes.staminaLevels} levels)`
+    attributeParts.push(staminaText)
   }
   if (data.attributes.magicka > 0) {
-    attributeParts.push(`Magicka: ${data.attributes.magicka}`)
+    const magickaText = `Magicka: ${data.attributes.magicka} (${data.attributes.magickaLevels} levels)`
+    attributeParts.push(magickaText)
   }
   if (attributeParts.length > 0) {
     lines.push(attributeParts.join(', '))
