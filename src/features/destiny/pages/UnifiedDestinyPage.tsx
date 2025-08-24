@@ -3,6 +3,7 @@ import type {
   PlayerCreationItem,
   SearchOption,
 } from '@/shared/components/playerCreation/types'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { usePlayerCreation } from '@/shared/hooks/usePlayerCreation'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
 import { destinyNodeToPlayerCreationItem } from '@/shared/utils/entityToPlayerCreationItem'
@@ -22,17 +23,34 @@ import { DestinyResponsivePathBuilder } from '../components/composition/DestinyR
 import type { DestinyNode } from '../types'
 
 export function UnifiedDestinyPage() {
+  // Connect to build store
+  const { build, setDestinyPath } = useCharacterBuild()
+
   // Use MVA adapters for data and state management
   const { nodes, isLoading, error } = useDestinyNodes()
-  const { currentPath, isValidPath, pathErrors, setPath, clearPath } =
-    useDestinyPath({
-      validatePath: true,
-    })
+
+  // Convert build store destiny path (EDIDs) to DestinyNode objects
+  const currentPath = useMemo(() => {
+    return build.destinyPath
+      .map(edid => nodes.find(n => n.edid === edid))
+      .filter((n): n is DestinyNode => !!n)
+  }, [build.destinyPath, nodes])
+
+  const {
+    currentPath: pathState,
+    isValidPath,
+    pathErrors,
+    setPath,
+    clearPath,
+  } = useDestinyPath({
+    initialPath: currentPath,
+    validatePath: true,
+  })
 
   // Get possible paths from current position
   const { possiblePaths } = useDestinyPossiblePaths({
     fromNode:
-      currentPath.length > 0 ? currentPath[currentPath.length - 1] : undefined,
+      pathState.length > 0 ? pathState[pathState.length - 1] : undefined,
   })
 
   // Use destiny filters for reference page
@@ -119,14 +137,16 @@ export function UnifiedDestinyPage() {
     referenceFilters.clearFilters()
   }
 
-  // Handle path changes
+  // Handle path changes - sync to build store
   const handlePathChange = (path: DestinyNode[]) => {
-    setPath(path)
+    const pathEdids = path.map(node => node.edid)
+    setDestinyPath(pathEdids)
   }
 
-  // Handle path completion
+  // Handle path completion - sync to build store
   const handlePathComplete = (path: DestinyNode[]) => {
-    setPath(path)
+    const pathEdids = path.map(node => node.edid)
+    setDestinyPath(pathEdids)
   }
 
   // Handle planning nodes (for advanced features)
@@ -212,6 +232,7 @@ export function UnifiedDestinyPage() {
 
           <TabsContent value="path" className="space-y-4">
             <DestinyResponsivePathBuilder
+              currentPath={pathState}
               onPathChange={handlePathChange}
               onPathComplete={handlePathComplete}
             />
