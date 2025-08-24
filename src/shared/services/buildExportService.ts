@@ -1,11 +1,11 @@
 import { useBirthsignsStore } from '../stores/birthsignsStore'
+import { useBlessingsStore } from '../stores/blessingsStore'
 import { useDestinyNodesStore } from '../stores/destinyNodesStore'
 import { usePerkTreesStore } from '../stores/perkTreesStore'
 import { useRacesStore } from '../stores/racesStore'
 import { useReligionsStore } from '../stores/religionsStore'
 import { useSkillsStore } from '../stores/skillsStore'
 import { useTraitsStore } from '../stores/traitsStore'
-import { useBlessingsStore } from '../stores/blessingsStore'
 import type { BuildState } from '../types/build'
 import type { HydratedBuildData } from '../types/discordExport'
 
@@ -207,8 +207,8 @@ function resolveReligion(religionId: string | null): {
       // Try to find religion using the same logic as findReligionById
       // This handles the ID format mismatch between selection and storage
       const religion = religions.find(
-        r => 
-          r.id === religionId || 
+        r =>
+          r.id === religionId ||
           r.name === religionId ||
           r.name.toLowerCase().replace(/\s+/g, '-') === religionId
       )
@@ -216,19 +216,22 @@ function resolveReligion(religionId: string | null): {
       if (!religion) return { name: 'Unknown Religion', effects: 'No effects' }
 
       // Extract tenets from the first tenet effect description
-      const tenets = religion.tenet?.effects?.[0]?.effectDescription || 
-                    religion.tenet?.description || 
-                    undefined
+      const tenets =
+        religion.tenet?.effects?.[0]?.effectDescription ||
+        religion.tenet?.description ||
+        undefined
 
       // Extract follower boon (boon1) from the first effect description
-      const followerBoon = religion.boon1?.effects?.[0]?.effectDescription || 
-                          religion.boon1?.spellName || 
-                          undefined
+      const followerBoon =
+        religion.boon1?.effects?.[0]?.effectDescription ||
+        religion.boon1?.spellName ||
+        undefined
 
       // Extract devotee boon (boon2) from the first effect description
-      const devoteeBoon = religion.boon2?.effects?.[0]?.effectDescription || 
-                         religion.boon2?.spellName || 
-                         undefined
+      const devoteeBoon =
+        religion.boon2?.effects?.[0]?.effectDescription ||
+        religion.boon2?.spellName ||
+        undefined
 
       return {
         name: religion.name,
@@ -251,7 +254,8 @@ function resolveFavoriteBlessing(blessingId: string | null): {
   effects: string
   source: string
 } {
-  if (!blessingId) return { name: 'Not selected', effects: 'No effects', source: 'None' }
+  if (!blessingId)
+    return { name: 'Not selected', effects: 'No effects', source: 'None' }
 
   return safeResolve(
     () => {
@@ -267,7 +271,12 @@ function resolveFavoriteBlessing(blessingId: string | null): {
       // Try to find blessing by ID
       const blessing = blessings.find(b => b.id === blessingId)
 
-      if (!blessing) return { name: 'Unknown Blessing', effects: 'No effects', source: 'Unknown' }
+      if (!blessing)
+        return {
+          name: 'Unknown Blessing',
+          effects: 'No effects',
+          source: 'Unknown',
+        }
 
       // Format effects as a summary
       const effectsSummary = blessing.effects
@@ -362,7 +371,13 @@ function resolvePerks(
           const skill = skills.find(s => s.edid === skillId)
           const perkTree = perkTrees.find(pt => pt.treeId === skillId)
 
-          const perks = perkIds.map(perkId => {
+          // Create a map to track unique perks and their ranks
+          const uniquePerks = new Map<
+            string,
+            { name: string; effects: string; rank?: number }
+          >()
+
+          perkIds.forEach(perkId => {
             // Try to find perk by EDID first (this is the most common case)
             let perk = perkTree?.perks.find(p => p.edid === perkId)
 
@@ -391,16 +406,29 @@ function resolvePerks(
             const description =
               perk?.ranks?.[0]?.description?.base || 'No effects'
 
-            return {
-              name: perk?.name || 'Unknown Perk',
-              effects: formatForDiscord(description),
-              rank: rank || undefined,
+            const perkKey = perk?.edid || perkId
+            const currentRank = uniquePerks.get(perkKey)?.rank || 0
+
+            // Only update if this rank is higher than what we've seen
+            if (rank && rank > currentRank) {
+              uniquePerks.set(perkKey, {
+                name: perk?.name || 'Unknown Perk',
+                effects: formatForDiscord(description),
+                rank: rank,
+              })
+            } else if (!uniquePerks.has(perkKey)) {
+              // If no rank specified or first occurrence, add it
+              uniquePerks.set(perkKey, {
+                name: perk?.name || 'Unknown Perk',
+                effects: formatForDiscord(description),
+                rank: rank || undefined,
+              })
             }
           })
 
           return {
             skillName: skill?.name || 'Unknown Skill',
-            perks,
+            perks: Array.from(uniquePerks.values()),
           }
         })
         .filter(group => group.perks.length > 0)
@@ -430,9 +458,19 @@ function resolveDestinyPath(
       }
 
       return destinyPath.map(nodeId => {
-        const node = destinyNodes.find(
-          n => n.id === nodeId || n.name === nodeId
-        )
+        // Try to find node by edid first (most common case for destiny paths)
+        let node = destinyNodes.find(n => n.edid === nodeId)
+
+        // If not found by edid, try by id
+        if (!node) {
+          node = destinyNodes.find(n => n.id === nodeId)
+        }
+
+        // If still not found, try by name (fallback)
+        if (!node) {
+          node = destinyNodes.find(n => n.name === nodeId)
+        }
+
         return {
           name: node?.name || 'Unknown Destiny',
           effects: node?.description
@@ -552,15 +590,49 @@ export function hydrateBuildData(build: BuildState): HydratedBuildData {
   // Generate tags
   const tags = generateTags(race, skills, traits)
 
-  // NEW: Extract attribute assignments
+  // NEW: Extract attribute assignments with level counts and race base stats
+  const attributeAssignments = build.attributeAssignments.assignments || {}
+
+  // Count how many levels were assigned to each attribute
+  const healthLevels = Object.values(attributeAssignments).filter(
+    attr => attr === 'health'
+  ).length
+  const staminaLevels = Object.values(attributeAssignments).filter(
+    attr => attr === 'stamina'
+  ).length
+  const magickaLevels = Object.values(attributeAssignments).filter(
+    attr => attr === 'magicka'
+  ).length
+
+  // Get race base stats
+  const races = useRacesStore.getState().data
+  const selectedRace = races.find(r => r.edid === build.race)
+  const raceBaseStats = selectedRace?.startingStats || {
+    health: 100,
+    stamina: 100,
+    magicka: 100,
+  }
+
+  // Calculate total attributes (race base + level assignments)
+  const totalHealth =
+    raceBaseStats.health + (build.attributeAssignments.health || 0)
+  const totalStamina =
+    raceBaseStats.stamina + (build.attributeAssignments.stamina || 0)
+  const totalMagicka =
+    raceBaseStats.magicka + (build.attributeAssignments.magicka || 0)
+
   const attributes = {
     level: build.attributeAssignments.level || 1,
-    health: build.attributeAssignments.health || 0,
-    stamina: build.attributeAssignments.stamina || 0,
-    magicka: build.attributeAssignments.magicka || 0,
-    totalPoints: (build.attributeAssignments.health || 0) + 
-                 (build.attributeAssignments.stamina || 0) + 
-                 (build.attributeAssignments.magicka || 0),
+    health: totalHealth,
+    stamina: totalStamina,
+    magicka: totalMagicka,
+    healthLevels,
+    staminaLevels,
+    magickaLevels,
+    totalPoints:
+      (build.attributeAssignments.health || 0) +
+      (build.attributeAssignments.stamina || 0) +
+      (build.attributeAssignments.magicka || 0),
   }
 
   return {

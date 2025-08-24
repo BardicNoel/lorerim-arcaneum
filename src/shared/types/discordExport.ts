@@ -4,17 +4,17 @@ export interface HydratedBuildData {
   race: { name: string; effects?: string }
   birthSign: { name: string; effects: string }
   traits: Array<{ name: string; effects: string; type: 'regular' | 'bonus' }>
-  religion: { 
-    name: string; 
-    effects: string;
-    tenets?: string;
-    followerBoon?: string;
-    devoteeBoon?: string;
+  religion: {
+    name: string
+    effects: string
+    tenets?: string
+    followerBoon?: string
+    devoteeBoon?: string
   }
-  favoriteBlessing: { 
-    name: string; 
-    effects: string;
-    source: string;
+  favoriteBlessing: {
+    name: string
+    effects: string
+    source: string
   }
   skills: {
     major: Array<{ name: string; level?: number }>
@@ -33,6 +33,9 @@ export interface HydratedBuildData {
     health: number
     stamina: number
     magicka: number
+    healthLevels: number
+    staminaLevels: number
+    magickaLevels: number
     totalPoints: number
   }
 }
