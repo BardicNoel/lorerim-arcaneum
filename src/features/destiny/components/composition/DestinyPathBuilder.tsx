@@ -19,6 +19,7 @@ interface DestinyPathBuilderProps {
   onPathComplete?: (path: DestinyNode[]) => void
   className?: string
   compact?: boolean
+  currentPath?: DestinyNode[] // Add this prop
 }
 
 export function DestinyPathBuilder({
@@ -26,9 +27,10 @@ export function DestinyPathBuilder({
   onPathComplete,
   className = '',
   compact = false,
+  currentPath = [], // Add this prop with default
 }: DestinyPathBuilderProps) {
   const {
-    currentPath,
+    currentPath: pathState,
     currentNode,
     availableNodes,
     isValidPath,
@@ -40,7 +42,9 @@ export function DestinyPathBuilder({
     goToPathIndex,
     isPathComplete,
     getPathSummary,
-  } = useDestinyPath()
+  } = useDestinyPath({
+    initialPath: currentPath, // Pass the currentPath as initialPath
+  })
 
   // Get possible paths from current position
   const { possiblePaths } = useDestinyPossiblePaths({
@@ -53,7 +57,7 @@ export function DestinyPathBuilder({
   // Use destiny filters for build path
   const buildPathFilters = useDestinyFilters({
     filterType: 'build-path',
-    currentPath,
+    currentPath: pathState,
   })
 
   // Use filtered paths from destiny filters
@@ -112,7 +116,7 @@ export function DestinyPathBuilder({
   const handlePathClick = (path: DestinyNode[], clickedIndex: number) => {
     let newPath: DestinyNode[]
 
-    if (currentPath.length === 0) {
+    if (pathState.length === 0) {
       // No current path - user is starting fresh
       // Set the path up to the clicked index
       newPath = path.slice(0, clickedIndex + 1)
@@ -125,7 +129,7 @@ export function DestinyPathBuilder({
 
       // Get the nodes to add (skip the first node since it's the current node)
       const nodesToAdd = path.slice(1, clickedIndex + 1)
-      newPath = [...currentPath, ...nodesToAdd]
+      newPath = [...pathState, ...nodesToAdd]
     }
 
     // Set the entire path at once (bypasses individual node validation)
@@ -142,7 +146,7 @@ export function DestinyPathBuilder({
   // Handle breadcrumb click
   const handleBreadcrumbClick = (index: number) => {
     goToPathIndex(index)
-    onPathChange?.(currentPath)
+    onPathChange?.(pathState)
   }
 
   // Handle clearing path
@@ -158,10 +162,10 @@ export function DestinyPathBuilder({
     return (
       <div className={`space-y-4 ${className}`}>
         {/* Selected Path List */}
-        <DestinySelectedPathList path={currentPath} />
+        <DestinySelectedPathList path={pathState} />
 
         {/* Clear Path Button */}
-        {currentPath.length > 0 && (
+        {pathState.length > 0 && (
           <div className="flex justify-end">
             <Button
               variant="outline"
@@ -189,7 +193,7 @@ export function DestinyPathBuilder({
                     isComplete: false,
                     endNode: path[path.length - 1],
                   }))}
-                  selectedPathLength={currentPath.length}
+                  selectedPathLength={pathState.length}
                   onPathClick={handlePathClick}
                   variant="compact"
                 />
@@ -228,7 +232,7 @@ export function DestinyPathBuilder({
               Destiny Path Builder
             </CardTitle>
             <div className="flex items-center gap-2">
-              {currentPath.length > 0 && (
+              {pathState.length > 0 && (
                 <Button
                   variant="outline"
                   size="sm"
@@ -245,16 +249,16 @@ export function DestinyPathBuilder({
         <CardContent>
           {/* Breadcrumb Trail */}
           <DestinyBreadcrumbTrail
-            path={currentPath}
+            path={pathState}
             allNodes={nodes}
             onBreadcrumbClick={handleBreadcrumbClick}
             className="mb-4"
           />
 
           {/* Path Summary */}
-          {currentPath.length > 0 && (
+          {pathState.length > 0 && (
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <span>Path Length: {currentPath.length}</span>
+              <span>Path Length: {pathState.length}</span>
               <span>•</span>
               <span>Start: {pathSummary.startNode?.name}</span>
               <span>•</span>
@@ -290,14 +294,14 @@ export function DestinyPathBuilder({
       </Card>
 
       {/* Current Path Display */}
-      {currentPath.length > 0 && (
+      {pathState.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">Current Path</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {currentPath.map((node, index) => (
+              {pathState.map((node, index) => (
                 <div
                   key={node.id}
                   className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50"
@@ -322,12 +326,12 @@ export function DestinyPathBuilder({
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">
-            {currentPath.length === 0
+            {pathState.length === 0
               ? 'Choose Your Starting Point'
               : 'Possible Paths'}
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            {currentPath.length === 0
+            {pathState.length === 0
               ? 'Select a root destiny node to begin your path'
               : displayPaths.length === 0
                 ? buildPathFilters.selectedFilters.length > 0
@@ -377,7 +381,7 @@ export function DestinyPathBuilder({
                     isComplete: false,
                     endNode: path[path.length - 1],
                   }))}
-                  selectedPathLength={currentPath.length}
+                  selectedPathLength={pathState.length}
                   onPathClick={handlePathClick}
                 />
               </div>
