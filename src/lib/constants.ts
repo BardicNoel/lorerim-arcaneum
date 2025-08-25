@@ -17,7 +17,7 @@ export const Z_INDEX = {
   // Dropdowns and overlays
   DROPDOWN: 100,
   AUTOCOMPLETE: 120,
-  TOOLTIP: 150,
+  TOOLTIP: 1000, // Increased from 150 to ensure it appears above ReactFlow elements
   MODAL: 200,
   DRAWER: 202,
 

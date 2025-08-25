@@ -1,3 +1,4 @@
+import { Z_INDEX } from '@/lib/constants'
 import React, { useCallback, useMemo } from 'react'
 import type {
   Connection,
@@ -168,12 +169,12 @@ export function PerkTreeCanvasII({
       const selectedPerk = selectedPerks.find(p => p.edid === perkId)
       const isSelected = selectedPerk !== undefined
 
-      return {
-        id: perkId,
-        type: 'perkNode',
-        position,
-        draggable: true,
-        data: {
+             return {
+         id: perkId,
+         type: 'perkNode',
+         position,
+         draggable: false,
+         data: {
           ...perk,
           selected: isSelected,
           currentRank: (selectedPerk as PerkNodeData)?.currentRank || 0,
@@ -267,7 +268,7 @@ export function PerkTreeCanvasII({
   return (
     <div
       className="w-full h-full bg-background rounded-lg border"
-      style={{ zIndex: 1 }}
+      style={{ zIndex: Z_INDEX.CONTENT, position: 'relative' }}
       onMouseDown={e => e.stopPropagation()}
       onTouchStart={e => e.stopPropagation()}
     >
@@ -309,6 +310,10 @@ export function PerkTreeCanvasII({
         panOnDrag={true}
         panOnScroll={false}
         preventScrolling={true}
+        style={{ 
+          backgroundColor: 'hsl(var(--background))',
+          zIndex: 1 // Ensure ReactFlow doesn't create conflicting stacking context
+        }}
       >
         <Background />
         <Controls />

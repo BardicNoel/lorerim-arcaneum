@@ -683,7 +683,7 @@ export function PerkTreeCanvasExperimental({
 
       <div
         className="w-full h-full min-h-[400px]"
-        style={{ zIndex: Z_INDEX.CONTENT }}
+        style={{ zIndex: Z_INDEX.CONTENT, position: 'relative' }}
       >
         <ReactFlow
           nodes={nodes}
@@ -709,7 +709,10 @@ export function PerkTreeCanvasExperimental({
           minZoom={0.1}
           maxZoom={2}
           defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
-          style={{ backgroundColor: 'hsl(var(--background))' }}
+          style={{ 
+            backgroundColor: 'hsl(var(--background))',
+            zIndex: 1 // Ensure ReactFlow doesn't create conflicting stacking context
+          }}
         >
           <Background
             color="hsl(var(--muted-foreground))"

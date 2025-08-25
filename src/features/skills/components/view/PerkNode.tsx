@@ -3,6 +3,7 @@ import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
+  HoverCardPortal,
 } from '@/shared/ui/ui/hover-card'
 import React, { memo } from 'react'
 import { Handle, Position } from 'reactflow'
@@ -117,13 +118,14 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
   // Get the description from the first rank
   const description = data.ranks[0]?.description?.base || ''
 
-  return (
+    return (
     <HoverCard>
       <HoverCardTrigger asChild>
         <div
           style={getNodeStyle()}
           onClick={handleNodeClick}
           onMouseDown={e => e.stopPropagation()}
+          
         >
           {/* Only show target handle if this node is not a root (has prerequisites) */}
           {!data.isRoot && <Handle type="target" position={Position.Bottom} />}
@@ -142,31 +144,38 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
         </div>
       </HoverCardTrigger>
 
-      <HoverCardContent
-        className="w-80 bg-background border border-border shadow-lg"
-        style={{ zIndex: Z_INDEX.TOOLTIP }}
-      >
-        <div className="space-y-2">
-          <h4 className="font-semibold text-sm">{data.name}</h4>
-          <div className="text-sm text-muted-foreground">{description}</div>
+      <HoverCardPortal>
+        <HoverCardContent
+          className="w-80"
+          style={{ 
+            zIndex: Z_INDEX.TOOLTIP,
+            backgroundColor: 'hsl(var(--background))',
+            border: '1px solid hsl(var(--border))',
+            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+          }}
+        >
+          <div className="space-y-2">
+            <h4 className="font-semibold text-sm">{data.name}</h4>
+            <div className="text-sm text-muted-foreground">{description}</div>
 
-          {/* Minimum skill level requirement */}
-          {typeof data.ranks[0]?.prerequisites?.skillLevel?.level ===
-            'number' &&
-            data.ranks[0].prerequisites.skillLevel.level > 0 && (
-              <div className="text-xs text-blue-700 font-medium pt-1">
-                Min. Level: {data.ranks[0].prerequisites.skillLevel.level}
+            {/* Minimum skill level requirement */}
+            {typeof data.ranks[0]?.prerequisites?.skillLevel?.level ===
+              'number' &&
+              data.ranks[0].prerequisites.skillLevel.level > 0 && (
+                <div className="text-xs text-blue-700 font-medium pt-1">
+                  Min. Level: {data.ranks[0].prerequisites.skillLevel.level}
+                </div>
+              )}
+            {totalRanks > 1 && (
+              <div className="text-xs text-muted-foreground pt-2 border-t">
+                <strong>Ranks:</strong> {data.currentRank || 0}/{totalRanks}
+                <br />
+                <em>Click to cycle through ranks</em>
               </div>
             )}
-          {totalRanks > 1 && (
-            <div className="text-xs text-muted-foreground pt-2 border-t">
-              <strong>Ranks:</strong> {data.currentRank || 0}/{totalRanks}
-              <br />
-              <em>Click to cycle through ranks</em>
-            </div>
-          )}
-        </div>
-      </HoverCardContent>
+          </div>
+        </HoverCardContent>
+      </HoverCardPortal>
     </HoverCard>
   )
 }
