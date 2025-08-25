@@ -382,7 +382,7 @@ export function BuildPage() {
     },
     {
       id: 'destiny',
-      component: <BuildPageDestinyCard navigate={navigate} />,
+      component: <BuildPageDestinyCard />,
       size: 'full' as const,
     },
   ]

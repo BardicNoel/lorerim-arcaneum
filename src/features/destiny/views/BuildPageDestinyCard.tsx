@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { ScrollArea } from '@/shared/ui/ui/scroll-area'
 import { AlertCircle, ExternalLink, RotateCcw } from 'lucide-react'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useDestinyNodes } from '../adapters/useDestinyNodes'
 import { useDestinyPath } from '../adapters/useDestinyPath'
 import { useDestinyPossiblePaths } from '../adapters/useDestinyPossiblePaths'
@@ -12,23 +13,29 @@ import { DestinyBreadcrumbTrail } from '../components/atomic/DestinyBreadcrumbTr
 import { DestinyPossiblePathsList } from '../components/composition/DestinyPossiblePathsList'
 import type { DestinyNode } from '../types'
 
-interface BuildPageDestinyCardProps {
-  navigate: (to: string) => void
-}
-
-const BuildPageDestinyCard: React.FC<BuildPageDestinyCardProps> = ({
-  navigate,
-}) => {
+const BuildPageDestinyCard: React.FC = () => {
   const { build, setDestinyPath } = useCharacterBuild()
+  const routerNavigate = useNavigate()
+
+  // Custom navigation that preserves build parameters
+  const navigateWithBuild = (to: string) => {
+    const currentHash = window.location.hash
+    const [_currentPath, paramsString] = currentHash.split('?')
+    const params = new URLSearchParams(paramsString || '')
+    const buildParam = params.get('b')
+
+    if (buildParam) {
+      // Preserve the build parameter when navigating
+      routerNavigate(`${to}?b=${buildParam}`)
+    } else {
+      // No build parameter, just navigate normally
+      routerNavigate(to)
+    }
+  }
   const { nodes, isLoading, error } = useDestinyNodes()
 
   // Convert build.destinyPath (string[]) to DestinyNode[]
-  const currentPath = React.useMemo(() => {
-    console.log('🔄 [Destiny Card] Converting destiny path:', {
-      destinyPath: build.destinyPath,
-      nodesCount: nodes.length,
-      sampleNodes: nodes.slice(0, 3).map(n => ({ name: n.name, edid: n.edid, id: n.id }))
-    })
+  const _currentPath = React.useMemo(() => {
     return build.destinyPath
       .map(edid => nodes.find(n => n.edid === edid))
       .filter((n): n is DestinyNode => !!n)
@@ -43,7 +50,7 @@ const BuildPageDestinyCard: React.FC<BuildPageDestinyCardProps> = ({
     currentPath: pathState,
     currentNode,
   } = useDestinyPath({
-    initialPath: currentPath,
+    initialPath: _currentPath,
     validatePath: true,
   })
 
@@ -103,7 +110,7 @@ const BuildPageDestinyCard: React.FC<BuildPageDestinyCardProps> = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => navigate('/destiny')}
+            onClick={() => navigateWithBuild('/build/destiny')}
             className="text-sm whitespace-nowrap cursor-pointer"
           >
             <ExternalLink className="w-4 h-4 mr-1" />
@@ -217,7 +224,7 @@ const BuildPageDestinyCard: React.FC<BuildPageDestinyCardProps> = ({
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => navigate('/destiny')}
+                  onClick={() => navigateWithBuild('/build/destiny')}
                   className="mt-2"
                 >
                   Browse All Destinies
