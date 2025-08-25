@@ -67,15 +67,6 @@ export function RaceAccordion({
         </div>
       </AccordionCard.Header>
 
-      <AccordionCard.Summary>
-        <div className="line-clamp-2">
-          <FormattedText
-            text={item.summary || item.description}
-            className="text-sm text-muted-foreground line-clamp-2"
-          />
-        </div>
-      </AccordionCard.Summary>
-
       <AccordionCard.Details>
         {/* Full Description */}
         <div>
