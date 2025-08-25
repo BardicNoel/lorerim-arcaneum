@@ -1,0 +1,2977 @@
+[
+  {
+    "name": "Julianos",
+    "domain": "Divine",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Julianos",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Divine Scholar",
+            "effectDescription": "Spells cost <Global=WSN_Favor_Global_Fractional>% less to cast (based on favor with Julianos).",
+            "magnitude": 2,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Julianos",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Temple of Logic",
+            "effectDescription": "Spells and scrolls are <Global=WSN_Favor_Global_Fractional>% more effective (based on favor with Julianos).",
+            "magnitude": 2,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Julianos",
+      "description": "Master the skills of the Mage. Strive to raise your Magicka. Never openly break the laws of Skyrim.",
+      "effects": [
+        {
+          "effectName": "Tenets of Julianos",
+          "effectDescription": "Master the skills of the Mage. Strive to raise your Magicka. Never openly break the laws of Skyrim.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Syrabane",
+    "domain": "Ancestor",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Syrabane",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Knowledge Seeker",
+            "effectDescription": "You are more likely to find spell tomes and scrolls on enemies you kill.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Syrabane",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Reach for the Stars",
+            "effectDescription": "Spells cost <Global=WSN_Favor_Global_Fractional>% less to cast (based on favor with Syrabane).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Syrabane",
+      "description": "Read books that teach new skills. Study a wide variety of spells. High Elves are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Syrabane",
+          "effectDescription": "Read books that teach new skills. Study a wide variety of spells. High Elves are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Altmer"
+    ]
+  },
+  {
+    "name": "Magnus",
+    "domain": "Ancestor",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Magnus",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Sight, Light and Insight",
+            "effectDescription": "Magicka does not regenerate, but praying rapidly replenishes Magicka. Spells cost <50>% less to cast.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Damage Magicka Regen",
+            "effectDescription": "No description available",
+            "magnitude": 1000,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Magnus",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Architect's Gift",
+            "effectDescription": "Praying automatically casts the (beneficial self targeted) spells in your hands for no Magicka and they last <Global=WSN_Favor_Global>% longer (based on favor with Magnus).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Magnus",
+      "description": "Practice magic successfully while praying. Safeguard the Eye of Magnus. Create enchanted items.",
+      "effects": [
+        {
+          "effectName": "Tenets of Magnus",
+          "effectDescription": "Practice magic successfully while praying. Safeguard the Eye of Magnus. Create enchanted items.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Jephre",
+    "domain": "Ancestor",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Jephre",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Forest Stride",
+            "effectDescription": "The unbounded spirit of Jephre increases movement speed by <mag>% when out of combat.",
+            "magnitude": 10,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Fortify Speed",
+            "effectDescription": "No description available",
+            "magnitude": 10,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Jephre",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "The Eternal Song",
+            "effectDescription": "Stamina regenerates <25>% faster in combat and <50>% faster out of combat. Praying to Jephre brings clear weather.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Regenerate Stamina",
+            "effectDescription": "No description available",
+            "magnitude": 100,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Regenerate Stamina",
+            "effectDescription": "No description available",
+            "magnitude": 100,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Jephre",
+      "description": "Explore new locations. Read the stories of others. Hunt animals. Wood Elves are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Jephre",
+          "effectDescription": "Explore new locations. Read the stories of others. Hunt animals. Wood Elves are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Bosmer"
+    ]
+  },
+  {
+    "name": "Mara",
+    "domain": "Divine",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Mara",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Cleansing",
+            "effectDescription": "Increases your health regeneration by <1>. Pray to Mara to cure all diseases affecting you or allies within <40> feet.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Restore Health",
+            "effectDescription": "No description available",
+            "magnitude": 1,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Mara",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Aura of Peace",
+            "effectDescription": "Living allies within <mag> feet are healed <Global=WSN_Favor_Global_Fractional> points per second (based on favor with Mara).",
+            "magnitude": 40,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Mara",
+      "description": "Be married. Own one or more houses. Be generous to beggars and children. Receive the blessing of Lover's Comfort. Never openly break the laws of Skyrim.",
+      "effects": [
+        {
+          "effectName": "Tenets of Mara",
+          "effectDescription": "Be married. Own one or more houses. Be generous to beggars and children. Receive the blessing of Lover's Comfort. Never openly break the laws of Skyrim.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Meridia",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Meridia",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Purification",
+            "effectDescription": "Attacks, spells, scrolls, shouts and enchantments are <Global=WSN_Favor_Global_Fractional3>% better against undead (based on favor with Meridia).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Drain Favor on Summon Undead",
+            "effectDescription": "No description available",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Drain Favor on Becoming Undead",
+            "effectDescription": "No description available",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Meridia",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Supreme Light",
+            "effectDescription": "Activate an undead opponent in combat to call down a solar strike to deal <Global=WSN_Favor_Global_Fractional2> damage (based on favor with Meridia) and half to nearby undead. Costs <10>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Meridia",
+      "description": "Slay the undead. Never summon the undead or become one of them. High Elves and those skilled in Restoration are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Meridia",
+          "effectDescription": "Slay the undead. Never summon the undead or become one of them. High Elves and those skilled in Restoration are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Altmer"
+    ]
+  },
+  {
+    "name": "Azura",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Azura",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Twilight Shroud",
+            "effectDescription": "Foes within <mag> feet suffer <Global=WSN_Favor_Global_Fractional>% reduced magic resistance (based on favor with Azura) and can't absorb spells.",
+            "magnitude": 40,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Azura",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Perfume of Moonshadow",
+            "effectDescription": "Activate a person in combat below <Global=WSN_Favor_Global_Fractional2>% Health (based on favor with Azura) to paralyze them with <1> Health. Costs <5>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Azura",
+      "description": "Trap souls in my name. Explore new locations. Pray only at twilight, preferably outside. Dark Elves and those skilled in Illusion are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Azura",
+          "effectDescription": "Trap souls in my name. Explore new locations. Pray only at twilight, preferably outside. Dark Elves and those skilled in Illusion are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Dunmer"
+    ]
+  },
+  {
+    "name": "Talos",
+    "domain": "Divine",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Talos",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Stormlord",
+            "effectDescription": "Attacks and shouts against elves are increased by <Global=WSN_Favor_Global_Fractional3>%, while attacks against all other enemies are increased by half as much (based on favor with Talos).",
+            "magnitude": 150,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Talos",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Dragon of the North",
+            "effectDescription": "Your remaining shout cooldown is halved whenever an enemy dies within <mag> feet.",
+            "magnitude": 50,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Talos",
+      "description": "Bring the Civil War to a conclusion. Learn the dragon tongue. Absorb dragon souls. Slay elves and the Thalmor. Never openly break the laws of Skyrim.",
+      "effects": [
+        {
+          "effectName": "Tenets of Talos",
+          "effectDescription": "Bring the Civil War to a conclusion. Learn the dragon tongue. Absorb dragon souls. Slay elves and the Thalmor. Never openly break the laws of Skyrim.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Akatosh",
+    "domain": "Divine",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Akatosh",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Father of Dragons",
+            "effectDescription": "Attacks, spells, scrolls, shouts and enchantments are <Global=WSN_Favor_Global_Fractional2>% better against dragons (based on favor with Akatosh).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Akatosh",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Turn the Hourglass",
+            "effectDescription": "Praying to Akatosh resets the cooldown of your most recently used shout and power.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Akatosh",
+      "description": "Fulfill your destiny by saving Tamriel. Raise your character level. Absorb dragon souls. Never openly break the laws of Skyrim.",
+      "effects": [
+        {
+          "effectName": "Tenets of Akatosh",
+          "effectDescription": "Fulfill your destiny by saving Tamriel. Raise your character level. Absorb dragon souls. Never openly break the laws of Skyrim.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Dibella",
+    "domain": "Divine",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Dibella",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Afterglow",
+            "effectDescription": "<Lover's> <Comfort> (gained by sleeping with one's spouse) also improves all skills by <5>%.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Dibella",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Dibellan Arts",
+            "effectDescription": "Activate a person in combat to make them unequip their items and follow you for <90> seconds. Costs <5>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Dibella",
+      "description": "Persuade others. Receive the blessing of Lover's Comfort. Find a new Sybil for my Temple. Pray only in the nude. Never openly break the laws of Skyrim.",
+      "effects": [
+        {
+          "effectName": "Tenets of Dibella",
+          "effectDescription": "Persuade others. Receive the blessing of Lover's Comfort. Find a new Sybil for my Temple. Pray only in the nude. Never openly break the laws of Skyrim.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Phynaster",
+    "domain": "Ancestor",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Phynaster",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Shorter Strides",
+            "effectDescription": "Health, Magicka and Stamina regenerate <200>% faster when standing still but <100>% slower when moving.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Shorter Strides - Buff HP Regen",
+            "effectDescription": "No description available",
+            "magnitude": 200,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Shorter Strides - Buff MS Regen",
+            "effectDescription": "No description available",
+            "magnitude": 200,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Shorter Strides - Nerf HP Regen",
+            "effectDescription": "No description available",
+            "magnitude": 300,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Shorter Strides - Nerf MS Regen",
+            "effectDescription": "No description available",
+            "magnitude": 300,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Phynaster",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Elvenpath",
+            "effectDescription": "During prayer, you may teleport back to the last location where you prayed. Costs <2>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Phynaster",
+      "description": "Explore new locations. Find the standing stones of Skyrim. Harvest the fruits of nature. Bretons are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Phynaster",
+          "effectDescription": "Explore new locations. Find the standing stones of Skyrim. Harvest the fruits of nature. Bretons are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Breton"
+    ]
+  },
+  {
+    "name": "Mehrunes Dagon",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Mehrunes Dagon",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Self-Immolation",
+            "effectDescription": "Daedric fire burns your spirit as you pray, draining Magicka. Stop praying at <20>% or less to gain more favor and <Burning Path> activations.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Mehrunes Dagon",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Burning Path",
+            "effectDescription": "Nearby foes burn for <Global=WSN_Favor_Global_Fractional3> damage and explode on death for <Global=WSN_Favor_Global> damage (based on favor with Mehrunes Dagon). Pray to recharge. (Activations: <Global=WSN_Effect_Global_MehrunesExplodes>/<Global=WSN_Effect_Global_MehrunesExplodesMax>)",
+            "magnitude": 20,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Mehrunes Dagon",
+      "description": "Slay people who stand in your way. Defile the shrines of my enemies. Those skilled in Destruction are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Mehrunes Dagon",
+          "effectDescription": "Slay people who stand in your way. Defile the shrines of my enemies. Those skilled in Destruction are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Vaermina",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Vaermina",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Night Terrors",
+            "effectDescription": "Mind affecting illusion spells work on targets <Global=WSN_Favor_Global_Fractional> levels higher and cost <50>% less magicka while out of combat (based on favor with Vaermina).",
+            "magnitude": 40,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Vaermina Sleep Detector",
+            "effectDescription": "No description available",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Vaermina",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Phantasmagoria",
+            "effectDescription": "Activate a sleeping person to summon an illusion to accompany you for an hour. Costs <5>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Vaermina",
+      "description": "Witness the death of those under your mind affecting spells. Kill people in their sleep. Sleep to pray. Those skilled in Illusion are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Vaermina",
+          "effectDescription": "Witness the death of those under your mind affecting spells. Kill people in their sleep. Sleep to pray. Those skilled in Illusion are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Zenithar",
+    "domain": "Divine",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Zenithar",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Work Ethic",
+            "effectDescription": "Smithing, Alchemy and Enchanting are <Global=WSN_Favor_Global_Fractional>% better (based on favor with Zenithar).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Zenithar",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Invisible Hand",
+            "effectDescription": "Pray to Zenithar to buy and sell items directly.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Zenithar",
+      "description": "Invest in stores and merchants. Seek out skill training. Make weapons and armor. Never openly break the laws of Skyrim.",
+      "effects": [
+        {
+          "effectName": "Tenets of Zenithar",
+          "effectDescription": "Invest in stores and merchants. Seek out skill training. Make weapons and armor. Never openly break the laws of Skyrim.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Boethiah",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Boethiah",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Blood Throne",
+            "effectDescription": "Your attacks deal <Global=WSN_Favor_Global_Fractional3>% more damage when fighting only one opponent (based on favor with Boethiah).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Boethiah",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Assassinate",
+            "effectDescription": "During prayer, you may invoke superior Daedric Invisibility for <90> seconds. If broken by a sneak attack, it deals <25>% more damage. Costs <10>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Boethiah",
+      "description": "Murder the innocent. Slay people who stand in your way. Strike unseen with sneak attacks. Dark Elves are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Boethiah",
+          "effectDescription": "Murder the innocent. Slay people who stand in your way. Strike unseen with sneak attacks. Dark Elves are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Dunmer"
+    ]
+  },
+  {
+    "name": "Nocturnal",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Nocturnal",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Vanish in the Night",
+            "effectDescription": "Praying clears non-violent crime bounties up to <Global=WSN_Favor_Global> gold (based on favor with Nocturnal).",
+            "magnitude": 20,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Nocturnal",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Raven's Watch",
+            "effectDescription": "During the night, you are less likely to be detected and are more proficient with picking pockets. During prayer, you may astrally observe the nearest person within <300> feet.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Nocturnal",
+      "description": "Pickpocket <Mysterious> <Coinpurses>. Pick locks successfully. Pray only at night, preferably in darkness. Those skilled in Sneak are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Nocturnal",
+          "effectDescription": "Pickpocket <Mysterious> <Coinpurses>. Pick locks successfully. Pray only at night, preferably in darkness. Those skilled in Sneak are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Molag Bal",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Molag Bal",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Eye of the Storm",
+            "effectDescription": "Absorbs <Global=WSN_Favor_Global_Fractional> Magicka and Stamina per second (based on favor with Molag Bal) from nearby enemies in combat.",
+            "magnitude": 12,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Drain Favor on Stop Being Vampire",
+            "effectDescription": "No description available",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Molag Bal",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Dragged to Oblivion",
+            "effectDescription": "Activate a hostile below level 50 in combat to banish them to Coldharbour. Pray to request the items. Costs <25>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Molag Bal",
+      "description": "Slay people who stand in your way. Trap souls in my name. Live as a vampire and never seek a cure. Those skilled in Destruction are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Molag Bal",
+          "effectDescription": "Slay people who stand in your way. Trap souls in my name. Live as a vampire and never seek a cure. Those skilled in Destruction are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Kynareth",
+    "domain": "Divine",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Kynareth",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Windspeaker",
+            "effectDescription": "The fierce spirit of Kyne increases movement speed by <mag>% in combat.",
+            "magnitude": 15,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Fortify Speed",
+            "effectDescription": "No description available",
+            "magnitude": 15,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Kynareth",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Kynareth's Emissary",
+            "effectDescription": "Pray to Kynareth to summon a sacred Sabre Cat mount.",
+            "magnitude": 40,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Kynareth",
+      "description": "Explore new locations. Strive to raise your Stamina. Receive the Voice of the Sky. Pray only outdoors. Never openly break the laws of Skyrim.",
+      "effects": [
+        {
+          "effectName": "Tenets of Kynareth",
+          "effectDescription": "Explore new locations. Strive to raise your Stamina. Receive the Voice of the Sky. Pray only outdoors. Never openly break the laws of Skyrim.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Mephala",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Mephala",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Secret Murder",
+            "effectDescription": "Sneak attacks deal <Global=WSN_Favor_Global_Fractional3>% more damage from behind (based on favor with Mephala).",
+            "magnitude": 50,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Mephala",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Whispers of Betrayal",
+            "effectDescription": "During prayer, seize control of the nearest person within <75> feet to fight for you. Costs <5>% favor.",
+            "magnitude": 50,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Mephala",
+      "description": "Poison your weapons. Strike unseen with sneak attacks. Intimidate the weak. Dark Elves are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Mephala",
+          "effectDescription": "Poison your weapons. Strike unseen with sneak attacks. Intimidate the weak. Dark Elves are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Dunmer"
+    ]
+  },
+  {
+    "name": "Arkay",
+    "domain": "Divine",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Arkay",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Chalice of Life",
+            "effectDescription": "Regenerate up to <5>% of your maximum Health per second based on missing Health. Can perform <Arkay's> <Rites>.",
+            "magnitude": 100,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Drain Favor on Summon Undead",
+            "effectDescription": "No description available",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Drain Favor on Becoming Undead",
+            "effectDescription": "No description available",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Arkay",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Arkayn Cycle",
+            "effectDescription": "Revive with full Health upon taking fatal damage. Must pray to use this ability again. Costs <15>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Arkay",
+      "description": "Slay the undead and their summoners. Perform <Arkay's> <Rites>. Never openly break the laws of Skyrim. Never summon the undead or become one of them.",
+      "effects": [
+        {
+          "effectName": "Tenets of Arkay",
+          "effectDescription": "Slay the undead and their summoners. Perform <Arkay's> <Rites>. Never openly break the laws of Skyrim. Never summon the undead or become one of them.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Sanguine",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Sanguine",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Be Merry",
+            "effectDescription": "Health, Magicka and Stamina regenerate <mag>% faster while a potion, food item or ingredient is active.",
+            "magnitude": 50,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Be Merry - HP Bonus",
+            "effectDescription": "No description available",
+            "magnitude": 50,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Be Merry - MS Bonus",
+            "effectDescription": "No description available",
+            "magnitude": 50,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Sanguine",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Pandemonium",
+            "effectDescription": "Can pray in combat, forcing the <5> nearest hostile people to dance for <20> seconds. Costs <10>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Sanguine",
+      "description": "Make mischief and commit misdemeanors and crimes worthy of a bounty. Indulge in mead, wine and ale. Find your own way out of jail.",
+      "effects": [
+        {
+          "effectName": "Tenets of Sanguine",
+          "effectDescription": "Make mischief and commit misdemeanors and crimes worthy of a bounty. Indulge in mead, wine and ale. Find your own way out of jail.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Malacath",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Malacath",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Deathbringer",
+            "effectDescription": "Your power attacks deal <Global=WSN_Favor_Global_Fractional3>% more damage (based on favor with Malacath).",
+            "magnitude": 150,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Malacath",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Bloodsoaked Triumph",
+            "effectDescription": "When an enemy dies within <mag> feet, their killer is healed by <Global=WSN_Favor_Global>% of the amount of overkill damage dealt (based on favor with Malacath).",
+            "magnitude": 40,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Malacath",
+      "description": "Defeat epic foes. Improve weapons and armor. Never commit a crime against the strongholds. Orcs and those skilled in Smithing are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Malacath",
+          "effectDescription": "Defeat epic foes. Improve weapons and armor. Never commit a crime against the strongholds. Orcs and those skilled in Smithing are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Orsimer"
+    ]
+  },
+  {
+    "name": "Stendarr",
+    "domain": "Divine",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Stendarr",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Sacred Resolve",
+            "effectDescription": "Take <Global=WSN_Favor_Global_Fractional3>% less attack damage from daedra and undead (based on favor with Stendarr).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Drain Favor on Summon Undead or Daedra",
+            "effectDescription": "No description available",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Stendarr",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Channel Divinity",
+            "effectDescription": "During prayer, you may spend <10>% favor to gain <Global=WSN_Favor_Global_Fractional2>% improved attack, defense and healing (based on favor with Stendarr) for <60> minutes or <5> battles.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Stendarr",
+      "description": "Clear dungeons of evil. Slay daedra and the undead. Complete side quests. Never openly break the laws of Skyrim. Never practice the foul summoning arts.",
+      "effects": [
+        {
+          "effectName": "Tenets of Stendarr",
+          "effectDescription": "Clear dungeons of evil. Slay daedra and the undead. Complete side quests. Never openly break the laws of Skyrim. Never practice the foul summoning arts.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Auriel",
+    "domain": "Ancestor",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Auriel",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Father of Mer",
+            "effectDescription": "All skills are <Global=WSN_Favor_Global_Fractional>% more efficient (based on favor with Auriel).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Auriel",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Path to Alaxon",
+            "effectDescription": "Attaining level <100> in a skill improves that skill by <Global=WSN_Favor_Global_Fractional>% (based on favor with Auriel).",
+            "magnitude": 10,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Auriel",
+      "description": "Fulfill your destiny by saving Tamriel. Master all skills. Become my Champion at my sacred Chantry. High Elves are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Auriel",
+          "effectDescription": "Fulfill your destiny by saving Tamriel. Master all skills. Become my Champion at my sacred Chantry. High Elves are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Altmer"
+    ]
+  },
+  {
+    "name": "Peryite",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Peryite",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Taskmaster",
+            "effectDescription": "All skills are <Global=WSN_Favor_Global_Fractional>% more efficient (based on favor with Peryite). Pray for <Peryite's> <Gifts> to gain favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Drain Favor on End Diseased",
+            "effectDescription": "No description available",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Peryite",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Green Dragon's Breath",
+            "effectDescription": "Activate a living opponent in combat to inflict all of <Peryite's> <Gifts> you have on the target, plus <5> disease damage per second for each gift. Pray to recharge.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Peryite",
+      "description": "Catch as many diseases as you can. Accept my Gifts of pestilence. Pray only while diseased. Never accept a cure for your afflictions.",
+      "effects": [
+        {
+          "effectName": "Tenets of Peryite",
+          "effectDescription": "Catch as many diseases as you can. Accept my Gifts of pestilence. Pray only while diseased. Never accept a cure for your afflictions.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Hircine",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Hircine",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Bitter Mercy",
+            "effectDescription": "Hircine's gift doubles attack damage to living targets with <Global=WSN_Favor_Global_Fractional3>% or less Health (based on favor with Hircine).",
+            "magnitude": 150,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Hircine",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Posting of the Hunt",
+            "effectDescription": "During prayer, invoke a <Hunt> against the living within <500> feet, revealing them and exposing them to <Bitter> <Mercy>. Costs <10>% favor.",
+            "magnitude": 150,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Hircine",
+      "description": "Slay the living in open combat, especially those stronger than you. Live as a werewolf. Pray in the wild. Those skilled in Light Armor are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Hircine",
+          "effectDescription": "Slay the living in open combat, especially those stronger than you. Live as a werewolf. Pray in the wild. Those skilled in Light Armor are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Xarxes",
+    "domain": "Ancestor",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Xarxes",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Scribe's Insight",
+            "effectDescription": "If you read a Skill Book while praying, Xarxes grants you an extra Skill Point in that skill.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Xarxes",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Panopticon",
+            "effectDescription": "During prayer, you may ascend in a trance, revealing all characters in a very large radius.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Xarxes",
+      "description": "Explore new locations. Read the stories of others. Study a wide variety of spells. Bretons are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Xarxes",
+          "effectDescription": "Explore new locations. Read the stories of others. Study a wide variety of spells. Bretons are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Breton"
+    ]
+  },
+  {
+    "name": "Shor",
+    "domain": "Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Shor",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Another Name for Freedom",
+            "effectDescription": "Take <Global=WSN_Favor_Global_Fractional3>% less attack damage and stagger from elves (based on favor with Shor).",
+            "magnitude": 150,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Shor",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Destiny",
+            "effectDescription": "When entering combat with a mighty foe, Shor sends a Shield-Thane to assist you. Pray to recharge.",
+            "magnitude": 150,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Shor",
+      "description": "Fulfill your destiny by saving Tamriel. Master the skills of the Warrior. Slay elves. Defeat epic foes.",
+      "effects": [
+        {
+          "effectName": "Tenets of Shor",
+          "effectDescription": "Fulfill your destiny by saving Tamriel. Master the skills of the Warrior. Slay elves. Defeat epic foes.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Hermaeus Mora",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Hermaeus Mora",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Demon of Knowledge",
+            "effectDescription": "Find <Eldritch> <Pages> on corpses. Similar <Eldritch> <Pages> can be bound at a tanning rack to create <Eldritch> <Tomes> that improve magic and shouts.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Hermaeus Mora",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Omniscience",
+            "effectDescription": "Pray to permanently raise a skill of your choice by one level. Costs <10>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Hermaeus Mora",
+      "description": "Read <Eldritch> <Pages> and bind them into <Eldritch> <Tomes>. Read books that teach new skills. Become my Champion at the Summit of Apocrypha.",
+      "effects": [
+        {
+          "effectName": "Tenets of Hermaeus Mora",
+          "effectDescription": "Read <Eldritch> <Pages> and bind them into <Eldritch> <Tomes>. Read books that teach new skills. Become my Champion at the Summit of Apocrypha.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Clavicus Vile",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Clavicus Vile",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Pactmaker",
+            "effectDescription": "Conjuration spells and effects last <10>% longer. Pray to make a <Pact> to gain favor with Clavicus Vile.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Clavicus Vile",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Wishmaster",
+            "effectDescription": "Pray to make a <Wish>, permanently gaining an additional perk point. Costs <30>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Clavicus Vile",
+      "description": "Pray to accept a Pact and complete it as written within the allotted time. Never break or ignore my Pacts.",
+      "effects": [
+        {
+          "effectName": "Tenets of Clavicus Vile",
+          "effectDescription": "Pray to accept a Pact and complete it as written within the allotted time. Never break or ignore my Pacts.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Namira",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Namira",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Creeping Decay",
+            "effectDescription": "Reduces Poison Resist of all within <mag> feet by <Global=WSN_Favor_Global_Fractional2>% (based on favor with Namira).",
+            "magnitude": 40,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Namira",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Necrophages",
+            "effectDescription": "Poisoning a person or putting a Human Heart or Flesh into their inventory attracts insects, reducing armor by <Global=WSN_Favor_Global> and dealing <Global=WSN_Favor_Global_Fractional3> disease damage (based on favor with Namira).",
+            "magnitude": 150,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Namira",
+      "description": "Murder the innocent. Poison your weapons. Eat the corpses of the dead with my Ring. Be generous to beggars.",
+      "effects": [
+        {
+          "effectName": "Tenets of Namira",
+          "effectDescription": "Murder the innocent. Poison your weapons. Eat the corpses of the dead with my Ring. Be generous to beggars.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Jyggalag",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Jyggalag",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Obelisks of Order",
+            "effectDescription": "Generates <8> <Obelisks> <of> <Order> in Skyrim. Activating one grants <15> points of Health, Magicka and Stamina.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Drain Favor on Have Sheogorath",
+            "effectDescription": "No description available",
+            "magnitude": 10,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Drain Favor on Summon Daedra",
+            "effectDescription": "No description available",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Jyggalag",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Stasis",
+            "effectDescription": "Activate an opponent in combat to trap them in an inert but invulnerable state for <15> seconds. Costs <5>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Jyggalag",
+      "description": "Activate my Obelisks of Order. Clear dungeons of evil. Slay daedra. Never serve Sheogorath. Those skilled in Heavy Armor are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Jyggalag",
+          "effectDescription": "Activate my Obelisks of Order. Clear dungeons of evil. Slay daedra. Never serve Sheogorath. Those skilled in Heavy Armor are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Trinimac",
+    "domain": "Ancestor",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Trinimac",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Tears of Man",
+            "effectDescription": "Attacks deal <Global=WSN_Favor_Global_Fractional3>% more damage and critical damage to humans (based on favor with Trinimac).",
+            "magnitude": 150,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Drain Favor on Have Boethiah",
+            "effectDescription": "No description available",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Trinimac",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Manifest Divinity",
+            "effectDescription": "When praying, you may become ethereal and invulnerable until your next attack. Costs <5>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Trinimac",
+      "description": "Slay humans. Defeat epic foes. Never accept Boethiah's blessing or serve her. Those skilled in Two-Handed are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Trinimac",
+          "effectDescription": "Slay humans. Defeat epic foes. Never accept Boethiah's blessing or serve her. Those skilled in Two-Handed are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Sheogorath",
+    "domain": "Daedric Prince",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Sheogorath",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Touch of Madness",
+            "effectDescription": "Praying grants a random <Touch> <of> <Madness>. High favor with Sheogorath yields more beneficial effects.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Sheogorath",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Lost to Madness",
+            "effectDescription": "Receive a <Touch> <of> <Madness> whenever you enter combat.",
+            "magnitude": 10,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Lost to Madness - Active",
+            "effectDescription": "No description available",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Sheogorath",
+      "description": "Pray often and receive Sheogorath's <Touch> <of> <Madness>. Never disrespect cheese.",
+      "effects": [
+        {
+          "effectName": "Tenets of Sheogorath",
+          "effectDescription": "Pray often and receive Sheogorath's <Touch> <of> <Madness>. Never disrespect cheese.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Sithis",
+    "domain": "Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Sithis",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Primal Darkness",
+            "effectDescription": "Up to <25>% harder to detect by those within <30> feet. Chance to find Human Hearts on people you kill.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Sithis",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Call of the Void",
+            "effectDescription": "While sneaking, activate a door to briefly turn it into a Void portal. Targets within <60> feet who are not detecting you are pulled in and killed. Costs <5>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Sithis",
+      "description": "Murder the innocent. Pray while sacrificing a Human Heart or Human Flesh. Send your victims to the Void. Argonians are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Sithis",
+          "effectDescription": "Murder the innocent. Pray while sacrificing a Human Heart or Human Flesh. Send your victims to the Void. Argonians are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Argonian"
+    ]
+  },
+  {
+    "name": "Z'en",
+    "domain": "Ancestor",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Z'en",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Traveler's Break",
+            "effectDescription": "Beneficial potions, food and ingredients last <50>% longer and are <Global=WSN_Favor_Global_Fractional3>% better (based on favor with Z'en).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Z'en",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Merchant's Knapsack",
+            "effectDescription": "Pray to open an unlimited extradimensional storage space.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Zen",
+      "description": "Bribe people as needed. Harvest the fruits of nature. Eat as much food as you want. Those skilled in Speech are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Z'en",
+          "effectDescription": "Bribe people as needed. Harvest the fruits of nature. Eat as much food as you want. Those skilled in Speech are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Satakal",
+    "domain": "Yokudan Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Satakal",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "World Egg",
+            "effectDescription": "Shrine blessings from other gods are more effective and last longer (based on favor with Satakal).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Satakal",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Ouroboros",
+            "effectDescription": "Pray to become reborn as a different person, moving points between your attributes. Costs <15>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Satakal",
+      "description": "Fulfill your destiny by saving Tamriel. Strive to raise your Health. Absorb dragon souls.",
+      "effects": [
+        {
+          "effectName": "Tenets of Satakal",
+          "effectDescription": "Fulfill your destiny by saving Tamriel. Strive to raise your Health. Absorb dragon souls.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Tall Papa",
+    "domain": "Yokudan Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Tall Papa",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Metaphysical Insight",
+            "effectDescription": "Weapon enchantments drain <Global=WSN_Favor_Global_Fractional3>% less charge (based on favor with Tall Papa).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Tall Papa",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Glimpse the Shores",
+            "effectDescription": "On death, enter an ethereal ascended state. If combat ends within <Global=WSN_Favor_Global_Fractional3> seconds, brings you back to life (based on favor with Tall Papa) for <5>% favor. Pray to reset.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Tall Papa death effect",
+            "effectDescription": "No description available",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Protected by Tall Papa",
+            "effectDescription": "No description available",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Tall Papa",
+      "description": "Touch the <Fractures> scattered around Skyrim. Create enchanted items. Those skilled in Enchanting are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Tall Papa",
+          "effectDescription": "Touch the <Fractures> scattered around Skyrim. Create enchanted items. Those skilled in Enchanting are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "the HoonDing",
+    "domain": "Yokudan Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of the HoonDing",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Make Way",
+            "effectDescription": "Staggering an opponent reduces armor by <Global=WSN_Favor_Global_Fractional2> points for <30> seconds (based on favor with the HoonDing).",
+            "magnitude": 60,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Worthy Killer",
+            "effectDescription": "No description available",
+            "magnitude": 150,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of the HoonDing",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Perseverance",
+            "effectDescription": "Grants immunity to stagger from attacks and bashes.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of the HoonDing",
+      "description": "Slay your foes in open combat, especially those stronger than you. Those skilled in One-Handed are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of the HoonDing",
+          "effectDescription": "Slay your foes in open combat, especially those stronger than you. Those skilled in One-Handed are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Sai",
+    "domain": "Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Sai",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Gamble",
+            "effectDescription": "When meditating, able to bet some of your gold on a game of dice.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Sai",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "High Stakes",
+            "effectDescription": "Staking <1000> gold or more on a game of dice also adds <1> point of Health, Magicka or Stamina to your wager.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Sai",
+      "description": "Gamble while meditating and win.",
+      "effects": [
+        {
+          "effectName": "Tenets of Sai",
+          "effectDescription": "Gamble while meditating and win.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "the Animal Gods",
+    "domain": "Nordic Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of the Old Ways",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Totem Worship",
+            "effectDescription": "Pray while sacrificing <100> gold worth of gemstones to assume the powers of an <animal> <god>.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of the Old Ways",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Dragon Cult",
+            "effectDescription": "Able to assume the powers of the <Dragon>. Costs <2>% favor per hour.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of the Old Ways",
+      "description": "Slay people who stand in your way. Absorb dragon souls. Assume our powers through prayer. Nords are most deserving of our favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of the Old Ways",
+          "effectDescription": "Slay people who stand in your way. Absorb dragon souls. Assume our powers through prayer. Nords are most deserving of our favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Nord"
+    ]
+  },
+  {
+    "name": "Baan Dar",
+    "domain": "Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Baan Dar",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Pariah",
+            "effectDescription": "Selling to fences is <Global=WSN_Favor_Global>% more lucrative. Pickpocketing is <Global=WSN_Favor_Global_Fractional2>% easier (based on favor with Baan Dar).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Baan Dar",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Skooma Trick",
+            "effectDescription": "Put skooma bottles in people's inventory, then pray to Baan Dar to ignite them within <200> feet for <Global=WSN_Favor_Global_Fractional4> damage (based on favor with Baan Dar). Costs <5>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Baan Dar",
+      "description": "Pick locks and pockets successfully. Khajiit and those skilled in Archery are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Baan Dar",
+          "effectDescription": "Pick locks and pockets successfully. Khajiit and those skilled in Archery are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Khajiit"
+    ]
+  },
+  {
+    "name": "Ebonarm",
+    "domain": "Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Ebonarm",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Enemy of the Daedra",
+            "effectDescription": "Attacks and critical strikes are <Global=WSN_Favor_Global_Fractional2>% more effective against daedra and those who summon them (based on favor with Ebonarm).",
+            "magnitude": 150,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Ebonarm",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Raven's Harvest",
+            "effectDescription": "Reduces the armor of enemies within <mag> feet by <Global=WSN_Favor_Global_Fractional2> points (based on favor with Ebonarm) and you gain the total amount. Doubled against daedra.",
+            "magnitude": 40,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Ebonarm",
+      "description": "Slay daedra. Defeat epic foes. Complete miscellaneous quests for the people of Skyrim. Those skilled in Block are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Ebonarm",
+          "effectDescription": "Slay daedra. Defeat epic foes. Complete miscellaneous quests for the people of Skyrim. Those skilled in Block are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Rajhin",
+    "domain": "Khajiiti Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Rajhin",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Rajhin's Tales",
+            "effectDescription": "Find additional gold in many containers, with a chance to find a large amount of additional gold.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Rajhin",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Prayer of Unlocking",
+            "effectDescription": "Pray to Rajhin to break a lock within <20> feet. Costs <5>% favor. No effect on locks that can't be picked.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Rajhin",
+      "description": "Explore new locations. Bribe people as needed. Pick locks successfully. Those skilled in Lockpicking are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Rajhin",
+          "effectDescription": "Explore new locations. Bribe people as needed. Pick locks successfully. Those skilled in Lockpicking are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Riddle'Thar",
+    "domain": "Khajiiti Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of the Riddle'Thar",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Path to Llesw'er",
+            "effectDescription": "All skills are <Global=WSN_Favor_Global_Fractional>% more efficient (based on favor with the Riddle'Thar).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of the Riddle'Thar",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Beseech the Manes",
+            "effectDescription": "During prayer, an ancient Mane will grant a blessing they believe to be appropriate for the challenges you are about to face.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of the Riddle'Thar",
+      "description": "Master the skills of the Warrior, Thief and Mage. Strive to raise your Health, Magicka and Stamina. Each is as important as the others. Pray only at night.",
+      "effects": [
+        {
+          "effectName": "Tenets of Riddle'Thar",
+          "effectDescription": "Master the skills of the Warrior, Thief and Mage. Strive to raise your Health, Magicka and Stamina. Each is as important as the others. Pray only at night.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Morwha",
+    "domain": "Yokudan Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Morwha",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Healer of the Sands",
+            "effectDescription": "Meditation restores <Global=WSN_Favor_Global> Health per second for you and nearby allies (based on favor with Morwha).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Morwha",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Fertile Growth",
+            "effectDescription": "Praying to Morwha blesses you with enchanted fruit that restores or fortifies an attribute.",
+            "magnitude": 40,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Morwha",
+      "description": "Be married. Receive the blessing of Lover's Comfort. Harvest the fruits of nature. Eat as much food as you want.",
+      "effects": [
+        {
+          "effectName": "Tenets of Morwha",
+          "effectDescription": "Be married. Receive the blessing of Lover's Comfort. Harvest the fruits of nature. Eat as much food as you want.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Leki",
+    "domain": "Yokudan Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Leki",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Spirit Sword",
+            "effectDescription": "Power attacks ignore <Global=WSN_Favor_Global_Fractional3>% of an opponent's armor (based on favor with Leki).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Leki",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Battle Meditation",
+            "effectDescription": "During prayer, you may spend <5>% favor to gain <Global=WSN_Favor_Global_Fractional>% melee damage (based on favor with Leki) for <60> minutes or <10> battles. Costs <5>% favor.",
+            "magnitude": 60,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Leki",
+      "description": "Bring the Civil War to a conclusion. Make and improve weapons. Master the skills of the Warrior.",
+      "effects": [
+        {
+          "effectName": "Tenets of Leki",
+          "effectDescription": "Bring the Civil War to a conclusion. Make and improve weapons. Master the skills of the Warrior.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "the Hist",
+    "domain": "Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of the Hist",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Symbiosis",
+            "effectDescription": "Pray to gain a <Global=WSN_Favor_Global_Fractional2> point bonus to Stamina and Magicka for <Global=WSN_Favor_Global_Fractional4> seconds (based on favor with the Hist).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Drain Favor on Summon Daedra",
+            "effectDescription": "No description available",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of the Hist",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Deep Roots",
+            "effectDescription": "Absorb <Global=WSN_Favor_Global_Fractional3>% of the Magicka and Stamina of dead creatures and people within <mag> feet (based on favor with the Hist).",
+            "magnitude": 60,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of the Hist",
+      "description": "Explore new locations. Slay daedra. Pray only outdoors. Never summon a daedra.",
+      "effects": [
+        {
+          "effectName": "Tenets of the Hist",
+          "effectDescription": "Explore new locations. Slay daedra. Pray only outdoors. Never summon a daedra.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "St. Alessia",
+    "domain": "Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of St. Alessia",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Covenant of Man",
+            "effectDescription": "Pray for a Divine blessing of your choice. Divine blessings are <Global=WSN_Favor_Global_Fractional2>% better (based on favor with St. Alessia).",
+            "magnitude": 150,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of St. Alessia",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Dragonblood Empress",
+            "effectDescription": "While under the effects of a Divine blessing, can talk to most non-hostile humans to make them a friend and potential follower. Costs <10>% favor.",
+            "magnitude": 60,
+            "duration": 0,
+            "area": 0,
+            "keywords": [
+              "WSN_Misc_StAlessia_Boon2_Keyword"
+            ]
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of St. Alessia",
+      "description": "Have a follower at your side. Slay elves. Receive the blessing of a Divine.",
+      "effects": [
+        {
+          "effectName": "Tenets of St. Alessia",
+          "effectDescription": "Have a follower at your side. Slay elves. Receive the blessing of a Divine.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "Mannimarco",
+    "domain": "Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Mannimarco",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Dark Moon",
+            "effectDescription": "Undead conjured at night last <Global=WSN_Favor_Global>% longer (based on favor with Mannimarco).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Drain Favor on Arkay Blessing",
+            "effectDescription": "No description available",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Mannimarco",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Nocturne",
+            "effectDescription": "Allied conjured undead deal <Global=WSN_Favor_Global_Fractional2>% more attack damage and regenerate Health (based on favor with Mannimarco).",
+            "magnitude": 100,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Mannimarco",
+      "description": "Trap souls in my name. Pray only at night. Never accept Arkay's blessing. Those skilled in Conjuration are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Mannimarco",
+          "effectDescription": "Trap souls in my name. Pray only at night. Never accept Arkay's blessing. Those skilled in Conjuration are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": []
+  },
+  {
+    "name": "the All-Maker",
+    "domain": "Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of the All-Maker",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Wellspring of Life",
+            "effectDescription": "Healing spells restore <Global=WSN_Favor_Global_Fractional3>% more Health (based on favor with the All-Maker).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of the All-Maker",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "World Shaman",
+            "effectDescription": "After using an All-Maker Stone power, pray to the All-Maker to have it restored to you.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of the All-Maker",
+      "description": "Cleanse the All-Maker Stones. Hunt animals. Explore new locations. Pray only outdoors. Nords are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of the All-Maker",
+          "effectDescription": "Cleanse the All-Maker Stones. Hunt animals. Explore new locations. Pray only outdoors. Nords are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Nord"
+    ]
+  },
+  {
+    "name": "the Magna-Ge",
+    "domain": "Deity",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of the Magna-Ge",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Shimmering Light",
+            "effectDescription": "Gain <mag> points of weapon charge per second, up to their charge level when last equipped or recharged.",
+            "magnitude": 5,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of the Magna-Ge",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Starlit Path",
+            "effectDescription": "During prayer, you may let the Magna-Ge carry you to a location within line of sight. Costs <4>% favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of the Magna-Ge",
+      "description": "Create enchanted items. Explore new locations. Pray only outdoors at night. High Elves and those skilled in Alteration are most deserving of our favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of the Magna-Ge",
+          "effectDescription": "Create enchanted items. Explore new locations. Pray only outdoors at night. High Elves and those skilled in Alteration are most deserving of our favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Altmer"
+    ]
+  },
+  {
+    "name": "Sotha Sil",
+    "domain": "Tribunal",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Sotha Sil",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Seht's Guidance",
+            "effectDescription": "Items are enchanted <Global=WSN_Favor_Global_Fractional3>% stronger (based on favor with Sotha Sil).",
+            "magnitude": 10,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          },
+          {
+            "effectName": "Visit Dwemer Ruins",
+            "effectDescription": "Visit Dwemer ruins while worshipping Sotha Sil to gain favor.",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Sotha Sil",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Seht's Brilliance",
+            "effectDescription": "Using a filled soul gem or dynamo core, permanently summon a Dwarven automaton to fight for you.  You may only have one active at a time",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Sotha Sil",
+      "description": "Uncover the secrets of Dwemer ruins. Create enchanted items. Master the skills of the Mage. Dark Elves and those skilled in Enchanting are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Sotha Sil",
+          "effectDescription": "Uncover the secrets of Dwemer ruins. Create enchanted items. Master the skills of the Mage. Dark Elves and those skilled in Enchanting are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Dunmer"
+    ]
+  },
+  {
+    "name": "Almalexia",
+    "domain": "Tribunal",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Almalexia",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Face-Snaked Queen",
+            "effectDescription": "Attacks deal <Global=WSN_Favor_Global_Fractional3>% more damage to Nords and Argonians (based on favor with Almalexia).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Almalexia",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Ayem's Mercy",
+            "effectDescription": "Healing from all sources is <Global=WSN_Favor_Global_Fractional3>% more effective (based on favor with Almalexia).",
+            "magnitude": 0,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Almalexia",
+      "description": "Vanquish the threats facing Solstheim. Be generous to beggars and children. Receive the blessing of Lover's Comfort. Dark Elves are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Almalexia",
+          "effectDescription": "Vanquish the threats facing Solstheim. Be generous to beggars and children. Receive the blessing of Lover's Comfort. Dark Elves are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Dunmer"
+    ]
+  },
+  {
+    "name": "Vivec",
+    "domain": "Tribunal",
+    "boons": {
+      "boon1": {
+        "spellName": "Follower of Vivec",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Vehk's Guile",
+            "effectDescription": "Speech and intimidate checks are <Global=WSN_Favor_Global_Fractional3>% easier (per favor with Vivec)",
+            "magnitude": 50,
+            "duration": 0,
+            "area": 0,
+            "keywords": [
+              "MagicEnchFortifySneak"
+            ]
+          }
+        ]
+      },
+      "boon2": {
+        "spellName": "Devotee of Vivec",
+        "spellDescription": "No description available",
+        "effects": [
+          {
+            "effectName": "Might of the Armiger",
+            "effectDescription": "Your power attacks deal <Global=WSN_Favor_Global_Fractional3>% more damage (based on favor with Vivec).",
+            "magnitude": 45,
+            "duration": 0,
+            "area": 0,
+            "keywords": []
+          }
+        ]
+      }
+    },
+    "tenets": {
+      "spellName": "Follower of Vivec",
+      "description": "Fulfill your destiny by saving Tamriel. Read the stories of others. Defeat epic foes. Dark Elves and those skilled in Speechcraft are most deserving of my favor.",
+      "effects": [
+        {
+          "effectName": "Tenets of Vivec",
+          "effectDescription": "Fulfill your destiny by saving Tamriel. Read the stories of others. Defeat epic foes. Dark Elves and those skilled in Speechcraft are most deserving of my favor.",
+          "magnitude": 0,
+          "duration": 0,
+          "area": 0,
+          "keywords": []
+        }
+      ]
+    },
+    "favoredRaces": [
+      "Dunmer"
+    ]
+  }
+]

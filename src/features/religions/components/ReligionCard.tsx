@@ -4,7 +4,7 @@ import type { PlayerCreationItem } from '@/shared/components/playerCreation/type
 import { Button } from '@/shared/ui/ui/button'
 import { H3 } from '@/shared/ui/ui/typography'
 import { ExternalLink, Heart, Shield, Star } from 'lucide-react'
-import React from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { Religion } from '../types'
 import { ReligionAvatar, ReligionCategoryBadge } from './atomic'
@@ -63,13 +63,18 @@ export function ReligionCard({
     (originalReligion?.boon1?.effects?.length || 0) +
     (originalReligion?.boon2?.effects?.length || 0)
 
-  // Get blessing summary
-  const blessingSummary =
-    originalReligion?.blessing?.effects?.[0]?.effectName || 'Blessing'
+
+  // Get blessing summary (memoized)
+  const blessingSummary = useMemo(
+    () => originalReligion?.blessing?.effects?.[0]?.effectName || 'Blessing',
+    [originalReligion]
+  )
+
+
 
   // Get tenets for chips
-  const tenets = originalReligion?.tenet?.effects?.[0]?.effectDescription
-    ? originalReligion.tenet.effects[0].effectDescription
+  const tenets = originalReligion?.tenet?.description
+    ? originalReligion.tenet.description
         .split('.')
         .filter(sentence => sentence.trim().length > 0)
         .slice(0, 4)

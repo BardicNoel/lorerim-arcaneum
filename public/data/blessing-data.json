@@ -1,0 +1,1106 @@
+[
+  {
+    "name": "Julianos",
+    "domain": "Divine",
+    "blessing": {
+      "spellName": "Blessing of Julianos",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Magicka",
+          "effectDescription": "Increases your Magicka by <mag> points.",
+          "magnitude": 40,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing",
+            "WSN_MagicBlessing_Keyword_Divine"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Syrabane",
+    "domain": "Ancestor",
+    "blessing": {
+      "spellName": "Blessing of Syrabane",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Regenerate Magicka",
+          "effectDescription": "Regenerate <mag>% of your maximum Magicka per second.",
+          "magnitude": 2,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Magnus",
+    "domain": "Ancestor",
+    "blessing": {
+      "spellName": "Blessing of Magnus",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Spell Absorption",
+          "effectDescription": "<mag>% chance to absorb a hostile spell and recharge your Magicka.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Jephre",
+    "domain": "Ancestor",
+    "blessing": {
+      "spellName": "Blessing of Jephre",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Carry Weight",
+          "effectDescription": "Carrying capacity increased by <mag> points.",
+          "magnitude": 50,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Mara",
+    "domain": "Divine",
+    "blessing": {
+      "spellName": "Blessing of Mara",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Restoration",
+          "effectDescription": "Restoration spells cost <mag>% less to cast.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing",
+            "WSN_MagicBlessing_Keyword_Divine"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Meridia",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Meridia",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Amplify Restoration",
+          "effectDescription": "Restoration spells are <10>% more effective.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Azura",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Azura",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Resist Magic",
+          "effectDescription": "Resist <mag>% of magic.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Talos",
+    "domain": "Divine",
+    "blessing": {
+      "spellName": "Blessing of Talos",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Shouts",
+          "effectDescription": "Time between shouts is reduced.",
+          "magnitude": 0.10000000149011612,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing",
+            "WSN_MagicBlessing_Keyword_Divine"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Akatosh",
+    "domain": "Divine",
+    "blessing": {
+      "spellName": "Blessing of Akatosh",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Resist Magic",
+          "effectDescription": "Resist <mag>% of magic.",
+          "magnitude": 15,
+          "duration": 28800,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Dibella",
+    "domain": "Divine",
+    "blessing": {
+      "spellName": "Blessing of Dibella",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Speech",
+          "effectDescription": "Prices are <mag>% better.",
+          "magnitude": 20,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing",
+            "WSN_MagicBlessing_Keyword_Divine"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Phynaster",
+    "domain": "Ancestor",
+    "blessing": {
+      "spellName": "Blessing of Phynaster",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Alchemy",
+          "effectDescription": "Potions and poisons you mix are <mag>% stronger.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Mehrunes Dagon",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Mehrunes Dagon",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Amplify Destruction",
+          "effectDescription": "Destruction spells are <mag>% more effective.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Vaermina",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Vaermina",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Illusion",
+          "effectDescription": "Illusion spells cost <mag>% less to cast.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Zenithar",
+    "domain": "Divine",
+    "blessing": {
+      "spellName": "Blessing of Zenithar",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Smithing",
+          "effectDescription": "Able to improve items <mag>% better.",
+          "magnitude": 5,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing",
+            "WSN_MagicBlessing_Keyword_Divine"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Boethiah",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Boethiah",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify One-Handed",
+          "effectDescription": "You are <mag>% more effective with one-handed weapons.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Nocturnal",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Nocturnal",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Sneak",
+          "effectDescription": "You are <mag>% harder to detect.",
+          "magnitude": 25,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Molag Bal",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Molag Bal",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Destruction",
+          "effectDescription": "Destruction spells cost <mag>% less to cast.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Kynareth",
+    "domain": "Divine",
+    "blessing": {
+      "spellName": "Blessing of Kynareth",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Stamina",
+          "effectDescription": "Increases your Stamina by <mag> points.",
+          "magnitude": 40,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing",
+            "WSN_MagicBlessing_Keyword_Divine"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Mephala",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Mephala",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Poisons",
+          "effectDescription": "Poisons you mix are <mag>% more effective.",
+          "magnitude": 15,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Arkay",
+    "domain": "Divine",
+    "blessing": {
+      "spellName": "Blessing of Arkay",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Health",
+          "effectDescription": "Increases your Health by <mag> points.",
+          "magnitude": 40,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing",
+            "WSN_MagicBlessing_Keyword_Divine"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Sanguine",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Sanguine",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Potions",
+          "effectDescription": "Using beneficial potions and alchemical ingredients is <mag>% better.",
+          "magnitude": 15,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Malacath",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Malacath",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Power Attacks",
+          "effectDescription": "Your power attacks cost <mag>% less Stamina.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Stendarr",
+    "domain": "Divine",
+    "blessing": {
+      "spellName": "Blessing of Stendarr",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Block",
+          "effectDescription": "Block <mag>% more damage.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing",
+            "WSN_MagicBlessing_Keyword_Divine"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Auriel",
+    "domain": "Ancestor",
+    "blessing": {
+      "spellName": "Blessing of Auriel",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Archery",
+          "effectDescription": "You are <mag>% more effective with missile weapons.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Peryite",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Peryite",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Resist Poison",
+          "effectDescription": "Increases Poison Resistance by <mag>%.",
+          "magnitude": 50,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Hircine",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Hircine",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Regenerate Stamina",
+          "effectDescription": "Regenerate <mag>% of your maximum Stamina per second.",
+          "magnitude": 2,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Xarxes",
+    "domain": "Ancestor",
+    "blessing": {
+      "spellName": "Blessing of Xarxes",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Scrolls",
+          "effectDescription": "Scrolls are <mag>% more effective.",
+          "magnitude": 25,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Shor",
+    "domain": "Deity",
+    "blessing": {
+      "spellName": "Blessing of Shor",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Elf Slayer",
+          "effectDescription": "Deal <mag>% more attack damage and critical damage against elves.",
+          "magnitude": 15,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Hermaeus Mora",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Hermaeus Mora",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Corpus",
+          "effectDescription": "Spells and effects you cast on yourself last <mag>% longer.",
+          "magnitude": 15,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Clavicus Vile",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Clavicus Vile",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Conjuration",
+          "effectDescription": "Conjuration spells cost <mag>% less to cast.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Namira",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Namira",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Resist Disease",
+          "effectDescription": "Increases Disease Resistance by <mag>%.",
+          "magnitude": 25,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Jyggalag",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Jyggalag",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Daedra Slayer",
+          "effectDescription": "Deal <mag>% more attack damage and critical damage against daedra.",
+          "magnitude": 15,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Trinimac",
+    "domain": "Ancestor",
+    "blessing": {
+      "spellName": "Blessing of Trinimac",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Two-Handed",
+          "effectDescription": "You are <mag>% more effective with two-handed weapons.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Sheogorath",
+    "domain": "Daedric Prince",
+    "blessing": {
+      "spellName": "Blessing of Sheogorath",
+      "spellDescription": "No description available",
+      "effects": []
+    }
+  },
+  {
+    "name": "Sithis",
+    "domain": "Deity",
+    "blessing": {
+      "spellName": "Blessing of Sithis",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Sneak Attacks",
+          "effectDescription": "Sneak attacks deal <mag>% more damage.",
+          "magnitude": 15,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Z'en",
+    "domain": "Ancestor",
+    "blessing": {
+      "spellName": "Blessing of Z'en",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Alteration",
+          "effectDescription": "Alteration spells cost <mag>% less to cast.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Satakal",
+    "domain": "Yokudan Deity",
+    "blessing": {
+      "spellName": "Blessing of Satakal",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Regenerate Health",
+          "effectDescription": "Regenerate <mag>% of your maximum Health per second.",
+          "magnitude": 2,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing",
+            "WSN_Item_SacredStone_Keyword_IsRedguardBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Tall Papa",
+    "domain": "Yokudan Deity",
+    "blessing": {
+      "spellName": "Blessing of Tall Papa",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Enchanting",
+          "effectDescription": "Items are enchanted <mag>% stronger.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing",
+            "WSN_Item_SacredStone_Keyword_IsRedguardBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "the HoonDing",
+    "domain": "Yokudan Deity",
+    "blessing": {
+      "spellName": "Blessing of the HoonDing",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Stagger",
+          "effectDescription": "Stagger from attacks and bashes is <mag>% more effective.",
+          "magnitude": 50,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing",
+            "WSN_Item_SacredStone_Keyword_IsRedguardBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Sai",
+    "domain": "Deity",
+    "blessing": {
+      "spellName": "Blessing of Sai",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Light Armor",
+          "effectDescription": "Armor rating of light armor pieces is increased by <mag>%.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "the Animal Gods",
+    "domain": "Nordic Deity",
+    "blessing": {
+      "spellName": "Blessing of the Old Ways",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Animal Slayer",
+          "effectDescription": "Deal <mag>% more attack damage and critical damage against animals.",
+          "magnitude": 15,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Baan Dar",
+    "domain": "Deity",
+    "blessing": {
+      "spellName": "Blessing of Baan Dar",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Pickpocket",
+          "effectDescription": "Pickpocketing is <mag>% easier.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Ebonarm",
+    "domain": "Deity",
+    "blessing": {
+      "spellName": "Blessing of Ebonarm",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Heavy Armor",
+          "effectDescription": "Armor rating of heavy armor pieces is increased by <mag>%.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Rajhin",
+    "domain": "Khajiiti Deity",
+    "blessing": {
+      "spellName": "Blessing of Rajhin",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Lockpicking",
+          "effectDescription": "Lockpicking is <mag>% easier.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Riddle'Thar",
+    "domain": "Khajiiti Deity",
+    "blessing": {
+      "spellName": "Blessing of the Riddle'Thar",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Unarmed Damage",
+          "effectDescription": "Unarmed strikes do <mag> additional damage.",
+          "magnitude": 20,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Morwha",
+    "domain": "Yokudan Deity",
+    "blessing": {
+      "spellName": "Blessing of Morwha",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Healing",
+          "effectDescription": "Healing spells restore <mag>% more Health.",
+          "magnitude": 15,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing",
+            "WSN_Item_SacredStone_Keyword_IsRedguardBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Leki",
+    "domain": "Yokudan Deity",
+    "blessing": {
+      "spellName": "Blessing of Leki",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Light Armor",
+          "effectDescription": "Armor rating of light armor pieces is increased by <mag>%.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing",
+            "WSN_Item_SacredStone_Keyword_IsRedguardBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "the Hist",
+    "domain": "Deity",
+    "blessing": {
+      "spellName": "Blessing of the Hist",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Armor",
+          "effectDescription": "Tough scales increase armor by <mag> points.",
+          "magnitude": 50,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "St. Alessia",
+    "domain": "Deity",
+    "blessing": {
+      "spellName": "Blessing of St. Alessia",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Fortify Followers",
+          "effectDescription": "Followers within <mag> feet gain <50> points of armor and <10>% magic resistance.",
+          "magnitude": 20,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing",
+            "WSN_Misc_StAlessia_Keyword_Blessing",
+            "WSN_MagicBlessing_Keyword_Divine"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Mannimarco",
+    "domain": "Deity",
+    "blessing": {
+      "spellName": "Blessing of Mannimarco",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Amplify Conjuration",
+          "effectDescription": "Conjuration spells are <mag>% more effective.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "the All-Maker",
+    "domain": "Deity",
+    "blessing": {
+      "spellName": "Blessing of the All-Maker",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Animal Hunter",
+          "effectDescription": "Deal <mag>% more attack damage and critical damage against animals.",
+          "magnitude": 15,
+          "duration": 28800,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "the Magna-Ge",
+    "domain": "Deity",
+    "blessing": {
+      "spellName": "Blessing of the Magna-Ge",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Amplify Alteration",
+          "effectDescription": "Alteration spells are <10>% more effective.",
+          "magnitude": 10,
+          "duration": 86400,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Sotha Sil",
+    "domain": "Tribunal",
+    "blessing": {
+      "spellName": "Soul of Sotha Sil",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Soul of Sotha Sil",
+          "effectDescription": "Increases your Magicka by <mag> points.",
+          "magnitude": 5,
+          "duration": 28800,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Almalexia",
+    "domain": "Tribunal",
+    "blessing": {
+      "spellName": "Lady's Grace",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Lady's Grace",
+          "effectDescription": "Increases your Health by <mag> points.",
+          "magnitude": 10,
+          "duration": 28800,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Vivec",
+    "domain": "Tribunal",
+    "blessing": {
+      "spellName": "Vivec's Mystery",
+      "spellDescription": "No description available",
+      "effects": [
+        {
+          "effectName": "Vivec's Mystery",
+          "effectDescription": "Sneak is increased by <mag> points.",
+          "magnitude": 5,
+          "duration": 28800,
+          "area": 0,
+          "keywords": [
+            "MagicBlessing"
+          ]
+        }
+      ]
+    }
+  }
+]

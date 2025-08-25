@@ -297,21 +297,16 @@ export function ReligionSheet({
                 Tenets of {religion.name}
               </H3>
               <div className="space-y-3">
-                {religion.tenet.effects.map((effect, index) => {
-                  // Split the effect description by periods to create separate tenets
-                  const tenetSentences = effect.effectDescription
-                    .split('.')
-                    .filter(sentence => sentence.trim().length > 0)
-
-                  return tenetSentences.map((tenet, tenetIndex) => (
+                {religion.tenet.description
+                  .split('.')
+                  .filter(sentence => sentence.trim().length > 0)
+                  .map((tenet, tenetIndex) => (
                     <div
-                      key={`${index}-${tenetIndex}`}
+                      key={tenetIndex}
                       className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border"
                     >
                       <div className="flex items-center gap-2">
                         <Shield className="h-4 w-4 text-blue-500" />
-                        {effect.targetAttribute &&
-                          getEffectIcon(effect.targetAttribute)}
                       </div>
                       <div className="flex-1">
                         <P className="text-sm text-muted-foreground">
@@ -319,8 +314,7 @@ export function ReligionSheet({
                         </P>
                       </div>
                     </div>
-                  ))
-                })}
+                  ))}
               </div>
             </div>
           )}

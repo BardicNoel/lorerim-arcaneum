@@ -2,6 +2,7 @@ import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
 import type { Religion } from '@/shared/data/schemas'
 import { getDataUrl } from '@/shared/utils/baseUrl'
 import { create } from 'zustand'
+import { transformReligionDataArray, transformBlessingDataArray } from '@/features/religions/adapters/religionDataAdapter'
 
 interface ReligionsStore {
   // Data
@@ -37,30 +38,39 @@ export const useReligionsStore = create<ReligionsStore>((set, get) => ({
     set({ loading: true, error: null })
 
     try {
-      const response = await fetch(
-        getDataUrl('data/wintersun-religion-docs.json')
+      // Load religion data
+      const religionResponse = await fetch(
+        getDataUrl('data/religion-data.json')
       )
-      if (!response.ok) {
-        throw new Error(`Failed to fetch religions data: ${response.status}`)
+      if (!religionResponse.ok) {
+        throw new Error(`Failed to fetch religions data: ${religionResponse.status}`)
       }
 
-      const rawData = await response.json()
-      const religions = rawData.flatMap((pantheon: any) =>
-        pantheon.deities.map((deity: any) => ({
-          ...deity, // Preserve all original deity fields
-          id: deity.id || deity.name,
-          pantheon: pantheon.type, // Add pantheon info
-          type: deity.type || pantheon.type, // Ensure type field exists
-          tags: [
-            pantheon.type,
-            ...(shouldShowFavoredRaces() ? deity.favoredRaces || [] : []),
-            ...(deity.tags || []),
-          ].filter(Boolean),
-        }))
+      // Load blessing data
+      const blessingResponse = await fetch(
+        getDataUrl('data/blessing-data.json')
       )
+      if (!blessingResponse.ok) {
+        throw new Error(`Failed to fetch blessings data: ${blessingResponse.status}`)
+      }
+
+      const religionData = await religionResponse.json()
+      const blessingData = await blessingResponse.json()
+
+      const religions = transformReligionDataArray(religionData)
+      const blessings = transformBlessingDataArray(blessingData)
+
+      // Merge blessing data into religion data
+      const mergedReligions = religions.map(religion => {
+        const blessing = blessings.find(b => b.name === religion.name)
+        return {
+          ...religion,
+          blessing: blessing?.blessing,
+        }
+      })
 
       set({
-        data: religions,
+        data: mergedReligions,
         loading: false,
       })
     } catch (error) {
