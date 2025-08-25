@@ -540,3 +540,91 @@ body {
   border-radius: 0.5rem;
   margin: 1rem;
 }
+
+/* ===== REACTFLOW Z-INDEX OVERRIDES ===== */
+/* Ensure ReactFlow elements don't interfere with tooltips and hover cards */
+.react-flow__node {
+  z-index: 1 !important;
+}
+
+.react-flow__edge {
+  z-index: 0 !important;
+}
+
+.react-flow__edge-path {
+  z-index: 0 !important;
+}
+
+.react-flow__edge-text {
+  z-index: 0 !important;
+}
+
+.react-flow__controls {
+  z-index: 10 !important;
+}
+
+.react-flow__background {
+  z-index: -1 !important;
+}
+
+.react-flow__selection {
+  z-index: 2 !important;
+}
+
+.react-flow__minimap {
+  z-index: 5 !important;
+}
+
+/* Ensure ReactFlow handles don't interfere with tooltips */
+.react-flow__handle {
+  z-index: 1 !important;
+}
+
+/* Ensure ReactFlow panes don't create conflicting stacking contexts */
+.react-flow__pane {
+  z-index: 0 !important;
+}
+
+.react-flow__viewport {
+  z-index: 0 !important;
+}
+
+/* ===== HOVER CARD OVERRIDES ===== */
+/* Ensure hover cards have solid backgrounds and appear above ReactFlow elements */
+[data-radix-hover-card-content] {
+  background-color: hsl(var(--popover)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  backdrop-filter: none !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+  z-index: 99999 !important;
+  position: fixed !important;
+}
+
+/* Force hover cards to be above ALL ReactFlow elements */
+.react-flow__node [data-radix-hover-card-content] {
+  z-index: 99999 !important;
+}
+
+/* Ensure ReactFlow portal doesn't interfere with hover cards */
+.react-flow__viewport [data-radix-hover-card-content] {
+  z-index: 99999 !important;
+}
+
+/* Override ReactFlow's stacking context */
+.react-flow__node {
+  z-index: 1 !important;
+  position: absolute !important;
+}
+
+/* Ensure hover cards break out of ReactFlow's stacking context */
+.react-flow__pane [data-radix-hover-card-content] {
+  z-index: 99999 !important;
+  position: fixed !important;
+}
+
+/* Dark theme hover card overrides */
+.dark [data-radix-hover-card-content] {
+  background-color: hsl(var(--popover)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2) !important;
+}

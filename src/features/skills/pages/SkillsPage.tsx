@@ -6,6 +6,7 @@ import { usePerkReferencesComputed } from '@/features/perk-references/adapters/u
 import { usePerkReferencesFilters } from '@/features/perk-references/adapters/usePerkReferencesFilters'
 import { PerkReferencesPageView } from '@/features/perk-references/pages/PerkReferencesPageView'
 
+
 // Main page component that composes adapters and views
 export function SkillsPage() {
   // Use specialized adapter for skills page
@@ -127,7 +128,7 @@ export function SkillsPage() {
             />
           </TabsContent>
         </Tabs>
-      </div>
-    </BuildPageShell>
-  )
-}
+             </div>
+     </BuildPageShell>
+   )
+ }
