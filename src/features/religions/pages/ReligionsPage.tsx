@@ -23,6 +23,7 @@ import {
   ReligionCard,
   ReligionSheet,
 } from '../components/composition'
+import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { Religion as FeatureReligion } from '../types'
 import { mapSharedReligionToFeatureReligion } from '../utils/religionMapper'
 
@@ -150,13 +151,22 @@ export function ReligionsPage() {
   // Filter and sort religions based on selected tags
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
 
-  const filteredReligions = useMemo(() => {
+  // Extract fuzzy search query from selected tags
+  const fuzzySearchQuery = selectedTags
+    .filter(tag => tag.category === 'Fuzzy Search')
+    .map(tag => tag.value)
+    .join(' ')
+
+  // Apply tag-based filtering first
+  const tagFilteredReligions = useMemo(() => {
     let filtered = featureReligions
 
-    // Apply tag filters
-    if (selectedTags.length > 0) {
+    // Apply tag filters (excluding fuzzy search tags)
+    const nonFuzzyTags = selectedTags.filter(tag => tag.category !== 'Fuzzy Search')
+    
+    if (nonFuzzyTags.length > 0) {
       filtered = filtered.filter(religion => {
-        return selectedTags.every(tag => {
+        return nonFuzzyTags.every(tag => {
           if (tag.category === 'Pantheons') {
             // Use the original religion data for pantheon filtering
             const originalReligion = religions?.find(
@@ -175,8 +185,20 @@ export function ReligionsPage() {
       })
     }
 
-    // Apply sorting
-    filtered.sort((a, b) => {
+    return filtered
+  }, [featureReligions, selectedTags, religions])
+
+  // Apply fuzzy search to the tag-filtered religions
+  const { filteredReligions: fuzzyFilteredReligions } = useFuzzySearch(
+    tagFilteredReligions,
+    fuzzySearchQuery
+  )
+
+  // Apply sorting to the final filtered results
+  const filteredReligions = useMemo(() => {
+    const sorted = [...fuzzyFilteredReligions]
+    
+    sorted.sort((a, b) => {
       if (sortBy === 'alphabetical') {
         return a.name.localeCompare(b.name)
       }
@@ -205,8 +227,8 @@ export function ReligionsPage() {
       return 0
     })
 
-    return filtered
-  }, [featureReligions, selectedTags, sortBy, religions])
+    return sorted
+  }, [fuzzyFilteredReligions, sortBy])
 
   const handleTagSelect = (optionOrTag: SearchOption | string) => {
     const newTag: SelectedTag =
@@ -215,7 +237,7 @@ export function ReligionsPage() {
             id: optionOrTag,
             label: optionOrTag,
             value: optionOrTag,
-            category: 'Custom',
+            category: 'Fuzzy Search',
           }
         : {
             id: optionOrTag.id,

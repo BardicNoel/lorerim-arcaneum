@@ -29,6 +29,7 @@ export function useFuzzySearch(religions: Religion[] | undefined | null, searchQ
       name: religion.name,
       description: religion.tenet?.description || '',
       type: religion.type,
+      pantheon: religion.pantheon || '',
       favoredRaces: shouldShowFavoredRaces() ? religion.favoredRaces || [] : [],
       tenetEffects:
         religion.tenet?.effects?.map(
@@ -64,6 +65,7 @@ export function useFuzzySearch(religions: Religion[] | undefined | null, searchQ
           ? [{ name: 'favoredRaces', weight: 0.1 }]
           : []),
         { name: 'type', weight: 0.1 },
+        { name: 'pantheon', weight: 0.1 },
       ],
       threshold: 0.3, // Lower threshold = more strict matching
       includeScore: true,
