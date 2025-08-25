@@ -53,11 +53,23 @@ export function useSkillsReference() {
 
   // Assignment handlers
   const handleAssignMajor = (skillId: string) => {
-    addMajorSkill(skillId)
+    // Check if skill is already major - if so, remove it
+    if (build.skills.major.includes(skillId)) {
+      removeMajorSkill(skillId)
+    } else {
+      // Otherwise add it as major
+      addMajorSkill(skillId)
+    }
   }
 
   const handleAssignMinor = (skillId: string) => {
-    addMinorSkill(skillId)
+    // Check if skill is already minor - if so, remove it
+    if (build.skills.minor.includes(skillId)) {
+      removeMinorSkill(skillId)
+    } else {
+      // Otherwise add it as minor
+      addMinorSkill(skillId)
+    }
   }
 
   const handleRemoveAssignment = (skillId: string) => {

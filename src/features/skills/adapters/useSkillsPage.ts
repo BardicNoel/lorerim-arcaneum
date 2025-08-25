@@ -131,16 +131,28 @@ export function useSkillsPage() {
   // ============================================================================
   const handleAssignMajor = useCallback(
     (skillId: string) => {
-      addMajorSkill(skillId)
+      // Check if skill is already major - if so, remove it
+      if (build.skills.major.includes(skillId)) {
+        removeMajorSkill(skillId)
+      } else {
+        // Otherwise add it as major
+        addMajorSkill(skillId)
+      }
     },
-    [addMajorSkill]
+    [build.skills.major, addMajorSkill, removeMajorSkill]
   )
 
   const handleAssignMinor = useCallback(
     (skillId: string) => {
-      addMinorSkill(skillId)
+      // Check if skill is already minor - if so, remove it
+      if (build.skills.minor.includes(skillId)) {
+        removeMinorSkill(skillId)
+      } else {
+        // Otherwise add it as minor
+        addMinorSkill(skillId)
+      }
     },
-    [addMinorSkill]
+    [build.skills.minor, addMinorSkill, removeMinorSkill]
   )
 
   const handleRemoveAssignment = useCallback(
