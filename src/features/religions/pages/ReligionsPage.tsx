@@ -16,7 +16,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
 
 import { ChevronDown, Grid3X3, List, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import {
   BlessingCard,
   BlessingSheet,
@@ -48,6 +49,17 @@ export function ReligionsPage() {
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [activeTab, setActiveTab] = useState<TabType>('religions')
+  const [searchParams] = useSearchParams()
+
+  // Handle URL parameter for active tab
+  useEffect(() => {
+    const tabParam = searchParams.get('tab')
+    if (tabParam === 'blessings') {
+      setActiveTab('blessings')
+    } else if (tabParam === 'religions') {
+      setActiveTab('religions')
+    }
+  }, [searchParams])
 
   // Convert religions to feature format for ReligionCard
   const featureReligions: FeatureReligion[] = useMemo(() => {
