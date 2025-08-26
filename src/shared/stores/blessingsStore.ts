@@ -2,6 +2,7 @@ import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
 import type { Religion } from '@/shared/data/schemas'
 import { getDataUrl } from '@/shared/utils/baseUrl'
 import { create } from 'zustand'
+import { transformBlessingDataArray } from '@/features/religions/adapters/religionDataAdapter'
 
 // Blessing-specific type for the store
 export interface BlessingData {
@@ -61,80 +62,41 @@ export const useBlessingsStore = create<BlessingsStore>((set, get) => ({
 
     try {
       const response = await fetch(
-        getDataUrl('data/wintersun-religion-docs.json')
+        getDataUrl('data/blessing-data.json')
       )
       if (!response.ok) {
-        throw new Error(`Failed to fetch religions data: ${response.status}`)
+        throw new Error(`Failed to fetch blessings data: ${response.status}`)
       }
 
       const rawData = await response.json()
 
-      // Transform and filter for blessings only
-      const blessings: BlessingData[] = rawData.flatMap(
-        (pantheon: any) =>
-          pantheon.deities
-            .map((deity: any) => {
-              // Check if this deity has valid blessing effects
-              if (
-                !deity.blessing?.effects ||
-                deity.blessing.effects.length === 0
-              ) {
-                return null
-              }
-
-              // Filter out UI effects (type "1" and "3")
-              const validEffects = deity.blessing.effects.filter(
-                (effect: any) =>
-                  effect.effectType !== '1' && effect.effectType !== '3'
-              )
-
-              // Only include if there are valid gameplay effects
-              if (validEffects.length === 0) {
-                return null
-              }
-
-              return {
-                id: deity.id || deity.name,
-                name: deity.name,
-                type: deity.type || pantheon.type,
-                pantheon: pantheon.type,
-                blessingName:
-                  deity.blessing.spellName || `Blessing of ${deity.name}`,
-                blessingDescription: validEffects
-                  .map((e: any) => e.effectDescription)
-                  .join(' '),
-                effects: validEffects.map((effect: any) => ({
-                  name: effect.effectName,
-                  description: effect.effectDescription,
-                  magnitude: effect.magnitude,
-                  duration: effect.duration,
-                  area: effect.area,
-                  effectType: effect.effectType,
-                  targetAttribute: effect.targetAttribute,
-                  keywords: effect.keywords || [],
-                })),
-                tags: [
-                  pantheon.type,
-                  ...(shouldShowFavoredRaces() ? deity.favoredRaces || [] : []),
-                  ...(deity.tags || []),
-                ].filter(Boolean),
-                originalReligion: {
-                  ...deity,
-                  id: deity.id || deity.name,
-                  pantheon: pantheon.type,
-                  type: deity.type || pantheon.type,
-                  tags: [
-                    pantheon.type,
-                    ...(shouldShowFavoredRaces()
-                      ? deity.favoredRaces || []
-                      : []),
-                    ...(deity.tags || []),
-                  ].filter(Boolean),
-                },
-              }
-            })
-            .filter(Boolean) // Remove null entries
-      )
+      // Transform blessing data to BlessingData format
+      const transformedReligions = transformBlessingDataArray(rawData)
+      
+      const blessings: BlessingData[] = transformedReligions
+        .filter(religion => religion.blessing?.effects && religion.blessing.effects.length > 0)
+        .map(religion => ({
+          id: religion.id!,
+          name: religion.name,
+          type: religion.type!,
+          pantheon: religion.pantheon!,
+          blessingName: religion.blessing!.spellName,
+          blessingDescription: religion.blessing!.effects
+            .map(e => e.effectDescription)
+            .join(' '),
+          effects: religion.blessing!.effects.map(effect => ({
+            name: effect.effectName,
+            description: effect.effectDescription,
+            magnitude: effect.magnitude,
+            duration: effect.duration,
+            area: effect.area,
+            effectType: effect.effectType,
+            targetAttribute: effect.targetAttribute,
+            keywords: effect.keywords,
+          })),
+          tags: religion.tags || [],
+          originalReligion: religion,
+        }))
 
       set({
         data: blessings,

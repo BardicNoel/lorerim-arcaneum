@@ -1,11 +1,11 @@
 import { cn } from '@/lib/utils'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
-import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Button } from '@/shared/ui/ui/button'
 import { H3 } from '@/shared/ui/ui/typography'
 import { ExternalLink, Heart, Shield, Star } from 'lucide-react'
-import React from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import type { Religion } from '../types'
 import { ReligionAvatar, ReligionCategoryBadge } from './atomic'
 
@@ -38,6 +38,8 @@ export function ReligionCard({
   const handleNavigateToReligionPage = (e: React.MouseEvent) => {
     e.stopPropagation()
     navigate(viewAllButtonRoute)
+    // Scroll to top when navigating to religions page
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleOpenDetails = (e: React.MouseEvent) => {
@@ -63,13 +65,15 @@ export function ReligionCard({
     (originalReligion?.boon1?.effects?.length || 0) +
     (originalReligion?.boon2?.effects?.length || 0)
 
-  // Get blessing summary
-  const blessingSummary =
-    originalReligion?.blessing?.effects?.[0]?.effectName || 'Blessing'
+  // Get blessing summary (memoized)
+  const blessingSummary = useMemo(
+    () => originalReligion?.blessing?.effects?.[0]?.effectName || 'Blessing',
+    [originalReligion]
+  )
 
   // Get tenets for chips
-  const tenets = originalReligion?.tenet?.effects?.[0]?.effectDescription
-    ? originalReligion.tenet.effects[0].effectDescription
+  const tenets = originalReligion?.tenet?.description
+    ? originalReligion.tenet.description
         .split('.')
         .filter(sentence => sentence.trim().length > 0)
         .slice(0, 4)
@@ -123,7 +127,7 @@ export function ReligionCard({
         {showToggle && (
           <div onClick={e => e.stopPropagation()}>
             <AddToBuildSwitchSimple
-              itemId={originalReligion?.name || item?.id || ''}
+              itemId={originalReligion?.name?.toLowerCase().replace(/\s+/g, '-') || item?.id || ''}
               itemType="religion"
               itemName={displayName}
             />

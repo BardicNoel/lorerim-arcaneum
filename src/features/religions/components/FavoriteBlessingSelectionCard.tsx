@@ -71,7 +71,9 @@ export function FavoriteBlessingSelectionCard({
     : null
 
   const handleNavigateToReligionPage = () => {
-    navigate('/build/religions')
+    navigate('/build/religions?tab=blessings')
+    // Scroll to top when navigating to religions page
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   if (loading) {

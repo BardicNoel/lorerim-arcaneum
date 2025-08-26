@@ -1,6 +1,7 @@
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { ResponsivePanel } from '@/shared/components/generic/ResponsivePanel'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { H3, P } from '@/shared/ui/ui/typography'
 import {
   BookOpen,
@@ -108,6 +109,8 @@ export function BlessingSheet({
   isOpen,
   onOpenChange,
 }: BlessingSheetProps) {
+  const { build } = useCharacterBuild()
+  
   if (!religion) return null
 
   const blessing = religion.blessing
@@ -117,9 +120,11 @@ export function BlessingSheet({
     return null
   }
 
+
+
   return (
     <ResponsivePanel
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={onOpenChange}
       title={`Blessing of ${religion.name}`}
       description="Divine blessing granted to worshippers"
@@ -138,11 +143,11 @@ export function BlessingSheet({
               </P>
             </div>
           </div>
-          <AddToBuildSwitchSimple
-            itemId={`blessing-${religion.name}`}
-            itemType="religion"
-            itemName={`Blessing of ${religion.name}`}
-          />
+                     <AddToBuildSwitchSimple
+             itemId={religion.name?.toLowerCase().replace(/\s+/g, '-')}
+             itemType="blessing"
+             itemName={`Blessing of ${religion.name}`}
+           />
         </div>
 
         {/* Blessing Effects */}

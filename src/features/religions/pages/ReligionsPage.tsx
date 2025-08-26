@@ -16,13 +16,15 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
 
 import { ChevronDown, Grid3X3, List, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import {
   BlessingCard,
   BlessingSheet,
   ReligionCard,
   ReligionSheet,
 } from '../components/composition'
+import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { Religion as FeatureReligion } from '../types'
 import { mapSharedReligionToFeatureReligion } from '../utils/religionMapper'
 
@@ -47,6 +49,17 @@ export function ReligionsPage() {
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [activeTab, setActiveTab] = useState<TabType>('religions')
+  const [searchParams] = useSearchParams()
+
+  // Handle URL parameter for active tab
+  useEffect(() => {
+    const tabParam = searchParams.get('tab')
+    if (tabParam === 'blessings') {
+      setActiveTab('blessings')
+    } else if (tabParam === 'religions') {
+      setActiveTab('religions')
+    }
+  }, [searchParams])
 
   // Convert religions to feature format for ReligionCard
   const featureReligions: FeatureReligion[] = useMemo(() => {
@@ -58,12 +71,45 @@ export function ReligionsPage() {
     return featureReligions.map(religionToPlayerCreationItem)
   }, [featureReligions])
 
-  // Filter religions that have blessings
+  // Filter religions that have blessings and apply sorting
   const religionsWithBlessings = useMemo(() => {
-    return featureReligions.filter(
+    const filtered = featureReligions.filter(
       religion => religion.blessing && religion.blessing.effects.length > 0
     )
-  }, [featureReligions])
+    
+    // Apply the same sorting logic as religions
+    const sorted = [...filtered]
+    sorted.sort((a, b) => {
+      if (sortBy === 'alphabetical') {
+        return a.name.localeCompare(b.name)
+      }
+      if (sortBy === 'divine-type') {
+        const getTypePriority = (type: string | undefined) => {
+          switch (type) {
+            case 'Divine':
+              return 1
+            case 'Daedric':
+              return 2
+            case 'Tribunal':
+              return 3
+            case 'Ancestor':
+              return 4
+            default:
+              return 5
+          }
+        }
+        const priorityA = getTypePriority(a.type)
+        const priorityB = getTypePriority(b.type)
+        if (priorityA !== priorityB) {
+          return priorityA - priorityB
+        }
+        return a.name.localeCompare(b.name)
+      }
+      return 0
+    })
+    
+    return sorted
+  }, [featureReligions, sortBy])
 
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
@@ -150,13 +196,22 @@ export function ReligionsPage() {
   // Filter and sort religions based on selected tags
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
 
-  const filteredReligions = useMemo(() => {
+  // Extract fuzzy search query from selected tags
+  const fuzzySearchQuery = selectedTags
+    .filter(tag => tag.category === 'Fuzzy Search')
+    .map(tag => tag.value)
+    .join(' ')
+
+  // Apply tag-based filtering first
+  const tagFilteredReligions = useMemo(() => {
     let filtered = featureReligions
 
-    // Apply tag filters
-    if (selectedTags.length > 0) {
+    // Apply tag filters (excluding fuzzy search tags)
+    const nonFuzzyTags = selectedTags.filter(tag => tag.category !== 'Fuzzy Search')
+    
+    if (nonFuzzyTags.length > 0) {
       filtered = filtered.filter(religion => {
-        return selectedTags.every(tag => {
+        return nonFuzzyTags.every(tag => {
           if (tag.category === 'Pantheons') {
             // Use the original religion data for pantheon filtering
             const originalReligion = religions?.find(
@@ -175,8 +230,20 @@ export function ReligionsPage() {
       })
     }
 
-    // Apply sorting
-    filtered.sort((a, b) => {
+    return filtered
+  }, [featureReligions, selectedTags, religions])
+
+  // Apply fuzzy search to the tag-filtered religions
+  const { filteredReligions: fuzzyFilteredReligions } = useFuzzySearch(
+    tagFilteredReligions,
+    fuzzySearchQuery
+  )
+
+  // Apply sorting to the final filtered results
+  const filteredReligions = useMemo(() => {
+    const sorted = [...fuzzyFilteredReligions]
+    
+    sorted.sort((a, b) => {
       if (sortBy === 'alphabetical') {
         return a.name.localeCompare(b.name)
       }
@@ -205,8 +272,8 @@ export function ReligionsPage() {
       return 0
     })
 
-    return filtered
-  }, [featureReligions, selectedTags, sortBy, religions])
+    return sorted
+  }, [fuzzyFilteredReligions, sortBy])
 
   const handleTagSelect = (optionOrTag: SearchOption | string) => {
     const newTag: SelectedTag =
@@ -215,7 +282,7 @@ export function ReligionsPage() {
             id: optionOrTag,
             label: optionOrTag,
             value: optionOrTag,
-            category: 'Custom',
+            category: 'Fuzzy Search',
           }
         : {
             id: optionOrTag.id,
@@ -450,7 +517,7 @@ export function ReligionsPage() {
                   key={religion.name}
                   religion={religion}
                   onClick={() => handleBlessingClick(religion)}
-                  showToggle={false}
+                  showToggle={true}
                   className={viewMode === 'list' ? 'w-full' : 'h-full'}
                 />
               ))}

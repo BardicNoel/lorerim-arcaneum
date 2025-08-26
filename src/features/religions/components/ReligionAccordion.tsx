@@ -602,28 +602,22 @@ export function renderReligionExpandedContent(
               Tenets of {item.name}
             </h5>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {originalReligion.tenet.effects.map((effect, index) => {
-                // Split the effect description by periods to create separate tenets
-                const tenetSentences = effect.effectDescription
-                  .split('.')
-                  .filter(sentence => sentence.trim().length > 0)
-
-                return tenetSentences.map((tenet, tenetIndex) => (
+              {originalReligion.tenet.description
+                .split('.')
+                .filter(sentence => sentence.trim().length > 0)
+                .map((tenet, tenetIndex) => (
                   <div
-                    key={`${index}-${tenetIndex}`}
+                    key={tenetIndex}
                     className="flex items-start gap-2 p-3 bg-muted/50 rounded-lg border border-border"
                   >
                     <div className="flex items-center gap-2">
                       {getEffectIconByType('positive')}
-                      {effect.targetAttribute &&
-                        getEffectIcon(effect.targetAttribute)}
                     </div>
                     <div className="flex-1">
                       <FormattedDescription description={tenet.trim() + '.'} />
                     </div>
                   </div>
-                ))
-              })}
+                ))}
             </div>
           </div>
         )}
@@ -985,19 +979,16 @@ export function ReligionAccordion({
                 Tenets of {item.name}
               </h5>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {originalReligion.tenet.effects.map((effect, index) => {
-                  const tenetSentences = effect.effectDescription
-                    .split('.')
-                    .filter(sentence => sentence.trim().length > 0)
-                  return tenetSentences.map((tenet, tenetIndex) => (
+                {originalReligion.tenet.description
+                  .split('.')
+                  .filter(sentence => sentence.trim().length > 0)
+                  .map((tenet, tenetIndex) => (
                     <div
-                      key={`${index}-${tenetIndex}`}
+                      key={tenetIndex}
                       className="flex items-start gap-2 p-3 bg-muted/50 rounded-lg border border-border"
                     >
                       <div className="flex items-center gap-2">
                         {getEffectIconByType('positive')}
-                        {effect.targetAttribute &&
-                          getEffectIcon(effect.targetAttribute)}
                       </div>
                       <div className="flex-1">
                         <FormattedDescription
@@ -1005,8 +996,7 @@ export function ReligionAccordion({
                         />
                       </div>
                     </div>
-                  ))
-                })}
+                  ))}
               </div>
             </div>
           )}

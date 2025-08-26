@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { H3, P } from '@/shared/ui/ui/typography'
 import { Clock, Target } from 'lucide-react'
 import type { Religion } from '../types'
@@ -70,12 +71,15 @@ export function BlessingCard({
   onClick,
   showToggle = true,
 }: BlessingCardProps) {
+  const { build } = useCharacterBuild()
   const blessing = religion.blessing
   const effectsCount = blessing?.effects?.length || 0
 
   if (!blessing || effectsCount === 0) {
     return null
   }
+
+
 
   return (
     <div
@@ -94,21 +98,21 @@ export function BlessingCard({
         {/* Title and Effects Count */}
         <div className="flex-1 min-w-0">
           <H3 className="text-lg font-semibold text-primary truncate">
-            Blessing of {religion.name}
+            {religion.name}
           </H3>
           <P className="text-sm text-muted-foreground mt-1">
-            {effectsCount} effect{effectsCount !== 1 ? 's' : ''}
+            Blessing • {effectsCount} effect{effectsCount !== 1 ? 's' : ''}
           </P>
         </div>
 
         {/* Toggle */}
         {showToggle && (
           <div onClick={e => e.stopPropagation()}>
-            <AddToBuildSwitchSimple
-              itemId={`blessing-${religion.name}`}
-              itemType="religion"
-              itemName={`Blessing of ${religion.name}`}
-            />
+                         <AddToBuildSwitchSimple
+               itemId={religion.name?.toLowerCase().replace(/\s+/g, '-')}
+               itemType="blessing"
+               itemName={`Blessing of ${religion.name}`}
+             />
           </div>
         )}
       </div>
