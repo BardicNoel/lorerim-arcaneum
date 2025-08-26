@@ -38,6 +38,8 @@ export function ReligionCard({
   const handleNavigateToReligionPage = (e: React.MouseEvent) => {
     e.stopPropagation()
     navigate(viewAllButtonRoute)
+    // Scroll to top when navigating to religions page
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleOpenDetails = (e: React.MouseEvent) => {
