@@ -4,7 +4,7 @@ import { Switch } from '@/shared/ui/ui/switch'
 
 interface AddToBuildSwitchSimpleProps {
   itemId: string
-  itemType: 'race' | 'stone' | 'religion' | 'trait' | 'skill' | 'equipment'
+  itemType: 'race' | 'stone' | 'religion' | 'blessing' | 'trait' | 'skill' | 'equipment'
   itemName: string
   isInBuild?: boolean
   className?: string
@@ -23,6 +23,7 @@ export function AddToBuildSwitchSimple({
     setRace,
     setStone,
     setReligion,
+    setFavoriteBlessing,
     addTrait,
     addRegularTrait,
     addBonusTrait,
@@ -45,6 +46,8 @@ export function AddToBuildSwitchSimple({
         return build.stone === itemId
       case 'religion':
         return build.religion === itemId
+      case 'blessing':
+        return build.favoriteBlessing === itemId
       case 'trait':
         return (
           build.traits.regular.includes(itemId) ||
@@ -81,6 +84,9 @@ export function AddToBuildSwitchSimple({
         break
       case 'religion':
         setReligion(checked ? itemId : null)
+        break
+      case 'blessing':
+        setFavoriteBlessing(checked ? itemId : null)
         break
       case 'trait':
         if (checked) {

@@ -109,7 +109,7 @@ export function BlessingSheet({
   isOpen,
   onOpenChange,
 }: BlessingSheetProps) {
-  const { build, setFavoriteBlessing } = useCharacterBuild()
+  const { build } = useCharacterBuild()
   
   if (!religion) return null
 
@@ -120,18 +120,7 @@ export function BlessingSheet({
     return null
   }
 
-  // Check if this blessing is currently selected as favorite
-  const blessingId = religion.name?.toLowerCase().replace(/\s+/g, '-')
-  const isFavoriteBlessing = build.favoriteBlessing === blessingId
 
-  // Custom handler for blessing selection
-  const handleBlessingToggle = (checked: boolean) => {
-    if (checked) {
-      setFavoriteBlessing(blessingId)
-    } else {
-      setFavoriteBlessing(null)
-    }
-  }
 
   return (
     <ResponsivePanel
@@ -154,13 +143,11 @@ export function BlessingSheet({
               </P>
             </div>
           </div>
-          <AddToBuildSwitchSimple
-            itemId={religion.name?.toLowerCase().replace(/\s+/g, '-')}
-            itemType="religion"
-            itemName={`Blessing of ${religion.name}`}
-            isInBuild={isFavoriteBlessing}
-            onCheckedChange={handleBlessingToggle}
-          />
+                     <AddToBuildSwitchSimple
+             itemId={religion.name?.toLowerCase().replace(/\s+/g, '-')}
+             itemType="blessing"
+             itemName={`Blessing of ${religion.name}`}
+           />
         </div>
 
         {/* Blessing Effects */}
