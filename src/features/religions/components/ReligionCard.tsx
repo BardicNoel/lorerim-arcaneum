@@ -125,7 +125,7 @@ export function ReligionCard({
         {showToggle && (
           <div onClick={e => e.stopPropagation()}>
             <AddToBuildSwitchSimple
-              itemId={originalReligion?.name || item?.id || ''}
+              itemId={originalReligion?.name?.toLowerCase().replace(/\s+/g, '-') || item?.id || ''}
               itemType="religion"
               itemName={displayName}
             />

@@ -154,7 +154,7 @@ export function BlessingSheet({
             </div>
           </div>
           <AddToBuildSwitchSimple
-            itemId={`blessing-${religion.name}`}
+            itemId={religion.name}
             itemType="religion"
             itemName={`Blessing of ${religion.name}`}
             isInBuild={isFavoriteBlessing}
