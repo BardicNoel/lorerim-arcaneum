@@ -80,12 +80,13 @@ export function BlessingCard({
   }
 
   // Check if this blessing is currently selected as favorite
-  const isFavoriteBlessing = build.favoriteBlessing === religion.name
+  const blessingId = religion.name?.toLowerCase().replace(/\s+/g, '-')
+  const isFavoriteBlessing = build.favoriteBlessing === blessingId
 
   // Custom handler for blessing selection
   const handleBlessingToggle = (checked: boolean) => {
     if (checked) {
-      setFavoriteBlessing(religion.name)
+      setFavoriteBlessing(blessingId)
     } else {
       setFavoriteBlessing(null)
     }
@@ -119,7 +120,7 @@ export function BlessingCard({
         {showToggle && (
           <div onClick={e => e.stopPropagation()}>
             <AddToBuildSwitchSimple
-              itemId={religion.name}
+              itemId={religion.name?.toLowerCase().replace(/\s+/g, '-')}
               itemType="religion"
               itemName={`Blessing of ${religion.name}`}
               isInBuild={isFavoriteBlessing}
