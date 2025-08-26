@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { H3, P } from '@/shared/ui/ui/typography'
 import { Clock, Target } from 'lucide-react'
 import type { Religion } from '../types'
@@ -70,11 +71,24 @@ export function BlessingCard({
   onClick,
   showToggle = true,
 }: BlessingCardProps) {
+  const { build, setFavoriteBlessing } = useCharacterBuild()
   const blessing = religion.blessing
   const effectsCount = blessing?.effects?.length || 0
 
   if (!blessing || effectsCount === 0) {
     return null
+  }
+
+  // Check if this blessing is currently selected as favorite
+  const isFavoriteBlessing = build.favoriteBlessing === religion.name
+
+  // Custom handler for blessing selection
+  const handleBlessingToggle = (checked: boolean) => {
+    if (checked) {
+      setFavoriteBlessing(religion.name)
+    } else {
+      setFavoriteBlessing(null)
+    }
   }
 
   return (
@@ -94,10 +108,10 @@ export function BlessingCard({
         {/* Title and Effects Count */}
         <div className="flex-1 min-w-0">
           <H3 className="text-lg font-semibold text-primary truncate">
-            Blessing of {religion.name}
+            {religion.name}
           </H3>
           <P className="text-sm text-muted-foreground mt-1">
-            {effectsCount} effect{effectsCount !== 1 ? 's' : ''}
+            Blessing • {effectsCount} effect{effectsCount !== 1 ? 's' : ''}
           </P>
         </div>
 
@@ -108,6 +122,8 @@ export function BlessingCard({
               itemId={`blessing-${religion.name}`}
               itemType="religion"
               itemName={`Blessing of ${religion.name}`}
+              isInBuild={isFavoriteBlessing}
+              onCheckedChange={handleBlessingToggle}
             />
           </div>
         )}

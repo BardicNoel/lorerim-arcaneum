@@ -1,11 +1,11 @@
 import { cn } from '@/lib/utils'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
-import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Button } from '@/shared/ui/ui/button'
 import { H3 } from '@/shared/ui/ui/typography'
 import { ExternalLink, Heart, Shield, Star } from 'lucide-react'
 import React, { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import type { Religion } from '../types'
 import { ReligionAvatar, ReligionCategoryBadge } from './atomic'
 
@@ -63,14 +63,11 @@ export function ReligionCard({
     (originalReligion?.boon1?.effects?.length || 0) +
     (originalReligion?.boon2?.effects?.length || 0)
 
-
   // Get blessing summary (memoized)
   const blessingSummary = useMemo(
     () => originalReligion?.blessing?.effects?.[0]?.effectName || 'Blessing',
     [originalReligion]
   )
-
-
 
   // Get tenets for chips
   const tenets = originalReligion?.tenet?.description

@@ -59,12 +59,45 @@ export function ReligionsPage() {
     return featureReligions.map(religionToPlayerCreationItem)
   }, [featureReligions])
 
-  // Filter religions that have blessings
+  // Filter religions that have blessings and apply sorting
   const religionsWithBlessings = useMemo(() => {
-    return featureReligions.filter(
+    const filtered = featureReligions.filter(
       religion => religion.blessing && religion.blessing.effects.length > 0
     )
-  }, [featureReligions])
+    
+    // Apply the same sorting logic as religions
+    const sorted = [...filtered]
+    sorted.sort((a, b) => {
+      if (sortBy === 'alphabetical') {
+        return a.name.localeCompare(b.name)
+      }
+      if (sortBy === 'divine-type') {
+        const getTypePriority = (type: string | undefined) => {
+          switch (type) {
+            case 'Divine':
+              return 1
+            case 'Daedric':
+              return 2
+            case 'Tribunal':
+              return 3
+            case 'Ancestor':
+              return 4
+            default:
+              return 5
+          }
+        }
+        const priorityA = getTypePriority(a.type)
+        const priorityB = getTypePriority(b.type)
+        if (priorityA !== priorityB) {
+          return priorityA - priorityB
+        }
+        return a.name.localeCompare(b.name)
+      }
+      return 0
+    })
+    
+    return sorted
+  }, [featureReligions, sortBy])
 
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
@@ -472,7 +505,7 @@ export function ReligionsPage() {
                   key={religion.name}
                   religion={religion}
                   onClick={() => handleBlessingClick(religion)}
-                  showToggle={false}
+                  showToggle={true}
                   className={viewMode === 'list' ? 'w-full' : 'h-full'}
                 />
               ))}

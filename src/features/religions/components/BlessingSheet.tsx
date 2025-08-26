@@ -1,6 +1,7 @@
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { ResponsivePanel } from '@/shared/components/generic/ResponsivePanel'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { H3, P } from '@/shared/ui/ui/typography'
 import {
   BookOpen,
@@ -108,6 +109,8 @@ export function BlessingSheet({
   isOpen,
   onOpenChange,
 }: BlessingSheetProps) {
+  const { build, setFavoriteBlessing } = useCharacterBuild()
+  
   if (!religion) return null
 
   const blessing = religion.blessing
@@ -117,9 +120,21 @@ export function BlessingSheet({
     return null
   }
 
+  // Check if this blessing is currently selected as favorite
+  const isFavoriteBlessing = build.favoriteBlessing === religion.name
+
+  // Custom handler for blessing selection
+  const handleBlessingToggle = (checked: boolean) => {
+    if (checked) {
+      setFavoriteBlessing(religion.name)
+    } else {
+      setFavoriteBlessing(null)
+    }
+  }
+
   return (
     <ResponsivePanel
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={onOpenChange}
       title={`Blessing of ${religion.name}`}
       description="Divine blessing granted to worshippers"
@@ -142,6 +157,8 @@ export function BlessingSheet({
             itemId={`blessing-${religion.name}`}
             itemType="religion"
             itemName={`Blessing of ${religion.name}`}
+            isInBuild={isFavoriteBlessing}
+            onCheckedChange={handleBlessingToggle}
           />
         </div>
 
