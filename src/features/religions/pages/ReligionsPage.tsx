@@ -71,45 +71,12 @@ export function ReligionsPage() {
     return featureReligions.map(religionToPlayerCreationItem)
   }, [featureReligions])
 
-  // Filter religions that have blessings and apply sorting
+  // Filter religions that have blessings (basic filtering only - will be refined after selectedTags is declared)
   const religionsWithBlessings = useMemo(() => {
-    const filtered = featureReligions.filter(
+    return featureReligions.filter(
       religion => religion.blessing && religion.blessing.effects.length > 0
     )
-    
-    // Apply the same sorting logic as religions
-    const sorted = [...filtered]
-    sorted.sort((a, b) => {
-      if (sortBy === 'alphabetical') {
-        return a.name.localeCompare(b.name)
-      }
-      if (sortBy === 'divine-type') {
-        const getTypePriority = (type: string | undefined) => {
-          switch (type) {
-            case 'Divine':
-              return 1
-            case 'Daedric':
-              return 2
-            case 'Tribunal':
-              return 3
-            case 'Ancestor':
-              return 4
-            default:
-              return 5
-          }
-        }
-        const priorityA = getTypePriority(a.type)
-        const priorityB = getTypePriority(b.type)
-        if (priorityA !== priorityB) {
-          return priorityA - priorityB
-        }
-        return a.name.localeCompare(b.name)
-      }
-      return 0
-    })
-    
-    return sorted
-  }, [featureReligions, sortBy])
+  }, [featureReligions])
 
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
@@ -139,57 +106,18 @@ export function ReligionsPage() {
           description: `Religions from ${pantheon} pantheon`,
         })),
       },
-      ...(shouldShowFavoredRaces()
-        ? [
-            {
-              id: 'favored-races',
-              name: 'Favored Races',
-              placeholder: 'Search by favored race...',
-              options: allTags.map(tag => ({
-                id: `race-${tag}`,
-                label: tag,
-                value: tag,
-                category: 'Favored Races',
-                description: `Religions that favor ${tag}`,
-              })),
-            },
-          ]
-        : []),
-      {
-        id: 'religion-types',
-        name: 'Religion Types',
-        placeholder: 'Search by religion type...',
-        options: [
-          {
-            id: 'divine',
-            label: 'Divine',
-            value: 'Divine',
-            category: 'Religion Types',
-            description: 'Divine religions',
-          },
-          {
-            id: 'daedric',
-            label: 'Daedric',
-            value: 'Daedric',
-            category: 'Religion Types',
-            description: 'Daedric religions',
-          },
-          {
-            id: 'tribunal',
-            label: 'Tribunal',
-            value: 'Tribunal',
-            category: 'Religion Types',
-            description: 'Tribunal religions',
-          },
-          {
-            id: 'ancestor',
-            label: 'Ancestor',
-            value: 'Ancestor',
-            category: 'Religion Types',
-            description: 'Ancestor religions',
-          },
-        ],
-      },
+             {
+         id: 'favored-races',
+         name: 'Favored Races',
+         placeholder: 'Search by favored race...',
+         options: allTags.map(tag => ({
+           id: `race-${tag}`,
+           label: tag,
+           value: tag,
+           category: 'Favored Races',
+           description: `Religions that favor ${tag}`,
+         })),
+       },
     ]
   }
 
@@ -213,17 +141,11 @@ export function ReligionsPage() {
       filtered = filtered.filter(religion => {
         return nonFuzzyTags.every(tag => {
           if (tag.category === 'Pantheons') {
-            // Use the original religion data for pantheon filtering
-            const originalReligion = religions?.find(
-              r => r.name === religion.name
-            )
-            return originalReligion?.pantheon === tag.value
+            // Filter by religion type (which corresponds to pantheon)
+            return religion.type === tag.value
           }
           if (tag.category === 'Favored Races') {
             return religion.favoredRaces?.includes(tag.value)
-          }
-          if (tag.category === 'Religion Types') {
-            return religion.type === tag.value
           }
           return true
         })
@@ -231,7 +153,7 @@ export function ReligionsPage() {
     }
 
     return filtered
-  }, [featureReligions, selectedTags, religions])
+  }, [featureReligions, selectedTags])
 
   // Apply fuzzy search to the tag-filtered religions
   const { filteredReligions: fuzzyFilteredReligions } = useFuzzySearch(
@@ -274,6 +196,79 @@ export function ReligionsPage() {
 
     return sorted
   }, [fuzzyFilteredReligions, sortBy])
+
+  // Apply tag-based filtering to blessings
+  const tagFilteredBlessings = useMemo(() => {
+    // First filter to only religions with blessings
+    const withBlessings = featureReligions.filter(
+      religion => religion.blessing && religion.blessing.effects.length > 0
+    )
+    
+    // Apply the same tag-based filtering as religions
+    let filtered = withBlessings
+    
+    // Apply tag filters (excluding fuzzy search tags)
+    const nonFuzzyTags = selectedTags.filter(tag => tag.category !== 'Fuzzy Search')
+    
+    if (nonFuzzyTags.length > 0) {
+      filtered = filtered.filter(religion => {
+        return nonFuzzyTags.every(tag => {
+          if (tag.category === 'Pantheons') {
+            // Filter by religion type (which corresponds to pantheon)
+            return religion.type === tag.value
+          }
+          if (tag.category === 'Favored Races') {
+            return religion.favoredRaces?.includes(tag.value)
+          }
+          return true
+        })
+      })
+    }
+    
+    return filtered
+  }, [featureReligions, selectedTags])
+
+  // Apply fuzzy search to the tag-filtered blessings
+  const { filteredReligions: fuzzyFilteredBlessings } = useFuzzySearch(
+    tagFilteredBlessings,
+    fuzzySearchQuery
+  )
+
+  // Apply sorting to the final filtered blessings
+  const filteredBlessings = useMemo(() => {
+    const sorted = [...fuzzyFilteredBlessings]
+    
+    sorted.sort((a, b) => {
+      if (sortBy === 'alphabetical') {
+        return a.name.localeCompare(b.name)
+      }
+      if (sortBy === 'divine-type') {
+        const getTypePriority = (type: string | undefined) => {
+          switch (type) {
+            case 'Divine':
+              return 1
+            case 'Daedric':
+              return 2
+            case 'Tribunal':
+              return 3
+            case 'Ancestor':
+              return 4
+            default:
+              return 5
+          }
+        }
+        const priorityA = getTypePriority(a.type)
+        const priorityB = getTypePriority(b.type)
+        if (priorityA !== priorityB) {
+          return priorityA - priorityB
+        }
+        return a.name.localeCompare(b.name)
+      }
+      return 0
+    })
+    
+    return sorted
+  }, [fuzzyFilteredBlessings, sortBy])
 
   const handleTagSelect = (optionOrTag: SearchOption | string) => {
     const newTag: SelectedTag =
@@ -448,9 +443,9 @@ export function ReligionsPage() {
             <TabsTrigger value="religions">
               Religions ({filteredReligions.length})
             </TabsTrigger>
-            <TabsTrigger value="blessings">
-              Blessings ({religionsWithBlessings.length})
-            </TabsTrigger>
+                         <TabsTrigger value="blessings">
+               Blessings ({filteredBlessings.length})
+             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="religions" className="space-y-4">
@@ -496,48 +491,48 @@ export function ReligionsPage() {
             )}
           </TabsContent>
 
-          <TabsContent value="blessings" className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-muted-foreground">
-                {religionsWithBlessings.length} blessing
-                {religionsWithBlessings.length !== 1 ? 's' : ''} found
-              </div>
-            </div>
+                     <TabsContent value="blessings" className="space-y-4">
+             <div className="flex items-center justify-between">
+               <div className="text-sm text-muted-foreground">
+                 {filteredBlessings.length} blessing
+                 {filteredBlessings.length !== 1 ? 's' : ''} found
+               </div>
+             </div>
 
-            {/* Blessing Cards Grid/List */}
-            <div
-              className={
-                viewMode === 'grid'
-                  ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
-                  : 'space-y-4'
-              }
-            >
-              {religionsWithBlessings.map(religion => (
-                <BlessingCard
-                  key={religion.name}
-                  religion={religion}
-                  onClick={() => handleBlessingClick(religion)}
-                  showToggle={true}
-                  className={viewMode === 'list' ? 'w-full' : 'h-full'}
-                />
-              ))}
-            </div>
+             {/* Blessing Cards Grid/List */}
+             <div
+               className={
+                 viewMode === 'grid'
+                   ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
+                   : 'space-y-4'
+               }
+             >
+               {filteredBlessings.map(religion => (
+                 <BlessingCard
+                   key={religion.name}
+                   religion={religion}
+                   onClick={() => handleBlessingClick(religion)}
+                   showToggle={true}
+                   className={viewMode === 'list' ? 'w-full' : 'h-full'}
+                 />
+               ))}
+             </div>
 
-            {religionsWithBlessings.length === 0 && (
-              <div className="text-center py-12">
-                <div className="text-lg text-muted-foreground">
-                  No blessings found matching your criteria
-                </div>
-                <Button
-                  variant="outline"
-                  onClick={() => setSelectedTags([])}
-                  className="mt-4"
-                >
-                  Clear filters
-                </Button>
-              </div>
-            )}
-          </TabsContent>
+             {filteredBlessings.length === 0 && (
+               <div className="text-center py-12">
+                 <div className="text-lg text-muted-foreground">
+                   No blessings found matching your criteria
+                 </div>
+                 <Button
+                   variant="outline"
+                   onClick={() => setSelectedTags([])}
+                   className="mt-4"
+                 >
+                   Clear filters
+                 </Button>
+               </div>
+             )}
+           </TabsContent>
         </Tabs>
       </div>
 

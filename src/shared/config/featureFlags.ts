@@ -7,7 +7,7 @@ export const FEATURE_FLAGS = {
    * Controls whether favored races are displayed in religion/trait components
    * Disabled due to data inconsistencies in the core content
    */
-  SHOW_FAVORED_RACES: false,
+  SHOW_FAVORED_RACES: true,
 
   /**
    * Controls whether race-based autocomplete is available in search
