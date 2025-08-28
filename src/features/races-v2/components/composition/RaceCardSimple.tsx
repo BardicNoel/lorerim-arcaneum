@@ -8,6 +8,7 @@ import { ExternalLink, Star } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import type { Race } from '../../types'
 import { CategoryBadge, RaceAvatar } from '../atomic'
+import { extractUnperkedAbilities } from '../../utils/raceToPlayerCreationItem'
 
 interface RaceCardSimpleProps {
   item?: PlayerCreationItem
@@ -45,6 +46,9 @@ export function RaceCardSimple({
   const displayCategory = item?.category || originalRace?.category || ''
   const displayEffects = item?.effects || []
   const displaySummary = item?.summary || originalRace?.description || ''
+
+  // Extract unperked abilities
+  const unperkedAbilities = originalRace ? extractUnperkedAbilities(originalRace) : []
 
   return (
     <div
@@ -146,6 +150,20 @@ export function RaceCardSimple({
                   ))}
                 </div>
               )}
+
+            {/* Unperked Abilities */}
+            {unperkedAbilities.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {unperkedAbilities.map((ability, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-1 px-2 py-1 bg-muted/50 text-muted-foreground border rounded-full text-xs font-medium"
+                  >
+                    ⚡ {ability}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

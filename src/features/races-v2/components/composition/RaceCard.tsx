@@ -10,6 +10,7 @@ import { CategoryBadge, RaceAvatar } from '../atomic'
 import { RaceEffectsDisplay } from './RaceEffectsDisplay'
 import { RaceKeywordsDisplay } from './RaceKeywordsDisplay'
 import { RaceStatsDisplay } from './RaceStatsDisplay'
+import { RaceUnperkedAbilitiesDisplay } from './RaceUnperkedAbilitiesDisplay'
 
 interface RaceCardProps {
   item?: PlayerCreationItem
@@ -149,6 +150,14 @@ export function RaceCard({
               description: spell.description,
             }))}
             title="Racial Abilities"
+          />
+        )}
+
+        {/* Unperked Abilities */}
+        {originalRace && (
+          <RaceUnperkedAbilitiesDisplay
+            race={originalRace}
+            title="Unperked Abilities"
           />
         )}
 

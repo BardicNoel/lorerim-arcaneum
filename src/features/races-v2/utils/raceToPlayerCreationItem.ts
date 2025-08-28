@@ -2,6 +2,34 @@ import type { PlayerCreationItem } from '@/shared/components/playerCreation/type
 import type { Race } from '../types'
 
 /**
+ * Extracts unperked abilities from race keywords.
+ * Unperked abilities are recognizable by the keyword edid including "unperked".
+ * Converts camelCase to spaced words (e.g., "CreatePotions" -> "Create Potions").
+ */
+export function extractUnperkedAbilities(race: Race): string[] {
+  if (!race.keywords || race.keywords.length === 0) {
+    return []
+  }
+
+  return race.keywords
+    .filter(keyword => keyword.edid.toLowerCase().includes('unperked'))
+    .map(keyword => {
+      // Extract the skill name from the edid
+      // Example: "REQ_RacialSkills_SneakUnperked" -> "Sneak"
+      const match = keyword.edid.match(/REQ_RacialSkills_(\w+)Unperked/)
+      if (match) {
+        const skillName = match[1]
+        // Convert camelCase to spaced words
+        return skillName.replace(/([A-Z])/g, ' $1').trim()
+      }
+      // Fallback: return the edid without the prefix/suffix
+      const fallbackName = keyword.edid.replace(/REQ_RacialSkills_/, '').replace(/Unperked$/, '')
+      return fallbackName.replace(/([A-Z])/g, ' $1').trim()
+    })
+    .filter(Boolean) // Remove any empty strings
+}
+
+/**
  * Maps a Race entity to a PlayerCreationItem for use in shared player creation UIs.
  * Includes skill bonuses, racial spells, and category as tags.
  */

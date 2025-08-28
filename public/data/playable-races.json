@@ -59,26 +59,25 @@
           "globalFormId": "0x00105F16"
         }
       ],
-      "keywords": [],
+      "keywords": [
+        {
+          "edid": "REQ_RacialSkills_RechargeWeaponsUnperked",
+          "globalFormId": "0x8CAD3A3C"
+        }
+      ],
       "regeneration": {
         "health": {
           "base": 0
         },
         "magicka": {
-          "base": 1.2000000476837158,
-          "multipliers": [
-            {
-              "value": 1.5,
-              "source": "Highborn"
-            }
-          ]
+          "base": 1.2000000476837158
         },
         "stamina": {
           "base": 1.5499999523162842
         }
       },
       "combat": {
-        "unarmedDamage": 12,
+        "unarmedDamage": 7,
         "unarmedReach": 73
       }
     },
@@ -103,11 +102,11 @@
       },
       "skillBonuses": [
         {
-          "skill": "One-Handed",
+          "skill": "OneHanded",
           "bonus": 10
         },
         {
-          "skill": "Light Armor",
+          "skill": "LightArmor",
           "bonus": 10
         },
         {
@@ -135,15 +134,9 @@
           "globalFormId": "0x000AA01B"
         },
         {
-          "edid": "REQ_Trait_PlayableRace_Khajiit",
-          "name": "Claws",
-          "description": "Bestial claws are extremely sharp - sharp enough to easily shred through flesh, making them much more lethal than normal hands. Unarmed damage is increased by <20>.",
-          "globalFormId": "0x000AA01E"
-        },
-        {
           "edid": "REQ_Ability_Race_Argonian_Histskin",
           "name": "Histskin",
-          "description": "Argonians can nautrally regenerate health faster than others, and their metabolism increases the effect of alchemical substances. Regenerate <1> health per second, potions are <10>% more effective and last longer.",
+          "description": "Argonians can nautrally regenerate health faster than others, and their metabolism increases the effect of alchemical substances. Regenerate <1.5> health per second, potions are <10>% more effective and last longer.",
           "globalFormId": "0x000E40D5"
         },
         {
@@ -156,19 +149,34 @@
           "edid": "REQ_Ability_Race_All_StrongStomach",
           "name": "Strong Stomach",
           "description": "Your metabolism can digest raw food without food poisoning.",
-          "globalFormId": "0xFE686808"
+          "globalFormId": "0xFE68F808"
         }
       ],
-      "keywords": [],
+      "keywords": [
+        {
+          "edid": "IsBeastRace",
+          "globalFormId": "0x000D61D1"
+        },
+        {
+          "edid": "REQ_StrongStomach",
+          "globalFormId": "0x8C4CF31E"
+        },
+        {
+          "edid": "REQ_RacialSkills_SneakUnperked",
+          "globalFormId": "0x8CAD3A3A"
+        },
+        {
+          "edid": "REQ_RacialSkills_CreatePotionsUnperked",
+          "globalFormId": "0x8CAD3A3B"
+        },
+        {
+          "edid": "REQ_RacialSkills_LockpickUnperked",
+          "globalFormId": "0x8CAD3A3E"
+        }
+      ],
       "regeneration": {
         "health": {
-          "base": 0,
-          "adjustments": [
-            {
-              "value": 1,
-              "source": "Histskin"
-            }
-          ]
+          "base": 0
         },
         "magicka": {
           "base": 1.100000023841858
@@ -178,7 +186,7 @@
         }
       },
       "combat": {
-        "unarmedDamage": 32,
+        "unarmedDamage": 9,
         "unarmedReach": 73
       }
     },
@@ -207,7 +215,7 @@
           "bonus": 15
         },
         {
-          "skill": "Light Armor",
+          "skill": "LightArmor",
           "bonus": 10
         },
         {
@@ -244,16 +252,33 @@
           "edid": "REQ_Ability_Race_Bosmer_EyeOfTheHunt",
           "name": "Eye of the Hunt",
           "description": "The Bosmer are naturally skilled in marksmanship, and can aim their bows more precisely. Armor penetration with ranged weapons is increased by <5>.",
-          "globalFormId": "0xFE686801"
+          "globalFormId": "0xFE68F801"
         },
         {
           "edid": "REQ_Ability_Race_All_StrongStomach",
           "name": "Strong Stomach",
           "description": "Your metabolism can digest raw food without food poisoning.",
-          "globalFormId": "0xFE686808"
+          "globalFormId": "0xFE68F808"
         }
       ],
-      "keywords": [],
+      "keywords": [
+        {
+          "edid": "REQ_StrongStomach",
+          "globalFormId": "0x8C4CF31E"
+        },
+        {
+          "edid": "REQ_RacialSkills_SneakUnperked",
+          "globalFormId": "0x8CAD3A3A"
+        },
+        {
+          "edid": "REQ_RacialSkills_CreatePotionsUnperked",
+          "globalFormId": "0x8CAD3A3B"
+        },
+        {
+          "edid": "REQ_RacialSkills_PickpocketUnperked",
+          "globalFormId": "0x8CAD3A3D"
+        }
+      ],
       "regeneration": {
         "health": {
           "base": 0
@@ -266,7 +291,7 @@
         }
       },
       "combat": {
-        "unarmedDamage": 12,
+        "unarmedDamage": 9,
         "unarmedReach": 73
       }
     },
@@ -329,7 +354,20 @@
           "globalFormId": "0x000AA022"
         }
       ],
-      "keywords": [],
+      "keywords": [
+        {
+          "edid": "REQ_RaceHuman",
+          "globalFormId": "0x8C316340"
+        },
+        {
+          "edid": "REQ_RacialSkills_CreatePotionsUnperked",
+          "globalFormId": "0x8CAD3A3B"
+        },
+        {
+          "edid": "REQ_RacialSkills_RechargeWeaponsUnperked",
+          "globalFormId": "0x8CAD3A3C"
+        }
+      ],
       "regeneration": {
         "health": {
           "base": 0
@@ -342,7 +380,7 @@
         }
       },
       "combat": {
-        "unarmedDamage": 12,
+        "unarmedDamage": 8,
         "unarmedReach": 73
       }
     },
@@ -367,11 +405,11 @@
       },
       "skillBonuses": [
         {
-          "skill": "One-Handed",
+          "skill": "OneHanded",
           "bonus": 10
         },
         {
-          "skill": "Light Armor",
+          "skill": "LightArmor",
           "bonus": 10
         },
         {
@@ -405,7 +443,12 @@
           "globalFormId": "0x000E40D4"
         }
       ],
-      "keywords": [],
+      "keywords": [
+        {
+          "edid": "REQ_RacialSkills_SneakUnperked",
+          "globalFormId": "0x8CAD3A3A"
+        }
+      ],
       "regeneration": {
         "health": {
           "base": 0
@@ -418,7 +461,7 @@
         }
       },
       "combat": {
-        "unarmedDamage": 13,
+        "unarmedDamage": 8,
         "unarmedReach": 73
       }
     },
@@ -443,7 +486,7 @@
       },
       "skillBonuses": [
         {
-          "skill": "One-Handed",
+          "skill": "OneHanded",
           "bonus": 10
         },
         {
@@ -451,7 +494,7 @@
           "bonus": 10
         },
         {
-          "skill": "Heavy Armor",
+          "skill": "HeavyArmor",
           "bonus": 10
         },
         {
@@ -481,32 +524,25 @@
           "globalFormId": "0x000EB7EB"
         }
       ],
-      "keywords": [],
+      "keywords": [
+        {
+          "edid": "REQ_RaceHuman",
+          "globalFormId": "0x8C316340"
+        }
+      ],
       "regeneration": {
         "health": {
           "base": 0
         },
         "magicka": {
-          "base": 1.100000023841858,
-          "multipliers": [
-            {
-              "value": 1.25,
-              "source": "Imperial Diversity"
-            }
-          ]
+          "base": 1.100000023841858
         },
         "stamina": {
-          "base": 1.600000023841858,
-          "multipliers": [
-            {
-              "value": 1.25,
-              "source": "Imperial Diversity"
-            }
-          ]
+          "base": 1.600000023841858
         }
       },
       "combat": {
-        "unarmedDamage": 13,
+        "unarmedDamage": 9,
         "unarmedReach": 73
       }
     },
@@ -531,11 +567,11 @@
       },
       "skillBonuses": [
         {
-          "skill": "One-Handed",
+          "skill": "OneHanded",
           "bonus": 10
         },
         {
-          "skill": "Light Armor",
+          "skill": "LightArmor",
           "bonus": 10
         },
         {
@@ -563,12 +599,6 @@
           "globalFormId": "0x000AA01D"
         },
         {
-          "edid": "REQ_Trait_PlayableRace_Khajiit",
-          "name": "Claws",
-          "description": "Bestial claws are extremely sharp - sharp enough to easily shred through flesh, making them much more lethal than normal hands. Unarmed damage is increased by <20>.",
-          "globalFormId": "0x000AA01E"
-        },
-        {
           "edid": "REQ_Ability_Race_Khajiit_FelineAgility",
           "name": "Feline Agility",
           "description": "Khajiits are very agile and can fall long heights without taking critical damage. Movement is <10>% faster, sneaking is <20>% faster, fall damage is reduced by <75>%.",
@@ -578,16 +608,41 @@
           "edid": "REQ_Ability_Race_All_StrongStomach",
           "name": "Strong Stomach",
           "description": "Your metabolism can digest raw food without food poisoning.",
-          "globalFormId": "0xFE686808"
+          "globalFormId": "0xFE68F808"
         },
         {
           "edid": "REQ_Ability_Race_Khajiit_Fingersmith",
           "name": "Fingersmith",
           "description": "Khajiits have keen senses and dexterity, making them much more proficient in thievery. Lockpicking expertise is increased by <2>, lockpicks are <20>% more durable, pickpocketing is <20>% more likely to succeed, you are <20>% harder to detect.",
-          "globalFormId": "0xFE686816"
+          "globalFormId": "0xFE68F816"
         }
       ],
-      "keywords": [],
+      "keywords": [
+        {
+          "edid": "IsBeastRace",
+          "globalFormId": "0x000D61D1"
+        },
+        {
+          "edid": "REQ_StrongStomach",
+          "globalFormId": "0x8C4CF31E"
+        },
+        {
+          "edid": "REQ_RacialSkills_SneakUnperked",
+          "globalFormId": "0x8CAD3A3A"
+        },
+        {
+          "edid": "REQ_RacialSkills_CreatePotionsUnperked",
+          "globalFormId": "0x8CAD3A3B"
+        },
+        {
+          "edid": "REQ_RacialSkills_PickpocketUnperked",
+          "globalFormId": "0x8CAD3A3D"
+        },
+        {
+          "edid": "REQ_RacialSkills_LockpickUnperked",
+          "globalFormId": "0x8CAD3A3E"
+        }
+      ],
       "regeneration": {
         "health": {
           "base": 0
@@ -600,7 +655,7 @@
         }
       },
       "combat": {
-        "unarmedDamage": 32,
+        "unarmedDamage": 10,
         "unarmedReach": 73
       }
     },
@@ -625,11 +680,11 @@
       },
       "skillBonuses": [
         {
-          "skill": "One-Handed",
+          "skill": "OneHanded",
           "bonus": 10
         },
         {
-          "skill": "Two-Handed",
+          "skill": "TwoHanded",
           "bonus": 15
         },
         {
@@ -641,11 +696,11 @@
           "bonus": 10
         },
         {
-          "skill": "Heavy Armor",
+          "skill": "HeavyArmor",
           "bonus": 10
         },
         {
-          "skill": "Light Armor",
+          "skill": "LightArmor",
           "bonus": 10
         }
       ],
@@ -660,16 +715,21 @@
           "edid": "REQ_Ability_Race_Nord_AncientTongues",
           "name": "Ancient Tongues",
           "description": "Nords have inherent ability to Shout, and can unleash immense power through the Voice. Shouts are <10>% more powerful and last longer, Shouts can be used <10>% more often.",
-          "globalFormId": "0xFE686809"
+          "globalFormId": "0xFE68F809"
         },
         {
           "edid": "REQ_Ability_Race_Nord_BarbaricStrength",
           "name": "Barbaric Strength",
           "description": "Nords are fierce and strong, skilled with all melee weapons. Melee weapons deal <5>% more damage.",
-          "globalFormId": "0xFE68680B"
+          "globalFormId": "0xFE68F80B"
         }
       ],
-      "keywords": [],
+      "keywords": [
+        {
+          "edid": "REQ_RaceHuman",
+          "globalFormId": "0x8C316340"
+        }
+      ],
       "regeneration": {
         "health": {
           "base": 0
@@ -682,7 +742,7 @@
         }
       },
       "combat": {
-        "unarmedDamage": 14,
+        "unarmedDamage": 10,
         "unarmedReach": 73
       }
     },
@@ -707,11 +767,11 @@
       },
       "skillBonuses": [
         {
-          "skill": "One-Handed",
+          "skill": "OneHanded",
           "bonus": 10
         },
         {
-          "skill": "Two-Handed",
+          "skill": "TwoHanded",
           "bonus": 10
         },
         {
@@ -723,7 +783,7 @@
           "bonus": 10
         },
         {
-          "skill": "Heavy Armor",
+          "skill": "HeavyArmor",
           "bonus": 15
         },
         {
@@ -742,10 +802,15 @@
           "edid": "REQ_Ability_Race_All_StrongStomach",
           "name": "Strong Stomach",
           "description": "Your metabolism can digest raw food without food poisoning.",
-          "globalFormId": "0xFE686808"
+          "globalFormId": "0xFE68F808"
         }
       ],
-      "keywords": [],
+      "keywords": [
+        {
+          "edid": "REQ_StrongStomach",
+          "globalFormId": "0x8C4CF31E"
+        }
+      ],
       "regeneration": {
         "health": {
           "base": 0
@@ -758,7 +823,7 @@
         }
       },
       "combat": {
-        "unarmedDamage": 14,
+        "unarmedDamage": 10,
         "unarmedReach": 73
       }
     },
@@ -783,11 +848,11 @@
       },
       "skillBonuses": [
         {
-          "skill": "One-Handed",
+          "skill": "OneHanded",
           "bonus": 15
         },
         {
-          "skill": "Two-Handed",
+          "skill": "TwoHanded",
           "bonus": 10
         },
         {
@@ -803,7 +868,7 @@
           "bonus": 10
         },
         {
-          "skill": "Light Armor",
+          "skill": "LightArmor",
           "bonus": 10
         }
       ],
@@ -824,10 +889,15 @@
           "edid": "REQ_Ability_Race_Redguard_MartialProwess",
           "name": "Martial Prowess",
           "description": "Redguards are naturally skilled in martial arts, and can wield their weapons with great precision. Armor penetration with melee weapons is increased by <5>.",
-          "globalFormId": "0xFE68680E"
+          "globalFormId": "0xFE68F80E"
         }
       ],
-      "keywords": [],
+      "keywords": [
+        {
+          "edid": "REQ_RaceHuman",
+          "globalFormId": "0x8C316340"
+        }
+      ],
       "regeneration": {
         "health": {
           "base": 0
@@ -840,7 +910,7 @@
         }
       },
       "combat": {
-        "unarmedDamage": 13,
+        "unarmedDamage": 10,
         "unarmedReach": 73
       }
     }

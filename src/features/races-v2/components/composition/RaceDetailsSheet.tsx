@@ -4,7 +4,7 @@ import { Badge } from '@/shared/ui/ui/badge'
 import { H3 } from '@/shared/ui/ui/typography'
 import type { Race } from '../../types'
 import { CategoryBadge, RaceAvatar } from '../atomic'
-import { RaceEffectsDisplay, RaceKeywordsDisplay, RaceStatsDisplay } from './'
+import { RaceEffectsDisplay, RaceKeywordsDisplay, RaceStatsDisplay, RaceUnperkedAbilitiesDisplay } from './'
 
 interface RaceDetailsSheetProps {
   race: Race | null
@@ -95,6 +95,12 @@ export function RaceDetailsSheet({
               />
             </div>
           )}
+
+          {/* Unperked Abilities */}
+          <RaceUnperkedAbilitiesDisplay
+            race={race}
+            title="Unperked Abilities"
+          />
 
           {/* Keywords */}
           {race.keywords && race.keywords.length > 0 && (
