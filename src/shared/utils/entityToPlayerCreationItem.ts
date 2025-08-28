@@ -1,6 +1,6 @@
 import type { Birthsign } from '@/features/birthsigns/types'
 import type { Religion } from '@/features/religions/types'
-import type { Trait } from '@/features/traits/types'
+import type { Trait } from '@/shared/data/schemas'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
 import type { DestinyNode } from '@/shared/data/schemas'
@@ -53,9 +53,9 @@ export function traitToPlayerCreationItem(
     ...trait, // Spread domain-specific fields first
     id: trait.edid || trait.name, // Use id, edid, or name as fallback for character build compatibility
     name: trait.name,
-    description: trait.description,
+    description: trait.description || '',
     tags: trait.tags || [],
-    summary: trait.description,
+    summary: trait.description || '',
     effects: [
       ...(trait.effects?.map(effect => ({
         type: 'positive' as const, // Could be improved if effect.type is more granular
