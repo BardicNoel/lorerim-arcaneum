@@ -7,7 +7,7 @@ import type {
   SelectedTag,
 } from '@/shared/components/playerCreation/types'
 import type { Trait } from '@/shared/data/schemas'
-import { useTraits } from '@/shared/stores'
+import { useTraits } from '@/shared/stores/useDataStores'
 import { Button } from '@/shared/ui/ui/button'
 import {
   DropdownMenu,
@@ -39,8 +39,8 @@ const getSortLabel = (sortBy: SortOption) => {
 }
 
 export function AccordionTraitsPage() {
-  // Use the new cache-based hook - no infinite loops!
-  const { data: traitsData, loading, error, reload } = useTraits()
+  // Use the shared data store hook
+  const { data: traitsData, loading, error } = useTraits()
   const traits = traitsData || []
 
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
@@ -162,20 +162,43 @@ export function AccordionTraitsPage() {
     .map(tag => tag.value)
     .join(' ')
 
-  const { filteredTraits: fuzzyFilteredTraits } = useFuzzySearch(
+  const { filteredTraits: fuzzyFilteredTraits, searchResults } = useFuzzySearch(
     filteredTraits,
     fuzzySearchQuery
   )
 
+  // Determine which traits to display
+  const hasFuzzySearchTags = selectedTags.some(tag => tag.category === 'Fuzzy Search')
+  const traitsToDisplay = hasFuzzySearchTags ? fuzzyFilteredTraits : filteredTraits
+
   // Convert to PlayerCreationItem format
   const displayItems: (PlayerCreationItem & { originalTrait: Trait })[] =
-    fuzzyFilteredTraits.map(traitToPlayerCreationItem)
+    traitsToDisplay.map(traitToPlayerCreationItem)
 
   // Get all valid trait IDs for cleanup (use id or name as fallback)
   const allValidTraitIds = traits.map((trait: Trait) => trait.id || trait.name)
 
   // Sort the display items
   const sortedDisplayItems = [...displayItems].sort((a, b) => {
+    // If fuzzy search is active, respect the search ranking
+    if (hasFuzzySearchTags && searchResults.length > 0) {
+      const aResult = searchResults.find(result => result.item.originalTrait.id === a.id || result.item.originalTrait.name === a.name)
+      const bResult = searchResults.find(result => result.item.originalTrait.id === b.id || result.item.originalTrait.name === b.name)
+      
+      // If both items have search results, sort by score (lower score = better match)
+      if (aResult && bResult) {
+        return (aResult.score ?? 1) - (bResult.score ?? 1)
+      }
+      
+      // If only one has search results, prioritize the one with results
+      if (aResult && !bResult) return -1
+      if (!aResult && bResult) return 1
+      
+      // If neither has search results, fall back to alphabetical
+      return a.name.localeCompare(b.name)
+    }
+
+    // Otherwise, use the normal sort logic
     switch (sortBy) {
       case 'alphabetical':
         return a.name.localeCompare(b.name)
@@ -233,12 +256,7 @@ export function AccordionTraitsPage() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <p className="text-destructive mb-4">{error}</p>
-          <button
-            onClick={() => reload()}
-            className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
-          >
-            Retry
-          </button>
+          <p className="text-muted-foreground">Please refresh the page to try again.</p>
         </div>
       </div>
     )
@@ -351,7 +369,6 @@ export function AccordionTraitsPage() {
             <TraitAccordion
               key={item.id}
               item={item}
-              isExpanded={true}
               className="w-full"
               allTraitIds={allValidTraitIds}
             />
@@ -363,7 +380,6 @@ export function AccordionTraitsPage() {
             <TraitAccordion
               key={item.id}
               item={item}
-              isExpanded={true}
               className="w-full"
               allTraitIds={allValidTraitIds}
             />
