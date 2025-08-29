@@ -30,8 +30,11 @@ export default function EnchantmentsPage() {
   
   // View state
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
-  const [sortBy, setSortBy] = useState<'name' | 'category' | 'targetType' | 'plugin' | 'itemCount'>('name')
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
+  
+  // Get store state for sorting
+  const { viewState, setViewState } = useEnchantmentsStore()
+  const { sortBy, sortOrder } = viewState
   
   // Use the new filtering hook
   const { filteredEnchantments } = useEnchantmentUniformFilters(enchantments, selectedTags)
@@ -198,21 +201,19 @@ export default function EnchantmentsPage() {
               </div>
             </div>
 
-            {/* Right: Sort Options */}
-            <div className="relative">
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
-              >
-                <option value="name">Sort: A-Z</option>
-                <option value="category">Sort: Category</option>
-                <option value="targetType">Sort: Target Type</option>
-                <option value="plugin">Sort: Plugin</option>
-                <option value="itemCount">Sort: Item Count</option>
-              </select>
-              <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-            </div>
+                         {/* Right: Sort Options */}
+             <div className="relative">
+               <select
+                 value={sortBy}
+                 onChange={(e) => setViewState({ sortBy: e.target.value as any })}
+                 className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
+               >
+                 <option value="name">Sort: A-Z</option>
+                 <option value="targetType">Sort: Ench Target</option>
+                 <option value="wornRestrictions">Sort: Worn Restrictions</option>
+               </select>
+               <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+             </div>
           </div>
             
           {/* Selected Tags */}

@@ -38,21 +38,35 @@ export const EnchantmentGrid = React.memo<EnchantmentGridProps>(({
           aValue = a.name.toLowerCase()
           bValue = b.name.toLowerCase()
           break
-        case 'category':
-          aValue = a.category.toLowerCase()
-          bValue = b.category.toLowerCase()
-          break
         case 'targetType':
-          aValue = a.targetType
-          bValue = b.targetType
+          // Sort by enchantment type (weapon vs armor) for better UX
+          aValue = a.isWeaponEnchantment ? 'weapon' : 'armor'
+          bValue = b.isWeaponEnchantment ? 'weapon' : 'armor'
           break
-        case 'plugin':
-          aValue = a.plugin.toLowerCase()
-          bValue = b.plugin.toLowerCase()
-          break
-        case 'itemCount':
-          aValue = a.itemCount
-          bValue = b.itemCount
+        case 'wornRestrictions':
+          // Sort by worn restrictions: weapons first, then armor restrictions
+          if (a.isWeaponEnchantment && !b.isWeaponEnchantment) {
+            return -1 // Weapons first
+          }
+          if (!a.isWeaponEnchantment && b.isWeaponEnchantment) {
+            return 1 // Weapons first
+          }
+          if (a.isWeaponEnchantment && b.isWeaponEnchantment) {
+            // Both are weapons, sort by name
+            aValue = a.name.toLowerCase()
+            bValue = b.name.toLowerCase()
+          } else {
+            // Both are armor, sort by first worn restriction, then by name
+            const aFirstRestriction = a.wornRestrictions[0] || ''
+            const bFirstRestriction = b.wornRestrictions[0] || ''
+            if (aFirstRestriction !== bFirstRestriction) {
+              aValue = aFirstRestriction.toLowerCase()
+              bValue = bFirstRestriction.toLowerCase()
+            } else {
+              aValue = a.name.toLowerCase()
+              bValue = b.name.toLowerCase()
+            }
+          }
           break
         default:
           aValue = a.name.toLowerCase()
