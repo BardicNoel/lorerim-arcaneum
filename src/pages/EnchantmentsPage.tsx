@@ -6,7 +6,7 @@ import { BackToTopButton } from '@/shared/components/generic/BackToTopButton'
 import { BuildPageShell } from '@/shared/components/playerCreation/BuildPageShell'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import type { SearchCategory, SearchOption, SelectedTag } from '@/shared/components/playerCreation/types'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Grid3X3, List } from 'lucide-react'
 import { Button } from '@/shared/ui/ui/button'
 import { X } from 'lucide-react'
 import { 
@@ -173,33 +173,27 @@ export default function EnchantmentsPage() {
 
           {/* View Controls Section */}
           <div className="flex items-center justify-between mb-4">
-            {/* Left: View Mode Toggle */}
-            <div className="flex items-center gap-2">
-              <div className="flex border rounded-lg p-1 bg-muted">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-                    viewMode === 'grid' 
-                      ? 'bg-primary text-primary-foreground' 
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                  }`}
-                  title="Grid view"
-                >
-                  Grid
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-                    viewMode === 'list' 
-                      ? 'bg-primary text-primary-foreground' 
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                  }`}
-                  title="List view"
-                >
-                  List
-                </button>
-              </div>
-            </div>
+                         {/* Left: View Mode Toggle */}
+             <div className="flex items-center gap-2">
+               <Button
+                 variant={viewMode === 'grid' ? 'default' : 'outline'}
+                 size="sm"
+                 onClick={() => setViewMode('grid')}
+                 className="flex items-center gap-2"
+               >
+                 <Grid3X3 className="h-4 w-4" />
+                 Grid
+               </Button>
+               <Button
+                 variant={viewMode === 'list' ? 'default' : 'outline'}
+                 size="sm"
+                 onClick={() => setViewMode('list')}
+                 className="flex items-center gap-2"
+               >
+                 <List className="h-4 w-4" />
+                 List
+               </Button>
+             </div>
 
                          {/* Right: Sort Options */}
              <div className="relative">
