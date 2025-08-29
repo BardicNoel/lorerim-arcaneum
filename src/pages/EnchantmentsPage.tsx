@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { H1, H2 } from '@/shared/ui/ui/typography'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
+import { BackToTopButton } from '@/shared/components/generic/BackToTopButton'
 import { 
   EnchantmentGridContainer,
   EnchantmentDetailSheet
@@ -83,6 +84,9 @@ export default function EnchantmentsPage() {
           </TabsContent>
         </Tabs>
       </div>
+      
+      {/* Back to Top Button */}
+      <BackToTopButton threshold={400} />
     </div>
   )
 }
