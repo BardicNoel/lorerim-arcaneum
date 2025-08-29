@@ -1,12 +1,17 @@
 import { useState, useEffect, useMemo } from 'react'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
+import { BuildPageShell } from '@/shared/components/playerCreation/BuildPageShell'
+import { BackToTopButton } from '@/shared/components/generic/BackToTopButton'
 import { useSpellData, useSpellState } from '../../adapters'
+import { useSpellPagination } from '../../adapters/useSpellPagination'
 import { SpellGrid, SpellList } from '../composition'
+import { VirtualSpellGrid } from '../composition/VirtualSpellGrid'
 import { SpellDetailsSheet } from '../SpellDetailsSheet'
 import type { SearchOption, SelectedTag, SearchCategory } from '@/shared/components/playerCreation/types'
 import type { SpellWithComputed } from '../../types'
 import { ChevronDown } from 'lucide-react'
 import { levelOrder } from '../../config/spellConfig'
+import { Button } from '@/shared/ui/ui/button'
 
 type SortOption = 'alphabetical' | 'school' | 'level'
 
@@ -160,6 +165,20 @@ export function SpellPageView() {
     })
   }, [filteredSpells, sortBy])
 
+  // Add pagination
+  const { 
+    displayedItems, 
+    loadMore, 
+    resetPagination, 
+    paginationInfo, 
+    hasMore 
+  } = useSpellPagination(sortedSpells)
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    resetPagination()
+  }, [selectedTags, sortBy, resetPagination])
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -186,49 +205,31 @@ export function SpellPageView() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Debug Info */}
-      <div className="text-xs text-muted-foreground p-2 bg-muted rounded">
-        Debug: {safeSpells.length} spells, {searchCategories.length} search categories
-        {searchCategories.length > 0 && (
-          <div className="mt-1">
-            Categories: {searchCategories.map(cat => `${cat.name}(${cat.options.length})`).join(', ')}
-          </div>
-        )}
+    <BuildPageShell
+      title="Spells"
+      description={`Browse and search through ${safeSpells.length} spells. Filter by school, level, and effects to find the perfect spells for your character build.`}
+    >
+      {/* Search Bar Section */}
+      <div className="flex items-center gap-4 mb-4">
+        <div className="flex-1">
+          {searchCategories.length > 0 ? (
+            <CustomMultiAutocompleteSearch
+              categories={searchCategories}
+              onSelect={handleTagSelect}
+              onCustomSearch={handleTagSelect}
+            />
+          ) : (
+            <div className="p-4 border border-dashed border-muted-foreground/20 rounded-lg text-center text-muted-foreground">
+              No search categories available. Spells loaded: {safeSpells.length}
+            </div>
+          )}
+        </div>
       </div>
-      
-      {/* Search Interface */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-4">
-          <div className="flex-1">
-            {searchCategories.length > 0 ? (
-              <CustomMultiAutocompleteSearch
-                categories={searchCategories}
-                onSelect={handleTagSelect}
-                onCustomSearch={handleTagSelect}
-              />
-            ) : (
-              <div className="p-4 border border-dashed border-muted-foreground/20 rounded-lg text-center text-muted-foreground">
-                No search categories available. Spells loaded: {safeSpells.length}
-              </div>
-            )}
-          </div>
-          
-          {/* Sort Dropdown */}
-          <div className="relative">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
-            >
-              <option value="alphabetical">Sort: A-Z</option>
-              <option value="school">Sort: School</option>
-              <option value="level">Sort: Level</option>
-            </select>
-            <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-          </div>
-          
-          {/* View Mode Toggle */}
+
+      {/* View Controls Section */}
+      <div className="flex items-center justify-between mb-4">
+        {/* Left: View Mode Toggle */}
+        <div className="flex items-center gap-2">
           <div className="flex border rounded-lg p-1 bg-muted">
             <button
               onClick={() => setViewMode('grid')}
@@ -254,6 +255,21 @@ export function SpellPageView() {
             </button>
           </div>
         </div>
+
+        {/* Right: Sort Options */}
+        <div className="relative">
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as SortOption)}
+            className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
+          >
+            <option value="alphabetical">Sort: A-Z</option>
+            <option value="school">Sort: School</option>
+            <option value="level">Sort: Level</option>
+          </select>
+          <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+        </div>
+      </div>
         
         {/* Selected Tags */}
         {selectedTags.length > 0 && (
@@ -284,16 +300,15 @@ export function SpellPageView() {
             ))}
           </div>
         )}
-      </div>
 
       {/* Results Count */}
       <div className="text-sm text-muted-foreground">
-        {sortedSpells.length} of {safeSpells.length} spells
+        {paginationInfo.displayedItems} of {paginationInfo.totalItems} spells
       </div>
 
       {/* Results Display */}
       <div>
-        {sortedSpells.length === 0 ? (
+        {displayedItems.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground">
               No spells found matching your criteria.
@@ -305,20 +320,37 @@ export function SpellPageView() {
         ) : (
           <>
             {viewMode === 'grid' && (
-              <SpellGrid 
-                spells={sortedSpells} 
+              <VirtualSpellGrid 
+                spells={displayedItems} 
                 variant="default"
                 columns={3}
                 onSpellClick={handleSpellClick}
+                loadMore={loadMore}
+                hasMore={hasMore}
               />
             )}
             
             {viewMode === 'list' && (
-              <SpellList 
-                spells={sortedSpells} 
-                variant="default"
-                onSpellClick={handleSpellClick}
-              />
+              <div className="space-y-3">
+                <SpellList 
+                  spells={displayedItems} 
+                  variant="default"
+                  onSpellClick={handleSpellClick}
+                />
+                
+                {/* Load More Button for List View */}
+                {hasMore && (
+                  <div className="flex justify-center pt-4">
+                    <Button
+                      variant="outline"
+                      onClick={loadMore}
+                      className="w-full max-w-xs"
+                    >
+                      Load More ({paginationInfo.displayedItems} of {paginationInfo.totalItems})
+                    </Button>
+                  </div>
+                )}
+              </div>
             )}
           </>
         )}
@@ -330,6 +362,9 @@ export function SpellPageView() {
         isOpen={isDetailsOpen}
         onOpenChange={setIsDetailsOpen}
       />
-    </div>
+      
+      {/* Back to Top Button */}
+      <BackToTopButton threshold={400} />
+    </BuildPageShell>
   )
 }

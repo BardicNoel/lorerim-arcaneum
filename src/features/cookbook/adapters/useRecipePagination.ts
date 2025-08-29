@@ -1,37 +1,37 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react'
-import type { SearchResult } from '../model/SearchModel'
+import type { RecipeWithComputed } from '../types'
 
 const ITEMS_PER_PAGE = 50
 
-export function useSearchPagination(searchResults: SearchResult[]) {
+export function useRecipePagination(recipes: RecipeWithComputed[]) {
   const [currentPage, setCurrentPage] = useState(1)
-  const previousSearchResultsRef = useRef<SearchResult[]>([])
+  const previousRecipesRef = useRef<RecipeWithComputed[]>([])
 
-  // Calculate displayed items directly from search results and current page
+  // Calculate displayed items directly from recipes and current page
   const displayedItems = useMemo(() => {
     const itemsToShow = currentPage * ITEMS_PER_PAGE
-    return searchResults.slice(0, itemsToShow)
-  }, [searchResults, currentPage])
+    return recipes.slice(0, itemsToShow)
+  }, [recipes, currentPage])
 
-  // Reset to page 1 only when the actual search results content changes, not just the reference
+  // Reset to page 1 only when the actual recipe content changes, not just the reference
   useEffect(() => {
-    const previousSearchResults = previousSearchResultsRef.current
+    const previousRecipes = previousRecipesRef.current
     
     // Check if the actual content has changed (not just the reference)
     const hasContentChanged = 
-      previousSearchResults.length !== searchResults.length ||
-      searchResults.some((result, index) => result.item.id !== previousSearchResults[index]?.item.id)
+      previousRecipes.length !== recipes.length ||
+      recipes.some((recipe, index) => recipe.name !== previousRecipes[index]?.name)
     
     if (hasContentChanged) {
       setCurrentPage(1)
-      previousSearchResultsRef.current = searchResults
+      previousRecipesRef.current = recipes
     }
-  }, [searchResults])
+  }, [recipes])
 
   // Check if there are more items to load
   const hasMore = useMemo(() => {
-    return displayedItems.length < searchResults.length
-  }, [displayedItems.length, searchResults.length])
+    return displayedItems.length < recipes.length
+  }, [displayedItems.length, recipes.length])
 
   // Load more items
   const loadMore = useCallback(() => {
@@ -48,11 +48,11 @@ export function useSearchPagination(searchResults: SearchResult[]) {
   // Get pagination info
   const paginationInfo = useMemo(() => ({
     displayedItems: displayedItems.length,
-    totalItems: searchResults.length,
+    totalItems: recipes.length,
     hasMore,
     currentPage,
     itemsPerPage: ITEMS_PER_PAGE
-  }), [displayedItems.length, searchResults.length, hasMore, currentPage])
+  }), [displayedItems.length, recipes.length, hasMore, currentPage])
 
   return {
     displayedItems,

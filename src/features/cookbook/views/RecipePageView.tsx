@@ -1,5 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRecipeData, useRecipeFilters, useRecipeComputed } from '../adapters'
+import { useRecipePagination } from '../adapters/useRecipePagination'
+import { BuildPageShell } from '@/shared/components/playerCreation/BuildPageShell'
+import { BackToTopButton } from '@/shared/components/generic/BackToTopButton'
 import { 
   RecipeGrid, 
   RecipeList, 
@@ -8,6 +11,7 @@ import {
   FoodMetaAnalysis,
   type ViewMode
 } from '../components'
+import { VirtualRecipeGrid } from '../components/composition/VirtualRecipeGrid'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import type { SearchCategory, SearchOption, SelectedTag } from '@/shared/components/playerCreation/types'
@@ -187,6 +191,20 @@ export function RecipePageView() {
     fuzzySearchQuery
   )
 
+  // Add pagination
+  const { 
+    displayedItems, 
+    loadMore, 
+    resetPagination, 
+    paginationInfo, 
+    hasMore 
+  } = useRecipePagination(filteredRecipes)
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    resetPagination()
+  }, [selectedTags, resetPagination])
+
   const handleRecipeClick = (recipe: RecipeWithComputed) => {
     // TODO: Implement recipe detail view or modal
   }
@@ -214,19 +232,12 @@ export function RecipePageView() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Cookbook</h1>
-          <p className="text-muted-foreground">
-            Browse and search through {statistics.totalRecipes} recipes
-          </p>
-        </div>
-      </div>
-
-      {/* Search and View Controls */}
-      <div className="flex items-center gap-4">
+    <BuildPageShell
+      title="Cookbook"
+      description={`Browse and search through ${statistics.totalRecipes} recipes. Discover new combinations, filter by ingredients and effects, and find the perfect recipe for your character.`}
+    >
+      {/* Search Bar Section */}
+      <div className="flex items-center gap-4 mb-4">
         <div className="flex-1">
           <CustomMultiAutocompleteSearch
             categories={searchCategories}
@@ -234,12 +245,17 @@ export function RecipePageView() {
             onCustomSearch={handleTagSelect}
           />
         </div>
+      </div>
 
-        {/* View Mode Toggle */}
-        <ViewModeToggle
-          currentMode={viewMode}
-          onModeChange={setViewMode}
-        />
+      {/* View Controls Section */}
+      <div className="flex items-center justify-between mb-4">
+        {/* Left: View Mode Toggle */}
+        <div className="flex items-center gap-2">
+          <ViewModeToggle
+            currentMode={viewMode}
+            onModeChange={setViewMode}
+          />
+        </div>
       </div>
 
       {/* Selected Tags */}
@@ -285,37 +301,50 @@ export function RecipePageView() {
         <TabsContent value="recipes">
           {/* Recipe Display */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">
-                Recipes ({filteredRecipes.length})
-              </h2>
-              <div className="text-sm text-muted-foreground">
-                Showing {filteredRecipes.length} of {recipes.length} recipes
-              </div>
+            {/* Results Count */}
+            <div className="text-sm text-muted-foreground">
+              Showing {paginationInfo.displayedItems} of {paginationInfo.totalItems} recipes
             </div>
 
             {/* Dynamic Recipe Display based on view mode */}
             {viewMode === 'grid' && (
-              <RecipeGrid
-                recipes={filteredRecipes}
+              <VirtualRecipeGrid
+                recipes={displayedItems}
                 variant="default"
                 columns={3}
                 onRecipeClick={handleRecipeClick}
                 showEffects={true}
                 showIngredients={true}
                 getEffectComparisons={getEffectComparisons}
+                loadMore={loadMore}
+                hasMore={hasMore}
               />
             )}
 
             {viewMode === 'list' && (
-              <RecipeList
-                recipes={filteredRecipes}
-                variant="default"
-                onRecipeClick={handleRecipeClick}
-                showEffects={true}
-                showIngredients={true}
-                getEffectComparisons={getEffectComparisons}
-              />
+              <div className="space-y-3">
+                <RecipeList
+                  recipes={displayedItems}
+                  variant="default"
+                  onRecipeClick={handleRecipeClick}
+                  showEffects={true}
+                  showIngredients={true}
+                  getEffectComparisons={getEffectComparisons}
+                />
+                
+                {/* Load More Button for List View */}
+                {hasMore && (
+                  <div className="flex justify-center pt-4">
+                    <Button
+                      variant="outline"
+                      onClick={loadMore}
+                      className="w-full max-w-xs"
+                    >
+                      Load More ({paginationInfo.displayedItems} of {paginationInfo.totalItems})
+                    </Button>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </TabsContent>
@@ -330,6 +359,9 @@ export function RecipePageView() {
           <FoodMetaAnalysis recipes={recipes} />
         </TabsContent>
       </Tabs>
-    </div>
+      
+      {/* Back to Top Button */}
+      <BackToTopButton threshold={400} />
+    </BuildPageShell>
   )
 } 

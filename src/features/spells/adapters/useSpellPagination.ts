@@ -1,37 +1,37 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react'
-import type { SearchResult } from '../model/SearchModel'
+import type { SpellWithComputed } from '../types'
 
 const ITEMS_PER_PAGE = 50
 
-export function useSearchPagination(searchResults: SearchResult[]) {
+export function useSpellPagination(spells: SpellWithComputed[]) {
   const [currentPage, setCurrentPage] = useState(1)
-  const previousSearchResultsRef = useRef<SearchResult[]>([])
+  const previousSpellsRef = useRef<SpellWithComputed[]>([])
 
-  // Calculate displayed items directly from search results and current page
+  // Calculate displayed items directly from spells and current page
   const displayedItems = useMemo(() => {
     const itemsToShow = currentPage * ITEMS_PER_PAGE
-    return searchResults.slice(0, itemsToShow)
-  }, [searchResults, currentPage])
+    return spells.slice(0, itemsToShow)
+  }, [spells, currentPage])
 
-  // Reset to page 1 only when the actual search results content changes, not just the reference
+  // Reset to page 1 only when the actual spell content changes, not just the reference
   useEffect(() => {
-    const previousSearchResults = previousSearchResultsRef.current
+    const previousSpells = previousSpellsRef.current
     
     // Check if the actual content has changed (not just the reference)
     const hasContentChanged = 
-      previousSearchResults.length !== searchResults.length ||
-      searchResults.some((result, index) => result.item.id !== previousSearchResults[index]?.item.id)
+      previousSpells.length !== spells.length ||
+      spells.some((spell, index) => spell.name !== previousSpells[index]?.name)
     
     if (hasContentChanged) {
       setCurrentPage(1)
-      previousSearchResultsRef.current = searchResults
+      previousSpellsRef.current = spells
     }
-  }, [searchResults])
+  }, [spells])
 
   // Check if there are more items to load
   const hasMore = useMemo(() => {
-    return displayedItems.length < searchResults.length
-  }, [displayedItems.length, searchResults.length])
+    return displayedItems.length < spells.length
+  }, [displayedItems.length, spells.length])
 
   // Load more items
   const loadMore = useCallback(() => {
@@ -48,11 +48,11 @@ export function useSearchPagination(searchResults: SearchResult[]) {
   // Get pagination info
   const paginationInfo = useMemo(() => ({
     displayedItems: displayedItems.length,
-    totalItems: searchResults.length,
+    totalItems: spells.length,
     hasMore,
     currentPage,
     itemsPerPage: ITEMS_PER_PAGE
-  }), [displayedItems.length, searchResults.length, hasMore, currentPage])
+  }), [displayedItems.length, spells.length, hasMore, currentPage])
 
   return {
     displayedItems,

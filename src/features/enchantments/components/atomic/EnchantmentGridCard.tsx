@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter } from '@/shared/ui/ui/card'
 import { EnchantmentBadge } from './EnchantmentBadge'
 import { EffectsList } from './EffectDisplay'
 import { ItemList } from './ItemList'
+import { formatWornRestriction } from '../../hooks/useEnchantmentUniformFilters'
 import type { EnchantmentWithComputed } from '../../types'
 
 interface EnchantmentGridCardProps {
@@ -56,14 +57,36 @@ export const EnchantmentGridCard = React.memo<EnchantmentGridCardProps>(({
           <div className="mb-3">
             <EffectsList
               effects={enchantment.effects}
-              title="Effects"
+              title=""
               compact={true}
               showDescriptions={true}
-              maxDisplay={2}
+              maxDisplay={enchantment.effects.length}
             />
           </div>
         )}
         
+        {/* Enchantment Target Badges */}
+        <div className="flex flex-wrap gap-1 mt-3">
+          {enchantment.isWeaponEnchantment ? (
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
+              Weapon
+            </span>
+          ) : enchantment.wornRestrictions.length > 0 ? (
+            enchantment.wornRestrictions.map((restriction, index) => (
+              <span
+                key={index}
+                className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200"
+                title={formatWornRestriction(restriction)}
+              >
+                {formatWornRestriction(restriction)}
+              </span>
+            ))
+          ) : (
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
+              No listed restrictions
+            </span>
+          )}
+        </div>
 
       </CardContent>
       

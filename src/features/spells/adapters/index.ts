@@ -1,4 +1,5 @@
 export { useSpellData } from './useSpellData'
 export { useSpellState } from './useSpellState'
 export { useSpellFilters } from './useSpellFilters'
-export { useSpellComputed } from './useSpellComputed' 
+export { useSpellComputed } from './useSpellComputed'
+export { useSpellPagination } from './useSpellPagination' 

@@ -69,7 +69,7 @@ export interface EnchantmentSearchResult {
 // View state types
 export interface EnchantmentViewState {
   viewMode: 'grid' | 'search'
-  sortBy: 'name' | 'category' | 'targetType' | 'plugin' | 'itemCount'
+  sortBy: 'name' | 'targetType' | 'wornRestrictions'
   sortOrder: 'asc' | 'desc'
   selectedEnchantment: string | null
   expandedEnchantments: string[]
@@ -95,7 +95,7 @@ export interface EnchantmentError {
 // Utility types
 export type EnchantmentTargetType = 'touch' | 'self'
 export type EnchantmentItemType = 'weapon' | 'armor'
-export type EnchantmentSortField = 'name' | 'category' | 'targetType' | 'plugin' | 'itemCount'
+export type EnchantmentSortField = 'name' | 'targetType' | 'wornRestrictions'
 export type SortOrder = 'asc' | 'desc'
 
 // Constants
