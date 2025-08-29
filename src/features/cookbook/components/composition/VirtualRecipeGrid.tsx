@@ -35,7 +35,7 @@ export function VirtualRecipeGrid({
   const containerRef = useRef<HTMLDivElement>(null)
   const loadMoreTriggerRef = useRef<HTMLDivElement>(null)
 
-  // Calculate responsive columns based on container width
+  // Calculate responsive columns for uniform grid
   const getResponsiveColumns = useCallback(() => {
     if (maxColumnWidth && containerWidth > 0) {
       return Math.max(1, Math.floor(containerWidth / maxColumnWidth))
@@ -80,49 +80,56 @@ export function VirtualRecipeGrid({
     return () => observer.disconnect()
   }, [loadMore, hasMore])
 
-  // Create masonry columns
-  const renderMasonryColumns = useCallback(() => {
+    // Create uniform row grid (masonry-style)
+  const renderUniformRowGrid = useCallback(() => {
     const currentColumns = getResponsiveColumns()
-    const columns: React.ReactNode[][] = Array.from(
-      { length: currentColumns },
-      () => []
-    )
-
-    // Distribute recipes across columns
-    recipes.forEach((recipe, index) => {
-      const columnIndex = index % currentColumns
-
-      columns[columnIndex].push(
-        <div
-          key={recipe.name}
-          style={{
-            width: '100%',
-            marginBottom: `${gap}px`,
-          }}
-        >
-          <RecipeCard
-            recipe={recipe}
-            variant={variant}
-            onClick={() => onRecipeClick?.(recipe)}
-            showEffects={showEffects}
-            showIngredients={showIngredients}
-            effectComparisons={getEffectComparisons?.(recipe) || []}
-          />
-        </div>
-      )
-    })
-
-    return columns.map((columnItems, columnIndex) => (
-      <div
-        key={columnIndex}
-        style={{
-          width: `calc(${100 / currentColumns}% - ${gap / 2}px)`,
-          marginRight: columnIndex < currentColumns - 1 ? `${gap}px` : 0,
-        }}
-      >
-        {columnItems}
-      </div>
-    ))
+    
+    // Group recipes into rows
+    const rows: RecipeWithComputed[][] = []
+    for (let i = 0; i < recipes.length; i += currentColumns) {
+      rows.push(recipes.slice(i, i + currentColumns))
+    }
+    
+         return (
+       <div className="w-full">
+         {rows.map((row, rowIndex) => (
+           <div
+             key={rowIndex}
+             className="flex w-full"
+             style={{
+               gap: `${gap}px`,
+               marginBottom: `${gap}px`,
+             }}
+           >
+                          {row.map((recipe) => (
+                                 <div
+                   key={recipe.name}
+                   className="flex-1 min-w-0 flex"
+                 >
+                   <RecipeCard
+                     recipe={recipe}
+                     variant={variant}
+                     onClick={() => onRecipeClick?.(recipe)}
+                     showEffects={showEffects}
+                     showIngredients={showIngredients}
+                     effectComparisons={getEffectComparisons?.(recipe) || []}
+                     className="w-full"
+                   />
+                 </div>
+              ))}
+             {/* Fill empty slots in the last row */}
+             {row.length < currentColumns && 
+               Array.from({ length: currentColumns - row.length }).map((_, index) => (
+                 <div
+                   key={`empty-${index}`}
+                   className="flex-1 min-w-0"
+                 />
+               ))
+             }
+           </div>
+         ))}
+       </div>
+     )
   }, [recipes, getResponsiveColumns, gap, variant, onRecipeClick, showEffects, showIngredients, getEffectComparisons])
 
   if (recipes.length === 0) {
@@ -135,14 +142,7 @@ export function VirtualRecipeGrid({
 
   return (
     <div ref={containerRef} className={className}>
-      <div
-        style={{
-          display: 'flex',
-          width: '100%',
-        }}
-      >
-        {renderMasonryColumns()}
-      </div>
+      {renderUniformRowGrid()}
       
       {/* Load More Trigger */}
       {hasMore && loadMore && (

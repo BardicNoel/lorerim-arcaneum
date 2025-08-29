@@ -29,7 +29,7 @@ export function VirtualSpellGrid({
   const containerRef = useRef<HTMLDivElement>(null)
   const loadMoreTriggerRef = useRef<HTMLDivElement>(null)
 
-  // Calculate responsive columns based on container width
+  // Calculate responsive columns for uniform grid
   const getResponsiveColumns = useCallback(() => {
     if (maxColumnWidth && containerWidth > 0) {
       return Math.max(1, Math.floor(containerWidth / maxColumnWidth))
@@ -74,46 +74,53 @@ export function VirtualSpellGrid({
     return () => observer.disconnect()
   }, [loadMore, hasMore])
 
-  // Create masonry columns
-  const renderMasonryColumns = useCallback(() => {
+    // Create uniform row grid (masonry-style)
+  const renderUniformRowGrid = useCallback(() => {
     const currentColumns = getResponsiveColumns()
-    const columns: React.ReactNode[][] = Array.from(
-      { length: currentColumns },
-      () => []
-    )
-
-    // Distribute spells across columns
-    spells.forEach((spell, index) => {
-      const columnIndex = index % currentColumns
-
-      columns[columnIndex].push(
-        <div
-          key={spell.name}
-          style={{
-            width: '100%',
-            marginBottom: `${gap}px`,
-          }}
-        >
-          <SpellCard
-            spell={spell}
-            variant={variant}
-            onClick={() => onSpellClick?.(spell)}
-          />
-        </div>
-      )
-    })
-
-    return columns.map((columnItems, columnIndex) => (
-      <div
-        key={columnIndex}
-        style={{
-          width: `calc(${100 / currentColumns}% - ${gap / 2}px)`,
-          marginRight: columnIndex < currentColumns - 1 ? `${gap}px` : 0,
-        }}
-      >
-        {columnItems}
-      </div>
-    ))
+    
+    // Group spells into rows
+    const rows: SpellWithComputed[][] = []
+    for (let i = 0; i < spells.length; i += currentColumns) {
+      rows.push(spells.slice(i, i + currentColumns))
+    }
+    
+         return (
+       <div className="w-full">
+         {rows.map((row, rowIndex) => (
+           <div
+             key={rowIndex}
+             className="flex w-full"
+             style={{
+               gap: `${gap}px`,
+               marginBottom: `${gap}px`,
+             }}
+           >
+                          {row.map((spell) => (
+                <div
+                  key={spell.name}
+                  className="flex-1 min-w-0 flex"
+                >
+                  <SpellCard
+                    spell={spell}
+                    compact={variant === 'compact'}
+                    onClick={() => onSpellClick?.(spell)}
+                    className="w-full"
+                  />
+                </div>
+              ))}
+             {/* Fill empty slots in the last row */}
+             {row.length < currentColumns && 
+               Array.from({ length: currentColumns - row.length }).map((_, index) => (
+                 <div
+                   key={`empty-${index}`}
+                   className="flex-1 min-w-0"
+                 />
+               ))
+             }
+           </div>
+         ))}
+       </div>
+     )
   }, [spells, getResponsiveColumns, gap, variant, onSpellClick])
 
   if (spells.length === 0) {
@@ -126,14 +133,7 @@ export function VirtualSpellGrid({
 
   return (
     <div ref={containerRef} className={className}>
-      <div
-        style={{
-          display: 'flex',
-          width: '100%',
-        }}
-      >
-        {renderMasonryColumns()}
-      </div>
+      {renderUniformRowGrid()}
       
       {/* Load More Trigger */}
       {hasMore && loadMore && (

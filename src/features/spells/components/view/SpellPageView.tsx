@@ -204,16 +204,6 @@ export function SpellPageView() {
 
   return (
     <div className="space-y-6">
-      {/* Debug Info */}
-      <div className="text-xs text-muted-foreground p-2 bg-muted rounded">
-        Debug: {safeSpells.length} spells, {searchCategories.length} search categories
-        {searchCategories.length > 0 && (
-          <div className="mt-1">
-            Categories: {searchCategories.map(cat => `${cat.name}(${cat.options.length})`).join(', ')}
-          </div>
-        )}
-      </div>
-      
       {/* Search Interface */}
       <div className="space-y-4">
         <div className="flex items-center gap-4">

@@ -37,7 +37,7 @@ export function SpellCard({
   return (
     <Card 
       className={cn(
-        "p-6 cursor-pointer hover:shadow-md transition-shadow",
+        "p-6 cursor-pointer hover:shadow-md transition-shadow h-full",
         className
       )}
       onClick={onClick}
