@@ -313,6 +313,43 @@ export class EnchantmentModel {
   }
 
   /**
+   * Format worn restriction strings to be user-friendly
+   */
+  static formatWornRestriction(restriction: string): string {
+    const formatMap: Record<string, string> = {
+      // Armor pieces
+      'ArmorBoots': 'Armor Footwear',
+      'ArmorHelmet': 'Armor Headgear', 
+      'ArmorCuirass': 'Armor Body',
+      'ArmorGauntlets': 'Armor Hands',
+      'ArmorShield': 'Armor Shield',
+      'ArmorGreaves': 'Armor Legs',
+      
+      // Clothing pieces
+      'ClothingFeet': 'Clothing Footwear',
+      'ClothingHead': 'Clothing Headgear',
+      'ClothingBody': 'Clothing Body',
+      'ClothingHands': 'Clothing Hands',
+      'ClothingRing': 'Rings',
+      'ClothingNecklace': 'Necklaces',
+      'ClothingCirclet': 'Circlets',
+      
+      // Weapon materials (for weapon enchantments)
+      'WeapMaterialWood': 'Wooden Weapons',
+      'WeapMaterialSteel': 'Steel Weapons',
+      'WeapMaterialOrcish': 'Orcish Weapons',
+      'WeapMaterialIron': 'Iron Weapons',
+      'WeapMaterialGlass': 'Glass Weapons',
+      'WeapMaterialElven': 'Elven Weapons',
+      'WeapMaterialEbony': 'Ebony Weapons',
+      'WeapMaterialDwarven': 'Dwarven Weapons',
+      'WeapMaterialDaedric': 'Daedric Weapons',
+    }
+    
+    return formatMap[restriction] || restriction
+  }
+
+  /**
    * Filter enchantments by armor restriction
    */
   static filterByArmorRestriction(enchantments: EnchantmentWithComputed[], restriction: string): EnchantmentWithComputed[] {

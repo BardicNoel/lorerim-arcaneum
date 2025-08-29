@@ -18,7 +18,7 @@ import { EnchantmentsDataInitializer } from '@/features/enchantments/components/
 import { useSearchParams } from 'react-router-dom'
 import type { EnchantmentWithComputed } from '@/features/enchantments/types'
 import { useEnchantmentsStore } from '@/shared/stores'
-import { useEnchantmentUniformFilters } from '@/features/enchantments/hooks/useEnchantmentUniformFilters'
+import { useEnchantmentUniformFilters, formatWornRestriction } from '@/features/enchantments/hooks/useEnchantmentUniformFilters'
 
 export default function EnchantmentsPage() {
   const [selectedEnchantment, setSelectedEnchantment] = useState<EnchantmentWithComputed | null>(null)
@@ -78,18 +78,18 @@ export default function EnchantmentsPage() {
           },
         ],
       },
-      {
-        id: 'armor-restrictions',
-        name: 'Armor Restrictions',
-        placeholder: 'Filter by armor type restrictions...',
-        options: allArmorRestrictions.map(restriction => ({
-          id: `restriction-${restriction}`,
-          label: restriction,
-          value: restriction,
-          category: 'Armor Restrictions',
-          description: `Enchantments restricted to ${restriction}`,
-        })),
-      },
+             {
+         id: 'armor-restrictions',
+         name: 'Armor Restrictions',
+         placeholder: 'Filter by armor type restrictions...',
+         options: allArmorRestrictions.map(restriction => ({
+           id: `restriction-${restriction}`,
+           label: formatWornRestriction(restriction),
+           value: restriction,
+           category: 'Armor Restrictions',
+           description: `Enchantments restricted to ${formatWornRestriction(restriction)}`,
+         })),
+       },
     ]
   }, [enchantments])
 
