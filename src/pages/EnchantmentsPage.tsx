@@ -250,6 +250,7 @@ export default function EnchantmentsPage() {
            <EnchantmentGridContainer
              showFilters={false}
              enchantments={filteredEnchantments}
+             viewMode={viewMode}
              className="mt-4"
              onEnchantmentClick={(enchantment) => {
                setSelectedEnchantment(enchantment)

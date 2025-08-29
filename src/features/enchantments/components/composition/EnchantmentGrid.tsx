@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { EnchantmentGridCard } from '../atomic/EnchantmentGridCard'
+import { EnchantmentListCard } from '../atomic/EnchantmentListCard'
 import { useEnchantmentsStore } from '@/shared/stores'
 import type { EnchantmentWithComputed } from '../../types'
 
@@ -9,6 +10,7 @@ interface EnchantmentGridProps {
   enchantments?: EnchantmentWithComputed[]
   loading?: boolean
   emptyMessage?: string
+  viewMode?: 'grid' | 'list'
   onEnchantmentClick?: (enchantment: EnchantmentWithComputed) => void
 }
 
@@ -17,6 +19,7 @@ export const EnchantmentGrid = React.memo<EnchantmentGridProps>(({
   enchantments: propEnchantments,
   loading: propLoading,
   emptyMessage = "No enchantments found",
+  viewMode = 'grid',
   onEnchantmentClick
 }) => {
   const { data: storeEnchantments, loading: storeLoading, viewState } = useEnchantmentsStore()
@@ -85,7 +88,12 @@ export const EnchantmentGrid = React.memo<EnchantmentGridProps>(({
   
   if (loading) {
     return (
-      <div className={cn('grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4', className)}>
+      <div className={cn(
+        viewMode === 'list' 
+          ? 'space-y-4' 
+          : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4', 
+        className
+      )}>
         {Array.from({ length: 8 }).map((_, index) => (
           <div
             key={index}
@@ -116,21 +124,26 @@ export const EnchantmentGrid = React.memo<EnchantmentGridProps>(({
   
   return (
     <div className={cn(
-      'grid gap-4',
-      'grid-cols-1',
-      'md:grid-cols-2', 
-      'lg:grid-cols-3',
-      'xl:grid-cols-3',
-      '2xl:grid-cols-4',
+      viewMode === 'list' 
+        ? 'space-y-4' 
+        : 'grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4',
       className
     )}>
-      {sortedEnchantments.map((enchantment) => (
-        <EnchantmentGridCard
-          key={enchantment.baseEnchantmentId}
-          enchantment={enchantment}
-          onClick={() => handleCardClick(enchantment)}
-        />
-      ))}
+      {sortedEnchantments.map((enchantment) => 
+        viewMode === 'list' ? (
+          <EnchantmentListCard
+            key={enchantment.baseEnchantmentId}
+            enchantment={enchantment}
+            onClick={() => handleCardClick(enchantment)}
+          />
+        ) : (
+          <EnchantmentGridCard
+            key={enchantment.baseEnchantmentId}
+            enchantment={enchantment}
+            onClick={() => handleCardClick(enchantment)}
+          />
+        )
+      )}
     </div>
   )
 })
