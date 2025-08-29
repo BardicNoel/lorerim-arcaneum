@@ -1,10 +1,11 @@
 import React from 'react'
 import { ResponsivePanel } from '@/shared/components/generic/ResponsivePanel'
 import { Button } from '@/shared/ui/ui/button'
-import { X, ChevronLeft, ChevronRight, Copy, Share2 } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { EnchantmentBadge } from '../atomic/EnchantmentBadge'
 import { EffectsList } from '../atomic/EffectDisplay'
 import { ItemList } from '../atomic/ItemList'
+import { formatWornRestriction } from '../../hooks/useEnchantmentUniformFilters'
 import { useEnchantmentsStore } from '@/shared/stores'
 import type { EnchantmentWithComputed } from '../../types'
 
@@ -52,19 +53,6 @@ export const EnchantmentDetailSheet = React.memo<EnchantmentDetailSheetProps>(({
   
   const handleClose = () => {
     onOpenChange(false)
-  }
-  
-  const handleCopyToClipboard = async () => {
-    if (!currentEnchantment) return
-    
-    const text = `${currentEnchantment.name}\n\nEffects:\n${currentEnchantment.effects.map(e => `- ${e.name}: ${e.description}`).join('\n')}\n\nFound on: ${currentEnchantment.foundOnItems.map(i => i.name).join(', ')}`
-    
-    try {
-      await navigator.clipboard.writeText(text)
-      // TODO: Add toast notification
-    } catch (error) {
-      console.error('Failed to copy to clipboard:', error)
-    }
   }
   
 
@@ -149,73 +137,36 @@ export const EnchantmentDetailSheet = React.memo<EnchantmentDetailSheetProps>(({
           <div>
             <ItemList
               items={currentEnchantment.foundOnItems}
-              title="Found on Items"
+              title="Items that can carry this enchantment"
               showType={true}
               compact={false}
             />
           </div>
           
-          {/* Worn Restrictions */}
-          {currentEnchantment.wornRestrictions.length > 0 && (
-            <div>
-              <h4 className="text-sm font-medium text-muted-foreground mb-2">
-                Worn Restrictions
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {currentEnchantment.wornRestrictions.map((restriction, index) => (
+          {/* Enchantment Targets */}
+          <div>
+            <h4 className="text-sm font-medium text-muted-foreground mb-2">
+              Can be applied to:
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {currentEnchantment.isWeaponEnchantment ? (
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                  Weapons
+                </span>
+              ) : (
+                currentEnchantment.wornRestrictions.map((restriction, index) => (
                   <span
                     key={index}
-                    className="text-sm bg-muted text-muted-foreground px-3 py-1 rounded-full"
+                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200"
                   >
-                    {restriction}
+                    {formatWornRestriction(restriction)}
                   </span>
-                ))}
-              </div>
-            </div>
-          )}
-          
-          {/* Metadata */}
-          <div className="border-t pt-4">
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="text-muted-foreground">Plugin:</span>
-                <div className="font-medium">{currentEnchantment.plugin}</div>
-              </div>
-              <div>
-                <span className="text-muted-foreground">Item Count:</span>
-                <div className="font-medium">{currentEnchantment.itemCount}</div>
-              </div>
-              <div>
-                <span className="text-muted-foreground">Effect Count:</span>
-                <div className="font-medium">{currentEnchantment.effectCount}</div>
-              </div>
-              <div>
-                <span className="text-muted-foreground">ID:</span>
-                <div className="font-mono text-xs">{currentEnchantment.baseEnchantmentId}</div>
-              </div>
+                ))
+              )}
             </div>
           </div>
           
-          {/* Actions */}
-          <div className="flex gap-2 pt-4 border-t">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleCopyToClipboard}
-              className="flex items-center gap-2"
-            >
-              <Copy className="h-4 w-4" />
-              Copy Details
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-2"
-            >
-              <Share2 className="h-4 w-4" />
-              Share
-            </Button>
-          </div>
+
         </div>
       </div>
     </ResponsivePanel>
