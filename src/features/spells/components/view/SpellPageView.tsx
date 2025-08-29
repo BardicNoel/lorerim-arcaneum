@@ -1,12 +1,15 @@
 import { useState, useEffect, useMemo } from 'react'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import { useSpellData, useSpellState } from '../../adapters'
+import { useSpellPagination } from '../../adapters/useSpellPagination'
 import { SpellGrid, SpellList } from '../composition'
+import { VirtualSpellGrid } from '../composition/VirtualSpellGrid'
 import { SpellDetailsSheet } from '../SpellDetailsSheet'
 import type { SearchOption, SelectedTag, SearchCategory } from '@/shared/components/playerCreation/types'
 import type { SpellWithComputed } from '../../types'
 import { ChevronDown } from 'lucide-react'
 import { levelOrder } from '../../config/spellConfig'
+import { Button } from '@/shared/ui/ui/button'
 
 type SortOption = 'alphabetical' | 'school' | 'level'
 
@@ -160,6 +163,20 @@ export function SpellPageView() {
     })
   }, [filteredSpells, sortBy])
 
+  // Add pagination
+  const { 
+    displayedItems, 
+    loadMore, 
+    resetPagination, 
+    paginationInfo, 
+    hasMore 
+  } = useSpellPagination(sortedSpells)
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    resetPagination()
+  }, [selectedTags, sortBy, resetPagination])
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -288,12 +305,12 @@ export function SpellPageView() {
 
       {/* Results Count */}
       <div className="text-sm text-muted-foreground">
-        {sortedSpells.length} of {safeSpells.length} spells
+        {paginationInfo.displayedItems} of {paginationInfo.totalItems} spells
       </div>
 
       {/* Results Display */}
       <div>
-        {sortedSpells.length === 0 ? (
+        {displayedItems.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground">
               No spells found matching your criteria.
@@ -305,20 +322,37 @@ export function SpellPageView() {
         ) : (
           <>
             {viewMode === 'grid' && (
-              <SpellGrid 
-                spells={sortedSpells} 
+              <VirtualSpellGrid 
+                spells={displayedItems} 
                 variant="default"
                 columns={3}
                 onSpellClick={handleSpellClick}
+                loadMore={loadMore}
+                hasMore={hasMore}
               />
             )}
             
             {viewMode === 'list' && (
-              <SpellList 
-                spells={sortedSpells} 
-                variant="default"
-                onSpellClick={handleSpellClick}
-              />
+              <div className="space-y-3">
+                <SpellList 
+                  spells={displayedItems} 
+                  variant="default"
+                  onSpellClick={handleSpellClick}
+                />
+                
+                {/* Load More Button for List View */}
+                {hasMore && (
+                  <div className="flex justify-center pt-4">
+                    <Button
+                      variant="outline"
+                      onClick={loadMore}
+                      className="w-full max-w-xs"
+                    >
+                      Load More ({paginationInfo.displayedItems} of {paginationInfo.totalItems})
+                    </Button>
+                  </div>
+                )}
+              </div>
             )}
           </>
         )}

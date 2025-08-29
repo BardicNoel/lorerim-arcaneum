@@ -16,4 +16,6 @@ export {
 
 export {
   RecipeAccordion
-} from './RecipeAccordion' 
+} from './RecipeAccordion'
+
+export { VirtualRecipeGrid } from './VirtualRecipeGrid' 

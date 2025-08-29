@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRecipeData, useRecipeFilters, useRecipeComputed } from '../adapters'
+import { useRecipePagination } from '../adapters/useRecipePagination'
 import { 
   RecipeGrid, 
   RecipeList, 
@@ -8,6 +9,7 @@ import {
   FoodMetaAnalysis,
   type ViewMode
 } from '../components'
+import { VirtualRecipeGrid } from '../components/composition/VirtualRecipeGrid'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import type { SearchCategory, SearchOption, SelectedTag } from '@/shared/components/playerCreation/types'
@@ -187,6 +189,20 @@ export function RecipePageView() {
     fuzzySearchQuery
   )
 
+  // Add pagination
+  const { 
+    displayedItems, 
+    loadMore, 
+    resetPagination, 
+    paginationInfo, 
+    hasMore 
+  } = useRecipePagination(filteredRecipes)
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    resetPagination()
+  }, [selectedTags, resetPagination])
+
   const handleRecipeClick = (recipe: RecipeWithComputed) => {
     // TODO: Implement recipe detail view or modal
   }
@@ -285,37 +301,54 @@ export function RecipePageView() {
         <TabsContent value="recipes">
           {/* Recipe Display */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">
-                Recipes ({filteredRecipes.length})
-              </h2>
-              <div className="text-sm text-muted-foreground">
-                Showing {filteredRecipes.length} of {recipes.length} recipes
-              </div>
-            </div>
+                         <div className="flex items-center justify-between">
+               <h2 className="text-xl font-semibold">
+                 Recipes ({paginationInfo.displayedItems} of {paginationInfo.totalItems})
+               </h2>
+               <div className="text-sm text-muted-foreground">
+                 Showing {paginationInfo.displayedItems} of {paginationInfo.totalItems} recipes
+               </div>
+             </div>
 
             {/* Dynamic Recipe Display based on view mode */}
             {viewMode === 'grid' && (
-              <RecipeGrid
-                recipes={filteredRecipes}
+              <VirtualRecipeGrid
+                recipes={displayedItems}
                 variant="default"
                 columns={3}
                 onRecipeClick={handleRecipeClick}
                 showEffects={true}
                 showIngredients={true}
                 getEffectComparisons={getEffectComparisons}
+                loadMore={loadMore}
+                hasMore={hasMore}
               />
             )}
 
             {viewMode === 'list' && (
-              <RecipeList
-                recipes={filteredRecipes}
-                variant="default"
-                onRecipeClick={handleRecipeClick}
-                showEffects={true}
-                showIngredients={true}
-                getEffectComparisons={getEffectComparisons}
-              />
+              <div className="space-y-3">
+                <RecipeList
+                  recipes={displayedItems}
+                  variant="default"
+                  onRecipeClick={handleRecipeClick}
+                  showEffects={true}
+                  showIngredients={true}
+                  getEffectComparisons={getEffectComparisons}
+                />
+                
+                {/* Load More Button for List View */}
+                {hasMore && (
+                  <div className="flex justify-center pt-4">
+                    <Button
+                      variant="outline"
+                      onClick={loadMore}
+                      className="w-full max-w-xs"
+                    >
+                      Load More ({paginationInfo.displayedItems} of {paginationInfo.totalItems})
+                    </Button>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </TabsContent>
