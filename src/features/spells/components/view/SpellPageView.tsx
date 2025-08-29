@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
+import { BuildPageShell } from '@/shared/components/playerCreation/BuildPageShell'
 import { useSpellData, useSpellState } from '../../adapters'
 import { useSpellPagination } from '../../adapters/useSpellPagination'
 import { SpellGrid, SpellList } from '../composition'
@@ -203,39 +204,31 @@ export function SpellPageView() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Search Interface */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-4">
-          <div className="flex-1">
-            {searchCategories.length > 0 ? (
-              <CustomMultiAutocompleteSearch
-                categories={searchCategories}
-                onSelect={handleTagSelect}
-                onCustomSearch={handleTagSelect}
-              />
-            ) : (
-              <div className="p-4 border border-dashed border-muted-foreground/20 rounded-lg text-center text-muted-foreground">
-                No search categories available. Spells loaded: {safeSpells.length}
-              </div>
-            )}
-          </div>
-          
-          {/* Sort Dropdown */}
-          <div className="relative">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
-            >
-              <option value="alphabetical">Sort: A-Z</option>
-              <option value="school">Sort: School</option>
-              <option value="level">Sort: Level</option>
-            </select>
-            <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-          </div>
-          
-          {/* View Mode Toggle */}
+    <BuildPageShell
+      title="Spells"
+      description={`Browse and search through ${safeSpells.length} spells. Filter by school, level, and effects to find the perfect spells for your character build.`}
+    >
+      {/* Search Bar Section */}
+      <div className="flex items-center gap-4 mb-4">
+        <div className="flex-1">
+          {searchCategories.length > 0 ? (
+            <CustomMultiAutocompleteSearch
+              categories={searchCategories}
+              onSelect={handleTagSelect}
+              onCustomSearch={handleTagSelect}
+            />
+          ) : (
+            <div className="p-4 border border-dashed border-muted-foreground/20 rounded-lg text-center text-muted-foreground">
+              No search categories available. Spells loaded: {safeSpells.length}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* View Controls Section */}
+      <div className="flex items-center justify-between mb-4">
+        {/* Left: View Mode Toggle */}
+        <div className="flex items-center gap-2">
           <div className="flex border rounded-lg p-1 bg-muted">
             <button
               onClick={() => setViewMode('grid')}
@@ -261,6 +254,21 @@ export function SpellPageView() {
             </button>
           </div>
         </div>
+
+        {/* Right: Sort Options */}
+        <div className="relative">
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as SortOption)}
+            className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
+          >
+            <option value="alphabetical">Sort: A-Z</option>
+            <option value="school">Sort: School</option>
+            <option value="level">Sort: Level</option>
+          </select>
+          <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+        </div>
+      </div>
         
         {/* Selected Tags */}
         {selectedTags.length > 0 && (
@@ -291,7 +299,6 @@ export function SpellPageView() {
             ))}
           </div>
         )}
-      </div>
 
       {/* Results Count */}
       <div className="text-sm text-muted-foreground">
@@ -354,6 +361,6 @@ export function SpellPageView() {
         isOpen={isDetailsOpen}
         onOpenChange={setIsDetailsOpen}
       />
-    </div>
+    </BuildPageShell>
   )
 }

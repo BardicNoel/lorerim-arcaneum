@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRecipeData, useRecipeFilters, useRecipeComputed } from '../adapters'
 import { useRecipePagination } from '../adapters/useRecipePagination'
+import { BuildPageShell } from '@/shared/components/playerCreation/BuildPageShell'
 import { 
   RecipeGrid, 
   RecipeList, 
@@ -230,19 +231,12 @@ export function RecipePageView() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Cookbook</h1>
-          <p className="text-muted-foreground">
-            Browse and search through {statistics.totalRecipes} recipes
-          </p>
-        </div>
-      </div>
-
-      {/* Search and View Controls */}
-      <div className="flex items-center gap-4">
+    <BuildPageShell
+      title="Cookbook"
+      description={`Browse and search through ${statistics.totalRecipes} recipes. Discover new combinations, filter by ingredients and effects, and find the perfect recipe for your character.`}
+    >
+      {/* Search Bar Section */}
+      <div className="flex items-center gap-4 mb-4">
         <div className="flex-1">
           <CustomMultiAutocompleteSearch
             categories={searchCategories}
@@ -250,12 +244,17 @@ export function RecipePageView() {
             onCustomSearch={handleTagSelect}
           />
         </div>
+              </div>
 
-        {/* View Mode Toggle */}
-        <ViewModeToggle
-          currentMode={viewMode}
-          onModeChange={setViewMode}
-        />
+      {/* View Controls Section */}
+      <div className="flex items-center justify-between mb-4">
+        {/* Left: View Mode Toggle */}
+        <div className="flex items-center gap-2">
+          <ViewModeToggle
+            currentMode={viewMode}
+            onModeChange={setViewMode}
+          />
+        </div>
       </div>
 
       {/* Selected Tags */}
@@ -363,6 +362,6 @@ export function RecipePageView() {
           <FoodMetaAnalysis recipes={recipes} />
         </TabsContent>
       </Tabs>
-    </div>
+    </BuildPageShell>
   )
 } 
