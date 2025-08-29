@@ -18,6 +18,7 @@ import { EnchantmentsDataInitializer } from '@/features/enchantments/components/
 import { useSearchParams } from 'react-router-dom'
 import type { EnchantmentWithComputed } from '@/features/enchantments/types'
 import { useEnchantmentsStore } from '@/shared/stores'
+import { useEnchantmentUniformFilters } from '@/features/enchantments/hooks/useEnchantmentUniformFilters'
 
 export default function EnchantmentsPage() {
   const [selectedEnchantment, setSelectedEnchantment] = useState<EnchantmentWithComputed | null>(null)
@@ -31,6 +32,9 @@ export default function EnchantmentsPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [sortBy, setSortBy] = useState<'name' | 'category' | 'targetType' | 'plugin' | 'itemCount'>('name')
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
+  
+  // Use the new filtering hook
+  const { filteredEnchantments } = useEnchantmentUniformFilters(enchantments, selectedTags)
 
   // Generate search categories for autocomplete
   const searchCategories = useMemo((): SearchCategory[] => {
@@ -38,52 +42,52 @@ export default function EnchantmentsPage() {
       return []
     }
 
-    // Extract unique values
-    const allCategories = [...new Set(enchantments.map(e => e.category))]
-    const allTargetTypes = [...new Set(enchantments.map(e => e.targetType))]
-    const allPlugins = [...new Set(enchantments.map(e => e.plugin))]
-    
+    // Extract unique armor restrictions from wornRestrictions
+    const allArmorRestrictions = [...new Set(
+      enchantments
+        .filter(e => e.isArmorEnchantment) // Only armor enchantments have restrictions
+        .flatMap(e => e.wornRestrictions)
+        .filter(Boolean) // Remove empty strings
+    )].sort()
+
     return [
       {
         id: 'fuzzy-search',
         name: 'Fuzzy Search',
         placeholder: 'Search by name, effects, or description...',
-        options: [], // No autocomplete options - this should be free-form text input
+        options: [], // No autocomplete options - free-form text input
       },
       {
         id: 'categories',
-        name: 'Categories',
-        placeholder: 'Filter by category...',
-        options: allCategories.map(category => ({
-          id: `category-${category}`,
-          label: category,
-          value: category,
-          category: 'Categories',
-          description: `${category} enchantments`,
-        })),
+        name: 'Categories', 
+        placeholder: 'Filter by what can be enchanted...',
+        options: [
+          {
+            id: 'category-weapon',
+            label: 'Weapon',
+            value: 'weapon',
+            category: 'Categories',
+            description: 'Weapon enchantments',
+          },
+          {
+            id: 'category-armor',
+            label: 'Armor',
+            value: 'armor', 
+            category: 'Categories',
+            description: 'Armor enchantments',
+          },
+        ],
       },
       {
-        id: 'target-types',
-        name: 'Target Types',
-        placeholder: 'Filter by target type...',
-        options: allTargetTypes.map(type => ({
-          id: `target-${type}`,
-          label: type,
-          value: type,
-          category: 'Target Types',
-          description: `${type} enchantments`,
-        })),
-      },
-      {
-        id: 'plugins',
-        name: 'Plugins',
-        placeholder: 'Filter by plugin...',
-        options: allPlugins.map(plugin => ({
-          id: `plugin-${plugin}`,
-          label: plugin,
-          value: plugin,
-          category: 'Plugins',
-          description: `Enchantments from ${plugin}`,
+        id: 'armor-restrictions',
+        name: 'Armor Restrictions',
+        placeholder: 'Filter by armor type restrictions...',
+        options: allArmorRestrictions.map(restriction => ({
+          id: `restriction-${restriction}`,
+          label: restriction,
+          value: restriction,
+          category: 'Armor Restrictions',
+          description: `Enchantments restricted to ${restriction}`,
         })),
       },
     ]
@@ -100,6 +104,7 @@ export default function EnchantmentsPage() {
         category: 'Fuzzy Search',
       }
     } else {
+      // Handle 'Categories', 'Armor Restrictions', and 'Fuzzy Search'
       tag = {
         id: `${optionOrTag.category}-${optionOrTag.id}`,
         label: optionOrTag.label,
@@ -240,15 +245,16 @@ export default function EnchantmentsPage() {
             </div>
           )}
 
-          {/* Enchantment Collection */}
-          <EnchantmentGridContainer
-            showFilters={false}
-            className="mt-4"
-            onEnchantmentClick={(enchantment) => {
-              setSelectedEnchantment(enchantment)
-              setIsSheetOpen(true)
-            }}
-          />
+                     {/* Enchantment Collection */}
+           <EnchantmentGridContainer
+             showFilters={false}
+             enchantments={filteredEnchantments}
+             className="mt-4"
+             onEnchantmentClick={(enchantment) => {
+               setSelectedEnchantment(enchantment)
+               setIsSheetOpen(true)
+             }}
+           />
         </TabsContent>
         
         <TabsContent value="statistics">

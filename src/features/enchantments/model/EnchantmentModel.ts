@@ -298,6 +298,42 @@ export class EnchantmentModel {
   }
 
   /**
+   * Filter enchantments by enchantment type (weapon vs armor)
+   */
+  static filterByEnchantmentType(enchantments: EnchantmentWithComputed[], type: 'weapon' | 'armor'): EnchantmentWithComputed[] {
+    return enchantments.filter(enchantment => {
+      if (type === 'weapon') {
+        return enchantment.isWeaponEnchantment
+      }
+      if (type === 'armor') {
+        return enchantment.isArmorEnchantment
+      }
+      return true
+    })
+  }
+
+  /**
+   * Filter enchantments by armor restriction
+   */
+  static filterByArmorRestriction(enchantments: EnchantmentWithComputed[], restriction: string): EnchantmentWithComputed[] {
+    return enchantments.filter(enchantment => 
+      enchantment.wornRestrictions.includes(restriction)
+    )
+  }
+
+  /**
+   * Filter enchantments by fuzzy search
+   */
+  static filterByFuzzySearch(enchantments: EnchantmentWithComputed[], searchTerm: string): EnchantmentWithComputed[] {
+    if (!searchTerm) return enchantments
+    
+    const lowerSearchTerm = searchTerm.toLowerCase()
+    return enchantments.filter(enchantment => 
+      enchantment.searchableText.toLowerCase().includes(lowerSearchTerm)
+    )
+  }
+
+  /**
    * Get statistics for enchantments
    */
   static getStatistics(enchantments: EnchantmentWithComputed[]) {

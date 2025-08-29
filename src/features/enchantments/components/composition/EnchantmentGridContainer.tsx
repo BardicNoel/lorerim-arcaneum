@@ -8,15 +8,20 @@ import type { EnchantmentWithComputed } from '../../types'
 interface EnchantmentGridContainerProps {
   className?: string
   showFilters?: boolean
+  enchantments?: EnchantmentWithComputed[] // Add this prop
   onEnchantmentClick?: (enchantment: EnchantmentWithComputed) => void
 }
 
 export const EnchantmentGridContainer: React.FC<EnchantmentGridContainerProps> = ({
   className,
   showFilters = true,
+  enchantments: propEnchantments, // Add this
   onEnchantmentClick
 }) => {
-  const { filteredEnchantments, totalCount, filteredCount } = useEnchantmentFilters()
+  const { filteredEnchantments: storeEnchantments, totalCount, filteredCount } = useEnchantmentFilters()
+  
+  // Use prop enchantments if provided, otherwise use store
+  const displayEnchantments = propEnchantments || storeEnchantments
   
   return (
     <div className={cn('space-y-6', className)}>
@@ -32,7 +37,7 @@ export const EnchantmentGridContainer: React.FC<EnchantmentGridContainerProps> =
       )}
       
       <EnchantmentGrid
-        enchantments={filteredEnchantments}
+        enchantments={displayEnchantments}
         loading={false}
         onEnchantmentClick={onEnchantmentClick}
       />
