@@ -244,7 +244,7 @@ export function RecipePageView() {
             onCustomSearch={handleTagSelect}
           />
         </div>
-              </div>
+      </div>
 
       {/* View Controls Section */}
       <div className="flex items-center justify-between mb-4">
@@ -300,14 +300,10 @@ export function RecipePageView() {
         <TabsContent value="recipes">
           {/* Recipe Display */}
           <div className="space-y-4">
-                         <div className="flex items-center justify-between">
-               <h2 className="text-xl font-semibold">
-                 Recipes ({paginationInfo.displayedItems} of {paginationInfo.totalItems})
-               </h2>
-               <div className="text-sm text-muted-foreground">
-                 Showing {paginationInfo.displayedItems} of {paginationInfo.totalItems} recipes
-               </div>
-             </div>
+            {/* Results Count */}
+            <div className="text-sm text-muted-foreground">
+              Showing {paginationInfo.displayedItems} of {paginationInfo.totalItems} recipes
+            </div>
 
             {/* Dynamic Recipe Display based on view mode */}
             {viewMode === 'grid' && (
