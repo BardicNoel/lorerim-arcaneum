@@ -57,10 +57,10 @@ export const EnchantmentGridCard = React.memo<EnchantmentGridCardProps>(({
           <div className="mb-3">
             <EffectsList
               effects={enchantment.effects}
-              title="Effects"
+              title=""
               compact={true}
               showDescriptions={true}
-              maxDisplay={2}
+              maxDisplay={enchantment.effects.length}
             />
           </div>
         )}

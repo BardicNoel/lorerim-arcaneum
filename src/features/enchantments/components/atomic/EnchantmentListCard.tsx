@@ -52,18 +52,18 @@ export const EnchantmentListCard = React.memo<EnchantmentListCardProps>(({
              </div>
            </div>
            
-           {/* Effects Preview */}
-           {enchantment.hasEffects && (
-             <div>
-               <EffectsList
-                 effects={enchantment.effects}
-                 title="Effects"
-                 compact={true}
-                 showDescriptions={true}
-                 maxDisplay={1}
-               />
-             </div>
-           )}
+                        {/* Effects Preview */}
+             {enchantment.hasEffects && (
+               <div>
+                 <EffectsList
+                   effects={enchantment.effects}
+                   title=""
+                   compact={true}
+                   showDescriptions={true}
+                   maxDisplay={enchantment.effects.length}
+                 />
+               </div>
+             )}
            
            {/* Bottom: Enchantment Target Badges */}
            <div className="flex flex-wrap gap-1">
