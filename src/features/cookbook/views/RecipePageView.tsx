@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useRecipeData, useRecipeFilters, useRecipeComputed } from '../adapters'
 import { useRecipePagination } from '../adapters/useRecipePagination'
 import { BuildPageShell } from '@/shared/components/playerCreation/BuildPageShell'
+import { BackToTopButton } from '@/shared/components/generic/BackToTopButton'
 import { 
   RecipeGrid, 
   RecipeList, 
@@ -358,6 +359,9 @@ export function RecipePageView() {
           <FoodMetaAnalysis recipes={recipes} />
         </TabsContent>
       </Tabs>
+      
+      {/* Back to Top Button */}
+      <BackToTopButton threshold={400} />
     </BuildPageShell>
   )
 } 

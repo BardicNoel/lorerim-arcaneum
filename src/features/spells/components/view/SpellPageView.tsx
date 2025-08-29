@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
 import { BuildPageShell } from '@/shared/components/playerCreation/BuildPageShell'
+import { BackToTopButton } from '@/shared/components/generic/BackToTopButton'
 import { useSpellData, useSpellState } from '../../adapters'
 import { useSpellPagination } from '../../adapters/useSpellPagination'
 import { SpellGrid, SpellList } from '../composition'
@@ -361,6 +362,9 @@ export function SpellPageView() {
         isOpen={isDetailsOpen}
         onOpenChange={setIsDetailsOpen}
       />
+      
+      {/* Back to Top Button */}
+      <BackToTopButton threshold={400} />
     </BuildPageShell>
   )
 }
