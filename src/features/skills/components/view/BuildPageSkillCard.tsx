@@ -42,7 +42,7 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
   const [perkTreeOpen, setPerkTreeOpen] = useState(false)
 
   const handleNavigateToSkillPage = () => {
-    navigate('/skills')
+    navigate('/build/perks')
   }
 
   const handleSkillClick = (skillId: string) => {
