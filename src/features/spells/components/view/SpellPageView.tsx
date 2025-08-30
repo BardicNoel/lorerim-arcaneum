@@ -1,17 +1,20 @@
-import { useState, useEffect, useMemo } from 'react'
+import { BackToTopButton, ViewModeToggle } from '@/shared/components/generic'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
-import { BuildPageShell } from '@/shared/components/playerCreation/BuildPageShell'
-import { BackToTopButton } from '@/shared/components/generic/BackToTopButton'
+import type {
+  SearchCategory,
+  SearchOption,
+  SelectedTag,
+} from '@/shared/components/playerCreation/types'
+import { Button } from '@/shared/ui/ui/button'
+import { ChevronDown } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSpellData, useSpellState } from '../../adapters'
 import { useSpellPagination } from '../../adapters/useSpellPagination'
-import { SpellGrid, SpellList } from '../composition'
+import { levelOrder } from '../../config/spellConfig'
+import type { SpellWithComputed } from '../../types'
+import { SpellList } from '../composition'
 import { VirtualSpellGrid } from '../composition/VirtualSpellGrid'
 import { SpellDetailsSheet } from '../SpellDetailsSheet'
-import type { SearchOption, SelectedTag, SearchCategory } from '@/shared/components/playerCreation/types'
-import type { SpellWithComputed } from '../../types'
-import { ChevronDown } from 'lucide-react'
-import { levelOrder } from '../../config/spellConfig'
-import { Button } from '@/shared/ui/ui/button'
 
 type SortOption = 'alphabetical' | 'school' | 'level'
 
@@ -19,23 +22,25 @@ export function SpellPageView() {
   // Adapters
   const { spells, loading, error } = useSpellData()
   const { viewMode, setViewMode } = useSpellState()
-  
+
   // Ensure spells is always an array
   const safeSpells = Array.isArray(spells) ? spells : []
-  
+
   // State for detail sheet
-  const [selectedSpell, setSelectedSpell] = useState<SpellWithComputed | null>(null)
+  const [selectedSpell, setSelectedSpell] = useState<SpellWithComputed | null>(
+    null
+  )
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
-  
+
   // State for sorting
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
-  
+
   // Handle spell click to open detail sheet
   const handleSpellClick = (spell: SpellWithComputed) => {
     setSelectedSpell(spell)
     setIsDetailsOpen(true)
   }
-  
+
   // Generate search categories directly in the component
   const searchCategories = useMemo((): SearchCategory[] => {
     if (safeSpells.length === 0) {
@@ -45,7 +50,7 @@ export function SpellPageView() {
     // Extract unique schools and levels
     const allSchools = [...new Set(safeSpells.map(spell => spell.school))]
     const allLevels = [...new Set(safeSpells.map(spell => spell.level))]
-    
+
     return [
       {
         id: 'keywords',
@@ -79,12 +84,10 @@ export function SpellPageView() {
       },
     ]
   }, [safeSpells])
-  
 
-  
   // Search setup
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
-  
+
   // Tag management
   const handleTagSelect = (optionOrTag: SearchOption | string) => {
     let tag: SelectedTag
@@ -103,24 +106,28 @@ export function SpellPageView() {
         category: optionOrTag.category,
       }
     }
-    
-    if (!selectedTags.some(t => t.value === tag.value && t.category === tag.category)) {
+
+    if (
+      !selectedTags.some(
+        t => t.value === tag.value && t.category === tag.category
+      )
+    ) {
       setSelectedTags(prev => [...prev, tag])
     }
   }
-  
+
   const handleTagRemove = (tagId: string) => {
     setSelectedTags(prev => prev.filter(tag => tag.id !== tagId))
   }
-  
+
   const handleClearAllTags = () => {
     setSelectedTags([])
   }
-  
+
   // Filtered results
   const filteredSpells = safeSpells.filter(spell => {
     if (selectedTags.length === 0) return true
-    
+
     return selectedTags.every(tag => {
       switch (tag.category) {
         case 'Magic Schools':
@@ -134,7 +141,7 @@ export function SpellPageView() {
             spell.name.toLowerCase().includes(searchText) ||
             spell.school.toLowerCase().includes(searchText) ||
             spell.level.toLowerCase().includes(searchText) ||
-            spell.effects.some(effect => 
+            spell.effects.some(effect =>
               effect.description.toLowerCase().includes(searchText)
             )
           )
@@ -166,13 +173,8 @@ export function SpellPageView() {
   }, [filteredSpells, sortBy])
 
   // Add pagination
-  const { 
-    displayedItems, 
-    loadMore, 
-    resetPagination, 
-    paginationInfo, 
-    hasMore 
-  } = useSpellPagination(sortedSpells)
+  const { displayedItems, loadMore, resetPagination, paginationInfo, hasMore } =
+    useSpellPagination(sortedSpells)
 
   // Reset pagination when filters change
   useEffect(() => {
@@ -194,7 +196,7 @@ export function SpellPageView() {
     return (
       <div className="text-center py-12">
         <p className="text-destructive mb-4">Error loading spells: {error}</p>
-        <button 
+        <button
           onClick={() => window.location.reload()}
           className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
         >
@@ -205,10 +207,7 @@ export function SpellPageView() {
   }
 
   return (
-    <BuildPageShell
-      title="Spells"
-      description={`Browse and search through ${safeSpells.length} spells. Filter by school, level, and effects to find the perfect spells for your character build.`}
-    >
+    <div>
       {/* Search Bar Section */}
       <div className="flex items-center gap-4 mb-4">
         <div className="flex-1">
@@ -229,38 +228,13 @@ export function SpellPageView() {
       {/* View Controls Section */}
       <div className="flex items-center justify-between mb-4">
         {/* Left: View Mode Toggle */}
-        <div className="flex items-center gap-2">
-          <div className="flex border rounded-lg p-1 bg-muted">
-            <button
-              onClick={() => setViewMode('grid')}
-              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-                viewMode === 'grid' 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-              }`}
-              title="Grid view"
-            >
-              Grid
-            </button>
-            <button
-              onClick={() => setViewMode('list')}
-              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-                viewMode === 'list' 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-              }`}
-              title="List view"
-            >
-              List
-            </button>
-          </div>
-        </div>
+        <ViewModeToggle viewMode={viewMode} onViewModeChange={setViewMode} />
 
         {/* Right: Sort Options */}
         <div className="relative">
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as SortOption)}
+            onChange={e => setSortBy(e.target.value as SortOption)}
             className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
           >
             <option value="alphabetical">Sort: A-Z</option>
@@ -270,36 +244,36 @@ export function SpellPageView() {
           <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
         </div>
       </div>
-        
-        {/* Selected Tags */}
-        {selectedTags.length > 0 && (
-          <div className="flex flex-wrap gap-2 items-center">
-            {/* Clear All Button */}
-            <button
-              onClick={handleClearAllTags}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors duration-200 border border-border/50 hover:border-border cursor-pointer group"
-              title="Clear all filters"
-            >
-              <span className="text-lg">×</span>
-              Clear All
-            </button>
 
-            {/* Individual Tags */}
-            {selectedTags.map(tag => (
-              <span
-                key={tag.id}
-                className="inline-flex items-center px-3 py-1.5 rounded-full bg-skyrim-gold/20 border border-skyrim-gold/30 text-sm font-medium text-skyrim-gold hover:bg-skyrim-gold/30 transition-colors duration-200 cursor-pointer group"
-                onClick={() => handleTagRemove(tag.id)}
-                title="Click to remove"
-              >
-                {tag.label}
-                <span className="ml-2 text-skyrim-gold/70 group-hover:text-skyrim-gold transition-colors duration-200">
-                  ×
-                </span>
+      {/* Selected Tags */}
+      {selectedTags.length > 0 && (
+        <div className="flex flex-wrap gap-2 items-center">
+          {/* Clear All Button */}
+          <button
+            onClick={handleClearAllTags}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors duration-200 border border-border/50 hover:border-border cursor-pointer group"
+            title="Clear all filters"
+          >
+            <span className="text-lg">×</span>
+            Clear All
+          </button>
+
+          {/* Individual Tags */}
+          {selectedTags.map(tag => (
+            <span
+              key={tag.id}
+              className="inline-flex items-center px-3 py-1.5 rounded-full bg-skyrim-gold/20 border border-skyrim-gold/30 text-sm font-medium text-skyrim-gold hover:bg-skyrim-gold/30 transition-colors duration-200 cursor-pointer group"
+              onClick={() => handleTagRemove(tag.id)}
+              title="Click to remove"
+            >
+              {tag.label}
+              <span className="ml-2 text-skyrim-gold/70 group-hover:text-skyrim-gold transition-colors duration-200">
+                ×
               </span>
-            ))}
-          </div>
-        )}
+            </span>
+          ))}
+        </div>
+      )}
 
       {/* Results Count */}
       <div className="text-sm text-muted-foreground">
@@ -320,8 +294,8 @@ export function SpellPageView() {
         ) : (
           <>
             {viewMode === 'grid' && (
-              <VirtualSpellGrid 
-                spells={displayedItems} 
+              <VirtualSpellGrid
+                spells={displayedItems}
                 variant="default"
                 columns={3}
                 onSpellClick={handleSpellClick}
@@ -329,15 +303,15 @@ export function SpellPageView() {
                 hasMore={hasMore}
               />
             )}
-            
+
             {viewMode === 'list' && (
               <div className="space-y-3">
-                <SpellList 
-                  spells={displayedItems} 
+                <SpellList
+                  spells={displayedItems}
                   variant="default"
                   onSpellClick={handleSpellClick}
                 />
-                
+
                 {/* Load More Button for List View */}
                 {hasMore && (
                   <div className="flex justify-center pt-4">
@@ -346,7 +320,8 @@ export function SpellPageView() {
                       onClick={loadMore}
                       className="w-full max-w-xs"
                     >
-                      Load More ({paginationInfo.displayedItems} of {paginationInfo.totalItems})
+                      Load More ({paginationInfo.displayedItems} of{' '}
+                      {paginationInfo.totalItems})
                     </Button>
                   </div>
                 )}
@@ -362,9 +337,9 @@ export function SpellPageView() {
         isOpen={isDetailsOpen}
         onOpenChange={setIsDetailsOpen}
       />
-      
+
       {/* Back to Top Button */}
       <BackToTopButton threshold={400} />
-    </BuildPageShell>
+    </div>
   )
 }

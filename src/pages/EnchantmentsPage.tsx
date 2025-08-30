@@ -1,43 +1,51 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import { H1, H2 } from '@/shared/ui/ui/typography'
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
-import { BackToTopButton } from '@/shared/components/generic/BackToTopButton'
+import {
+  EnchantmentDetailSheet,
+  EnchantmentGridContainer,
+} from '@/features/enchantments/components/composition'
+import { EnchantmentsDataInitializer } from '@/features/enchantments/components/EnchantmentsDataInitializer'
+import { StatisticsDashboard } from '@/features/enchantments/components/statistics/composition/StatisticsDashboard'
+import {
+  formatWornRestriction,
+  useEnchantmentUniformFilters,
+} from '@/features/enchantments/hooks/useEnchantmentUniformFilters'
+import type { EnchantmentWithComputed } from '@/features/enchantments/types'
+import { BackToTopButton, ViewModeToggle } from '@/shared/components/generic'
 import { BuildPageShell } from '@/shared/components/playerCreation/BuildPageShell'
 import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
-import type { SearchCategory, SearchOption, SelectedTag } from '@/shared/components/playerCreation/types'
-import { ChevronDown, Grid3X3, List } from 'lucide-react'
-import { Button } from '@/shared/ui/ui/button'
-import { X } from 'lucide-react'
-import { 
-  EnchantmentGridContainer,
-  EnchantmentDetailSheet
-} from '@/features/enchantments/components/composition'
-import { StatisticsDashboard } from '@/features/enchantments/components/statistics/composition/StatisticsDashboard'
-import { EnchantmentsDataInitializer } from '@/features/enchantments/components/EnchantmentsDataInitializer'
-import { useSearchParams } from 'react-router-dom'
-import type { EnchantmentWithComputed } from '@/features/enchantments/types'
+import type {
+  SearchCategory,
+  SearchOption,
+  SelectedTag,
+} from '@/shared/components/playerCreation/types'
 import { useEnchantmentsStore } from '@/shared/stores'
-import { useEnchantmentUniformFilters, formatWornRestriction } from '@/features/enchantments/hooks/useEnchantmentUniformFilters'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
+import { ChevronDown, X } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 export default function EnchantmentsPage() {
-  const [selectedEnchantment, setSelectedEnchantment] = useState<EnchantmentWithComputed | null>(null)
+  const [selectedEnchantment, setSelectedEnchantment] =
+    useState<EnchantmentWithComputed | null>(null)
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const [searchParams] = useSearchParams()
-  
+
   // Get enchantment data for count
   const { data: enchantments } = useEnchantmentsStore()
-  
+
   // View state
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([])
-  
+
   // Get store state for sorting
   const { viewState, setViewState } = useEnchantmentsStore()
   const { sortBy, sortOrder } = viewState
-  
+
   // Use the new filtering hook
-  const { filteredEnchantments } = useEnchantmentUniformFilters(enchantments, selectedTags)
+  const { filteredEnchantments } = useEnchantmentUniformFilters(
+    enchantments,
+    selectedTags
+  )
 
   // Generate search categories for autocomplete
   const searchCategories = useMemo((): SearchCategory[] => {
@@ -46,12 +54,14 @@ export default function EnchantmentsPage() {
     }
 
     // Extract unique armor restrictions from wornRestrictions
-    const allArmorRestrictions = [...new Set(
-      enchantments
-        .filter(e => e.isArmorEnchantment) // Only armor enchantments have restrictions
-        .flatMap(e => e.wornRestrictions)
-        .filter(Boolean) // Remove empty strings
-    )].sort()
+    const allArmorRestrictions = [
+      ...new Set(
+        enchantments
+          .filter(e => e.isArmorEnchantment) // Only armor enchantments have restrictions
+          .flatMap(e => e.wornRestrictions)
+          .filter(Boolean) // Remove empty strings
+      ),
+    ].sort()
 
     return [
       {
@@ -62,7 +72,7 @@ export default function EnchantmentsPage() {
       },
       {
         id: 'categories',
-        name: 'Categories', 
+        name: 'Categories',
         placeholder: 'Filter by what can be enchanted...',
         options: [
           {
@@ -75,24 +85,24 @@ export default function EnchantmentsPage() {
           {
             id: 'category-armor',
             label: 'Armor',
-            value: 'armor', 
+            value: 'armor',
             category: 'Categories',
             description: 'Armor enchantments',
           },
         ],
       },
-             {
-         id: 'armor-restrictions',
-         name: 'Armor Restrictions',
-         placeholder: 'Filter by armor type restrictions...',
-         options: allArmorRestrictions.map(restriction => ({
-           id: `restriction-${restriction}`,
-           label: formatWornRestriction(restriction),
-           value: restriction,
-           category: 'Armor Restrictions',
-           description: `Enchantments restricted to ${formatWornRestriction(restriction)}`,
-         })),
-       },
+      {
+        id: 'armor-restrictions',
+        name: 'Armor Restrictions',
+        placeholder: 'Filter by armor type restrictions...',
+        options: allArmorRestrictions.map(restriction => ({
+          id: `restriction-${restriction}`,
+          label: formatWornRestriction(restriction),
+          value: restriction,
+          category: 'Armor Restrictions',
+          description: `Enchantments restricted to ${formatWornRestriction(restriction)}`,
+        })),
+      },
     ]
   }, [enchantments])
 
@@ -115,8 +125,12 @@ export default function EnchantmentsPage() {
         category: optionOrTag.category,
       }
     }
-    
-    if (!selectedTags.some(t => t.value === tag.value && t.category === tag.category)) {
+
+    if (
+      !selectedTags.some(
+        t => t.value === tag.value && t.category === tag.category
+      )
+    ) {
       setSelectedTags(prev => [...prev, tag])
     }
   }
@@ -144,7 +158,7 @@ export default function EnchantmentsPage() {
       description={`Explore the vast collection of ${enchantments.length} enchantments available in the world. Discover powerful effects, find items that carry these enchantments, and understand the restrictions that govern their use.`}
     >
       <EnchantmentsDataInitializer />
-      
+
       {/* Detail Sheet */}
       <EnchantmentDetailSheet
         enchantment={selectedEnchantment}
@@ -158,7 +172,7 @@ export default function EnchantmentsPage() {
           <TabsTrigger value="enchantments">Enchantments</TabsTrigger>
           <TabsTrigger value="statistics">Statistics</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="enchantments">
           {/* Search Bar Section */}
           <div className="flex items-center gap-4 mb-4">
@@ -173,43 +187,29 @@ export default function EnchantmentsPage() {
 
           {/* View Controls Section */}
           <div className="flex items-center justify-between mb-4">
-                         {/* Left: View Mode Toggle */}
-             <div className="flex items-center gap-2">
-               <Button
-                 variant={viewMode === 'grid' ? 'default' : 'outline'}
-                 size="sm"
-                 onClick={() => setViewMode('grid')}
-                 className="flex items-center gap-2"
-               >
-                 <Grid3X3 className="h-4 w-4" />
-                 Grid
-               </Button>
-               <Button
-                 variant={viewMode === 'list' ? 'default' : 'outline'}
-                 size="sm"
-                 onClick={() => setViewMode('list')}
-                 className="flex items-center gap-2"
-               >
-                 <List className="h-4 w-4" />
-                 List
-               </Button>
-             </div>
+            {/* Left: View Mode Toggle */}
+            <ViewModeToggle
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+            />
 
-                         {/* Right: Sort Options */}
-             <div className="relative">
-               <select
-                 value={sortBy}
-                 onChange={(e) => setViewState({ sortBy: e.target.value as any })}
-                 className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
-               >
-                 <option value="name">Sort: A-Z</option>
-                 <option value="targetType">Sort: Ench Target</option>
-                 <option value="wornRestrictions">Sort: Worn Restrictions</option>
-               </select>
-               <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-             </div>
+            {/* Right: Sort Options */}
+            <div className="relative">
+              <select
+                value={sortBy}
+                onChange={e => setViewState({ sortBy: e.target.value as any })}
+                className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
+              >
+                <option value="name">Sort: A-Z</option>
+                <option value="targetType">Sort: Ench Target</option>
+                <option value="wornRestrictions">
+                  Sort: Worn Restrictions
+                </option>
+              </select>
+              <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+            </div>
           </div>
-            
+
           {/* Selected Tags */}
           {selectedTags.length > 0 && (
             <div className="flex flex-wrap gap-2 items-center">
@@ -240,19 +240,19 @@ export default function EnchantmentsPage() {
             </div>
           )}
 
-                     {/* Enchantment Collection */}
-           <EnchantmentGridContainer
-             showFilters={false}
-             enchantments={filteredEnchantments}
-             viewMode={viewMode}
-             className="mt-4"
-             onEnchantmentClick={(enchantment) => {
-               setSelectedEnchantment(enchantment)
-               setIsSheetOpen(true)
-             }}
-           />
+          {/* Enchantment Collection */}
+          <EnchantmentGridContainer
+            showFilters={false}
+            enchantments={filteredEnchantments}
+            viewMode={viewMode}
+            className="mt-4"
+            onEnchantmentClick={enchantment => {
+              setSelectedEnchantment(enchantment)
+              setIsSheetOpen(true)
+            }}
+          />
         </TabsContent>
-        
+
         <TabsContent value="statistics">
           {/* Statistics Dashboard */}
           <Card className="border-skyrim-gold/20">
@@ -265,11 +265,11 @@ export default function EnchantmentsPage() {
               <StatisticsDashboard />
             </CardContent>
           </Card>
-                 </TabsContent>
-       </Tabs>
-     
-     {/* Back to Top Button */}
-     <BackToTopButton threshold={400} />
-   </BuildPageShell>
- )
+        </TabsContent>
+      </Tabs>
+
+      {/* Back to Top Button */}
+      <BackToTopButton threshold={400} />
+    </BuildPageShell>
+  )
 }
