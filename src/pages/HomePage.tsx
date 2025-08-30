@@ -8,7 +8,20 @@ import {
   CardTitle,
 } from '@/shared/ui/ui/card'
 import { H1, Lead } from '@/shared/ui/ui/typography'
-import { ArrowRight, FileText, Search, Sparkles, User, ExternalLink, Settings, Users, Sword, RotateCcw, BookOpen, UserCheck } from 'lucide-react'
+import {
+  ArrowRight,
+  BookOpen,
+  ExternalLink,
+  FileText,
+  RotateCcw,
+  Search,
+  Settings,
+  Sparkles,
+  Sword,
+  User,
+  UserCheck,
+  Users,
+} from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 export default function HomePage() {
@@ -21,27 +34,30 @@ export default function HomePage() {
   const externalTools = [
     {
       name: 'GigaPlanner',
-      description: 'Advanced build planner with detailed skill trees and optimization',
+      description:
+        'Advanced build planner with detailed skill trees and optimization',
       url: 'https://multidyls.github.io/GigaPlanner',
       icon: <Settings className="h-5 w-5 text-primary" />,
       category: 'Build Planning',
-      author: 'Multidyls'
+      author: 'Multidyls',
     },
     {
       name: 'Character Builder GPT',
-      description: 'AI-powered character creation assistant with personalized build recommendations',
+      description:
+        'AI-powered character creation assistant with personalized build recommendations',
       url: 'https://chatgpt.com/g/g-68462f6313d48191bab174806a049ca4-lorerim-builds-wizard-v2?model=gpt-4o',
       icon: <Users className="h-5 w-5 text-primary" />,
       category: 'AI Assistant',
-      author: 'Zoldyg'
+      author: 'Zoldyg',
     },
     {
       name: 'Alchemy Calculator',
-      description: 'Comprehensive alchemy crafting and ingredient database with detailed recipes',
+      description:
+        'Comprehensive alchemy crafting and ingredient database with detailed recipes',
       url: 'https://docs.google.com/spreadsheets/d/1zUVCaRlqHX_sER-kJR-ZLIAfsFbTj9FQCO-hMfnp4XA/edit?gid=2066962651#gid=2066962651',
       icon: <Sparkles className="h-5 w-5 text-primary" />,
       category: 'Crafting',
-      author: 'Rudy'
+      author: 'Rudy',
     },
     {
       name: 'Spell Sheet Generator',
@@ -49,24 +65,26 @@ export default function HomePage() {
       url: 'https://docs.google.com/spreadsheets/d/1fvYHRfwAprpgEPaXyuteEx0ud9S572noYnlpVq6cJFs/edit?gid=915313506#gid=915313506',
       icon: <BookOpen className="h-5 w-5 text-primary" />,
       category: 'Spells',
-      author: 'ImmatureTurtles'
+      author: 'ImmatureTurtles',
     },
     {
       name: 'Weapons Discussion Hub',
-      description: 'Deep dive into weapon mechanics, damage calculations, and optimization strategies',
+      description:
+        'Deep dive into weapon mechanics, damage calculations, and optimization strategies',
       url: 'https://discord.com/channels/622647066719420427/1382033558754955354',
       icon: <Sword className="h-5 w-5 text-primary" />,
       category: 'Combat',
-      author: 'Deo'
+      author: 'Deo',
     },
     {
       name: 'Spin Wheel Tool',
-      description: 'Random build generator and challenge creator for fun playthroughs',
-      url: 'https://spinthewheel.app/YXGCPykcqJ',
+      description:
+        'Random build generator and challenge creator for fun playthroughs',
+      url: 'https://sorathesaint.github.io/Wheel-of-classes-for-LoreRim-Arcaneum',
       icon: <RotateCcw className="h-5 w-5 text-primary" />,
       category: 'Fun',
-      author: 'Sora the Saint'
-    }
+      author: 'Sora the Saint',
+    },
   ]
 
   const handleExternalLink = (url: string) => {
@@ -85,12 +103,13 @@ export default function HomePage() {
               Lorerim Arcaneum
             </H1>
           </div>
-                     <Lead className="text-xl md:text-2xl text-muted-foreground">
-             A growing collection of Lorerim tools and resources. Build characters, explore mechanics, and contribute to the community.
-           </Lead>
-           <p className="text-sm text-muted-foreground mt-2">
-             Big thanks to Biggie Boss
-           </p>
+          <Lead className="text-xl md:text-2xl text-muted-foreground">
+            A growing collection of Lorerim tools and resources. Build
+            characters, explore mechanics, and contribute to the community.
+          </Lead>
+          <p className="text-sm text-muted-foreground mt-2">
+            Big thanks to Biggie Boss
+          </p>
         </div>
 
         {/* Character Build Status */}
@@ -134,17 +153,17 @@ export default function HomePage() {
             </Card>
 
             <div className="grid grid-cols-2 gap-3">
-                             <Card
-                 className="hover:shadow-md transition-shadow cursor-pointer bg-card"
-                 onClick={() => navigate('/build/race')}
-               >
-                 <CardContent className="p-4 text-center">
-                   <UserCheck className="h-8 w-8 mx-auto mb-2 text-primary" />
-                   <div className="font-medium text-sm text-card-foreground">
-                     Races
-                   </div>
-                 </CardContent>
-               </Card>
+              <Card
+                className="hover:shadow-md transition-shadow cursor-pointer bg-card"
+                onClick={() => navigate('/build/race')}
+              >
+                <CardContent className="p-4 text-center">
+                  <UserCheck className="h-8 w-8 mx-auto mb-2 text-primary" />
+                  <div className="font-medium text-sm text-card-foreground">
+                    Races
+                  </div>
+                </CardContent>
+              </Card>
 
               <Card
                 className="hover:shadow-md transition-shadow cursor-pointer bg-card"
@@ -257,17 +276,18 @@ export default function HomePage() {
           </div>
         </div>
 
-                 {/* Favorite Tools Section */}
-         <div className="space-y-6">
-           <div className="text-center">
-             <h2 className="text-2xl font-bold flex items-center justify-center gap-2 mb-2 text-foreground">
-                               <Settings className="h-6 w-6 text-primary" />
-               Favorite Tools
-             </h2>
-             <p className="text-muted-foreground">
-               Discover the best external tools and resources for Lorerim theorycrafting
-             </p>
-           </div>
+        {/* Favorite Tools Section */}
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold flex items-center justify-center gap-2 mb-2 text-foreground">
+              <Settings className="h-6 w-6 text-primary" />
+              Favorite Tools
+            </h2>
+            <p className="text-muted-foreground">
+              Discover the best external tools and resources for Lorerim
+              theorycrafting
+            </p>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {externalTools.map((tool, index) => (
@@ -303,18 +323,16 @@ export default function HomePage() {
               </Card>
             ))}
           </div>
+        </div>
 
-                     
-         </div>
- 
-         {/* Footer Section */}
-         <div className="text-left pt-8 border-t border-border">
-           <p className="text-muted-foreground">
-             Crafted by Bardic (Jeremy) Noel, with gratitude to Biggie Boss and the Lorerim community
-           </p>
-         </div>
-         
-       </div>
-     </div>
-   )
- }
+        {/* Footer Section */}
+        <div className="text-left pt-8 border-t border-border">
+          <p className="text-muted-foreground">
+            Crafted by Bardic (Jeremy) Noel, with gratitude to Biggie Boss and
+            the Lorerim community
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
