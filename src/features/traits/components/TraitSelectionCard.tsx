@@ -1,5 +1,6 @@
-import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
+import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { SelectionCardShell } from '@/shared/components/ui'
+import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { X } from 'lucide-react'
@@ -7,7 +8,6 @@ import { useNavigate } from 'react-router-dom'
 import { useTraits } from '../hooks/useTraits'
 import type { Trait } from '../types'
 import { TraitAutocomplete } from './'
-import { FormattedText } from '@/shared/components/generic/FormattedText'
 
 interface TraitSelectionCardProps {
   className?: string
@@ -45,7 +45,7 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
   }
 
   const handleNavigateToTraitPage = () => {
-    navigate('/traits')
+    navigate('/build/traits')
   }
 
   // Filter out already selected traits from autocomplete options

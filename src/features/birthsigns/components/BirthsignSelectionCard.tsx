@@ -31,7 +31,7 @@ export function BirthsignSelectionCard({
   }
 
   const handleNavigateToBirthsignPage = () => {
-    navigate('/birth-signs')
+    navigate('/build/birth-signs')
   }
 
   // If no birthsign is selected, show the autocomplete
