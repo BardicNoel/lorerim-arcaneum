@@ -13,3 +13,4 @@ export {
 export { ResponsivePanel } from './ResponsivePanel'
 export { GenericShareButton } from './ShareButton'
 export { GenericSummaryCard, createBuildSummaryItems } from './SummaryCard'
+export { ViewModeToggle, type ViewMode } from './ViewModeToggle'

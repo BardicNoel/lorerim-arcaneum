@@ -10,4 +10,4 @@ export function SpellsPage() {
       <SpellPageView />
     </BuildPageShell>
   )
-} 
+}

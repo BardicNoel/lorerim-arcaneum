@@ -10,4 +10,4 @@ export function CookbookPage() {
       <RecipePageView />
     </BuildPageShell>
   )
-} 
+}
