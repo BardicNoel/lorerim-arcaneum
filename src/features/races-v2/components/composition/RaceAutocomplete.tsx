@@ -110,8 +110,12 @@ export function RaceAutocomplete({
           <ChevronDown className="h-4 w-4 opacity-50" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="bottom" className="h-[100vh] max-h-[100vh] p-0">
-        <SheetHeader className="p-4 border-b">
+      <SheetContent
+        side="bottom"
+        className="h-[85vh] max-h-[85vh] p-0 flex flex-col"
+        onOpenAutoFocus={e => e.preventDefault()}
+      >
+        <SheetHeader className="p-4 border-b flex-shrink-0">
           <SheetTitle>Select Race</SheetTitle>
           <SheetDescription>
             Choose your character's race from the options below
@@ -119,7 +123,7 @@ export function RaceAutocomplete({
         </SheetHeader>
 
         {/* Search Input */}
-        <div className="p-4 border-b">
+        <div className="p-4 border-b flex-shrink-0">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -127,7 +131,6 @@ export function RaceAutocomplete({
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               className="pl-10"
-              autoFocus
             />
             {searchQuery && (
               <Button
@@ -143,24 +146,26 @@ export function RaceAutocomplete({
         </div>
 
         {/* Race List */}
-        <div className="flex-1 overflow-y-auto overscroll-contain p-4">
+        <div className="flex-1 overflow-y-auto overscroll-contain">
           {autocompleteOptions.length === 0 ? (
-            <div className="text-center py-8">
+            <div className="text-center py-8 px-4">
               <p className="text-muted-foreground">No races found</p>
               <p className="text-sm text-muted-foreground mt-1">
                 Try adjusting your search
               </p>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="p-4 space-y-3">
               {autocompleteOptions.map(option => (
                 <Button
                   key={option.id}
                   variant="ghost"
-                  className="w-full justify-start h-auto p-4 text-left"
+                  className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
                   onClick={() => handleRaceSelect(option)}
                 >
-                  {renderRaceOption(option, false)}
+                  <div className="w-full">
+                    {renderRaceOption(option, false)}
+                  </div>
                 </Button>
               ))}
             </div>
