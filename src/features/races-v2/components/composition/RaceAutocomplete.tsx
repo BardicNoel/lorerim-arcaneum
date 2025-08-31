@@ -17,7 +17,7 @@ import {
   SheetTrigger,
 } from '@/shared/ui/ui/sheet'
 import { ChevronDown, Search, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useFuzzySearch } from '../../hooks/useFuzzySearch'
 import type { Race } from '../../types'
 import { RaceAvatar } from '../atomic'
@@ -38,6 +38,7 @@ export function RaceAutocomplete({
   const [searchQuery, setSearchQuery] = useState('')
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const isMobile = useMediaQuery('(max-width: 640px)')
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   const { filteredRaces } = useFuzzySearch(races, searchQuery)
 
@@ -73,6 +74,14 @@ export function RaceAutocomplete({
       setIsDrawerOpen(false)
       setSearchQuery('')
     }
+  }
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value)
+    // Maintain focus on the input
+    setTimeout(() => {
+      searchInputRef.current?.focus()
+    }, 0)
   }
 
   // Custom renderer for race options
@@ -127,9 +136,10 @@ export function RaceAutocomplete({
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
+              ref={searchInputRef}
               placeholder="Search races..."
               value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
+              onChange={handleSearchChange}
               className="pl-10"
             />
             {searchQuery && (
