@@ -1,6 +1,6 @@
-import { useMemo } from 'react'
-import Fuse from 'fuse.js'
 import type { Trait } from '@/shared/data/schemas'
+import Fuse from 'fuse.js'
+import { useMemo } from 'react'
 
 interface SearchableTrait {
   id: string
@@ -23,9 +23,10 @@ export function useFuzzySearch(traits: Trait[], searchQuery: string) {
       name: trait.name,
       description: trait.description || '',
       category: trait.category || '',
-      effects: trait.effects?.map(
-        effect => `${effect.type} ${effect.value || ''}`
-      ).filter(Boolean) || [],
+      effects:
+        trait.effects
+          ?.map(effect => `${effect.type} ${effect.value || ''}`)
+          .filter(Boolean) || [],
       tags: trait.tags || [],
       originalTrait: trait,
     }))
@@ -56,38 +57,29 @@ export function useFuzzySearch(traits: Trait[], searchQuery: string) {
   // Perform search
   const searchResults = useMemo(() => {
     const trimmedQuery = searchQuery.trim().toLowerCase()
-    
-    console.log('🔍 [Fuzzy Search Debug] Search query:', trimmedQuery)
-    console.log('🔍 [Fuzzy Search Debug] Total traits to search:', searchableTraits.length)
-    
-    // If no search query, return empty results
+
+    // If no search query, return all traits
     if (!trimmedQuery) {
-      console.log('🔍 [Fuzzy Search Debug] No search query, returning empty results')
-      return []
+      return searchableTraits.map((trait, index) => ({
+        item: trait,
+        refIndex: index,
+        score: 0,
+        matches: [],
+      }))
     }
 
     // Run Fuse.js search
-    console.log('🔍 [Fuzzy Search Debug] Running Fuse.js search...')
     const results = fuse.search(trimmedQuery)
-    console.log('🔍 [Fuzzy Search Debug] Raw Fuse.js results:', results.map(r => ({
-      name: r.item.name,
-      score: r.score,
-      matches: r.matches
-    })))
 
     // Apply prefix boost for better relevance
     const prefix = trimmedQuery.slice(0, Math.min(3, trimmedQuery.length))
     const adjustedResults = results.map(result => {
       const text = result.item.description.toLowerCase()
       const hasPrefix = new RegExp(`\\b${prefix}`).test(text)
-      const adjustedScore = hasPrefix ? (result.score ?? 1) * 0.85 : result.score
-      
-      console.log('🔍 [Fuzzy Search Debug] Score adjustment for', result.item.name, ':', {
-        originalScore: result.score,
-        hasPrefix,
-        adjustedScore
-      })
-      
+      const adjustedScore = hasPrefix
+        ? (result.score ?? 1) * 0.85
+        : result.score
+
       return { ...result, score: adjustedScore }
     })
 
@@ -95,11 +87,6 @@ export function useFuzzySearch(traits: Trait[], searchQuery: string) {
     const filteredResults = adjustedResults
       .filter(r => (r.score ?? 1) <= 0.6) // More permissive threshold
       .sort((a, b) => (a.score ?? 1) - (b.score ?? 1))
-
-    console.log('🔍 [Fuzzy Search Debug] Final filtered results:', filteredResults.map(r => ({
-      name: r.item.name,
-      score: r.score
-    })))
 
     return filteredResults
   }, [fuse, searchQuery, searchableTraits])

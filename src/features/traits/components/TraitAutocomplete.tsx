@@ -3,10 +3,10 @@ import {
   type AutocompleteOption,
 } from '@/shared/components/generic'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
+import type { Trait } from '@/shared/data/schemas'
 import { Badge } from '@/shared/ui/ui/badge'
 import { useMemo, useState } from 'react'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
-import type { Trait } from '../types'
 
 interface TraitAutocompleteProps {
   traits: Trait[]
@@ -29,10 +29,10 @@ export function TraitAutocomplete({
   // Convert filtered traits to AutocompleteOption format
   const autocompleteOptions: AutocompleteOption[] = useMemo(() => {
     return filteredTraits.map(trait => ({
-      id: trait.edid,
+      id: trait.edid || trait.name,
       label: trait.name,
-      description: trait.description,
-      category: trait.category,
+      description: trait.description || '',
+      category: trait.category || '',
       badge: trait.category && (
         <Badge variant="outline" className="text-xs">
           {trait.category}
@@ -40,13 +40,15 @@ export function TraitAutocomplete({
       ),
       metadata: {
         originalTrait: trait,
-        effectsCount: trait.effects.length,
+        effectsCount: trait.effects?.length || 0,
       },
     }))
   }, [filteredTraits])
 
   const handleTraitSelect = (option: AutocompleteOption) => {
-    const selectedTrait = traits.find(trait => trait.edid === option.id)
+    const selectedTrait = traits.find(
+      trait => (trait.edid || trait.name) === option.id
+    )
     if (selectedTrait) {
       onSelect(selectedTrait)
     }
