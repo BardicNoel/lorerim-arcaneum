@@ -66,7 +66,7 @@ export function ResponsivePanel({
   const contentClassName = cn(
     'flex flex-col',
     isMobile
-      ? 'inset-0 top-0 left-0 right-0 bottom-0 h-[100dvh] max-h-[100dvh] w-[100vw] p-0 rounded-none border-0 overflow-hidden'
+      ? 'inset-0 top-0 left-0 right-0 bottom-0 h-[100dvh] max-h-[100dvh] w-[100vw] p-0 rounded-none border-0 overflow-y-auto'
       : 'w-[450px] sm:w-[800px] lg:w-[800px] sm:!max-w-[800px] lg:!max-w-[800px] p-0 overflow-y-auto bg-background',
     className
   )
@@ -81,7 +81,7 @@ export function ResponsivePanel({
           <div
             className={cn(
               'sticky top-0 z-10 bg-background border-b',
-              isMobile ? 'p-4' : 'p-4'
+              isMobile ? 'p-4 pr-16' : 'p-4' // Add right padding on mobile to avoid close button overlap
             )}
           >
             <SheetHeader className="p-0">
