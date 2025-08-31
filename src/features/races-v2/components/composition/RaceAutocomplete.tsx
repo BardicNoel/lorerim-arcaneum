@@ -4,7 +4,19 @@ import {
   type AutocompleteOption,
 } from '@/shared/components/generic'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 import { Badge } from '@/shared/ui/ui/badge'
+import { Button } from '@/shared/ui/ui/button'
+import { Input } from '@/shared/ui/ui/input'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/shared/ui/ui/sheet'
+import { ChevronDown, Search, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useFuzzySearch } from '../../hooks/useFuzzySearch'
 import type { Race } from '../../types'
@@ -24,6 +36,9 @@ export function RaceAutocomplete({
   className = '',
 }: RaceAutocompleteProps) {
   const [searchQuery, setSearchQuery] = useState('')
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const isMobile = useMediaQuery('(max-width: 640px)')
+
   const { filteredRaces } = useFuzzySearch(races, searchQuery)
 
   // Convert filtered races to AutocompleteOption format
@@ -55,6 +70,8 @@ export function RaceAutocomplete({
     const selectedRace = races.find(race => race.edid === option.id)
     if (selectedRace) {
       onSelect(selectedRace)
+      setIsDrawerOpen(false)
+      setSearchQuery('')
     }
   }
 
@@ -77,7 +94,84 @@ export function RaceAutocomplete({
     </div>
   )
 
-  return (
+  // Mobile drawer content
+  const MobileRaceDrawer = () => (
+    <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+      <SheetTrigger asChild>
+        <Button
+          variant="outline"
+          className={cn(
+            'w-full justify-between text-left font-normal',
+            !searchQuery && 'text-muted-foreground',
+            className
+          )}
+        >
+          <span>{searchQuery || placeholder}</span>
+          <ChevronDown className="h-4 w-4 opacity-50" />
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="bottom" className="h-[100vh] max-h-[100vh] p-0">
+        <SheetHeader className="p-4 border-b">
+          <SheetTitle>Select Race</SheetTitle>
+          <SheetDescription>
+            Choose your character's race from the options below
+          </SheetDescription>
+        </SheetHeader>
+
+        {/* Search Input */}
+        <div className="p-4 border-b">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search races..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              className="pl-10"
+              autoFocus
+            />
+            {searchQuery && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
+              >
+                <X className="h-3 w-3" />
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Race List */}
+        <div className="flex-1 overflow-y-auto overscroll-contain p-4">
+          {autocompleteOptions.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">No races found</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Try adjusting your search
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {autocompleteOptions.map(option => (
+                <Button
+                  key={option.id}
+                  variant="ghost"
+                  className="w-full justify-start h-auto p-4 text-left"
+                  onClick={() => handleRaceSelect(option)}
+                >
+                  {renderRaceOption(option, false)}
+                </Button>
+              ))}
+            </div>
+          )}
+        </div>
+      </SheetContent>
+    </Sheet>
+  )
+
+  // Desktop autocomplete
+  const DesktopRaceAutocomplete = () => (
     <GenericAutocomplete
       options={autocompleteOptions}
       onSelect={handleRaceSelect}
@@ -89,4 +183,6 @@ export function RaceAutocomplete({
       onSearchQueryChange={setSearchQuery}
     />
   )
+
+  return isMobile ? <MobileRaceDrawer /> : <DesktopRaceAutocomplete />
 }
