@@ -37,7 +37,9 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
     .filter(Boolean) as Trait[]
 
   const handleTraitSelect = (trait: Trait, slotType: 'regular' | 'bonus') => {
-    addTraitToSlot(trait.edid, slotType)
+    if (trait.edid) {
+      addTraitToSlot(trait.edid, slotType)
+    }
   }
 
   const handleTraitRemove = (traitId: string) => {
@@ -51,6 +53,7 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
   // Filter out already selected traits from autocomplete options
   const availableTraits = allTraits.filter(
     trait =>
+      trait.edid &&
       !build.traits.regular.includes(trait.edid) &&
       !build.traits.bonus.includes(trait.edid)
   )
