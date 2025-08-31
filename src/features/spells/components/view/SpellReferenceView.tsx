@@ -1,27 +1,30 @@
-import { useState } from 'react'
+import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
+import type {
+  SearchOption,
+  SelectedTag,
+} from '@/shared/components/playerCreation/types'
 import { Button } from '@/shared/ui/ui/button'
 import { Separator } from '@/shared/ui/ui/separator'
-import { 
-  Grid3X3, 
-  List, 
-  ChevronDown,
-  X
-} from 'lucide-react'
-import { CustomMultiAutocompleteSearch } from '@/shared/components/playerCreation/CustomMultiAutocompleteSearch'
-import { useSpellData, useSpellState, useSpellFilters, useSpellComputed } from '../../adapters'
+import { ChevronDown, Grid3X3, List, X } from 'lucide-react'
+import { useState } from 'react'
+import {
+  useSpellComputed,
+  useSpellData,
+  useSpellFilters,
+  useSpellState,
+} from '../../adapters'
 import { SpellGrid, SpellList } from '../composition'
-import type { SearchCategory, SearchOption, SelectedTag } from '@/shared/components/playerCreation/types'
 
 export function SpellReferenceView() {
   // Data adapters
   const { spells, loading, error } = useSpellData()
-  
+
   // State adapters
   const { viewMode, setViewMode } = useSpellState()
-  
+
   // State for tracking expanded cards
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set())
-  
+
   // Toggle expanded state for a card
   const toggleCardExpansion = (spellId: string) => {
     setExpandedCards(prev => {
@@ -34,7 +37,7 @@ export function SpellReferenceView() {
       return newSet
     })
   }
-  
+
   // Filter adapters
   const {
     filteredSpells,
@@ -48,7 +51,7 @@ export function SpellReferenceView() {
     sortBy,
     sortOrder,
     setSortBy,
-    toggleSortOrder
+    toggleSortOrder,
   } = useSpellFilters(spells)
 
   // Computed adapters
@@ -72,12 +75,16 @@ export function SpellReferenceView() {
         category: optionOrTag.category,
       }
     }
-    
-    if (!selectedTags.some(t => t.value === tag.value && t.category === tag.category)) {
+
+    if (
+      !selectedTags.some(
+        t => t.value === tag.value && t.category === tag.category
+      )
+    ) {
       addTagFilter(tag)
     }
   }
-  
+
   const handleTagRemove = (tagId: string) => {
     removeTagFilter(tagId)
   }
@@ -142,12 +149,22 @@ export function SpellReferenceView() {
               onCustomSearch={handleTagSelect}
             />
           </div>
-          
+
           {/* Sort Dropdown */}
           <div className="relative">
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as 'name' | 'school' | 'level' | 'magickaCost' | 'magnitude' | 'duration')}
+              onChange={e =>
+                setSortBy(
+                  e.target.value as
+                    | 'name'
+                    | 'school'
+                    | 'level'
+                    | 'magickaCost'
+                    | 'magnitude'
+                    | 'duration'
+                )
+              }
               className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
             >
               <option value="name">Sort: A-Z</option>
@@ -159,7 +176,7 @@ export function SpellReferenceView() {
             </select>
             <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
           </div>
-          
+
           {/* View Mode Toggle */}
           <div className="flex border rounded-lg p-1 bg-muted">
             <Button
@@ -227,18 +244,18 @@ export function SpellReferenceView() {
       {/* Spell Display */}
       <div>
         {viewMode === 'grid' && (
-          <SpellGrid 
-            spells={filteredSpells} 
+          <SpellGrid
+            spells={filteredSpells}
             variant="default"
-            columns={3}
+            columns={4}
             expandedCards={expandedCards}
             onToggleExpansion={toggleCardExpansion}
           />
         )}
-        
+
         {viewMode === 'list' && (
-          <SpellList 
-            spells={filteredSpells} 
+          <SpellList
+            spells={filteredSpells}
             variant="default"
             expandedCards={expandedCards}
             onToggleExpansion={toggleCardExpansion}
@@ -247,4 +264,4 @@ export function SpellReferenceView() {
       </div>
     </div>
   )
-} 
+}

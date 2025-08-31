@@ -297,7 +297,7 @@ export function SpellPageView() {
               <VirtualSpellGrid
                 spells={displayedItems}
                 variant="default"
-                columns={3}
+                maxColumnWidth={400}
                 onSpellClick={handleSpellClick}
                 loadMore={loadMore}
                 hasMore={hasMore}

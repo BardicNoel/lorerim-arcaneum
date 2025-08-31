@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { SpellCard } from './SpellCard'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { SpellWithComputed } from '../../types'
+import { SpellCard } from './SpellCard'
 
 export interface VirtualSpellGridProps {
   spells: SpellWithComputed[]
@@ -31,10 +31,16 @@ export function VirtualSpellGrid({
 
   // Calculate responsive columns for uniform grid
   const getResponsiveColumns = useCallback(() => {
+    // If maxColumnWidth is provided, use it for dynamic calculation
     if (maxColumnWidth && containerWidth > 0) {
       return Math.max(1, Math.floor(containerWidth / maxColumnWidth))
     }
-    return columns
+
+    // Otherwise, use standard responsive breakpoints
+    if (containerWidth < 768) return 1 // Mobile
+    if (containerWidth < 1024) return 2 // Tablet
+    if (containerWidth < 1280) return 3 // Small desktop
+    return 4 // Large desktop
   }, [columns, maxColumnWidth, containerWidth])
 
   // Handle resize to recalculate layout
@@ -63,9 +69,9 @@ export function VirtualSpellGrid({
           }
         })
       },
-      { 
+      {
         threshold: 0.1,
-        rootMargin: '0px 0px 4000px 0px'
+        rootMargin: '0px 0px 4000px 0px',
       }
     )
 
@@ -74,12 +80,12 @@ export function VirtualSpellGrid({
     return () => observer.disconnect()
   }, [loadMore, hasMore])
 
-    // Simple CSS Grid layout
+  // Simple CSS Grid layout
   const renderGrid = useCallback(() => {
     const currentColumns = getResponsiveColumns()
-    
+
     return (
-      <div 
+      <div
         className="w-full"
         style={{
           display: 'grid',
@@ -87,7 +93,7 @@ export function VirtualSpellGrid({
           gap: `${gap}px`,
         }}
       >
-        {spells.map((spell) => (
+        {spells.map(spell => (
           <SpellCard
             key={spell.name}
             spell={spell}
@@ -111,10 +117,10 @@ export function VirtualSpellGrid({
   return (
     <div ref={containerRef} className={className}>
       {renderGrid()}
-      
+
       {/* Load More Trigger */}
       {hasMore && loadMore && (
-        <div 
+        <div
           ref={loadMoreTriggerRef}
           className="w-full h-16 mt-16"
           style={{ minHeight: '64px' }}
