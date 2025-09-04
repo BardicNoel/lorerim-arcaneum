@@ -4,6 +4,7 @@ import {
   calculateTotalSkillLevel,
 } from '@/features/skills/utils/skillLevels'
 import { useCharacterStore } from '@/shared/stores/characterStore'
+import { validateBuild } from '../utils/validateBuild'
 
 export function useCharacterBuild() {
   // Specific selectors for better reactivity
@@ -326,7 +327,7 @@ export function useCharacterBuild() {
 
   // Clear all selections
   const clearBuild = () => {
-    updateBuild({
+    const clearedBuild = {
       name: '',
       notes: '',
       race: null,
@@ -346,7 +347,8 @@ export function useCharacterBuild() {
       },
       skillLevels: {},
       destinyPath: [],
-    })
+    }
+    updateBuild(validateBuild(clearedBuild))
   }
 
   // Build summary for display

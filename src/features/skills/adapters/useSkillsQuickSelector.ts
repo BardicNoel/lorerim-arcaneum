@@ -32,6 +32,23 @@ export function useSkillsQuickSelector() {
 
   // Transform skills for quick selector
   const quickSelectorSkills = useMemo(() => {
+    // Guard against undefined build.skills during initial render
+    if (!build?.skills?.major || !build?.skills?.minor) {
+      return skills.map(
+        skill =>
+          ({
+            ...skill,
+            isMajor: false,
+            isMinor: false,
+            selectedPerksCount: 0,
+            startingLevel: 0,
+            minLevel: 0,
+            canAssignMajor: true,
+            canAssignMinor: true,
+          }) as QuickSelectorSkill
+      )
+    }
+
     return skills.map(skill => {
       const isMajor = build.skills.major.includes(skill.id)
       const isMinor = build.skills.minor.includes(skill.id)
@@ -48,7 +65,7 @@ export function useSkillsQuickSelector() {
         build.perks?.ranks || {}
       )
 
-      // Assignment limits
+      // Assignment limits - now safely accessed with null checks
       const canAssignMajor = !isMajor && build.skills.major.length < 3
       const canAssignMinor = !isMinor && build.skills.minor.length < 6
 
