@@ -1,4 +1,5 @@
 import { Z_INDEX } from '@/lib/constants'
+import { ErrorBoundary } from '@/shared/components/ErrorBoundary'
 import { FloatingBuildButton } from '@/shared/components/FloatingBuildButton'
 import { useURLSync } from '@/shared/hooks/useURLSync'
 import { Sidebar } from '@/shared/ui/sidebar/Sidebar'
@@ -331,7 +332,9 @@ function AppContent() {
             />
           </div>
         )}
-        <main className={`flex-1 transition-all duration-300 ease-in-out min-w-0`}>
+        <main
+          className={`flex-1 transition-all duration-300 ease-in-out min-w-0`}
+        >
           <AppRouter />
         </main>
       </div>
@@ -343,7 +346,9 @@ function AppContent() {
 function App() {
   return (
     <HashRouter>
-      <AppContent />
+      <ErrorBoundary>
+        <AppContent />
+      </ErrorBoundary>
     </HashRouter>
   )
 }
