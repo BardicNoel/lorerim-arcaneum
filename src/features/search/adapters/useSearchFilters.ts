@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { useSearchData } from './useSearchData'
 import { useSearchState } from '../hooks/useSearchState'
+import { useSearchData } from './useSearchData'
 
 export function useSearchFilters() {
   const { search, getAvailableFilters, isReady, getSearchableItems } =
@@ -13,13 +13,13 @@ export function useSearchFilters() {
   }, [getSearchableItems])
 
   const searchResults = useMemo(() => {
-    if (!isReady) return []
+    if (!isReady || !activeFilters) return []
 
     // If no filters are applied, show all items
     const hasFilters =
-      activeFilters.tags.length > 0 ||
-      activeFilters.types.length > 0 ||
-      activeFilters.categories.length > 0
+      (activeFilters.tags?.length || 0) > 0 ||
+      (activeFilters.types?.length || 0) > 0 ||
+      (activeFilters.categories?.length || 0) > 0
 
     if (!hasFilters) {
       // Return all searchable items when no filters are applied
@@ -34,11 +34,11 @@ export function useSearchFilters() {
     }
 
     // Create a search query from tags using OR operator for inclusive fuzzy search
-    const searchQuery = activeFilters.tags.join(' | ')
+    const searchQuery = (activeFilters.tags || []).join(' | ')
 
     // Create filters without the search terms (tags will be handled separately)
     const searchFilters = {
-      ...activeFilters,
+      ...(activeFilters || {}),
       tags: [], // Remove tags from filters since they're used for search query
     }
 
@@ -46,17 +46,16 @@ export function useSearchFilters() {
     // to ensure the search function processes the filters
     const finalQuery = searchQuery || '*'
 
-
-
     return search(finalQuery, searchFilters)
   }, [isReady, search, activeFilters, getSearchableItems])
 
   const availableFilters = useMemo(() => {
-    if (!isReady) return { 
-      types: [], 
-      categories: [], 
-      tags: []
-    }
+    if (!isReady)
+      return {
+        types: [],
+        categories: [],
+        tags: [],
+      }
     return getAvailableFilters()
   }, [isReady, getAvailableFilters, searchableItemsCount])
 
