@@ -1,9 +1,9 @@
 import type { Birthsign } from '@/features/birthsigns/types'
 import type { RecipeWithComputed } from '@/features/cookbook/types'
 import type { DestinyNode } from '@/features/destiny/types'
+import type { EnchantmentWithComputed } from '@/features/enchantments/types'
 import type { PerkReferenceNode } from '@/features/perk-references/types'
 import type { SpellWithComputed } from '@/features/spells/types'
-import type { EnchantmentWithComputed } from '@/features/enchantments/types'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
 import type { Race, Religion, Skill, Trait } from '@/shared/data/schemas'
@@ -249,14 +249,14 @@ export function transformSpellsToSearchable(
     name: spell.name,
     description: spell.description,
     category: spell.school,
-    tags: spell.tags,
+    tags: spell.tags || [],
     searchableText: [
       spell.name,
       spell.description || '',
       spell.school || '',
       spell.level || '',
       spell.tome || '',
-      ...spell.tags,
+      ...(spell.tags || []),
       ...spell.effects.map(effect => effect.name),
       ...spell.effects.map(effect => effect.description),
       spell.isAreaSpell ? 'area spell' : '',
@@ -420,7 +420,9 @@ export function transformEnchantmentsToSearchable(
     ],
     searchableText: [
       enchantment.name,
-      ...enchantment.effects.map(effect => `${effect.name} ${effect.description}`),
+      ...enchantment.effects.map(
+        effect => `${effect.name} ${effect.description}`
+      ),
       ...enchantment.foundOnItems.map(item => `${item.name} ${item.type}`),
       enchantment.category,
       enchantment.plugin,
