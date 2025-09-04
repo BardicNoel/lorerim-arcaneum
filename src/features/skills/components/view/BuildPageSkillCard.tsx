@@ -114,10 +114,12 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
   const drawerSkills: DetailSkill[] = allSkills.map(skill => {
     const selectedPerks = getSkillPerks(skill.id)
     const skillLevel = getSkillLevel(skill.id)
-    const isMajor = build.skills.major.includes(skill.id)
-    const isMinor = build.skills.minor.includes(skill.id)
-    const canAssignMajor = !isMajor && build.skills.major.length < 3
-    const canAssignMinor = !isMinor && build.skills.minor.length < 6
+
+    // Guard against undefined build.skills during initial render
+    const isMajor = build?.skills?.major?.includes(skill.id) || false
+    const isMinor = build?.skills?.minor?.includes(skill.id) || false
+    const canAssignMajor = !isMajor && (build?.skills?.major?.length || 0) < 3
+    const canAssignMinor = !isMinor && (build?.skills?.minor?.length || 0) < 6
 
     return {
       ...skill,

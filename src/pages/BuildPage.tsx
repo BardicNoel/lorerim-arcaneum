@@ -15,7 +15,6 @@ import type { BuildState } from '@/shared/types/build'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 // Import extracted components
 import {
@@ -37,8 +36,6 @@ export function BuildPage() {
   const [showConfirm, setShowConfirm] = useState(false)
   const [showGigaPlannerTools, setShowGigaPlannerTools] = useState(false)
   const traitLimits = useTraitLimits()
-
-  const navigate = useNavigate()
 
   // Handle GigaPlanner import
   const handleGigaPlannerImport = (

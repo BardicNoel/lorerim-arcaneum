@@ -4,6 +4,7 @@ import {
   calculateTotalSkillLevel,
 } from '@/features/skills/utils/skillLevels'
 import { useCharacterStore } from '@/shared/stores/characterStore'
+import { validateBuild } from '../utils/validateBuild'
 
 export function useCharacterBuild() {
   // Specific selectors for better reactivity
@@ -24,9 +25,9 @@ export function useCharacterBuild() {
     const currentMajorSkills = majorSkills ?? []
     const currentMinorSkills = minorSkills ?? []
 
-    if (!hasMajorSkill(skillId) && currentMajorSkills.length < 3) {
+    if (!hasMajorSkill(skillId) && currentMajorSkills?.length < 3) {
       // Remove from minor skills first (mutual exclusion)
-      const newMinorSkills = currentMinorSkills.filter(id => id !== skillId)
+      const newMinorSkills = currentMinorSkills?.filter(id => id !== skillId)
 
       const newSkills = {
         major: [...currentMajorSkills, skillId],
@@ -41,7 +42,7 @@ export function useCharacterBuild() {
   const removeMajorSkill = (skillId: string) => {
     const currentMajorSkills = majorSkills ?? []
     const currentMinorSkills = minorSkills ?? []
-    const newMajorSkills = currentMajorSkills.filter(id => id !== skillId)
+    const newMajorSkills = currentMajorSkills?.filter(id => id !== skillId)
     updateBuild({
       skills: {
         major: newMajorSkills,
@@ -54,9 +55,9 @@ export function useCharacterBuild() {
     const currentMajorSkills = majorSkills ?? []
     const currentMinorSkills = minorSkills ?? []
 
-    if (!hasMinorSkill(skillId) && currentMinorSkills.length < 6) {
+    if (!hasMinorSkill(skillId) && currentMinorSkills?.length < 6) {
       // Remove from major skills first (mutual exclusion)
-      const newMajorSkills = currentMajorSkills.filter(id => id !== skillId)
+      const newMajorSkills = currentMajorSkills?.filter(id => id !== skillId)
 
       updateBuild({
         skills: {
@@ -326,7 +327,7 @@ export function useCharacterBuild() {
 
   // Clear all selections
   const clearBuild = () => {
-    updateBuild({
+    const clearedBuild = {
       name: '',
       notes: '',
       race: null,
@@ -346,7 +347,8 @@ export function useCharacterBuild() {
       },
       skillLevels: {},
       destinyPath: [],
-    })
+    }
+    updateBuild(validateBuild(clearedBuild))
   }
 
   // Build summary for display

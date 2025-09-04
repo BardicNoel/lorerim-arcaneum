@@ -1,6 +1,7 @@
 import type { AttributeType } from '@/features/attributes/types'
 import { DEFAULT_BUILD, type BuildState } from '@/shared/types/build'
 import { create } from 'zustand'
+import { validateBuild } from '../utils/validateBuild'
 
 interface CharacterStore {
   build: BuildState
@@ -19,22 +20,35 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
   updateBuild: updates => {
     console.log('📥 [Character Store] Received build updates:', updates)
     if (updates.destinyPath) {
-      console.log('🎯 [Character Store] Destiny path update detected:', updates.destinyPath)
+      console.log(
+        '🎯 [Character Store] Destiny path update detected:',
+        updates.destinyPath
+      )
     }
     set(state => {
-      console.log('🔄 [Character Store] Current state before update:', state.build)
+      console.log(
+        '🔄 [Character Store] Current state before update:',
+        state.build
+      )
       const newBuild = { ...state.build, ...updates }
       console.log('📊 [Character Store] Previous build state:', state.build)
       console.log('📊 [Character Store] New build state:', newBuild)
       if (newBuild.destinyPath) {
-        console.log('🎯 [Character Store] New destiny path in build:', newBuild.destinyPath)
+        console.log(
+          '🎯 [Character Store] New destiny path in build:',
+          newBuild.destinyPath
+        )
       }
-      console.log('🔄 [Character Store] About to return new state:', { build: newBuild })
-      return { build: newBuild }
+      // Validate the final build state to ensure data integrity
+      const validatedBuild = validateBuild(newBuild)
+      console.log('🔄 [Character Store] About to return validated state:', {
+        build: validatedBuild,
+      })
+      return { build: validatedBuild }
     })
     console.log('✅ [Character Store] Build state updated successfully')
   },
-  setBuild: build => set({ build }),
+  setBuild: build => set({ build: validateBuild(build) }),
   resetBuild: () => set({ build: DEFAULT_BUILD }),
 
   // NEW: Attribute assignment methods
@@ -58,16 +72,15 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
       currentAssignments[level] = attribute
       currentTotals[attribute] += 5
 
-      return {
-        build: {
-          ...state.build,
-          attributeAssignments: {
-            ...state.build.attributeAssignments,
-            ...currentTotals,
-            assignments: currentAssignments,
-          },
+      const newBuild = {
+        ...state.build,
+        attributeAssignments: {
+          ...state.build.attributeAssignments,
+          ...currentTotals,
+          assignments: currentAssignments,
         },
       }
+      return { build: validateBuild(newBuild) }
     })
   },
 
@@ -84,22 +97,21 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
         delete currentAssignments[level]
       }
 
-      return {
-        build: {
-          ...state.build,
-          attributeAssignments: {
-            ...state.build.attributeAssignments,
-            ...currentTotals,
-            assignments: currentAssignments,
-          },
+      const newBuild = {
+        ...state.build,
+        attributeAssignments: {
+          ...state.build.attributeAssignments,
+          ...currentTotals,
+          assignments: currentAssignments,
         },
       }
+      return { build: validateBuild(newBuild) }
     })
   },
 
   clearAllAttributeAssignments: () => {
-    set(state => ({
-      build: {
+    set(state => {
+      const newBuild = {
         ...state.build,
         attributeAssignments: {
           health: 0,
@@ -108,19 +120,21 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
           level: state.build.attributeAssignments.level,
           assignments: {},
         },
-      },
-    }))
+      }
+      return { build: validateBuild(newBuild) }
+    })
   },
 
   updateAttributeLevel: (level: number) => {
-    set(state => ({
-      build: {
+    set(state => {
+      const newBuild = {
         ...state.build,
         attributeAssignments: {
           ...state.build.attributeAssignments,
           level: Math.max(1, level),
         },
-      },
-    }))
+      }
+      return { build: validateBuild(newBuild) }
+    })
   },
 }))
