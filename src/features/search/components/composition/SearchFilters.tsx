@@ -37,21 +37,23 @@ export function SearchFilters({
   className,
 }: SearchFiltersProps) {
   const hasActiveFilters =
-    activeFilters.types.length > 0 ||
-    activeFilters.categories.length > 0 ||
-    activeFilters.tags.length > 0
+    (activeFilters?.types?.length || 0) > 0 ||
+    (activeFilters?.categories?.length || 0) > 0 ||
+    (activeFilters?.tags?.length || 0) > 0
 
   const handleTypeToggle = (type: string) => {
-    const newTypes = activeFilters.types.includes(type)
-      ? activeFilters.types.filter(t => t !== type)
-      : [...activeFilters.types, type]
+    const currentTypes = activeFilters?.types || []
+    const newTypes = currentTypes.includes(type)
+      ? currentTypes.filter(t => t !== type)
+      : [...currentTypes, type]
     onFiltersChange({ types: newTypes })
   }
 
   const handleCategoryToggle = (category: string) => {
-    const newCategories = activeFilters.categories.includes(category)
-      ? activeFilters.categories.filter(c => c !== category)
-      : [...activeFilters.categories, category]
+    const currentCategories = activeFilters?.categories || []
+    const newCategories = currentCategories.includes(category)
+      ? currentCategories.filter(c => c !== category)
+      : [...currentCategories, category]
     onFiltersChange({ categories: newCategories })
   }
 
@@ -118,7 +120,9 @@ export function SearchFilters({
             <Button
               key={type.value}
               variant={
-                activeFilters.types.includes(type.value) ? 'default' : 'outline'
+                (activeFilters?.types || []).includes(type.value)
+                  ? 'default'
+                  : 'outline'
               }
               size="sm"
               onClick={() => handleTypeToggle(type.value)}
@@ -130,8 +134,6 @@ export function SearchFilters({
           ))}
         </div>
       </div>
-
-
 
       {/* Selected Tags */}
       {selectedTags.length > 0 && (

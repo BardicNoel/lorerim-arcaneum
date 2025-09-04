@@ -109,14 +109,16 @@ export class SearchDataProvider {
       const { usePerkTreesStore } = await import(
         '@/shared/stores/perkTreesStore'
       )
-      const { useRecipesStore } = await import(
-        '@/shared/stores/recipesStore'
-      )
+      const { useRecipesStore } = await import('@/shared/stores/recipesStore')
 
       // Import spell data provider
-      const { SpellDataProvider } = await import('@/features/spells/model/SpellDataProvider')
+      const { SpellDataProvider } = await import(
+        '@/features/spells/model/SpellDataProvider'
+      )
       // Import enchantment data provider
-      const { EnchantmentDataProvider } = await import('@/features/enchantments/model/EnchantmentDataProvider')
+      const { EnchantmentDataProvider } = await import(
+        '@/features/enchantments/model/EnchantmentDataProvider'
+      )
 
       // Get data from all stores
       const skills = useSkillsStore.getState().data
@@ -228,17 +230,18 @@ export class SearchDataProvider {
     }
 
     // Check if this is an extended search query (contains operators)
-    const isExtendedSearch = query.includes(' | ') || query.includes(' & ') || query.includes('!')
-    
+    const isExtendedSearch =
+      query.includes(' | ') || query.includes(' & ') || query.includes('!')
+
     // First, look for exact matches to boost them (skip for extended search)
-    const exactMatches = isExtendedSearch ? [] : this.allSearchableItems.filter(item => 
-      item.name.toLowerCase() === query.toLowerCase()
-    )
+    const exactMatches = isExtendedSearch
+      ? []
+      : this.allSearchableItems.filter(
+          item => item.name.toLowerCase() === query.toLowerCase()
+        )
 
     // Perform fuzzy search on all items
     const fuseResults = this.searchIndex.search(query)
-
-
 
     // Combine exact matches (perfect score) with fuzzy results, avoiding duplicates
     const exactMatchIds = new Set(exactMatches.map(item => item.id))
@@ -246,7 +249,7 @@ export class SearchDataProvider {
       // Exact matches first with perfect score
       ...exactMatches.map(item => ({ item, score: 0, matches: [] })),
       // Fuzzy results that aren't already exact matches
-      ...fuseResults.filter(result => !exactMatchIds.has(result.item.id))
+      ...fuseResults.filter(result => !exactMatchIds.has(result.item.id)),
     ]
 
     // Apply filters to search results
@@ -259,8 +262,6 @@ export class SearchDataProvider {
         return this.applyFilters([item], filters).length > 0
       })
       const afterFilterCount = filteredResults.length
-      
-
     }
 
     // Transform results to SearchResult format
@@ -280,23 +281,26 @@ export class SearchDataProvider {
   ): SearchableItem[] {
     return items.filter(item => {
       // Filter by types
-      if (filters.types.length > 0 && !filters.types.includes(item.type)) {
+      if (
+        (filters.types?.length || 0) > 0 &&
+        !filters.types?.includes(item.type)
+      ) {
         return false
       }
 
       // Filter by categories
       if (
-        filters.categories.length > 0 &&
+        (filters.categories?.length || 0) > 0 &&
         item.category &&
-        !filters.categories.includes(item.category)
+        !filters.categories?.includes(item.category)
       ) {
         return false
       }
 
       // Filter by tags - check if any of the filter tags match any of the item's tags
-      if (filters.tags.length > 0) {
+      if ((filters.tags?.length || 0) > 0) {
         const itemTags = item.tags.map(tag => tag.toLowerCase())
-        const filterTags = filters.tags.map(tag => tag.toLowerCase())
+        const filterTags = (filters.tags || []).map(tag => tag.toLowerCase())
 
         // Check if any filter tag matches any item tag
         const hasMatchingTag = filterTags.some(filterTag =>
@@ -356,12 +360,13 @@ export class SearchDataProvider {
 
       if (item.type === 'spell' && filters.spellLevels?.length) {
         const spellData = item.originalData
-        if (!spellData.level || !filters.spellLevels.includes(spellData.level)) {
+        if (
+          !spellData.level ||
+          !filters.spellLevels.includes(spellData.level)
+        ) {
           return false
         }
       }
-
-
 
       return true
     })
