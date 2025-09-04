@@ -1,9 +1,18 @@
 import { Z_INDEX } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 import type { BlessingData } from '@/shared/stores/blessingsStore'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { Input } from '@/shared/ui/ui/input'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/shared/ui/ui/sheet'
 import { ChevronDown, Search, X, Zap } from 'lucide-react'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 
@@ -27,8 +36,11 @@ export function BlessingAutocomplete({
   const [isOpen, setIsOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [activeIndex, setActiveIndex] = useState(-1)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const isMobile = useMediaQuery('(max-width: 640px)')
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   // Filter blessings based on search query
   const filteredBlessings = useMemo(() => {
@@ -79,6 +91,7 @@ export function BlessingAutocomplete({
     setSearchQuery('')
     setIsOpen(false)
     setActiveIndex(-1)
+    setIsDrawerOpen(false)
   }
 
   const handleClear = () => {
@@ -113,6 +126,14 @@ export function BlessingAutocomplete({
   const clearSearch = () => {
     setSearchQuery('')
     inputRef.current?.focus()
+  }
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value)
+    // Maintain focus on the input
+    setTimeout(() => {
+      searchInputRef.current?.focus()
+    }, 0)
   }
 
   const getDeityTypeBadge = (type: string) => {
@@ -151,7 +172,129 @@ export function BlessingAutocomplete({
     return `${minutes}m`
   }
 
-  return (
+  // Mobile drawer content
+  const MobileBlessingDrawer = () => (
+    <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+      <SheetTrigger asChild>
+        <Button
+          variant="outline"
+          className={cn(
+            'w-full justify-between text-left font-normal',
+            !searchQuery && 'text-muted-foreground',
+            className
+          )}
+          disabled={disabled}
+        >
+          <span>{searchQuery || placeholder}</span>
+          <ChevronDown className="h-4 w-4 opacity-50" />
+        </Button>
+      </SheetTrigger>
+      <SheetContent
+        side="bottom"
+        className="h-[85vh] max-h-[85vh] p-0 flex flex-col"
+        onOpenAutoFocus={e => e.preventDefault()}
+      >
+        <SheetHeader className="p-4 border-b flex-shrink-0">
+          <SheetTitle>Select Blessing</SheetTitle>
+          <SheetDescription>
+            Choose your favorite blessing from the options below
+          </SheetDescription>
+        </SheetHeader>
+
+        {/* Search Input */}
+        <div className="p-4 border-b flex-shrink-0">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              ref={searchInputRef}
+              placeholder="Search blessings..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="pl-10"
+            />
+            {searchQuery && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
+              >
+                <X className="h-3 w-3" />
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Blessing List */}
+        <div className="flex-1 overflow-y-auto overscroll-contain">
+          {filteredBlessings.length === 0 ? (
+            <div className="text-center py-8 px-4">
+              <p className="text-muted-foreground">No blessings found</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Try adjusting your search
+              </p>
+            </div>
+          ) : (
+            <div className="p-4 space-y-3">
+              {filteredBlessings.map(blessing => (
+                <Button
+                  key={blessing.id}
+                  variant="ghost"
+                  className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+                  onClick={() => handleBlessingSelect(blessing.id)}
+                >
+                  <div className="w-full">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-medium">{blessing.name}</span>
+                      {getDeityTypeBadge(blessing.type)}
+                    </div>
+                    {blessing.blessingName && (
+                      <p className="text-sm font-medium text-primary mb-1">
+                        {blessing.blessingName}
+                      </p>
+                    )}
+                    {blessing.effects.length > 0 && (
+                      <div className="space-y-1">
+                        {blessing.effects
+                          .slice(0, 2)
+                          .map((effect, effectIndex) => (
+                            <div
+                              key={effectIndex}
+                              className="flex items-center gap-2 text-sm text-muted-foreground"
+                            >
+                              <Zap className="h-3 w-3 text-skyrim-gold" />
+                              <span className="font-medium">{effect.name}</span>
+                              {effect.magnitude > 0 && (
+                                <span className="text-xs">
+                                  +{effect.magnitude}
+                                </span>
+                              )}
+                              {effect.duration > 0 && (
+                                <span className="text-xs">
+                                  ({formatDuration(effect.duration)})
+                                </span>
+                              )}
+                            </div>
+                          ))}
+                        {blessing.effects.length > 2 && (
+                          <span className="text-xs text-muted-foreground">
+                            +{blessing.effects.length - 2} more effects
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </Button>
+              ))}
+            </div>
+          )}
+        </div>
+      </SheetContent>
+    </Sheet>
+  )
+
+  // Desktop dropdown
+  const DesktopBlessingDropdown = () => (
     <div ref={containerRef} className={cn('relative', className)}>
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -262,4 +405,6 @@ export function BlessingAutocomplete({
       )}
     </div>
   )
+
+  return isMobile ? <MobileBlessingDrawer /> : <DesktopBlessingDropdown />
 }
