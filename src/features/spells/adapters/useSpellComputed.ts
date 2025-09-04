@@ -1,7 +1,7 @@
+import type { SearchCategory } from '@/shared/components/playerCreation/types'
 import { useMemo } from 'react'
 import { SpellModel } from '../model/SpellModel'
-import type { SpellWithComputed, SpellComparison } from '../types'
-import type { SearchCategory, SearchOption } from '@/shared/components/playerCreation/types'
+import type { SpellComparison, SpellWithComputed } from '../types'
 
 interface UseSpellComputedOptions {
   enableStatistics?: boolean
@@ -23,17 +23,17 @@ interface UseSpellComputedReturn {
     levels: string[]
     tags: string[]
   }
-  
+
   // Search categories (new)
   searchCategories: SearchCategory[]
   categoriesWithCounts: Record<string, number>
   tagsWithCounts: Record<string, number>
-  
+
   // Grouped data
   spellsBySchool: Record<string, SpellWithComputed[]>
   spellsByLevel: Record<string, SpellWithComputed[]>
   spellsByTag: Record<string, SpellWithComputed[]>
-  
+
   // Computed lists
   freeSpells: SpellWithComputed[]
   areaSpells: SpellWithComputed[]
@@ -41,9 +41,12 @@ interface UseSpellComputedReturn {
   instantSpells: SpellWithComputed[]
   highCostSpells: SpellWithComputed[]
   lowCostSpells: SpellWithComputed[]
-  
+
   // Utility functions
-  compareSpells: (spell1: SpellWithComputed, spell2: SpellWithComputed) => SpellComparison
+  compareSpells: (
+    spell1: SpellWithComputed,
+    spell2: SpellWithComputed
+  ) => SpellComparison
   getSpellEfficiency: (spell: SpellWithComputed) => number
   getSpellPower: (spell: SpellWithComputed) => number
   getSpellComplexity: (spell: SpellWithComputed) => number
@@ -53,10 +56,10 @@ export function useSpellComputed(
   spells: SpellWithComputed[],
   options: UseSpellComputedOptions = {}
 ): UseSpellComputedReturn {
-  const { 
-    enableStatistics = true, 
-    enableGrouping = true, 
-    enableSearchCategories = true 
+  const {
+    enableStatistics = true,
+    enableGrouping = true,
+    enableSearchCategories = true,
   } = options
 
   // Ensure spells is always an array
@@ -75,7 +78,7 @@ export function useSpellComputed(
         avgMagnitude: 0,
         schools: [],
         levels: [],
-        tags: []
+        tags: [],
       }
     }
     return SpellModel.getStatistics(safeSpells)
@@ -89,7 +92,7 @@ export function useSpellComputed(
 
     const allSchools = [...new Set(safeSpells.map(spell => spell.school))]
     const allLevels = [...new Set(safeSpells.map(spell => spell.level))]
-    
+
     const categories = [
       {
         id: 'keywords',
@@ -122,49 +125,51 @@ export function useSpellComputed(
         })),
       },
     ]
-    
+
     return categories
   }, [safeSpells, enableSearchCategories])
 
   // Categories with counts (new)
   const categoriesWithCounts = useMemo(() => {
     if (!enableSearchCategories) return {}
-    
+
     const counts: Record<string, number> = {}
-    
+
     // Count by school
     safeSpells.forEach(spell => {
       counts[spell.school] = (counts[spell.school] || 0) + 1
     })
-    
+
     // Count by level
     safeSpells.forEach(spell => {
       counts[spell.level] = (counts[spell.level] || 0) + 1
     })
-    
+
     return counts
   }, [safeSpells, enableSearchCategories])
 
   // Tags with counts (new)
   const tagsWithCounts = useMemo(() => {
     if (!enableSearchCategories) return {}
-    
+
     const counts: Record<string, number> = {}
-    
+
     // Count by tags
     safeSpells.forEach(spell => {
-      spell.tags.forEach(tag => {
+      // Ensure tags property exists and is an array
+      const tags = spell.tags || []
+      tags.forEach(tag => {
         counts[tag] = (counts[tag] || 0) + 1
       })
     })
-    
+
     return counts
   }, [safeSpells, enableSearchCategories])
 
   // Grouped data
   const spellsBySchool = useMemo(() => {
     if (!enableGrouping) return {}
-    
+
     const grouped: Record<string, SpellWithComputed[]> = {}
     safeSpells.forEach(spell => {
       if (!grouped[spell.school]) {
@@ -172,18 +177,18 @@ export function useSpellComputed(
       }
       grouped[spell.school].push(spell)
     })
-    
+
     // Sort spells within each school by name
     Object.keys(grouped).forEach(school => {
       grouped[school].sort((a, b) => a.name.localeCompare(b.name))
     })
-    
+
     return grouped
   }, [safeSpells, enableGrouping])
 
   const spellsByLevel = useMemo(() => {
     if (!enableGrouping) return {}
-    
+
     const grouped: Record<string, SpellWithComputed[]> = {}
     safeSpells.forEach(spell => {
       if (!grouped[spell.level]) {
@@ -191,33 +196,35 @@ export function useSpellComputed(
       }
       grouped[spell.level].push(spell)
     })
-    
+
     // Sort spells within each level by name
     Object.keys(grouped).forEach(level => {
       grouped[level].sort((a, b) => a.name.localeCompare(b.name))
     })
-    
+
     return grouped
   }, [safeSpells, enableGrouping])
 
   const spellsByTag = useMemo(() => {
     if (!enableGrouping) return {}
-    
+
     const grouped: Record<string, SpellWithComputed[]> = {}
     safeSpells.forEach(spell => {
-      spell.tags.forEach(tag => {
+      // Ensure tags property exists and is an array
+      const tags = spell.tags || []
+      tags.forEach(tag => {
         if (!grouped[tag]) {
           grouped[tag] = []
         }
         grouped[tag].push(spell)
       })
     })
-    
+
     // Sort spells within each tag by name
     Object.keys(grouped).forEach(tag => {
       grouped[tag].sort((a, b) => a.name.localeCompare(b.name))
     })
-    
+
     return grouped
   }, [safeSpells, enableGrouping])
 
@@ -248,26 +255,29 @@ export function useSpellComputed(
 
   // Utility functions
   const compareSpells = useMemo(() => {
-    return (spell1: SpellWithComputed, spell2: SpellWithComputed): SpellComparison => {
+    return (
+      spell1: SpellWithComputed,
+      spell2: SpellWithComputed
+    ): SpellComparison => {
       const magickaCostDiff = spell2.magickaCost - spell1.magickaCost
-      const magickaCostPercent = spell1.magickaCost > 0 
-        ? (magickaCostDiff / spell1.magickaCost) * 100 
-        : 0
+      const magickaCostPercent =
+        spell1.magickaCost > 0
+          ? (magickaCostDiff / spell1.magickaCost) * 100
+          : 0
 
       const magnitudeDiff = spell2.totalMagnitude - spell1.totalMagnitude
-      const magnitudePercent = spell1.totalMagnitude > 0 
-        ? (magnitudeDiff / spell1.totalMagnitude) * 100 
-        : 0
+      const magnitudePercent =
+        spell1.totalMagnitude > 0
+          ? (magnitudeDiff / spell1.totalMagnitude) * 100
+          : 0
 
       const durationDiff = spell2.maxDuration - spell1.maxDuration
-      const durationPercent = spell1.maxDuration > 0 
-        ? (durationDiff / spell1.maxDuration) * 100 
-        : 0
+      const durationPercent =
+        spell1.maxDuration > 0 ? (durationDiff / spell1.maxDuration) * 100 : 0
 
       const areaDiff = spell2.maxArea - spell1.maxArea
-      const areaPercent = spell1.maxArea > 0 
-        ? (areaDiff / spell1.maxArea) * 100 
-        : 0
+      const areaPercent =
+        spell1.maxArea > 0 ? (areaDiff / spell1.maxArea) * 100 : 0
 
       // Compare effects
       const effects1 = spell1.effects.map(e => e.name)
@@ -280,12 +290,22 @@ export function useSpellComputed(
         spell1,
         spell2,
         differences: {
-          magickaCost: { difference: magickaCostDiff, percentage: magickaCostPercent },
-          magnitude: { difference: magnitudeDiff, percentage: magnitudePercent },
+          magickaCost: {
+            difference: magickaCostDiff,
+            percentage: magickaCostPercent,
+          },
+          magnitude: {
+            difference: magnitudeDiff,
+            percentage: magnitudePercent,
+          },
           duration: { difference: durationDiff, percentage: durationPercent },
           area: { difference: areaDiff, percentage: areaPercent },
-          effects: { added: addedEffects, removed: removedEffects, common: commonEffects }
-        }
+          effects: {
+            added: addedEffects,
+            removed: removedEffects,
+            common: commonEffects,
+          },
+        },
       }
     }
   }, [])
@@ -300,22 +320,22 @@ export function useSpellComputed(
   const getSpellPower = useMemo(() => {
     return (spell: SpellWithComputed): number => {
       let power = spell.totalMagnitude
-      
+
       // Bonus for area spells
       if (spell.isAreaSpell) {
         power += spell.maxArea * 2
       }
-      
+
       // Bonus for duration spells
       if (spell.isDurationSpell) {
         power += spell.maxDuration * 0.5
       }
-      
+
       // Bonus for multiple effects
       if (spell.effectCount > 1) {
         power += spell.effectCount * 10
       }
-      
+
       return power
     }
   }, [])
@@ -323,22 +343,22 @@ export function useSpellComputed(
   const getSpellComplexity = useMemo(() => {
     return (spell: SpellWithComputed): number => {
       let complexity = 0
-      
+
       // Base complexity from effect count
       complexity += spell.effectCount * 10
-      
+
       // Additional complexity for area effects
       if (spell.isAreaSpell) complexity += 20
-      
+
       // Additional complexity for duration effects
       if (spell.isDurationSpell) complexity += 15
-      
+
       // Additional complexity for high cost
       if (spell.magickaCost > 200) complexity += 10
-      
+
       // Additional complexity for high magnitude
       if (spell.totalMagnitude > 100) complexity += 10
-      
+
       return complexity
     }
   }, [])
@@ -346,17 +366,17 @@ export function useSpellComputed(
   return {
     // Statistics
     statistics,
-    
+
     // Search categories (new)
     searchCategories,
     categoriesWithCounts,
     tagsWithCounts,
-    
+
     // Grouped data
     spellsBySchool,
     spellsByLevel,
     spellsByTag,
-    
+
     // Computed lists
     freeSpells,
     areaSpells,
@@ -364,11 +384,11 @@ export function useSpellComputed(
     instantSpells,
     highCostSpells,
     lowCostSpells,
-    
+
     // Utility functions
     compareSpells,
     getSpellEfficiency,
     getSpellPower,
-    getSpellComplexity
+    getSpellComplexity,
   }
-} 
+}

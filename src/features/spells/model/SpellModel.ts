@@ -1,4 +1,9 @@
-import type { Spell, SpellWithComputed, SpellFilters, SpellSearchResult } from '../types'
+import type {
+  Spell,
+  SpellFilters,
+  SpellSearchResult,
+  SpellWithComputed,
+} from '../types'
 
 export class SpellModel {
   /**
@@ -33,9 +38,15 @@ export class SpellModel {
     const isAreaSpell = spell.effects.some(effect => effect.area > 0)
     const isDurationSpell = spell.effects.some(effect => effect.duration > 0)
     const isInstantSpell = spell.effects.every(effect => effect.duration === 0)
-    
-    const totalMagnitude = spell.effects.reduce((sum, effect) => sum + effect.magnitude, 0)
-    const maxDuration = Math.max(...spell.effects.map(effect => effect.duration), 0)
+
+    const totalMagnitude = spell.effects.reduce(
+      (sum, effect) => sum + effect.magnitude,
+      0
+    )
+    const maxDuration = Math.max(
+      ...spell.effects.map(effect => effect.duration),
+      0
+    )
     const maxArea = Math.max(...spell.effects.map(effect => effect.area), 0)
 
     // Generate tags based on spell properties
@@ -43,7 +54,7 @@ export class SpellModel {
       hasEffects,
       isAreaSpell,
       isDurationSpell,
-      isInstantSpell
+      isInstantSpell,
     })
 
     // Create searchable text for fuzzy search
@@ -60,24 +71,27 @@ export class SpellModel {
       maxDuration,
       maxArea,
       tags,
-      searchableText
+      searchableText,
     }
   }
 
   /**
    * Generate tags for a spell based on its properties
    */
-  private static generateTags(spell: Spell, computed: {
-    hasEffects: boolean
-    isAreaSpell: boolean
-    isDurationSpell: boolean
-    isInstantSpell: boolean
-  }): string[] {
+  private static generateTags(
+    spell: Spell,
+    computed: {
+      hasEffects: boolean
+      isAreaSpell: boolean
+      isDurationSpell: boolean
+      isInstantSpell: boolean
+    }
+  ): string[] {
     const tags: string[] = []
 
     // School tags
     tags.push(spell.school)
-    
+
     // Level tags
     tags.push(spell.level)
 
@@ -109,12 +123,36 @@ export class SpellModel {
     // Effect-specific tags
     spell.effects.forEach(effect => {
       if (effect.name.toLowerCase().includes('fire')) tags.push('Fire')
-      if (effect.name.toLowerCase().includes('frost') || effect.name.toLowerCase().includes('ice')) tags.push('Frost')
-      if (effect.name.toLowerCase().includes('shock') || effect.name.toLowerCase().includes('lightning')) tags.push('Shock')
-      if (effect.name.toLowerCase().includes('heal') || effect.name.toLowerCase().includes('restore')) tags.push('Healing')
-      if (effect.name.toLowerCase().includes('conjure') || effect.name.toLowerCase().includes('summon')) tags.push('Conjuration')
-      if (effect.name.toLowerCase().includes('fear') || effect.name.toLowerCase().includes('calm')) tags.push('Illusion')
-      if (effect.name.toLowerCase().includes('paralyze') || effect.name.toLowerCase().includes('slow')) tags.push('Control')
+      if (
+        effect.name.toLowerCase().includes('frost') ||
+        effect.name.toLowerCase().includes('ice')
+      )
+        tags.push('Frost')
+      if (
+        effect.name.toLowerCase().includes('shock') ||
+        effect.name.toLowerCase().includes('lightning')
+      )
+        tags.push('Shock')
+      if (
+        effect.name.toLowerCase().includes('heal') ||
+        effect.name.toLowerCase().includes('restore')
+      )
+        tags.push('Healing')
+      if (
+        effect.name.toLowerCase().includes('conjure') ||
+        effect.name.toLowerCase().includes('summon')
+      )
+        tags.push('Conjuration')
+      if (
+        effect.name.toLowerCase().includes('fear') ||
+        effect.name.toLowerCase().includes('calm')
+      )
+        tags.push('Illusion')
+      if (
+        effect.name.toLowerCase().includes('paralyze') ||
+        effect.name.toLowerCase().includes('slow')
+      )
+        tags.push('Control')
     })
 
     return [...new Set(tags)] // Remove duplicates
@@ -131,7 +169,7 @@ export class SpellModel {
       spell.description,
       ...tags,
       ...spell.effects.map(effect => effect.name),
-      ...spell.effects.map(effect => effect.description)
+      ...spell.effects.map(effect => effect.description),
     ]
     return parts.join(' ').toLowerCase()
   }
@@ -139,21 +177,30 @@ export class SpellModel {
   /**
    * Filter spells by school
    */
-  static filterBySchool(spells: SpellWithComputed[], school: string): SpellWithComputed[] {
+  static filterBySchool(
+    spells: SpellWithComputed[],
+    school: string
+  ): SpellWithComputed[] {
     return spells.filter(spell => spell.school === school)
   }
 
   /**
    * Filter spells by level
    */
-  static filterByLevel(spells: SpellWithComputed[], level: string): SpellWithComputed[] {
+  static filterByLevel(
+    spells: SpellWithComputed[],
+    level: string
+  ): SpellWithComputed[] {
     return spells.filter(spell => spell.level === level)
   }
 
   /**
    * Filter spells by multiple schools
    */
-  static filterBySchools(spells: SpellWithComputed[], schools: string[]): SpellWithComputed[] {
+  static filterBySchools(
+    spells: SpellWithComputed[],
+    schools: string[]
+  ): SpellWithComputed[] {
     if (schools.length === 0) return spells
     return spells.filter(spell => schools.includes(spell.school))
   }
@@ -161,7 +208,10 @@ export class SpellModel {
   /**
    * Filter spells by multiple levels
    */
-  static filterByLevels(spells: SpellWithComputed[], levels: string[]): SpellWithComputed[] {
+  static filterByLevels(
+    spells: SpellWithComputed[],
+    levels: string[]
+  ): SpellWithComputed[] {
     if (levels.length === 0) return spells
     return spells.filter(spell => levels.includes(spell.level))
   }
@@ -170,8 +220,8 @@ export class SpellModel {
    * Filter spells by magicka cost range
    */
   static filterByMagickaCost(
-    spells: SpellWithComputed[], 
-    minCost: number | null, 
+    spells: SpellWithComputed[],
+    minCost: number | null,
     maxCost: number | null
   ): SpellWithComputed[] {
     return spells.filter(spell => {
@@ -185,13 +235,15 @@ export class SpellModel {
    * Filter spells by magnitude range
    */
   static filterByMagnitude(
-    spells: SpellWithComputed[], 
-    minMagnitude: number | null, 
+    spells: SpellWithComputed[],
+    minMagnitude: number | null,
     maxMagnitude: number | null
   ): SpellWithComputed[] {
     return spells.filter(spell => {
-      if (minMagnitude !== null && spell.totalMagnitude < minMagnitude) return false
-      if (maxMagnitude !== null && spell.totalMagnitude > maxMagnitude) return false
+      if (minMagnitude !== null && spell.totalMagnitude < minMagnitude)
+        return false
+      if (maxMagnitude !== null && spell.totalMagnitude > maxMagnitude)
+        return false
       return true
     })
   }
@@ -207,8 +259,10 @@ export class SpellModel {
   ): SpellWithComputed[] {
     return spells.filter(spell => {
       if (hasEffects !== null && spell.hasEffects !== hasEffects) return false
-      if (isAreaSpell !== null && spell.isAreaSpell !== isAreaSpell) return false
-      if (isDurationSpell !== null && spell.isDurationSpell !== isDurationSpell) return false
+      if (isAreaSpell !== null && spell.isAreaSpell !== isAreaSpell)
+        return false
+      if (isDurationSpell !== null && spell.isDurationSpell !== isDurationSpell)
+        return false
       return true
     })
   }
@@ -216,12 +270,15 @@ export class SpellModel {
   /**
    * Search spells using fuzzy search
    */
-  static search(spells: SpellWithComputed[], query: string): SpellSearchResult[] {
+  static search(
+    spells: SpellWithComputed[],
+    query: string
+  ): SpellSearchResult[] {
     if (!query.trim()) {
       return spells.map(spell => ({
         spell,
         score: 1,
-        matchedFields: []
+        matchedFields: [],
       }))
     }
 
@@ -247,8 +304,7 @@ export class SpellModel {
       if (spell.school.toLowerCase() === searchTerm) {
         score += 30
         matchedFields.push('school')
-      }
-      else if (spell.school.toLowerCase().includes(searchTerm)) {
+      } else if (spell.school.toLowerCase().includes(searchTerm)) {
         score += 15
         matchedFields.push('school')
       }
@@ -257,8 +313,7 @@ export class SpellModel {
       if (spell.level.toLowerCase() === searchTerm) {
         score += 25
         matchedFields.push('level')
-      }
-      else if (spell.level.toLowerCase().includes(searchTerm)) {
+      } else if (spell.level.toLowerCase().includes(searchTerm)) {
         score += 10
         matchedFields.push('level')
       }
@@ -270,7 +325,8 @@ export class SpellModel {
       }
 
       // Tag matches
-      spell.tags.forEach(tag => {
+      const tags = spell.tags || []
+      tags.forEach(tag => {
         if (tag.toLowerCase().includes(searchTerm)) {
           score += 3
           matchedFields.push('tags')
@@ -293,7 +349,7 @@ export class SpellModel {
         results.push({
           spell,
           score,
-          matchedFields: [...new Set(matchedFields)]
+          matchedFields: [...new Set(matchedFields)],
         })
       }
     })
@@ -305,8 +361,14 @@ export class SpellModel {
    * Sort spells by various criteria
    */
   static sort(
-    spells: SpellWithComputed[], 
-    sortBy: 'name' | 'school' | 'level' | 'magickaCost' | 'magnitude' | 'duration',
+    spells: SpellWithComputed[],
+    sortBy:
+      | 'name'
+      | 'school'
+      | 'level'
+      | 'magickaCost'
+      | 'magnitude'
+      | 'duration',
     sortOrder: 'asc' | 'desc' = 'asc'
   ): SpellWithComputed[] {
     const sorted = [...spells].sort((a, b) => {
@@ -346,11 +408,11 @@ export class SpellModel {
     const levelOrder = ['Novice', 'Apprentice', 'Adept', 'Expert', 'Master']
     const index1 = levelOrder.indexOf(level1)
     const index2 = levelOrder.indexOf(level2)
-    
+
     if (index1 === -1 && index2 === -1) return 0
     if (index1 === -1) return 1
     if (index2 === -1) return -1
-    
+
     return index1 - index2
   }
 
@@ -388,14 +450,17 @@ export class SpellModel {
    * Get unique tags from spells
    */
   static getUniqueTags(spells: SpellWithComputed[]): string[] {
-    const allTags = spells.flatMap(spell => spell.tags)
+    const allTags = spells.flatMap(spell => spell.tags || [])
     return [...new Set(allTags)].sort()
   }
 
   /**
    * Apply multiple filters to spells
    */
-  static applyFilters(spells: SpellWithComputed[], filters: SpellFilters): SpellWithComputed[] {
+  static applyFilters(
+    spells: SpellWithComputed[],
+    filters: SpellFilters
+  ): SpellWithComputed[] {
     let filtered = [...spells]
 
     // Apply school filters
@@ -453,13 +518,17 @@ export class SpellModel {
     const durationSpells = spells.filter(spell => spell.isDurationSpell).length
     const freeSpells = spells.filter(spell => spell.magickaCost === 0).length
 
-    const avgMagickaCost = spells.length > 0 
-      ? spells.reduce((sum, spell) => sum + spell.magickaCost, 0) / spells.length 
-      : 0
+    const avgMagickaCost =
+      spells.length > 0
+        ? spells.reduce((sum, spell) => sum + spell.magickaCost, 0) /
+          spells.length
+        : 0
 
-    const avgMagnitude = spells.length > 0
-      ? spells.reduce((sum, spell) => sum + spell.totalMagnitude, 0) / spells.length
-      : 0
+    const avgMagnitude =
+      spells.length > 0
+        ? spells.reduce((sum, spell) => sum + spell.totalMagnitude, 0) /
+          spells.length
+        : 0
 
     return {
       totalSpells,
@@ -471,7 +540,7 @@ export class SpellModel {
       avgMagnitude: Math.round(avgMagnitude),
       schools,
       levels,
-      tags
+      tags,
     }
   }
-} 
+}
