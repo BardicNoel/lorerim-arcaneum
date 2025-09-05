@@ -2,23 +2,14 @@ import { cn } from '@/lib/utils'
 import {
   GenericAutocomplete,
   type AutocompleteOption,
+  MobileAutocompleteDrawer,
 } from '@/shared/components/generic'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import type { Trait } from '@/shared/data/schemas'
 import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
-import { Input } from '@/shared/ui/ui/input'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/shared/ui/ui/sheet'
-import { ChevronDown, Search, X } from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
 
 interface TraitAutocompleteProps {
@@ -61,27 +52,28 @@ export function TraitAutocomplete({
     }))
   }, [filteredTraits])
 
-  const handleTraitSelect = (option: AutocompleteOption) => {
+  const handleTraitSelect = useCallback((trait: Trait) => {
+    onSelect(trait)
+    setSearchQuery(trait.name) // Update search query to show selected trait name
+  }, [onSelect])
+
+  const handleDesktopTraitSelect = useCallback((option: AutocompleteOption) => {
     const selectedTrait = traits.find(
       trait => (trait.edid || trait.name) === option.id
     )
     if (selectedTrait) {
       onSelect(selectedTrait)
-      setIsDrawerOpen(false)
-      setSearchQuery('')
+      setSearchQuery(selectedTrait.name)
     }
-  }
+  }, [traits, onSelect])
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value)
-    // Maintain focus on the input
-    setTimeout(() => {
-      searchInputRef.current?.focus()
-    }, 0)
+    // Removed the problematic setTimeout focus call that was causing keyboard flashing
   }
 
   // Custom renderer for trait options
-  const renderTraitOption = (option: AutocompleteOption, isActive: boolean) => (
+  const renderTraitOption = useMemo(() => (option: AutocompleteOption, isActive: boolean) => (
     <div className="flex items-start gap-3">
       <div className="flex-1 min-w-0">
         <div className="font-medium truncate">{option.label}</div>
@@ -103,96 +95,85 @@ export function TraitAutocomplete({
         )}
       </div>
     </div>
-  )
+  ), [])
 
-  // Mobile drawer content
-  const MobileTraitDrawer = () => (
-    <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-      <SheetTrigger asChild>
-        <Button
-          variant="outline"
-          className={cn(
-            'w-full justify-between text-left font-normal',
-            !searchQuery && 'text-muted-foreground',
-            className
-          )}
-          disabled={disabled}
-        >
-          <span>{searchQuery || placeholder}</span>
-          <ChevronDown className="h-4 w-4 opacity-50" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent
-        side="bottom"
-        className="h-[85vh] max-h-[85vh] p-0 flex flex-col"
-        onOpenAutoFocus={e => e.preventDefault()}
-      >
-        <SheetHeader className="p-4 border-b flex-shrink-0">
-          <SheetTitle>Select Trait</SheetTitle>
-          <SheetDescription>
-            Choose a trait from the options below
-          </SheetDescription>
-        </SheetHeader>
+  // Create a store-like object for the drawer
+  const traitStore = useMemo(() => ({
+    data: traits,
+    search: (query: string) => {
+      const lowerQuery = query.toLowerCase()
+      return traits.filter(trait =>
+        trait.name.toLowerCase().includes(lowerQuery) ||
+        trait.description?.toLowerCase().includes(lowerQuery)
+      )
+    }
+  }), [traits])
 
-        {/* Search Input */}
-        <div className="p-4 border-b flex-shrink-0">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              ref={searchInputRef}
-              placeholder="Search traits..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className="pl-10"
-            />
-            {searchQuery && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
+  // Render function for complete trait list items in the drawer - using desktop layout
+  const renderTraitListItem = useCallback((trait: Trait, isSelected: boolean, onSelect: () => void) => (
+    <Button
+      variant="ghost"
+      className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+      onClick={onSelect}
+    >
+      <div className="flex items-start gap-3 w-full">
+        <div className="flex-1 min-w-0">
+          <div className="font-medium truncate">{trait.name}</div>
+          <div className="flex items-center gap-2 mt-1">
+            {trait.category && (
+              <Badge
+                variant="outline"
+                className={cn(
+                  'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
+                  'text-xs font-medium transition-colors'
+                )}
               >
-                <X className="h-3 w-3" />
-              </Button>
+                {trait.category}
+              </Badge>
+            )}
+            {trait.effects && trait.effects.length > 0 && (
+              <div className="text-xs text-muted-foreground">
+                {trait.effects.length} effect{trait.effects.length !== 1 ? 's' : ''}
+              </div>
             )}
           </div>
-        </div>
-
-        {/* Trait List */}
-        <div className="flex-1 overflow-y-auto overscroll-contain">
-          {autocompleteOptions.length === 0 ? (
-            <div className="text-center py-8 px-4">
-              <p className="text-muted-foreground">No traits found</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Try adjusting your search
-              </p>
-            </div>
-          ) : (
-            <div className="p-4 space-y-3">
-              {autocompleteOptions.map(option => (
-                <Button
-                  key={option.id}
-                  variant="ghost"
-                  className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
-                  onClick={() => handleTraitSelect(option)}
-                >
-                  <div className="w-full">
-                    {renderTraitOption(option, false)}
-                  </div>
-                </Button>
-              ))}
-            </div>
+          {trait.description && (
+            <FormattedText
+              text={trait.description}
+              className="text-sm text-muted-foreground mt-1 line-clamp-2"
+            />
           )}
         </div>
-      </SheetContent>
-    </Sheet>
-  )
+      </div>
+    </Button>
+  ), [])
+
+  // Mobile drawer content
+  const MobileTraitDrawer = () => {
+    return (
+      <MobileAutocompleteDrawer
+        isOpen={isDrawerOpen}
+        onOpenChange={setIsDrawerOpen}
+        onSelect={handleTraitSelect}
+        searchPlaceholder="Search traits..."
+        title="Select Trait"
+        description="Choose a trait from the options below"
+        triggerText={searchQuery}
+        triggerPlaceholder={placeholder}
+        store={traitStore}
+        renderListItem={renderTraitListItem}
+        emptyMessage="No traits found"
+        className={className}
+        disabled={disabled}
+      />
+    )
+  }
 
   // Desktop autocomplete
   const DesktopTraitAutocomplete = () => (
     <GenericAutocomplete
       options={autocompleteOptions}
-      onSelect={handleTraitSelect}
+      onSelect={handleDesktopTraitSelect}
       placeholder={placeholder}
       className={className}
       disabled={disabled}

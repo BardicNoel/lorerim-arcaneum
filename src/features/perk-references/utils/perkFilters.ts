@@ -62,7 +62,7 @@ export function applyPerkFilters(
     filteredNodes = filteredNodes.filter(node => 
       node.searchableText.includes(query) ||
       node.name.toLowerCase().includes(query) ||
-      node.tags.some(tag => tag.toLowerCase().includes(query))
+      node.tags.some(tag => typeof tag === 'string' && tag.toLowerCase().includes(query))
     )
   }
 
@@ -124,7 +124,7 @@ export function searchPerks(nodes: PerkReferenceNode[], query: string): PerkRefe
   return nodes.filter(node => 
     node.searchableText.includes(lowerQuery) ||
     node.name.toLowerCase().includes(lowerQuery) ||
-    node.tags.some(tag => tag.toLowerCase().includes(lowerQuery)) ||
+    node.tags.some(tag => typeof tag === 'string' && tag.toLowerCase().includes(lowerQuery)) ||
     node.skillTreeName.toLowerCase().includes(lowerQuery) ||
     node.category.toLowerCase().includes(lowerQuery)
   )

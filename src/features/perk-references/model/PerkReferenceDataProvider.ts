@@ -161,7 +161,7 @@ export class PerkReferenceDataProvider implements IPerkReferenceDataProvider {
     return this.perkNodes.filter(node => 
       node.searchableText.includes(lowerQuery) ||
       node.name.toLowerCase().includes(lowerQuery) ||
-      node.tags.some(tag => tag.toLowerCase().includes(lowerQuery))
+      node.tags.some(tag => typeof tag === 'string' && tag.toLowerCase().includes(lowerQuery))
     )
   }
 }
