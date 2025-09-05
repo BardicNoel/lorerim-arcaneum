@@ -1,12 +1,10 @@
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
-import { useMemo } from 'react'
 import Fuse from 'fuse.js'
-import type { 
-  PerkReferenceNode, 
-  PerkReferenceItem, 
+import { useMemo } from 'react'
+import type {
   PerkReferenceFilters,
-  PerkReferenceViewMode,
-  PerkReferenceState 
+  PerkReferenceItem,
+  PerkReferenceNode,
 } from '../types'
 
 export class PerkReferenceModel {
@@ -20,9 +18,10 @@ export class PerkReferenceModel {
 
   // Transform PerkReferenceNode to PerkReferenceItem
   transformToPlayerCreationItem(node: PerkReferenceNode): PerkReferenceItem {
-    const selectedPerks = this.buildState.perks?.selected?.[node.skillTree] || []
+    const selectedPerks =
+      this.buildState.perks?.selected?.[node.skillTree] || []
     const perkRanks = this.buildState.perks?.ranks?.[node.skillTree] || {}
-    
+
     const isSelected = selectedPerks.includes(node.edid)
     const currentRank = perkRanks[node.edid] || 0
 
@@ -30,6 +29,7 @@ export class PerkReferenceModel {
       id: node.edid,
       name: node.name,
       description: node.ranks[0]?.description?.base || '',
+      summary: node.ranks[0]?.description?.subtext || '',
       category: node.category,
       tags: node.tags,
       isSelected,
@@ -51,12 +51,16 @@ export class PerkReferenceModel {
   private isPerkAvailable(node: PerkReferenceNode): boolean {
     if (node.isRoot) return true
 
-    const selectedPerks = this.buildState.perks?.selected?.[node.skillTree] || []
+    const selectedPerks =
+      this.buildState.perks?.selected?.[node.skillTree] || []
     return node.prerequisites.every(prereq => selectedPerks.includes(prereq))
   }
 
   // Apply filters to perk nodes
-  applyFilters(nodes: PerkReferenceNode[], filters: PerkReferenceFilters): PerkReferenceNode[] {
+  applyFilters(
+    nodes: PerkReferenceNode[],
+    filters: PerkReferenceFilters
+  ): PerkReferenceNode[] {
     let filteredNodes = [...nodes]
 
     // Handle undefined filters
@@ -66,22 +70,22 @@ export class PerkReferenceModel {
 
     // Apply skill filters
     if (filters.skills && filters.skills.length > 0) {
-      filteredNodes = filteredNodes.filter(node => 
+      filteredNodes = filteredNodes.filter(node =>
         filters.skills.includes(node.skillTree)
       )
     }
 
     // Apply category filters
     if (filters.categories && filters.categories.length > 0) {
-      filteredNodes = filteredNodes.filter(node => 
+      filteredNodes = filteredNodes.filter(node =>
         filters.categories.includes(node.category)
       )
     }
 
     // Apply prerequisite filters
     if (filters.prerequisites && filters.prerequisites.length > 0) {
-      filteredNodes = filteredNodes.filter(node => 
-        filters.prerequisites.some(prereq => 
+      filteredNodes = filteredNodes.filter(node =>
+        filters.prerequisites.some(prereq =>
           node.prerequisites.includes(prereq)
         )
       )
@@ -89,17 +93,15 @@ export class PerkReferenceModel {
 
     // Apply tag filters
     if (filters.tags && filters.tags.length > 0) {
-      filteredNodes = filteredNodes.filter(node => 
-        filters.tags.some(tag => 
-          node.tags.includes(tag)
-        )
+      filteredNodes = filteredNodes.filter(node =>
+        filters.tags.some(tag => node.tags.includes(tag))
       )
     }
 
     // Apply minimum level filter
     if (filters.minLevel !== undefined) {
-      filteredNodes = filteredNodes.filter(node => 
-        (node.minLevel || 0) >= filters.minLevel!
+      filteredNodes = filteredNodes.filter(
+        node => (node.minLevel || 0) >= filters.minLevel!
       )
     }
 
@@ -123,7 +125,7 @@ export class PerkReferenceModel {
     // Apply search query
     if (filters.searchQuery && filters.searchQuery.trim()) {
       const query = filters.searchQuery.trim()
-      
+
       // Create searchable perk objects for Fuse.js
       const searchablePerks = filteredNodes.map(node => ({
         id: node.edid,
@@ -154,7 +156,7 @@ export class PerkReferenceModel {
       // Create Fuse instance and search
       const fuse = new Fuse(searchablePerks, fuseOptions)
       const searchResults = fuse.search(query)
-      
+
       // Get the original nodes from search results
       filteredNodes = searchResults.map(result => result.item.originalNode)
     }
@@ -185,20 +187,27 @@ export class PerkReferenceModel {
   }
 
   // Sort perks by various criteria
-  sortPerks(nodes: PerkReferenceNode[], sortBy: string = 'name'): PerkReferenceNode[] {
+  sortPerks(
+    nodes: PerkReferenceNode[],
+    sortBy: string = 'name'
+  ): PerkReferenceNode[] {
     const sortedNodes = [...nodes]
 
     switch (sortBy) {
       case 'name':
         return sortedNodes.sort((a, b) => a.name.localeCompare(b.name))
       case 'skill':
-        return sortedNodes.sort((a, b) => a.skillTreeName.localeCompare(b.skillTreeName))
+        return sortedNodes.sort((a, b) =>
+          a.skillTreeName.localeCompare(b.skillTreeName)
+        )
       case 'category':
         return sortedNodes.sort((a, b) => a.category.localeCompare(b.category))
       case 'rank':
         return sortedNodes.sort((a, b) => b.totalRanks - a.totalRanks)
       case 'prerequisites':
-        return sortedNodes.sort((a, b) => a.prerequisites.length - b.prerequisites.length)
+        return sortedNodes.sort(
+          (a, b) => a.prerequisites.length - b.prerequisites.length
+        )
       default:
         return sortedNodes
     }
@@ -217,16 +226,19 @@ export function usePerkReferenceModel(
   }, [perkNodes, build])
 
   const filteredNodes = useMemo(() => {
-    return model.applyFilters(perkNodes, filters || {
-      skills: [],
-      categories: [],
-      prerequisites: [],
-      tags: [],
-      rankLevel: 'all',
-      rootOnly: false,
-      searchQuery: '',
-      minLevel: undefined,
-    })
+    return model.applyFilters(
+      perkNodes,
+      filters || {
+        skills: [],
+        categories: [],
+        prerequisites: [],
+        tags: [],
+        rankLevel: 'all',
+        rootOnly: false,
+        searchQuery: '',
+        minLevel: undefined,
+      }
+    )
   }, [model, perkNodes, filters])
 
   const perkItems = useMemo(() => {
@@ -243,4 +255,4 @@ export function usePerkReferenceModel(
     perkItems,
     availableFilters,
   }
-} 
+}

@@ -1,9 +1,8 @@
-import React from 'react'
+import { AddToBuildButton } from '@/shared/components/playerCreation/AddToBuildButton'
 import { Badge } from '@/shared/ui/ui/badge'
 import { H4, P, Small } from '@/shared/ui/ui/typography'
-import { PerkReferenceBadge } from './PerkReferenceBadge'
-import { AddToBuildButton } from '@/shared/components/playerCreation/AddToBuildButton'
 import type { PerkReferenceItem } from '../../types'
+import { PerkReferenceBadge } from './PerkReferenceBadge'
 
 interface PerkReferenceListItemProps {
   item: PerkReferenceItem
@@ -53,9 +52,17 @@ export function PerkReferenceListItem({
               />
             )}
           </div>
-          <P className="text-xs text-muted-foreground line-clamp-1">
-            {item.summary || item.description}
-          </P>
+          <div className="space-y-1">
+            <P className="text-xs text-muted-foreground line-clamp-1">
+              {item.description}
+            </P>
+            {/* Subtext as secondary section */}
+            {item.summary && (
+              <P className="text-xs text-muted-foreground/80 italic border-l-2 border-muted pl-2 line-clamp-1">
+                {item.summary}
+              </P>
+            )}
+          </div>
         </div>
 
         {/* Tags */}
@@ -86,4 +93,4 @@ export function PerkReferenceListItem({
       </div>
     </div>
   )
-} 
+}

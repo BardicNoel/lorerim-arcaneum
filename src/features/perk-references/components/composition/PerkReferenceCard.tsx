@@ -1,9 +1,8 @@
-import React from 'react'
+import { AddToBuildButton } from '@/shared/components/playerCreation/AddToBuildButton'
 import { Badge } from '@/shared/ui/ui/badge'
 import { H4, P, Small } from '@/shared/ui/ui/typography'
-import { PerkReferenceBadge } from '../atomic/PerkReferenceBadge'
-import { AddToBuildButton } from '@/shared/components/playerCreation/AddToBuildButton'
 import type { PerkReferenceItem } from '../../types'
+import { PerkReferenceBadge } from '../atomic/PerkReferenceBadge'
 
 interface PerkReferenceCardProps {
   item: PerkReferenceItem
@@ -60,11 +59,7 @@ export function PerkReferenceCard({
 
       {/* Badges */}
       <div className="flex items-center gap-1 mb-3">
-        <PerkReferenceBadge
-          label={item.category}
-          type="category"
-          size="sm"
-        />
+        <PerkReferenceBadge label={item.category} type="category" size="sm" />
         {item.totalRanks > 1 && (
           <PerkReferenceBadge
             label={`${item.totalRanks} Ranks`}
@@ -73,19 +68,23 @@ export function PerkReferenceCard({
           />
         )}
         {item.isRoot && (
-          <PerkReferenceBadge
-            label="Root"
-            type="root"
-            size="sm"
-          />
+          <PerkReferenceBadge label="Root" type="root" size="sm" />
         )}
       </div>
 
       {/* Description */}
       {!compact && (
-        <P className="text-xs text-muted-foreground mb-3 line-clamp-2">
-          {item.description}
-        </P>
+        <div className="mb-3 space-y-1">
+          <P className="text-xs text-muted-foreground line-clamp-2">
+            {item.description}
+          </P>
+          {/* Subtext as secondary section */}
+          {item.summary && (
+            <P className="text-xs text-muted-foreground/80 italic border-l-2 border-muted pl-2 line-clamp-2">
+              {item.summary}
+            </P>
+          )}
+        </div>
       )}
 
       {/* Tags */}
@@ -112,4 +111,4 @@ export function PerkReferenceCard({
       </div>
     </div>
   )
-} 
+}

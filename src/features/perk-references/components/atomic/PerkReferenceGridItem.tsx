@@ -1,9 +1,8 @@
-import React from 'react'
+import { AddToBuildButton } from '@/shared/components/playerCreation/AddToBuildButton'
 import { Badge } from '@/shared/ui/ui/badge'
 import { H4, P, Small } from '@/shared/ui/ui/typography'
-import { PerkReferenceBadge } from './PerkReferenceBadge'
-import { AddToBuildButton } from '@/shared/components/playerCreation/AddToBuildButton'
 import type { PerkReferenceItem } from '../../types'
+import { PerkReferenceBadge } from './PerkReferenceBadge'
 
 interface PerkReferenceGridItemProps {
   item: PerkReferenceItem
@@ -65,9 +64,17 @@ export function PerkReferenceGridItem({
       </div>
 
       {/* Description */}
-      <P className="text-xs text-muted-foreground mb-3 line-clamp-2">
-        {item.summary || item.description}
-      </P>
+      <div className="mb-3 space-y-1">
+        <P className="text-xs text-muted-foreground line-clamp-2">
+          {item.description}
+        </P>
+        {/* Subtext as secondary section */}
+        {item.summary && (
+          <P className="text-xs text-muted-foreground/80 italic border-l-2 border-muted pl-2 line-clamp-2">
+            {item.summary}
+          </P>
+        )}
+      </div>
 
       {/* Tags */}
       <div className="flex items-center justify-between">
@@ -110,4 +117,4 @@ export function PerkReferenceGridItem({
       </div>
     </div>
   )
-} 
+}

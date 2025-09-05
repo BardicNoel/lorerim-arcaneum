@@ -1,10 +1,9 @@
-import React from 'react'
+import { AccordionCard } from '@/shared/components/generic/AccordionCard'
+import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation/AddToBuildSwitchSimple'
 import { Badge } from '@/shared/ui/ui/badge'
 import { H3, P, Small } from '@/shared/ui/ui/typography'
-import { AccordionCard } from '@/shared/components/generic/AccordionCard'
-import { PerkReferenceBadge } from './PerkReferenceBadge'
-import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation/AddToBuildSwitchSimple'
 import type { PerkReferenceItem } from '../../types'
+import { PerkReferenceBadge } from './PerkReferenceBadge'
 
 interface PerkReferenceAccordionItemProps {
   item: PerkReferenceItem
@@ -64,12 +63,18 @@ export function PerkReferenceAccordionItem({
           </div>
         </div>
       </AccordionCard.Header>
-      
+
       <AccordionCard.Summary>
-        <div className="line-clamp-2">
-          <P className="text-sm text-muted-foreground">
-            {item.summary || item.description}
+        <div className="space-y-1">
+          <P className="text-sm text-muted-foreground line-clamp-2">
+            {item.description}
           </P>
+          {/* Subtext as secondary section */}
+          {item.summary && (
+            <P className="text-xs text-muted-foreground/80 italic border-l-2 border-muted pl-2 line-clamp-2">
+              {item.summary}
+            </P>
+          )}
         </div>
         <div className="flex flex-wrap gap-1 mt-2">
           {item.tags.slice(0, 3).map((tag, index) => (
@@ -84,30 +89,29 @@ export function PerkReferenceAccordionItem({
           )}
         </div>
       </AccordionCard.Summary>
-      
+
       <AccordionCard.Details>
         <div className="space-y-4">
           {/* Full Description */}
           <div>
             <H3 className="text-sm font-semibold mb-2">Description</H3>
-            <P className="text-sm text-muted-foreground">
-              {item.description}
-            </P>
+            <P className="text-sm text-muted-foreground">{item.description}</P>
           </div>
 
           {/* Prerequisites */}
-          {originalNode?.prerequisites && originalNode.prerequisites.length > 0 && (
-            <div>
-              <H3 className="text-sm font-semibold mb-2">Prerequisites</H3>
-              <div className="space-y-1">
-                {originalNode.prerequisites.map((prereq, index) => (
-                  <div key={index} className="text-sm text-muted-foreground">
-                    • {prereq}
-                  </div>
-                ))}
+          {originalNode?.prerequisites &&
+            originalNode.prerequisites.length > 0 && (
+              <div>
+                <H3 className="text-sm font-semibold mb-2">Prerequisites</H3>
+                <div className="space-y-1">
+                  {originalNode.prerequisites.map((prereq, index) => (
+                    <div key={index} className="text-sm text-muted-foreground">
+                      • {prereq}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
           {/* Connections */}
           {originalNode?.connections && originalNode.connections.length > 0 && (
@@ -179,4 +183,4 @@ export function PerkReferenceAccordionItem({
       </AccordionCard.Details>
     </AccordionCard>
   )
-} 
+}
