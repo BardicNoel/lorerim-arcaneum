@@ -2,22 +2,13 @@ import { cn } from '@/lib/utils'
 import {
   GenericAutocomplete,
   type AutocompleteOption,
+  MobileAutocompleteDrawer,
 } from '@/shared/components/generic'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
-import { Input } from '@/shared/ui/ui/input'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/shared/ui/ui/sheet'
-import { ChevronDown, Search, X } from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useFuzzySearch } from '../../hooks/useFuzzySearch'
 import type { Race } from '../../types'
 import { RaceAvatar } from '../atomic'
@@ -67,25 +58,26 @@ export function RaceAutocomplete({
     }))
   }, [filteredRaces])
 
-  const handleRaceSelect = (option: AutocompleteOption) => {
+  const handleRaceSelect = useCallback((race: Race) => {
+    onSelect(race)
+    setSearchQuery(race.name) // Update search query to show selected race name
+  }, [onSelect])
+
+  const handleDesktopRaceSelect = useCallback((option: AutocompleteOption) => {
     const selectedRace = races.find(race => race.edid === option.id)
     if (selectedRace) {
       onSelect(selectedRace)
-      setIsDrawerOpen(false)
-      setSearchQuery('')
+      setSearchQuery(selectedRace.name)
     }
-  }
+  }, [races, onSelect])
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value)
-    // Maintain focus on the input
-    setTimeout(() => {
-      searchInputRef.current?.focus()
-    }, 0)
+    // Removed the problematic setTimeout focus call that was causing keyboard flashing
   }
 
   // Custom renderer for race options
-  const renderRaceOption = (option: AutocompleteOption, isActive: boolean) => (
+  const renderRaceOption = useMemo(() => (option: AutocompleteOption, isActive: boolean) => (
     <div className="flex items-center gap-3">
       {option.icon && <div className="flex-shrink-0">{option.icon}</div>}
       <div className="flex-1 min-w-0">
@@ -101,95 +93,66 @@ export function RaceAutocomplete({
         )}
       </div>
     </div>
-  )
+  ), [])
+
+  // Create a store-like object for the drawer
+  const raceStore = useMemo(() => ({
+    data: races,
+    search: (query: string) => {
+      const lowerQuery = query.toLowerCase()
+      return races.filter(race =>
+        race.name.toLowerCase().includes(lowerQuery) ||
+        race.description?.toLowerCase().includes(lowerQuery) ||
+        race.tags?.some(tag => typeof tag === 'string' && tag.toLowerCase().includes(lowerQuery))
+      )
+    }
+  }), [races])
+
+  // Render function for race items in the drawer
+  const renderRaceItem = useCallback((race: Race, isSelected: boolean) => (
+    <Button
+      variant="ghost"
+      className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+    >
+      <div className="w-full">
+        {renderRaceOption(
+          {
+            id: race.id || race.edid,
+            label: race.name,
+            description: race.description,
+            value: race,
+          },
+          isSelected
+        )}
+      </div>
+    </Button>
+  ), [renderRaceOption])
 
   // Mobile drawer content
-  const MobileRaceDrawer = () => (
-    <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-      <SheetTrigger asChild>
-        <Button
-          variant="outline"
-          className={cn(
-            'w-full justify-between text-left font-normal',
-            !searchQuery && 'text-muted-foreground',
-            className
-          )}
-        >
-          <span>{searchQuery || placeholder}</span>
-          <ChevronDown className="h-4 w-4 opacity-50" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent
-        side="bottom"
-        className="h-[85vh] max-h-[85vh] p-0 flex flex-col"
-        onOpenAutoFocus={e => e.preventDefault()}
-      >
-        <SheetHeader className="p-4 border-b flex-shrink-0">
-          <SheetTitle>Select Race</SheetTitle>
-          <SheetDescription>
-            Choose your character's race from the options below
-          </SheetDescription>
-        </SheetHeader>
-
-        {/* Search Input */}
-        <div className="p-4 border-b flex-shrink-0">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              ref={searchInputRef}
-              placeholder="Search races..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className="pl-10"
-            />
-            {searchQuery && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
-              >
-                <X className="h-3 w-3" />
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* Race List */}
-        <div className="flex-1 overflow-y-auto overscroll-contain">
-          {autocompleteOptions.length === 0 ? (
-            <div className="text-center py-8 px-4">
-              <p className="text-muted-foreground">No races found</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Try adjusting your search
-              </p>
-            </div>
-          ) : (
-            <div className="p-4 space-y-3">
-              {autocompleteOptions.map(option => (
-                <Button
-                  key={option.id}
-                  variant="ghost"
-                  className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
-                  onClick={() => handleRaceSelect(option)}
-                >
-                  <div className="w-full">
-                    {renderRaceOption(option, false)}
-                  </div>
-                </Button>
-              ))}
-            </div>
-          )}
-        </div>
-      </SheetContent>
-    </Sheet>
-  )
+  const MobileRaceDrawer = () => {
+    return (
+      <MobileAutocompleteDrawer
+        isOpen={isDrawerOpen}
+        onOpenChange={setIsDrawerOpen}
+        onSelect={handleRaceSelect}
+        searchPlaceholder="Search races..."
+        title="Select Race"
+        description="Choose your character's race from the options below"
+        triggerText={searchQuery}
+        triggerPlaceholder={placeholder}
+        store={raceStore}
+        renderItem={renderRaceItem}
+        emptyMessage="No races found"
+        className={className}
+      />
+    )
+  }
 
   // Desktop autocomplete
   const DesktopRaceAutocomplete = () => (
     <GenericAutocomplete
       options={autocompleteOptions}
-      onSelect={handleRaceSelect}
+      onSelect={handleDesktopRaceSelect}
       placeholder={placeholder}
       className={className}
       renderOption={renderRaceOption}

@@ -2,22 +2,13 @@ import { cn } from '@/lib/utils'
 import {
   GenericAutocomplete,
   type AutocompleteOption,
+  MobileAutocompleteDrawer,
 } from '@/shared/components/generic'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
-import { Input } from '@/shared/ui/ui/input'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/shared/ui/ui/sheet'
-import { ChevronDown, Search, X } from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import type { Skill } from '../../types'
 import { SkillAvatar } from '../atomic/SkillAvatar'
 
@@ -81,25 +72,26 @@ export function SkillAutocomplete({
     }))
   }, [filteredSkills])
 
-  const handleSkillSelect = (option: AutocompleteOption) => {
+  const handleSkillSelect = useCallback((skill: Skill) => {
+    onSelect(skill)
+    setSearchQuery(skill.name) // Update search query to show selected skill name
+  }, [onSelect])
+
+  const handleDesktopSkillSelect = useCallback((option: AutocompleteOption) => {
     const selectedSkill = skills.find(skill => skill.edid === option.id)
     if (selectedSkill) {
       onSelect(selectedSkill)
-      setIsDrawerOpen(false)
-      setSearchQuery('')
+      setSearchQuery(selectedSkill.name)
     }
-  }
+  }, [skills, onSelect])
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value)
-    // Maintain focus on the input
-    setTimeout(() => {
-      searchInputRef.current?.focus()
-    }, 0)
+    // Removed the problematic setTimeout focus call that was causing keyboard flashing
   }
 
   // Custom renderer for skill options
-  const renderSkillOption = (option: AutocompleteOption, isActive: boolean) => (
+  const renderSkillOption = useMemo(() => (option: AutocompleteOption, isActive: boolean) => (
     <div className="flex items-start gap-3">
       <SkillAvatar
         skillName={option.label}
@@ -131,96 +123,66 @@ export function SkillAutocomplete({
         )}
       </div>
     </div>
-  )
+  ), [])
+
+  // Create a store-like object for the drawer
+  const skillStore = useMemo(() => ({
+    data: skills,
+    search: (query: string) => {
+      const lowerQuery = query.toLowerCase()
+      return skills.filter(skill =>
+        skill.name.toLowerCase().includes(lowerQuery) ||
+        skill.description?.toLowerCase().includes(lowerQuery)
+      )
+    }
+  }), [skills])
+
+  // Render function for skill items in the drawer
+  const renderSkillItem = useCallback((skill: Skill, isSelected: boolean) => (
+    <Button
+      variant="ghost"
+      className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+    >
+      <div className="w-full">
+        {renderSkillOption(
+          {
+            id: skill.id || skill.edid,
+            label: skill.name,
+            description: skill.description,
+            value: skill,
+          },
+          isSelected
+        )}
+      </div>
+    </Button>
+  ), [renderSkillOption])
 
   // Mobile drawer content
-  const MobileSkillDrawer = () => (
-    <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-      <SheetTrigger asChild>
-        <Button
-          variant="outline"
-          className={cn(
-            'w-full justify-between text-left font-normal',
-            !searchQuery && 'text-muted-foreground',
-            className
-          )}
-          disabled={disabled}
-        >
-          <span>{searchQuery || placeholder}</span>
-          <ChevronDown className="h-4 w-4 opacity-50" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent
-        side="bottom"
-        className="h-[85vh] max-h-[85vh] p-0 flex flex-col"
-        onOpenAutoFocus={e => e.preventDefault()}
-      >
-        <SheetHeader className="p-4 border-b flex-shrink-0">
-          <SheetTitle>Select Skill</SheetTitle>
-          <SheetDescription>
-            Choose a skill from the options below
-          </SheetDescription>
-        </SheetHeader>
-
-        {/* Search Input */}
-        <div className="p-4 border-b flex-shrink-0">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              ref={searchInputRef}
-              placeholder="Search skills..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className="pl-10"
-            />
-            {searchQuery && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
-              >
-                <X className="h-3 w-3" />
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* Skill List */}
-        <div className="flex-1 overflow-y-auto overscroll-contain">
-          {autocompleteOptions.length === 0 ? (
-            <div className="text-center py-8 px-4">
-              <p className="text-muted-foreground">No skills found</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Try adjusting your search
-              </p>
-            </div>
-          ) : (
-            <div className="p-4 space-y-3">
-              {autocompleteOptions.map(option => (
-                <Button
-                  key={option.id}
-                  variant="ghost"
-                  className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
-                  onClick={() => handleSkillSelect(option)}
-                >
-                  <div className="w-full">
-                    {renderSkillOption(option, false)}
-                  </div>
-                </Button>
-              ))}
-            </div>
-          )}
-        </div>
-      </SheetContent>
-    </Sheet>
-  )
+  const MobileSkillDrawer = () => {
+    return (
+      <MobileAutocompleteDrawer
+        isOpen={isDrawerOpen}
+        onOpenChange={setIsDrawerOpen}
+        onSelect={handleSkillSelect}
+        searchPlaceholder="Search skills..."
+        title="Select Skill"
+        description="Choose a skill from the options below"
+        triggerText={searchQuery}
+        triggerPlaceholder={placeholder}
+        store={skillStore}
+        renderItem={renderSkillItem}
+        emptyMessage="No skills found"
+        className={className}
+        disabled={disabled}
+      />
+    )
+  }
 
   // Desktop autocomplete
   const DesktopSkillAutocomplete = () => (
     <GenericAutocomplete
       options={autocompleteOptions}
-      onSelect={handleSkillSelect}
+      onSelect={handleDesktopSkillSelect}
       placeholder={placeholder}
       className={className}
       disabled={disabled}

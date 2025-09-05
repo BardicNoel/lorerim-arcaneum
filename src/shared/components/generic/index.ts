@@ -10,6 +10,7 @@ export {
   GenericAutocomplete,
   type AutocompleteOption,
 } from './GenericAutocomplete'
+export { MobileAutocompleteDrawer, type MobileAutocompleteDrawerProps } from './MobileAutocompleteDrawer'
 export { ResponsivePanel } from './ResponsivePanel'
 export { GenericShareButton } from './ShareButton'
 export { GenericSummaryCard, createBuildSummaryItems } from './SummaryCard'

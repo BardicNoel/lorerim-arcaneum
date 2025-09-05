@@ -1,24 +1,17 @@
 import { Z_INDEX } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import { MobileAutocompleteDrawer } from '@/shared/components/generic'
 import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 import type { BlessingData } from '@/shared/stores/blessingsStore'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { Input } from '@/shared/ui/ui/input'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/shared/ui/ui/sheet'
 import { ChevronDown, Search, X, Zap } from 'lucide-react'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 interface BlessingAutocompleteProps {
   blessings: BlessingData[] | undefined | null
-  selectedBlessingId: string | null
+  selectedBlessingId?: string | null // Made optional since not used in mobile drawer
   onBlessingSelect: (blessingId: string | null) => void
   placeholder?: string
   className?: string
@@ -27,7 +20,7 @@ interface BlessingAutocompleteProps {
 
 export function BlessingAutocomplete({
   blessings,
-  selectedBlessingId,
+  selectedBlessingId: _selectedBlessingId, // Prefix with underscore to indicate intentionally unused
   onBlessingSelect,
   placeholder = 'Search for a blessing source...',
   className,
@@ -40,7 +33,7 @@ export function BlessingAutocomplete({
   const isMobile = useMediaQuery('(max-width: 640px)')
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const searchInputRef = useRef<HTMLInputElement>(null)
+  // const searchInputRef = useRef<HTMLInputElement>(null) // Not used in new API
 
   // Filter blessings based on search query
   const filteredBlessings = useMemo(() => {
@@ -54,15 +47,15 @@ export function BlessingAutocomplete({
         blessing.name.toLowerCase().includes(lowerQuery) ||
         blessing.blessingName.toLowerCase().includes(lowerQuery) ||
         blessing.blessingDescription.toLowerCase().includes(lowerQuery) ||
-        blessing.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
+        blessing.tags?.some(tag => typeof tag === 'string' && tag.toLowerCase().includes(lowerQuery))
     )
   }, [blessings, searchQuery])
 
-  // Find selected blessing
-  const selectedBlessing = useMemo(() => {
-    if (!selectedBlessingId || !blessings) return null
-    return blessings.find(blessing => blessing.id === selectedBlessingId)
-  }, [selectedBlessingId, blessings])
+  // Find selected blessing (for future use if needed)
+  // const selectedBlessing = useMemo(() => {
+  //   if (!selectedBlessingId || !blessings) return null
+  //   return blessings.find(blessing => blessing.id === selectedBlessingId)
+  // }, [selectedBlessingId, blessings])
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -86,20 +79,25 @@ export function BlessingAutocomplete({
     setActiveIndex(-1)
   }
 
-  const handleBlessingSelect = (blessingId: string) => {
+  const handleBlessingSelect = useCallback((blessing: BlessingData) => {
+    onBlessingSelect(blessing.id)
+    setSearchQuery(blessing.name) // Update search query to show selected blessing name
+  }, [onBlessingSelect])
+
+  const handleDesktopBlessingSelect = useCallback((blessingId: string) => {
     onBlessingSelect(blessingId)
     setSearchQuery('')
     setIsOpen(false)
     setActiveIndex(-1)
     setIsDrawerOpen(false)
-  }
+  }, [onBlessingSelect])
 
-  const handleClear = () => {
-    onBlessingSelect(null)
-    setSearchQuery('')
-    setIsOpen(false)
-    setActiveIndex(-1)
-  }
+  // const handleClear = () => {
+  //   onBlessingSelect(null)
+  //   setSearchQuery('')
+  //   setIsOpen(false)
+  //   setActiveIndex(-1)
+  // }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
@@ -111,7 +109,7 @@ export function BlessingAutocomplete({
     } else if (e.key === 'Enter') {
       e.preventDefault()
       if (activeIndex >= 0 && filteredBlessings[activeIndex]) {
-        handleBlessingSelect(filteredBlessings[activeIndex].id)
+        handleDesktopBlessingSelect(filteredBlessings[activeIndex].id)
       }
     } else if (e.key === 'Escape') {
       setIsOpen(false)
@@ -123,18 +121,15 @@ export function BlessingAutocomplete({
     setIsOpen(true)
   }
 
-  const clearSearch = () => {
-    setSearchQuery('')
-    inputRef.current?.focus()
-  }
+  // const clearSearch = () => {
+  //   setSearchQuery('')
+  //   inputRef.current?.focus()
+  // }
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value)
-    // Maintain focus on the input
-    setTimeout(() => {
-      searchInputRef.current?.focus()
-    }, 0)
-  }
+  // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSearchQuery(e.target.value)
+  //   // Removed the problematic setTimeout focus call that was causing keyboard flashing
+  // }
 
   const getDeityTypeBadge = (type: string) => {
     const typeStyles = {
@@ -172,126 +167,89 @@ export function BlessingAutocomplete({
     return `${minutes}m`
   }
 
-  // Mobile drawer content
-  const MobileBlessingDrawer = () => (
-    <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-      <SheetTrigger asChild>
-        <Button
-          variant="outline"
-          className={cn(
-            'w-full justify-between text-left font-normal',
-            !searchQuery && 'text-muted-foreground',
-            className
-          )}
-          disabled={disabled}
-        >
-          <span>{searchQuery || placeholder}</span>
-          <ChevronDown className="h-4 w-4 opacity-50" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent
-        side="bottom"
-        className="h-[85vh] max-h-[85vh] p-0 flex flex-col"
-        onOpenAutoFocus={e => e.preventDefault()}
-      >
-        <SheetHeader className="p-4 border-b flex-shrink-0">
-          <SheetTitle>Select Blessing</SheetTitle>
-          <SheetDescription>
-            Choose your favorite blessing from the options below
-          </SheetDescription>
-        </SheetHeader>
+  // Create a store-like object for the drawer
+  const blessingStore = useMemo(() => ({
+    data: filteredBlessings || [],
+    search: (query: string) => {
+      const lowerQuery = query.toLowerCase()
+      return (filteredBlessings || []).filter(blessing =>
+        blessing.name.toLowerCase().includes(lowerQuery) ||
+        blessing.blessingName.toLowerCase().includes(lowerQuery) ||
+        blessing.blessingDescription.toLowerCase().includes(lowerQuery)
+      )
+    }
+  }), [filteredBlessings])
 
-        {/* Search Input */}
-        <div className="p-4 border-b flex-shrink-0">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              ref={searchInputRef}
-              placeholder="Search blessings..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className="pl-10"
-            />
-            {searchQuery && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
-              >
-                <X className="h-3 w-3" />
-              </Button>
+  // Render function for blessing items in the drawer
+  const renderBlessingItem = useCallback((blessing: BlessingData, _isSelected: boolean) => (
+    <Button
+      variant="ghost"
+      className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+    >
+      <div className="w-full">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="font-medium">{blessing.name}</span>
+          {getDeityTypeBadge(blessing.type)}
+        </div>
+        {blessing.blessingName && (
+          <p className="text-sm font-medium text-primary mb-1">
+            {blessing.blessingName}
+          </p>
+        )}
+        {blessing.effects.length > 0 && (
+          <div className="space-y-1">
+            {blessing.effects
+              .slice(0, 2)
+              .map((effect, effectIndex) => (
+                <div
+                  key={effectIndex}
+                  className="flex items-center gap-2 text-sm text-muted-foreground"
+                >
+                  <Zap className="h-3 w-3 text-skyrim-gold" />
+                  <span className="font-medium">{effect.name}</span>
+                  {effect.magnitude > 0 && (
+                    <span className="text-xs">
+                      +{effect.magnitude}
+                    </span>
+                  )}
+                  {effect.duration > 0 && (
+                    <span className="text-xs">
+                      ({formatDuration(effect.duration)})
+                    </span>
+                  )}
+                </div>
+              ))}
+            {blessing.effects.length > 2 && (
+              <span className="text-xs text-muted-foreground">
+                +{blessing.effects.length - 2} more effects
+              </span>
             )}
           </div>
-        </div>
+        )}
+      </div>
+    </Button>
+  ), [getDeityTypeBadge, formatDuration])
 
-        {/* Blessing List */}
-        <div className="flex-1 overflow-y-auto overscroll-contain">
-          {filteredBlessings.length === 0 ? (
-            <div className="text-center py-8 px-4">
-              <p className="text-muted-foreground">No blessings found</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Try adjusting your search
-              </p>
-            </div>
-          ) : (
-            <div className="p-4 space-y-3">
-              {filteredBlessings.map(blessing => (
-                <Button
-                  key={blessing.id}
-                  variant="ghost"
-                  className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
-                  onClick={() => handleBlessingSelect(blessing.id)}
-                >
-                  <div className="w-full">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium">{blessing.name}</span>
-                      {getDeityTypeBadge(blessing.type)}
-                    </div>
-                    {blessing.blessingName && (
-                      <p className="text-sm font-medium text-primary mb-1">
-                        {blessing.blessingName}
-                      </p>
-                    )}
-                    {blessing.effects.length > 0 && (
-                      <div className="space-y-1">
-                        {blessing.effects
-                          .slice(0, 2)
-                          .map((effect, effectIndex) => (
-                            <div
-                              key={effectIndex}
-                              className="flex items-center gap-2 text-sm text-muted-foreground"
-                            >
-                              <Zap className="h-3 w-3 text-skyrim-gold" />
-                              <span className="font-medium">{effect.name}</span>
-                              {effect.magnitude > 0 && (
-                                <span className="text-xs">
-                                  +{effect.magnitude}
-                                </span>
-                              )}
-                              {effect.duration > 0 && (
-                                <span className="text-xs">
-                                  ({formatDuration(effect.duration)})
-                                </span>
-                              )}
-                            </div>
-                          ))}
-                        {blessing.effects.length > 2 && (
-                          <span className="text-xs text-muted-foreground">
-                            +{blessing.effects.length - 2} more effects
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </Button>
-              ))}
-            </div>
-          )}
-        </div>
-      </SheetContent>
-    </Sheet>
-  )
+  // Mobile drawer content
+  const MobileBlessingDrawer = () => {
+    return (
+      <MobileAutocompleteDrawer
+        isOpen={isDrawerOpen}
+        onOpenChange={setIsDrawerOpen}
+        onSelect={handleBlessingSelect}
+        searchPlaceholder="Search blessings..."
+        title="Select Blessing"
+        description="Choose your favorite blessing from the options below"
+        triggerText={searchQuery}
+        triggerPlaceholder={placeholder}
+        store={blessingStore}
+        renderItem={renderBlessingItem}
+        emptyMessage="No blessings found"
+        className={className}
+        disabled={disabled}
+      />
+    )
+  }
 
   // Desktop dropdown
   const DesktopBlessingDropdown = () => (
@@ -313,7 +271,10 @@ export function BlessingAutocomplete({
           <Button
             variant="ghost"
             size="sm"
-            onClick={clearSearch}
+            onClick={() => {
+              setSearchQuery('')
+              inputRef.current?.focus()
+            }}
             className="absolute right-8 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-muted"
           >
             <X className="h-4 w-4" />
@@ -350,7 +311,7 @@ export function BlessingAutocomplete({
               filteredBlessings.map((blessing, index) => (
                 <button
                   key={blessing.id}
-                  onClick={() => handleBlessingSelect(blessing.id)}
+                  onClick={() => handleDesktopBlessingSelect(blessing.id)}
                   className={cn(
                     'w-full text-left px-3 py-3 rounded-lg text-sm transition-all duration-200 cursor-pointer',
                     index === activeIndex

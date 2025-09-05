@@ -128,7 +128,7 @@ export class DestinyNodeModel {
       node =>
         node.name.toLowerCase().includes(lowerQuery) ||
         node.description.toLowerCase().includes(lowerQuery) ||
-        node.tags.some(tag => tag.toLowerCase().includes(lowerQuery))
+        node.tags.some(tag => typeof tag === 'string' && tag.toLowerCase().includes(lowerQuery))
     )
   }
 

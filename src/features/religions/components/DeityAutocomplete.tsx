@@ -2,25 +2,18 @@ import { cn } from '@/lib/utils'
 import {
   GenericAutocomplete,
   type AutocompleteOption,
+  MobileAutocompleteDrawer,
 } from '@/shared/components/generic'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { shouldShowFavoredRaces } from '@/shared/config/featureFlags'
 import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
-import { Input } from '@/shared/ui/ui/input'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/shared/ui/ui/sheet'
-import { ChevronDown, Search, Star, X } from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
+import { Star } from 'lucide-react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { Religion } from '../types'
+import type { DeityOption } from '../types/selection'
 import { getDeityOptions } from '../utils/religionFilters'
 
 interface DeityAutocompleteProps {
@@ -91,22 +84,23 @@ export function DeityAutocomplete({
     }))
   }, [filteredDeityOptions])
 
-  const handleDeitySelect = (option: AutocompleteOption) => {
+  const handleDeitySelect = useCallback((deity: DeityOption) => {
+    onDeitySelect(deity.id)
+    setSearchQuery(deity.name) // Update search query to show selected deity name
+  }, [onDeitySelect])
+
+  const handleDesktopDeitySelect = useCallback((option: AutocompleteOption) => {
     onDeitySelect(option.id)
-    setIsDrawerOpen(false)
-    setSearchQuery('')
-  }
+    setSearchQuery(option.label)
+  }, [onDeitySelect])
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value)
-    // Maintain focus on the input
-    setTimeout(() => {
-      searchInputRef.current?.focus()
-    }, 0)
+    // Removed the problematic setTimeout focus call that was causing keyboard flashing
   }
 
   // Custom renderer for deity options
-  const renderDeityOption = (option: AutocompleteOption, isActive: boolean) => (
+  const renderDeityOption = useMemo(() => (option: AutocompleteOption, isActive: boolean) => (
     <div className="flex items-center gap-3">
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
@@ -132,96 +126,66 @@ export function DeityAutocomplete({
           )}
       </div>
     </div>
-  )
+  ), [])
+
+  // Create a store-like object for the drawer
+  const deityStore = useMemo(() => ({
+    data: filteredDeityOptions,
+    search: (query: string) => {
+      const lowerQuery = query.toLowerCase()
+      return filteredDeityOptions.filter(deity =>
+        deity.name.toLowerCase().includes(lowerQuery) ||
+        deity.description?.toLowerCase().includes(lowerQuery)
+      )
+    }
+  }), [filteredDeityOptions])
+
+  // Render function for deity items in the drawer
+  const renderDeityItem = useCallback((deity: DeityOption, isSelected: boolean) => (
+    <Button
+      variant="ghost"
+      className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+    >
+      <div className="w-full">
+        {renderDeityOption(
+          {
+            id: deity.id,
+            label: deity.name,
+            description: deity.description,
+            value: deity,
+          },
+          isSelected
+        )}
+      </div>
+    </Button>
+  ), [renderDeityOption])
 
   // Mobile drawer content
-  const MobileDeityDrawer = () => (
-    <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-      <SheetTrigger asChild>
-        <Button
-          variant="outline"
-          className={cn(
-            'w-full justify-between text-left font-normal',
-            !searchQuery && 'text-muted-foreground',
-            className
-          )}
-          disabled={disabled}
-        >
-          <span>{searchQuery || placeholder}</span>
-          <ChevronDown className="h-4 w-4 opacity-50" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent
-        side="bottom"
-        className="h-[85vh] max-h-[85vh] p-0 flex flex-col"
-        onOpenAutoFocus={e => e.preventDefault()}
-      >
-        <SheetHeader className="p-4 border-b flex-shrink-0">
-          <SheetTitle>Select Religion</SheetTitle>
-          <SheetDescription>
-            Choose your character's religion from the options below
-          </SheetDescription>
-        </SheetHeader>
-
-        {/* Search Input */}
-        <div className="p-4 border-b flex-shrink-0">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              ref={searchInputRef}
-              placeholder="Search religions..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className="pl-10"
-            />
-            {searchQuery && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
-              >
-                <X className="h-3 w-3" />
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* Deity List */}
-        <div className="flex-1 overflow-y-auto overscroll-contain">
-          {autocompleteOptions.length === 0 ? (
-            <div className="text-center py-8 px-4">
-              <p className="text-muted-foreground">No religions found</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Try adjusting your search
-              </p>
-            </div>
-          ) : (
-            <div className="p-4 space-y-3">
-              {autocompleteOptions.map(option => (
-                <Button
-                  key={option.id}
-                  variant="ghost"
-                  className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
-                  onClick={() => handleDeitySelect(option)}
-                >
-                  <div className="w-full">
-                    {renderDeityOption(option, false)}
-                  </div>
-                </Button>
-              ))}
-            </div>
-          )}
-        </div>
-      </SheetContent>
-    </Sheet>
-  )
+  const MobileDeityDrawer = () => {
+    return (
+      <MobileAutocompleteDrawer
+        isOpen={isDrawerOpen}
+        onOpenChange={setIsDrawerOpen}
+        onSelect={handleDeitySelect}
+        searchPlaceholder="Search religions..."
+        title="Select Religion"
+        description="Choose your character's religion from the options below"
+        triggerText={searchQuery}
+        triggerPlaceholder={placeholder}
+        store={deityStore}
+        renderItem={renderDeityItem}
+        emptyMessage="No religions found"
+        className={className}
+        disabled={disabled}
+      />
+    )
+  }
 
   // Desktop autocomplete
   const DesktopDeityAutocomplete = () => (
     <GenericAutocomplete
       options={autocompleteOptions}
-      onSelect={handleDeitySelect}
+      onSelect={handleDesktopDeitySelect}
       placeholder={placeholder}
       className={className}
       renderOption={renderDeityOption}

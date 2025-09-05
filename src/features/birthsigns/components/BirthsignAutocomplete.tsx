@@ -2,22 +2,13 @@ import { cn } from '@/lib/utils'
 import {
   GenericAutocomplete,
   type AutocompleteOption,
+  MobileAutocompleteDrawer,
 } from '@/shared/components/generic'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
-import { Input } from '@/shared/ui/ui/input'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/shared/ui/ui/sheet'
-import { ChevronDown, Search, X } from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { Birthsign } from '../types'
 import { BirthsignAvatar } from './BirthsignAvatar'
@@ -66,27 +57,28 @@ export function BirthsignAutocomplete({
     }))
   }, [filteredBirthsigns])
 
-  const handleBirthsignSelect = (option: AutocompleteOption) => {
+  const handleBirthsignSelect = useCallback((birthsign: Birthsign) => {
+    onSelect(birthsign)
+    setSearchQuery(birthsign.name) // Update search query to show selected birthsign name
+  }, [onSelect])
+
+  const handleDesktopBirthsignSelect = useCallback((option: AutocompleteOption) => {
     const selectedBirthsign = birthsigns.find(
       birthsign => birthsign.edid === option.id
     )
     if (selectedBirthsign) {
       onSelect(selectedBirthsign)
-      setIsDrawerOpen(false)
-      setSearchQuery('')
+      setSearchQuery(selectedBirthsign.name)
     }
-  }
+  }, [birthsigns, onSelect])
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value)
-    // Maintain focus on the input
-    setTimeout(() => {
-      searchInputRef.current?.focus()
-    }, 0)
+    // Removed the problematic setTimeout focus call that was causing keyboard flashing
   }
 
   // Custom renderer for birthsign options
-  const renderBirthsignOption = (
+  const renderBirthsignOption = useMemo(() => (
     option: AutocompleteOption,
     isActive: boolean
   ) => (
@@ -105,95 +97,66 @@ export function BirthsignAutocomplete({
         )}
       </div>
     </div>
-  )
+  ), [])
+
+  // Create a store-like object for the drawer
+  const birthsignStore = useMemo(() => ({
+    data: birthsigns,
+    search: (query: string) => {
+      const lowerQuery = query.toLowerCase()
+      return birthsigns.filter(birthsign =>
+        birthsign.name.toLowerCase().includes(lowerQuery) ||
+        birthsign.description?.toLowerCase().includes(lowerQuery) ||
+        birthsign.group?.toLowerCase().includes(lowerQuery)
+      )
+    }
+  }), [birthsigns])
+
+  // Render function for birthsign items in the drawer
+  const renderBirthsignItem = useCallback((birthsign: Birthsign, isSelected: boolean) => (
+    <Button
+      variant="ghost"
+      className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+    >
+      <div className="w-full">
+        {renderBirthsignOption(
+          {
+            id: birthsign.edid,
+            label: birthsign.name,
+            description: birthsign.description,
+            value: birthsign,
+          },
+          isSelected
+        )}
+      </div>
+    </Button>
+  ), [renderBirthsignOption])
 
   // Mobile drawer content
-  const MobileBirthsignDrawer = () => (
-    <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-      <SheetTrigger asChild>
-        <Button
-          variant="outline"
-          className={cn(
-            'w-full justify-between text-left font-normal',
-            !searchQuery && 'text-muted-foreground',
-            className
-          )}
-        >
-          <span>{searchQuery || placeholder}</span>
-          <ChevronDown className="h-4 w-4 opacity-50" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent
-        side="bottom"
-        className="h-[85vh] max-h-[85vh] p-0 flex flex-col"
-        onOpenAutoFocus={e => e.preventDefault()}
-      >
-        <SheetHeader className="p-4 border-b flex-shrink-0">
-          <SheetTitle>Select Birth Sign</SheetTitle>
-          <SheetDescription>
-            Choose your character's birth sign from the options below
-          </SheetDescription>
-        </SheetHeader>
-
-        {/* Search Input */}
-        <div className="p-4 border-b flex-shrink-0">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              ref={searchInputRef}
-              placeholder="Search birthsigns..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className="pl-10"
-            />
-            {searchQuery && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
-              >
-                <X className="h-3 w-3" />
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* Birthsign List */}
-        <div className="flex-1 overflow-y-auto overscroll-contain">
-          {autocompleteOptions.length === 0 ? (
-            <div className="text-center py-8 px-4">
-              <p className="text-muted-foreground">No birthsigns found</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Try adjusting your search
-              </p>
-            </div>
-          ) : (
-            <div className="p-4 space-y-3">
-              {autocompleteOptions.map(option => (
-                <Button
-                  key={option.id}
-                  variant="ghost"
-                  className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
-                  onClick={() => handleBirthsignSelect(option)}
-                >
-                  <div className="w-full">
-                    {renderBirthsignOption(option, false)}
-                  </div>
-                </Button>
-              ))}
-            </div>
-          )}
-        </div>
-      </SheetContent>
-    </Sheet>
-  )
+  const MobileBirthsignDrawer = () => {
+    return (
+      <MobileAutocompleteDrawer
+        isOpen={isDrawerOpen}
+        onOpenChange={setIsDrawerOpen}
+        onSelect={handleBirthsignSelect}
+        searchPlaceholder="Search birthsigns..."
+        title="Select Birth Sign"
+        description="Choose your character's birth sign from the options below"
+        triggerText={searchQuery}
+        triggerPlaceholder={placeholder}
+        store={birthsignStore}
+        renderItem={renderBirthsignItem}
+        emptyMessage="No birthsigns found"
+        className={className}
+      />
+    )
+  }
 
   // Desktop autocomplete
   const DesktopBirthsignAutocomplete = () => (
     <GenericAutocomplete
       options={autocompleteOptions}
-      onSelect={handleBirthsignSelect}
+      onSelect={handleDesktopBirthsignSelect}
       placeholder={placeholder}
       className={className}
       renderOption={renderBirthsignOption}
