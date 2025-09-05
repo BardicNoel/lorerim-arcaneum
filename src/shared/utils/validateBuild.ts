@@ -1,4 +1,5 @@
-import type { BuildState } from '../types/build'
+import type { BuildState, LegacyBuildState, CompactBuildState } from '../types/build'
+import { getPerkData, isCompactFormat } from './compactPerkEncoding'
 
 /**
  * Validates and sanitizes a build state object, ensuring all required properties exist
@@ -48,11 +49,14 @@ export function validateBuild(
       bonus: validateNumber(build.traitLimits?.bonus, 1),
     },
 
-    // Perks - ensure objects exist and are valid
-    perks: {
-      selected: validateRecordOfStringArrays(build.perks?.selected),
-      ranks: validateRecordOfNumbers(build.perks?.ranks),
-    },
+    // Perks - handle both legacy and compact formats
+    ...(isCompactFormat(build) 
+      ? { p: validateCompactPerks(build.p) }
+      : { perks: {
+          selected: validateRecordOfStringArrays(build.perks?.selected),
+          ranks: validateRecordOfNumbers(build.perks?.ranks),
+        }}
+    ),
 
     // Skill levels - ensure object exists and is valid
     skillLevels: validateRecordOfNumbers(build.skillLevels),
@@ -80,13 +84,13 @@ export function validateBuild(
     },
   }
 
-  return validatedBuild
+  return validatedBuild as BuildState
 }
 
 /**
  * Returns a complete default build structure with all required properties
  */
-function getDefaultBuildStructure(): BuildState {
+function getDefaultBuildStructure(): LegacyBuildState {
   return {
     v: 1,
     name: '',
@@ -217,6 +221,29 @@ function validateRecordOfAttributeTypes(
         ['health', 'stamina', 'magicka'].includes(val)
       ) {
         validated[numKey] = val as 'health' | 'stamina' | 'magicka'
+      }
+    }
+
+    return validated
+  }
+  return {}
+}
+
+/**
+ * Validates compact perks format
+ */
+function validateCompactPerks(value: any): Record<string, number[]> {
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    const validated: Record<string, number[]> = {}
+
+    for (const [key, val] of Object.entries(value)) {
+      if (typeof key === 'string' && Array.isArray(val)) {
+        const validIndexes = val.filter(
+          (index) => typeof index === 'number' && index >= 0 && Number.isInteger(index)
+        )
+        if (validIndexes.length > 0) {
+          validated[key] = validIndexes
+        }
       }
     }
 

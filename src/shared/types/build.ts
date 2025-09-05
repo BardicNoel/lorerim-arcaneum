@@ -1,4 +1,16 @@
-export interface BuildState {
+// Compact perk format for reduced build link size
+export interface CompactPerks {
+  [skillCode: string]: number[] // skillCode -> array of perk indexes
+}
+
+// Legacy perk format (backwards compatibility)
+export interface LegacyPerks {
+  selected: Record<string, string[]> // skillId -> array of perk EDIDs
+  ranks: Record<string, number> // perkId -> current rank
+}
+
+// Base build state without perks (used for both formats)
+export interface BaseBuildState {
   v: number // Schema version
   name: string // Character name
   notes: string // RP flavor text
@@ -18,10 +30,6 @@ export interface BuildState {
     major: string[] // Array of EDIDs
     minor: string[] // Array of EDIDs
   }
-  perks: {
-    selected: Record<string, string[]> // skillId -> array of perk EDIDs
-    ranks: Record<string, number> // perkId -> current rank
-  }
   skillLevels: Record<string, number> // skillId -> minimum required level based on selected perks
   equipment: string[] // Array of EDIDs
   userProgress: {
@@ -38,8 +46,21 @@ export interface BuildState {
   }
 }
 
-export const DEFAULT_BUILD: BuildState = {
-  v: 1,
+// Legacy build state (backwards compatibility)
+export interface LegacyBuildState extends BaseBuildState {
+  perks: LegacyPerks
+}
+
+// Compact build state (new format)
+export interface CompactBuildState extends BaseBuildState {
+  p: CompactPerks // Compact perks using indexes
+}
+
+// Union type for build state (supports both formats)
+export type BuildState = LegacyBuildState | CompactBuildState
+
+export const DEFAULT_BUILD: LegacyBuildState = {
+  v: 2,
   name: '',
   notes: '',
   race: null,
