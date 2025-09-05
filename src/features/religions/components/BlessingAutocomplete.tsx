@@ -180,11 +180,12 @@ export function BlessingAutocomplete({
     }
   }), [filteredBlessings])
 
-  // Render function for blessing items in the drawer
-  const renderBlessingItem = useCallback((blessing: BlessingData, _isSelected: boolean) => (
+  // Render function for complete blessing list items in the drawer - using desktop layout
+  const renderBlessingListItem = useCallback((blessing: BlessingData, _isSelected: boolean, onSelect: () => void) => (
     <Button
       variant="ghost"
       className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+      onClick={onSelect}
     >
       <div className="w-full">
         <div className="flex items-center gap-2 mb-1">
@@ -243,7 +244,7 @@ export function BlessingAutocomplete({
         triggerText={searchQuery}
         triggerPlaceholder={placeholder}
         store={blessingStore}
-        renderItem={renderBlessingItem}
+        renderListItem={renderBlessingListItem}
         emptyMessage="No blessings found"
         className={className}
         disabled={disabled}

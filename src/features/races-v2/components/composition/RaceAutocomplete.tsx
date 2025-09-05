@@ -108,25 +108,42 @@ export function RaceAutocomplete({
     }
   }), [races])
 
-  // Render function for race items in the drawer
-  const renderRaceItem = useCallback((race: Race, isSelected: boolean) => (
+  // Render function for complete race list items in the drawer - using desktop layout
+  const renderRaceListItem = useCallback((race: Race, isSelected: boolean, onSelect: () => void) => (
     <Button
       variant="ghost"
       className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+      onClick={onSelect}
     >
-      <div className="w-full">
-        {renderRaceOption(
-          {
-            id: race.id || race.edid,
-            label: race.name,
-            description: race.description,
-            value: race,
-          },
-          isSelected
-        )}
+      <div className="flex items-center gap-3 w-full">
+        <div className="flex-shrink-0">
+          <RaceAvatar raceName={race.name} size="md" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="font-medium">{race.name}</span>
+            {race.category && (
+              <Badge
+                variant="outline"
+                className={cn(
+                  'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
+                  'text-xs font-medium transition-colors'
+                )}
+              >
+                {race.category}
+              </Badge>
+            )}
+          </div>
+          {race.description && (
+            <FormattedText
+              text={race.description}
+              className="text-sm text-muted-foreground line-clamp-2 mt-1"
+            />
+          )}
+        </div>
       </div>
     </Button>
-  ), [renderRaceOption])
+  ), [])
 
   // Mobile drawer content
   const MobileRaceDrawer = () => {
@@ -141,7 +158,7 @@ export function RaceAutocomplete({
         triggerText={searchQuery}
         triggerPlaceholder={placeholder}
         store={raceStore}
-        renderItem={renderRaceItem}
+        renderListItem={renderRaceListItem}
         emptyMessage="No races found"
         className={className}
       />

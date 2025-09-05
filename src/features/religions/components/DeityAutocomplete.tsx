@@ -140,25 +140,50 @@ export function DeityAutocomplete({
     }
   }), [filteredDeityOptions])
 
-  // Render function for deity items in the drawer
-  const renderDeityItem = useCallback((deity: DeityOption, isSelected: boolean) => (
+  // Render function for complete deity list items in the drawer - using desktop layout
+  const renderDeityListItem = useCallback((deity: DeityOption, isSelected: boolean, onSelect: () => void) => (
     <Button
       variant="ghost"
       className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+      onClick={onSelect}
     >
-      <div className="w-full">
-        {renderDeityOption(
-          {
-            id: deity.id,
-            label: deity.name,
-            description: deity.description,
-            value: deity,
-          },
-          isSelected
-        )}
+      <div className="flex items-center gap-3 w-full">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="font-medium">{deity.name}</span>
+            {deity.type && (
+              <Badge
+                variant="outline"
+                className={cn(
+                  'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
+                  'text-xs font-medium transition-colors'
+                )}
+              >
+                {deity.type}
+              </Badge>
+            )}
+          </div>
+          {deity.description && (
+            <FormattedText
+              text={deity.description}
+              className="text-sm text-muted-foreground line-clamp-2 mb-1"
+            />
+          )}
+          {shouldShowFavoredRaces() &&
+            deity.favoredRaces &&
+            deity.favoredRaces.length > 0 && (
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Star className="h-3 w-3 fill-current" />
+                <span>
+                  Favored races:{' '}
+                  {deity.favoredRaces.map(race => race.name).join(', ')}
+                </span>
+              </div>
+            )}
+        </div>
       </div>
     </Button>
-  ), [renderDeityOption])
+  ), [])
 
   // Mobile drawer content
   const MobileDeityDrawer = () => {
@@ -173,7 +198,7 @@ export function DeityAutocomplete({
         triggerText={searchQuery}
         triggerPlaceholder={placeholder}
         store={deityStore}
-        renderItem={renderDeityItem}
+        renderListItem={renderDeityListItem}
         emptyMessage="No religions found"
         className={className}
         disabled={disabled}

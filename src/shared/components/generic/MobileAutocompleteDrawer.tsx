@@ -35,8 +35,11 @@ export interface MobileAutocompleteDrawerProps<T> {
     search: (query: string) => T[]
   }
   
-  // Item rendering
-  renderItem: (item: T, isSelected: boolean) => React.ReactNode
+  // Item rendering - optional custom list item renderer
+  renderListItem?: (item: T, isSelected: boolean, onSelect: () => void) => React.ReactNode
+  
+  // Fallback item rendering for simple cases
+  renderItem?: (item: T, isSelected: boolean) => React.ReactNode
   
   // Empty state
   emptyMessage: string
@@ -57,6 +60,7 @@ const MobileAutocompleteDrawerComponent = <T,>({
   triggerText,
   triggerPlaceholder,
   store,
+  renderListItem,
   renderItem,
   emptyMessage,
   emptySubMessage = 'Try adjusting your search',
@@ -168,15 +172,44 @@ const MobileAutocompleteDrawerComponent = <T,>({
             </div>
           ) : (
             <div className="p-4 space-y-3">
-              {filteredData.map((item, index) => (
-                <div
-                  key={index}
-                  onClick={() => handleItemSelect(item)}
-                  className="cursor-pointer"
-                >
-                  {renderItem(item, false)}
-                </div>
-              ))}
+              {filteredData.map((item, index) => {
+                // Use custom renderListItem if provided, otherwise fall back to renderItem
+                if (renderListItem) {
+                  return (
+                    <div key={index}>
+                      {renderListItem(item, false, () => handleItemSelect(item))}
+                    </div>
+                  )
+                } else if (renderItem) {
+                  // Fallback to simple renderItem with default Button wrapper
+                  return (
+                    <Button
+                      key={index}
+                      variant="ghost"
+                      onClick={() => handleItemSelect(item)}
+                      className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+                    >
+                      <div className="w-full">
+                        {renderItem(item, false)}
+                      </div>
+                    </Button>
+                  )
+                } else {
+                  // Ultimate fallback - just render the item as a string
+                  return (
+                    <Button
+                      key={index}
+                      variant="ghost"
+                      onClick={() => handleItemSelect(item)}
+                      className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+                    >
+                      <div className="w-full">
+                        {String(item)}
+                      </div>
+                    </Button>
+                  )
+                }
+              })}
             </div>
           )}
         </div>

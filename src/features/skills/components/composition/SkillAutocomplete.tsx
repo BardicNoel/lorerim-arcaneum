@@ -137,25 +137,54 @@ export function SkillAutocomplete({
     }
   }), [skills])
 
-  // Render function for skill items in the drawer
-  const renderSkillItem = useCallback((skill: Skill, isSelected: boolean) => (
+  // Render function for complete skill list items in the drawer - using desktop layout
+  const renderSkillListItem = useCallback((skill: Skill, isSelected: boolean, onSelect: () => void) => (
     <Button
       variant="ghost"
       className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+      onClick={onSelect}
     >
-      <div className="w-full">
-        {renderSkillOption(
-          {
-            id: skill.id || skill.edid,
-            label: skill.name,
-            description: skill.description,
-            value: skill,
-          },
-          isSelected
-        )}
+      <div className="flex items-start gap-3 w-full">
+        <SkillAvatar
+          skillName={skill.name}
+          size="sm"
+          className="flex-shrink-0"
+        />
+        <div className="flex-1 min-w-0">
+          <div className="font-medium truncate">{skill.name}</div>
+          <div className="flex items-center gap-2 mt-1">
+            {skill.category && (
+              <Badge
+                variant="outline"
+                className={cn(
+                  'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
+                  'text-xs font-medium transition-colors'
+                )}
+              >
+                {skill.category}
+              </Badge>
+            )}
+            {skill.keyAbilities && skill.keyAbilities.length > 0 && (
+              <div className="text-xs text-muted-foreground">
+                {skill.keyAbilities.length} ability{skill.keyAbilities.length !== 1 ? 's' : ''}
+              </div>
+            )}
+          </div>
+          {skill.description && (
+            <FormattedText
+              text={skill.description}
+              className="text-sm text-muted-foreground mt-1 line-clamp-2"
+            />
+          )}
+          {skill.scaling && (
+            <div className="text-xs text-muted-foreground mt-1">
+              <strong>Scaling:</strong> {skill.scaling}
+            </div>
+          )}
+        </div>
       </div>
     </Button>
-  ), [renderSkillOption])
+  ), [])
 
   // Mobile drawer content
   const MobileSkillDrawer = () => {
@@ -170,7 +199,7 @@ export function SkillAutocomplete({
         triggerText={searchQuery}
         triggerPlaceholder={placeholder}
         store={skillStore}
-        renderItem={renderSkillItem}
+        renderListItem={renderSkillListItem}
         emptyMessage="No skills found"
         className={className}
         disabled={disabled}

@@ -109,25 +109,44 @@ export function TraitAutocomplete({
     }
   }), [traits])
 
-  // Render function for trait items in the drawer
-  const renderTraitItem = useCallback((trait: Trait, isSelected: boolean) => (
+  // Render function for complete trait list items in the drawer - using desktop layout
+  const renderTraitListItem = useCallback((trait: Trait, isSelected: boolean, onSelect: () => void) => (
     <Button
       variant="ghost"
       className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+      onClick={onSelect}
     >
-      <div className="w-full">
-        {renderTraitOption(
-          {
-            id: trait.id,
-            label: trait.name,
-            description: trait.description,
-            value: trait,
-          },
-          isSelected
-        )}
+      <div className="flex items-start gap-3 w-full">
+        <div className="flex-1 min-w-0">
+          <div className="font-medium truncate">{trait.name}</div>
+          <div className="flex items-center gap-2 mt-1">
+            {trait.category && (
+              <Badge
+                variant="outline"
+                className={cn(
+                  'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
+                  'text-xs font-medium transition-colors'
+                )}
+              >
+                {trait.category}
+              </Badge>
+            )}
+            {trait.effects && trait.effects.length > 0 && (
+              <div className="text-xs text-muted-foreground">
+                {trait.effects.length} effect{trait.effects.length !== 1 ? 's' : ''}
+              </div>
+            )}
+          </div>
+          {trait.description && (
+            <FormattedText
+              text={trait.description}
+              className="text-sm text-muted-foreground mt-1 line-clamp-2"
+            />
+          )}
+        </div>
       </div>
     </Button>
-  ), [renderTraitOption])
+  ), [])
 
   // Mobile drawer content
   const MobileTraitDrawer = () => {
@@ -142,7 +161,7 @@ export function TraitAutocomplete({
         triggerText={searchQuery}
         triggerPlaceholder={placeholder}
         store={traitStore}
-        renderItem={renderTraitItem}
+        renderListItem={renderTraitListItem}
         emptyMessage="No traits found"
         className={className}
         disabled={disabled}

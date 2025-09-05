@@ -112,25 +112,42 @@ export function BirthsignAutocomplete({
     }
   }), [birthsigns])
 
-  // Render function for birthsign items in the drawer
-  const renderBirthsignItem = useCallback((birthsign: Birthsign, isSelected: boolean) => (
+  // Render function for complete birthsign list items in the drawer - using desktop layout
+  const renderBirthsignListItem = useCallback((birthsign: Birthsign, isSelected: boolean, onSelect: () => void) => (
     <Button
       variant="ghost"
       className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+      onClick={onSelect}
     >
-      <div className="w-full">
-        {renderBirthsignOption(
-          {
-            id: birthsign.edid,
-            label: birthsign.name,
-            description: birthsign.description,
-            value: birthsign,
-          },
-          isSelected
-        )}
+      <div className="flex items-center gap-3 w-full">
+        <div className="flex-shrink-0">
+          <BirthsignAvatar birthsignName={birthsign.name} size="md" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="font-medium">{birthsign.name}</span>
+            {birthsign.group && (
+              <Badge
+                variant="outline"
+                className={cn(
+                  'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
+                  'text-xs font-medium transition-colors'
+                )}
+              >
+                {birthsign.group}
+              </Badge>
+            )}
+          </div>
+          {birthsign.description && (
+            <FormattedText
+              text={birthsign.description}
+              className="text-sm text-muted-foreground line-clamp-2 mt-1"
+            />
+          )}
+        </div>
       </div>
     </Button>
-  ), [renderBirthsignOption])
+  ), [])
 
   // Mobile drawer content
   const MobileBirthsignDrawer = () => {
@@ -145,7 +162,7 @@ export function BirthsignAutocomplete({
         triggerText={searchQuery}
         triggerPlaceholder={placeholder}
         store={birthsignStore}
-        renderItem={renderBirthsignItem}
+        renderListItem={renderBirthsignListItem}
         emptyMessage="No birthsigns found"
         className={className}
       />
