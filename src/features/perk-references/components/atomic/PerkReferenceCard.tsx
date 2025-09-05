@@ -1,10 +1,9 @@
-import React from 'react'
-import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
-import { Badge } from '@/shared/ui/ui/badge'
-import { H3, P, Small } from '@/shared/ui/ui/typography'
-import { PerkReferenceBadge } from './PerkReferenceBadge'
 import { AddToBuildButton } from '@/shared/components/playerCreation/AddToBuildButton'
+import { Badge } from '@/shared/ui/ui/badge'
+import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
+import { H3, P, Small } from '@/shared/ui/ui/typography'
 import type { PerkReferenceItem } from '../../types'
+import { PerkReferenceBadge } from './PerkReferenceBadge'
 
 interface PerkReferenceCardProps {
   item: PerkReferenceItem
@@ -69,9 +68,17 @@ export function PerkReferenceCard({
       </CardHeader>
 
       <CardContent>
-        <P className="text-sm text-muted-foreground mb-4 line-clamp-2">
-          {item.summary || item.description}
-        </P>
+        <div className="mb-4 space-y-1">
+          <P className="text-sm text-muted-foreground line-clamp-2">
+            {item.description}
+          </P>
+          {/* Subtext as secondary section */}
+          {item.summary && (
+            <P className="text-xs text-muted-foreground/80 italic border-l-2 border-muted pl-2 line-clamp-2">
+              {item.summary}
+            </P>
+          )}
+        </div>
 
         <div className="flex items-center justify-between">
           <div className="flex flex-wrap gap-1">
@@ -113,4 +120,4 @@ export function PerkReferenceCard({
       </CardContent>
     </Card>
   )
-} 
+}

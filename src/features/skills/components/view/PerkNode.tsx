@@ -2,8 +2,8 @@ import { Z_INDEX } from '@/lib/constants'
 import {
   HoverCard,
   HoverCardContent,
-  HoverCardTrigger,
   HoverCardPortal,
+  HoverCardTrigger,
 } from '@/shared/ui/ui/hover-card'
 import React, { memo } from 'react'
 import { Handle, Position } from 'reactflow'
@@ -117,15 +117,15 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
 
   // Get the description from the first rank
   const description = data.ranks[0]?.description?.base || ''
+  const subtext = data.ranks[0]?.description?.subtext || ''
 
-    return (
+  return (
     <HoverCard>
       <HoverCardTrigger asChild>
         <div
           style={getNodeStyle()}
           onClick={handleNodeClick}
           onMouseDown={e => e.stopPropagation()}
-          
         >
           {/* Only show target handle if this node is not a root (has prerequisites) */}
           {!data.isRoot && <Handle type="target" position={Position.Bottom} />}
@@ -147,16 +147,24 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
       <HoverCardPortal>
         <HoverCardContent
           className="w-80"
-          style={{ 
+          style={{
             zIndex: Z_INDEX.TOOLTIP,
             backgroundColor: 'hsl(var(--background))',
             border: '1px solid hsl(var(--border))',
-            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+            boxShadow:
+              '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
           }}
         >
           <div className="space-y-2">
             <h4 className="font-semibold text-sm">{data.name}</h4>
             <div className="text-sm text-muted-foreground">{description}</div>
+
+            {/* Subtext as secondary section */}
+            {subtext && (
+              <div className="text-xs text-muted-foreground/80 italic border-l-2 border-muted pl-2">
+                {subtext}
+              </div>
+            )}
 
             {/* Minimum skill level requirement */}
             {typeof data.ranks[0]?.prerequisites?.skillLevel?.level ===
