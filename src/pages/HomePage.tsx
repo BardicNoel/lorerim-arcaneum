@@ -60,7 +60,7 @@ export default function HomePage() {
       author: 'Rudy',
     },
     {
-      name: 'Spell Sheet Generator',
+      name: 'Spell List Google Sheet',
       description: 'Lorerim Spell List Google Sheet',
       url: 'https://docs.google.com/spreadsheets/d/1fvYHRfwAprpgEPaXyuteEx0ud9S572noYnlpVq6cJFs/edit?gid=915313506#gid=915313506',
       icon: <BookOpen className="h-5 w-5 text-primary" />,
