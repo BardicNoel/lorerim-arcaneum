@@ -1,5 +1,7 @@
-import type { BuildState, LegacyBuildState, CompactBuildState } from '../types/build'
-import { getPerkData, isCompactFormat } from './compactPerkEncoding'
+import type { BuildState, LegacyBuildState } from '../types/build'
+import { isCompressedBuildState } from '../types/build'
+import { toLegacy } from './buildCompression'
+import { isCompactFormat } from './compactPerkEncoding'
 
 /**
  * Validates and sanitizes a build state object, ensuring all required properties exist
@@ -14,6 +16,11 @@ export function validateBuild(
   // If no build provided, return default structure
   if (!build) {
     return getDefaultBuildStructure()
+  }
+
+  // If it's a compressed build, convert to legacy format for validation
+  if (isCompressedBuildState(build)) {
+    return toLegacy(build)
   }
 
   // Ensure the build has the required structure to prevent undefined errors
@@ -50,13 +57,14 @@ export function validateBuild(
     },
 
     // Perks - handle both legacy and compact formats
-    ...(isCompactFormat(build) 
+    ...(isCompactFormat(build)
       ? { p: validateCompactPerks(build.p) }
-      : { perks: {
-          selected: validateRecordOfStringArrays(build.perks?.selected),
-          ranks: validateRecordOfNumbers(build.perks?.ranks),
-        }}
-    ),
+      : {
+          perks: {
+            selected: validateRecordOfStringArrays(build.perks?.selected),
+            ranks: validateRecordOfNumbers(build.perks?.ranks),
+          },
+        }),
 
     // Skill levels - ensure object exists and is valid
     skillLevels: validateRecordOfNumbers(build.skillLevels),
@@ -239,7 +247,8 @@ function validateCompactPerks(value: any): Record<string, number[]> {
     for (const [key, val] of Object.entries(value)) {
       if (typeof key === 'string' && Array.isArray(val)) {
         const validIndexes = val.filter(
-          (index) => typeof index === 'number' && index >= 0 && Number.isInteger(index)
+          index =>
+            typeof index === 'number' && index >= 0 && Number.isInteger(index)
         )
         if (validIndexes.length > 0) {
           validated[key] = validIndexes
