@@ -93,8 +93,8 @@ function NavigationContent({
     const buildParam = params.get('b')
 
     if (buildParam) {
-      // Preserve the build parameter when navigating
-      navigate(`${to}?b=${buildParam}`)
+      // Preserve the build parameter when navigating using hash
+      window.location.hash = `${to}?b=${buildParam}`
     } else {
       // No build parameter, just navigate normally
       navigate(to)
@@ -175,8 +175,8 @@ function AppSidebar({
     const buildParam = params.get('b')
 
     if (buildParam) {
-      // Preserve the build parameter when navigating
-      navigate(`${to}?b=${buildParam}`)
+      // Preserve the build parameter when navigating using hash
+      window.location.hash = `${to}?b=${buildParam}`
     } else {
       // No build parameter, just navigate normally
       navigate(to)

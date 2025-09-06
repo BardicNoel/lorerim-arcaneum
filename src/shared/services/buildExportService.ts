@@ -19,6 +19,8 @@ function formatForDiscord(text: string): string {
   return text
     .replace(/\*\*\*(.*?)\*\*\*/g, '**$1**') // Convert *** to **
     .replace(/<(\d+)>/g, 'Level $1') // Convert <N> to Level N
+    .replace(/<Global=([^>]+)>/g, 'X%') // Convert <Global=Variable> to X%
+    .replace(/<[^>]+>/g, 'X%') // Convert any other angle bracket variables to X%
     .replace(/\n+/g, ' ') // Convert newlines to spaces
     .trim()
 }
@@ -613,16 +615,23 @@ export function hydrateBuildData(build: BuildState): HydratedBuildData {
     magicka: 100,
   }
 
-  // Calculate total attributes (race base + level assignments)
+  // Calculate total attributes (race base + level assignments * 5)
   const totalHealth =
-    raceBaseStats.health + (build.attributeAssignments.health || 0)
+    raceBaseStats.health + (build.attributeAssignments.health || 0) * 5
   const totalStamina =
-    raceBaseStats.stamina + (build.attributeAssignments.stamina || 0)
+    raceBaseStats.stamina + (build.attributeAssignments.stamina || 0) * 5
   const totalMagicka =
-    raceBaseStats.magicka + (build.attributeAssignments.magicka || 0)
+    raceBaseStats.magicka + (build.attributeAssignments.magicka || 0) * 5
+
+  // Calculate total character level (base level 1 + all attribute assignments)
+  const totalCharacterLevel =
+    1 +
+    (build.attributeAssignments.health || 0) +
+    (build.attributeAssignments.stamina || 0) +
+    (build.attributeAssignments.magicka || 0)
 
   const attributes = {
-    level: build.attributeAssignments.level || 1,
+    level: totalCharacterLevel,
     health: totalHealth,
     stamina: totalStamina,
     magicka: totalMagicka,

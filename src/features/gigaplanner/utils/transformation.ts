@@ -74,7 +74,7 @@ export interface BuildState {
     stamina: number
     magicka: number
     level: number
-    assignments: Record<number, 'health' | 'stamina' | 'magicka'>
+    // Removed: assignments: Record<number, 'health' | 'stamina' | 'magicka'>
   }
 }
 

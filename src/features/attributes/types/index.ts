@@ -5,7 +5,7 @@ export interface AttributeAssignments {
   stamina: number
   magicka: number
   level: number
-  assignments: Record<number, AttributeType>
+  // Removed: assignments: Record<number, AttributeType>
 }
 
 export interface AttributeStats {
@@ -19,4 +19,4 @@ export interface AttributeDisplayData {
   health: AttributeStats
   stamina: AttributeStats
   magicka: AttributeStats
-} 
+}

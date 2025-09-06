@@ -8,9 +8,8 @@ interface CharacterStore {
   updateBuild: (updates: Partial<BuildState>) => void
   setBuild: (build: BuildState) => void
   resetBuild: () => void
-  // NEW: Attribute assignment methods
-  setAttributeAssignment: (level: number, attribute: AttributeType) => void
-  clearAttributeAssignment: (level: number) => void
+  // NEW: Attribute assignment methods (simplified - no level tracking)
+  setAttributePoints: (attribute: AttributeType, points: number) => void
   clearAllAttributeAssignments: () => void
   updateAttributeLevel: (level: number) => void
 }
@@ -18,91 +17,36 @@ interface CharacterStore {
 export const useCharacterStore = create<CharacterStore>((set, get) => ({
   build: DEFAULT_BUILD,
   updateBuild: updates => {
-    console.log('📥 [Character Store] Received build updates:', updates)
-    if (updates.destinyPath) {
-      console.log(
-        '🎯 [Character Store] Destiny path update detected:',
-        updates.destinyPath
-      )
-    }
     set(state => {
-      console.log(
-        '🔄 [Character Store] Current state before update:',
-        state.build
-      )
       const newBuild = { ...state.build, ...updates }
-      console.log('📊 [Character Store] Previous build state:', state.build)
-      console.log('📊 [Character Store] New build state:', newBuild)
-      if (newBuild.destinyPath) {
-        console.log(
-          '🎯 [Character Store] New destiny path in build:',
-          newBuild.destinyPath
-        )
+      // Only validate if there are significant changes (not just name/notes)
+      const needsValidation =
+        updates.race !== undefined ||
+        updates.stone !== undefined ||
+        updates.religion !== undefined ||
+        updates.favoriteBlessing !== undefined ||
+        updates.traits !== undefined ||
+        updates.skills !== undefined ||
+        updates.destinyPath !== undefined ||
+        updates.perks !== undefined ||
+        updates.attributeAssignments !== undefined
+
+      return {
+        build: needsValidation ? validateBuild(newBuild) : newBuild,
       }
-      // Validate the final build state to ensure data integrity
-      const validatedBuild = validateBuild(newBuild)
-      console.log('🔄 [Character Store] About to return validated state:', {
-        build: validatedBuild,
-      })
-      return { build: validatedBuild }
     })
-    console.log('✅ [Character Store] Build state updated successfully')
   },
   setBuild: build => set({ build: validateBuild(build) }),
   resetBuild: () => set({ build: DEFAULT_BUILD }),
 
-  // NEW: Attribute assignment methods
-  setAttributeAssignment: (level: number, attribute: AttributeType) => {
+  // NEW: Attribute assignment methods (simplified - no level tracking)
+  setAttributePoints: (attribute: AttributeType, points: number) => {
     set(state => {
-      const currentAssignments = {
-        ...state.build.attributeAssignments.assignments,
-      }
-      const currentTotals = { ...state.build.attributeAssignments }
-
-      // Remove previous assignment for this level if it exists
-      const previousAssignment = currentAssignments[level]
-      if (previousAssignment) {
-        currentTotals[previousAssignment] = Math.max(
-          0,
-          currentTotals[previousAssignment] - 5
-        )
-      }
-
-      // Add new assignment (5 points per level)
-      currentAssignments[level] = attribute
-      currentTotals[attribute] += 5
-
       const newBuild = {
         ...state.build,
         attributeAssignments: {
           ...state.build.attributeAssignments,
-          ...currentTotals,
-          assignments: currentAssignments,
-        },
-      }
-      return { build: validateBuild(newBuild) }
-    })
-  },
-
-  clearAttributeAssignment: (level: number) => {
-    set(state => {
-      const currentAssignments = {
-        ...state.build.attributeAssignments.assignments,
-      }
-      const currentTotals = { ...state.build.attributeAssignments }
-
-      const assignment = currentAssignments[level]
-      if (assignment) {
-        currentTotals[assignment] = Math.max(0, currentTotals[assignment] - 5)
-        delete currentAssignments[level]
-      }
-
-      const newBuild = {
-        ...state.build,
-        attributeAssignments: {
-          ...state.build.attributeAssignments,
-          ...currentTotals,
-          assignments: currentAssignments,
+          [attribute]: Math.max(0, points),
         },
       }
       return { build: validateBuild(newBuild) }
@@ -118,7 +62,6 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
           stamina: 0,
           magicka: 0,
           level: state.build.attributeAssignments.level,
-          assignments: {},
         },
       }
       return { build: validateBuild(newBuild) }

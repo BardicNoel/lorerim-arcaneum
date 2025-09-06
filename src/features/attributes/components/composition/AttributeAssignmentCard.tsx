@@ -28,24 +28,22 @@ export function AttributeAssignmentCard({
     displayData,
     level,
     selectedRace,
-    setAttributeAssignment,
-    clearAttributeAssignment,
+    setAttributePoints,
     clearAllAttributeAssignments,
     updateAttributeLevel,
+    getTotalAssignments,
+    getMaxPossibleAssignments,
+    getRemainingAssignments,
   } = useAttributeAssignments()
 
   // Get derived stats calculation
   const derivedStatsCalculation = useDerivedStatsCalculation()
 
-  const handleAssignmentChange = (
-    level: number,
-    attribute: 'health' | 'stamina' | 'magicka'
+  const handleAttributeChange = (
+    attribute: 'health' | 'stamina' | 'magicka',
+    points: number
   ) => {
-    setAttributeAssignment(level, attribute)
-  }
-
-  const handleClearAssignment = (level: number) => {
-    clearAttributeAssignment(level)
+    setAttributePoints(attribute, points)
   }
 
   const handleClearAll = () => {
@@ -95,11 +93,13 @@ export function AttributeAssignmentCard({
         {showControls && isExpanded && (
           <AttributeAssignmentControls
             level={level}
-            assignments={assignments.assignments}
-            onAssignmentChange={handleAssignmentChange}
-            onClearAssignment={handleClearAssignment}
+            assignments={assignments}
+            onAttributeChange={handleAttributeChange}
             onClearAll={handleClearAll}
             onUpdateAttributeLevel={updateAttributeLevel}
+            getTotalAssignments={getTotalAssignments}
+            getMaxPossibleAssignments={getMaxPossibleAssignments}
+            getRemainingAssignments={getRemainingAssignments}
           />
         )}
 

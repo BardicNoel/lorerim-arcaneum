@@ -1,4 +1,7 @@
-import type { BuildState } from '../types/build'
+import type { BuildState, LegacyBuildState } from '../types/build'
+import { isCompressedBuildState } from '../types/build'
+import { toLegacy } from './buildCompression'
+import { isCompactFormat } from './compactPerkEncoding'
 
 /**
  * Validates and sanitizes a build state object, ensuring all required properties exist
@@ -13,6 +16,11 @@ export function validateBuild(
   // If no build provided, return default structure
   if (!build) {
     return getDefaultBuildStructure()
+  }
+
+  // If it's a compressed build, convert to legacy format for validation
+  if (isCompressedBuildState(build)) {
+    return toLegacy(build)
   }
 
   // Ensure the build has the required structure to prevent undefined errors
@@ -48,11 +56,15 @@ export function validateBuild(
       bonus: validateNumber(build.traitLimits?.bonus, 1),
     },
 
-    // Perks - ensure objects exist and are valid
-    perks: {
-      selected: validateRecordOfStringArrays(build.perks?.selected),
-      ranks: validateRecordOfNumbers(build.perks?.ranks),
-    },
+    // Perks - handle both legacy and compact formats
+    ...(isCompactFormat(build)
+      ? { p: validateCompactPerks(build.p) }
+      : {
+          perks: {
+            selected: validateRecordOfStringArrays(build.perks?.selected),
+            ranks: validateRecordOfNumbers(build.perks?.ranks),
+          },
+        }),
 
     // Skill levels - ensure object exists and is valid
     skillLevels: validateRecordOfNumbers(build.skillLevels),
@@ -74,19 +86,17 @@ export function validateBuild(
       stamina: validateNumber(build.attributeAssignments?.stamina, 0),
       magicka: validateNumber(build.attributeAssignments?.magicka, 0),
       level: validateNumber(build.attributeAssignments?.level, 1),
-      assignments: validateRecordOfAttributeTypes(
-        build.attributeAssignments?.assignments
-      ),
+      // Removed: assignments: validateRecordOfAttributeTypes(...)
     },
   }
 
-  return validatedBuild
+  return validatedBuild as BuildState
 }
 
 /**
  * Returns a complete default build structure with all required properties
  */
-function getDefaultBuildStructure(): BuildState {
+function getDefaultBuildStructure(): LegacyBuildState {
   return {
     v: 1,
     name: '',
@@ -122,7 +132,7 @@ function getDefaultBuildStructure(): BuildState {
       stamina: 0,
       magicka: 0,
       level: 1,
-      assignments: {},
+      // Removed: assignments: {},
     },
   }
 }
@@ -217,6 +227,30 @@ function validateRecordOfAttributeTypes(
         ['health', 'stamina', 'magicka'].includes(val)
       ) {
         validated[numKey] = val as 'health' | 'stamina' | 'magicka'
+      }
+    }
+
+    return validated
+  }
+  return {}
+}
+
+/**
+ * Validates compact perks format
+ */
+function validateCompactPerks(value: any): Record<string, number[]> {
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    const validated: Record<string, number[]> = {}
+
+    for (const [key, val] of Object.entries(value)) {
+      if (typeof key === 'string' && Array.isArray(val)) {
+        const validIndexes = val.filter(
+          index =>
+            typeof index === 'number' && index >= 0 && Number.isInteger(index)
+        )
+        if (validIndexes.length > 0) {
+          validated[key] = validIndexes
+        }
       }
     }
 

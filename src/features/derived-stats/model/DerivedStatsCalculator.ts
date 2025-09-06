@@ -40,10 +40,10 @@ export class DerivedStatsCalculator {
       }
     }
 
-    // Add attribute assignments (points from character level)
-    base.health += build.attributeAssignments.health || 0
-    base.stamina += build.attributeAssignments.stamina || 0
-    base.magicka += build.attributeAssignments.magicka || 0
+    // Add attribute assignments (each assignment point = 5 attribute points)
+    base.health += (build.attributeAssignments.health || 0) * 5
+    base.stamina += (build.attributeAssignments.stamina || 0) * 5
+    base.magicka += (build.attributeAssignments.magicka || 0) * 5
 
     return base
   }

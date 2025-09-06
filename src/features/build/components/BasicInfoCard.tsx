@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import { Input } from '@/shared/ui/ui/input'
 import { Label } from '@/shared/ui/ui/label'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 interface BasicInfoCardProps {
   name: string
@@ -17,7 +17,7 @@ interface BasicInfoCardProps {
  * Handles character name and notes input for the build page.
  * This follows the birthsigns pattern of feature-specific components
  * that delegate to shared UI components.
- * 
+ *
  * Both name and notes fields use local state with debounced updates to prevent laggy typing.
  */
 export function BasicInfoCard({
@@ -30,32 +30,36 @@ export function BasicInfoCard({
   // Local state for name and notes to prevent laggy typing
   const [localName, setLocalName] = useState(name)
   const [localNotes, setLocalNotes] = useState(notes)
-  
+
+  // Refs to store timeout IDs for cleanup
+  const nameTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const notesTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
   // Debounced update to zustand store for name
   const debouncedUpdateName = useCallback(
-    (() => {
-      let timeoutId: NodeJS.Timeout
-      return (value: string) => {
-        clearTimeout(timeoutId)
-        timeoutId = setTimeout(() => {
-          onNameChange(value)
-        }, 300) // 300ms debounce delay
+    (value: string) => {
+      if (nameTimeoutRef.current) {
+        clearTimeout(nameTimeoutRef.current)
       }
-    })(),
+      nameTimeoutRef.current = setTimeout(() => {
+        onNameChange(value)
+        nameTimeoutRef.current = null
+      }, 1000) // 1000ms debounce delay for better performance
+    },
     [onNameChange]
   )
 
   // Debounced update to zustand store for notes
   const debouncedUpdateNotes = useCallback(
-    (() => {
-      let timeoutId: NodeJS.Timeout
-      return (value: string) => {
-        clearTimeout(timeoutId)
-        timeoutId = setTimeout(() => {
-          onNotesChange(value)
-        }, 300) // 300ms debounce delay
+    (value: string) => {
+      if (notesTimeoutRef.current) {
+        clearTimeout(notesTimeoutRef.current)
       }
-    })(),
+      notesTimeoutRef.current = setTimeout(() => {
+        onNotesChange(value)
+        notesTimeoutRef.current = null
+      }, 1000) // 1000ms debounce delay for better performance
+    },
     [onNotesChange]
   )
 
@@ -67,6 +71,19 @@ export function BasicInfoCard({
   useEffect(() => {
     setLocalNotes(notes)
   }, [notes])
+
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      // Clear any pending debounced updates
+      if (nameTimeoutRef.current) {
+        clearTimeout(nameTimeoutRef.current)
+      }
+      if (notesTimeoutRef.current) {
+        clearTimeout(notesTimeoutRef.current)
+      }
+    }
+  }, [])
 
   // Handle name change with local state and debounced update
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
