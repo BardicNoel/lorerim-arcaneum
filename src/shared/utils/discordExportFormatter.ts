@@ -60,9 +60,6 @@ export function formatBuildForDiscordNamesOnly(
   // Favorite Blessing
   lines.push(`__✨ Favorite Blessing__`)
   lines.push(`${data.favoriteBlessing.name}`)
-  if (data.favoriteBlessing.source !== 'None') {
-    lines.push(`• **Source:** ${data.favoriteBlessing.source}`)
-  }
   if (data.favoriteBlessing.effects !== 'No effects') {
     lines.push(`• **Effects:** ${data.favoriteBlessing.effects}`)
   }
@@ -71,16 +68,16 @@ export function formatBuildForDiscordNamesOnly(
   // NEW: Attributes
   lines.push(`__⚔️ Attributes (Level ${data.attributes.level})__`)
   const attributeParts = []
-  if (data.attributes.health > 0) {
-    const healthText = `Health: ${data.attributes.health} (${data.attributes.healthLevels} levels)`
+  if (data.attributes.healthLevels > 0) {
+    const healthText = `Health: ${data.attributes.health} (${data.attributes.healthLevels} lvl)`
     attributeParts.push(healthText)
   }
-  if (data.attributes.stamina > 0) {
-    const staminaText = `Stamina: ${data.attributes.stamina} (${data.attributes.staminaLevels} levels)`
+  if (data.attributes.staminaLevels > 0) {
+    const staminaText = `Stamina: ${data.attributes.stamina} (${data.attributes.staminaLevels} lvl)`
     attributeParts.push(staminaText)
   }
-  if (data.attributes.magicka > 0) {
-    const magickaText = `Magicka: ${data.attributes.magicka} (${data.attributes.magickaLevels} levels)`
+  if (data.attributes.magickaLevels > 0) {
+    const magickaText = `Magicka: ${data.attributes.magicka} (${data.attributes.magickaLevels} lvl)`
     attributeParts.push(magickaText)
   }
   if (attributeParts.length > 0) {
@@ -120,7 +117,7 @@ export function formatBuildForDiscordNamesOnly(
       skillGroup.perks.forEach(perk => {
         const rankText =
           perk.rank && perk.rank > 1 ? ` (Rank ${perk.rank})` : ''
-        lines.push(`• **${perk.name}${rankText}**`)
+        lines.push(`• ${perk.name}${rankText}`)
       })
       lines.push('')
     })
@@ -136,12 +133,6 @@ export function formatBuildForDiscordNamesOnly(
       }
       lines.push('')
     })
-  }
-
-  // Tags
-  if (data.tags.length > 0) {
-    lines.push('')
-    lines.push(data.tags.map(tag => `#${tag}`).join(' '))
   }
 
   return lines.join('\n')
@@ -207,9 +198,6 @@ export function formatBuildForDiscord(
   // Favorite Blessing
   lines.push(`__✨ Favorite Blessing__`)
   lines.push(`${data.favoriteBlessing.name}`)
-  if (data.favoriteBlessing.source !== 'None') {
-    lines.push(`• **Source:** ${data.favoriteBlessing.source}`)
-  }
   if (data.favoriteBlessing.effects !== 'No effects') {
     lines.push(`• **Effects:** ${data.favoriteBlessing.effects}`)
   }
@@ -218,16 +206,16 @@ export function formatBuildForDiscord(
   // NEW: Attributes
   lines.push(`__⚔️ Attributes (Level ${data.attributes.level})__`)
   const attributeParts = []
-  if (data.attributes.health > 0) {
-    const healthText = `Health: ${data.attributes.health} (${data.attributes.healthLevels} levels)`
+  if (data.attributes.healthLevels > 0) {
+    const healthText = `Health: ${data.attributes.health} (${data.attributes.healthLevels} lvl)`
     attributeParts.push(healthText)
   }
-  if (data.attributes.stamina > 0) {
-    const staminaText = `Stamina: ${data.attributes.stamina} (${data.attributes.staminaLevels} levels)`
+  if (data.attributes.staminaLevels > 0) {
+    const staminaText = `Stamina: ${data.attributes.stamina} (${data.attributes.staminaLevels} lvl)`
     attributeParts.push(staminaText)
   }
-  if (data.attributes.magicka > 0) {
-    const magickaText = `Magicka: ${data.attributes.magicka} (${data.attributes.magickaLevels} levels)`
+  if (data.attributes.magickaLevels > 0) {
+    const magickaText = `Magicka: ${data.attributes.magicka} (${data.attributes.magickaLevels} lvl)`
     attributeParts.push(magickaText)
   }
   if (attributeParts.length > 0) {
@@ -267,7 +255,7 @@ export function formatBuildForDiscord(
       skillGroup.perks.forEach(perk => {
         const rankText =
           perk.rank && perk.rank > 1 ? ` (Rank ${perk.rank})` : ''
-        lines.push(`• **${perk.name}${rankText}**`)
+        lines.push(`• ${perk.name}${rankText}`)
       })
       lines.push('')
     })
@@ -283,12 +271,6 @@ export function formatBuildForDiscord(
       }
       lines.push('')
     })
-  }
-
-  // Tags
-  if (data.tags.length > 0) {
-    lines.push('')
-    lines.push(data.tags.map(tag => `#${tag}`).join(' '))
   }
 
   return lines.join('\n')
