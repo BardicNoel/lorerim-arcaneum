@@ -8,9 +8,8 @@ interface CharacterStore {
   updateBuild: (updates: Partial<BuildState>) => void
   setBuild: (build: BuildState) => void
   resetBuild: () => void
-  // NEW: Attribute assignment methods
-  setAttributeAssignment: (level: number, attribute: AttributeType) => void
-  clearAttributeAssignment: (level: number) => void
+  // NEW: Attribute assignment methods (simplified - no level tracking)
+  setAttributePoints: (attribute: AttributeType, points: number) => void
   clearAllAttributeAssignments: () => void
   updateAttributeLevel: (level: number) => void
 }
@@ -51,58 +50,14 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
   setBuild: build => set({ build: validateBuild(build) }),
   resetBuild: () => set({ build: DEFAULT_BUILD }),
 
-  // NEW: Attribute assignment methods
-  setAttributeAssignment: (level: number, attribute: AttributeType) => {
+  // NEW: Attribute assignment methods (simplified - no level tracking)
+  setAttributePoints: (attribute: AttributeType, points: number) => {
     set(state => {
-      const currentAssignments = {
-        ...state.build.attributeAssignments.assignments,
-      }
-      const currentTotals = { ...state.build.attributeAssignments }
-
-      // Remove previous assignment for this level if it exists
-      const previousAssignment = currentAssignments[level]
-      if (previousAssignment) {
-        currentTotals[previousAssignment] = Math.max(
-          0,
-          currentTotals[previousAssignment] - 5
-        )
-      }
-
-      // Add new assignment (5 points per level)
-      currentAssignments[level] = attribute
-      currentTotals[attribute] += 5
-
       const newBuild = {
         ...state.build,
         attributeAssignments: {
           ...state.build.attributeAssignments,
-          ...currentTotals,
-          assignments: currentAssignments,
-        },
-      }
-      return { build: validateBuild(newBuild) }
-    })
-  },
-
-  clearAttributeAssignment: (level: number) => {
-    set(state => {
-      const currentAssignments = {
-        ...state.build.attributeAssignments.assignments,
-      }
-      const currentTotals = { ...state.build.attributeAssignments }
-
-      const assignment = currentAssignments[level]
-      if (assignment) {
-        currentTotals[assignment] = Math.max(0, currentTotals[assignment] - 5)
-        delete currentAssignments[level]
-      }
-
-      const newBuild = {
-        ...state.build,
-        attributeAssignments: {
-          ...state.build.attributeAssignments,
-          ...currentTotals,
-          assignments: currentAssignments,
+          [attribute]: Math.max(0, points),
         },
       }
       return { build: validateBuild(newBuild) }
@@ -118,7 +73,6 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
           stamina: 0,
           magicka: 0,
           level: state.build.attributeAssignments.level,
-          assignments: {},
         },
       }
       return { build: validateBuild(newBuild) }

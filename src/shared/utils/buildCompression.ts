@@ -67,7 +67,7 @@ export function legacyToCompressed(
       st: legacy.attributeAssignments.stamina,
       m: legacy.attributeAssignments.magicka,
       l: legacy.attributeAssignments.level,
-      as: legacy.attributeAssignments.assignments,
+      // Removed: as: legacy.attributeAssignments.assignments,
     },
     p: compactPerksToIndexes(encodePerks(legacy.perks)),
   }
@@ -112,7 +112,7 @@ export function compactToCompressed(
       st: compact.attributeAssignments.stamina,
       m: compact.attributeAssignments.magicka,
       l: compact.attributeAssignments.level,
-      as: compact.attributeAssignments.assignments,
+      // Removed: as: compact.attributeAssignments.assignments,
     },
     p: compactPerksToIndexes(compact.p),
   }
@@ -155,7 +155,7 @@ export function compressedToLegacy(
       stamina: compressed.a.st,
       magicka: compressed.a.m,
       level: compressed.a.l,
-      assignments: compressed.a.as,
+      // Removed: assignments: compressed.a.as,
     },
     perks: decodePerks(compactPerksFromIndexes(compressed.p)),
   }
@@ -198,7 +198,7 @@ export function compressedToCompact(
       stamina: compressed.a.st,
       magicka: compressed.a.m,
       level: compressed.a.l,
-      assignments: compressed.a.as,
+      // Removed: assignments: compressed.a.as,
     },
     p: compactPerksFromIndexes(compressed.p),
   }

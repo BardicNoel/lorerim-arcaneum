@@ -8,78 +8,49 @@ import type { AttributeType } from '../../types'
 
 interface AttributeAssignmentControlsProps {
   level: number
-  assignments: Record<number, AttributeType>
-  onAssignmentChange: (level: number, attribute: AttributeType) => void
-  onClearAssignment: (level: number) => void
+  assignments: {
+    health: number
+    stamina: number
+    magicka: number
+    level: number
+  }
+  onAttributeChange: (attribute: AttributeType, points: number) => void
   onClearAll: () => void
   onUpdateAttributeLevel: (level: number) => void
+  getTotalAssignments: () => number
+  getMaxPossibleAssignments: () => number
+  getRemainingAssignments: () => number
   className?: string
 }
 
 export function AttributeAssignmentControls({
   level,
   assignments,
-  onAssignmentChange,
-  onClearAssignment,
+  onAttributeChange,
   onClearAll,
   onUpdateAttributeLevel,
+  getTotalAssignments,
+  getMaxPossibleAssignments,
+  getRemainingAssignments,
   className,
 }: AttributeAssignmentControlsProps) {
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
-  // Calculate current totals
-  const getAttributeTotal = (attribute: AttributeType) => {
-    return Object.values(assignments).filter(a => a === attribute).length
-  }
 
-  const healthTotal = getAttributeTotal('health')
-  const staminaTotal = getAttributeTotal('stamina')
-  const magickaTotal = getAttributeTotal('magicka')
-  const totalAssigned = healthTotal + staminaTotal + magickaTotal
-
-  // Derive level from total attributes (level = total + 1, since level 1 has no assignment)
-  const derivedLevel = totalAssigned + 1
-
-  const handleAttributeChange = (
-    attribute: AttributeType,
-    newValue: number
-  ) => {
-    const currentTotal = getAttributeTotal(attribute)
-    const difference = newValue - currentTotal
-
-    if (difference > 0) {
-      // Add points
-      for (let i = 0; i < difference; i++) {
-        // Find the next available level to assign
-        const nextLevel = Math.max(2, totalAssigned + 2 + i)
-        onAssignmentChange(nextLevel, attribute)
-      }
-    } else if (difference < 0) {
-      // Remove points
-      for (let i = 0; i < Math.abs(difference); i++) {
-        // Find the last assigned level for this attribute and clear it
-        for (let j = level; j >= 2; j--) {
-          if (assignments[j] === attribute) {
-            onClearAssignment(j)
-            break
-          }
-        }
-      }
-    }
-
-    // Update the level based on new total
-    const newTotal = totalAssigned + difference
-    onUpdateAttributeLevel(newTotal + 1)
-  }
+  const totalAssigned = getTotalAssignments()
+  const maxPossible = getMaxPossibleAssignments()
+  const remaining = getRemainingAssignments()
 
   const handleIncrement = (attribute: AttributeType) => {
-    handleAttributeChange(attribute, getAttributeTotal(attribute) + 1)
+    const currentValue = assignments[attribute]
+    // No limit on attribute points - always allow increment
+    onAttributeChange(attribute, currentValue + 1) // 1 point per increment
   }
 
   const handleDecrement = (attribute: AttributeType) => {
-    const currentTotal = getAttributeTotal(attribute)
-    if (currentTotal > 0) {
-      handleAttributeChange(attribute, currentTotal - 1)
+    const currentValue = assignments[attribute]
+    if (currentValue > 0) {
+      onAttributeChange(attribute, Math.max(0, currentValue - 1)) // 1 point per decrement
     }
   }
 
@@ -104,9 +75,28 @@ export function AttributeAssignmentControls({
 
       {/* Level Display with Integrated Controls */}
       <div className="p-3 bg-muted/30 rounded-lg border">
-        <div className="text-sm text-muted-foreground mb-3">
-          Character Level: {derivedLevel} (derived from {totalAssigned}{' '}
-          attribute points)
+        <div className="flex items-center justify-between mb-3">
+          <div className="text-sm text-muted-foreground">
+            Character Level: {level} • {totalAssigned} points assigned (
+            {totalAssigned * 5} total attribute points)
+            {maxPossible === Infinity ? '' : ` • ${remaining} remaining`}
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="text-xs text-muted-foreground">Level:</label>
+            <Input
+              type="number"
+              value={level}
+              onChange={e => {
+                const newLevel = parseInt(e.target.value) || 1
+                if (newLevel >= 1 && newLevel <= 100) {
+                  onUpdateAttributeLevel(newLevel)
+                }
+              }}
+              className="w-16 text-center text-sm"
+              min={1}
+              max={100}
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -128,18 +118,18 @@ export function AttributeAssignmentControls({
                 variant="outline"
                 size="sm"
                 onClick={() => handleDecrement('health')}
-                disabled={healthTotal <= 0}
+                disabled={assignments.health <= 0}
                 className="h-8 w-8 p-0"
               >
                 <Minus className="h-4 w-4" />
               </Button>
               <Input
                 type="number"
-                value={healthTotal}
+                value={assignments.health}
                 onChange={e => {
                   const newValue = parseInt(e.target.value) || 0
                   if (newValue >= 0) {
-                    handleAttributeChange('health', newValue)
+                    onAttributeChange('health', newValue)
                   }
                 }}
                 className={cn(
@@ -177,18 +167,18 @@ export function AttributeAssignmentControls({
                 variant="outline"
                 size="sm"
                 onClick={() => handleDecrement('stamina')}
-                disabled={staminaTotal <= 0}
+                disabled={assignments.stamina <= 0}
                 className="h-8 w-8 p-0"
               >
                 <Minus className="h-4 w-4" />
               </Button>
               <Input
                 type="number"
-                value={staminaTotal}
+                value={assignments.stamina}
                 onChange={e => {
                   const newValue = parseInt(e.target.value) || 0
                   if (newValue >= 0) {
-                    handleAttributeChange('stamina', newValue)
+                    onAttributeChange('stamina', newValue)
                   }
                 }}
                 className={cn(
@@ -226,18 +216,18 @@ export function AttributeAssignmentControls({
                 variant="outline"
                 size="sm"
                 onClick={() => handleDecrement('magicka')}
-                disabled={magickaTotal <= 0}
+                disabled={assignments.magicka <= 0}
                 className="h-8 w-8 p-0"
               >
                 <Minus className="h-4 w-4" />
               </Button>
               <Input
                 type="number"
-                value={magickaTotal}
+                value={assignments.magicka}
                 onChange={e => {
                   const newValue = parseInt(e.target.value) || 0
                   if (newValue >= 0) {
-                    handleAttributeChange('magicka', newValue)
+                    onAttributeChange('magicka', newValue)
                   }
                 }}
                 className={cn(

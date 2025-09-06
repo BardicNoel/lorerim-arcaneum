@@ -47,7 +47,7 @@ export interface BaseBuildState {
     stamina: number // Total stamina increases
     magicka: number // Total magicka increases
     level: number // Current character level
-    assignments: Record<number, 'health' | 'stamina' | 'magicka'> // Level -> attribute mapping
+    // Removed: assignments: Record<number, 'health' | 'stamina' | 'magicka'> // Level -> attribute mapping
   }
 }
 
@@ -87,7 +87,7 @@ export interface CompressedBuildState {
     st: number // Total stamina increases (compressed from 'stamina')
     m: number // Total magicka increases (compressed from 'magicka')
     l: number // Current character level (compressed from 'level')
-    as: Record<number, 'health' | 'stamina' | 'magicka'> // Level -> attribute mapping (compressed from 'assignments')
+    // Removed: as: Record<number, 'health' | 'stamina' | 'magicka'> // Level -> attribute mapping (compressed from 'assignments')
   }
   p: CompressedPerks // Compressed perks using skill indexes
 }
@@ -134,7 +134,7 @@ export const DEFAULT_BUILD: LegacyBuildState = {
     stamina: 0,
     magicka: 0,
     level: 1,
-    assignments: {},
+    // Removed: assignments: {},
   },
 }
 
@@ -164,7 +164,7 @@ export const DEFAULT_COMPRESSED_BUILD: CompressedBuildState = {
     st: 0, // stamina
     m: 0, // magicka
     l: 1, // level
-    as: {}, // assignments
+    // Removed: as: {}, // assignments
   },
   p: {}, // compressed perks
 }

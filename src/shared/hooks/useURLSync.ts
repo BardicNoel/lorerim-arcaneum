@@ -65,8 +65,6 @@ export const useURLSync = () => {
             legacyBuild.attributeAssignments.stamina === 0 &&
             legacyBuild.attributeAssignments.magicka === 0 &&
             legacyBuild.attributeAssignments.level === 1 &&
-            Object.keys(legacyBuild.attributeAssignments.assignments).length ===
-              0 &&
             Object.keys(legacyBuild.perks.selected).length === 0
 
           if (isDefaultBuild) {

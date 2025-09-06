@@ -40,11 +40,6 @@ describe('Build Compression Utilities', () => {
       stamina: 3,
       magicka: 2,
       level: 10,
-      assignments: {
-        2: 'health',
-        3: 'stamina',
-        4: 'magicka',
-      },
     },
     perks: {
       selected: {
@@ -95,11 +90,7 @@ describe('Build Compression Utilities', () => {
       expect(compressed.a.st).toBe(3)
       expect(compressed.a.m).toBe(2)
       expect(compressed.a.l).toBe(10)
-      expect(compressed.a.as).toEqual({
-        2: 'health',
-        3: 'stamina',
-        4: 'magicka',
-      })
+      // Removed: expect(compressed.a.as).toEqual({...})
 
       // Perks should be converted to compressed format
       expect(compressed.p).toBeDefined()
@@ -154,11 +145,7 @@ describe('Build Compression Utilities', () => {
       expect(legacy.attributeAssignments.stamina).toBe(3)
       expect(legacy.attributeAssignments.magicka).toBe(2)
       expect(legacy.attributeAssignments.level).toBe(10)
-      expect(legacy.attributeAssignments.assignments).toEqual({
-        2: 'health',
-        3: 'stamina',
-        4: 'magicka',
-      })
+      // Removed: expect(legacy.attributeAssignments.assignments).toEqual({...})
 
       // userProgress should be restored with empty unlocks
       expect(legacy.userProgress.unlocks).toEqual([])
@@ -199,8 +186,18 @@ describe('Build Compression Utilities', () => {
       expect(convertedBack.skillLevels).toEqual(original.skillLevels)
       expect(convertedBack.equipment).toEqual(original.equipment)
       expect(convertedBack.destinyPath).toEqual(original.destinyPath)
-      expect(convertedBack.attributeAssignments).toEqual(
-        original.attributeAssignments
+      // Compare attribute assignments (excluding assignments field which was removed)
+      expect(convertedBack.attributeAssignments.health).toBe(
+        original.attributeAssignments.health
+      )
+      expect(convertedBack.attributeAssignments.stamina).toBe(
+        original.attributeAssignments.stamina
+      )
+      expect(convertedBack.attributeAssignments.magicka).toBe(
+        original.attributeAssignments.magicka
+      )
+      expect(convertedBack.attributeAssignments.level).toBe(
+        original.attributeAssignments.level
       )
 
       // userProgress should be restored with empty unlocks

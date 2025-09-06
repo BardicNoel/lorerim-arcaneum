@@ -1,13 +1,12 @@
 import { useCharacterStore } from '@/shared/stores/characterStore'
 import { useRacesStore } from '@/shared/stores/racesStore'
 import { useMemo } from 'react'
-import type { AttributeDisplayData, AttributeType } from '../types'
+import type { AttributeDisplayData } from '../types'
 
 export function useAttributeAssignments() {
   const {
     build,
-    setAttributeAssignment,
-    clearAttributeAssignment,
+    setAttributePoints,
     clearAllAttributeAssignments,
     updateAttributeLevel,
   } = useCharacterStore()
@@ -48,7 +47,7 @@ export function useAttributeAssignments() {
       health: {
         base: baseStats.health,
         assigned: assignments.health,
-        total: baseStats.health + assignments.health,
+        total: baseStats.health + assignments.health * 5, // Each assignment point = 5 attribute points
         ratio:
           totalAssignments > 0
             ? (assignments.health / totalAssignments) * 100
@@ -57,7 +56,7 @@ export function useAttributeAssignments() {
       stamina: {
         base: baseStats.stamina,
         assigned: assignments.stamina,
-        total: baseStats.stamina + assignments.stamina,
+        total: baseStats.stamina + assignments.stamina * 5, // Each assignment point = 5 attribute points
         ratio:
           totalAssignments > 0
             ? (assignments.stamina / totalAssignments) * 100
@@ -66,7 +65,7 @@ export function useAttributeAssignments() {
       magicka: {
         base: baseStats.magicka,
         assigned: assignments.magicka,
-        total: baseStats.magicka + assignments.magicka,
+        total: baseStats.magicka + assignments.magicka * 5, // Each assignment point = 5 attribute points
         ratio:
           totalAssignments > 0
             ? (assignments.magicka / totalAssignments) * 100
@@ -75,31 +74,19 @@ export function useAttributeAssignments() {
     }
   }, [assignments, baseStats])
 
-  // Validation helpers
-  const canAssignAtLevel = (level: number) => {
-    return level > 0 && level <= assignments.level
-  }
-
-  const getAssignmentAtLevel = (level: number): AttributeType | null => {
-    return assignments.assignments[level] || null
-  }
-
+  // Validation helpers (simplified)
   const getTotalAssignments = () => {
     return assignments.health + assignments.stamina + assignments.magicka
   }
 
-  const getUnassignedLevels = () => {
-    const assignedLevels = Object.keys(assignments.assignments).map(Number)
-    const unassigned = []
+  const getMaxPossibleAssignments = () => {
+    // No limit on attribute points - users can assign any amount up to level 100
+    // The level cap is 100, so we allow unlimited assignment
+    return Infinity
+  }
 
-    for (let i = 2; i <= assignments.level; i++) {
-      // Start at level 2 (level 1 has no assignment)
-      if (!assignedLevels.includes(i)) {
-        unassigned.push(i)
-      }
-    }
-
-    return unassigned
+  const getRemainingAssignments = () => {
+    return getMaxPossibleAssignments() - getTotalAssignments()
   }
 
   return {
@@ -111,15 +98,13 @@ export function useAttributeAssignments() {
     baseStats,
 
     // Actions
-    setAttributeAssignment,
-    clearAttributeAssignment,
+    setAttributePoints,
     clearAllAttributeAssignments,
     updateAttributeLevel,
 
     // Computed
-    canAssignAtLevel,
-    getAssignmentAtLevel,
     getTotalAssignments,
-    getUnassignedLevels,
+    getMaxPossibleAssignments,
+    getRemainingAssignments,
   }
 }

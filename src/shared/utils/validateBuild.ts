@@ -86,9 +86,7 @@ export function validateBuild(
       stamina: validateNumber(build.attributeAssignments?.stamina, 0),
       magicka: validateNumber(build.attributeAssignments?.magicka, 0),
       level: validateNumber(build.attributeAssignments?.level, 1),
-      assignments: validateRecordOfAttributeTypes(
-        build.attributeAssignments?.assignments
-      ),
+      // Removed: assignments: validateRecordOfAttributeTypes(...)
     },
   }
 
@@ -134,7 +132,7 @@ function getDefaultBuildStructure(): LegacyBuildState {
       stamina: 0,
       magicka: 0,
       level: 1,
-      assignments: {},
+      // Removed: assignments: {},
     },
   }
 }

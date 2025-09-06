@@ -34,11 +34,6 @@ describe('URL Persistence with Compression', () => {
       stamina: 3,
       magicka: 2,
       level: 10,
-      assignments: {
-        2: 'health',
-        3: 'stamina',
-        4: 'magicka',
-      },
     },
     perks: {
       selected: {
@@ -92,11 +87,7 @@ describe('URL Persistence with Compression', () => {
       expect(decoded!.attributeAssignments.stamina).toBe(3)
       expect(decoded!.attributeAssignments.magicka).toBe(2)
       expect(decoded!.attributeAssignments.level).toBe(10)
-      expect(decoded!.attributeAssignments.assignments).toEqual({
-        2: 'health',
-        3: 'stamina',
-        4: 'magicka',
-      })
+      // Removed: expect(decoded!.attributeAssignments.assignments).toEqual({...})
 
       // userProgress should be restored with empty unlocks
       expect(decoded!.userProgress.unlocks).toEqual([])
