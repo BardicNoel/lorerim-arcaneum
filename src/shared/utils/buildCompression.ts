@@ -7,6 +7,7 @@
  * - Compressed: Compressed property names, skill indexes, compressed perks
  */
 
+import { destiniesFromIndexes, destiniesToIndexes } from '../data/destinyIndex'
 import {
   compactPerksFromIndexes,
   compactPerksToIndexes,
@@ -15,6 +16,7 @@ import {
   skillLevelsFromIndexes,
   skillLevelsToIndexes,
 } from '../data/skillIndex'
+import { traitsFromIndexes, traitsToIndexes } from '../data/traitIndex'
 import type {
   BuildState,
   CompactBuildState,
@@ -43,8 +45,8 @@ export function legacyToCompressed(
     g: legacy.religion,
     f: legacy.favoriteBlessing,
     t: {
-      r: legacy.traits.regular,
-      b: legacy.traits.bonus,
+      r: traitsToIndexes(legacy.traits.regular),
+      b: traitsToIndexes(legacy.traits.bonus),
     },
     // Only include trait limits if different from defaults
     ...(legacy.traitLimits.regular !== 2 || legacy.traitLimits.bonus !== 1
@@ -61,7 +63,7 @@ export function legacyToCompressed(
     },
     sl: skillLevelsToIndexes(legacy.skillLevels),
     e: legacy.equipment,
-    d: legacy.destinyPath,
+    d: destiniesToIndexes(legacy.destinyPath),
     a: {
       h: legacy.attributeAssignments.health,
       st: legacy.attributeAssignments.stamina,
@@ -88,8 +90,8 @@ export function compactToCompressed(
     g: compact.religion,
     f: compact.favoriteBlessing,
     t: {
-      r: compact.traits.regular,
-      b: compact.traits.bonus,
+      r: traitsToIndexes(compact.traits.regular),
+      b: traitsToIndexes(compact.traits.bonus),
     },
     // Only include trait limits if different from defaults
     ...(compact.traitLimits.regular !== 2 || compact.traitLimits.bonus !== 1
@@ -106,7 +108,7 @@ export function compactToCompressed(
     },
     sl: skillLevelsToIndexes(compact.skillLevels),
     e: compact.equipment,
-    d: compact.destinyPath,
+    d: destiniesToIndexes(compact.destinyPath),
     a: {
       h: compact.attributeAssignments.health,
       st: compact.attributeAssignments.stamina,
@@ -133,8 +135,8 @@ export function compressedToLegacy(
     religion: compressed.g,
     favoriteBlessing: compressed.f,
     traits: {
-      regular: compressed.t.r,
-      bonus: compressed.t.b,
+      regular: traitsFromIndexes(compressed.t.r),
+      bonus: traitsFromIndexes(compressed.t.b),
     },
     traitLimits: {
       regular: compressed.l?.[0] ?? 2,
@@ -149,7 +151,7 @@ export function compressedToLegacy(
     userProgress: {
       unlocks: [], // userProgress removed in compressed format
     },
-    destinyPath: compressed.d,
+    destinyPath: destiniesFromIndexes(compressed.d),
     attributeAssignments: {
       health: compressed.a.h,
       stamina: compressed.a.st,
@@ -176,8 +178,8 @@ export function compressedToCompact(
     religion: compressed.g,
     favoriteBlessing: compressed.f,
     traits: {
-      regular: compressed.t.r,
-      bonus: compressed.t.b,
+      regular: traitsFromIndexes(compressed.t.r),
+      bonus: traitsFromIndexes(compressed.t.b),
     },
     traitLimits: {
       regular: compressed.l?.[0] ?? 2,
@@ -192,7 +194,7 @@ export function compressedToCompact(
     userProgress: {
       unlocks: [], // userProgress removed in compressed format
     },
-    destinyPath: compressed.d,
+    destinyPath: destiniesFromIndexes(compressed.d),
     attributeAssignments: {
       health: compressed.a.h,
       stamina: compressed.a.st,

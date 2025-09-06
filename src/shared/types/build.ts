@@ -71,8 +71,8 @@ export interface CompressedBuildState {
   g: string | null // EDID of followed deity (compressed from 'religion')
   f: string | null // EDID of favorite blessing source (compressed from 'favoriteBlessing')
   t: {
-    r: string[] // Array of EDIDs (compressed from 'regular')
-    b: string[] // Array of EDIDs (compressed from 'bonus')
+    r: number[] // Array of trait indexes (compressed from 'regular')
+    b: number[] // Array of trait indexes (compressed from 'bonus')
   }
   l?: [number, number] // Optional trait limits as tuple [regular, bonus] (compressed from 'traitLimits')
   k: {
@@ -81,7 +81,7 @@ export interface CompressedBuildState {
   }
   sl: Record<number, number> // skillIndex -> minimum required level (compressed from 'skillLevels')
   e: string[] // Array of EDIDs (compressed from 'equipment')
-  d: string[] // Ordered array of DestinyNode ids (compressed from 'destinyPath')
+  d: number[] // Ordered array of destiny indexes (compressed from 'destinyPath')
   a: {
     h: number // Total health increases (compressed from 'health')
     st: number // Total stamina increases (compressed from 'stamina')
