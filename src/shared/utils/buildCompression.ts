@@ -7,7 +7,10 @@
  * - Compressed: Compressed property names, skill indexes, compressed perks
  */
 
+import { birthsignFromIndex, birthsignToIndex } from '../data/birthsignIndex'
 import { destiniesFromIndexes, destiniesToIndexes } from '../data/destinyIndex'
+import { raceFromIndex, raceToIndex } from '../data/raceIndex'
+import { religionFromIndex, religionToIndex } from '../data/religionIndex'
 import {
   compactPerksFromIndexes,
   compactPerksToIndexes,
@@ -40,10 +43,12 @@ export function legacyToCompressed(
     v: 2,
     n: legacy.name,
     o: legacy.notes,
-    r: legacy.race,
-    s: legacy.stone,
-    g: legacy.religion,
-    f: legacy.favoriteBlessing,
+    r: legacy.race ? raceToIndex(legacy.race) : null,
+    s: legacy.stone ? birthsignToIndex(legacy.stone) : null,
+    g: legacy.religion ? religionToIndex(legacy.religion) : null,
+    f: legacy.favoriteBlessing
+      ? religionToIndex(legacy.favoriteBlessing)
+      : null,
     t: {
       r: traitsToIndexes(legacy.traits.regular),
       b: traitsToIndexes(legacy.traits.bonus),
@@ -85,10 +90,12 @@ export function compactToCompressed(
     v: 2,
     n: compact.name,
     o: compact.notes,
-    r: compact.race,
-    s: compact.stone,
-    g: compact.religion,
-    f: compact.favoriteBlessing,
+    r: compact.race ? raceToIndex(compact.race) : null,
+    s: compact.stone ? birthsignToIndex(compact.stone) : null,
+    g: compact.religion ? religionToIndex(compact.religion) : null,
+    f: compact.favoriteBlessing
+      ? religionToIndex(compact.favoriteBlessing)
+      : null,
     t: {
       r: traitsToIndexes(compact.traits.regular),
       b: traitsToIndexes(compact.traits.bonus),
@@ -130,10 +137,11 @@ export function compressedToLegacy(
     v: 2,
     name: compressed.n,
     notes: compressed.o,
-    race: compressed.r,
-    stone: compressed.s,
-    religion: compressed.g,
-    favoriteBlessing: compressed.f,
+    race: compressed.r !== null ? raceFromIndex(compressed.r) : null,
+    stone: compressed.s !== null ? birthsignFromIndex(compressed.s) : null,
+    religion: compressed.g !== null ? religionFromIndex(compressed.g) : null,
+    favoriteBlessing:
+      compressed.f !== null ? religionFromIndex(compressed.f) : null,
     traits: {
       regular: traitsFromIndexes(compressed.t.r),
       bonus: traitsFromIndexes(compressed.t.b),
@@ -173,10 +181,11 @@ export function compressedToCompact(
     v: 2,
     name: compressed.n,
     notes: compressed.o,
-    race: compressed.r,
-    stone: compressed.s,
-    religion: compressed.g,
-    favoriteBlessing: compressed.f,
+    race: compressed.r !== null ? raceFromIndex(compressed.r) : null,
+    stone: compressed.s !== null ? birthsignFromIndex(compressed.s) : null,
+    religion: compressed.g !== null ? religionFromIndex(compressed.g) : null,
+    favoriteBlessing:
+      compressed.f !== null ? religionFromIndex(compressed.f) : null,
     traits: {
       regular: traitsFromIndexes(compressed.t.r),
       bonus: traitsFromIndexes(compressed.t.b),

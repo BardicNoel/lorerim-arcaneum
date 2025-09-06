@@ -66,10 +66,10 @@ export interface CompressedBuildState {
   v: number // Schema version
   n: string // Character name (compressed from 'name')
   o: string // RP flavor text (compressed from 'notes')
-  r: string | null // EDID (compressed from 'race')
-  s: string | null // EDID (compressed from 'stone')
-  g: string | null // EDID of followed deity (compressed from 'religion')
-  f: string | null // EDID of favorite blessing source (compressed from 'favoriteBlessing')
+  r: number | null // race index (compressed from 'race')
+  s: number | null // birthsign index (compressed from 'stone')
+  g: number | null // religion index (compressed from 'religion')
+  f: number | null // favorite blessing index (compressed from 'favoriteBlessing')
   t: {
     r: number[] // Array of trait indexes (compressed from 'regular')
     b: number[] // Array of trait indexes (compressed from 'bonus')
