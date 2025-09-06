@@ -1,40 +1,45 @@
 /**
  * Skill Index System for v2 Compression
- * 
+ *
  * This file creates a comprehensive skill indexing system to eliminate duplication
  * across different fields that reference the same skills with different naming conventions.
- * 
+ *
  * Current Problem:
  * - `p` field uses: "DST" (compact codes)
  * - `sl` field uses: "AVDestruction" (full EDIDs)
  * - `skills` field uses: "AVDestruction" (full EDIDs)
- * 
+ *
  * Solution:
  * - Create a fixed skill index mapping: 0 => "AVSmithing", 1 => "AVDestruction", etc.
  * - All skill references use numeric indexes instead of strings
  * - Massive reduction in URL size and elimination of naming inconsistencies
  */
 
+import {
+  SKILL_TREE_CODES,
+  SKILL_TREE_CODES_REVERSE,
+} from './compactPerkCatalogs'
+
 // Fixed skill index mapping - this order must NEVER change for backwards compatibility
 export const SKILL_INDEX = [
-  'AVSmithing',      // 0
-  'AVDestruction',   // 1
-  'AVEnchanting',    // 2
-  'AVRestoration',   // 3
-  'AVMysticism',     // 4 (Illusion)
-  'AVConjuration',   // 5
-  'AVAlteration',    // 6
-  'AVSpeechcraft',   // 7
-  'AVAlchemy',       // 8
-  'AVSneak',         // 9
-  'AVLockpicking',   // 10 (Wayfarer)
-  'AVPickpocket',    // 11 (Finesse)
-  'AVLightArmor',    // 12 (Evasion)
-  'AVHeavyArmor',    // 13
-  'AVBlock',         // 14
-  'AVMarksman',      // 15
-  'AVTwoHanded',     // 16
-  'AVOneHanded',     // 17
+  'AVSmithing', // 0
+  'AVDestruction', // 1
+  'AVEnchanting', // 2
+  'AVRestoration', // 3
+  'AVMysticism', // 4 (Illusion)
+  'AVConjuration', // 5
+  'AVAlteration', // 6
+  'AVSpeechcraft', // 7
+  'AVAlchemy', // 8
+  'AVSneak', // 9
+  'AVLockpicking', // 10 (Wayfarer)
+  'AVPickpocket', // 11 (Finesse)
+  'AVLightArmor', // 12 (Evasion)
+  'AVHeavyArmor', // 13
+  'AVBlock', // 14
+  'AVMarksman', // 15
+  'AVTwoHanded', // 16
+  'AVOneHanded', // 17
 ] as const
 
 // Reverse mapping for decoding
@@ -46,7 +51,7 @@ export const SKILL_INDEX_REVERSE = Object.fromEntries(
 export type SkillIndex = number
 
 // Type for skill ID
-export type SkillId = typeof SKILL_INDEX[number]
+export type SkillId = (typeof SKILL_INDEX)[number]
 
 /**
  * Convert skill ID to index
@@ -116,10 +121,7 @@ export function indexObjectToSkillIdObject<T>(
 /**
  * Convert skills object (major/minor arrays) to index format
  */
-export function skillsToIndexes(skills: {
-  major: string[]
-  minor: string[]
-}): {
+export function skillsToIndexes(skills: { major: string[]; minor: string[] }): {
   major: SkillIndex[]
   minor: SkillIndex[]
 } {
@@ -201,7 +203,20 @@ export function perksFromIndexes(perks: {
 export function compactPerksToIndexes(
   compactPerks: Record<string, number[]>
 ): Record<SkillIndex, number[]> {
-  return skillIdObjectToIndexObject(compactPerks)
+  const result: Record<SkillIndex, number[]> = {}
+
+  for (const [skillCode, perkIndexes] of Object.entries(compactPerks)) {
+    // Convert skill code to skill ID, then to index
+    const skillId = SKILL_TREE_CODES_REVERSE[skillCode]
+    if (skillId) {
+      const skillIndex = skillIdToIndex(skillId)
+      if (skillIndex !== null) {
+        result[skillIndex] = perkIndexes
+      }
+    }
+  }
+
+  return result
 }
 
 /**
@@ -209,8 +224,23 @@ export function compactPerksToIndexes(
  */
 export function compactPerksFromIndexes(
   compactPerks: Record<SkillIndex, number[]>
-): Partial<Record<SkillId, number[]>> {
-  return indexObjectToSkillIdObject(compactPerks)
+): Partial<Record<string, number[]>> {
+  const result: Partial<Record<string, number[]>> = {}
+
+  for (const [skillIndexStr, perkIndexes] of Object.entries(compactPerks)) {
+    const skillIndex = parseInt(skillIndexStr, 10) as SkillIndex
+    const skillId = indexToSkillId(skillIndex)
+    if (skillId) {
+      // Convert skill ID to skill code
+      const skillCode =
+        SKILL_TREE_CODES[skillId as keyof typeof SKILL_TREE_CODES]
+      if (skillCode) {
+        result[skillCode] = perkIndexes
+      }
+    }
+  }
+
+  return result
 }
 
 /**
