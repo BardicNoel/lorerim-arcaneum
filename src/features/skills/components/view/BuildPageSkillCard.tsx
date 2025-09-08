@@ -5,7 +5,7 @@ import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
 import { Card, CardContent } from '@/shared/ui/ui/card'
 import { ChevronRight, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { DetailSkill } from '../../adapters'
 import {
@@ -100,7 +100,7 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
   }, [allSkills, selectedMajorSkills, selectedMinorSkills, otherPerkedSkills])
 
   // Transform QuickSelectorSkill to Skill format for autocomplete components
-  const transformToSkillFormat = (skill: any) => ({
+  const transformToSkillFormat = useCallback((skill: any) => ({
     name: skill.name,
     edid: skill.id,
     category: skill.category,
@@ -108,7 +108,13 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
     scaling: skill.scaling || '',
     keyAbilities: skill.keyAbilities || [],
     metaTags: skill.metaTags || [],
-  })
+  }), [])
+
+  // Memoize the transformed skills to prevent unnecessary re-renders
+  const transformedAvailableSkills = useMemo(() => 
+    availableSkills.map(transformToSkillFormat), 
+    [availableSkills, transformToSkillFormat]
+  )
 
   // Transform skills for the perk tree drawer
   const drawerSkills: DetailSkill[] = allSkills.map(skill => {
@@ -291,7 +297,7 @@ export function BuildPageSkillCard({ className }: BuildPageSkillCardProps) {
                   </Badge>
                 </div>
                 <SkillAutocomplete
-                  skills={availableSkills.map(transformToSkillFormat)}
+                  skills={transformedAvailableSkills}
                   onSelect={skill => {
                     const unifiedSkill = availableSkills.find(
                       s => s.id === skill.edid

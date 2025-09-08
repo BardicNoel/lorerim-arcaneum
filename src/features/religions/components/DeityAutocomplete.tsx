@@ -185,8 +185,8 @@ export function DeityAutocomplete({
     </Button>
   ), [])
 
-  // Mobile drawer content
-  const MobileDeityDrawer = () => {
+  // Render mobile drawer
+  if (isMobile) {
     return (
       <MobileAutocompleteDrawer
         isOpen={isDrawerOpen}
@@ -206,8 +206,8 @@ export function DeityAutocomplete({
     )
   }
 
-  // Desktop autocomplete
-  const DesktopDeityAutocomplete = () => (
+  // Render desktop autocomplete
+  return (
     <GenericAutocomplete
       options={autocompleteOptions}
       onSelect={handleDesktopDeitySelect}
@@ -219,6 +219,4 @@ export function DeityAutocomplete({
       onSearchQueryChange={setSearchQuery}
     />
   )
-
-  return isMobile ? <MobileDeityDrawer /> : <DesktopDeityAutocomplete />
 }

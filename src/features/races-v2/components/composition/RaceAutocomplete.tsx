@@ -8,7 +8,7 @@ import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useFuzzySearch } from '../../hooks/useFuzzySearch'
 import type { Race } from '../../types'
 import { RaceAvatar } from '../atomic'
@@ -30,6 +30,7 @@ export function RaceAutocomplete({
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const isMobile = useMediaQuery('(max-width: 640px)')
   const searchInputRef = useRef<HTMLInputElement>(null)
+
 
   const { filteredRaces } = useFuzzySearch(races, searchQuery)
 
@@ -145,8 +146,8 @@ export function RaceAutocomplete({
     </Button>
   ), [])
 
-  // Mobile drawer content
-  const MobileRaceDrawer = () => {
+  // Render mobile drawer
+  if (isMobile) {
     return (
       <MobileAutocompleteDrawer
         isOpen={isDrawerOpen}
@@ -165,8 +166,8 @@ export function RaceAutocomplete({
     )
   }
 
-  // Desktop autocomplete
-  const DesktopRaceAutocomplete = () => (
+  // Render desktop autocomplete
+  return (
     <GenericAutocomplete
       options={autocompleteOptions}
       onSelect={handleDesktopRaceSelect}
@@ -178,6 +179,4 @@ export function RaceAutocomplete({
       onSearchQueryChange={setSearchQuery}
     />
   )
-
-  return isMobile ? <MobileRaceDrawer /> : <DesktopRaceAutocomplete />
 }

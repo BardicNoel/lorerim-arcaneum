@@ -149,8 +149,8 @@ export function BirthsignAutocomplete({
     </Button>
   ), [])
 
-  // Mobile drawer content
-  const MobileBirthsignDrawer = () => {
+  // Render mobile drawer
+  if (isMobile) {
     return (
       <MobileAutocompleteDrawer
         isOpen={isDrawerOpen}
@@ -169,8 +169,8 @@ export function BirthsignAutocomplete({
     )
   }
 
-  // Desktop autocomplete
-  const DesktopBirthsignAutocomplete = () => (
+  // Render desktop autocomplete
+  return (
     <GenericAutocomplete
       options={autocompleteOptions}
       onSelect={handleDesktopBirthsignSelect}
@@ -182,6 +182,4 @@ export function BirthsignAutocomplete({
       onSearchQueryChange={setSearchQuery}
     />
   )
-
-  return isMobile ? <MobileBirthsignDrawer /> : <DesktopBirthsignAutocomplete />
 }
