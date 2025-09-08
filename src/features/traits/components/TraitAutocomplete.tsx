@@ -148,8 +148,8 @@ export function TraitAutocomplete({
     </Button>
   ), [])
 
-  // Mobile drawer content
-  const MobileTraitDrawer = () => {
+  // Render mobile drawer
+  if (isMobile) {
     return (
       <MobileAutocompleteDrawer
         isOpen={isDrawerOpen}
@@ -169,8 +169,8 @@ export function TraitAutocomplete({
     )
   }
 
-  // Desktop autocomplete
-  const DesktopTraitAutocomplete = () => (
+  // Render desktop autocomplete
+  return (
     <GenericAutocomplete
       options={autocompleteOptions}
       onSelect={handleDesktopTraitSelect}
@@ -183,6 +183,4 @@ export function TraitAutocomplete({
       onSearchQueryChange={setSearchQuery}
     />
   )
-
-  return isMobile ? <MobileTraitDrawer /> : <DesktopTraitAutocomplete />
 }

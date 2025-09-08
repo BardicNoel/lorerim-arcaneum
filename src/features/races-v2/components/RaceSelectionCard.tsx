@@ -51,6 +51,7 @@ export function RaceSelectionCard({ className }: RaceSelectionCardProps) {
           Choose your character's race
         </p>
         <RaceAutocomplete
+          key="race-autocomplete-no-selection"
           races={races}
           onSelect={handleRaceSelect}
           placeholder="Search for a race..."
@@ -71,6 +72,7 @@ export function RaceSelectionCard({ className }: RaceSelectionCardProps) {
       className={className}
     >
       <RaceAutocomplete
+        key="race-autocomplete-with-selection"
         races={races}
         onSelect={handleRaceSelect}
         placeholder={`Race: Select a race (${selectedRace.name})`}

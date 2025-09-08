@@ -231,8 +231,8 @@ export function BlessingAutocomplete({
     </Button>
   ), [getDeityTypeBadge, formatDuration])
 
-  // Mobile drawer content
-  const MobileBlessingDrawer = () => {
+  // Render mobile drawer
+  if (isMobile) {
     return (
       <MobileAutocompleteDrawer
         isOpen={isDrawerOpen}
@@ -252,8 +252,8 @@ export function BlessingAutocomplete({
     )
   }
 
-  // Desktop dropdown
-  const DesktopBlessingDropdown = () => (
+  // Render desktop dropdown
+  return (
     <div ref={containerRef} className={cn('relative', className)}>
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -367,6 +367,4 @@ export function BlessingAutocomplete({
       )}
     </div>
   )
-
-  return isMobile ? <MobileBlessingDrawer /> : <DesktopBlessingDropdown />
 }

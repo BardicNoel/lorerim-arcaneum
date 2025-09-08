@@ -146,75 +146,23 @@ export function FavoriteBlessingSelectionCard({
         className="w-full"
       />
 
-      {/* Simplified Blessing Display */}
-      <div className="mt-4 p-4 border rounded-lg bg-card">
-        {/* Header */}
-        <div className="flex items-start gap-3 mb-3">
+      {/* Compact Blessing Display */}
+      <div className="mt-4 p-3 border rounded-lg bg-card">
+        <div className="flex items-center gap-3">
           <ReligionAvatar
             religionName={selectedBlessingSource.name}
-            size="lg"
+            size="md"
           />
           <div className="flex-1 min-w-0">
-            <h4 className="text-lg font-semibold text-primary truncate">
+            <h4 className="font-medium text-primary truncate">
               {selectedBlessingSource.blessingName}
             </h4>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-sm text-muted-foreground">
               {selectedBlessingSource.effects.length} effect
               {selectedBlessingSource.effects.length !== 1 ? 's' : ''}
             </p>
           </div>
         </div>
-
-        {/* Effects List */}
-        <div className="space-y-2">
-          {selectedBlessingSource.effects
-            .slice(0, 2) // Show only first 2 effects
-            .map((effect, index) => (
-              <div
-                key={index}
-                className="flex items-start gap-2 p-2 bg-muted/30 rounded-lg"
-              >
-                <Zap className="h-4 w-4 text-skyrim-gold mt-0.5" />
-                <div className="flex-1">
-                  <div className="font-medium text-sm mb-1">{effect.name}</div>
-                  <FormattedBlessingDescription
-                    description={effect.description}
-                    magnitude={effect.magnitude}
-                    duration={effect.duration}
-                    area={effect.area}
-                  />
-                  {(effect.duration > 0 || effect.area > 0) && (
-                    <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
-                      {effect.duration > 0 && (
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          <span>
-                            Lasts for {formatDuration(effect.duration)}
-                          </span>
-                        </div>
-                      )}
-                      {effect.area > 0 && (
-                        <div className="flex items-center gap-1">
-                          <Target className="h-3 w-3" />
-                          <span>Area: {effect.area}</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-        </div>
-
-        {/* More Effects Indicator */}
-        {selectedBlessingSource.effects.length > 2 && (
-          <div className="mt-3 pt-3 border-t border-border">
-            <p className="text-xs text-muted-foreground">
-              +{selectedBlessingSource.effects.length - 2} more effect
-              {selectedBlessingSource.effects.length - 2 !== 1 ? 's' : ''}
-            </p>
-          </div>
-        )}
       </div>
     </SelectionCardShell>
   )

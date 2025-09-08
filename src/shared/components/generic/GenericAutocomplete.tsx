@@ -82,7 +82,8 @@ export function GenericAutocomplete({
 
   const handleOptionSelect = (option: AutocompleteOption) => {
     onSelect(option)
-    setSearchQuery('')
+    // Don't clear search query here - let parent components handle it
+    // setSearchQuery('')
     setIsOpen(false)
     setActiveIndex(-1)
   }
@@ -120,6 +121,7 @@ export function GenericAutocomplete({
       inputRef.current?.focus()
     }
   }
+
 
   // Default option renderer
   const defaultRenderOption = (

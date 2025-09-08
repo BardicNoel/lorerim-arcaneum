@@ -186,8 +186,8 @@ export function SkillAutocomplete({
     </Button>
   ), [])
 
-  // Mobile drawer content
-  const MobileSkillDrawer = () => {
+  // Render mobile drawer
+  if (isMobile) {
     return (
       <MobileAutocompleteDrawer
         isOpen={isDrawerOpen}
@@ -207,8 +207,8 @@ export function SkillAutocomplete({
     )
   }
 
-  // Desktop autocomplete
-  const DesktopSkillAutocomplete = () => (
+  // Render desktop autocomplete
+  return (
     <GenericAutocomplete
       options={autocompleteOptions}
       onSelect={handleDesktopSkillSelect}
@@ -221,6 +221,4 @@ export function SkillAutocomplete({
       onSearchQueryChange={setSearchQuery}
     />
   )
-
-  return isMobile ? <MobileSkillDrawer /> : <DesktopSkillAutocomplete />
 }
