@@ -140,15 +140,13 @@ export function usePerkReferencesFilters() {
     const active: PerkReferenceFilter[] = []
 
     filters.skills.forEach(skillId => {
-      const skill = availableFilters.skills.find(s => s.id === skillId)
-      if (skill) {
-        active.push({
-          id: `skill-${skillId}`,
-          type: 'skill',
-          value: skillId,
-          label: skill.name,
-        })
-      }
+      // Use the skillId directly as the label since it's the skill tree name
+      active.push({
+        id: `skill-${skillId}`,
+        type: 'skill',
+        value: skillId,
+        label: skillId, // skillId is actually the skill tree name
+      })
     })
 
     filters.categories.forEach(category => {
@@ -261,9 +259,11 @@ export function usePerkReferencesFilters() {
       }
       
       // Add to appropriate filter based on category
-      if (optionOrTag.category === 'Skill Trees') {
+      if (optionOrTag.category === 'skill') {
         addSkillFilter(optionOrTag.value)
-      } else if (optionOrTag.category === 'Minimum Level') {
+      } else if (optionOrTag.category === 'tag') {
+        addTagFilter(optionOrTag.value)
+      } else if (optionOrTag.category === 'minLevel') {
         // Handle minimum level filter
         const level = parseInt(optionOrTag.value)
         if (!isNaN(level)) {
@@ -274,7 +274,7 @@ export function usePerkReferencesFilters() {
         setSearchQuery(optionOrTag.value)
       }
     }
-  }, [addSkillFilter, setSearchQuery, setMinLevelFilter])
+  }, [addSkillFilter, addTagFilter, setSearchQuery, setMinLevelFilter])
 
   // Handle tag removal
   const handleTagRemove = useCallback((tagId: string) => {

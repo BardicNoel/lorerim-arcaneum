@@ -50,6 +50,7 @@ export function PerkReferencesPageView() {
       ...new Set(allPerks.map(perk => perk.minLevel || 0)),
     ].sort((a, b) => a - b)
 
+
     return [
       {
         id: 'keywords',
@@ -71,8 +72,20 @@ export function PerkReferencesPageView() {
           id: `skill-${skillTree}`,
           label: skillTree,
           value: skillTree,
-          category: 'Skill Trees',
+          category: 'skill',
           description: `Perks from ${skillTree} skill tree`,
+        })),
+      },
+      {
+        id: 'tags',
+        name: 'Tags',
+        placeholder: 'Filter by perk tags...',
+        options: allTags.map(tag => ({
+          id: `tag-${tag}`,
+          label: tag,
+          value: tag,
+          category: 'tag',
+          description: `Perks with ${tag} tag`,
         })),
       },
       {
@@ -83,15 +96,57 @@ export function PerkReferencesPageView() {
           id: `level-${level}`,
           label: `Level ${level}+`,
           value: level.toString(),
-          category: 'Minimum Level',
+          category: 'minLevel',
           description: `Perks requiring level ${level} or higher`,
         })),
       },
     ]
   }, [allPerks])
 
-  // Apply fuzzy search
-  const { filteredPerks } = useFuzzySearch(allPerks, searchQuery)
+  // Apply fuzzy search first
+  const { filteredPerks: fuzzyFilteredPerks } = useFuzzySearch(allPerks, searchQuery)
+
+  // Apply additional filters from selectedTags
+  const filteredPerks = useMemo(() => {
+    let filtered = [...fuzzyFilteredPerks]
+
+    // Apply skill tree filters
+    const skillFilters = selectedTags
+      .filter(tag => tag.category === 'skill')
+      .map(tag => tag.value)
+    
+    if (skillFilters.length > 0) {
+      filtered = filtered.filter(perk => 
+        skillFilters.includes(perk.skillTreeName) || skillFilters.includes(perk.skillTree)
+      )
+    }
+
+    // Apply tag filters (from the 'tag' category)
+    const tagFilters = selectedTags
+      .filter(tag => tag.category === 'tag')
+      .map(tag => tag.value)
+    
+    if (tagFilters.length > 0) {
+      filtered = filtered.filter(perk => 
+        tagFilters.some(tag => perk.tags.includes(tag))
+      )
+    }
+
+    // Apply minimum level filters
+    const minLevelFilters = selectedTags
+      .filter(tag => tag.category === 'minLevel')
+      .map(tag => parseInt(tag.value))
+      .filter(level => !isNaN(level))
+    
+    if (minLevelFilters.length > 0) {
+      const maxMinLevel = Math.max(...minLevelFilters)
+      filtered = filtered.filter(perk => 
+        (perk.minLevel || 0) >= maxMinLevel
+      )
+    }
+
+    return filtered
+  }, [fuzzyFilteredPerks, selectedTags])
 
   // Convert to PlayerCreationItem format
   const displayItems = filteredPerks.map(perk => {

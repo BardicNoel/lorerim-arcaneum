@@ -12,6 +12,7 @@ export function perkToPlayerCreationItem(perk: PerkReferenceNode, build: any) {
     id: perk.edid,
     name: perk.name,
     description: perk.ranks[0]?.description?.base || '',
+    summary: perk.ranks[0]?.description?.subtext || '',
     category: perk.category,
     tags: perk.tags,
     isSelected,

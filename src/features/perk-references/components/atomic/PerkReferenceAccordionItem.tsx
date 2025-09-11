@@ -4,6 +4,7 @@ import { Badge } from '@/shared/ui/ui/badge'
 import { H3, P, Small } from '@/shared/ui/ui/typography'
 import type { PerkReferenceItem } from '../../types'
 import { PerkReferenceBadge } from './PerkReferenceBadge'
+import { SkillAvatar } from '@/features/skills/components/atomic/SkillAvatar'
 
 interface PerkReferenceAccordionItemProps {
   item: PerkReferenceItem
@@ -38,11 +39,11 @@ export function PerkReferenceAccordionItem({
                 itemName={item.name}
               />
             )}
-            <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
-              <span className="text-sm font-bold text-muted-foreground">
-                {item.name.charAt(0)}
-              </span>
-            </div>
+            <SkillAvatar
+              skillName={originalNode.skillTreeName}
+              size="sm"
+              className="flex-shrink-0"
+            />
             <H3 className="text-primary font-semibold">{item.name}</H3>
           </div>
           <div className="flex items-center gap-3">

@@ -3,6 +3,7 @@ import { Badge } from '@/shared/ui/ui/badge'
 import { H4, P, Small } from '@/shared/ui/ui/typography'
 import type { PerkReferenceItem } from '../../types'
 import { PerkReferenceBadge } from './PerkReferenceBadge'
+import { SkillAvatar } from '@/features/skills/components/atomic/SkillAvatar'
 
 interface PerkReferenceListItemProps {
   item: PerkReferenceItem
@@ -27,11 +28,11 @@ export function PerkReferenceListItem({
     >
       <div className="flex items-center gap-3">
         {/* Avatar */}
-        <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center flex-shrink-0">
-          <span className="text-sm font-bold text-muted-foreground">
-            {item.name.charAt(0)}
-          </span>
-        </div>
+        <SkillAvatar
+          skillName={originalNode.skillTreeName}
+          size="sm"
+          className="flex-shrink-0"
+        />
 
         {/* Content */}
         <div className="flex-1 min-w-0">
