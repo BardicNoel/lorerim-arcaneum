@@ -154,7 +154,8 @@ export function PerkTreeCanvasII({
     positionedTreeConfig,
   ])
 
-  const initialNodes: Node[] = useMemo(() => {
+  // Create base nodes without selection data (stable)
+  const baseNodes: Node[] = useMemo(() => {
     if (!validatedTree || layoutNodes.length === 0) return []
     return validatedTree.perks.map(perk => {
       const perkId = perk.edid
@@ -165,22 +166,16 @@ export function PerkTreeCanvasII({
       const hasChildren = perk.connections.children.length > 0
       const isRoot = perk.connections.parents.length === 0
 
-      // Check if this perk is selected
-      const selectedPerk = selectedPerks.find(p => p.edid === perkId)
-      const isSelected = selectedPerk !== undefined
-
-             return {
-         id: perkId,
-         type: 'perkNode',
-         position,
-         draggable: false,
-         data: {
+      return {
+        id: perkId,
+        type: 'perkNode',
+        position,
+        draggable: false,
+        data: {
           ...perk,
-          selected: isSelected,
-          currentRank: (selectedPerk as PerkNodeData)?.currentRank || 0,
           hasChildren: hasChildren,
           isRoot: isRoot,
-          currentSkillLevel: currentSkillLevel, // Pass current skill level to each node
+          currentSkillLevel: currentSkillLevel,
           onTogglePerk,
           onRankChange,
         } as PerkNodeData & {
@@ -192,11 +187,28 @@ export function PerkTreeCanvasII({
   }, [
     validatedTree,
     layoutNodes,
-    selectedPerks,
     onTogglePerk,
     onRankChange,
     currentSkillLevel,
   ])
+
+  // Update nodes with current selection data
+  const nodes = useMemo(() => {
+    return baseNodes.map(node => {
+      const perkData = selectedPerks.find(p => p.edid === node.id)
+      const isSelected = perkData?.selected || false
+      const currentRank = perkData?.currentRank || 0
+
+      return {
+        ...node,
+        data: {
+          ...node.data,
+          selected: isSelected,
+          currentRank: currentRank,
+        },
+      }
+    })
+  }, [baseNodes, selectedPerks])
   const initialEdges: Edge[] = useMemo(() => {
     if (!validatedTree) return []
     const edges: Edge[] = []
@@ -224,16 +236,20 @@ export function PerkTreeCanvasII({
     })
     return edges
   }, [validatedTree])
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
+  const [flowNodes, setFlowNodes, onNodesChange] = useNodesState([])
+  const [flowEdges, setFlowEdges, onEdgesChange] = useEdgesState([])
+
+  // Update flow nodes when our computed nodes change
   React.useEffect(() => {
-    setNodes(initialNodes)
-  }, [initialNodes, setNodes])
+    setFlowNodes(nodes)
+  }, [nodes, setFlowNodes])
+
+  // Update flow edges when our computed edges change
   React.useEffect(() => {
-    setEdges(initialEdges)
-  }, [initialEdges, setEdges])
+    setFlowEdges(initialEdges)
+  }, [initialEdges, setFlowEdges])
   React.useEffect(() => {
-    if (validatedTree && nodes.length > 0 && reactFlowInstance) {
+    if (validatedTree && flowNodes.length > 0 && reactFlowInstance) {
       setTimeout(() => {
         reactFlowInstance.fitView({
           padding: 0.2,
@@ -245,8 +261,8 @@ export function PerkTreeCanvasII({
     }
   }, [validatedTree?.treeId, reactFlowInstance])
   const onConnect = useCallback(
-    (params: Connection) => setEdges(eds => addEdge(params, eds)),
-    [setEdges]
+    (params: Connection) => setFlowEdges(eds => addEdge(params, eds)),
+    [setFlowEdges]
   )
   const handleMouseDown = useCallback((event: React.MouseEvent) => {
     event.stopPropagation()
@@ -282,8 +298,8 @@ export function PerkTreeCanvasII({
         </div>
       </div>
       <ReactFlow
-        nodes={nodes}
-        edges={edges}
+        nodes={flowNodes}
+        edges={flowEdges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
@@ -307,12 +323,13 @@ export function PerkTreeCanvasII({
         onNodeDragStop={onNodeDragStop}
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
+        onDoubleClick={e => e.preventDefault()} // Disable double-click to zoom
         panOnDrag={true}
         panOnScroll={false}
         preventScrolling={true}
-        style={{ 
+        style={{
           backgroundColor: 'hsl(var(--background))',
-          zIndex: 1 // Ensure ReactFlow doesn't create conflicting stacking context
+          zIndex: 1, // Ensure ReactFlow doesn't create conflicting stacking context
         }}
       >
         <Background />

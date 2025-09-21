@@ -360,8 +360,6 @@ export function PerkTreeCanvasExperimental({
       p => p.edid === 'LoreRimTrapper_Rank3'
     )
 
-
-
     validatedTree.perks.forEach(perk => {
       const savedPos = savedPositions.get(perk.edid)
       if (savedPos) {
@@ -394,8 +392,6 @@ export function PerkTreeCanvasExperimental({
       // Check if this perk has no position data (will be draggable)
       const hasNoPosition = !savedPositions.get(perkId) && !perk.position
 
-
-
       return {
         id: perkId,
         type: 'perkNode',
@@ -411,8 +407,6 @@ export function PerkTreeCanvasExperimental({
       }
     })
 
-
-
     return nodes
   }, [
     validatedTree,
@@ -427,8 +421,6 @@ export function PerkTreeCanvasExperimental({
     if (!validatedTree) return []
 
     const edges: Edge[] = []
-
-
 
     validatedTree.perks.forEach(perk => {
       const perkId = perk.edid
@@ -456,8 +448,6 @@ export function PerkTreeCanvasExperimental({
         })
       }
     })
-
-
 
     return edges
   }, [validatedTree])
@@ -709,9 +699,10 @@ export function PerkTreeCanvasExperimental({
           minZoom={0.1}
           maxZoom={2}
           defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
-          style={{ 
+          onDoubleClick={e => e.preventDefault()} // Disable double-click to zoom
+          style={{
             backgroundColor: 'hsl(var(--background))',
-            zIndex: 1 // Ensure ReactFlow doesn't create conflicting stacking context
+            zIndex: 1, // Ensure ReactFlow doesn't create conflicting stacking context
           }}
         >
           <Background
