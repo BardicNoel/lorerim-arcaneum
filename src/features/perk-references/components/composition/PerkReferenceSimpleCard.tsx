@@ -1,10 +1,10 @@
+import { SkillAvatar } from '@/features/skills/components/atomic/SkillAvatar'
 import { cn } from '@/lib/utils'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
 import { H4, P, Small } from '@/shared/ui/ui/typography'
 import type { PerkReferenceNode } from '../../types'
 import { PerkReferenceBadge } from '../atomic/PerkReferenceBadge'
-import { SkillAvatar } from '@/features/skills/components/atomic/SkillAvatar'
 
 interface PerkReferenceSimpleCardProps {
   item: PlayerCreationItem & { originalPerk: PerkReferenceNode }
@@ -137,9 +137,6 @@ export function PerkReferenceSimpleCard({
               )}
             </div>
             <div className="flex items-center gap-2 mt-2">
-              <Small className="text-muted-foreground">
-                {originalPerk.skillTreeName}
-              </Small>
               {item.tags.length > 0 && (
                 <div className="flex items-center gap-1">
                   {item.tags.slice(0, 2).map((tag, index) => (
