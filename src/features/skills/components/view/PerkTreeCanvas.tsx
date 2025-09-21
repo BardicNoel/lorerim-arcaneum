@@ -135,8 +135,6 @@ function buildTreeStructure(perks: PerkNodeType[]): Map<string, TreeNode> {
     {} as Record<number, number>
   )
 
-
-
   return treeNodes
 }
 
@@ -312,7 +310,6 @@ function calculateNodePositions(perks: PerkNodeType[]) {
             }
 
             idealPositions.set(perkId, idealX)
-
           }
         }
       })
@@ -509,8 +506,6 @@ export function PerkTreeCanvas({
       }
     })
 
-
-
     return edges
   }, [validatedTree])
 
@@ -607,9 +602,10 @@ export function PerkTreeCanvas({
         minZoom={0.1}
         maxZoom={2}
         defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
-        style={{ 
+        onDoubleClick={e => e.preventDefault()} // Disable double-click to zoom
+        style={{
           backgroundColor: 'hsl(var(--background))',
-          zIndex: 1 // Ensure ReactFlow doesn't create conflicting stacking context
+          zIndex: 1, // Ensure ReactFlow doesn't create conflicting stacking context
         }}
       >
         <Background

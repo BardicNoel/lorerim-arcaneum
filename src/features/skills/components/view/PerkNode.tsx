@@ -5,9 +5,21 @@ import {
   HoverCardPortal,
   HoverCardTrigger,
 } from '@/shared/ui/ui/hover-card'
-import React, { memo } from 'react'
+import React, { memo, useRef, useState } from 'react'
 import { Handle, Position } from 'reactflow'
 import type { PerkNode as PerkNodeType } from '../../types'
+
+// Utility function to get minimum required skill level for a specific rank
+const getMinLevelForRank = (
+  perk: PerkNodeType,
+  rank: number
+): number | null => {
+  const rankData = perk.ranks.find(r => r.rank === rank)
+  if (!rankData?.prerequisites?.skillLevel) {
+    return null
+  }
+  return rankData.prerequisites.skillLevel.level
+}
 
 interface PerkNodeProps {
   data: PerkNodeType & {
@@ -29,6 +41,10 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
   onTogglePerk,
   onRankChange,
 }) => {
+  // State to control hovercard visibility
+  const [isHoverCardOpen, setIsHoverCardOpen] = useState(false)
+  const isClickingRef = useRef(false)
+
   // For multi-rank perks, consider them selected if rank > 0
   // For single-rank perks, use the boolean selected state
   const totalRanks = data.totalRanks
@@ -38,6 +54,12 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
   const handleNodeClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
+
+    // Mark that we're clicking to prevent hovercard from closing
+    isClickingRef.current = true
+
+    // Keep the hovercard open during clicks
+    setIsHoverCardOpen(true)
 
     const totalRanks = data.totalRanks || 1
 
@@ -66,6 +88,30 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
         onTogglePerk(data.edid)
       }
     }
+
+    // Reset clicking flag after a short delay
+    setTimeout(() => {
+      isClickingRef.current = false
+    }, 200)
+  }
+
+  const handleMouseEnter = () => {
+    setIsHoverCardOpen(true)
+  }
+
+  const handleMouseLeave = () => {
+    // Only close if we're not in the middle of a click interaction
+    if (!isClickingRef.current) {
+      setIsHoverCardOpen(false)
+    }
+  }
+
+  const handleOpenChange = (open: boolean) => {
+    // Prevent closing if we're in the middle of a click
+    if (!open && isClickingRef.current) {
+      return
+    }
+    setIsHoverCardOpen(open)
   }
 
   const getNodeStyle = () => {
@@ -120,6 +166,8 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
     return {
       ...baseStyle,
       borderColor: 'hsl(var(--border))',
+      backgroundColor: 'hsl(var(--background))',
+      color: 'hsl(var(--muted-foreground))',
     }
   }
 
@@ -177,12 +225,14 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
   }
 
   return (
-    <HoverCard>
+    <HoverCard open={isHoverCardOpen} onOpenChange={handleOpenChange}>
       <HoverCardTrigger asChild>
         <div
           style={getNodeStyle()}
           onClick={handleNodeClick}
           onMouseDown={e => e.stopPropagation()}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
           {/* Only show target handle if this node is not a root (has prerequisites) */}
           {!data.isRoot && <Handle type="target" position={Position.Bottom} />}
@@ -223,19 +273,58 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
               </div>
             )}
 
-            {/* Minimum skill level requirement */}
-            {typeof data.ranks[0]?.prerequisites?.skillLevel?.level ===
-              'number' &&
-              data.ranks[0].prerequisites.skillLevel.level > 0 && (
-                <div className="text-xs text-blue-700 font-medium pt-1">
-                  Min. Level: {data.ranks[0].prerequisites.skillLevel.level}
+            {/* Level requirements for all ranks */}
+            {totalRanks > 1 ? (
+              <div className="text-xs pt-2 border-t">
+                <div className="font-medium mb-1">Level Requirements:</div>
+                {Array.from({ length: totalRanks }, (_, i) => i + 1).map(
+                  rank => {
+                    const requiredLevel = getMinLevelForRank(data, rank)
+                    const currentSkillLevel = data.currentSkillLevel || 0
+
+                    return (
+                      <div
+                        key={rank}
+                        className="flex justify-between items-center py-1"
+                      >
+                        <span>Rank {rank}:</span>
+                        <span className="font-medium text-blue-600 dark:text-blue-400">
+                          {requiredLevel
+                            ? `Level ${requiredLevel}`
+                            : 'No requirement'}
+                        </span>
+                      </div>
+                    )
+                  }
+                )}
+                <div className="text-muted-foreground mt-2 italic">
+                  Current: Level {data.currentSkillLevel || 0}
                 </div>
-              )}
+              </div>
+            ) : (
+              // Single rank perk level requirement
+              (() => {
+                const requiredLevel = getMinLevelForRank(data, 1)
+                const currentSkillLevel = data.currentSkillLevel || 0
+
+                return requiredLevel ? (
+                  <div className="text-xs font-medium pt-1 text-blue-600 dark:text-blue-400">
+                    Required Level: {requiredLevel}
+                    <br />
+                    <span className="text-muted-foreground">
+                      Current: Level {currentSkillLevel}
+                    </span>
+                  </div>
+                ) : null
+              })()
+            )}
+
             {totalRanks > 1 && (
               <div className="text-xs text-muted-foreground pt-2 border-t">
-                <strong>Ranks:</strong> {data.currentRank || 0}/{totalRanks}
+                <strong>Current:</strong> {data.currentRank || 0}/{totalRanks}{' '}
+                ranks
                 <br />
-                <em>Click to cycle through ranks</em>
+                <em>Click to cycle through available ranks</em>
               </div>
             )}
           </div>
