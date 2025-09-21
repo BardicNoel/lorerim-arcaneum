@@ -1,3 +1,4 @@
+import { calculateAllSkillLevels } from '@/features/skills/utils/skillLevels'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { usePerkTrees } from '@/shared/stores'
 import { useMemo } from 'react'
@@ -14,6 +15,8 @@ export function usePerkData(skillId: string | null) {
     removePerk,
     setPerkRank,
     clearSkillPerks,
+    build,
+    updateBuild,
   } = useCharacterBuild()
 
   // Get perk tree for the selected skill
@@ -80,19 +83,70 @@ export function usePerkData(skillId: string | null) {
   }
 
   const handlePerkRankChange = (perkId: string, newRank: number) => {
-    setPerkRank(perkId, newRank)
+    console.log('🔧 usePerkData handlePerkRankChange called:', {
+      perkId,
+      newRank,
+      skillId,
+    })
 
-    // For multi-rank perks, also handle selection state
+    if (!skillId) {
+      console.log('❌ No skillId, returning early')
+      return
+    }
+
+    // Use the same logic as usePerkNodeCycle for proper rank cycling
+    const currentRank = getPerkRank(perkId) || 0
+    console.log('📊 Current rank:', currentRank, 'Target rank:', newRank)
+    console.log('📋 Selected perks:', selectedPerks)
+    console.log('🎯 Perk in selected perks:', selectedPerks.includes(perkId))
+
     if (newRank === 0) {
-      // Rank is 0, remove from selected perks if it's there
+      console.log('🔄 Going to rank 0, removing perk')
+      // Going to rank 0, remove perk and set rank to 0
       if (selectedPerks.includes(perkId)) {
+        console.log('🗑️ Removing perk from selected perks')
         removePerk(skillId, perkId)
+      } else {
+        console.log(
+          '⚠️ Perk not in selected perks, but trying to set rank to 0'
+        )
       }
+      console.log('📉 Setting rank to 0')
+      setPerkRank(perkId, 0)
     } else {
-      // Rank is > 0, add to selected perks if it's not there
+      // For any rank > 0, ensure the perk is in selected perks and set rank in one operation
+      const currentPerks = build?.perks?.selected ?? {}
+      const currentRanks = build?.perks?.ranks ?? {}
+      const skillPerks = currentPerks[skillId] ?? []
+
+      let newSelectedPerks = { ...currentPerks }
+      let newRanks = { ...currentRanks }
+
+      // Add perk to selected perks if not already there
       if (!selectedPerks.includes(perkId)) {
-        addPerk(skillId, perkId)
+        console.log('➕ Adding perk to selected perks (was missing)')
+        newSelectedPerks[skillId] = [...skillPerks, perkId]
       }
+
+      // Set the rank
+      console.log('🔄 Setting rank to:', newRank)
+      newRanks[perkId] = newRank
+
+      // Update both selection and rank in one operation
+      const newPerks = {
+        ...build?.perks,
+        selected: newSelectedPerks,
+        ranks: newRanks,
+      }
+
+      // Calculate new skill levels based on updated perks
+      const newSkillLevels = calculateAllSkillLevels(newPerks)
+
+      updateBuild({
+        perks: newPerks,
+        skillLevels: newSkillLevels,
+      })
+      console.log('🔄 Build updated with perk selection and rank')
     }
   }
 

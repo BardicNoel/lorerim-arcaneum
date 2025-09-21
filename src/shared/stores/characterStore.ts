@@ -17,8 +17,10 @@ interface CharacterStore {
 export const useCharacterStore = create<CharacterStore>((set, get) => ({
   build: DEFAULT_BUILD,
   updateBuild: updates => {
+    console.log('🏪 updateBuild called with updates:', updates)
     set(state => {
       const newBuild = { ...state.build, ...updates }
+      console.log('🏪 New build state:', newBuild)
       // Only validate if there are significant changes (not just name/notes)
       const needsValidation =
         updates.race !== undefined ||
@@ -31,8 +33,10 @@ export const useCharacterStore = create<CharacterStore>((set, get) => ({
         updates.perks !== undefined ||
         updates.attributeAssignments !== undefined
 
+      const finalBuild = needsValidation ? validateBuild(newBuild) : newBuild
+      console.log('🏪 Final build state:', finalBuild)
       return {
-        build: needsValidation ? validateBuild(newBuild) : newBuild,
+        build: finalBuild,
       }
     })
   },

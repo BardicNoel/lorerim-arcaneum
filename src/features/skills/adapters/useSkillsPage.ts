@@ -47,6 +47,8 @@ export function useSkillsPage() {
   // Get character build state and assignment functions
   const {
     build,
+    majorSkills,
+    minorSkills,
     addMajorSkill,
     addMinorSkill,
     removeMajorSkill,
@@ -54,6 +56,8 @@ export function useSkillsPage() {
     addPerk,
     removePerk,
     setPerkRank,
+    getPerkRank,
+    getSkillPerks,
   } = useCharacterBuild()
 
   // Apply search and category filters
@@ -70,7 +74,7 @@ export function useSkillsPage() {
   // Transform skills with calculated level properties
   const skillsPageSkills = useMemo(() => {
     return filteredSkills.map(skill => {
-      const selectedPerks = build.perks?.selected?.[skill.id] || []
+      const selectedPerks = getSkillPerks(skill.id)
       const selectedPerksCount = selectedPerks.length
       const totalPerks = skill.totalPerks ?? 0
 
@@ -79,7 +83,7 @@ export function useSkillsPage() {
       const minLevel = calculateMinimumSkillLevel(
         skill.id,
         selectedPerks,
-        build.perks?.ranks || {}
+        {} // We'll need to get ranks differently, but for now use empty object
       )
 
       return {
@@ -88,21 +92,19 @@ export function useSkillsPage() {
         level: startingLevel + minLevel, // Total skill level
         startingLevel, // Base level from race + major/minor
         minLevel, // Minimum level from selected perks
-        assignmentType: build.skills.major.includes(skill.id)
+        assignmentType: majorSkills.includes(skill.id)
           ? ('major' as const)
-          : build.skills.minor.includes(skill.id)
+          : minorSkills.includes(skill.id)
             ? ('minor' as const)
             : ('none' as const),
         canAssignMajor:
-          !build.skills.major.includes(skill.id) &&
-          build.skills.major.length < 3,
+          !majorSkills.includes(skill.id) && majorSkills.length < 3,
         canAssignMinor:
-          !build.skills.minor.includes(skill.id) &&
-          build.skills.minor.length < 6,
+          !minorSkills.includes(skill.id) && minorSkills.length < 6,
         perkCount: `${selectedPerksCount}/${totalPerks}`,
       } as SkillsPageSkill
     })
-  }, [filteredSkills, build])
+  }, [filteredSkills, build, majorSkills, minorSkills, getSkillPerks])
 
   // ============================================================================
   // Skill Summary Calculation
@@ -114,17 +116,17 @@ export function useSkillsPage() {
     )
 
     return {
-      majorCount: build.skills.major.length,
-      minorCount: build.skills.minor.length,
+      majorCount: majorSkills.length,
+      minorCount: minorSkills.length,
       majorLimit: 3,
       minorLimit: 6,
-      canAssignMajor: build.skills.major.length < 3,
-      canAssignMinor: build.skills.minor.length < 6,
+      canAssignMajor: majorSkills.length < 3,
+      canAssignMinor: minorSkills.length < 6,
       totalSkills: skillsPageSkills.length,
       totalPerks: totalSelectedPerks,
       totalPerkRanks: 0, // Perk ranks not currently tracked
     }
-  }, [skillsPageSkills, build.skills.major, build.skills.minor])
+  }, [skillsPageSkills, majorSkills, minorSkills])
 
   // ============================================================================
   // Action Handlers
@@ -132,27 +134,27 @@ export function useSkillsPage() {
   const handleAssignMajor = useCallback(
     (skillId: string) => {
       // Check if skill is already major - if so, remove it
-      if (build.skills.major.includes(skillId)) {
+      if (majorSkills.includes(skillId)) {
         removeMajorSkill(skillId)
       } else {
         // Otherwise add it as major
         addMajorSkill(skillId)
       }
     },
-    [build.skills.major, addMajorSkill, removeMajorSkill]
+    [majorSkills, addMajorSkill, removeMajorSkill]
   )
 
   const handleAssignMinor = useCallback(
     (skillId: string) => {
       // Check if skill is already minor - if so, remove it
-      if (build.skills.minor.includes(skillId)) {
+      if (minorSkills.includes(skillId)) {
         removeMinorSkill(skillId)
       } else {
         // Otherwise add it as minor
         addMinorSkill(skillId)
       }
     },
-    [build.skills.minor, addMinorSkill, removeMinorSkill]
+    [minorSkills, addMinorSkill, removeMinorSkill]
   )
 
   const handleRemoveAssignment = useCallback(
@@ -185,15 +187,21 @@ export function useSkillsPage() {
 
   // Get selected perks for the selected skill
   const selectedPerks = useMemo(() => {
-    if (!selectedSkill || !build.perks?.selected) return []
-    return build.perks.selected[selectedSkill.id] || []
-  }, [selectedSkill, build.perks?.selected])
+    if (!selectedSkill) return []
+    return getSkillPerks(selectedSkill.id)
+  }, [selectedSkill, getSkillPerks])
 
   // Get perk ranks for the selected skill
   const perkRanks = useMemo(() => {
-    if (!selectedSkill || !build.perks?.ranks) return {}
-    return build.perks.ranks[selectedSkill.id] || {}
-  }, [selectedSkill, build.perks?.ranks])
+    if (!selectedSkill) return {}
+    // Get all selected perks for this skill and their ranks
+    const selectedPerks = getSkillPerks(selectedSkill.id)
+    const ranks: Record<string, number> = {}
+    selectedPerks.forEach((perkId: string) => {
+      ranks[perkId] = getPerkRank(perkId)
+    })
+    return ranks
+  }, [selectedSkill, getSkillPerks, getPerkRank])
 
   // Get available perks for the selected skill
   const availablePerks = useMemo(() => {
@@ -219,12 +227,52 @@ export function useSkillsPage() {
 
   const handlePerkRankChange = useCallback(
     (perkId: string, rank: number) => {
-      if (!selectedSkill) return
+      console.log('🔧 handlePerkRankChange called:', {
+        perkId,
+        rank,
+        selectedSkill: selectedSkill?.id,
+      })
 
-      // Update perk rank using the character build function
-      setPerkRank(perkId, rank)
+      if (!selectedSkill) {
+        console.log('❌ No selected skill, returning early')
+        return
+      }
+
+      // Use the same logic as usePerkNodeCycle for proper rank cycling
+      const currentRank = getPerkRank(perkId) || 0
+      console.log('📊 Current rank:', currentRank, 'Target rank:', rank)
+      console.log('📋 Selected perks:', selectedPerks)
+      console.log('🎯 Perk in selected perks:', selectedPerks.includes(perkId))
+
+      if (rank === 0) {
+        console.log('🔄 Going to rank 0, removing perk')
+        // Going to rank 0, remove perk and set rank to 0
+        if (selectedPerks.includes(perkId)) {
+          console.log('🗑️ Removing perk from selected perks')
+          removePerk(selectedSkill.id, perkId)
+        }
+        console.log('📉 Setting rank to 0')
+        setPerkRank(perkId, 0)
+      } else {
+        // For any rank > 0, ensure the perk is in selected perks and set rank
+        if (!selectedPerks.includes(perkId)) {
+          console.log('➕ Adding perk to selected perks (was missing)')
+          addPerk(selectedSkill.id, perkId)
+        }
+
+        // Set the rank
+        console.log('🔄 Setting rank to:', rank)
+        setPerkRank(perkId, rank)
+      }
     },
-    [selectedSkill, setPerkRank]
+    [
+      selectedSkill,
+      selectedPerks,
+      addPerk,
+      removePerk,
+      setPerkRank,
+      getPerkRank,
+    ]
   )
 
   // ============================================================================

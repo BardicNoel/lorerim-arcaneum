@@ -45,7 +45,6 @@ export function SkillPerkTreeDrawer({
   onSkillSelect,
   onReset,
 }: SkillPerkTreeDrawerProps) {
-
   // Use perk data adapter
   const {
     selectedPerks,
@@ -61,17 +60,15 @@ export function SkillPerkTreeDrawer({
     ? getSkillLevel(selectedSkill)
     : undefined
 
-  // Convert selected perk IDs to PerkNode objects for the canvas
-  const selectedPerkNodes = React.useMemo(() => {
+  // Convert all perks to PerkNode objects for the canvas (both selected and deselected)
+  const allPerkNodes = React.useMemo(() => {
     if (!perkTree) return []
 
-    return perkTree.perks
-      .filter(perk => selectedPerks.includes(perk.edid))
-      .map(perk => ({
-        ...perk,
-        selected: true,
-        currentRank: perkRanks[perk.edid] || 1, // Use actual rank from store
-      }))
+    return perkTree.perks.map(perk => ({
+      ...perk,
+      selected: selectedPerks.includes(perk.edid),
+      currentRank: perkRanks[perk.edid] || 0, // Use actual rank from store, default to 0
+    }))
   }, [perkTree, selectedPerks, perkRanks])
 
   const handleTogglePerk = React.useCallback(
@@ -128,7 +125,6 @@ export function SkillPerkTreeDrawer({
       shouldScaleBackground={false}
       dismissible={true}
     >
-
       <DrawerPortal>
         <DrawerOverlay />
         <DrawerPrimitive.Content
@@ -139,7 +135,6 @@ export function SkillPerkTreeDrawer({
             zIndex: Z_INDEX.DRAWER,
           }}
         >
-
           <DrawerHeader className="border-b">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -204,7 +199,7 @@ export function SkillPerkTreeDrawer({
                   tree={perkTree}
                   onTogglePerk={handleTogglePerk}
                   onRankChange={handleRankChange}
-                  selectedPerks={selectedPerkNodes}
+                  selectedPerks={allPerkNodes}
                   currentSkillLevel={currentSkillLevel}
                 />
               ) : (

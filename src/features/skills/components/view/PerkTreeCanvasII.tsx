@@ -165,19 +165,20 @@ export function PerkTreeCanvasII({
       const hasChildren = perk.connections.children.length > 0
       const isRoot = perk.connections.parents.length === 0
 
-      // Check if this perk is selected
-      const selectedPerk = selectedPerks.find(p => p.edid === perkId)
-      const isSelected = selectedPerk !== undefined
+      // Find the perk data (now all perks are passed in selectedPerks)
+      const perkData = selectedPerks.find(p => p.edid === perkId)
+      const isSelected = perkData?.selected || false
+      const currentRank = perkData?.currentRank || 0
 
-             return {
-         id: perkId,
-         type: 'perkNode',
-         position,
-         draggable: false,
-         data: {
+      return {
+        id: perkId,
+        type: 'perkNode',
+        position,
+        draggable: false,
+        data: {
           ...perk,
           selected: isSelected,
-          currentRank: (selectedPerk as PerkNodeData)?.currentRank || 0,
+          currentRank: currentRank,
           hasChildren: hasChildren,
           isRoot: isRoot,
           currentSkillLevel: currentSkillLevel, // Pass current skill level to each node
@@ -310,9 +311,9 @@ export function PerkTreeCanvasII({
         panOnDrag={true}
         panOnScroll={false}
         preventScrolling={true}
-        style={{ 
+        style={{
           backgroundColor: 'hsl(var(--background))',
-          zIndex: 1 // Ensure ReactFlow doesn't create conflicting stacking context
+          zIndex: 1, // Ensure ReactFlow doesn't create conflicting stacking context
         }}
       >
         <Background />

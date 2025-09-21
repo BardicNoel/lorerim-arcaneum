@@ -212,10 +212,13 @@ export function useCharacterBuild() {
 
   // Perk management functions
   const addPerk = (skillId: string, perkId: string) => {
+    console.log('➕ addPerk called:', { skillId, perkId })
     const currentPerks = build?.perks?.selected ?? {}
     const skillPerks = currentPerks[skillId] ?? []
+    console.log('📋 Current skill perks:', skillPerks)
 
     if (!skillPerks.includes(perkId)) {
+      console.log('✅ Adding perk to skill perks')
       const newPerks = {
         ...build?.perks,
         selected: {
@@ -231,6 +234,9 @@ export function useCharacterBuild() {
         perks: newPerks,
         skillLevels: newSkillLevels,
       })
+      console.log('🔄 Build updated with new perk')
+    } else {
+      console.log('⚠️ Perk already in skill perks, skipping')
     }
   }
 
@@ -258,7 +264,9 @@ export function useCharacterBuild() {
   }
 
   const setPerkRank = (perkId: string, rank: number) => {
+    console.log('📈 setPerkRank called:', { perkId, rank })
     const currentRanks = build?.perks?.ranks ?? {}
+    console.log('📊 Current ranks:', currentRanks)
 
     const newPerks = {
       ...build?.perks,
@@ -275,6 +283,7 @@ export function useCharacterBuild() {
       perks: newPerks,
       skillLevels: newSkillLevels,
     })
+    console.log('🔄 Build updated with new rank')
   }
 
   const clearSkillPerks = (skillId: string) => {

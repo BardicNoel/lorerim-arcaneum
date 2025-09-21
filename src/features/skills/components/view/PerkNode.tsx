@@ -48,6 +48,14 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
       // Cycle: 0 (unselected) -> 1 -> ... -> maxRank -> 0
       const nextRank = currentRank >= maxRank ? 0 : currentRank + 1
 
+      console.log('🔄 PerkNode cycling:', {
+        perkId: data.edid,
+        currentRank,
+        maxRank,
+        nextRank,
+        totalRanks,
+      })
+
       // Update the rank (this will also handle perk selection in the adapter)
       if (onRankChange) {
         onRankChange(data.edid, nextRank)
@@ -115,9 +123,58 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
     }
   }
 
-  // Get the description from the first rank
-  const description = data.ranks[0]?.description?.base || ''
-  const subtext = data.ranks[0]?.description?.subtext || ''
+  // Get the description from the current rank (or first rank if not selected)
+  const currentRank = data.currentRank || 0
+  const displayRank = currentRank > 0 ? currentRank : 1
+  const description =
+    data.ranks.find(r => r.rank === displayRank)?.description?.base ||
+    data.ranks[0]?.description?.base ||
+    ''
+
+  // For subtext, show current rank benefits and next rank benefits
+  let subtextContent: React.ReactNode = null
+  if (totalRanks > 1) {
+    const subtextElements: React.ReactNode[] = []
+
+    // Rule 1: If a rank is currently selected, show the current rank subtext
+    if (currentRank > 0) {
+      const currentRankSubtext = data.ranks.find(r => r.rank === currentRank)
+        ?.description?.subtext
+      if (currentRankSubtext) {
+        subtextElements.push(
+          <div key="current" className="mb-2">
+            <span className="text-green-600 dark:text-green-400 font-medium">
+              Current:
+            </span>{' '}
+            {currentRankSubtext}
+          </div>
+        )
+      }
+    }
+
+    // Rule 2: If there is a higher rank than the current, show what the next rank gives
+    if (currentRank < totalRanks) {
+      const nextRank = currentRank + 1
+      const nextRankSubtext = data.ranks.find(r => r.rank === nextRank)
+        ?.description?.subtext
+      if (nextRankSubtext) {
+        subtextElements.push(
+          <div key="next">
+            <span className="text-blue-600 dark:text-blue-400 font-medium">
+              Next:
+            </span>{' '}
+            {nextRankSubtext}
+          </div>
+        )
+      }
+    }
+
+    subtextContent = subtextElements.length > 0 ? <>{subtextElements}</> : null
+  } else {
+    // Single rank perk
+    const singleRankSubtext = data.ranks[0]?.description?.subtext || ''
+    subtextContent = singleRankSubtext ? <div>{singleRankSubtext}</div> : null
+  }
 
   return (
     <HoverCard>
@@ -160,9 +217,9 @@ const PerkNodeComponent: React.FC<PerkNodeProps> = ({
             <div className="text-sm text-muted-foreground">{description}</div>
 
             {/* Subtext as secondary section */}
-            {subtext && (
+            {subtextContent && (
               <div className="text-xs text-muted-foreground/80 italic border-l-2 border-muted pl-2">
-                {subtext}
+                {subtextContent}
               </div>
             )}
 
