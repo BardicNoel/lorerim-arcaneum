@@ -16,17 +16,54 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
+      "tags": ["magic"],
+      "diagram": ""
+    },
+    {
+      "name": "Addict",
+      "description": "You've developed some bad habits. Skooma and alcohol benefits last <2x> as long and you can craft skooma at cooking pot. When not under the effects of alcohol or skooma, you have a <25%> chance to get staggered when hit.",
+      "edid": "Traits_AddictAb",
+      "formId": "0xFEA7DC88",
+      "spell": {
+        "cost": 0,
+        "type": "Ability",
+        "castType": "ConstantEffect",
+        "delivery": "Self"
+      },
+      "effects": [
+        {
+          "type": "special_effect",
+          "value": 0,
+          "duration": 0,
+          "flags": ["No Duration", "No Magnitude", "No Area"]
+        },
+        {
+          "type": "special_effect",
+          "value": 0,
+          "condition": "recovery effect",
+          "duration": 0,
+          "flags": [
+            "Recover",
+            "No Duration",
+            "No Magnitude",
+            "No Area",
+            "Hide in UI"
+          ]
+        },
+        {
+          "type": "special_effect",
+          "value": 0,
+          "condition": "recovery effect",
+          "duration": 0,
+          "flags": ["Recover", "No Duration", "No Magnitude", "No Area"]
+        }
       ],
+      "category": "crafting",
+      "tags": ["crafting"],
       "diagram": ""
     },
     {
@@ -45,39 +82,24 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
           "value": 20,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
         },
         {
           "type": "damage_dealt",
           "value": 1,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["No Duration", "No Area", "Hide in UI"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -96,11 +118,7 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
@@ -118,9 +136,7 @@
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -139,35 +155,21 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
           "value": 100,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
         },
         {
           "type": "damage_dealt",
           "value": 100,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
         },
         {
           "type": "damage_dealt",
@@ -275,9 +277,7 @@
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -296,11 +296,7 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "special_effect",
@@ -321,18 +317,11 @@
           "value": 20,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -352,18 +341,11 @@
           "value": 0,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["Recover", "No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -382,17 +364,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -411,17 +387,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -440,17 +410,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -479,9 +443,7 @@
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -500,65 +462,39 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
           "value": 10,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
         },
         {
           "type": "damage_dealt",
           "value": 200,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
         },
         {
           "type": "damage_dealt",
           "value": 1,
           "condition": "negative effect",
           "duration": 0,
-          "flags": [
-            "Detrimental",
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["Detrimental", "No Duration", "No Area", "Hide in UI"]
         },
         {
           "type": "damage_dealt",
           "value": 0.25,
           "condition": "negative effect",
           "duration": 0,
-          "flags": [
-            "Detrimental",
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["Detrimental", "No Duration", "No Area", "Hide in UI"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -577,17 +513,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -606,17 +536,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -635,11 +559,7 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
@@ -656,9 +576,7 @@
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -677,17 +595,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -707,17 +619,11 @@
           "value": 0.10000000149011612,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Area"
-          ]
+          "flags": ["Recover", "No Duration", "No Area"]
         }
       ],
       "category": "social",
-      "tags": [
-        "social"
-      ],
+      "tags": ["social"],
       "diagram": ""
     },
     {
@@ -736,11 +642,7 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
@@ -758,9 +660,7 @@
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -779,17 +679,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -808,29 +702,18 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
           "value": 0.4000000059604645,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -849,17 +732,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -878,17 +755,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -907,39 +778,24 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
           "value": 5,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["No Duration", "No Area", "Hide in UI"]
         },
         {
           "type": "damage_dealt",
           "value": 10,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -969,9 +825,7 @@
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -1001,9 +855,7 @@
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -1033,9 +885,7 @@
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -1054,17 +904,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -1084,17 +928,11 @@
           "value": 10,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Area"
-          ]
+          "flags": ["Recover", "No Duration", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -1113,17 +951,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "special",
-      "tags": [
-        "special"
-      ],
+      "tags": ["special"],
       "diagram": ""
     },
     {
@@ -1142,17 +974,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -1172,17 +998,11 @@
           "value": 200,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Area"
-          ]
+          "flags": ["Recover", "No Duration", "No Area"]
         }
       ],
       "category": "special",
-      "tags": [
-        "special"
-      ],
+      "tags": ["special"],
       "diagram": ""
     },
     {
@@ -1201,17 +1021,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "special",
-      "tags": [
-        "special"
-      ],
+      "tags": ["special"],
       "diagram": ""
     },
     {
@@ -1231,18 +1045,11 @@
           "value": 0,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["Recover", "No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -1285,9 +1092,7 @@
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -1306,17 +1111,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -1335,17 +1134,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -1364,35 +1157,21 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
           "value": 5,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
         },
         {
           "type": "damage_dealt",
           "value": 1,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
         },
         {
           "type": "damage_dealt",
@@ -1409,9 +1188,7 @@
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -1430,17 +1207,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -1459,21 +1230,13 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
           "value": 5,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["No Duration", "No Area", "Hide in UI"]
         },
         {
           "type": "damage_dealt",
@@ -1490,9 +1253,7 @@
         }
       ],
       "category": "special",
-      "tags": [
-        "special"
-      ],
+      "tags": ["special"],
       "diagram": ""
     },
     {
@@ -1511,17 +1272,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "special",
-      "tags": [
-        "special"
-      ],
+      "tags": ["special"],
       "diagram": ""
     },
     {
@@ -1540,11 +1295,7 @@
           "type": "special_effect",
           "value": 50,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
@@ -1600,9 +1351,7 @@
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -1621,17 +1370,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -1650,39 +1393,24 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
           "value": 2,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["No Duration", "No Area", "Hide in UI"]
         },
         {
           "type": "damage_dealt",
           "value": 2,
           "condition": "negative effect",
           "duration": 0,
-          "flags": [
-            "Detrimental",
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["Detrimental", "No Duration", "No Area", "Hide in UI"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -1701,17 +1429,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -1731,12 +1453,7 @@
           "value": 0,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["Recover", "No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
@@ -1753,9 +1470,7 @@
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -1850,9 +1565,7 @@
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -1871,11 +1584,7 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
@@ -1892,9 +1601,7 @@
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -1914,18 +1621,11 @@
           "value": 100,
           "condition": "negative effect, recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "Detrimental",
-            "No Duration",
-            "No Area"
-          ]
+          "flags": ["Recover", "Detrimental", "No Duration", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -1944,17 +1644,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -1984,9 +1678,7 @@
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -2005,17 +1697,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -2034,17 +1720,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "special",
-      "tags": [
-        "special"
-      ],
+      "tags": ["special"],
       "diagram": ""
     },
     {
@@ -2063,17 +1743,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "special",
-      "tags": [
-        "special"
-      ],
+      "tags": ["special"],
       "diagram": ""
     },
     {
@@ -2092,17 +1766,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -2132,9 +1800,7 @@
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -2153,43 +1819,26 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
           "value": 30,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
         },
         {
           "type": "damage_dealt",
           "value": 1,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["No Duration", "No Area", "Hide in UI"]
         },
         {
           "type": "damage_dealt",
           "value": 1,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["No Duration", "No Area", "Hide in UI"]
         },
         {
           "type": "special_effect",
@@ -2233,9 +1882,7 @@
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -2254,17 +1901,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -2283,17 +1924,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -2312,23 +1947,14 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         },
         {
           "type": "damage_dealt",
           "value": 30,
           "condition": "recovery effect",
           "duration": 0,
-          "flags": [
-            "Recover",
-            "No Duration",
-            "No Area",
-            "Hide in UI"
-          ]
+          "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
         },
         {
           "type": "damage_dealt",
@@ -2345,9 +1971,7 @@
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     },
     {
@@ -2391,9 +2015,7 @@
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -2412,17 +2034,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "combat",
-      "tags": [
-        "combat"
-      ],
+      "tags": ["combat"],
       "diagram": ""
     },
     {
@@ -2441,17 +2057,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "special",
-      "tags": [
-        "special"
-      ],
+      "tags": ["special"],
       "diagram": ""
     },
     {
@@ -2470,17 +2080,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "crafting",
-      "tags": [
-        "crafting"
-      ],
+      "tags": ["crafting"],
       "diagram": ""
     },
     {
@@ -2499,17 +2103,11 @@
           "type": "special_effect",
           "value": 0,
           "duration": 0,
-          "flags": [
-            "No Duration",
-            "No Magnitude",
-            "No Area"
-          ]
+          "flags": ["No Duration", "No Magnitude", "No Area"]
         }
       ],
       "category": "magic",
-      "tags": [
-        "magic"
-      ],
+      "tags": ["magic"],
       "diagram": ""
     }
   ],
@@ -2531,39 +2129,24 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
             "value": 20,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
           },
           {
             "type": "damage_dealt",
             "value": 1,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["No Duration", "No Area", "Hide in UI"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -2582,11 +2165,7 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
@@ -2604,9 +2183,7 @@
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -2625,11 +2202,7 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "special_effect",
@@ -2650,18 +2223,11 @@
             "value": 20,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -2680,17 +2246,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -2709,17 +2269,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -2738,17 +2292,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -2777,9 +2325,7 @@
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -2798,65 +2344,39 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
             "value": 10,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
           },
           {
             "type": "damage_dealt",
             "value": 200,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
           },
           {
             "type": "damage_dealt",
             "value": 1,
             "condition": "negative effect",
             "duration": 0,
-            "flags": [
-              "Detrimental",
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["Detrimental", "No Duration", "No Area", "Hide in UI"]
           },
           {
             "type": "damage_dealt",
             "value": 0.25,
             "condition": "negative effect",
             "duration": 0,
-            "flags": [
-              "Detrimental",
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["Detrimental", "No Duration", "No Area", "Hide in UI"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -2875,17 +2395,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -2904,17 +2418,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -2933,11 +2441,7 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
@@ -2954,9 +2458,7 @@
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -2975,29 +2477,18 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
             "value": 0.4000000059604645,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -3016,17 +2507,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -3045,17 +2530,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -3085,9 +2564,7 @@
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -3117,9 +2594,7 @@
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -3138,17 +2613,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -3191,9 +2660,7 @@
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -3212,35 +2679,21 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
             "value": 5,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
           },
           {
             "type": "damage_dealt",
             "value": 1,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
           },
           {
             "type": "damage_dealt",
@@ -3257,9 +2710,7 @@
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -3278,17 +2729,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -3307,17 +2752,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -3336,11 +2775,7 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
@@ -3357,9 +2792,7 @@
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -3389,9 +2822,7 @@
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -3410,17 +2841,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -3464,9 +2889,7 @@
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       },
       {
@@ -3485,17 +2908,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "combat",
-        "tags": [
-          "combat"
-        ],
+        "tags": ["combat"],
         "diagram": ""
       }
     ],
@@ -3516,17 +2933,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -3545,35 +2956,21 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
             "value": 100,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
           },
           {
             "type": "damage_dealt",
             "value": 100,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
           },
           {
             "type": "damage_dealt",
@@ -3681,9 +3078,7 @@
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -3703,18 +3098,11 @@
             "value": 0,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["Recover", "No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -3733,17 +3121,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -3762,11 +3144,7 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
@@ -3784,9 +3162,7 @@
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -3805,17 +3181,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -3834,39 +3204,24 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
             "value": 5,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["No Duration", "No Area", "Hide in UI"]
           },
           {
             "type": "damage_dealt",
             "value": 10,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -3896,9 +3251,7 @@
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -3918,17 +3271,11 @@
             "value": 10,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Area"
-            ]
+            "flags": ["Recover", "No Duration", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -3947,17 +3294,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -3977,18 +3318,11 @@
             "value": 0,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["Recover", "No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4007,17 +3341,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4036,17 +3364,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4065,11 +3387,7 @@
             "type": "special_effect",
             "value": 50,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
@@ -4125,9 +3443,7 @@
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4146,17 +3462,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4175,39 +3485,24 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
             "value": 2,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["No Duration", "No Area", "Hide in UI"]
           },
           {
             "type": "damage_dealt",
             "value": 2,
             "condition": "negative effect",
             "duration": 0,
-            "flags": [
-              "Detrimental",
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["Detrimental", "No Duration", "No Area", "Hide in UI"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4227,12 +3522,7 @@
             "value": 0,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["Recover", "No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
@@ -4249,9 +3539,7 @@
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4346,9 +3634,7 @@
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4368,18 +3654,11 @@
             "value": 100,
             "condition": "negative effect, recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "Detrimental",
-              "No Duration",
-              "No Area"
-            ]
+            "flags": ["Recover", "Detrimental", "No Duration", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4398,17 +3677,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4427,17 +3700,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4467,9 +3734,7 @@
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4488,43 +3753,26 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
             "value": 30,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
           },
           {
             "type": "damage_dealt",
             "value": 1,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["No Duration", "No Area", "Hide in UI"]
           },
           {
             "type": "damage_dealt",
             "value": 1,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["No Duration", "No Area", "Hide in UI"]
           },
           {
             "type": "special_effect",
@@ -4568,9 +3816,7 @@
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4589,17 +3835,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4618,17 +3858,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4647,23 +3881,14 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
             "value": 30,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["Recover", "No Duration", "No Area", "Hide in UI"]
           },
           {
             "type": "damage_dealt",
@@ -4680,9 +3905,7 @@
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       },
       {
@@ -4701,17 +3924,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "magic",
-        "tags": [
-          "magic"
-        ],
+        "tags": ["magic"],
         "diagram": ""
       }
     ],
@@ -4733,21 +3950,58 @@
             "value": 0.10000000149011612,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Area"
-            ]
+            "flags": ["Recover", "No Duration", "No Area"]
           }
         ],
         "category": "social",
-        "tags": [
-          "social"
-        ],
+        "tags": ["social"],
         "diagram": ""
       }
     ],
     "crafting": [
+      {
+        "name": "Addict",
+        "description": "Addict: You've developed some bad habits. Skooma and alcohol benefits last <2x> as long and you can craft skooma at cooking pot. When not under the effects of alcohol or skooma, you have a <25%> chance to get staggered when hit.",
+        "edid": "Traits_AddictAb",
+        "formId": "0xFEA7DC88",
+        "spell": {
+          "cost": 0,
+          "type": "Ability",
+          "castType": "ConstantEffect",
+          "delivery": "Self"
+        },
+        "effects": [
+          {
+            "type": "special_effect",
+            "value": 0,
+            "duration": 0,
+            "flags": ["No Duration", "No Magnitude", "No Area"]
+          },
+          {
+            "type": "special_effect",
+            "value": 0,
+            "condition": "recovery effect",
+            "duration": 0,
+            "flags": [
+              "Recover",
+              "No Duration",
+              "No Magnitude",
+              "No Area",
+              "Hide in UI"
+            ]
+          },
+          {
+            "type": "special_effect",
+            "value": 0,
+            "condition": "recovery effect",
+            "duration": 0,
+            "flags": ["Recover", "No Duration", "No Magnitude", "No Area"]
+          }
+        ],
+        "category": "crafting",
+        "tags": ["crafting"],
+        "diagram": ""
+      },
       {
         "name": "Witcher",
         "description": "Potions and poisons you craft are <20%> more effective, and consuming raw ingredients grants double the effect. However, you can only benefit from up to <four> active potion effects at a time.",
@@ -4764,17 +4018,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "crafting",
-        "tags": [
-          "crafting"
-        ],
+        "tags": ["crafting"],
         "diagram": ""
       }
     ],
@@ -4795,17 +4043,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "special",
-        "tags": [
-          "special"
-        ],
+        "tags": ["special"],
         "diagram": ""
       },
       {
@@ -4825,17 +4067,11 @@
             "value": 200,
             "condition": "recovery effect",
             "duration": 0,
-            "flags": [
-              "Recover",
-              "No Duration",
-              "No Area"
-            ]
+            "flags": ["Recover", "No Duration", "No Area"]
           }
         ],
         "category": "special",
-        "tags": [
-          "special"
-        ],
+        "tags": ["special"],
         "diagram": ""
       },
       {
@@ -4854,17 +4090,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "special",
-        "tags": [
-          "special"
-        ],
+        "tags": ["special"],
         "diagram": ""
       },
       {
@@ -4883,21 +4113,13 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           },
           {
             "type": "damage_dealt",
             "value": 5,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Area",
-              "Hide in UI"
-            ]
+            "flags": ["No Duration", "No Area", "Hide in UI"]
           },
           {
             "type": "damage_dealt",
@@ -4914,9 +4136,7 @@
           }
         ],
         "category": "special",
-        "tags": [
-          "special"
-        ],
+        "tags": ["special"],
         "diagram": ""
       },
       {
@@ -4935,17 +4155,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "special",
-        "tags": [
-          "special"
-        ],
+        "tags": ["special"],
         "diagram": ""
       },
       {
@@ -4964,17 +4178,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "special",
-        "tags": [
-          "special"
-        ],
+        "tags": ["special"],
         "diagram": ""
       },
       {
@@ -4993,17 +4201,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "special",
-        "tags": [
-          "special"
-        ],
+        "tags": ["special"],
         "diagram": ""
       },
       {
@@ -5022,17 +4224,11 @@
             "type": "special_effect",
             "value": 0,
             "duration": 0,
-            "flags": [
-              "No Duration",
-              "No Magnitude",
-              "No Area"
-            ]
+            "flags": ["No Duration", "No Magnitude", "No Area"]
           }
         ],
         "category": "special",
-        "tags": [
-          "special"
-        ],
+        "tags": ["special"],
         "diagram": ""
       }
     ]
