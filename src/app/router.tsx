@@ -1,3 +1,4 @@
+import { AlchemyPage } from '@/features/alchemy'
 import { AccordionBirthsignsPage } from '@/features/birthsigns/pages/AccordionBirthsignsPage'
 import { CookbookPage } from '@/features/cookbook/pages'
 import { UnifiedDestinyPage } from '@/features/destiny'
@@ -12,8 +13,8 @@ import { SpellsPage } from '@/features/spells'
 import { AccordionTraitsPage } from '@/features/traits/pages/AccordionTraitsPage'
 import { BuildPage } from '@/pages/BuildPage'
 import CraftingPage from '@/pages/CraftingPage'
-import EquipmentPage from '@/pages/EquipmentPage'
 import EnchantmentsPage from '@/pages/EnchantmentsPage'
+import EquipmentPage from '@/pages/EquipmentPage'
 import { CharacterBuildLayout } from '@/shared/components/playerCreation'
 // TODO: Re-implement store test if needed
 // import { StoreTest } from '@/shared/stores/StoreTest'
@@ -39,6 +40,7 @@ export const AppRouter = () => {
       </Route>
       <Route path="/spells" element={<SpellsPage />} />
       <Route path="/cookbook" element={<CookbookPage />} />
+      <Route path="/alchemy" element={<AlchemyPage />} />
 
       {/* Other pages */}
       <Route path="/search" element={<SimpleSearchPage />} />
