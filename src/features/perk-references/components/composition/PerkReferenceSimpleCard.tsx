@@ -1,3 +1,4 @@
+import { SkillAvatar } from '@/features/skills/components/atomic/SkillAvatar'
 import { cn } from '@/lib/utils'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
@@ -35,11 +36,11 @@ export function PerkReferenceSimpleCard({
           {/* Header */}
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-sm font-bold text-muted-foreground">
-                  {item.name.charAt(0)}
-                </span>
-              </div>
+              <SkillAvatar
+                skillName={originalPerk.skillTreeName}
+                size="sm"
+                className="flex-shrink-0"
+              />
               <div className="min-w-0 flex-1">
                 <H4 className="text-sm font-semibold line-clamp-1">
                   {item.name}
@@ -70,9 +71,17 @@ export function PerkReferenceSimpleCard({
           </div>
 
           {/* Description */}
-          <P className="text-xs text-muted-foreground mb-3 line-clamp-2">
-            {item.description}
-          </P>
+          <div className="mb-3 space-y-1">
+            <P className="text-xs text-muted-foreground line-clamp-2">
+              {item.description}
+            </P>
+            {/* Subtext as secondary section */}
+            {item.summary && (
+              <P className="text-xs text-muted-foreground/80 italic border-l-2 border-muted pl-2 line-clamp-2">
+                {item.summary}
+              </P>
+            )}
+          </div>
 
           {/* Tags */}
           <div className="flex flex-wrap gap-1">
@@ -91,11 +100,11 @@ export function PerkReferenceSimpleCard({
       ) : (
         // List layout
         <>
-          <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center flex-shrink-0">
-            <span className="text-sm font-bold text-muted-foreground">
-              {item.name.charAt(0)}
-            </span>
-          </div>
+          <SkillAvatar
+            skillName={originalPerk.skillTreeName}
+            size="sm"
+            className="flex-shrink-0"
+          />
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-2">
               <H4 className="text-sm font-semibold truncate">{item.name}</H4>
@@ -116,13 +125,18 @@ export function PerkReferenceSimpleCard({
                 )}
               </div>
             </div>
-            <P className="text-sm text-muted-foreground line-clamp-2 mt-1">
-              {item.description}
-            </P>
+            <div className="mt-1 space-y-1">
+              <P className="text-sm text-muted-foreground line-clamp-2">
+                {item.description}
+              </P>
+              {/* Subtext as secondary section */}
+              {item.summary && (
+                <P className="text-xs text-muted-foreground/80 italic border-l-2 border-muted pl-2 line-clamp-2">
+                  {item.summary}
+                </P>
+              )}
+            </div>
             <div className="flex items-center gap-2 mt-2">
-              <Small className="text-muted-foreground">
-                {originalPerk.skillTreeName}
-              </Small>
               {item.tags.length > 0 && (
                 <div className="flex items-center gap-1">
                   {item.tags.slice(0, 2).map((tag, index) => (
