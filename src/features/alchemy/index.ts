@@ -13,5 +13,8 @@ export * from './hooks'
 // Components
 export * from './components'
 
+// Views
+export * from './views'
+
 // Pages
 export * from './pages'
