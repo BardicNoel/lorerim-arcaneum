@@ -34,16 +34,8 @@ export function AlchemyPageView() {
     useAlchemyFilters(ingredients)
 
   // Computed adapters
-  const {
-    statistics,
-    availableEffectTypes,
-    availableEffects,
-    availableSkills,
-    availablePlugins,
-    availableRarities,
-    availableFlags,
-    getEffectComparisons,
-  } = useAlchemyComputed(ingredients)
+  const { statistics, availableEffects, getEffectComparisons } =
+    useAlchemyComputed(ingredients)
 
   // View state
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
@@ -58,31 +50,14 @@ export function AlchemyPageView() {
 
       // Use the pre-computed available options from useAlchemyComputed
       // This ensures consistency and avoids duplicate calculations
-      const allEffectTypes = availableEffectTypes || []
       const allEffects = availableEffects || []
-      const allSkills = availableSkills || []
-      const allPlugins = availablePlugins || []
-      const allRarities = availableRarities || []
-      const allFlags = availableFlags || []
 
       return [
         {
           id: 'fuzzy-search',
           name: 'Fuzzy Search',
-          placeholder: 'Search by name, effects, skills, or description...',
+          placeholder: 'Search by name, effects, or description...',
           options: [], // No autocomplete options - this should be free-form text input
-        },
-        {
-          id: 'effect-types',
-          name: 'Effect Types',
-          placeholder: 'Filter by effect type...',
-          options: allEffectTypes.map(effectType => ({
-            id: `effect-type-${effectType}`,
-            label: effectType,
-            value: effectType,
-            category: 'Effect Types',
-            description: `Ingredients with ${effectType} effects`,
-          })),
         },
         {
           id: 'effects',
@@ -94,54 +69,6 @@ export function AlchemyPageView() {
             value: effect,
             category: 'Effects',
             description: `Ingredients with ${effect} effect`,
-          })),
-        },
-        {
-          id: 'skills',
-          name: 'Skills',
-          placeholder: 'Filter by skill...',
-          options: allSkills.map(skill => ({
-            id: `skill-${skill}`,
-            label: skill,
-            value: skill,
-            category: 'Skills',
-            description: `Ingredients for ${skill} skill`,
-          })),
-        },
-        {
-          id: 'plugins',
-          name: 'Plugins',
-          placeholder: 'Filter by plugin...',
-          options: allPlugins.map(plugin => ({
-            id: `plugin-${plugin}`,
-            label: plugin,
-            value: plugin,
-            category: 'Plugins',
-            description: `Ingredients from ${plugin}`,
-          })),
-        },
-        {
-          id: 'rarities',
-          name: 'Rarities',
-          placeholder: 'Filter by rarity...',
-          options: allRarities.map(rarity => ({
-            id: `rarity-${rarity}`,
-            label: rarity,
-            value: rarity,
-            category: 'Rarities',
-            description: `${rarity} rarity ingredients`,
-          })),
-        },
-        {
-          id: 'flags',
-          name: 'Flags',
-          placeholder: 'Filter by flag...',
-          options: allFlags.map(flag => ({
-            id: `flag-${flag}`,
-            label: flag,
-            value: flag,
-            category: 'Flags',
-            description: `Ingredients with ${flag} flag`,
           })),
         },
       ]
@@ -201,31 +128,11 @@ export function AlchemyPageView() {
             // For fuzzy search, we'll handle this separately
             return true
 
-          case 'Effect Types':
-            // Filter by effect types
-            return ingredient.effectTypes.includes(tag.value)
-
           case 'Effects':
             // Filter by effects
             return ingredient.effects.some(
               effect => effect.mgefName === tag.value
             )
-
-          case 'Skills':
-            // Filter by skills
-            return ingredient.skills.includes(tag.value)
-
-          case 'Plugins':
-            // Filter by plugin
-            return ingredient.plugin === tag.value
-
-          case 'Rarities':
-            // Filter by rarity
-            return ingredient.rarity === tag.value
-
-          case 'Flags':
-            // Filter by flags
-            return ingredient.flags.includes(tag.value)
 
           default:
             return true

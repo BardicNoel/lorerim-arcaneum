@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
-import { Badge } from '@/shared/ui/ui/badge'
 import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
 import { Clock, Coins, FlaskConical, Star, Weight, Zap } from 'lucide-react'
 import type {
@@ -185,20 +184,11 @@ export function IngredientCard({
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-medium truncate">{ingredient.name}</h3>
-          <div className="flex gap-1">
-            <Badge
-              variant="secondary"
-              className={cn('text-xs', getRarityColor(ingredient.rarity))}
-            >
-              {ingredient.rarity}
-            </Badge>
-          </div>
         </div>
       </CardHeader>
       <CardContent className="pt-0">
         <div className="text-xs text-muted-foreground">
-          {ingredient.effectCount} effects • {ingredient.value}g •{' '}
-          {ingredient.weight}w
+          {ingredient.value}g • {Math.round(ingredient.weight * 10) / 10}w
         </div>
       </CardContent>
     </Card>
@@ -215,20 +205,6 @@ export function IngredientCard({
         <div className="flex items-start justify-between">
           <div className="flex-1 min-w-0">
             <h3 className="font-medium truncate">{ingredient.name}</h3>
-            <div className="text-sm text-muted-foreground mt-1">
-              {ingredient.edid}
-            </div>
-          </div>
-          <div className="flex flex-col gap-1 ml-2">
-            <Badge
-              variant="secondary"
-              className={cn('text-xs', getRarityColor(ingredient.rarity))}
-            >
-              {ingredient.rarity}
-            </Badge>
-            <Badge variant="outline" className="text-xs">
-              {ingredient.plugin}
-            </Badge>
           </div>
         </div>
       </CardHeader>
@@ -242,11 +218,7 @@ export function IngredientCard({
               </div>
               <div className="flex items-center gap-1">
                 <Weight className="h-3 w-3" />
-                <span>{ingredient.weight}w</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <FlaskConical className="h-3 w-3" />
-                <span>{ingredient.effectCount} effects</span>
+                <span>{Math.round(ingredient.weight * 10) / 10}w</span>
               </div>
             </div>
           )}
@@ -254,7 +226,7 @@ export function IngredientCard({
           {showEffects && ingredient.effects.length > 0 && (
             <div>
               <div className="text-xs font-medium text-muted-foreground mb-2">
-                Effects ({ingredient.effectCount})
+                Effects
               </div>
               <div className="space-y-2">
                 {ingredient.effects.map((effect, index) => (
@@ -297,21 +269,6 @@ export function IngredientCard({
               </div>
             </div>
           )}
-
-          {ingredient.flags.length > 0 && (
-            <div>
-              <div className="text-xs font-medium text-muted-foreground mb-1">
-                Flags
-              </div>
-              <div className="flex flex-wrap gap-1">
-                {ingredient.flags.map((flag, index) => (
-                  <Badge key={index} variant="outline" className="text-xs">
-                    {flag}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </CardContent>
     </Card>
@@ -328,23 +285,6 @@ export function IngredientCard({
         <div className="flex items-start justify-between">
           <div className="flex-1 min-w-0">
             <h3 className="font-medium">{ingredient.name}</h3>
-            <div className="text-sm text-muted-foreground mt-1">
-              {ingredient.edid}
-            </div>
-            <div className="text-xs text-muted-foreground mt-1">
-              Form ID: {ingredient.globalFormId}
-            </div>
-          </div>
-          <div className="flex flex-col gap-1 ml-2">
-            <Badge
-              variant="secondary"
-              className={cn('text-xs', getRarityColor(ingredient.rarity))}
-            >
-              {ingredient.rarity}
-            </Badge>
-            <Badge variant="outline" className="text-xs">
-              {ingredient.plugin}
-            </Badge>
           </div>
         </div>
       </CardHeader>
@@ -366,7 +306,7 @@ export function IngredientCard({
                 <div>
                   <div className="text-sm font-medium">Weight</div>
                   <div className="text-xs text-muted-foreground">
-                    {ingredient.weight} units
+                    {Math.round(ingredient.weight * 10) / 10} units
                   </div>
                 </div>
               </div>
@@ -374,9 +314,7 @@ export function IngredientCard({
                 <FlaskConical className="h-4 w-4 text-purple-500" />
                 <div>
                   <div className="text-sm font-medium">Effects</div>
-                  <div className="text-xs text-muted-foreground">
-                    {ingredient.effectCount} effects
-                  </div>
+                  <div className="text-xs text-muted-foreground">Available</div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -520,19 +458,6 @@ export function IngredientCard({
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {ingredient.flags.length > 0 && (
-            <div>
-              <div className="text-sm font-medium mb-2">Flags</div>
-              <div className="flex flex-wrap gap-2">
-                {ingredient.flags.map((flag, index) => (
-                  <Badge key={index} variant="outline" className="text-xs">
-                    {flag}
-                  </Badge>
                 ))}
               </div>
             </div>
