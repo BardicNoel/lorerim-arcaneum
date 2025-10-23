@@ -67,12 +67,12 @@
     },
     {
       "perkId": "REQ_Pickpocket_100_PerfectTouch",
-      "x": 484.2856998741627,
-      "y": 151.2857099622488,
-      "gridX": 1,
-      "gridY": 0,
-      "horizontal": 0.08571399748325348,
-      "vertical": 0.04285699874162674
+      "x": 195.84850264853674,
+      "y": 205.8379624810085,
+      "gridX": 4,
+      "gridY": 4,
+      "horizontal": 0.08302994702926526,
+      "vertical": -1
     },
     {
       "perkId": "REQ_Pickpocket_30_Sound_Body",
@@ -103,12 +103,30 @@
     },
     {
       "perkId": "LoreRimTrapper_Rank1",
+      "x": 1090.599253860721,
+      "y": 892.2022862807391,
+      "gridX": 1,
+      "gridY": 0,
+      "horizontal": -1,
+      "vertical": -0.7400762093579715
+    },
+    {
+      "perkId": "LoreRimTrapper_Rank2",
       "x": 1043.5714499652386,
-      "y": 332.5714199244976,
+      "y": 513.0000000447035,
       "gridX": 3,
-      "gridY": 1,
+      "gridY": 2,
       "horizontal": 0.07142899930477142,
-      "vertical": 0.08571399748325348
+      "vertical": 0.10000000149011612
+    },
+    {
+      "perkId": "LoreRimTrapper_Rank3",
+      "x": 1038.86866957569,
+      "y": 320.0306722190354,
+      "gridX": 1,
+      "gridY": 3,
+      "horizontal": 0.022626608486198165,
+      "vertical": 0.332310926032153
     },
     {
       "perkId": "REQ_Pickpocket_25_Pocket_sand",
@@ -130,12 +148,12 @@
     },
     {
       "perkId": "ORD_Pic90_Mutiny_Perk_90_OrdASISExclude",
-      "x": 518.6307678738956,
-      "y": 243.70883459356367,
-      "gridX": 1,
-      "gridY": 0,
-      "horizontal": 0.7726153574779119,
-      "vertical": 1
+      "x": 405.76403852473754,
+      "y": 229.6004934249189,
+      "gridX": 3,
+      "gridY": 4,
+      "horizontal": 1,
+      "vertical": -1
     },
     {
       "perkId": "ORD_Pic40_DeathsEmperor_Perk_40_OrdASISExclude",
@@ -157,6 +175,6 @@
     }
   ],
   "version": "1.0.0",
-  "createdAt": "2025-07-26T21:07:34.639Z",
-  "updatedAt": "2025-07-26T21:07:34.639Z"
+  "createdAt": "2025-10-23T21:59:10.735Z",
+  "updatedAt": "2025-10-23T21:59:10.735Z"
 }
