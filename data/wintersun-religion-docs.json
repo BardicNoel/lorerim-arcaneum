@@ -18,9 +18,7 @@
               "effectDescription": "Resist <mag>% of magic.",
               "effectType": "34",
               "targetAttribute": "MagicResist",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -30,9 +28,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -114,10 +110,7 @@
               "effectDescription": "Increases your Health by <mag> points.",
               "effectType": "34",
               "targetAttribute": "Health",
-              "keywords": [
-                "0x000FB98C",
-                "0xA1302DC6"
-              ]
+              "keywords": ["0x000FB98C", "0xA1302DC6"]
             },
             {
               "magnitude": 25,
@@ -127,9 +120,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -281,10 +272,7 @@
               "effectDescription": "Prices are <mag>% better.",
               "effectType": "34",
               "targetAttribute": "SpeechcraftMod",
-              "keywords": [
-                "0x000FB98C",
-                "0xA1302DC6"
-              ]
+              "keywords": ["0x000FB98C", "0xA1302DC6"]
             },
             {
               "magnitude": 25,
@@ -294,9 +282,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -378,10 +364,7 @@
               "effectDescription": "Increases your Magicka by <mag> points.",
               "effectType": "34",
               "targetAttribute": "Magicka",
-              "keywords": [
-                "0x000FB98C",
-                "0xA1302DC6"
-              ]
+              "keywords": ["0x000FB98C", "0xA1302DC6"]
             },
             {
               "magnitude": 25,
@@ -391,9 +374,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -475,10 +456,7 @@
               "effectDescription": "Increases your Stamina by <mag> points.",
               "effectType": "34",
               "targetAttribute": "Stamina",
-              "keywords": [
-                "0x000FB98C",
-                "0xA1302DC6"
-              ]
+              "keywords": ["0x000FB98C", "0xA1302DC6"]
             },
             {
               "magnitude": 25,
@@ -488,9 +466,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -582,10 +558,7 @@
               "effectDescription": "Restoration spells cost <mag>% less to cast.",
               "effectType": "34",
               "targetAttribute": "RestorationMod",
-              "keywords": [
-                "0x000FB98C",
-                "0xA1302DC6"
-              ]
+              "keywords": ["0x000FB98C", "0xA1302DC6"]
             },
             {
               "magnitude": 25,
@@ -595,9 +568,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -689,10 +660,7 @@
               "effectDescription": "Block <mag>% more damage.",
               "effectType": "34",
               "targetAttribute": "BlockMod",
-              "keywords": [
-                "0x000FB98C",
-                "0xA1302DC6"
-              ]
+              "keywords": ["0x000FB98C", "0xA1302DC6"]
             },
             {
               "magnitude": 25,
@@ -702,9 +670,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -796,10 +762,7 @@
               "effectDescription": "Time between shouts is reduced.",
               "effectType": "34",
               "targetAttribute": "ShoutRecoveryMult",
-              "keywords": [
-                "0x000FB98C",
-                "0xA1302DC6"
-              ]
+              "keywords": ["0x000FB98C", "0xA1302DC6"]
             },
             {
               "magnitude": 1,
@@ -809,9 +772,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -893,10 +854,7 @@
               "effectDescription": "Able to improve items <mag>% better.",
               "effectType": "34",
               "targetAttribute": "SmithingMod",
-              "keywords": [
-                "0x000FB98C",
-                "0xA1302DC6"
-              ]
+              "keywords": ["0x000FB98C", "0xA1302DC6"]
             },
             {
               "magnitude": 25,
@@ -906,9 +864,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -996,9 +952,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 10,
@@ -1008,9 +962,7 @@
               "effectDescription": "Increases your Health by <mag> points.",
               "effectType": "34",
               "targetAttribute": "Health",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 0,
@@ -1084,10 +1036,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Breton",
-          "Dark Elf"
-        ],
+        "favoredRaces": ["Breton", "Dark Elf"],
         "worshipRestrictions": []
       },
       {
@@ -1105,9 +1054,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 5,
@@ -1117,9 +1064,7 @@
               "effectDescription": "Increases your Magicka by <mag> points.",
               "effectType": "34",
               "targetAttribute": "Magicka",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 0,
@@ -1203,10 +1148,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Breton",
-          "Dark Elf"
-        ],
+        "favoredRaces": ["Breton", "Dark Elf"],
         "worshipRestrictions": []
       },
       {
@@ -1224,9 +1166,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 5,
@@ -1236,9 +1176,7 @@
               "effectDescription": "Sneak is increased by <mag> points.",
               "effectType": "34",
               "targetAttribute": "Sneak",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 0,
@@ -1274,9 +1212,7 @@
               "effectDescription": "Speech and intimidate checks are <Global=WSN_Favor_Global_Fractional3>% easier (per favor with Vivec)",
               "effectType": "34",
               "targetAttribute": "SpeechcraftMod",
-              "keywords": [
-                "0x00074F6F"
-              ]
+              "keywords": ["0x00074F6F"]
             }
           ]
         },
@@ -1314,10 +1250,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Breton",
-          "Dark Elf"
-        ],
+        "favoredRaces": ["Breton", "Dark Elf"],
         "worshipRestrictions": []
       }
     ]
@@ -1341,9 +1274,7 @@
               "effectDescription": "You are <mag>% more effective with missile weapons.",
               "effectType": "34",
               "targetAttribute": "MarksmanMod",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -1353,9 +1284,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -1429,10 +1358,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Altmer",
-          "Bosmer"
-        ],
+        "favoredRaces": ["Altmer", "Bosmer"],
         "worshipRestrictions": []
       },
       {
@@ -1450,9 +1376,7 @@
               "effectDescription": "Carrying capacity increased by <mag> points.",
               "effectType": "34",
               "targetAttribute": "CarryWeight",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -1462,9 +1386,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -1558,10 +1480,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Dunmer",
-          "Argonian"
-        ],
+        "favoredRaces": ["Dunmer", "Argonian"],
         "worshipRestrictions": []
       },
       {
@@ -1579,9 +1498,7 @@
               "effectDescription": "<mag>% chance to absorb a hostile spell and recharge your Magicka.",
               "effectType": "34",
               "targetAttribute": "AbsorbChance",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -1591,9 +1508,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -1685,9 +1600,7 @@
               "effectDescription": "Potions and poisons you mix are <mag>% stronger.",
               "effectType": "34",
               "targetAttribute": "AlchemyMod",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -1697,9 +1610,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -1813,10 +1724,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Imperial",
-          "Wood Elf"
-        ],
+        "favoredRaces": ["Imperial", "Wood Elf"],
         "worshipRestrictions": []
       },
       {
@@ -1834,9 +1742,7 @@
               "effectDescription": "Regenerate <mag>% of your maximum Magicka per second.",
               "effectType": "34",
               "targetAttribute": "MagickaRate",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -1846,9 +1752,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -1922,10 +1826,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Altmer",
-          "Bosmer"
-        ],
+        "favoredRaces": ["Altmer", "Bosmer"],
         "worshipRestrictions": []
       },
       {
@@ -1943,9 +1844,7 @@
               "effectDescription": "You are <mag>% more effective with two-handed weapons.",
               "effectType": "34",
               "targetAttribute": "TwoHandedMod",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -1955,9 +1854,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -2069,9 +1966,7 @@
               "effectDescription": "Scrolls are <mag>% more effective.",
               "effectType": "34",
               "targetAttribute": "VoicePoints",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -2081,9 +1976,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -2157,10 +2050,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Imperial",
-          "Wood Elf"
-        ],
+        "favoredRaces": ["Imperial", "Wood Elf"],
         "worshipRestrictions": []
       },
       {
@@ -2178,9 +2068,7 @@
               "effectDescription": "Alteration spells cost <mag>% less to cast.",
               "effectType": "34",
               "targetAttribute": "AlterationMod",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -2190,9 +2078,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -2290,9 +2176,7 @@
               "effectDescription": "Resist <mag>% of magic.",
               "effectType": "34",
               "targetAttribute": "MagicResist",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -2302,9 +2186,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -2378,10 +2260,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Breton",
-          "Breton"
-        ],
+        "favoredRaces": ["Breton", "Breton"],
         "worshipRestrictions": []
       },
       {
@@ -2399,9 +2278,7 @@
               "effectDescription": "You are <mag>% more effective with one-handed weapons.",
               "effectType": "34",
               "targetAttribute": "OneHandedMod",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -2411,9 +2288,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -2487,10 +2362,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Breton",
-          "Dark Elf"
-        ],
+        "favoredRaces": ["Breton", "Dark Elf"],
         "worshipRestrictions": []
       },
       {
@@ -2508,9 +2380,7 @@
               "effectDescription": "Conjuration spells cost <mag>% less to cast.",
               "effectType": "34",
               "targetAttribute": "ConjurationMod",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -2520,9 +2390,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -2614,9 +2482,7 @@
               "effectDescription": "Spells and effects you cast on yourself last <mag>% longer.",
               "effectType": "34",
               "targetAttribute": "VoicePoints",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -2626,9 +2492,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -2720,9 +2584,7 @@
               "effectDescription": "Regenerate <mag>% of your maximum Stamina per second.",
               "effectType": "34",
               "targetAttribute": "StaminaRate",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -2732,9 +2594,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -2826,9 +2686,7 @@
               "effectDescription": "Deal <mag>% more attack damage and critical damage against daedra.",
               "effectType": "34",
               "targetAttribute": "VoicePoints",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -2838,9 +2696,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -2952,9 +2808,7 @@
               "effectDescription": "Your power attacks cost <mag>% less Stamina.",
               "effectType": "34",
               "targetAttribute": "VoicePoints",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -2964,9 +2818,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -3040,10 +2892,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Nord",
-          "Falmer"
-        ],
+        "favoredRaces": ["Nord", "Falmer"],
         "worshipRestrictions": []
       },
       {
@@ -3061,9 +2910,7 @@
               "effectDescription": "Destruction spells are <mag>% more effective.",
               "effectType": "34",
               "targetAttribute": "DestructionPowerMod",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -3073,9 +2920,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -3167,9 +3012,7 @@
               "effectDescription": "Poisons you mix are <mag>% more effective.",
               "effectType": "34",
               "targetAttribute": "VoicePoints",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -3179,9 +3022,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -3255,10 +3096,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Breton",
-          "Dark Elf"
-        ],
+        "favoredRaces": ["Breton", "Dark Elf"],
         "worshipRestrictions": []
       },
       {
@@ -3276,9 +3114,7 @@
               "effectDescription": "Restoration spells are <10>% more effective.",
               "effectType": "34",
               "targetAttribute": "RestorationPowerMod",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -3288,9 +3124,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -3384,10 +3218,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Altmer",
-          "Bosmer"
-        ],
+        "favoredRaces": ["Altmer", "Bosmer"],
         "worshipRestrictions": []
       },
       {
@@ -3405,9 +3236,7 @@
               "effectDescription": "Destruction spells cost <mag>% less to cast.",
               "effectType": "34",
               "targetAttribute": "DestructionMod",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -3417,9 +3246,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -3521,9 +3348,7 @@
               "effectDescription": "Increases Disease Resistance by <mag>%.",
               "effectType": "34",
               "targetAttribute": "DiseaseResist",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -3533,9 +3358,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -3627,9 +3450,7 @@
               "effectDescription": "You are <mag>% harder to detect.",
               "effectType": "34",
               "targetAttribute": "Sneak",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -3639,9 +3460,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -3733,9 +3552,7 @@
               "effectDescription": "Increases Poison Resistance by <mag>%.",
               "effectType": "34",
               "targetAttribute": "PoisonResist",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -3745,9 +3562,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -3849,9 +3664,7 @@
               "effectDescription": "Using beneficial potions and alchemical ingredients is <mag>% better.",
               "effectType": "34",
               "targetAttribute": "VoicePoints",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -3861,9 +3674,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -3985,9 +3796,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -4089,9 +3898,7 @@
               "effectDescription": "Illusion spells cost <mag>% less to cast.",
               "effectType": "34",
               "targetAttribute": "IllusionMod",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -4101,9 +3908,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -4211,9 +4016,7 @@
               "effectDescription": "Pickpocketing is <mag>% easier.",
               "effectType": "34",
               "targetAttribute": "PickPocketMod",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -4223,9 +4026,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -4299,10 +4100,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Khajiit",
-          "Argonian"
-        ],
+        "favoredRaces": ["Khajiit", "Argonian"],
         "worshipRestrictions": []
       },
       {
@@ -4320,9 +4118,7 @@
               "effectDescription": "Armor rating of heavy armor pieces is increased by <mag>%.",
               "effectType": "34",
               "targetAttribute": "VoicePoints",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -4332,9 +4128,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -4416,9 +4210,7 @@
               "effectDescription": "Conjuration spells are <mag>% more effective.",
               "effectType": "34",
               "targetAttribute": "ConjurationPowerMod",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -4428,9 +4220,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -4522,9 +4312,7 @@
               "effectDescription": "Armor rating of light armor pieces is increased by <mag>%.",
               "effectType": "34",
               "targetAttribute": "VoicePoints",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -4534,9 +4322,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -4618,9 +4404,7 @@
               "effectDescription": "Deal <mag>% more attack damage and critical damage against elves.",
               "effectType": "34",
               "targetAttribute": "VoicePoints",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -4630,9 +4414,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -4724,9 +4506,7 @@
               "effectDescription": "Sneak attacks deal <mag>% more damage.",
               "effectType": "34",
               "targetAttribute": "VoicePoints",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -4736,9 +4516,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -4812,10 +4590,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Orc",
-          "Orc"
-        ],
+        "favoredRaces": ["Orc", "Orc"],
         "worshipRestrictions": []
       },
       {
@@ -4833,11 +4608,7 @@
               "effectDescription": "Followers within <mag> feet gain <50> points of armor and <10>% magic resistance.",
               "effectType": "35",
               "targetAttribute": null,
-              "keywords": [
-                "0x000FB98C",
-                "0xA13120D6",
-                "0xA1302DC6"
-              ]
+              "keywords": ["0x000FB98C", "0xA13120D6", "0xA1302DC6"]
             },
             {
               "magnitude": 25,
@@ -4847,9 +4618,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -4901,9 +4670,7 @@
               "effectDescription": "While under the effects of a Divine blessing, can talk to most non-hostile humans to make them a friend and potential follower. Costs <10>% favor.",
               "effectType": "1",
               "targetAttribute": null,
-              "keywords": [
-                "0xA13120D7"
-              ]
+              "keywords": ["0xA13120D7"]
             }
           ]
         },
@@ -4943,9 +4710,7 @@
               "effectDescription": "Deal <mag>% more attack damage and critical damage against animals.",
               "effectType": "34",
               "targetAttribute": "VoicePoints",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -4955,9 +4720,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -5031,10 +4794,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Redguard",
-          "Khajiit"
-        ],
+        "favoredRaces": ["Redguard", "Khajiit"],
         "worshipRestrictions": []
       },
       {
@@ -5052,9 +4812,7 @@
               "effectDescription": "Tough scales increase armor by <mag> points.",
               "effectType": "34",
               "targetAttribute": "DamageResist",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -5064,9 +4822,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -5168,9 +4924,7 @@
               "effectDescription": "Alteration spells are <10>% more effective.",
               "effectType": "34",
               "targetAttribute": "AlterationPowerMod",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -5180,9 +4934,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -5246,10 +4998,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Altmer",
-          "Bosmer"
-        ],
+        "favoredRaces": ["Altmer", "Bosmer"],
         "worshipRestrictions": []
       }
     ]
@@ -5273,10 +5022,7 @@
               "effectDescription": "Armor rating of light armor pieces is increased by <mag>%.",
               "effectType": "34",
               "targetAttribute": "VoicePoints",
-              "keywords": [
-                "0x000FB98C",
-                "0xA128416A"
-              ]
+              "keywords": ["0x000FB98C", "0xA128416A"]
             },
             {
               "magnitude": 25,
@@ -5286,9 +5032,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -5380,10 +5124,7 @@
               "effectDescription": "Healing spells restore <mag>% more Health.",
               "effectType": "34",
               "targetAttribute": "VoicePoints",
-              "keywords": [
-                "0x000FB98C",
-                "0xA128416A"
-              ]
+              "keywords": ["0x000FB98C", "0xA128416A"]
             },
             {
               "magnitude": 25,
@@ -5393,9 +5134,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -5487,10 +5226,7 @@
               "effectDescription": "Regenerate <mag>% of your maximum Health per second.",
               "effectType": "34",
               "targetAttribute": "HealRate",
-              "keywords": [
-                "0x000FB98C",
-                "0xA128416A"
-              ]
+              "keywords": ["0x000FB98C", "0xA128416A"]
             },
             {
               "magnitude": 25,
@@ -5500,9 +5236,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -5594,10 +5328,7 @@
               "effectDescription": "Items are enchanted <mag>% stronger.",
               "effectType": "34",
               "targetAttribute": "EnchantingPowerMod",
-              "keywords": [
-                "0x000FB98C",
-                "0xA128416A"
-              ]
+              "keywords": ["0x000FB98C", "0xA128416A"]
             },
             {
               "magnitude": 25,
@@ -5607,9 +5338,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -5721,10 +5450,7 @@
               "effectDescription": "Stagger from attacks and bashes is <mag>% more effective.",
               "effectType": "34",
               "targetAttribute": "VoicePoints",
-              "keywords": [
-                "0x000FB98C",
-                "0xA128416A"
-              ]
+              "keywords": ["0x000FB98C", "0xA128416A"]
             },
             {
               "magnitude": 25,
@@ -5734,9 +5460,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -5844,9 +5568,7 @@
               "effectDescription": "Lockpicking is <mag>% easier.",
               "effectType": "34",
               "targetAttribute": "LockpickingMod",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -5856,9 +5578,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -5950,9 +5670,7 @@
               "effectDescription": "Unarmed strikes do <mag> additional damage.",
               "effectType": "34",
               "targetAttribute": "UnarmedDamage",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -5962,9 +5680,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -6062,9 +5778,7 @@
               "effectDescription": "Deal <mag>% more attack damage and critical damage against animals.",
               "effectType": "34",
               "targetAttribute": "VoicePoints",
-              "keywords": [
-                "0x000FB98C"
-              ]
+              "keywords": ["0x000FB98C"]
             },
             {
               "magnitude": 25,
@@ -6074,9 +5788,7 @@
               "effectDescription": "",
               "effectType": "3",
               "targetAttribute": null,
-              "keywords": [
-                "0x000F8A4E"
-              ]
+              "keywords": ["0x000F8A4E"]
             },
             {
               "magnitude": 0,
@@ -6150,10 +5862,7 @@
             }
           ]
         },
-        "favoredRaces": [
-          "Redguard",
-          "Khajiit"
-        ],
+        "favoredRaces": ["Redguard", "Khajiit"],
         "worshipRestrictions": []
       }
     ]

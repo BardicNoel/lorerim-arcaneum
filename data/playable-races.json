@@ -62,7 +62,7 @@
       "keywords": [
         {
           "edid": "REQ_RacialSkills_RechargeWeaponsUnperked",
-          "globalFormId": "0x8CAD3A3C"
+          "globalFormId": "0x8FAD3A3C"
         }
       ],
       "regeneration": {
@@ -149,7 +149,7 @@
           "edid": "REQ_Ability_Race_All_StrongStomach",
           "name": "Strong Stomach",
           "description": "Your metabolism can digest raw food without food poisoning.",
-          "globalFormId": "0xFE68F808"
+          "globalFormId": "0xFE67B808"
         }
       ],
       "keywords": [
@@ -159,19 +159,19 @@
         },
         {
           "edid": "REQ_StrongStomach",
-          "globalFormId": "0x8C4CF31E"
+          "globalFormId": "0x8F4CF31E"
         },
         {
           "edid": "REQ_RacialSkills_SneakUnperked",
-          "globalFormId": "0x8CAD3A3A"
+          "globalFormId": "0x8FAD3A3A"
         },
         {
           "edid": "REQ_RacialSkills_CreatePotionsUnperked",
-          "globalFormId": "0x8CAD3A3B"
+          "globalFormId": "0x8FAD3A3B"
         },
         {
           "edid": "REQ_RacialSkills_LockpickUnperked",
-          "globalFormId": "0x8CAD3A3E"
+          "globalFormId": "0x8FAD3A3E"
         }
       ],
       "regeneration": {
@@ -252,31 +252,31 @@
           "edid": "REQ_Ability_Race_Bosmer_EyeOfTheHunt",
           "name": "Eye of the Hunt",
           "description": "The Bosmer are naturally skilled in marksmanship, and can aim their bows more precisely. Armor penetration with ranged weapons is increased by <5>.",
-          "globalFormId": "0xFE68F801"
+          "globalFormId": "0xFE67B801"
         },
         {
           "edid": "REQ_Ability_Race_All_StrongStomach",
           "name": "Strong Stomach",
           "description": "Your metabolism can digest raw food without food poisoning.",
-          "globalFormId": "0xFE68F808"
+          "globalFormId": "0xFE67B808"
         }
       ],
       "keywords": [
         {
           "edid": "REQ_StrongStomach",
-          "globalFormId": "0x8C4CF31E"
+          "globalFormId": "0x8F4CF31E"
         },
         {
           "edid": "REQ_RacialSkills_SneakUnperked",
-          "globalFormId": "0x8CAD3A3A"
+          "globalFormId": "0x8FAD3A3A"
         },
         {
           "edid": "REQ_RacialSkills_CreatePotionsUnperked",
-          "globalFormId": "0x8CAD3A3B"
+          "globalFormId": "0x8FAD3A3B"
         },
         {
           "edid": "REQ_RacialSkills_PickpocketUnperked",
-          "globalFormId": "0x8CAD3A3D"
+          "globalFormId": "0x8FAD3A3D"
         }
       ],
       "regeneration": {
@@ -357,15 +357,15 @@
       "keywords": [
         {
           "edid": "REQ_RaceHuman",
-          "globalFormId": "0x8C316340"
+          "globalFormId": "0x8F316340"
         },
         {
           "edid": "REQ_RacialSkills_CreatePotionsUnperked",
-          "globalFormId": "0x8CAD3A3B"
+          "globalFormId": "0x8FAD3A3B"
         },
         {
           "edid": "REQ_RacialSkills_RechargeWeaponsUnperked",
-          "globalFormId": "0x8CAD3A3C"
+          "globalFormId": "0x8FAD3A3C"
         }
       ],
       "regeneration": {
@@ -446,7 +446,7 @@
       "keywords": [
         {
           "edid": "REQ_RacialSkills_SneakUnperked",
-          "globalFormId": "0x8CAD3A3A"
+          "globalFormId": "0x8FAD3A3A"
         }
       ],
       "regeneration": {
@@ -527,7 +527,7 @@
       "keywords": [
         {
           "edid": "REQ_RaceHuman",
-          "globalFormId": "0x8C316340"
+          "globalFormId": "0x8F316340"
         }
       ],
       "regeneration": {
@@ -602,19 +602,19 @@
           "edid": "REQ_Ability_Race_Khajiit_FelineAgility",
           "name": "Feline Agility",
           "description": "Khajiits are very agile and can fall long heights without taking critical damage. Movement is <10>% faster, sneaking is <20>% faster, fall damage is reduced by <75>%.",
-          "globalFormId": "0x8C1AD1B0"
+          "globalFormId": "0x8F1AD1B0"
         },
         {
           "edid": "REQ_Ability_Race_All_StrongStomach",
           "name": "Strong Stomach",
           "description": "Your metabolism can digest raw food without food poisoning.",
-          "globalFormId": "0xFE68F808"
+          "globalFormId": "0xFE67B808"
         },
         {
           "edid": "REQ_Ability_Race_Khajiit_Fingersmith",
           "name": "Fingersmith",
           "description": "Khajiits have keen senses and dexterity, making them much more proficient in thievery. Lockpicking expertise is increased by <2>, lockpicks are <20>% more durable, pickpocketing is <20>% more likely to succeed, you are <20>% harder to detect.",
-          "globalFormId": "0xFE68F816"
+          "globalFormId": "0xFE67B816"
         }
       ],
       "keywords": [
@@ -624,23 +624,23 @@
         },
         {
           "edid": "REQ_StrongStomach",
-          "globalFormId": "0x8C4CF31E"
+          "globalFormId": "0x8F4CF31E"
         },
         {
           "edid": "REQ_RacialSkills_SneakUnperked",
-          "globalFormId": "0x8CAD3A3A"
+          "globalFormId": "0x8FAD3A3A"
         },
         {
           "edid": "REQ_RacialSkills_CreatePotionsUnperked",
-          "globalFormId": "0x8CAD3A3B"
+          "globalFormId": "0x8FAD3A3B"
         },
         {
           "edid": "REQ_RacialSkills_PickpocketUnperked",
-          "globalFormId": "0x8CAD3A3D"
+          "globalFormId": "0x8FAD3A3D"
         },
         {
           "edid": "REQ_RacialSkills_LockpickUnperked",
-          "globalFormId": "0x8CAD3A3E"
+          "globalFormId": "0x8FAD3A3E"
         }
       ],
       "regeneration": {
@@ -715,19 +715,19 @@
           "edid": "REQ_Ability_Race_Nord_AncientTongues",
           "name": "Ancient Tongues",
           "description": "Nords have inherent ability to Shout, and can unleash immense power through the Voice. Shouts are <10>% more powerful and last longer, Shouts can be used <10>% more often.",
-          "globalFormId": "0xFE68F809"
+          "globalFormId": "0xFE67B809"
         },
         {
           "edid": "REQ_Ability_Race_Nord_BarbaricStrength",
           "name": "Barbaric Strength",
           "description": "Nords are fierce and strong, skilled with all melee weapons. Melee weapons deal <5>% more damage.",
-          "globalFormId": "0xFE68F80B"
+          "globalFormId": "0xFE67B80B"
         }
       ],
       "keywords": [
         {
           "edid": "REQ_RaceHuman",
-          "globalFormId": "0x8C316340"
+          "globalFormId": "0x8F316340"
         }
       ],
       "regeneration": {
@@ -802,13 +802,13 @@
           "edid": "REQ_Ability_Race_All_StrongStomach",
           "name": "Strong Stomach",
           "description": "Your metabolism can digest raw food without food poisoning.",
-          "globalFormId": "0xFE68F808"
+          "globalFormId": "0xFE67B808"
         }
       ],
       "keywords": [
         {
           "edid": "REQ_StrongStomach",
-          "globalFormId": "0x8C4CF31E"
+          "globalFormId": "0x8F4CF31E"
         }
       ],
       "regeneration": {
@@ -889,13 +889,13 @@
           "edid": "REQ_Ability_Race_Redguard_MartialProwess",
           "name": "Martial Prowess",
           "description": "Redguards are naturally skilled in martial arts, and can wield their weapons with great precision. Armor penetration with melee weapons is increased by <5>.",
-          "globalFormId": "0xFE68F80E"
+          "globalFormId": "0xFE67B80E"
         }
       ],
       "keywords": [
         {
           "edid": "REQ_RaceHuman",
-          "globalFormId": "0x8C316340"
+          "globalFormId": "0x8F316340"
         }
       ],
       "regeneration": {
@@ -927,12 +927,8 @@
     }
   },
   "compatibility": {
-    "mods": [
-      "Synthesis - NPC.esp"
-    ],
-    "plugins": [
-      "Synthesis - NPC.esp"
-    ],
+    "mods": ["Synthesis - NPC.esp"],
+    "plugins": ["Synthesis - NPC.esp"],
     "loadOrder": {
       "Synthesis - NPC.esp": 0
     }
