@@ -1,0 +1,196 @@
+{
+  "food": [
+    {
+      "effectName": "Fortify Block",
+      "bestRecipe": "Crab Cakes",
+      "bestMagnitude": 10,
+      "bestDuration": 2400,
+      "description": "Blocking absorbs <10>% more damage and bashing does as much as more damage for <2400> seconds."
+    },
+    {
+      "effectName": "Fortify Carry Weight",
+      "bestRecipe": "Braided Bread",
+      "bestMagnitude": 10,
+      "bestDuration": 1200,
+      "description": "Carrying capacity increases by <10> for <1200> seconds."
+    },
+    {
+      "effectName": "Fortify Health",
+      "bestRecipe": "Roasted Salmon Fillet",
+      "bestMagnitude": 20,
+      "bestDuration": 1800,
+      "description": "Health increases by <20> for <1800> seconds."
+    },
+    {
+      "effectName": "Fortify Health Regeneration",
+      "bestRecipe": "Dragon Pie",
+      "bestMagnitude": 25,
+      "bestDuration": 600,
+      "description": "Health regenerates <25>% faster for <600> seconds."
+    },
+    {
+      "effectName": "Fortify Magicka",
+      "bestRecipe": "Apple Pie",
+      "bestMagnitude": 25,
+      "bestDuration": 1800,
+      "description": "Magicka increases by <25> for <1800> seconds."
+    },
+    {
+      "effectName": "Fortify Marksman",
+      "bestRecipe": "Apple Dumpling",
+      "bestMagnitude": 5,
+      "bestDuration": 900,
+      "description": "Ranged weapons deal <5>% more damage for <900> seconds."
+    },
+    {
+      "effectName": "Fortify One-Handed",
+      "bestRecipe": "Chicken Dumpling",
+      "bestMagnitude": 5,
+      "bestDuration": 900,
+      "description": "One-handed weapons deal <5>% more damage for <900> seconds."
+    },
+    {
+      "effectName": "Fortify Stamina",
+      "bestRecipe": "Roasted Horker Steak",
+      "bestMagnitude": 15,
+      "bestDuration": 1800,
+      "description": "Stamina increases by <15> for <1800> seconds."
+    },
+    {
+      "effectName": "Fortify Stamina Regeneration",
+      "bestRecipe": "Dragon Pie",
+      "bestMagnitude": 25,
+      "bestDuration": 600,
+      "description": "Stamina regenerates <25>% faster for <600> seconds."
+    },
+    {
+      "effectName": "Fortify Two-Handed",
+      "bestRecipe": "Chicken Dumpling",
+      "bestMagnitude": 5,
+      "bestDuration": 900,
+      "description": "Two-handed weapons deal <5>% more damage for <900> seconds."
+    },
+    {
+      "effectName": "Hydrated",
+      "bestRecipe": "Cup of Water",
+      "bestMagnitude": 20,
+      "bestDuration": 720,
+      "description": "Food bonuses are <20>% stronger for <720> seconds."
+    },
+    {
+      "effectName": "Inebriation",
+      "bestRecipe": "Herbal Infusion",
+      "bestMagnitude": 30,
+      "bestDuration": 1350,
+      "description": "Impairs coordination and focus, slowing the regeneration of Stamina by <30>% and twice that for Magicka for <1350> seconds. At least you get to feel good for a while!"
+    },
+    {
+      "effectName": "Krambambula Effect",
+      "bestRecipe": "Kram Bam Bula",
+      "bestMagnitude": 0,
+      "bestDuration": 20,
+      "description": "Delicious dwarven whiskey with honey and juniper berries"
+    },
+    {
+      "effectName": "Movement Speed",
+      "bestRecipe": "Charred Skeever Meat",
+      "bestMagnitude": 20,
+      "bestDuration": 180,
+      "description": "Movement speed is increased by <20> for <180> seconds."
+    },
+    {
+      "effectName": "Regenerate Magicka",
+      "bestRecipe": "Clam Chowder",
+      "bestMagnitude": 45,
+      "bestDuration": 3600,
+      "description": "Magicka regenerates <45>% faster for <3600> seconds."
+    },
+    {
+      "effectName": "Regeneration",
+      "bestRecipe": "Potato Bread",
+      "bestMagnitude": 25,
+      "bestDuration": 1200,
+      "description": "Health regenerates <25>% faster for <1200> seconds."
+    },
+    {
+      "effectName": "Restore Health",
+      "bestRecipe": "Ironwood Soup",
+      "bestMagnitude": 1,
+      "bestDuration": 1800,
+      "description": "Health recovers by <1> per second for <1800> seconds."
+    },
+    {
+      "effectName": "Restore Health & Stamina",
+      "bestRecipe": "Charred Skeever Meat",
+      "bestMagnitude": 10,
+      "bestDuration": 180,
+      "description": "Restore <10> health & stamina for <180> seconds."
+    },
+    {
+      "effectName": "Restore Magicka",
+      "bestRecipe": "Hot Elsweyr Fondue",
+      "bestMagnitude": 1,
+      "bestDuration": 3600,
+      "description": "Magicka recovers by <1> per second for <3600> seconds."
+    },
+    {
+      "effectName": "Restore Stamina",
+      "bestRecipe": "Garlic Bread",
+      "bestMagnitude": 0.6000000238418579,
+      "bestDuration": 900,
+      "description": "Stamina recovers by 0.6 per second for <900> seconds."
+    },
+    {
+      "effectName": "Waterbreathing",
+      "bestRecipe": "Fishlung Soup",
+      "bestMagnitude": 0,
+      "bestDuration": 60,
+      "description": "You can breathe underwater for <60> seconds."
+    }
+  ],
+  "alcohol": [
+    {
+      "effectName": "Fortify Barter",
+      "bestRecipe": "Colovian Brandy",
+      "bestMagnitude": 20,
+      "bestDuration": 900,
+      "description": "Prices are <20>% more favorable for <900> seconds."
+    },
+    {
+      "effectName": "Fortify Health Regeneration",
+      "bestRecipe": "Mead with Juniper Berry",
+      "bestMagnitude": 25,
+      "bestDuration": 300,
+      "description": "Health regenerates <25>% faster for <300> seconds."
+    },
+    {
+      "effectName": "Fortify Illusion",
+      "bestRecipe": "Loci Whiskey",
+      "bestMagnitude": 25,
+      "bestDuration": 60,
+      "description": "Illusion skill is <25> higher for <60> seconds."
+    },
+    {
+      "effectName": "Inebriation",
+      "bestRecipe": "Loci Whiskey",
+      "bestMagnitude": 30,
+      "bestDuration": 1350,
+      "description": "Impairs coordination and focus, slowing the regeneration of Stamina by <30>% and twice that for Magicka for <1350> seconds. At least you get to feel good for a while!"
+    },
+    {
+      "effectName": "Invisibility",
+      "bestRecipe": "Loci Whiskey",
+      "bestMagnitude": 0,
+      "bestDuration": 50,
+      "description": "You become invisibile for <50> seconds."
+    },
+    {
+      "effectName": "Restore Health",
+      "bestRecipe": "Loci Whiskey",
+      "bestMagnitude": 5,
+      "bestDuration": 20,
+      "description": "Health recovers by <5> per second for <20> seconds."
+    }
+  ],
+  "skooma": []
+}
