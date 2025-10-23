@@ -12,12 +12,7 @@
         "Create unique items",
         "Unlock new crafting materials"
       ],
-      "metaTags": [
-        "crafting",
-        "equipment",
-        "improvement",
-        "materials"
-      ]
+      "metaTags": ["crafting", "equipment", "improvement", "materials"]
     },
     {
       "name": "Destruction",
@@ -31,12 +26,7 @@
         "Control fire, frost, and lightning",
         "Area of effect damage"
       ],
-      "metaTags": [
-        "magic",
-        "combat",
-        "damage",
-        "elements"
-      ]
+      "metaTags": ["magic", "combat", "damage", "elements"]
     },
     {
       "name": "Enchanting",
@@ -50,12 +40,7 @@
         "Recharge enchanted items",
         "Disenchant items to learn effects"
       ],
-      "metaTags": [
-        "crafting",
-        "magic",
-        "equipment",
-        "effects"
-      ]
+      "metaTags": ["crafting", "magic", "equipment", "effects"]
     },
     {
       "name": "Restoration",
@@ -69,12 +54,7 @@
         "Turn undead",
         "Restore stamina and magicka"
       ],
-      "metaTags": [
-        "magic",
-        "healing",
-        "protection",
-        "support"
-      ]
+      "metaTags": ["magic", "healing", "protection", "support"]
     },
     {
       "name": "Illusion",
@@ -88,12 +68,7 @@
         "Invisibility and stealth magic",
         "Calm and frenzy effects"
       ],
-      "metaTags": [
-        "magic",
-        "illusion",
-        "stealth",
-        "control"
-      ]
+      "metaTags": ["magic", "illusion", "stealth", "control"]
     },
     {
       "name": "Conjuration",
@@ -107,12 +82,7 @@
         "Raise undead minions",
         "Create magical barriers"
       ],
-      "metaTags": [
-        "magic",
-        "summoning",
-        "combat",
-        "minions"
-      ]
+      "metaTags": ["magic", "summoning", "combat", "minions"]
     },
     {
       "name": "Alteration",
@@ -126,12 +96,7 @@
         "Enhance armor and protection",
         "Control magic and elements"
       ],
-      "metaTags": [
-        "magic",
-        "utility",
-        "protection",
-        "environment"
-      ]
+      "metaTags": ["magic", "utility", "protection", "environment"]
     },
     {
       "name": "Speech",
@@ -145,12 +110,7 @@
         "Bribe guards and officials",
         "Influence dialogue outcomes"
       ],
-      "metaTags": [
-        "social",
-        "trading",
-        "persuasion",
-        "diplomacy"
-      ]
+      "metaTags": ["social", "trading", "persuasion", "diplomacy"]
     },
     {
       "name": "Alchemy",
@@ -164,12 +124,7 @@
         "Create powerful buffs",
         "Craft healing and utility items"
       ],
-      "metaTags": [
-        "crafting",
-        "magic",
-        "consumables",
-        "effects"
-      ]
+      "metaTags": ["crafting", "magic", "consumables", "effects"]
     },
     {
       "name": "Sneak",
@@ -183,12 +138,7 @@
         "Sneak past enemies",
         "Hide in shadows and cover"
       ],
-      "metaTags": [
-        "stealth",
-        "combat",
-        "movement",
-        "assassination"
-      ]
+      "metaTags": ["stealth", "combat", "movement", "assassination"]
     },
     {
       "name": "Wayfarer",
@@ -202,12 +152,7 @@
         "Access hidden treasures",
         "Reduce lockpick breakage"
       ],
-      "metaTags": [
-        "stealth",
-        "thievery",
-        "utility",
-        "exploration"
-      ]
+      "metaTags": ["stealth", "thievery", "utility", "exploration"]
     },
     {
       "name": "Finesse",
@@ -221,12 +166,7 @@
         "Pickpocket weapons during combat",
         "Steal equipped items"
       ],
-      "metaTags": [
-        "stealth",
-        "thievery",
-        "social",
-        "criminal"
-      ]
+      "metaTags": ["stealth", "thievery", "social", "criminal"]
     },
     {
       "name": "Evasion",
@@ -240,12 +180,7 @@
         "Unlock light armor perks",
         "Sneak effectively in armor"
       ],
-      "metaTags": [
-        "defense",
-        "armor",
-        "mobility",
-        "stealth"
-      ]
+      "metaTags": ["defense", "armor", "mobility", "stealth"]
     },
     {
       "name": "Heavy Armor",
@@ -259,12 +194,7 @@
         "Unlock heavy armor perks",
         "Maintain mobility in heavy armor"
       ],
-      "metaTags": [
-        "defense",
-        "armor",
-        "protection",
-        "tank"
-      ]
+      "metaTags": ["defense", "armor", "protection", "tank"]
     },
     {
       "name": "Block",
@@ -278,12 +208,7 @@
         "Shield charge attacks",
         "Block arrows and spells"
       ],
-      "metaTags": [
-        "defense",
-        "combat",
-        "shield",
-        "protection"
-      ]
+      "metaTags": ["defense", "combat", "shield", "protection"]
     },
     {
       "name": "Marksman",
@@ -297,12 +222,7 @@
         "Quick shot and zoom abilities",
         "Poison application to arrows"
       ],
-      "metaTags": [
-        "weapon",
-        "combat",
-        "ranged",
-        "archery"
-      ]
+      "metaTags": ["weapon", "combat", "ranged", "archery"]
     },
     {
       "name": "Two-handed",
@@ -317,12 +237,7 @@
         "Unstoppable power attacks",
         "Block with two-handed weapons"
       ],
-      "metaTags": [
-        "weapon",
-        "combat",
-        "melee",
-        "heavy"
-      ]
+      "metaTags": ["weapon", "combat", "melee", "heavy"]
     },
     {
       "name": "One-handed",
@@ -337,12 +252,7 @@
         "Power attacks with one-handed weapons",
         "Block with one-handed weapons"
       ],
-      "metaTags": [
-        "weapon",
-        "combat",
-        "melee",
-        "dual-wield"
-      ]
+      "metaTags": ["weapon", "combat", "melee", "dual-wield"]
     }
   ],
   "combatSkills": [
@@ -358,12 +268,7 @@
         "Create unique items",
         "Unlock new crafting materials"
       ],
-      "metaTags": [
-        "crafting",
-        "equipment",
-        "improvement",
-        "materials"
-      ]
+      "metaTags": ["crafting", "equipment", "improvement", "materials"]
     },
     {
       "name": "Heavy Armor",
@@ -377,12 +282,7 @@
         "Unlock heavy armor perks",
         "Maintain mobility in heavy armor"
       ],
-      "metaTags": [
-        "defense",
-        "armor",
-        "protection",
-        "tank"
-      ]
+      "metaTags": ["defense", "armor", "protection", "tank"]
     },
     {
       "name": "Block",
@@ -396,12 +296,7 @@
         "Shield charge attacks",
         "Block arrows and spells"
       ],
-      "metaTags": [
-        "defense",
-        "combat",
-        "shield",
-        "protection"
-      ]
+      "metaTags": ["defense", "combat", "shield", "protection"]
     },
     {
       "name": "Marksman",
@@ -415,12 +310,7 @@
         "Quick shot and zoom abilities",
         "Poison application to arrows"
       ],
-      "metaTags": [
-        "weapon",
-        "combat",
-        "ranged",
-        "archery"
-      ]
+      "metaTags": ["weapon", "combat", "ranged", "archery"]
     },
     {
       "name": "Two-handed",
@@ -435,12 +325,7 @@
         "Unstoppable power attacks",
         "Block with two-handed weapons"
       ],
-      "metaTags": [
-        "weapon",
-        "combat",
-        "melee",
-        "heavy"
-      ]
+      "metaTags": ["weapon", "combat", "melee", "heavy"]
     },
     {
       "name": "One-handed",
@@ -455,12 +340,7 @@
         "Power attacks with one-handed weapons",
         "Block with one-handed weapons"
       ],
-      "metaTags": [
-        "weapon",
-        "combat",
-        "melee",
-        "dual-wield"
-      ]
+      "metaTags": ["weapon", "combat", "melee", "dual-wield"]
     }
   ],
   "magicSkills": [
@@ -476,12 +356,7 @@
         "Control fire, frost, and lightning",
         "Area of effect damage"
       ],
-      "metaTags": [
-        "magic",
-        "combat",
-        "damage",
-        "elements"
-      ]
+      "metaTags": ["magic", "combat", "damage", "elements"]
     },
     {
       "name": "Enchanting",
@@ -495,12 +370,7 @@
         "Recharge enchanted items",
         "Disenchant items to learn effects"
       ],
-      "metaTags": [
-        "crafting",
-        "magic",
-        "equipment",
-        "effects"
-      ]
+      "metaTags": ["crafting", "magic", "equipment", "effects"]
     },
     {
       "name": "Restoration",
@@ -514,12 +384,7 @@
         "Turn undead",
         "Restore stamina and magicka"
       ],
-      "metaTags": [
-        "magic",
-        "healing",
-        "protection",
-        "support"
-      ]
+      "metaTags": ["magic", "healing", "protection", "support"]
     },
     {
       "name": "Illusion",
@@ -533,12 +398,7 @@
         "Invisibility and stealth magic",
         "Calm and frenzy effects"
       ],
-      "metaTags": [
-        "magic",
-        "illusion",
-        "stealth",
-        "control"
-      ]
+      "metaTags": ["magic", "illusion", "stealth", "control"]
     },
     {
       "name": "Conjuration",
@@ -552,12 +412,7 @@
         "Raise undead minions",
         "Create magical barriers"
       ],
-      "metaTags": [
-        "magic",
-        "summoning",
-        "combat",
-        "minions"
-      ]
+      "metaTags": ["magic", "summoning", "combat", "minions"]
     },
     {
       "name": "Alteration",
@@ -571,12 +426,7 @@
         "Enhance armor and protection",
         "Control magic and elements"
       ],
-      "metaTags": [
-        "magic",
-        "utility",
-        "protection",
-        "environment"
-      ]
+      "metaTags": ["magic", "utility", "protection", "environment"]
     },
     {
       "name": "Alchemy",
@@ -590,12 +440,7 @@
         "Create powerful buffs",
         "Craft healing and utility items"
       ],
-      "metaTags": [
-        "crafting",
-        "magic",
-        "consumables",
-        "effects"
-      ]
+      "metaTags": ["crafting", "magic", "consumables", "effects"]
     }
   ],
   "stealthSkills": [
@@ -611,12 +456,7 @@
         "Bribe guards and officials",
         "Influence dialogue outcomes"
       ],
-      "metaTags": [
-        "social",
-        "trading",
-        "persuasion",
-        "diplomacy"
-      ]
+      "metaTags": ["social", "trading", "persuasion", "diplomacy"]
     },
     {
       "name": "Sneak",
@@ -630,12 +470,7 @@
         "Sneak past enemies",
         "Hide in shadows and cover"
       ],
-      "metaTags": [
-        "stealth",
-        "combat",
-        "movement",
-        "assassination"
-      ]
+      "metaTags": ["stealth", "combat", "movement", "assassination"]
     },
     {
       "name": "Wayfarer",
@@ -649,12 +484,7 @@
         "Access hidden treasures",
         "Reduce lockpick breakage"
       ],
-      "metaTags": [
-        "stealth",
-        "thievery",
-        "utility",
-        "exploration"
-      ]
+      "metaTags": ["stealth", "thievery", "utility", "exploration"]
     },
     {
       "name": "Finesse",
@@ -668,12 +498,7 @@
         "Pickpocket weapons during combat",
         "Steal equipped items"
       ],
-      "metaTags": [
-        "stealth",
-        "thievery",
-        "social",
-        "criminal"
-      ]
+      "metaTags": ["stealth", "thievery", "social", "criminal"]
     },
     {
       "name": "Evasion",
@@ -687,12 +512,7 @@
         "Unlock light armor perks",
         "Sneak effectively in armor"
       ],
-      "metaTags": [
-        "defense",
-        "armor",
-        "mobility",
-        "stealth"
-      ]
+      "metaTags": ["defense", "armor", "mobility", "stealth"]
     }
   ],
   "craftingSkills": [],
