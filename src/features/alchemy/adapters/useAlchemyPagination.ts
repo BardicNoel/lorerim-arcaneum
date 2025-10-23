@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { AlchemyIngredientWithComputed } from '../types'
 
 interface UseAlchemyPaginationOptions {
@@ -10,7 +10,6 @@ interface UseAlchemyPaginationReturn {
   // Pagination state
   currentPage: number
   pageSize: number
-  totalPages: number
   hasMore: boolean
   hasPrevious: boolean
 
@@ -18,16 +17,12 @@ interface UseAlchemyPaginationReturn {
   paginationInfo: {
     totalItems: number
     displayedItems: number
-    startIndex: number
-    endIndex: number
     currentPage: number
-    totalPages: number
+    hasMore: boolean
+    itemsPerPage: number
   }
 
   // Pagination actions
-  goToPage: (page: number) => void
-  nextPage: () => void
-  previousPage: () => void
   setPageSize: (size: number) => void
   loadMore: () => void
   resetPagination: () => void
@@ -44,62 +39,54 @@ export function useAlchemyPagination(
 
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(initialPageSize)
+  const previousIngredientsRef = useRef<AlchemyIngredientWithComputed[]>([])
 
   // Calculate pagination values
   const totalItems = ingredients.length
-  const totalPages = Math.ceil(totalItems / pageSize)
-  const startIndex = (currentPage - 1) * pageSize
-  const endIndex = Math.min(startIndex + pageSize, totalItems)
 
-  const hasMore = currentPage < totalPages
+  // Get displayed items using accumulative pattern
+  const displayedItems = useMemo(() => {
+    const itemsToShow = currentPage * pageSize
+    return ingredients.slice(0, itemsToShow)
+  }, [ingredients, currentPage, pageSize])
+
+  // Check if there are more items to load
+  const hasMore = useMemo(() => {
+    return displayedItems.length < ingredients.length
+  }, [displayedItems.length, ingredients.length])
+
   const hasPrevious = currentPage > 1
 
-  // Get displayed items
-  const displayedItems = useMemo(() => {
-    return ingredients.slice(startIndex, endIndex)
-  }, [ingredients, startIndex, endIndex])
+  // Reset to page 1 only when the actual ingredient content changes
+  useEffect(() => {
+    const previousIngredients = previousIngredientsRef.current
+
+    // Check if the actual content has changed (not just the reference)
+    const hasContentChanged =
+      previousIngredients.length !== ingredients.length ||
+      ingredients.some(
+        (ing, index) => ing.name !== previousIngredients[index]?.name
+      )
+
+    if (hasContentChanged) {
+      setCurrentPage(1)
+      previousIngredientsRef.current = ingredients
+    }
+  }, [ingredients])
 
   // Pagination info
   const paginationInfo = useMemo(
     () => ({
       totalItems,
       displayedItems: displayedItems.length,
-      startIndex: startIndex + 1, // 1-based index for display
-      endIndex,
       currentPage,
-      totalPages,
+      hasMore,
+      itemsPerPage: pageSize,
     }),
-    [
-      totalItems,
-      displayedItems.length,
-      startIndex,
-      endIndex,
-      currentPage,
-      totalPages,
-    ]
+    [totalItems, displayedItems.length, currentPage, hasMore, pageSize]
   )
 
   // Pagination actions
-  const goToPage = useCallback(
-    (page: number) => {
-      const validPage = Math.max(1, Math.min(page, totalPages))
-      setCurrentPage(validPage)
-    },
-    [totalPages]
-  )
-
-  const nextPage = useCallback(() => {
-    if (hasMore) {
-      setCurrentPage(prev => prev + 1)
-    }
-  }, [hasMore])
-
-  const previousPage = useCallback(() => {
-    if (hasPrevious) {
-      setCurrentPage(prev => prev - 1)
-    }
-  }, [hasPrevious])
-
   const setPageSizeHandler = useCallback(
     (size: number) => {
       const validSize = Math.max(1, Math.min(size, maxPageSize))
@@ -121,18 +108,10 @@ export function useAlchemyPagination(
     setPageSize(initialPageSize)
   }, [initialPageSize])
 
-  // Reset pagination when ingredients change
-  useMemo(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(totalPages)
-    }
-  }, [currentPage, totalPages])
-
   return {
     // Pagination state
     currentPage,
     pageSize,
-    totalPages,
     hasMore,
     hasPrevious,
 
@@ -140,9 +119,6 @@ export function useAlchemyPagination(
     paginationInfo,
 
     // Pagination actions
-    goToPage,
-    nextPage,
-    previousPage,
     setPageSize: setPageSizeHandler,
     loadMore,
     resetPagination,

@@ -7,8 +7,8 @@ import type {
 } from '@/shared/components/playerCreation/types'
 import { Button } from '@/shared/ui/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/ui/tabs'
-import { X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { ChevronDown, X } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   useAlchemyComputed,
   useAlchemyData,
@@ -25,6 +25,8 @@ import { VirtualIngredientGrid } from '../components/composition/VirtualIngredie
 import { useFuzzySearch } from '../hooks/useFuzzySearch'
 import type { AlchemyIngredientWithComputed } from '../types'
 
+type SortOption = 'alphabetical' | 'value' | 'weight'
+
 export function AlchemyPageView() {
   // Data adapters
   const { ingredients, loading, error } = useAlchemyData()
@@ -39,6 +41,14 @@ export function AlchemyPageView() {
 
   // View state
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
+
+  // State for sorting
+  const [sortBy, setSortBy] = useState<SortOption>('alphabetical')
+
+  // Debug sortBy changes
+  useEffect(() => {
+    console.log(`🎯 sortBy changed to: ${sortBy}`)
+  }, [sortBy])
 
   // Generate enhanced search categories for autocomplete
   const generateSearchCategories = (): SearchCategory[] => {
@@ -152,14 +162,58 @@ export function AlchemyPageView() {
     fuzzySearchQuery
   )
 
+  // Sort the filtered ingredients BEFORE pagination
+  const sortedIngredients = useMemo(() => {
+    console.log(
+      `🔄 Sorting triggered - sortBy: ${sortBy}, filteredIngredients.length: ${filteredIngredients.length}`
+    )
+
+    const sorted = [...filteredIngredients].sort((a, b) => {
+      let result = 0
+      switch (sortBy) {
+        case 'alphabetical':
+          result = a.name.localeCompare(b.name)
+          break
+        case 'value':
+          result = b.value - a.value // Descending
+          if (result === 0) result = a.name.localeCompare(b.name)
+          break
+        case 'weight':
+          result = a.weight - b.weight // Ascending
+          if (result === 0) result = a.name.localeCompare(b.name)
+          break
+        default:
+          result = 0
+      }
+      return result
+    })
+
+    // Debug logging
+    console.log(
+      `✅ Sort complete - sortBy: ${sortBy}, Total items: ${sorted.length}`
+    )
+    if (sorted.length > 0) {
+      console.log(
+        `📊 First 3 items after sort:`,
+        sorted.slice(0, 3).map(item => ({
+          name: item.name,
+          value: item.value,
+          weight: item.weight,
+        }))
+      )
+    }
+
+    return sorted
+  }, [filteredIngredients, sortBy])
+
   // Add pagination
   const { displayedItems, loadMore, resetPagination, paginationInfo, hasMore } =
-    useAlchemyPagination(filteredIngredients)
+    useAlchemyPagination(sortedIngredients)
 
   // Reset pagination when filters change
   useEffect(() => {
     resetPagination()
-  }, [selectedTags, resetPagination])
+  }, [selectedTags, sortBy, resetPagination])
 
   const handleIngredientClick = (ingredient: AlchemyIngredientWithComputed) => {
     // TODO: Implement ingredient detail view or modal
@@ -208,6 +262,24 @@ export function AlchemyPageView() {
       <div className="flex items-center justify-between mb-4">
         {/* Left: View Mode Toggle */}
         <ViewModeToggle viewMode={viewMode} onViewModeChange={setViewMode} />
+
+        {/* Right: Sort Options */}
+        <div className="relative">
+          <select
+            value={sortBy}
+            onChange={e => {
+              const newSort = e.target.value as SortOption
+              console.log(`🔄 Select changed from ${sortBy} to ${newSort}`)
+              setSortBy(newSort)
+            }}
+            className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer"
+          >
+            <option value="alphabetical">Sort: A-Z</option>
+            <option value="value">Sort: Value</option>
+            <option value="weight">Sort: Weight</option>
+          </select>
+          <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+        </div>
       </div>
 
       {/* Selected Tags */}

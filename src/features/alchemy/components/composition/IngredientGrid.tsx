@@ -79,7 +79,7 @@ export function IngredientGrid({
 
         return (
           <IngredientCard
-            key={ingredient.name}
+            key={ingredient.edid}
             ingredient={ingredient}
             variant={variant}
             onClick={() => handleIngredientClick(ingredient)}
