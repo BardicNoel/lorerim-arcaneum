@@ -36,6 +36,7 @@ const navSections = [
     items: [
       { to: '/spells', label: 'Spells' },
       { to: '/cookbook', label: 'Food and Alcohol' },
+      { to: '/alchemy', label: 'Alchemy' },
       { to: '/enchantments', label: 'Enchantments' },
     ],
   },
