@@ -237,7 +237,7 @@ export function IngredientCard({
                     <div className="flex items-start gap-2">
                       {getEffectIcon(effect)}
                       <div className="flex-1">
-                        <div className="font-medium text-xs mb-1">
+                        <div className="font-bold text-xs mb-1">
                           {effect.mgefName}
                         </div>
                         <div className="text-xs text-muted-foreground">
@@ -246,10 +246,9 @@ export function IngredientCard({
                             className="text-xs text-muted-foreground"
                           />
                         </div>
-                        <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
-                          <span>Mag: {effect.magnitude}</span>
-                          <span>Dur: {effect.duration}s</span>
-                          <span>Cost: {effect.baseCost.toFixed(2)}</span>
+                        <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                          <span>Magnitude: {effect.magnitude}</span>
+                          <span>Duration: {effect.duration}s</span>
                         </div>
                       </div>
                     </div>
@@ -341,7 +340,7 @@ export function IngredientCard({
                     <div className="flex items-start gap-3">
                       {getEffectIcon(effect)}
                       <div className="flex-1">
-                        <div className="font-medium text-sm mb-1">
+                        <div className="font-bold text-sm mb-1">
                           {effect.mgefName}
                         </div>
                         <div className="text-sm text-muted-foreground mb-2">
@@ -350,18 +349,14 @@ export function IngredientCard({
                             className="text-sm text-muted-foreground"
                           />
                         </div>
-                        <div className="grid grid-cols-3 gap-2 text-xs">
+                        <div className="grid grid-cols-2 gap-2 text-xs mt-2">
                           <div className="flex items-center gap-1">
                             <Zap className="h-3 w-3" />
-                            <span>Mag: {effect.magnitude}</span>
+                            <span>Magnitude: {effect.magnitude}</span>
                           </div>
                           <div className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />
-                            <span>Dur: {effect.duration}s</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <FlaskConical className="h-3 w-3" />
-                            <span>Cost: {effect.baseCost.toFixed(2)}</span>
+                            <span>Duration: {effect.duration}s</span>
                           </div>
                         </div>
                         <div className="mt-2 text-xs text-muted-foreground">
