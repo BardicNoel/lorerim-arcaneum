@@ -42,7 +42,13 @@ export const useBirthsignsStore = create<BirthsignsStore>((set, get) => ({
       }
 
       const rawData = await response.json()
-      const birthsigns = rawData.map((birthsign: any) => ({
+
+      // Flatten the nested structure - each category has a 'birthsigns' array
+      const allBirthsigns = rawData.flatMap(
+        (category: any) => category.birthsigns || []
+      )
+
+      const birthsigns = allBirthsigns.map((birthsign: any) => ({
         ...birthsign,
         id: birthsign.edid || birthsign.name.toLowerCase().replace(/\s+/g, '-'),
         tags: [

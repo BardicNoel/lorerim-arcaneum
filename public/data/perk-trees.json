@@ -23,7 +23,7 @@
               "items": [
                 {
                   "type": "INGR",
-                  "id": "171293079"
+                  "id": "0x8C35B997"
                 }
               ]
             }
@@ -84,7 +84,7 @@
               "items": [
                 {
                   "type": "INGR",
-                  "id": "168152007"
+                  "id": "0x8C05CBC7"
                 }
               ]
             }
@@ -128,7 +128,7 @@
               "items": [
                 {
                   "type": "INGR",
-                  "id": "168152010"
+                  "id": "0x8C05CBCA"
                 }
               ]
             }
@@ -175,7 +175,7 @@
               "items": [
                 {
                   "type": "INGR",
-                  "id": "168152032"
+                  "id": "0x8C05CBE0"
                 }
               ]
             }
@@ -223,7 +223,7 @@
               "items": [
                 {
                   "type": "INGR",
-                  "id": "168152030"
+                  "id": "0x8C05CBDE"
                 }
               ]
             }
@@ -267,7 +267,7 @@
               "items": [
                 {
                   "type": "INGR",
-                  "id": "168152026"
+                  "id": "0x8C05CBDA"
                 }
               ]
             }
@@ -386,7 +386,7 @@
               "items": [
                 {
                   "type": "INGR",
-                  "id": "179124040"
+                  "id": "0x8CAD3748"
                 }
               ]
             }
@@ -427,7 +427,7 @@
               "items": [
                 {
                   "type": "INGR",
-                  "id": "168152020"
+                  "id": "0x8C05CBD4"
                 }
               ]
             }
@@ -471,7 +471,7 @@
               "items": [
                 {
                   "type": "INGR",
-                  "id": "168152023"
+                  "id": "0x8C05CBD7"
                 }
               ]
             }
@@ -518,7 +518,7 @@
               "items": [
                 {
                   "type": "INGR",
-                  "id": "168152028"
+                  "id": "0x8C05CBDC"
                 }
               ]
             }
@@ -6007,76 +6007,6 @@
         }
       },
       {
-        "edid": "BOOB_BoozyBardPerk",
-        "name": "Boozy Bard",
-        "globalFormId": "0xFEA7D801",
-        "ranks": [
-          {
-            "rank": 1,
-            "edid": "BOOB_BoozyBardPerk",
-            "name": "Boozy Bard",
-            "globalFormId": "0xFEA7D801",
-            "description": {
-              "base": "Alcohol makes the music flow sweeter! Alcoholic drinks no longer have negative effects, and performing under the influence enhances both your musical powers and the damage of your bardic weapons.",
-              "subtext": ""
-            },
-            "prerequisites": {
-              "skillLevel": {
-                "skill": "Speech",
-                "level": 25
-              }
-            }
-          }
-        ],
-        "totalRanks": 1,
-        "connections": {
-          "parents": ["BOOB_BattleMusePerk"],
-          "children": []
-        },
-        "isRoot": false,
-        "position": {
-          "x": -1,
-          "y": -1,
-          "horizontal": 0,
-          "vertical": 0
-        }
-      },
-      {
-        "edid": "BOOB_SkaldPerk",
-        "name": "Skald",
-        "globalFormId": "0xFEA7C809",
-        "ranks": [
-          {
-            "rank": 1,
-            "edid": "BOOB_SkaldPerk",
-            "name": "Skald",
-            "globalFormId": "0xFEA7C809",
-            "description": {
-              "base": "Continuously playing instruments during combat now grants additional benefits. Drums bolster your allies, while the Lute and Flute weakens your enemies' defenses.",
-              "subtext": ""
-            },
-            "prerequisites": {
-              "skillLevel": {
-                "skill": "Speech",
-                "level": 50
-              }
-            }
-          }
-        ],
-        "totalRanks": 1,
-        "connections": {
-          "parents": ["BOOB_WindborneMelodyPerk"],
-          "children": []
-        },
-        "isRoot": false,
-        "position": {
-          "x": 0,
-          "y": 0.5,
-          "horizontal": 0,
-          "vertical": 0
-        }
-      },
-      {
         "edid": "BOOB_BattleMusePerk",
         "name": "Battle Muse",
         "globalFormId": "0xFEA7C80C",
@@ -6096,121 +6026,12 @@
         "totalRanks": 1,
         "connections": {
           "parents": [],
-          "children": [
-            "BOOB_BoozyBardPerk",
-            "BOOB_StandingOvationPerk",
-            "BOOB_WindborneMelodyPerk"
-          ]
+          "children": []
         },
         "isRoot": true,
         "position": {
           "x": -2,
           "y": 0,
-          "horizontal": 0,
-          "vertical": 0
-        }
-      },
-      {
-        "edid": "BOOB_StandingOvationPerk",
-        "name": "Standing Ovation",
-        "globalFormId": "0xFEA7C818",
-        "ranks": [
-          {
-            "rank": 1,
-            "edid": "BOOB_StandingOvationPerk",
-            "name": "Standing Ovation",
-            "globalFormId": "0xFEA7C818",
-            "description": {
-              "base": "Your captivating performances leave the crowd in awe. The bonuses received from playing for a crowd at the inns are now doubled and last twice as long.",
-              "subtext": ""
-            },
-            "prerequisites": {
-              "skillLevel": {
-                "skill": "Speech",
-                "level": 25
-              }
-            }
-          }
-        ],
-        "totalRanks": 1,
-        "connections": {
-          "parents": ["BOOB_BattleMusePerk"],
-          "children": []
-        },
-        "isRoot": false,
-        "position": {
-          "x": -1,
-          "y": 0,
-          "horizontal": 0,
-          "vertical": 0
-        }
-      },
-      {
-        "edid": "BOOB_WindborneMelodyPerk",
-        "name": "Windborne Melody",
-        "globalFormId": "0xFEA7C819",
-        "ranks": [
-          {
-            "rank": 1,
-            "edid": "BOOB_WindborneMelodyPerk",
-            "name": "Windborne Melody",
-            "globalFormId": "0xFEA7C819",
-            "description": {
-              "base": "Your music flows as freely as the wind. Playing an instrument no longer slows your movement.",
-              "subtext": ""
-            },
-            "prerequisites": {
-              "skillLevel": {
-                "skill": "Speech",
-                "level": 25
-              }
-            }
-          }
-        ],
-        "totalRanks": 1,
-        "connections": {
-          "parents": ["BOOB_BattleMusePerk"],
-          "children": ["BOOB_SkaldPerk", "BOOB_SongOfPowerPerk"]
-        },
-        "isRoot": false,
-        "position": {
-          "x": -1,
-          "y": 1,
-          "horizontal": 0,
-          "vertical": 0
-        }
-      },
-      {
-        "edid": "BOOB_SongOfPowerPerk",
-        "name": "Song of Power",
-        "globalFormId": "0xFEA7C836",
-        "ranks": [
-          {
-            "rank": 1,
-            "edid": "BOOB_SongOfPowerPerk",
-            "name": "Song of Power",
-            "globalFormId": "0xFEA7C836",
-            "description": {
-              "base": "Your music builds to a powerful crescendo, periodically unleashing a forceful shockwave that knocks enemies back.",
-              "subtext": ""
-            },
-            "prerequisites": {
-              "skillLevel": {
-                "skill": "Speech",
-                "level": 50
-              }
-            }
-          }
-        ],
-        "totalRanks": 1,
-        "connections": {
-          "parents": ["BOOB_WindborneMelodyPerk"],
-          "children": []
-        },
-        "isRoot": false,
-        "position": {
-          "x": 0,
-          "y": 1.5,
           "horizontal": 0,
           "vertical": 0
         }
@@ -6458,11 +6279,11 @@
               "items": [
                 {
                   "type": "INGR",
-                  "id": "241010"
+                  "id": "0x0003AD72"
                 },
                 {
                   "type": "INGR",
-                  "id": "168048225"
+                  "id": "0x8C043661"
                 }
               ]
             }
@@ -6503,11 +6324,11 @@
               "items": [
                 {
                   "type": "INGR",
-                  "id": "240987"
+                  "id": "0x0003AD5B"
                 },
                 {
                   "type": "INGR",
-                  "id": "240995"
+                  "id": "0x0003AD63"
                 }
               ]
             }
@@ -6548,7 +6369,7 @@
               "items": [
                 {
                   "type": "INGR",
-                  "id": "441351"
+                  "id": "0x0006BC07"
                 }
               ]
             }
@@ -6589,15 +6410,15 @@
               "items": [
                 {
                   "type": "INGR",
-                  "id": "241010"
+                  "id": "0x0003AD72"
                 },
                 {
                   "type": "INGR",
-                  "id": "518341"
+                  "id": "0x0007E8C5"
                 },
                 {
                   "type": "INGR",
-                  "id": "408415"
+                  "id": "0x00063B5F"
                 }
               ]
             }
