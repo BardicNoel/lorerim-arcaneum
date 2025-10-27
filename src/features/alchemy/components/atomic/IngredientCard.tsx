@@ -343,10 +343,10 @@ export function IngredientCard({
                         <div className="font-bold text-sm mb-1">
                           {effect.mgefName}
                         </div>
-                        <div className="text-sm text-muted-foreground mb-2">
+                        <div className="text-base text-muted-foreground mb-2">
                           <FormattedText
                             text={formatEffectDescription(effect)}
-                            className="text-sm text-muted-foreground"
+                            className="text-base text-muted-foreground"
                           />
                         </div>
                         <div className="grid grid-cols-2 gap-2 text-xs mt-2">

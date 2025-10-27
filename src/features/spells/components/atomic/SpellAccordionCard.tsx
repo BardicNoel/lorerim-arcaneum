@@ -74,7 +74,7 @@ export function SpellAccordionCard({
 
       <AccordionCard.Summary>
         <div className="px-4 py-2 space-y-3">
-          <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+          <div className="flex items-center gap-4 text-base text-muted-foreground mb-3">
             <div className="flex items-center gap-1">
               <svg
                 className="w-4 h-4"
@@ -107,8 +107,8 @@ export function SpellAccordionCard({
             </Badge>
           </div>
           <FormattedText
-            text={spell.description}
-            className="text-sm text-muted-foreground mb-3"
+            text={spell.message}
+            className="text-base text-muted-foreground mb-3"
             as="p"
           />
         </div>

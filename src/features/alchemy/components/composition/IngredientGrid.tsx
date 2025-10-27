@@ -63,7 +63,7 @@ export function IngredientGrid({
       <div className="flex items-center justify-center p-8">
         <div className="text-center">
           <div className="text-muted-foreground mb-2">No ingredients found</div>
-          <div className="text-sm text-muted-foreground">
+          <div className="text-base text-muted-foreground">
             Try adjusting your search or filter criteria
           </div>
         </div>

@@ -99,7 +99,7 @@ function FormattedBlessingDescription({
     .replace(/\b(duration|dur)\b/gi, duration.toString())
     .replace(/\b(area)\b/gi, area.toString())
 
-  return <P className="text-sm text-muted-foreground">{formatted}</P>
+  return <P className="text-base text-muted-foreground">{formatted}</P>
 }
 
 function getEffectIcon(effectType: string): React.ReactNode {
@@ -138,7 +138,7 @@ export function FollowerSheet({
               <H3 className="text-xl font-semibold">
                 Follower of {religion.name}
               </H3>
-              <P className="text-sm text-muted-foreground">
+              <P className="text-base text-muted-foreground">
                 {effectsCount} power{effectsCount !== 1 ? 's' : ''}
               </P>
             </div>
@@ -219,7 +219,7 @@ export function FollowerSheet({
             <H3 className="text-lg font-semibold mb-3">
               Devotee Powers Preview
             </H3>
-            <P className="text-sm text-muted-foreground mb-3">
+            <P className="text-base text-muted-foreground mb-3">
               As a devoted follower, you can unlock even greater powers:
             </P>
             <div className="space-y-2">
@@ -252,13 +252,13 @@ export function FollowerSheet({
           <div className="space-y-3">
             <div>
               <P className="text-sm font-medium mb-1">Religion Type</P>
-              <P className="text-sm text-muted-foreground">{religion.type}</P>
+              <P className="text-base text-muted-foreground">{religion.type}</P>
             </div>
 
             {religion.tenet?.description && (
               <div>
                 <P className="text-sm font-medium mb-1">Tenets</P>
-                <P className="text-sm text-muted-foreground">
+                <P className="text-base text-muted-foreground">
                   {religion.tenet.description}
                 </P>
               </div>
@@ -285,13 +285,3 @@ export function FollowerSheet({
     </ResponsivePanel>
   )
 }
-
-
-
-
-
-
-
-
-
-

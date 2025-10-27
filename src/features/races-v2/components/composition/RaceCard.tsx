@@ -113,7 +113,7 @@ export function RaceCard({
       <div className="space-y-3">
         {/* Description */}
         <div className="line-clamp-2">
-          <P className="text-sm text-muted-foreground">{displaySummary}</P>
+          <P className="text-base text-muted-foreground">{displaySummary}</P>
         </div>
 
         {/* Quick effects */}
@@ -128,7 +128,7 @@ export function RaceCard({
       <div className="space-y-4">
         {/* Description */}
         <div>
-          <P className="text-sm text-muted-foreground leading-relaxed">
+          <P className="text-base text-muted-foreground leading-relaxed">
             {displayDescription}
           </P>
         </div>

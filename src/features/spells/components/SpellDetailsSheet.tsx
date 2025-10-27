@@ -3,24 +3,21 @@ import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Separator } from '@/shared/ui/ui/separator'
 import { H2, H3, P, Small } from '@/shared/ui/ui/typography'
-import { 
-  BookOpen, 
-  Clock, 
-  Target, 
-  Zap, 
-  Sparkles,
-  Flame,
-  Heart,
-  Ghost,
+import {
+  BookOpen,
   Eye,
-  Shield
+  Flame,
+  Ghost,
+  Heart,
+  Shield,
+  Sparkles,
+  Zap,
 } from 'lucide-react'
 import type { SpellWithComputed } from '../types'
 import {
-  SpellSchoolIcon,
-  SpellSchoolBadge,
-  SpellLevelBadge,
   SpellCostBadge,
+  SpellLevelBadge,
+  SpellSchoolBadge,
   SpellStatsDisplay,
   SpellTagsDisplay,
 } from './atomic'
@@ -55,12 +52,13 @@ export function SpellDetailsSheet({
 }: SpellDetailsSheetProps) {
   if (!spell) return null
 
-  const SchoolIcon = schoolIcons[spell.school as keyof typeof schoolIcons] || Sparkles
+  const SchoolIcon =
+    schoolIcons[spell.school as keyof typeof schoolIcons] || Sparkles
 
   return (
-    <ResponsivePanel 
-      open={isOpen} 
-      onOpenChange={onOpenChange} 
+    <ResponsivePanel
+      open={isOpen}
+      onOpenChange={onOpenChange}
       side="right"
       title={spell.name}
       description={`${spell.school} • ${spell.level} • ${spell.magickaCost} MP`}
@@ -78,19 +76,26 @@ export function SpellDetailsSheet({
               <SpellLevelBadge level={spell.level} size="sm" />
               <SpellCostBadge cost={spell.magickaCost} size="sm" />
             </div>
-            <FormattedText text={spell.description} />
+            <FormattedText text={spell.message} />
           </div>
         </div>
 
         <Separator />
 
         {/* Spell Statistics */}
-        <SpellStatsDisplay 
+        <SpellStatsDisplay
           stats={{
             magickaCost: spell.magickaCost || 0,
-            duration: spell.maxDuration && spell.maxDuration > 0 ? spell.maxDuration : undefined,
-            area: spell.maxArea && spell.maxArea > 0 ? spell.maxArea : undefined,
-            magnitude: spell.totalMagnitude && spell.totalMagnitude > 0 ? spell.totalMagnitude : undefined,
+            duration:
+              spell.maxDuration && spell.maxDuration > 0
+                ? spell.maxDuration
+                : undefined,
+            area:
+              spell.maxArea && spell.maxArea > 0 ? spell.maxArea : undefined,
+            magnitude:
+              spell.totalMagnitude && spell.totalMagnitude > 0
+                ? spell.totalMagnitude
+                : undefined,
           }}
         />
 
@@ -104,49 +109,54 @@ export function SpellDetailsSheet({
               {spell.effects
                 .filter((effect, index, self) => {
                   // Get the base name (remove Single/Dual suffix)
-                  const baseName = effect.name.replace(/\s*\(Single\)|\s*\(Dual\)/i, '')
-                  
+                  const baseName = effect.name.replace(
+                    /\s*\(Single\)|\s*\(Dual\)/i,
+                    ''
+                  )
+
                   // Find the first occurrence with the same base name and stats
                   const firstIndex = self.findIndex(e => {
-                    const eBaseName = e.name.replace(/\s*\(Single\)|\s*\(Dual\)/i, '')
-                    return eBaseName === baseName && 
-                           e.magnitude === effect.magnitude && 
-                           e.duration === effect.duration
+                    const eBaseName = e.name.replace(
+                      /\s*\(Single\)|\s*\(Dual\)/i,
+                      ''
+                    )
+                    return (
+                      eBaseName === baseName &&
+                      e.magnitude === effect.magnitude &&
+                      e.duration === effect.duration
+                    )
                   })
-                  
+
                   // Only show the first occurrence
                   return index === firstIndex
                 })
                 .map((effect, index) => (
-                <div
-                  key={index}
-                  className="p-3 rounded bg-muted border"
-                >
-                  {/* Effect Name */}
-                  <div className="font-medium text-foreground mb-2">
-                    {effect.name}
-                  </div>
-                  
-                  {/* Effect Description (if available) */}
-                  {effect.description && (
-                    <FormattedText
-                      text={effect.description}
-                      className="text-sm text-muted-foreground mb-2"
-                    />
-                  )}
-                  
-                  {/* Effect Stats */}
-                  <div className="flex gap-4 text-xs text-muted-foreground">
-                    {effect.magnitude > 0 && (
-                      <span>Magnitude: {effect.magnitude}</span>
+                  <div key={index} className="p-3 rounded bg-muted border">
+                    {/* Effect Name */}
+                    <div className="font-medium text-foreground mb-2">
+                      {effect.name}
+                    </div>
+
+                    {/* Effect Description (if available) */}
+                    {effect.description && (
+                      <FormattedText
+                        text={effect.description}
+                        className="text-base text-muted-foreground mb-2"
+                      />
                     )}
-                    {effect.duration > 0 && (
-                      <span>Duration: {effect.duration}s</span>
-                    )}
-                    {effect.area > 0 && <span>Area: {effect.area}ft</span>}
+
+                    {/* Effect Stats */}
+                    <div className="flex gap-4 text-xs text-muted-foreground">
+                      {effect.magnitude > 0 && (
+                        <span>Magnitude: {effect.magnitude}</span>
+                      )}
+                      {effect.duration > 0 && (
+                        <span>Duration: {effect.duration}s</span>
+                      )}
+                      {effect.area > 0 && <span>Area: {effect.area}ft</span>}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         )}
@@ -155,11 +165,7 @@ export function SpellDetailsSheet({
         {spell.tags && spell.tags.length > 0 && (
           <>
             <Separator />
-            <SpellTagsDisplay
-              tags={spell.tags}
-              title="Tags"
-              maxDisplay={20}
-            />
+            <SpellTagsDisplay tags={spell.tags} title="Tags" maxDisplay={20} />
           </>
         )}
 
@@ -169,7 +175,7 @@ export function SpellDetailsSheet({
             <Separator />
             <div className="space-y-4">
               <H3 className="text-lg font-semibold">Additional Information</H3>
-              
+
               {spell.tome && (
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
@@ -182,7 +188,9 @@ export function SpellDetailsSheet({
 
               {spell.vendors && spell.vendors.length > 0 && (
                 <div className="space-y-2">
-                  <Small className="text-muted-foreground">Available From</Small>
+                  <Small className="text-muted-foreground">
+                    Available From
+                  </Small>
                   <div className="flex flex-wrap gap-1">
                     {spell.vendors.map((vendor, index) => (
                       <Badge key={index} variant="outline" className="text-xs">
@@ -197,7 +205,9 @@ export function SpellDetailsSheet({
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <Zap className="w-4 h-4 text-muted-foreground" />
-                    <Small className="text-muted-foreground">Half Cost Perk</Small>
+                    <Small className="text-muted-foreground">
+                      Half Cost Perk
+                    </Small>
                   </div>
                   <P className="text-sm">{spell.halfCostPerkName}</P>
                 </div>

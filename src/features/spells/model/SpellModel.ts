@@ -166,7 +166,7 @@ export class SpellModel {
       spell.name,
       spell.school,
       spell.level,
-      spell.description,
+      spell.message,
       ...tags,
       ...spell.effects.map(effect => effect.name),
       ...spell.effects.map(effect => effect.description),
@@ -318,10 +318,10 @@ export class SpellModel {
         matchedFields.push('level')
       }
 
-      // Description contains search term
-      if (spell.description.toLowerCase().includes(searchTerm)) {
+      // Message contains search term
+      if (spell.message.toLowerCase().includes(searchTerm)) {
         score += 5
-        matchedFields.push('description')
+        matchedFields.push('message')
       }
 
       // Tag matches

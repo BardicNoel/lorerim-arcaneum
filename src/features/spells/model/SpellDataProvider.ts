@@ -1,6 +1,6 @@
-import type { Spell, SpellWithComputed, SpellDataResponse } from '../types'
-import { SpellModel } from './SpellModel'
 import { getDataUrl } from '@/shared/utils/baseUrl'
+import type { SpellDataResponse, SpellWithComputed } from '../types'
+import { SpellModel } from './SpellModel'
 
 export class SpellDataProvider {
   private static instance: SpellDataProvider
@@ -27,20 +27,22 @@ export class SpellDataProvider {
     }
 
     try {
-      const dataUrl = getDataUrl('data/player_spells.json')
-      
+      const dataUrl = getDataUrl('data/filtered-spells.json')
+
       const response = await fetch(dataUrl)
       if (!response.ok) {
-        throw new Error(`Failed to fetch spells: ${response.status} ${response.statusText}`)
+        throw new Error(
+          `Failed to fetch spells: ${response.status} ${response.statusText}`
+        )
       }
 
       const rawData = await response.json()
-      
+
       // Validate and transform the data
       const spells: SpellWithComputed[] = []
       let validCount = 0
       let invalidCount = 0
-      
+
       for (const item of rawData) {
         if (SpellModel.isValid(item)) {
           const spellWithComputed = SpellModel.addComputedProperties(item)
@@ -69,22 +71,24 @@ export class SpellDataProvider {
   async getSpellData(): Promise<SpellDataResponse> {
     const spells = await this.loadSpells()
     const stats = SpellModel.getStatistics(spells)
-    
+
     const result = {
       spells,
       totalCount: stats.totalSpells,
       schools: stats.schools,
       levels: stats.levels,
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
     }
-    
+
     return result
   }
 
   /**
    * Get a specific spell by editorId
    */
-  async getSpellByEditorId(editorId: string): Promise<SpellWithComputed | null> {
+  async getSpellByEditorId(
+    editorId: string
+  ): Promise<SpellWithComputed | null> {
     const spells = await this.loadSpells()
     return spells.find(spell => spell.editorId === editorId) || null
   }
@@ -134,7 +138,9 @@ export class SpellDataProvider {
    * Check if cache is valid
    */
   isCacheValid(): boolean {
-    return this.cache !== null && Date.now() - this.lastFetch < this.CACHE_DURATION
+    return (
+      this.cache !== null && Date.now() - this.lastFetch < this.CACHE_DURATION
+    )
   }
 
   /**
@@ -145,7 +151,7 @@ export class SpellDataProvider {
       hasCache: this.cache !== null,
       cacheSize: this.cache?.length || 0,
       lastFetch: this.lastFetch,
-      isValid: this.isCacheValid()
+      isValid: this.isCacheValid(),
     }
   }
-} 
+}

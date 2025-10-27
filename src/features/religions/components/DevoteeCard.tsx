@@ -64,7 +64,7 @@ function FormattedBlessingDescription({
     .replace(/\b(duration|dur)\b/gi, duration.toString())
     .replace(/\b(area)\b/gi, area.toString())
 
-  return <P className="text-sm text-muted-foreground">{formatted}</P>
+  return <P className="text-base text-muted-foreground">{formatted}</P>
 }
 
 export function DevoteeCard({
@@ -98,7 +98,7 @@ export function DevoteeCard({
             <H3 className="text-lg font-semibold">
               Devotee of {religion.name}
             </H3>
-            <P className="text-sm text-muted-foreground">
+            <P className="text-base text-muted-foreground">
               {effectsCount} power{effectsCount !== 1 ? 's' : ''}
             </P>
           </div>
@@ -177,13 +177,3 @@ export function DevoteeCard({
     </div>
   )
 }
-
-
-
-
-
-
-
-
-
-

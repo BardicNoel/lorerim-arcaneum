@@ -1,5 +1,5 @@
-import type { SpellWithComputed } from '@/features/spells/types'
 import { SpellDataProvider } from '@/features/spells/model/SpellDataProvider'
+import type { SpellWithComputed } from '@/features/spells/types'
 import { create } from 'zustand'
 
 interface SpellsStore {
@@ -71,13 +71,14 @@ export const useSpellsStore = create<SpellsStore>((set, get) => ({
     return state.data.filter(
       spell =>
         spell.name.toLowerCase().includes(lowerQuery) ||
-        spell.description?.toLowerCase().includes(lowerQuery) ||
+        spell.message?.toLowerCase().includes(lowerQuery) ||
         spell.school?.toLowerCase().includes(lowerQuery) ||
         spell.level?.toLowerCase().includes(lowerQuery) ||
         spell.tags?.some(tag => tag.toLowerCase().includes(lowerQuery)) ||
-        spell.effects?.some(effect => 
-          effect.name.toLowerCase().includes(lowerQuery) ||
-          effect.description?.toLowerCase().includes(lowerQuery)
+        spell.effects?.some(
+          effect =>
+            effect.name.toLowerCase().includes(lowerQuery) ||
+            effect.description?.toLowerCase().includes(lowerQuery)
         )
     )
   },
@@ -91,4 +92,4 @@ export const useSpellsStore = create<SpellsStore>((set, get) => ({
     const state = get()
     return state.data.filter(spell => spell.level === level)
   },
-})) 
+}))
