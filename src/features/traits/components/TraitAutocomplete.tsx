@@ -1,8 +1,8 @@
 import { cn } from '@/lib/utils'
 import {
   GenericAutocomplete,
-  type AutocompleteOption,
   MobileAutocompleteDrawer,
+  type AutocompleteOption,
 } from '@/shared/components/generic'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import type { Trait } from '@/shared/data/schemas'
@@ -52,20 +52,26 @@ export function TraitAutocomplete({
     }))
   }, [filteredTraits])
 
-  const handleTraitSelect = useCallback((trait: Trait) => {
-    onSelect(trait)
-    setSearchQuery(trait.name) // Update search query to show selected trait name
-  }, [onSelect])
+  const handleTraitSelect = useCallback(
+    (trait: Trait) => {
+      onSelect(trait)
+      setSearchQuery(trait.name) // Update search query to show selected trait name
+    },
+    [onSelect]
+  )
 
-  const handleDesktopTraitSelect = useCallback((option: AutocompleteOption) => {
-    const selectedTrait = traits.find(
-      trait => (trait.edid || trait.name) === option.id
-    )
-    if (selectedTrait) {
-      onSelect(selectedTrait)
-      setSearchQuery(selectedTrait.name)
-    }
-  }, [traits, onSelect])
+  const handleDesktopTraitSelect = useCallback(
+    (option: AutocompleteOption) => {
+      const selectedTrait = traits.find(
+        trait => (trait.edid || trait.name) === option.id
+      )
+      if (selectedTrait) {
+        onSelect(selectedTrait)
+        setSearchQuery(selectedTrait.name)
+      }
+    },
+    [traits, onSelect]
+  )
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value)
@@ -73,80 +79,93 @@ export function TraitAutocomplete({
   }
 
   // Custom renderer for trait options
-  const renderTraitOption = useMemo(() => (option: AutocompleteOption, isActive: boolean) => (
-    <div className="flex items-start gap-3">
-      <div className="flex-1 min-w-0">
-        <div className="font-medium truncate">{option.label}</div>
-        <div className="flex items-center gap-2 mt-1">
-          {option.badge && <div className="flex-shrink-0">{option.badge}</div>}
-          {option.metadata?.effectsCount &&
-            option.metadata.effectsCount > 0 && (
-              <div className="text-xs text-muted-foreground">
-                {option.metadata.effectsCount} effect
-                {option.metadata.effectsCount !== 1 ? 's' : ''}
-              </div>
-            )}
-        </div>
-        {option.description && (
-          <FormattedText
-            text={option.description}
-            className="text-sm text-muted-foreground mt-1 line-clamp-2"
-          />
-        )}
-      </div>
-    </div>
-  ), [])
-
-  // Create a store-like object for the drawer
-  const traitStore = useMemo(() => ({
-    data: traits,
-    search: (query: string) => {
-      const lowerQuery = query.toLowerCase()
-      return traits.filter(trait =>
-        trait.name.toLowerCase().includes(lowerQuery) ||
-        trait.description?.toLowerCase().includes(lowerQuery)
-      )
-    }
-  }), [traits])
-
-  // Render function for complete trait list items in the drawer - using desktop layout
-  const renderTraitListItem = useCallback((trait: Trait, isSelected: boolean, onSelect: () => void) => (
-    <Button
-      variant="ghost"
-      className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
-      onClick={onSelect}
-    >
-      <div className="flex items-start gap-3 w-full">
+  const renderTraitOption = useMemo(
+    () => (option: AutocompleteOption, isActive: boolean) => (
+      <div className="flex items-start gap-3">
         <div className="flex-1 min-w-0">
-          <div className="font-medium truncate">{trait.name}</div>
+          <div className="font-medium truncate">{option.label}</div>
           <div className="flex items-center gap-2 mt-1">
-            {trait.category && (
-              <Badge
-                variant="outline"
-                className={cn(
-                  'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
-                  'text-xs font-medium transition-colors'
-                )}
-              >
-                {trait.category}
-              </Badge>
+            {option.badge && (
+              <div className="flex-shrink-0">{option.badge}</div>
             )}
-            {trait.effects && trait.effects.length > 0 && (
-              <div className="text-xs text-muted-foreground">
-                {trait.effects.length} effect{trait.effects.length !== 1 ? 's' : ''}
-              </div>
-            )}
+            {option.metadata?.effectsCount &&
+              option.metadata.effectsCount > 0 && (
+                <div className="text-xs text-muted-foreground">
+                  {option.metadata.effectsCount} effect
+                  {option.metadata.effectsCount !== 1 ? 's' : ''}
+                </div>
+              )}
           </div>
-          {trait.description && (
+          {option.description && (
             <FormattedText
-              text={trait.description}
-              className="text-sm text-muted-foreground mt-1 line-clamp-2"
+              text={option.description}
+              className="text-base text-muted-foreground mt-1 line-clamp-2"
             />
           )}
         </div>
       </div>
-    </Button>
-  ), [])
+    ),
+    []
+  )
+
+  // Create a store-like object for the drawer
+  const traitStore = useMemo(
+    () => ({
+      data: traits,
+      search: (query: string) => {
+        const lowerQuery = query.toLowerCase()
+        return traits.filter(
+          trait =>
+            trait.name.toLowerCase().includes(lowerQuery) ||
+            trait.description?.toLowerCase().includes(lowerQuery)
+        )
+      },
+    }),
+    [traits]
+  )
+
+  // Render function for complete trait list items in the drawer - using desktop layout
+  const renderTraitListItem = useCallback(
+    (trait: Trait, isSelected: boolean, onSelect: () => void) => (
+      <Button
+        variant="ghost"
+        className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+        onClick={onSelect}
+      >
+        <div className="flex items-start gap-3 w-full">
+          <div className="flex-1 min-w-0">
+            <div className="font-medium truncate">{trait.name}</div>
+            <div className="flex items-center gap-2 mt-1">
+              {trait.category && (
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
+                    'text-xs font-medium transition-colors'
+                  )}
+                >
+                  {trait.category}
+                </Badge>
+              )}
+              {trait.effects && trait.effects.length > 0 && (
+                <div className="text-xs text-muted-foreground">
+                  {trait.effects.length} effect
+                  {trait.effects.length !== 1 ? 's' : ''}
+                </div>
+              )}
+            </div>
+            {trait.description && (
+              <FormattedText
+                text={trait.description}
+                className="text-base text-muted-foreground mt-1 line-clamp-2"
+              />
+            )}
+          </div>
+        </div>
+      </Button>
+    ),
+    []
+  )
 
   // Render mobile drawer
   if (isMobile) {

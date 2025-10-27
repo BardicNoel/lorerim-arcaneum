@@ -95,9 +95,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Altmer"
-    ]
+    "favoredRaces": ["Altmer"]
   },
   {
     "name": "Magnus",
@@ -227,9 +225,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Bosmer"
-    ]
+    "favoredRaces": ["Bosmer"]
   },
   {
     "name": "Mara",
@@ -351,9 +347,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Altmer"
-    ]
+    "favoredRaces": ["Altmer"]
   },
   {
     "name": "Azura",
@@ -402,9 +396,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Dunmer"
-    ]
+    "favoredRaces": ["Dunmer"]
   },
   {
     "name": "Talos",
@@ -632,9 +624,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Breton"
-    ]
+    "favoredRaces": ["Breton"]
   },
   {
     "name": "Mehrunes Dagon",
@@ -838,9 +828,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Dunmer"
-    ]
+    "favoredRaces": ["Dunmer"]
   },
   {
     "name": "Nocturnal",
@@ -1052,9 +1040,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Dunmer"
-    ]
+    "favoredRaces": ["Dunmer"]
   },
   {
     "name": "Arkay",
@@ -1233,9 +1219,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Orsimer"
-    ]
+    "favoredRaces": ["Orsimer"]
   },
   {
     "name": "Stendarr",
@@ -1341,9 +1325,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Altmer"
-    ]
+    "favoredRaces": ["Altmer"]
   },
   {
     "name": "Peryite",
@@ -1498,9 +1480,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Breton"
-    ]
+    "favoredRaces": ["Breton"]
   },
   {
     "name": "Shor",
@@ -1924,9 +1904,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Argonian"
-    ]
+    "favoredRaces": ["Argonian"]
   },
   {
     "name": "Z'en",
@@ -2244,9 +2222,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Nord"
-    ]
+    "favoredRaces": ["Nord"]
   },
   {
     "name": "Baan Dar",
@@ -2295,9 +2271,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Khajiit"
-    ]
+    "favoredRaces": ["Khajiit"]
   },
   {
     "name": "Ebonarm",
@@ -2629,9 +2603,7 @@
             "magnitude": 60,
             "duration": 0,
             "area": 0,
-            "keywords": [
-              "WSN_Misc_StAlessia_Boon2_Keyword"
-            ]
+            "keywords": ["WSN_Misc_StAlessia_Boon2_Keyword"]
           }
         ]
       }
@@ -2756,9 +2728,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Nord"
-    ]
+    "favoredRaces": ["Nord"]
   },
   {
     "name": "the Magna-Ge",
@@ -2807,9 +2777,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Altmer"
-    ]
+    "favoredRaces": ["Altmer"]
   },
   {
     "name": "Sotha Sil",
@@ -2866,9 +2834,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Dunmer"
-    ]
+    "favoredRaces": ["Dunmer"]
   },
   {
     "name": "Almalexia",
@@ -2917,9 +2883,7 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Dunmer"
-    ]
+    "favoredRaces": ["Dunmer"]
   },
   {
     "name": "Vivec",
@@ -2935,9 +2899,7 @@
             "magnitude": 50,
             "duration": 0,
             "area": 0,
-            "keywords": [
-              "MagicEnchFortifySneak"
-            ]
+            "keywords": ["MagicEnchFortifySneak"]
           }
         ]
       },
@@ -2970,8 +2932,6 @@
         }
       ]
     },
-    "favoredRaces": [
-      "Dunmer"
-    ]
+    "favoredRaces": ["Dunmer"]
   }
 ]

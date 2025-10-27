@@ -43,7 +43,7 @@ export function BirthsignSelectionCard({
         onNavigate={handleNavigateToBirthsignPage}
         className={className}
       >
-        <p className="text-sm text-muted-foreground mb-4">
+        <p className="text-base text-muted-foreground mb-4">
           Choose your character's birthsign
         </p>
         <BirthsignAutocomplete

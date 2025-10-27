@@ -1,8 +1,8 @@
 import { cn } from '@/lib/utils'
 import {
   GenericAutocomplete,
-  type AutocompleteOption,
   MobileAutocompleteDrawer,
+  type AutocompleteOption,
 } from '@/shared/components/generic'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
 import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
@@ -31,7 +31,6 @@ export function RaceAutocomplete({
   const isMobile = useMediaQuery('(max-width: 640px)')
   const searchInputRef = useRef<HTMLInputElement>(null)
 
-
   const { filteredRaces } = useFuzzySearch(races, searchQuery)
 
   // Convert filtered races to AutocompleteOption format
@@ -59,18 +58,24 @@ export function RaceAutocomplete({
     }))
   }, [filteredRaces])
 
-  const handleRaceSelect = useCallback((race: Race) => {
-    onSelect(race)
-    setSearchQuery(race.name) // Update search query to show selected race name
-  }, [onSelect])
+  const handleRaceSelect = useCallback(
+    (race: Race) => {
+      onSelect(race)
+      setSearchQuery(race.name) // Update search query to show selected race name
+    },
+    [onSelect]
+  )
 
-  const handleDesktopRaceSelect = useCallback((option: AutocompleteOption) => {
-    const selectedRace = races.find(race => race.edid === option.id)
-    if (selectedRace) {
-      onSelect(selectedRace)
-      setSearchQuery(selectedRace.name)
-    }
-  }, [races, onSelect])
+  const handleDesktopRaceSelect = useCallback(
+    (option: AutocompleteOption) => {
+      const selectedRace = races.find(race => race.edid === option.id)
+      if (selectedRace) {
+        onSelect(selectedRace)
+        setSearchQuery(selectedRace.name)
+      }
+    },
+    [races, onSelect]
+  )
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value)
@@ -78,73 +83,89 @@ export function RaceAutocomplete({
   }
 
   // Custom renderer for race options
-  const renderRaceOption = useMemo(() => (option: AutocompleteOption, isActive: boolean) => (
-    <div className="flex items-center gap-3">
-      {option.icon && <div className="flex-shrink-0">{option.icon}</div>}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <span className="font-medium">{option.label}</span>
-          {option.badge && <div className="flex-shrink-0">{option.badge}</div>}
-        </div>
-        {option.description && (
-          <FormattedText
-            text={option.description}
-            className="text-sm text-muted-foreground line-clamp-2 mt-1"
-          />
-        )}
-      </div>
-    </div>
-  ), [])
-
-  // Create a store-like object for the drawer
-  const raceStore = useMemo(() => ({
-    data: races,
-    search: (query: string) => {
-      const lowerQuery = query.toLowerCase()
-      return races.filter(race =>
-        race.name.toLowerCase().includes(lowerQuery) ||
-        race.description?.toLowerCase().includes(lowerQuery) ||
-        race.tags?.some(tag => typeof tag === 'string' && tag.toLowerCase().includes(lowerQuery))
-      )
-    }
-  }), [races])
-
-  // Render function for complete race list items in the drawer - using desktop layout
-  const renderRaceListItem = useCallback((race: Race, isSelected: boolean, onSelect: () => void) => (
-    <Button
-      variant="ghost"
-      className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
-      onClick={onSelect}
-    >
-      <div className="flex items-center gap-3 w-full">
-        <div className="flex-shrink-0">
-          <RaceAvatar raceName={race.name} size="md" />
-        </div>
+  const renderRaceOption = useMemo(
+    () => (option: AutocompleteOption, isActive: boolean) => (
+      <div className="flex items-center gap-3">
+        {option.icon && <div className="flex-shrink-0">{option.icon}</div>}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="font-medium">{race.name}</span>
-            {race.category && (
-              <Badge
-                variant="outline"
-                className={cn(
-                  'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
-                  'text-xs font-medium transition-colors'
-                )}
-              >
-                {race.category}
-              </Badge>
+            <span className="font-medium">{option.label}</span>
+            {option.badge && (
+              <div className="flex-shrink-0">{option.badge}</div>
             )}
           </div>
-          {race.description && (
+          {option.description && (
             <FormattedText
-              text={race.description}
-              className="text-sm text-muted-foreground line-clamp-2 mt-1"
+              text={option.description}
+              className="text-base text-muted-foreground line-clamp-2 mt-1"
             />
           )}
         </div>
       </div>
-    </Button>
-  ), [])
+    ),
+    []
+  )
+
+  // Create a store-like object for the drawer
+  const raceStore = useMemo(
+    () => ({
+      data: races,
+      search: (query: string) => {
+        const lowerQuery = query.toLowerCase()
+        return races.filter(
+          race =>
+            race.name.toLowerCase().includes(lowerQuery) ||
+            race.description?.toLowerCase().includes(lowerQuery) ||
+            race.tags?.some(
+              tag =>
+                typeof tag === 'string' &&
+                tag.toLowerCase().includes(lowerQuery)
+            )
+        )
+      },
+    }),
+    [races]
+  )
+
+  // Render function for complete race list items in the drawer - using desktop layout
+  const renderRaceListItem = useCallback(
+    (race: Race, isSelected: boolean, onSelect: () => void) => (
+      <Button
+        variant="ghost"
+        className="w-full justify-start h-auto p-5 text-left hover:bg-muted/60 rounded-lg"
+        onClick={onSelect}
+      >
+        <div className="flex items-center gap-3 w-full">
+          <div className="flex-shrink-0">
+            <RaceAvatar raceName={race.name} size="md" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="font-medium">{race.name}</span>
+              {race.category && (
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    'bg-skyrim-gold/10 text-skyrim-gold border-skyrim-gold/30 hover:bg-skyrim-gold/20',
+                    'text-xs font-medium transition-colors'
+                  )}
+                >
+                  {race.category}
+                </Badge>
+              )}
+            </div>
+            {race.description && (
+              <FormattedText
+                text={race.description}
+                className="text-base text-muted-foreground line-clamp-2 mt-1"
+              />
+            )}
+          </div>
+        </div>
+      </Button>
+    ),
+    []
+  )
 
   // Render mobile drawer
   if (isMobile) {

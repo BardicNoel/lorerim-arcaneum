@@ -10,7 +10,7 @@ export interface SpellEffect {
 export interface Spell {
   name: string
   editorId: string
-  description: string
+  message: string
   school: string
   level: string
   magickaCost: number
@@ -19,6 +19,7 @@ export interface Spell {
   halfCostPerk: string
   halfCostPerkName: string
   effects: SpellEffect[]
+  found: boolean
 }
 
 // Computed spell properties for enhanced functionality
@@ -102,4 +103,4 @@ export interface SpellError {
   code: string
   message: string
   details?: unknown
-} 
+}

@@ -91,7 +91,7 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
                   </div>
                   <FormattedText
                     text={selectedRegularTraits[0].description}
-                    className="text-sm text-muted-foreground mt-1 line-clamp-2"
+                    className="text-base text-muted-foreground mt-1 line-clamp-2"
                   />
                 </div>
                 <Button
@@ -136,7 +136,7 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
                   </div>
                   <FormattedText
                     text={selectedRegularTraits[1].description}
-                    className="text-sm text-muted-foreground mt-1 line-clamp-2"
+                    className="text-base text-muted-foreground mt-1 line-clamp-2"
                   />
                 </div>
                 <Button
@@ -186,7 +186,7 @@ export function TraitSelectionCard({ className }: TraitSelectionCardProps) {
                   </div>
                   <FormattedText
                     text={selectedBonusTraits[0].description}
-                    className="text-sm text-muted-foreground mt-1 line-clamp-2"
+                    className="text-base text-muted-foreground mt-1 line-clamp-2"
                   />
                 </div>
                 <Button

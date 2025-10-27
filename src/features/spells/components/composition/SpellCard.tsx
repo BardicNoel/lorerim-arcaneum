@@ -1,15 +1,14 @@
-import { Card } from '@/shared/ui/ui/card'
-import { H3, Small } from '@/shared/ui/ui/typography'
 import { cn } from '@/lib/utils'
-import { Star } from 'lucide-react'
 import { FormattedText } from '@/shared/components/generic/FormattedText'
+import { Card } from '@/shared/ui/ui/card'
+import { H3 } from '@/shared/ui/ui/typography'
 import { getGameTextFormattingOptions } from '@/shared/utils/gameTextFormatting'
 import type { SpellWithComputed } from '../../types'
 import {
-  SpellSchoolIcon,
-  SpellSchoolBadge,
-  SpellLevelBadge,
   SpellCostBadge,
+  SpellLevelBadge,
+  SpellSchoolBadge,
+  SpellSchoolIcon,
 } from '../atomic'
 
 interface SpellCardProps {
@@ -26,18 +25,10 @@ export function SpellCard({
   className,
   compact = false,
 }: SpellCardProps) {
-  // Function to inject actual values into effect text
-  const injectEffectValues = (text: string, effect: any) => {
-    return text
-      .replace(/<mag>/gi, effect.magnitude?.toString() || '0')
-      .replace(/<dur>/gi, effect.duration?.toString() || '0')
-      .replace(/<area>/gi, effect.area?.toString() || '0')
-  }
-
   return (
-    <Card 
+    <Card
       className={cn(
-        "p-6 cursor-pointer hover:shadow-md transition-shadow h-full",
+        'p-6 cursor-pointer hover:shadow-md transition-shadow h-full',
         className
       )}
       onClick={onClick}
@@ -58,35 +49,14 @@ export function SpellCard({
         </div>
       </div>
 
-      {/* Effects: Only show effects with descriptions */}
-      {spell.effects && spell.effects.filter(effect => effect.description).length > 0 && (
-        <div>
-          <Small className="text-muted-foreground mb-2">Effects</Small>
-          <div className="space-y-2">
-            {spell.effects
-              .filter(effect => effect.description)
-              .map((effect, index) => (
-              <div
-                key={index}
-                className="p-2 rounded bg-muted border text-sm"
-              >
-                <FormattedText 
-                  text={injectEffectValues(effect.description, effect)}
-                  options={getGameTextFormattingOptions()}
-                  className="text-muted-foreground"
-                />
-                <div className="flex gap-4 text-xs text-muted-foreground mt-1">
-                  {effect.magnitude > 0 && (
-                    <span>Magnitude: {effect.magnitude}</span>
-                  )}
-                  {effect.duration > 0 && (
-                    <span>Duration: {effect.duration}s</span>
-                  )}
-                  {effect.area > 0 && <span>Area: {effect.area}ft</span>}
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* Spell Message */}
+      {spell.message && (
+        <div className="mt-4">
+          <FormattedText
+            text={spell.message}
+            options={getGameTextFormattingOptions()}
+            className="text-base text-muted-foreground"
+          />
         </div>
       )}
     </Card>

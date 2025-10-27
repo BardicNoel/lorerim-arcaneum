@@ -2110,8 +2110,8 @@
     "effects": [
       {
         "mgefFormId": "0xFE016803",
-        "mgefName": "_",
-        "mgefDescription": "a",
+        "mgefName": "Night Eye",
+        "mgefDescription": "Improved night vision for <dur> seconds.",
         "effectType": "Script",
         "skill": "Illusion",
         "baseCost": 0.75,
@@ -2161,8 +2161,8 @@
       },
       {
         "mgefFormId": "0xFE016812",
-        "mgefName": "`",
-        "mgefDescription": "^",
+        "mgefName": "Spell Absorption",
+        "mgefDescription": "Absorb <mag>% of the magicka from hostile spells for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.10000000149011612,
@@ -2194,8 +2194,8 @@
     "effects": [
       {
         "mgefFormId": "0xFE016846",
-        "mgefName": "Z",
-        "mgefDescription": "X",
+        "mgefName": "Light",
+        "mgefDescription": "Emits a small light that lasts for <dur> seconds.",
         "effectType": "Light",
         "skill": "None",
         "baseCost": 0.5,
@@ -2245,8 +2245,8 @@
       },
       {
         "mgefFormId": "0xFE016812",
-        "mgefName": "`",
-        "mgefDescription": "^",
+        "mgefName": "Spell Absorption",
+        "mgefDescription": "Absorb <mag>% of the magicka from hostile spells for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.10000000149011612,
@@ -2379,8 +2379,8 @@
       },
       {
         "mgefFormId": "0xFE016812",
-        "mgefName": "`",
-        "mgefDescription": "^",
+        "mgefName": "Spell Absorption",
+        "mgefDescription": "Absorb <mag>% of the magicka from hostile spells for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.10000000149011612,
@@ -2463,8 +2463,8 @@
       },
       {
         "mgefFormId": "0xFE016803",
-        "mgefName": "_",
-        "mgefDescription": "a",
+        "mgefName": "Night Eye",
+        "mgefDescription": "Improved night vision for <dur> seconds.",
         "effectType": "Script",
         "skill": "Illusion",
         "baseCost": 0.75,
@@ -2547,8 +2547,8 @@
       },
       {
         "mgefFormId": "0xFE016846",
-        "mgefName": "Z",
-        "mgefDescription": "X",
+        "mgefName": "Light",
+        "mgefDescription": "Emits a small light that lasts for <dur> seconds.",
         "effectType": "Light",
         "skill": "None",
         "baseCost": 0.5,
@@ -2816,8 +2816,8 @@
       },
       {
         "mgefFormId": "0xFE016812",
-        "mgefName": "`",
-        "mgefDescription": "^",
+        "mgefName": "Spell Absorption",
+        "mgefDescription": "Absorb <mag>% of the magicka from hostile spells for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.10000000149011612,
@@ -3152,8 +3152,8 @@
       },
       {
         "mgefFormId": "0xFE016803",
-        "mgefName": "_",
-        "mgefDescription": "a",
+        "mgefName": "Night Eye",
+        "mgefDescription": "Improved night vision for <dur> seconds.",
         "effectType": "Script",
         "skill": "Illusion",
         "baseCost": 0.75,
@@ -3387,8 +3387,8 @@
       },
       {
         "mgefFormId": "0xFE016846",
-        "mgefName": "Z",
-        "mgefDescription": "X",
+        "mgefName": "Light",
+        "mgefDescription": "Emits a small light that lasts for <dur> seconds.",
         "effectType": "Light",
         "skill": "None",
         "baseCost": 0.5,
@@ -3925,8 +3925,8 @@
       },
       {
         "mgefFormId": "0xFE016812",
-        "mgefName": "`",
-        "mgefDescription": "^",
+        "mgefName": "Spell Absorption",
+        "mgefDescription": "Absorb <mag>% of the magicka from hostile spells for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.10000000149011612,
@@ -4143,8 +4143,8 @@
       },
       {
         "mgefFormId": "0xFE016812",
-        "mgefName": "`",
-        "mgefDescription": "^",
+        "mgefName": "Spell Absorption",
+        "mgefDescription": "Absorb <mag>% of the magicka from hostile spells for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.10000000149011612,
@@ -4496,8 +4496,8 @@
       },
       {
         "mgefFormId": "0xFE016803",
-        "mgefName": "_",
-        "mgefDescription": "a",
+        "mgefName": "Night Eye",
+        "mgefDescription": "Improved night vision for <dur> seconds.",
         "effectType": "Script",
         "skill": "Illusion",
         "baseCost": 0.75,
@@ -4597,8 +4597,8 @@
       },
       {
         "mgefFormId": "0xFE016812",
-        "mgefName": "`",
-        "mgefDescription": "^",
+        "mgefName": "Spell Absorption",
+        "mgefDescription": "Absorb <mag>% of the magicka from hostile spells for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.10000000149011612,
@@ -4765,8 +4765,8 @@
       },
       {
         "mgefFormId": "0xFE016846",
-        "mgefName": "Z",
-        "mgefDescription": "X",
+        "mgefName": "Light",
+        "mgefDescription": "Emits a small light that lasts for <dur> seconds.",
         "effectType": "Light",
         "skill": "None",
         "baseCost": 0.5,
@@ -4983,8 +4983,8 @@
       },
       {
         "mgefFormId": "0xFE016803",
-        "mgefName": "_",
-        "mgefDescription": "a",
+        "mgefName": "Night Eye",
+        "mgefDescription": "Improved night vision for <dur> seconds.",
         "effectType": "Script",
         "skill": "Illusion",
         "baseCost": 0.75,
@@ -7140,7 +7140,7 @@
     "unresolvedEffects": []
   },
   {
-    "name": "Salt Pile",
+    "name": "Healing Salts",
     "edid": "ccKRTSSE001_SaltPile",
     "globalFormId": "0xFE03EF86",
     "plugin": "cckrtsse001_altar.esl",
@@ -7224,7 +7224,7 @@
     "unresolvedEffects": []
   },
   {
-    "name": "R P Aloe Vera Leaves",
+    "name": "Aloe Vera Leaves",
     "edid": "RP_AloeVeraLeaves01",
     "globalFormId": "0xFE0400D0",
     "plugin": "_ResourcePack.esl",
@@ -16222,8 +16222,8 @@
     "effects": [
       {
         "mgefFormId": "0xFE016812",
-        "mgefName": "`",
-        "mgefDescription": "^",
+        "mgefName": "Spell Absorption",
+        "mgefDescription": "Absorb <mag>% of the magicka from hostile spells for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.10000000149011612,
@@ -16256,8 +16256,8 @@
       },
       {
         "mgefFormId": "0xFE016846",
-        "mgefName": "Z",
-        "mgefDescription": "X",
+        "mgefName": "Light",
+        "mgefDescription": "Emits a small light that lasts for <dur> seconds.",
         "effectType": "Light",
         "skill": "None",
         "baseCost": 0.5,
@@ -16273,8 +16273,8 @@
       },
       {
         "mgefFormId": "0xFE016803",
-        "mgefName": "_",
-        "mgefDescription": "a",
+        "mgefName": "Night Eye",
+        "mgefDescription": "Improved night vision for <dur> seconds.",
         "effectType": "Script",
         "skill": "Illusion",
         "baseCost": 0.75,
@@ -17751,8 +17751,8 @@
       },
       {
         "mgefFormId": "0x040390E1",
-        "mgefName": "\u0018*",
-        "mgefDescription": "�*",
+        "mgefName": "Waterwalking",
+        "mgefDescription": "Walk on the surface of water for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.15000000596046448,
@@ -18255,8 +18255,8 @@
       },
       {
         "mgefFormId": "0xFE016846",
-        "mgefName": "Z",
-        "mgefDescription": "X",
+        "mgefName": "Light",
+        "mgefDescription": "Emits a small light that lasts for <dur> seconds.",
         "effectType": "Light",
         "skill": "None",
         "baseCost": 0.5,
@@ -19213,8 +19213,8 @@
       },
       {
         "mgefFormId": "0xFE016812",
-        "mgefName": "`",
-        "mgefDescription": "^",
+        "mgefName": "Spell Absorption",
+        "mgefDescription": "Absorb <mag>% of the magicka from hostile spells for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.10000000149011612,
@@ -21229,8 +21229,8 @@
       },
       {
         "mgefFormId": "0x040390E1",
-        "mgefName": "\u0018*",
-        "mgefDescription": "�*",
+        "mgefName": "Waterwalking",
+        "mgefDescription": "Walk on the surface of water for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.15000000596046448,
@@ -21313,8 +21313,8 @@
       },
       {
         "mgefFormId": "0x040390E1",
-        "mgefName": "\u0018*",
-        "mgefDescription": "�*",
+        "mgefName": "Waterwalking",
+        "mgefDescription": "Walk on the surface of water for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.15000000596046448,
@@ -21397,8 +21397,8 @@
       },
       {
         "mgefFormId": "0x040390E1",
-        "mgefName": "\u0018*",
-        "mgefDescription": "�*",
+        "mgefName": "Waterwalking",
+        "mgefDescription": "Walk on the surface of water for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.15000000596046448,
@@ -25681,8 +25681,8 @@
       },
       {
         "mgefFormId": "0xFE016812",
-        "mgefName": "`",
-        "mgefDescription": "^",
+        "mgefName": "Spell Absorption",
+        "mgefDescription": "Absorb <mag>% of the magicka from hostile spells for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.10000000149011612,
@@ -25815,8 +25815,8 @@
       },
       {
         "mgefFormId": "0xFE016812",
-        "mgefName": "`",
-        "mgefDescription": "^",
+        "mgefName": "Spell Absorption",
+        "mgefDescription": "Absorb <mag>% of the magicka from hostile spells for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.10000000149011612,
@@ -25933,8 +25933,8 @@
       },
       {
         "mgefFormId": "0xFE016812",
-        "mgefName": "`",
-        "mgefDescription": "^",
+        "mgefName": "Spell Absorption",
+        "mgefDescription": "Absorb <mag>% of the magicka from hostile spells for <dur> seconds.",
         "effectType": "Werewolf",
         "skill": "None",
         "baseCost": 0.10000000149011612,
@@ -26185,8 +26185,8 @@
       },
       {
         "mgefFormId": "0xFE016846",
-        "mgefName": "Z",
-        "mgefDescription": "X",
+        "mgefName": "Light",
+        "mgefDescription": "Emits a small light that lasts for <dur> seconds.",
         "effectType": "Light",
         "skill": "None",
         "baseCost": 0.5,
@@ -26269,8 +26269,8 @@
       },
       {
         "mgefFormId": "0xFE016803",
-        "mgefName": "_",
-        "mgefDescription": "a",
+        "mgefName": "Night Eye",
+        "mgefDescription": "Improved night vision for <dur> seconds.",
         "effectType": "Script",
         "skill": "Illusion",
         "baseCost": 0.75,
