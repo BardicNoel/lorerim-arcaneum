@@ -8,8 +8,8 @@ import { ExternalLink, Heart, Shield, Star, Zap } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { getBirthsignGroupStyle } from '../config/birthsignConfig'
 import type { Birthsign } from '../types'
+import { sanitizeSkillName, sanitizeStatName } from '../utils/stringSanitizer'
 import { BirthsignAvatar } from './'
-import { sanitizeStatName, sanitizeSkillName } from '../utils/stringSanitizer'
 
 interface BirthsignCardProps {
   item?: PlayerCreationItem
@@ -142,7 +142,9 @@ export function BirthsignCard({
         <div className="flex items-start gap-3">
           <BirthsignAvatar birthsignName={displayName} size="2xl" />
           <div className="flex flex-col gap-1">
-            <H3 className="text-primary font-semibold">{displayName}</H3>
+            <H3 className="text-lg text-primary font-semibold">
+              {displayName}
+            </H3>
             {/* Birthsign group tag and stat pills */}
             <div className="flex items-center gap-2">
               {displayGroup && (
@@ -366,7 +368,7 @@ export function BirthsignCard({
                         </div>
                         <FormattedText text={power.description} />
                         {(power.magnitude || power.duration) && (
-                          <div className="grid grid-cols-2 gap-4 text-sm mt-2">
+                          <div className="grid grid-cols-2 gap-4 text-base mt-2">
                             {power.magnitude && (
                               <div>
                                 <span className="font-medium">Magnitude:</span>{' '}

@@ -72,7 +72,7 @@ export function RaceAccordion({
         <div>
           <FormattedText
             text={item.description}
-            className="text-sm text-muted-foreground leading-relaxed"
+            className="text-base text-muted-foreground leading-relaxed"
           />
         </div>
 

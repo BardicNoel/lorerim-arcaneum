@@ -213,7 +213,7 @@ export function RecipeCard({
             {recipe.description && (
               <FormattedText
                 text={renderText(recipe.description)}
-                className="text-sm text-muted-foreground mt-1 line-clamp-2"
+                className="text-base text-muted-foreground mt-1 line-clamp-2"
                 as="p"
               />
             )}
@@ -311,7 +311,7 @@ export function RecipeCard({
             {recipe.description && (
               <FormattedText
                 text={renderText(recipe.description)}
-                className="text-sm text-muted-foreground mt-1"
+                className="text-base text-muted-foreground mt-1"
                 as="p"
               />
             )}
@@ -367,10 +367,10 @@ export function RecipeCard({
                         <div className="font-medium text-sm mb-1">
                           {renderText(effect.name)}
                         </div>
-                        <div className="text-sm text-muted-foreground">
+                        <div className="text-base text-muted-foreground">
                           <FormattedText
                             text={formatEffectDescription(effect)}
-                            className="text-sm text-muted-foreground"
+                            className="text-base text-muted-foreground"
                           />
                         </div>
                       </div>

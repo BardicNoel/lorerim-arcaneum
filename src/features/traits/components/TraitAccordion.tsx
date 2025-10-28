@@ -14,6 +14,7 @@ interface TraitAccordionProps {
   className?: string
   allTraitIds?: string[] // Add this prop to pass all valid trait IDs
   disableHover?: boolean
+  showBuildControls?: boolean
 }
 
 export function TraitAccordion({
@@ -21,6 +22,7 @@ export function TraitAccordion({
   className,
   allTraitIds,
   disableHover = false,
+  showBuildControls = true,
 }: TraitAccordionProps) {
   const originalTrait = item.originalTrait
   const {
@@ -104,7 +106,7 @@ export function TraitAccordion({
           <div className="w-16 h-16 rounded-full bg-skyrim-gold/20 flex items-center justify-center">
             <Dna className="h-8 w-8 text-skyrim-gold" />
           </div>
-          <H3 className="text-primary font-semibold">{item.name}</H3>
+          <H3 className="text-lg text-primary font-semibold">{item.name}</H3>
         </div>
       </AccordionCard.Header>
       <AccordionCard.Summary>
@@ -115,40 +117,42 @@ export function TraitAccordion({
       </AccordionCard.Summary>
       <AccordionCard.Footer>
         {/* Trait Selection Controls */}
-        <div className="flex gap-2">
-          <Button
-            size="sm"
-            variant={traitLevel === 'primary' ? 'default' : 'outline'}
-            disabled={isRegularLimitReached}
-            className={cn(
-              'flex-1 text-xs',
-              traitLevel === 'primary' &&
-                'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90'
-            )}
-            onClick={e => {
-              e.stopPropagation()
-              handleTraitSelect('primary')
-            }}
-          >
-            {traitLevel === 'primary' ? 'Remove Trait' : 'Starting Trait'}
-          </Button>
-          <Button
-            size="sm"
-            variant={traitLevel === 'secondary' ? 'default' : 'outline'}
-            disabled={isBonusLimitReached}
-            className={cn(
-              'flex-1 text-xs',
-              traitLevel === 'secondary' &&
-                'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90'
-            )}
-            onClick={e => {
-              e.stopPropagation()
-              handleTraitSelect('secondary')
-            }}
-          >
-            {traitLevel === 'secondary' ? 'Remove Trait' : 'Late Game Trait'}
-          </Button>
-        </div>
+        {showBuildControls && (
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant={traitLevel === 'primary' ? 'default' : 'outline'}
+              disabled={isRegularLimitReached}
+              className={cn(
+                'flex-1 text-xs',
+                traitLevel === 'primary' &&
+                  'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90'
+              )}
+              onClick={e => {
+                e.stopPropagation()
+                handleTraitSelect('primary')
+              }}
+            >
+              {traitLevel === 'primary' ? 'Remove Trait' : 'Starting Trait'}
+            </Button>
+            <Button
+              size="sm"
+              variant={traitLevel === 'secondary' ? 'default' : 'outline'}
+              disabled={isBonusLimitReached}
+              className={cn(
+                'flex-1 text-xs',
+                traitLevel === 'secondary' &&
+                  'bg-skyrim-gold text-skyrim-dark hover:bg-skyrim-gold/90'
+              )}
+              onClick={e => {
+                e.stopPropagation()
+                handleTraitSelect('secondary')
+              }}
+            >
+              {traitLevel === 'secondary' ? 'Remove Trait' : 'Late Game Trait'}
+            </Button>
+          </div>
+        )}
       </AccordionCard.Footer>
     </AccordionCard>
   )

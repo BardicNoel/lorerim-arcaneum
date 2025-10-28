@@ -1,6 +1,5 @@
-import React from 'react'
-import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
 import { Badge } from '@/shared/ui/ui/badge'
+import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
 import { H3, P, Small } from '@/shared/ui/ui/typography'
 import type { PlayerCreationItem } from './types'
 
@@ -44,7 +43,7 @@ export function GenericItemCard({
       </CardHeader>
 
       <CardContent className="pt-0">
-        <P className="text-sm text-muted-foreground mb-4 line-clamp-2">
+        <P className="text-base text-muted-foreground mb-4 line-clamp-2">
           {item.summary || item.description}
         </P>
 

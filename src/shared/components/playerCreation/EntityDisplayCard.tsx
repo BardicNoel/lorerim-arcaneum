@@ -190,7 +190,7 @@ export function EntityDisplayCard({
             {entity.description && (
               <FormattedText
                 text={entity.description}
-                className="text-sm text-muted-foreground mt-2"
+                className="text-base text-muted-foreground mt-2"
                 as="p"
               />
             )}

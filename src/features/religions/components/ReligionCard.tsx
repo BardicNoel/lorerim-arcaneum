@@ -1,11 +1,11 @@
 import { cn } from '@/lib/utils'
 import { AddToBuildSwitchSimple } from '@/shared/components/playerCreation'
+import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Button } from '@/shared/ui/ui/button'
 import { H3 } from '@/shared/ui/ui/typography'
 import { ExternalLink, Heart, Shield, Star } from 'lucide-react'
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import type { Religion } from '../types'
 import { ReligionAvatar, ReligionCategoryBadge } from './atomic'
 
@@ -127,7 +127,11 @@ export function ReligionCard({
         {showToggle && (
           <div onClick={e => e.stopPropagation()}>
             <AddToBuildSwitchSimple
-              itemId={originalReligion?.name?.toLowerCase().replace(/\s+/g, '-') || item?.id || ''}
+              itemId={
+                originalReligion?.name?.toLowerCase().replace(/\s+/g, '-') ||
+                item?.id ||
+                ''
+              }
               itemType="religion"
               itemName={displayName}
             />
@@ -170,7 +174,7 @@ export function ReligionCard({
       {/* Description Row */}
       {displayDescription && (
         <div className="mb-3">
-          <div className="text-sm text-muted-foreground leading-relaxed">
+          <div className="text-base text-muted-foreground leading-relaxed">
             {displayDescription}
           </div>
         </div>

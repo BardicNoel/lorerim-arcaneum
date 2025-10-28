@@ -24,7 +24,10 @@ import {
 } from 'lucide-react'
 import React from 'react'
 import type { Religion } from '../types'
-import { sanitizeEffectName, sanitizeEffectDescription } from '../utils/stringSanitizer'
+import {
+  sanitizeEffectDescription,
+  sanitizeEffectName,
+} from '../utils/stringSanitizer'
 
 /**
  * Component to format any description with highlighted values in angle brackets
@@ -426,7 +429,7 @@ export function renderReligionCollapsedContent(
       <div className="line-clamp-2">
         <FormattedText
           text={item.summary || item.description}
-          className="text-sm text-muted-foreground"
+          className="text-base text-muted-foreground"
         />
       </div>
 
@@ -487,7 +490,7 @@ export function renderReligionExpandedContent(
       <div>
         <FormattedText
           text={item.description}
-          className="text-sm text-muted-foreground leading-relaxed"
+          className="text-base text-muted-foreground leading-relaxed"
         />
       </div>
 

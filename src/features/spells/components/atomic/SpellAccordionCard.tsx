@@ -130,7 +130,7 @@ export function SpellAccordionCard({
                   >
                     <FormattedText
                       text={effect.description}
-                      className="text-muted-foreground mb-2"
+                      className="text-base text-muted-foreground mb-2"
                       as="p"
                     />
                     <div className="flex gap-4 text-xs text-muted-foreground">

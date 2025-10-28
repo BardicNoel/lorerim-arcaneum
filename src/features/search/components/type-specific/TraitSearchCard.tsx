@@ -1,5 +1,6 @@
-import { AccordionCard } from '@/shared/components/generic/AccordionCard'
+import { TraitAccordion } from '@/features/traits/components/TraitAccordion'
 import { useTraitsStore } from '@/shared/stores/traitsStore'
+import { traitToPlayerCreationItem } from '@/shared/utils'
 import type { SearchableItem } from '../../model/SearchModel'
 import { findItemInStore } from '../../utils/storeLookup'
 
@@ -38,64 +39,19 @@ export function TraitSearchCard({
     return null
   }
 
+  // Convert trait to PlayerCreationItem format and use the feature's TraitAccordion
+  const traitAsPlayerCreationItem = traitToPlayerCreationItem(fullTrait)
+
   return (
-    <AccordionCard
+    <TraitAccordion
+      item={{
+        ...traitAsPlayerCreationItem,
+        originalTrait: fullTrait,
+      }}
       className={className}
-      expanded={isExpanded}
-      onToggle={onToggle}
-    >
-      <AccordionCard.Header>
-        <div className="flex items-start gap-3">
-          <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
-            <span className="text-lg font-bold text-muted-foreground">
-              {fullTrait.name.charAt(0)}
-            </span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-primary">{fullTrait.name}</h3>
-            {fullTrait.category && (
-              <span className="text-sm text-muted-foreground">
-                {fullTrait.category}
-              </span>
-            )}
-          </div>
-        </div>
-      </AccordionCard.Header>
-
-      <AccordionCard.Summary>
-        {fullTrait.description && (
-          <p className="text-sm text-muted-foreground line-clamp-2">
-            {fullTrait.description}
-          </p>
-        )}
-      </AccordionCard.Summary>
-
-      <AccordionCard.Details>
-        {fullTrait.tags && fullTrait.tags.length > 0 && (
-          <div className="space-y-2">
-            <h5 className="text-sm font-medium text-foreground">Tags</h5>
-            <div className="flex flex-wrap gap-1">
-              {fullTrait.tags.map((tag, idx) => (
-                <span
-                  key={`${tag}-${idx}`}
-                  className="inline-block px-2 py-1 text-xs bg-muted rounded"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {fullTrait.description && (
-          <div className="space-y-2">
-            <h5 className="text-sm font-medium text-foreground">Description</h5>
-            <p className="text-sm text-muted-foreground">
-              {fullTrait.description}
-            </p>
-          </div>
-        )}
-      </AccordionCard.Details>
-    </AccordionCard>
+      allTraitIds={traits.map(t => t.id)}
+      disableHover={false}
+      showBuildControls={false}
+    />
   )
 }

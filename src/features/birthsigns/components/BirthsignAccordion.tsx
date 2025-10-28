@@ -8,8 +8,8 @@ import { H3 } from '@/shared/ui/ui/typography'
 import { Star } from 'lucide-react'
 import { getBirthsignGroupStyle } from '../config/birthsignConfig'
 import type { Birthsign } from '../types'
+import { sanitizeSkillName, sanitizeStatName } from '../utils/stringSanitizer'
 import { BirthsignAvatar } from './BirthsignAvatar'
-import { sanitizeStatName, sanitizeSkillName } from '../utils/stringSanitizer'
 
 interface BirthsignAccordionProps {
   item: PlayerCreationItem & { originalBirthsign: Birthsign }
@@ -85,7 +85,9 @@ export function BirthsignAccordion({
                   key={index}
                   className="flex items-center justify-between p-3 rounded-lg border bg-muted/30"
                 >
-                  <span className="font-medium capitalize">{sanitizeStatName(stat.stat)}</span>
+                  <span className="font-medium capitalize">
+                    {sanitizeStatName(stat.stat)}
+                  </span>
                   <span
                     className={cn(
                       'font-bold',
@@ -118,7 +120,7 @@ export function BirthsignAccordion({
                   <div className="border-t border-border my-2" />
                   <FormattedText
                     text={power.description}
-                    className="text-sm text-muted-foreground"
+                    className="text-base text-muted-foreground"
                   />
                 </div>
               ))}
@@ -170,7 +172,7 @@ export function BirthsignAccordion({
                   <div className="text-sm font-medium">{effect.stat}</div>
                   <FormattedText
                     text={effect.description}
-                    className="text-sm text-muted-foreground"
+                    className="text-base text-muted-foreground"
                   />
                 </div>
               ))}
@@ -187,7 +189,7 @@ export function BirthsignAccordion({
                   <div className="text-sm font-medium">{effect.stat}</div>
                   <FormattedText
                     text={effect.description}
-                    className="text-sm text-muted-foreground"
+                    className="text-base text-muted-foreground"
                   />
                 </div>
               ))}

@@ -138,7 +138,7 @@ function RecipeAccordionItem({
               <div>
                 <FormattedText
                   text={renderText(recipe.description)}
-                  className="text-sm text-muted-foreground"
+                  className="text-base text-muted-foreground"
                   as="p"
                 />
               </div>
@@ -181,10 +181,10 @@ function RecipeAccordionItem({
                             {renderText(effect.name)}
                           </div>
                           {effect.description && (
-                            <div className="text-sm text-muted-foreground">
+                            <div className="text-base text-muted-foreground">
                               <FormattedText
                                 text={renderText(effect.description)}
-                                className="text-sm text-muted-foreground"
+                                className="text-base text-muted-foreground"
                               />
                             </div>
                           )}

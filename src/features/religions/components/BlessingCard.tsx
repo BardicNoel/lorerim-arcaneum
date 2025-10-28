@@ -5,8 +5,11 @@ import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import { H3, P } from '@/shared/ui/ui/typography'
 import { Clock, Target } from 'lucide-react'
 import type { Religion } from '../types'
+import {
+  sanitizeEffectDescription,
+  sanitizeEffectName,
+} from '../utils/stringSanitizer'
 import { ReligionAvatar } from './atomic/ReligionAvatar'
-import { sanitizeEffectName, sanitizeEffectDescription } from '../utils/stringSanitizer'
 
 interface BlessingCardProps {
   religion: Religion
@@ -61,7 +64,10 @@ function FormattedBlessingDescription({
     .replace(/\b(area)\b/gi, area.toString())
 
   return (
-    <FormattedText text={formatted} className="text-sm text-muted-foreground" />
+    <FormattedText
+      text={formatted}
+      className="text-base text-muted-foreground"
+    />
   )
 }
 
@@ -78,8 +84,6 @@ export function BlessingCard({
   if (!blessing || effectsCount === 0) {
     return null
   }
-
-
 
   return (
     <div
@@ -108,11 +112,11 @@ export function BlessingCard({
         {/* Toggle */}
         {showToggle && (
           <div onClick={e => e.stopPropagation()}>
-                         <AddToBuildSwitchSimple
-               itemId={religion.name?.toLowerCase().replace(/\s+/g, '-')}
-               itemType="blessing"
-               itemName={`Blessing of ${religion.name}`}
-             />
+            <AddToBuildSwitchSimple
+              itemId={religion.name?.toLowerCase().replace(/\s+/g, '-')}
+              itemType="blessing"
+              itemName={`Blessing of ${religion.name}`}
+            />
           </div>
         )}
       </div>
@@ -130,7 +134,9 @@ export function BlessingCard({
               className="flex items-start gap-2 p-2 bg-muted/30 rounded-lg"
             >
               <div className="flex-1">
-                <P className="font-medium text-sm mb-1">{sanitizeEffectName(effect.effectName)}</P>
+                <P className="font-medium text-sm mb-1">
+                  {sanitizeEffectName(effect.effectName)}
+                </P>
                 <FormattedBlessingDescription
                   description={effect.effectDescription}
                   magnitude={effect.magnitude}

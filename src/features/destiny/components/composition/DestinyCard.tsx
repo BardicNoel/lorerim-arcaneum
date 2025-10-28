@@ -1,7 +1,6 @@
-import React from 'react'
-import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
-import { Badge } from '@/shared/ui/ui/badge'
 import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
+import { Badge } from '@/shared/ui/ui/badge'
+import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
 import type { DestinyNode } from '../../types'
 
 interface DestinyCardProps {
@@ -159,7 +158,7 @@ export function DestinyCard({
       </CardHeader>
 
       <CardContent className="pt-0">
-        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+        <p className="text-base text-muted-foreground mb-3 line-clamp-2">
           {item.description}
         </p>
 

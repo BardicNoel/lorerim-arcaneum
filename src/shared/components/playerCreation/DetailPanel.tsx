@@ -1,10 +1,9 @@
-import React from 'react'
-import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
+import { MarkdownText } from '@/shared/components/MarkdownText'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
+import { Card, CardContent, CardHeader } from '@/shared/ui/ui/card'
 import { H3, H4, P, Small } from '@/shared/ui/ui/typography'
-import { MarkdownText } from '@/shared/components/MarkdownText'
-import { X, Plus, Minus, Circle } from 'lucide-react'
+import { Circle, Minus, Plus, X } from 'lucide-react'
 import type { PlayerCreationItem } from './types'
 
 interface DetailPanelProps {
@@ -54,7 +53,7 @@ export function DetailPanel({ item, onClose, className }: DetailPanelProps) {
         {/* Description */}
         <div>
           <H4 className="mb-2">Description</H4>
-          <MarkdownText className="text-sm text-muted-foreground leading-relaxed">
+          <MarkdownText className="text-base text-muted-foreground leading-relaxed">
             {item.description}
           </MarkdownText>
         </div>

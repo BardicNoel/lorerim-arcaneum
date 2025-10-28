@@ -153,7 +153,9 @@ export function GlobalSearch({
         navigate(`/perk-references`)
         break
       case 'enchantment':
-        navigate(`/enchantments?selected=${result.item.id.replace('enchantment-', '')}`)
+        navigate(
+          `/enchantments?selected=${result.item.id.replace('enchantment-', '')}`
+        )
         break
     }
 
@@ -348,6 +350,23 @@ export function GlobalSearch({
                 </div>
               )}
             </div>
+
+            {/* View All Results Button */}
+            {results.length > 0 && query.trim() && (
+              <div className="border-t pt-2">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => {
+                    navigate(`/search?q=${encodeURIComponent(query)}`)
+                    setIsOpen(false)
+                    setQuery('')
+                  }}
+                >
+                  View All Results in Search Page
+                </Button>
+              </div>
+            )}
 
             {/* Keyboard Shortcuts Help */}
             <div className="flex items-center justify-between text-xs text-muted-foreground">

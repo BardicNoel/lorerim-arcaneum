@@ -1,15 +1,16 @@
 import type { SearchableItem } from '../../model/SearchModel'
 import { BirthsignSearchCard } from '../type-specific/BirthsignSearchCard'
+import { BlessingSearchCard } from '../type-specific/BlessingSearchCard'
 import { DestinySearchCard } from '../type-specific/DestinySearchCard'
+import { EnchantmentSearchCard } from '../type-specific/EnchantmentSearchCard'
 import { PerkReferenceSearchCard } from '../type-specific/PerkReferenceSearchCard'
 import { PerkSearchCard } from '../type-specific/PerkSearchCard'
 import { RaceSearchCard } from '../type-specific/RaceSearchCard'
+import { RecipeSearchCard } from '../type-specific/RecipeSearchCard'
 import { ReligionSearchCard } from '../type-specific/ReligionSearchCard'
 import { SkillSearchCard } from '../type-specific/SkillSearchCard'
-import { TraitSearchCard } from '../type-specific/TraitSearchCard'
 import { SpellSearchCard } from '../type-specific/SpellSearchCard'
-import { RecipeSearchCard } from '../type-specific/RecipeSearchCard'
-import { EnchantmentSearchCard } from '../type-specific/EnchantmentSearchCard'
+import { TraitSearchCard } from '../type-specific/TraitSearchCard'
 import { DefaultSearchCard } from './DefaultSearchCard'
 
 interface SearchCardProps {
@@ -65,6 +66,17 @@ export function SearchCard({
     case 'birthsign':
       return (
         <BirthsignSearchCard
+          item={item}
+          className={className}
+          isExpanded={isExpanded}
+          onToggle={onToggle}
+          viewMode={viewMode}
+        />
+      )
+
+    case 'blessing':
+      return (
+        <BlessingSearchCard
           item={item}
           className={className}
           isExpanded={isExpanded}

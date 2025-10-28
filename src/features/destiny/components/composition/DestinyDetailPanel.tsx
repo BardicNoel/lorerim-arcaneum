@@ -1,8 +1,7 @@
-import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
+import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
 import { Badge } from '@/shared/ui/ui/badge'
 import { Button } from '@/shared/ui/ui/button'
-import type { PlayerCreationItem } from '@/shared/components/playerCreation/types'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
 import type { DestinyNode } from '../../types'
 
 interface DestinyDetailPanelProps {
@@ -54,7 +53,7 @@ export function DestinyDetailPanel({
         <CardContent className="space-y-4">
           <div>
             <h4 className="font-semibold text-sm mb-2">Description</h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-base text-muted-foreground leading-relaxed">
               {item.description}
             </p>
           </div>

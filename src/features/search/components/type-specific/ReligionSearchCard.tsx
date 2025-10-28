@@ -1,12 +1,8 @@
-import {
-  ReligionCard,
-  ReligionSheet,
-} from '@/features/religions/components/composition'
+import { ReligionCard } from '@/features/religions/components/composition'
 import type { Religion as FeatureReligion } from '@/features/religions/types'
 import { mapSharedReligionToFeatureReligion } from '@/features/religions/utils/religionMapper'
 import type { Religion as SharedReligion } from '@/shared/data/schemas'
 import { useReligionsStore } from '@/shared/stores/religionsStore'
-import { useState } from 'react'
 import type { SearchableItem } from '../../model/SearchModel'
 import { findItemInStore } from '../../utils/storeLookup'
 
@@ -26,9 +22,6 @@ export function ReligionSearchCard({
   viewMode = 'grid',
 }: ReligionSearchCardProps) {
   const religions = useReligionsStore(state => state.data)
-  const [selectedReligion, setSelectedReligion] =
-    useState<FeatureReligion | null>(null)
-  const [isSheetOpen, setIsSheetOpen] = useState(false)
 
   // Find the full religion record from the store
   const fullReligion = findItemInStore(religions, item.originalData) as
@@ -54,25 +47,13 @@ export function ReligionSearchCard({
   const religionAsFeatureReligion: FeatureReligion =
     mapSharedReligionToFeatureReligion(fullReligion)
 
-  const handleOpenDetails = (id: string) => {
-    setSelectedReligion(religionAsFeatureReligion)
-    setIsSheetOpen(true)
-  }
-
-  // Render the new ReligionCard with the full religion data
+  // Render the ReligionCard without detail sheet management
   return (
-    <div className={className}>
-      <ReligionCard
-        originalReligion={religionAsFeatureReligion}
-        className="w-full"
-        onOpenDetails={handleOpenDetails}
-        showToggle={true}
-      />
-      <ReligionSheet
-        religion={selectedReligion}
-        isOpen={isSheetOpen}
-        onClose={() => setIsSheetOpen(false)}
-      />
-    </div>
+    <ReligionCard
+      originalReligion={religionAsFeatureReligion}
+      className={className}
+      onOpenDetails={() => {}} // No-op for search results
+      showToggle={false} // Disable toggle for search results
+    />
   )
 }

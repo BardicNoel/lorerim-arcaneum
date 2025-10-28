@@ -1,15 +1,14 @@
-import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
-import { Badge } from '@/shared/ui/ui/badge'
-import { Button } from '@/shared/ui/ui/button'
-import { ChevronDown, ChevronUp, ExternalLink } from 'lucide-react'
-import { EnchantmentBadge } from '@/features/enchantments/components/atomic/EnchantmentBadge'
 import { EffectsList } from '@/features/enchantments/components/atomic/EffectDisplay'
+import { EnchantmentBadge } from '@/features/enchantments/components/atomic/EnchantmentBadge'
 import { ItemList } from '@/features/enchantments/components/atomic/ItemList'
-import { highlightText } from '../../utils/searchUtils'
-import type { SearchableItem } from '../../model/SearchModel'
 import type { EnchantmentWithComputed } from '@/features/enchantments/types'
 import { cn } from '@/lib/utils'
+import { Badge } from '@/shared/ui/ui/badge'
+import { Button } from '@/shared/ui/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/ui/card'
+import { ChevronDown, ChevronUp } from 'lucide-react'
+import type { SearchableItem } from '../../model/SearchModel'
+import { highlightText } from '../../utils/searchUtils'
 
 interface EnchantmentSearchCardProps {
   item: SearchableItem
@@ -29,16 +28,20 @@ export function EnchantmentSearchCard({
   className,
 }: EnchantmentSearchCardProps) {
   const enchantment = item.originalData as EnchantmentWithComputed
-  
-  const highlightedName = searchTerm 
+
+  const highlightedName = searchTerm
     ? highlightText(enchantment.name, searchTerm)
     : enchantment.name
-    
-  const highlightedDescription = enchantment.effects.length > 0 
-    ? (searchTerm 
-        ? highlightText(enchantment.effects.map(e => e.name).join(', '), searchTerm)
-        : enchantment.effects.map(e => e.name).join(', '))
-    : undefined
+
+  const highlightedDescription =
+    enchantment.effects.length > 0
+      ? searchTerm
+        ? highlightText(
+            enchantment.effects.map(e => e.name).join(', '),
+            searchTerm
+          )
+        : enchantment.effects.map(e => e.name).join(', ')
+      : undefined
 
   const handleClick = () => {
     // Navigate to enchantments page and open detail sheet
@@ -47,7 +50,7 @@ export function EnchantmentSearchCard({
 
   if (viewMode === 'list') {
     return (
-      <Card 
+      <Card
         className={cn(
           'cursor-pointer hover:shadow-md transition-shadow border-l-4 border-l-blue-500',
           className
@@ -59,23 +62,27 @@ export function EnchantmentSearchCard({
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-2">
                 <div className="text-lg">🔮</div>
-                <h4 
+                <h4
                   className="font-medium text-sm truncate"
                   dangerouslySetInnerHTML={{ __html: highlightedName }}
                 />
-                <EnchantmentBadge type="targetType" value={enchantment.targetType} size="sm" />
+                <EnchantmentBadge
+                  type="targetType"
+                  value={enchantment.targetType}
+                  size="sm"
+                />
                 <Badge variant="outline" className="text-xs">
                   {enchantment.effectCount} effects
                 </Badge>
               </div>
-              
+
               {highlightedDescription && (
-                <p 
+                <p
                   className="text-xs text-muted-foreground mb-2"
                   dangerouslySetInnerHTML={{ __html: highlightedDescription }}
                 />
               )}
-              
+
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <span>{enchantment.category}</span>
                 <span>•</span>
@@ -84,12 +91,12 @@ export function EnchantmentSearchCard({
                 <span>{enchantment.itemCount} items</span>
               </div>
             </div>
-            
+
             <Button
               variant="ghost"
               size="sm"
               className="ml-2"
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation()
                 onToggle?.()
               }}
@@ -101,7 +108,7 @@ export function EnchantmentSearchCard({
               )}
             </Button>
           </div>
-          
+
           {isExpanded && (
             <div className="mt-4 space-y-3 pt-4 border-t">
               {/* Effects Preview */}
@@ -114,7 +121,7 @@ export function EnchantmentSearchCard({
                   maxDisplay={3}
                 />
               )}
-              
+
               {/* Items Preview */}
               <ItemList
                 items={enchantment.foundOnItems}
@@ -132,7 +139,7 @@ export function EnchantmentSearchCard({
 
   // Grid view (default)
   return (
-    <Card 
+    <Card
       className={cn(
         'cursor-pointer hover:shadow-md transition-shadow',
         className
@@ -142,26 +149,29 @@ export function EnchantmentSearchCard({
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <CardTitle 
+            <CardTitle
               className="text-lg"
               dangerouslySetInnerHTML={{ __html: highlightedName }}
             />
             {highlightedDescription && (
-              <p 
-                className="text-sm text-muted-foreground mt-1"
+              <p
+                className="text-base text-muted-foreground mt-1"
                 dangerouslySetInnerHTML={{ __html: highlightedDescription }}
               />
             )}
           </div>
           <div className="flex gap-2 ml-4">
-            <EnchantmentBadge type="targetType" value={enchantment.targetType} />
+            <EnchantmentBadge
+              type="targetType"
+              value={enchantment.targetType}
+            />
             <Badge variant="outline" className="text-xs">
               {enchantment.effectCount} effects
             </Badge>
           </div>
         </div>
       </CardHeader>
-      
+
       <CardContent className="pt-0">
         <div className="space-y-3">
           {/* Effects Preview */}
@@ -174,7 +184,7 @@ export function EnchantmentSearchCard({
               maxDisplay={2}
             />
           )}
-          
+
           {/* Items Preview */}
           <ItemList
             items={enchantment.foundOnItems}
@@ -183,7 +193,7 @@ export function EnchantmentSearchCard({
             showType={true}
             maxItems={3}
           />
-          
+
           {/* Metadata */}
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span>{enchantment.category}</span>
@@ -192,14 +202,14 @@ export function EnchantmentSearchCard({
             <span>•</span>
             <span>{enchantment.itemCount} items</span>
           </div>
-          
+
           {/* Expand/Collapse Button */}
           {onToggle && (
             <Button
               variant="ghost"
               size="sm"
               className="w-full mt-2"
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation()
                 onToggle()
               }}
@@ -222,4 +232,3 @@ export function EnchantmentSearchCard({
     </Card>
   )
 }
-
