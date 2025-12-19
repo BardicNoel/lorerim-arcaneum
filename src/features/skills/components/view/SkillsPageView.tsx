@@ -120,17 +120,11 @@ export function SkillsPageView({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div>
             <p className="text-muted-foreground">Major Skills (0-3)</p>
-            <p>
-              Your primary skills that level up faster and start at a higher
-              level.
-            </p>
+            <p>Your primary skills that start at a higher level boost.</p>
           </div>
           <div>
             <p className="text-muted-foreground">Minor Skills (0-6)</p>
-            <p>
-              Secondary skills that provide additional benefits and
-              customization.
-            </p>
+            <p>Secondary skills that start with a smaller level boost</p>
           </div>
         </div>
       </div>
