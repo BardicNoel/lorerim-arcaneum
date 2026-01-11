@@ -328,7 +328,7 @@ export default function HomePage() {
         {/* Footer Section */}
         <div className="text-left pt-8 border-t border-border">
           <p className="text-muted-foreground">
-            Crafted by Bardic (Jeremy) Noel, with gratitude to Biggie Boss and
+            Crafted by Bardic Noel, with gratitude to Biggie Boss and
             the Lorerim community
           </p>
         </div>
