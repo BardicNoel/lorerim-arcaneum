@@ -32,6 +32,11 @@ export function GlobalSearch({
   const inputRef = useRef<HTMLInputElement>(null)
   const resultsRef = useRef<HTMLDivElement>(null)
 
+  const handleSearchIconClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    navigate('/search')
+  }
+
   // Debounced search
   useEffect(() => {
     if (!isOpen || !isReady) return
@@ -221,7 +226,10 @@ export function GlobalSearch({
         className="w-full justify-start text-sm text-muted-foreground"
         onClick={() => setIsOpen(true)}
       >
-        <Search className="mr-2 h-4 w-4" />
+        <Search
+          className="mr-2 h-4 w-4 cursor-pointer hover:text-primary transition-colors"
+          onClick={handleSearchIconClick}
+        />
         {placeholder}
         <div className="ml-auto flex items-center gap-1">
           <Command className="h-3 w-3" />

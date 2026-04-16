@@ -1,5 +1,5 @@
 import { usePerkReferencesData } from '@/features/perk-references/adapters/usePerkReferencesData'
-import { PerkReferenceAccordionCard } from '@/features/perk-references/components/atomic/PerkReferenceAccordionCard'
+import { PerkReferenceSimpleCard } from '@/features/perk-references/components/composition/PerkReferenceSimpleCard'
 import { perkToPlayerCreationItem } from '@/features/perk-references/utils/perkToPlayerCreationItem'
 import { useCharacterBuild } from '@/shared/hooks/useCharacterBuild'
 import type { SearchableItem } from '../../model/SearchModel'
@@ -41,11 +41,10 @@ export function PerkReferenceSearchCard({
   const displayItem = { ...perkItem, originalPerk: fullPerk }
 
   return (
-    <PerkReferenceAccordionCard
+    <PerkReferenceSimpleCard
       item={displayItem}
       className={className}
-      isExpanded={isExpanded}
-      onToggle={onToggle}
+      onClick={() => {}} // No-op for search results
       viewMode={viewMode}
     />
   )
