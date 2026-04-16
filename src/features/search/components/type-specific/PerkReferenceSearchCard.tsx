@@ -7,16 +7,12 @@ import type { SearchableItem } from '../../model/SearchModel'
 interface PerkReferenceSearchCardProps {
   item: SearchableItem
   className?: string
-  isExpanded?: boolean
-  onToggle?: () => void
   viewMode?: 'list' | 'grid'
 }
 
 export function PerkReferenceSearchCard({
   item,
   className,
-  isExpanded = false,
-  onToggle,
   viewMode = 'grid',
 }: PerkReferenceSearchCardProps) {
   const { build } = useCharacterBuild()

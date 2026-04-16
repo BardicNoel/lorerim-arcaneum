@@ -134,8 +134,6 @@ export function SearchCard({
         <PerkReferenceSearchCard
           item={item}
           className={className}
-          isExpanded={isExpanded}
-          onToggle={onToggle}
           viewMode={viewMode}
         />
       )
